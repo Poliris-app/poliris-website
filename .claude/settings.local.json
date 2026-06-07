@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /home/rona -name \"Poliris_Landing_Page.html\" 2>/dev/null | head -5)",
+      "Read(//home/rona/**)"
+    ]
+  }
+}
