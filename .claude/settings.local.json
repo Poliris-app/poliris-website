@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(find /home/rona -name \"Poliris_Landing_Page.html\" 2>/dev/null | head -5)",
-      "Read(//home/rona/**)"
+      "Read(//home/rona/**)",
+      "Bash(sed -n '874,1000p' /mnt/d/Downloads/poliris-visibility_6.html)",
+      "Read(//mnt/d/Downloads/**)",
+      "Bash(cat /tmp/map_react.txt | grep -c \"className\" && tail -8 /tmp/map_react.txt)",
+      "Read(//tmp/**)",
+      "Bash(python3)"
     ]
   }
 }

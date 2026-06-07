@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const ChevronLeft = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
@@ -16,73 +16,373 @@ const Check = () => (
   </svg>
 );
 
+/* ── Heatmap helpers ───────────────────────────────────────────── */
+const HEAT_COLORS = ['#EFF6FF','#DBEAFE','#BFDBFE','#93C5FD','#60A5FA','#3B82F6','#2563EB','#1D4ED8','#1E40AF','#1E3A8A','#172554'];
+
+function heatLevel(score) {
+  return Math.max(0, Math.min(10, Math.floor(score / 10 + 0.5)));
+}
+
+function HeatCell({ score }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div
+      className="vheat__cell"
+      style={{ background: HEAT_COLORS[heatLevel(score)] }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      {show && <div className="vheat__tooltip">{Math.round(score)}%</div>}
+    </div>
+  );
+}
+
 /* ── Slide visual components ───────────────────────────────────── */
 function VisibilityVis() {
-  const bars = [
-    { name: 'Your brand', pct: 53, col: '#1e3893' },
-    { name: 'Rival A',    pct: 28, col: '#9aa6cf' },
-    { name: 'Rival B',    pct: 19, col: '#c4cae0' },
+  const MODELS = [
+    { label: 'Avg.',        icon: null },
+    { label: 'ChatGPT',     icon: '/chatgpt-com-logo.png' },
+    { label: 'Claude',      icon: '/claudeai-com-logo.png' },
+    { label: 'Mistral',     icon: '/mistral-ai-logo.png' },
+    { label: 'Gemini Web',  icon: '/gemini-ai-logo.png' },
   ];
+  const BRANDS = [
+    { name: 'Nike',        logo: '/nike-com-logo.png',        scores: [73, 78, 63, 88, 68], isYou: true },
+    { name: 'New Balance', logo: '/newbalance-com-logo.png',  scores: [55, 62, 48, 58, 45] },
+    { name: 'Hoka',        logo: '/hoka-com-logo.png',        scores: [42, 45, 35, 52, 38] },
+    { name: 'ASICS',       logo: '/asics-com-logo.png',       scores: [60, 65, 52, 70, 55] },
+    { name: 'Brooks',      logo: '/brooksrunning-com-logo.png', scores: [32, 38, 25, 40, 28] },
+  ];
+
   return (
-    <div className="vis-card">
-      <div className="vis-card__header">
-        <span className="vis-card__title">Share of voice · PM tools</span>
-        <span className="vis-card__badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-            <path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"/>
-            <path d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"/>
-            <path d="M18 9h1.5a1 1 0 0 0 0-5H18"/>
-            <path d="M4 22h16"/>
-            <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/>
-            <path d="M6 9H4.5a1 1 0 0 1 0-5H6"/>
-          </svg>
-          #1
-        </span>
-      </div>
-      {bars.map((r) => (
-        <div key={r.name} className="vis-bar-row">
-          <span className="vis-bar-name">
-            <span className="vis-bar-dot" style={{ background: r.col }} />
-            {r.name}
-          </span>
-          <div className="vis-bar-track">
-            <div className="vis-bar-fill" style={{ width: `${r.pct}%`, background: r.col }} />
-          </div>
-          <span className="vis-bar-pct">{r.pct}%</span>
+    <div className="vheat">
+      {/* Score bar */}
+      <div className="vheat__top">
+        <div className="vheat__top-row">
+          <span className="vheat__top-label">AI Visibility</span>
+          <span className="vheat__excellent">Excellent</span>
         </div>
-      ))}
-      <div className="vis-tags">
-        {['ChatGPT · 61%', 'Gemini · 48%', 'Claude · 55%'].map((c) => (
-          <span key={c} className="vis-tag">{c}</span>
-        ))}
+        <div className="vheat__score-row">
+          <span className="vheat__score-num">83</span>
+          <span className="vheat__score-denom">/100</span>
+          <div className="vheat__bar-track">
+            <div className="vheat__bar-fill" style={{ width: '83%' }} />
+          </div>
+        </div>
+      </div>
+
+      <div className="vheat__body">
+        {/* Stats */}
+        <div className="vheat__stats">
+          <div className="vheat__stat">
+            <span className="vheat__stat-label">Visibility Rank</span>
+            <span className="vheat__stat-val">#2</span>
+          </div>
+          <div className="vheat__stat-divider" />
+          <div className="vheat__stat">
+            <span className="vheat__stat-label">Visibility Score</span>
+            <div className="vheat__stat-row">
+              <span className="vheat__stat-val">70%</span>
+              <span className="vheat__stat-delta">↓2%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Heatmap grid */}
+        <div className="vheat__grid">
+          {BRANDS.map((b) => (
+            <div key={b.name} className="vheat__row">
+              <div className="vheat__brand">
+                <img src={b.logo} alt={b.name} className="vheat__brand-logo" />
+                <span className="vheat__brand-name">{b.name}</span>
+              </div>
+              <div className="vheat__cells">
+                {b.scores.map((s, i) => <HeatCell key={i} score={s} />)}
+              </div>
+            </div>
+          ))}
+
+          {/* Column headers */}
+          <div className="vheat__row vheat__row--headers">
+            <div className="vheat__brand" />
+            <div className="vheat__cells">
+              {MODELS.map((m) => (
+                <div key={m.label} className="vheat__col-label">
+                  {m.icon && <img src={m.icon} alt={m.label} className="vheat__col-icon" />}
+                  <span>{m.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="vheat__legend">
+            <span className="vheat__legend-text">Low</span>
+            <div className="vheat__legend-bar" />
+            <span className="vheat__legend-text">High</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 function SentimentVis() {
-  const qualifiers = [
-    { label: 'Reliable & trustworthy', type: 'pos' },
-    { label: 'Easy to use',            type: 'pos' },
-    { label: 'Limited integrations',   type: 'warn' },
-    { label: 'Pricey for SMBs',        type: 'neg' },
+  const BRANDS = [
+    {
+      name: 'Nike',   logo: '/nike-com-logo.png',           color: '#0f172a', isYou: true,
+      overall: 'Strong',
+      scores: { Innovation: 80, Performance: 90, Range: 70, Premium: 85, Trust: 88 },
+    },
+    {
+      name: 'On',     logo: '/on-com-logo.png',             color: '#e55a2b',
+      overall: 'Moderate',
+      scores: { Innovation: 75, Performance: 78, Range: 65, Premium: 68, Trust: 72 },
+    },
+    {
+      name: 'Hoka',   logo: '/hoka-com-logo.png',           color: '#0ea5e9',
+      overall: 'Moderate',
+      scores: { Innovation: 65, Performance: 73, Range: 58, Premium: 50, Trust: 65 },
+    },
+    {
+      name: 'ASICS',  logo: '/asics-com-logo.png',          color: '#7c3aed',
+      overall: 'Strong',
+      scores: { Innovation: 70, Performance: 84, Range: 72, Premium: 65, Trust: 80 },
+    },
+    {
+      name: 'Brooks', logo: '/brooksrunning-com-logo.png',  color: '#14b8a6',
+      overall: 'Weak',
+      scores: { Innovation: 50, Performance: 62, Range: 48, Premium: 42, Trust: 58 },
+    },
   ];
+
+  const AXES = ['Innovation', 'Performance', 'Range', 'Premium', 'Trust'];
+  const n = AXES.length;
+
+  const TIER_STYLE = {
+    'Very Strong': { background: 'rgb(209,250,229)', color: 'rgb(21,128,61)' },
+    'Strong':      { background: 'rgb(220,252,231)', color: 'rgb(34,197,94)' },
+    'Moderate':    { background: 'rgb(254,252,232)', color: 'rgb(234,179,8)' },
+    'Weak':        { background: '#fff7ed',          color: '#f97316' },
+    'Very Weak':   { background: '#fef2f2',          color: '#ef4444' },
+  };
+
+  function sentTier(score) {
+    if (score >= 80) return 'Very Strong';
+    if (score >= 65) return 'Strong';
+    if (score >= 45) return 'Moderate';
+    if (score >= 25) return 'Weak';
+    return 'Very Weak';
+  }
+
+  function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  const [visibility, setVisibility] = useState(() =>
+    Object.fromEntries(BRANDS.map(b => [b.name, true]))
+  );
+  const [tooltip, setTooltip] = useState({
+    visible: false, x: 0, y: 0, segIdx: -1,
+    axisLabel: '', singleBrand: null, multiBrands: null,
+  });
+
+  function toggleBrand(name) {
+    setVisibility(prev => {
+      const allKeys = BRANDS.map(b => b.name);
+      const visibleKeys = allKeys.filter(k => prev[k]);
+      if (visibleKeys.length === allKeys.length) {
+        return Object.fromEntries(allKeys.map(k => [k, k === name]));
+      }
+      if (visibleKeys.length === 1 && visibleKeys[0] === name) {
+        return Object.fromEntries(allKeys.map(k => [k, true]));
+      }
+      const next = { ...prev, [name]: !prev[name] };
+      if (!allKeys.some(k => next[k])) return Object.fromEntries(allKeys.map(k => [k, true]));
+      return next;
+    });
+  }
+
+  const cx = 200, cy = 165, r = 108;
+  const labelDist = 150;
+
+  function radarPt(i, pct) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    return {
+      x: cx + r * (pct / 100) * Math.cos(angle),
+      y: cy + r * (pct / 100) * Math.sin(angle),
+    };
+  }
+
+  function polyStr(scores) {
+    return AXES.map((ax, i) => {
+      const p = radarPt(i, scores[ax]);
+      return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    }).join(' ');
+  }
+
+  function labelPt(i) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    return {
+      x: cx + labelDist * Math.cos(angle),
+      y: cy + labelDist * Math.sin(angle),
+    };
+  }
+
+  function getSegIdx(svgX, svgY) {
+    const dx = svgX - cx, dy = svgY - cy;
+    if (Math.sqrt(dx * dx + dy * dy) < 10) return null;
+    const angle = Math.atan2(dy, dx) + Math.PI / 2;
+    const norm = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    return Math.round(norm / (Math.PI * 2 / n)) % n;
+  }
+
+  function handleMouseMove(e) {
+    const svgEl = e.currentTarget.ownerSVGElement;
+    const svgRect = svgEl.getBoundingClientRect();
+    const wrapRect = svgEl.parentElement.getBoundingClientRect();
+    const svgX = (e.clientX - svgRect.left) * (400 / svgRect.width);
+    const svgY = (e.clientY - svgRect.top) * (330 / svgRect.height);
+    const tx = e.clientX - wrapRect.left;
+    const ty = e.clientY - wrapRect.top;
+
+    const segIdx = getSegIdx(svgX, svgY);
+    if (segIdx === null) { setTooltip(p => ({ ...p, visible: false })); return; }
+
+    const axisLabel = AXES[segIdx];
+    const visibleBrands = BRANDS.filter(b => visibility[b.name]);
+
+    if (visibleBrands.length === 1) {
+      setTooltip({ visible: true, x: tx, y: ty, segIdx, axisLabel, singleBrand: visibleBrands[0], multiBrands: null });
+    } else {
+      const sorted = [...visibleBrands].sort((a, b) => b.scores[axisLabel] - a.scores[axisLabel]);
+      setTooltip({ visible: true, x: tx, y: ty, segIdx, axisLabel, singleBrand: null, multiBrands: sorted });
+    }
+  }
+
   return (
     <div className="vis-card">
-      <div className="vis-card__sub">Sentiment breakdown</div>
-      <div className="vis-sent-bar">
-        <div style={{ background: '#1f8a5b', width: '58%' }} />
-        <div style={{ background: '#d98a2b', width: '28%' }} />
-        <div style={{ background: '#d2453a', width: '14%' }} />
+      <div className="srad__chips">
+        {BRANDS.map(b => (
+          <button
+            key={b.name}
+            className={`srad__chip${visibility[b.name] ? '' : ' srad__chip--inactive'}`}
+            onClick={() => toggleBrand(b.name)}
+          >
+            <span className="srad__chip-dot" style={{ background: b.color }} />
+            <img src={b.logo} alt={b.name} className="srad__chip-logo" />
+            <span className="srad__chip-name">{b.name}</span>
+            {b.isYou && <span className="srad__chip-you">You</span>}
+          </button>
+        ))}
       </div>
-      {qualifiers.map((q) => (
-        <div key={q.label} className="vis-qual-row">
-          <span className="vis-qual-label">{q.label}</span>
-          <span className={`vis-qual-badge vis-qual-badge--${q.type}`}>
-            {q.type === 'pos' ? 'Positive' : q.type === 'warn' ? 'Neutral' : 'Negative'}
-          </span>
-        </div>
-      ))}
+
+      <div className="srad__chart-wrap" onMouseLeave={() => setTooltip(p => ({ ...p, visible: false }))}>
+        <svg viewBox="0 0 400 330" className="srad__svg">
+          <rect width="400" height="330" rx="10" fill="#f8f9fc" />
+
+          {[1, 2, 3, 4].map(lvl => (
+            <polygon key={lvl}
+              points={AXES.map((_, i) => { const p = radarPt(i, lvl * 25); return `${p.x.toFixed(2)},${p.y.toFixed(2)}`; }).join(' ')}
+              fill="none" stroke="#e2e5ec" strokeWidth="0.8"
+            />
+          ))}
+
+          {AXES.map((_, i) => {
+            const end = radarPt(i, 100);
+            return <line key={i} x1={cx} y1={cy} x2={end.x} y2={end.y} stroke="#d1d5db" strokeWidth="0.5" />;
+          })}
+
+          {BRANDS.map(b => (
+            <polygon key={b.name}
+              points={polyStr(b.scores)}
+              fill={hexToRgba(b.color, 0.12)}
+              stroke={b.color} strokeWidth="1" strokeLinejoin="round"
+              style={{ opacity: visibility[b.name] ? 1 : 0, transition: 'opacity 0.2s' }}
+            />
+          ))}
+
+          {BRANDS.map(b => visibility[b.name] && AXES.map((ax, i) => {
+            const p = radarPt(i, b.scores[ax]);
+            return <circle key={`${b.name}-${i}`} cx={p.x} cy={p.y} r="2.5" fill="white" stroke={b.color} strokeWidth="1" />;
+          }))}
+
+          {AXES.map((ax, i) => {
+            const pos = labelPt(i);
+            return (
+              <text key={ax} x={pos.x} y={pos.y}
+                textAnchor="middle" dominantBaseline="middle"
+                fontSize="11" fill="#6b7280"
+                fontFamily="Chivo, system-ui, sans-serif"
+              >{ax}</text>
+            );
+          })}
+
+          {tooltip.visible && tooltip.segIdx >= 0 && BRANDS.map(b => {
+            if (!visibility[b.name]) return null;
+            const p = radarPt(tooltip.segIdx, b.scores[AXES[tooltip.segIdx]]);
+            return <circle key={b.name} cx={p.x} cy={p.y} r="5" fill={b.color} stroke="white" strokeWidth="2" />;
+          })}
+
+          <rect x="0" y="0" width="400" height="330" fill="transparent"
+            style={{ cursor: 'crosshair' }}
+            onMouseMove={handleMouseMove}
+          />
+        </svg>
+
+        {tooltip.visible && (
+          <div className="srad__radar-tip" style={{
+            left: tooltip.x + 14,
+            top: Math.max(0, tooltip.y - 60),
+            transform: tooltip.x > 240 ? 'translateX(-110%)' : 'translateX(0)',
+          }}>
+            {tooltip.singleBrand ? (
+              <>
+                <div className="srad__rtip-title">Web score</div>
+                <div className="srad__rtip-brand-row">
+                  <span className="srad__rtip-dot" style={{ background: tooltip.singleBrand.color }} />
+                  <img src={tooltip.singleBrand.logo} alt={tooltip.singleBrand.name} className="srad__rtip-logo" />
+                  <span className="srad__rtip-brand">{tooltip.singleBrand.name}</span>
+                  <span className="srad__rtip-badge" style={TIER_STYLE[tooltip.singleBrand.overall]}>
+                    {tooltip.singleBrand.overall}
+                  </span>
+                </div>
+                <div className="srad__rtip-axes">
+                  {AXES.map(ax => {
+                    const tier = sentTier(tooltip.singleBrand.scores[ax]);
+                    return (
+                      <div key={ax} className="srad__rtip-row">
+                        <span className="srad__rtip-attr">{ax}</span>
+                        <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{tier}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="srad__rtip-title">{tooltip.axisLabel}</div>
+                <div className="srad__rtip-axes">
+                  {tooltip.multiBrands.map(b => {
+                    const tier = sentTier(b.scores[tooltip.axisLabel]);
+                    return (
+                      <div key={b.name} className="srad__rtip-row">
+                        <span className="srad__rtip-dot" style={{ background: b.color }} />
+                        <img src={b.logo} alt={b.name} className="srad__rtip-logo" />
+                        <span className="srad__rtip-brand">{b.name}</span>
+                        <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{tier}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -144,8 +444,8 @@ function ContentVis() {
 const SLIDES = [
   {
     tabIcon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-        <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+        <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
       </svg>
     ),
     tabLabel: 'AI Visibility',
@@ -158,12 +458,12 @@ const SLIDES = [
   },
   {
     tabIcon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-        <path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
       </svg>
     ),
-    tabLabel: 'Sentiment',
-    eyebrow: 'Sentiment',
+    tabLabel: 'AI Sentiment',
+    eyebrow: 'AI Sentiment',
     title: 'Understand how AI really feels about you.',
     lead: "AI answers carry a tone. Find out whether engines describe your brand as trustworthy, innovative, or risky — and fix it.",
     points: ['Positive vs negative qualifier breakdown', 'Perception radar by attribute', 'Before / after optimisation comparison'],
@@ -172,13 +472,12 @@ const SLIDES = [
   },
   {
     tabIcon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
-        <path d="m9 12 2 2 4-4"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     ),
-    tabLabel: 'Technical audit',
-    eyebrow: 'Technical audit',
+    tabLabel: 'AI Authority',
+    eyebrow: 'AI Authority',
     title: "Know exactly what's blocking you from AI results.",
     lead: 'Crawl your site the way LLMs do. Surface every missing schema, crawlability gap, and trust signal that prevents AI from citing you.',
     points: ['Schema.org coverage & quality score', 'LLM-crawlability diagnosis', 'Prioritised fix list by impact'],
@@ -187,14 +486,12 @@ const SLIDES = [
   },
   {
     tabIcon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-        <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/>
-        <path d="M14 2v5a1 1 0 0 0 1 1h5"/>
-        <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+        <circle cx="12" cy="12" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><path d="M12 6v4M12 14l-6.5 2.5M12 14l6.5 2.5"/>
       </svg>
     ),
-    tabLabel: 'Content generation',
-    eyebrow: 'Content generation',
+    tabLabel: 'Content Generation',
+    eyebrow: 'Content Generation',
     title: "Let agents write and ship the fix for you.",
     lead: "Once audit and sentiment tell you what needs changing, our content agents draft on-brand pages, FAQs, and structured data — ready to push live.",
     points: ['AI-drafted content aligned to your brand voice', 'FAQ & structured-data generation', 'One-click publish to your CMS'],
@@ -210,12 +507,7 @@ export default function ProductCarousel() {
   const windowRef = useRef(null);
   const total = SLIDES.length;
 
-  const go = useCallback((n) => setActive(((n % total) + total) % total), [total]);
-
-  useEffect(() => {
-    const t = setInterval(() => go(active + 1), 6500);
-    return () => clearInterval(t);
-  }, [active, go]);
+  const go = (n) => setActive(((n % total) + total) % total);
 
   useEffect(() => {
     if (!trackRef.current || !windowRef.current) return;
@@ -246,16 +538,12 @@ export default function ProductCarousel() {
               className={`products__tab${active === i ? ' products__tab--active' : ''}`}
             >
               <span className="products__tab-icon">{sl.tabIcon}</span>
-              {sl.tabLabel}
+              <span className="products__tab-label">{sl.tabLabel}</span>
             </button>
           ))}
         </div>
 
         <div className="carousel">
-          <button className="carousel__btn" onClick={() => go(active - 1)} aria-label="Previous">
-            <ChevronLeft />
-          </button>
-
           <div ref={windowRef} className="carousel__window">
             <div
               ref={trackRef}
@@ -291,9 +579,6 @@ export default function ProductCarousel() {
             </div>
           </div>
 
-          <button className="carousel__btn" onClick={() => go(active + 1)} aria-label="Next">
-            <ChevronRight />
-          </button>
         </div>
 
         <div className="carousel__dots">

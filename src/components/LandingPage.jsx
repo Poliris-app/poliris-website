@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ProductCarousel from './ProductCarousel';
-import HeroDashboard from './HeroDashboard';
+import Hero from './Hero';
 
 /* ── Avatar images (base64 from original design) ─────────────── */
 const AVATARS = {
@@ -21,7 +21,14 @@ const Eyebrow = ({ children }) => <div className="eyebrow">{children}</div>;
 export default function LandingPage() {
   return (
     <div className="landing">
-      <Hero />
+      <Hero
+        eyebrow="AI brand management, beyond monitoring"
+        title={<>Take control of how<br /><HL>AI sees</HL> your brand.</>}
+        lead="Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan."
+        primaryCta="Start your free trial"
+        secondaryCta="Book a demo"
+        note="No setup. No SEO expertise required."
+      />
       <ValueChain />
       <ProductCarousel />
       <Agents />
@@ -29,64 +36,6 @@ export default function LandingPage() {
       <Stakes />
       <CtaBand />
     </div>
-  );
-}
-
-/* ================================================================
-   HERO
-   ================================================================ */
-function Hero() {
-  return (
-    <header id="top" className="hero">
-      <div className="hero__glow" aria-hidden="true" />
-      <div className="hero__inner">
-        <Eyebrow>AI brand management, beyond monitoring</Eyebrow>
-        <h1 className="hero__h1">
-          Take control of how<br /><HL>AI sees</HL> your brand.
-        </h1>
-        <p className="hero__lead">
-          Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan.
-        </p>
-        <div className="hero__actions">
-          <a href="#" className="btn btn--primary">
-            Start your free trial
-            <span className="btn__icon btn__icon--dark">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </a>
-          <a href="#" className="btn btn--secondary">Book a demo</a>
-        </div>
-        <p className="hero__note">No setup. No SEO expertise required.</p>
-
-        <AiBand />
-
-        <HeroDashboard />
-      </div>
-    </header>
-  );
-}
-
-/* ================================================================
-   AI BAND
-   ================================================================ */
-function AiBand() {
-  const logos = [
-    { src: '/Chatgpt-logo-2.svg',    alt: 'ChatGPT' },
-    { src: '/Gemini-logo-2.svg',     alt: 'Gemini' },
-    { src: '/Deepseek-logo.svg',     alt: 'Deepseek' },
-    { src: '/Mistral-ai-logo.svg',   alt: 'Mistral AI' },
-    { src: '/Claude-logo-2.svg',     alt: 'Claude' },
-    { src: '/Perplexity-logo-2.svg', alt: 'Perplexity' },
-  ];
-  const doubled = [...logos, ...logos];
-  return (
-    <section className="ai-band">
-      <div className="ai-band__track">
-        {doubled.map((l, i) => (
-          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" />
-        ))}
-      </div>
-    </section>
   );
 }
 
@@ -416,25 +365,28 @@ function Stakes() {
    CTA BAND
    ================================================================ */
 function CtaBand() {
+  const MODELS = ['ChatGPT', 'Gemini', 'Perplexity', 'Claude', 'Mistral', 'DeepSeek', 'Grok', 'Copilot'];
+  const tripled = [...MODELS, ...MODELS, ...MODELS];
   return (
     <section id="how" className="cta-band">
       <div className="cta-band__glow" aria-hidden="true" />
-      <div className="container">
-        <div className="cta-band__inner">
-          <h2 className="cta-band__h2">See how AI describes your brand.</h2>
-          <p className="cta-band__lead">
-            Start a 14-day free trial. No setup, no expertise needed — just the picture of how AI sees you today.
-          </p>
-          <div className="cta-band__actions">
-            <a href="#" className="btn btn--ondark-primary">
-              Get your free trial
-              <span className="btn__icon btn__icon--blue">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </span>
-            </a>
-            <a href="#" className="btn btn--ondark">Book a demo</a>
-          </div>
-          <p className="cta-band__note">14 days free · No credit card required</p>
+      <div className="cta-band__glow2" aria-hidden="true" />
+      <div className="cta-band__inner">
+        <h2 className="cta-band__h2">See how AI describes your brand.</h2>
+        <p className="cta-band__lead">
+          Start a 14-day free trial. No setup, no expertise needed — just the picture of how AI sees you today.
+        </p>
+        <div className="cta-band__actions">
+          <a href="#" className="btn btn--primary">Get your free trial</a>
+          <a href="#" className="btn btn--secondary">Book a demo</a>
+        </div>
+        <p className="cta-band__note">14 days free · No credit card required</p>
+      </div>
+      <div className="cta-model-strip">
+        <div className="cta-model-track">
+          {tripled.map((m, i) => (
+            <span key={i} className="cta-model-item">{m}</span>
+          ))}
         </div>
       </div>
     </section>

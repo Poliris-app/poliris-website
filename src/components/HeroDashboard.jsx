@@ -77,6 +77,15 @@ function sentTier(val) {
   return           { label: 'Very Weak',        color: '#dc2626' };
 }
 
+const TIER_CLASS = {
+  'Very Strong': 'hdash__kpi--verystrong',
+  'Strong':      'hdash__kpi--strong',
+  'Moderate':    'hdash__kpi--moderate',
+  'Weak':        'hdash__kpi--weak',
+  'Very Weak':   'hdash__kpi--veryweak',
+};
+function tierClass(label) { return TIER_CLASS[label] ?? ''; }
+
 export default function HeroDashboard() {
   const [tab,        setTab]        = useState('visibility');
   const [hovered,    setHovered]    = useState(null);
@@ -319,7 +328,7 @@ export default function HeroDashboard() {
                         {tab === 'visibility' ? (
                           <span className="hdash__tip-val" style={{ color: tier.color }}>{val}%</span>
                         ) : (
-                          <span className="hdash__tip-val" style={{ color: tier.color }}>{tier.label}</span>
+                          <span className={`hdash__tip-val ${tierClass(tier.label)}`}>{tier.label}</span>
                         )}
                       </div>
                     );
@@ -375,9 +384,7 @@ export default function HeroDashboard() {
                           </div>
                           <div className="hdash__qtip-row">
                             <span className="hdash__qtip-key">Sentiment:</span>
-                            <span className="hdash__qtip-badge"
-                              style={{ color: tier.color, borderColor: tier.color + '60', background: tier.color + '18' }}
-                            >{tier.label}</span>
+                            <span className={`hdash__qtip-badge ${tierClass(tier.label)}`}>{tier.label}</span>
                           </div>
                         </div>
                       )}
@@ -460,11 +467,11 @@ export default function HeroDashboard() {
             <p className="hdash__analysis-sub">How your product is described by AI</p>
 
             <div className="hdash__kpi-row">
-              <div className="hdash__kpi">
+              <div className="hdash__kpi2">
                 <span className="hdash__kpi-label">Avg. Score</span>
-                <span className="hdash__kpi-val hdash__kpi--strong">Strong</span>
+                <span className="hdash__kpi-val hdash__kpi--verystrong">Very Strong</span>
               </div>
-              <div className="hdash__kpi">
+              <div className="hdash__kpi2">
                 <span className="hdash__kpi-label">Trend</span>
                 <span className="hdash__kpi-val">→ Stable</span>
               </div>
@@ -472,20 +479,23 @@ export default function HeroDashboard() {
 
             <p className="hdash__plat-label-sm">Score by platform</p>
             {[
-              { label: 'Performance', pct: 83 },
-              { label: 'Quality',     pct: 88 },
-              { label: 'Safety',      pct: 79 },
-            ].map(s => (
+              { label: 'Performance', pct: 100 },
+              { label: 'Quality',     pct: 100 },
+              { label: 'Safety',      pct: 80 },
+            ].map(s => {
+              const tier = sentTier(s.pct);
+              return (
               <div key={s.label} className="hdash__sent-row">
                 <div className="hdash__sent-top">
                   <span className="hdash__sent-label">{s.label}</span>
-                  <span className="hdash__sent-badge">Strong</span>
+                  <span className={`hdash__sent-badge ${tierClass(tier.label)}`}>{tier.label}</span>
                 </div>
                 <div className="hdash__sent-track">
-                  <div className="hdash__sent-bar" style={{ width: `${s.pct}%` }} />
+                  <div className={`hdash__sent-bar hdash__sent-bar--${tier.label.toLowerCase().replace(' ', '')}`} style={{ width: `${s.pct}%` }} />
                 </div>
               </div>
-            ))}
+              );
+            })}
 
             <p className="hdash__insight-note">All platforms are performing well. Quality leads with the strongest sentiment coverage.</p>
             <button className="hdash__details-btn">Details</button>
