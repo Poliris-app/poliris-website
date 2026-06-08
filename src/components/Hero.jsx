@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import HeroDashboard from './HeroDashboard';
 
 const LOGOS = [
@@ -22,33 +23,64 @@ function AiBand() {
   );
 }
 
+function ScrollHint() {
+  const travelRef = useRef(null);
+
+  useEffect(() => {
+    const LINE_H = 80;
+    const onScroll = () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
+      if (travelRef.current) {
+        travelRef.current.style.top = `${progress * LINE_H}px`;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <div className="scroll-hint" aria-hidden="true">
+      <span className="scroll-hint__label">scroll</span>
+      <span className="scroll-hint__line">
+        <span className="scroll-hint__travel" ref={travelRef} />
+      </span>
+    </div>
+  );
+}
+
 export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, note, showDashboard = true, dark = false }) {
   return (
-    <header id="top" className={`hero${dark ? ' hero--dark' : ''}`}>
-      <div className="hero__glow" aria-hidden="true" />
-      <div className="hero__inner">
-        <div className="eyebrow">{eyebrow}</div>
-        <h1 className="hero__h1">{title}</h1>
-        <p className="hero__lead">{lead}</p>
-        <div className="hero__actions">
-          <a href="#" className="btn btn--primary">
-            {primaryCta}
-            {!dark && (
-              <span className="btn__icon btn__icon--dark">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
-                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                </svg>
-              </span>
-            )}
-          </a>
-          <a href="#" className="btn btn--secondary">{secondaryCta}</a>
+    <>
+      <ScrollHint />
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}`}>
+        <div className="hero__glow" aria-hidden="true" />
+        <div className="hero__inner">
+          <div className="eyebrow">{eyebrow}</div>
+          <h1 className="hero__h1">{title}</h1>
+          <p className="hero__lead">{lead}</p>
+          <div className="hero__actions">
+            <a href="#" className="btn btn--primary">
+              {primaryCta}
+              {!dark && (
+                <span className="btn__icon btn__icon--dark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </span>
+              )}
+            </a>
+            <a href="#" className="btn btn--secondary">{secondaryCta}</a>
+          </div>
+          <p className="hero__note">{note}</p>
+
+          <AiBand />
+
+          {showDashboard && <HeroDashboard />}
         </div>
-        <p className="hero__note">{note}</p>
-
-        <AiBand />
-
-        {showDashboard && <HeroDashboard />}
-      </div>
-    </header>
+      </header>
+    </>
   );
 }

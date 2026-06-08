@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
+import CtaBand from '../components/CtaBand';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -749,27 +750,13 @@ export default function SentimentPage() {
           </div>
         </section>
 
-        {/* ===== CTA BAND ===== */}
-        <section className="cta-band">
-          <div className="wrap">
-            <div className="inner">
-              <h2>See how AI talks about you — free.</h2>
-              <p className="lead">Run a sentiment scan on your brand and your competitors — axis by axis, model by model — and find out exactly where you're slipping.</p>
-              <div className="hero-cta">
-                <a href="#" className="btn-primary">
-                  Start your free trial
-                  <span className="btn-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
-                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                    </svg>
-                  </span>
-                </a>
-                <a href="#" className="btn-ondark">Talk to an expert</a>
-              </div>
-              <p className="note">Free · no credit card · results in 60 seconds</p>
-            </div>
-          </div>
-        </section>
+        <CtaBand
+          heading="See how AI talks about you — free."
+          lead="Run a sentiment scan on your brand and your competitors — axis by axis, model by model — and find out exactly where you're slipping."
+          primaryCta="Start your free trial"
+          secondaryCta="Talk to an expert"
+          note="Free · no credit card · results in 60 seconds"
+        />
       </main>
       <Footer />
     </div>

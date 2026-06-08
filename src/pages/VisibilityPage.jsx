@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import MarketMapSvg from '../components/MarketMapSvg';
 import Hero from '../components/Hero';
+import CtaBand from '../components/CtaBand';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -84,7 +85,6 @@ export default function VisibilityPage() {
 
         {/* ======================== HERO ======================== */}
         <Hero
-          dark
           eyebrow="Poliris Visibility"
           title={<>Win the share of voice<br />inside <HL>AI answers.</HL></>}
           lead="The AI-visibility analysis built around your product — and your real market. See exactly where you're recommended, topic by topic and market by market."
@@ -628,27 +628,13 @@ export default function VisibilityPage() {
           </div>
         </section>
 
-        {/* ======================== CTA BAND ======================== */}
-        <section className="cta-band">
-          <div className="wrap">
-            <div className="inner reveal">
-              <h2>See your AI visibility score — free.</h2>
-              <p className="lead">Find out where you appear in AI answers today — by topic and by market — and exactly what's eating your share.</p>
-              <div className="hero-cta">
-                <a href="#" className="btn btn-primary btn-lg">
-                  Get a free audit{' '}
-                  <span className="btn-icon">
-                    <svg className="licon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                    </svg>
-                  </span>
-                </a>
-                <a href="#" className="btn btn-ondark btn-lg">Talk to an expert</a>
-              </div>
-              <div className="note">No credit card · result in 60s · cancel anytime</div>
-            </div>
-          </div>
-        </section>
+        <CtaBand
+          heading="See your AI visibility score — free."
+          lead="Find out where you appear in AI answers today — by topic and by market — and exactly what's eating your share."
+          primaryCta="Get a free audit"
+          secondaryCta="Talk to an expert"
+          note="No credit card · result in 60s · cancel anytime"
+        />
 
       </main>
       <Footer />

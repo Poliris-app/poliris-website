@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductCarousel from './ProductCarousel';
 import Hero from './Hero';
+import CtaBand from './CtaBand';
 
 /* ── Avatar images (base64 from original design) ─────────────── */
 const AVATARS = {
@@ -19,6 +20,19 @@ const HL = ({ children }) => <span className="hl">{children}</span>;
 const Eyebrow = ({ children }) => <div className="eyebrow">{children}</div>;
 
 export default function LandingPage() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="landing">
       <Hero
@@ -141,14 +155,14 @@ function ValueChain() {
   return (
     <section className="value-chain" id="value-chain">
       <div className="container">
-        <div className="sec-head">
+        <div className="sec-head reveal">
           <Eyebrow>The full value chain</Eyebrow>
           <h2 className="sec-h2">Most tools tell you what's happening.<br />Poliris lets you <HL>take control.</HL></h2>
           <p className="sec-lead">Other tools stop at monitoring. Poliris runs the whole chain — technical audit, content, and the fixes shipped live on your site.</p>
         </div>
         <WorkflowVs />
         <div className="vchain-diagram">
-          <div className="vchain-frame">
+          <div className="vchain-frame reveal reveal--scale reveal--d1">
             <div className="vcf-head">
               <span className="vcf-badge">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
@@ -159,8 +173,8 @@ function ValueChain() {
               <span className="vcf-sub">runs the entire chain — end to end</span>
             </div>
             <div className="vc-track">
-              {steps.map((step) => (
-                <div key={step.num} className={`vc-node${step.monitor ? ' vc-monitor' : ''}`}>
+              {steps.map((step, i) => (
+                <div key={step.num} className={`vc-node${step.monitor ? ' vc-monitor' : ''} reveal reveal--d${i + 2}`}>
                   <div className="vc-ic">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="23" height="23">
                       {step.icon}
@@ -202,7 +216,7 @@ function Agents() {
     <section id="team" className="agents">
       <div className="container">
         <div className="agents__panel">
-          <div className="agents__head">
+          <div className="agents__head reveal">
             <Eyebrow>The team</Eyebrow>
             <h2 className="agents__h2">
               A full team working for you,
@@ -231,7 +245,7 @@ function Agents() {
 
 function AgentCard({ agent }) {
   return (
-    <div className="agent-card">
+    <div className="agent-card reveal">
       <div className="agent-card__top">
         <div className="agent-card__av" style={{ background: agent.gradient }}>
           <img src={AVATARS[agent.name]} alt={agent.name} />
@@ -260,19 +274,27 @@ function ComparisonTable() {
   ];
   const CheckIcon = () => (
     <span className="comparison__check-bg">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-        <path d="M20 6 9 17l-5-5"/>
+      <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+        <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </span>
+  );
+  const CrossIcon = () => (
+    <span className="comparison__x-icon">
+      <svg viewBox="0 0 14 14" fill="none" width="16" height="16">
+        <path d="M3 3l8 8M11 3l-8 8" stroke="#d1d5db" strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     </span>
   );
   return (
     <section className="comparison">
       <div className="container">
-        <div className="sec-head">
+        <div className="sec-head reveal">
+          <Eyebrow>One platform, not a stack</Eyebrow>
           <h2 className="sec-h2">Replace your whole toolstack.</h2>
           <p className="sec-lead">AI visibility, sentiment, technical SEO and content — usually four separate tools. With Poliris, it&rsquo;s one.</p>
         </div>
-        <div className="comparison__table-wrap">
+        <div className="comparison__table-wrap reveal reveal--scale reveal--d1">
           <table className="comparison__table">
             <thead>
               <tr>
@@ -287,7 +309,7 @@ function ComparisonTable() {
                   <td className="comparison__td">{row.need}</td>
                   <td className="comparison__td comparison__td--other">
                     {row.other === 'x'
-                      ? <span className="comparison__x-bg"><span className="comparison__x">×</span></span>
+                      ? <CrossIcon />
                       : <span>{row.other}</span>}
                   </td>
                   <td className="comparison__td comparison__td--pol">
@@ -302,9 +324,11 @@ function ComparisonTable() {
           </table>
         </div>
         <div className="comparison__concl">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#1E9E6A" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" style={{flexShrink:0}}>
-            <path d="M20 6 9 17l-5-5"/>
-          </svg>
+          <span className="comparison__check-bg" style={{flexShrink:0}}>
+            <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+              <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
           <span className="comparison__concl-text">One subscription instead of four — everything above lives inside Poliris.</span>
         </div>
       </div>
@@ -336,7 +360,7 @@ function Stakes() {
   return (
     <section className="stakes">
       <div className="container">
-        <div className="sec-head">
+        <div className="sec-head reveal">
           <Eyebrow>The stakes</Eyebrow>
           <h2 className="sec-h2">
             AI is already shaping your brand.<br />With or <HL>without you.</HL>
@@ -347,7 +371,7 @@ function Stakes() {
         </div>
         <div className="stakes__grid">
           {cards.map((card, i) => (
-            <div key={i} className="stakes__card">
+            <div key={i} className={`stakes__card reveal reveal--d${i + 1}`}>
               <div className="stakes__iconbox">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="30" height="30">
                   {card.icon}
@@ -363,34 +387,3 @@ function Stakes() {
   );
 }
 
-/* ================================================================
-   CTA BAND
-   ================================================================ */
-function CtaBand() {
-  const MODELS = ['ChatGPT', 'Gemini', 'Perplexity', 'Claude', 'Mistral', 'DeepSeek', 'Grok', 'Copilot'];
-  const tripled = [...MODELS, ...MODELS, ...MODELS];
-  return (
-    <section id="how" className="cta-band">
-      <div className="cta-band__glow" aria-hidden="true" />
-      <div className="cta-band__glow2" aria-hidden="true" />
-      <div className="cta-band__inner">
-        <h2 className="cta-band__h2">See how AI describes your brand.</h2>
-        <p className="cta-band__lead">
-          Start a 14-day free trial. No setup, no expertise needed — just the picture of how AI sees you today.
-        </p>
-        <div className="cta-band__actions">
-          <a href="#" className="btn btn--primary">Get your free trial</a>
-          <a href="#" className="btn btn--secondary">Book a demo</a>
-        </div>
-        <p className="cta-band__note">14 days free · No credit card required</p>
-      </div>
-      <div className="cta-model-strip">
-        <div className="cta-model-track">
-          {tripled.map((m, i) => (
-            <span key={i} className="cta-model-item">{m}</span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
