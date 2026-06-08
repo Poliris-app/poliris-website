@@ -125,7 +125,6 @@ export default function SentimentPage() {
       <main>
         {/* ===== HERO ===== */}
         <Hero
-          dark
           eyebrow="Poliris Sentiment"
           title={<>Understand <HL>how</HL> AI describes your brand.</>}
           lead="Showing up in AI answers isn't enough — what matters is how you show up. Poliris scores the way AI talks about you, on every axis your market buys on, across every model, against every competitor."

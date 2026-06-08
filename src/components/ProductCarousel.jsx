@@ -388,54 +388,538 @@ function SentimentVis() {
 }
 
 function AuditVis() {
-  const checks = [
-    { label: 'Schema.org markup',  status: 'ok',   score: '9/10' },
-    { label: 'LLM crawlability',   status: 'ok',   score: '8/10' },
-    { label: 'FAQ structured data', status: 'warn', score: '5/10' },
-    { label: 'E-E-A-T signals',    status: 'bad',  score: '3/10' },
+  const [activeKey, setActiveKey] = useState(null);
+  const [vals, setVals] = useState([81, 80, 36]);
+
+  const STAGE_META = [
+    {
+      key: 'page', label: 'Page Access', color: '#3B6FF5',
+      question: 'Can AI reach your pages?',
+      checks: [
+        { ok: true,  text: 'Robots.txt allows AI crawlers' },
+        { ok: true,  text: 'XML sitemap is present and valid' },
+        { ok: true,  text: 'Key pages return HTTP 200' },
+        { ok: true,  text: 'No disallow rules blocking GPTBot / ClaudeBot' },
+        { ok: false, text: 'AI-specific crawl directives not configured' },
+      ],
+    },
+    {
+      key: 'content', label: 'Content Access', color: '#F97316',
+      question: 'Can AI read your content?',
+      checks: [
+        { ok: true,  text: 'Core content loads without JavaScript' },
+        { ok: true,  text: 'Structured data (JSON-LD) present' },
+        { ok: true,  text: 'Open Graph and meta tags configured' },
+        { ok: false, text: 'Some pages require login to read' },
+        { ok: false, text: 'PDF and video content not accessible to AI' },
+      ],
+    },
+    {
+      key: 'quality', label: 'Content Quality', color: '#EF4444',
+      question: 'Is your content good quality?',
+      checks: [
+        { ok: true,  text: 'Content is original (no duplicate pages)' },
+        { ok: false, text: 'Answers buried in long unstructured paragraphs' },
+        { ok: false, text: 'No FAQ or Q&A formatted sections' },
+        { ok: false, text: 'Content not updated in 90+ days' },
+        { ok: false, text: 'No direct answers to common user queries' },
+      ],
+    },
   ];
+
+  const STAGES = STAGE_META.map((m, i) => ({ ...m, value: vals[i] }));
+
+  const W = 1200, H = 420, CY = 210, SW = 400, MIN_H = 15, MAX_H = 180, BN_THRESH = 75;
+
+  /* Cumulative half-heights — each stage multiplies the previous */
+  const halves = (() => {
+    return [
+      MAX_H,
+      ...STAGES.map(s => MIN_H + (Math.max(0, Math.min(100, s.value)) / 100) * (MAX_H - MIN_H)),
+    ];
+  })();
+
+  const health = Math.round(STAGES.reduce((a, s) => a + s.value, 0) / STAGES.length);
+  const reach  = Math.round(vals.reduce((a, v) => a * v / 100, 100));
+  const status = health >= 80 ? 'Healthy' : health >= 60 ? 'Needs attention' : 'Needs improvement';
+  const ringColor = health >= 70 ? '#16A34A' : health >= 50 ? '#D97706' : '#DC2626';
+  const ringR = 26, ringC = 2 * Math.PI * ringR;
+
+  /* Full pipe outline — single path, clipped per stage for colour */
+  function masterPath() {
+    const [h0, h1, h2, h3] = halves;
+    const x = [0, SW, SW * 2, SW * 3];
+    const T = h => CY - h, B = h => CY + h;
+    const tt = (xa, xb, ha, hb) => { const m = (xa + xb) / 2; return `C ${m} ${T(ha)}, ${m} ${T(hb)}, ${xb} ${T(hb)}`; };
+    const tb = (xa, xb, ha, hb) => { const m = (xa + xb) / 2; return `C ${m} ${B(hb)}, ${m} ${B(ha)}, ${xa} ${B(ha)}`; };
+    return [
+      `M ${x[0]} ${T(h0)}`, tt(x[0],x[1],h0,h1), tt(x[1],x[2],h1,h2), tt(x[2],x[3],h2,h3),
+      `L ${x[3]} ${B(h3)}`, tb(x[2],x[3],h2,h3), tb(x[1],x[2],h1,h2), tb(x[0],x[1],h0,h1), 'Z',
+    ].join(' ');
+  }
+
+  /* Dotted edge paths (top/bottom, inset from pipe wall) */
+  function edgePath(side, inset) {
+    const ih = halves.map(h => Math.max(0, h - inset));
+    const [h0, h1, h2, h3] = ih;
+    const x = [0, SW, SW * 2, SW * 3];
+    const d = side === 'top' ? -1 : 1;
+    const y = h => CY + d * h;
+    const tp = (xa, xb, ha, hb) => { const m = (xa + xb) / 2; return `C ${m} ${y(ha)}, ${m} ${y(hb)}, ${xb} ${y(hb)}`; };
+    return [`M ${x[0]} ${y(h0)}`, tp(x[0],x[1],h0,h1), tp(x[1],x[2],h1,h2), tp(x[2],x[3],h2,h3)].join(' ');
+  }
+
+  const mp = masterPath();
+  const svgPct = (sx, sy) => ({ left: `${(sx / W) * 100}%`, top: `${(sy / H) * 100}%` });
+  const stageCX = i => SW * i + SW / 2;
+  const stageAY = i => CY - (halves[i] + halves[i + 1]) / 2 - 18;
+
+  /* Primary bottleneck = single stage with the minimum value, if below threshold */
+  const minVal = Math.min(...vals);
+  const bnIdx  = minVal < BN_THRESH ? vals.indexOf(minVal) : -1;
+
+  const toggle = key => setActiveKey(k => k === key ? null : key);
+
+  const AI_LOGOS = [
+    { src: '/mistral-ai-logo.png',    alt: 'Mistral',    left: '1.5%', top: '27%' },
+    { src: '/chatgpt-com-logo.png',   alt: 'ChatGPT',    left: '6.5%', top: '40%' },
+    { src: '/claudeai-com-logo.png',  alt: 'Claude',     left: '12%',  top: '27%' },
+    { src: '/perplexity-ai-logo.png', alt: 'Perplexity', left: '2%',   top: '65%' },
+    { src: '/gemini-ai-logo.png',     alt: 'Gemini',     left: '7.5%', top: '76%' },
+  ];
+
+  const activeStage = STAGES.find(s => s.key === activeKey);
+
   return (
     <div className="vis-card">
-      <div className="vis-score-row">
-        <div>
-          <span className="vis-score-num">72</span>
-          <span className="vis-score-denom">/100</span>
+      {/* ── Header ─────────────────────────────────────────── */}
+      <div className="pipeline-hdr">
+        <div className="pipeline-hdr-text">
+          <div className="pipeline-title">Site Health Pipeline</div>
+          <div className="pipeline-sub">
+            Your content flows through 3 stages. A bottleneck at any stage limits everything after it.
+          </div>
         </div>
-        <div>
-          <div className="vis-score-label">Technical score</div>
-          <div className="vis-score-sub">12 issues found</div>
+        <div className="pipeline-score-wrap">
+          <div className="pipeline-score-info">
+            <span className="pipeline-score-lbl">Health score</span>
+            <span className="pipeline-score-desc">Based on all 3 stages</span>
+          </div>
+          <div className="pipeline-ring">
+            <svg viewBox="0 0 64 64" width="52" height="52"
+              style={{ transform: 'rotate(-90deg)' }}>
+              <circle cx="32" cy="32" r={ringR} fill="none" stroke="#E2E8F0" strokeWidth="5"/>
+              <circle cx="32" cy="32" r={ringR} fill="none" stroke={ringColor} strokeWidth="5"
+                strokeLinecap="round"
+                strokeDasharray={`${ringC * health / 100} ${ringC}`}
+                style={{ transition: 'stroke-dasharray .3s, stroke .3s' }}/>
+            </svg>
+            <span className="pipeline-ring-val" style={{ color: ringColor, transition: 'color .3s' }}>{health}%</span>
+          </div>
         </div>
       </div>
-      {checks.map((c) => (
-        <div key={c.label} className="vis-check-row">
-          <span className={`vis-check-icon vis-check-icon--${c.status}`}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-              <path d="M20 6 9 17l-5-5"/>
+
+      {/* ── Full-bleed funnel ──────────────────────────────── */}
+      <div className="pipeline-funnel">
+        <svg viewBox={`0 0 ${W} ${H}`} className="pipeline-svg">
+          <defs>
+            {STAGES.map((s, i) => (
+              <clipPath key={s.key} id={`pcl-${i}`}>
+                <rect x={SW * i} y={0} width={SW} height={H}/>
+              </clipPath>
+            ))}
+            <filter id="pipe-glow" x="-25%" y="-25%" width="150%" height="150%">
+              <feGaussianBlur stdDeviation="10"/>
+            </filter>
+          </defs>
+
+          {/* Stage dividers */}
+          <line x1={SW}   y1={20} x2={SW}   y2={H - 20} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6"/>
+          <line x1={SW*2} y1={20} x2={SW*2} y2={H - 20} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6"/>
+
+          {/* Outer halo */}
+          {STAGES.map((s, i) => (
+            <path key={`halo-${s.key}`} d={mp}
+              fill="none" stroke={s.color}
+              strokeOpacity={activeKey && activeKey !== s.key ? '0.08' : '0.22'}
+              strokeWidth="26" filter="url(#pipe-glow)" clipPath={`url(#pcl-${i})`}
+              style={{ transition: 'stroke-opacity .25s' }}/>
+          ))}
+          {/* Lighter ring */}
+          {STAGES.map((s, i) => (
+            <path key={`ring-${s.key}`} d={mp}
+              fill="none" stroke={s.color}
+              strokeOpacity={activeKey && activeKey !== s.key ? '0.12' : '0.32'}
+              strokeWidth="12" clipPath={`url(#pcl-${i})`}
+              style={{ transition: 'stroke-opacity .25s' }}/>
+          ))}
+          {/* Core fill */}
+          {STAGES.map((s, i) => (
+            <path key={`fill-${s.key}`} d={mp} fill={s.color}
+              fillOpacity={activeKey && activeKey !== s.key ? '0.4' : '1'}
+              clipPath={`url(#pcl-${i})`}
+              style={{ transition: 'fill-opacity .25s' }}/>
+          ))}
+
+          {/* Dotted flow lines */}
+          <path d={edgePath('top', 12)}    fill="none" stroke="#fff" strokeOpacity="0.6"
+            strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
+          <path d={edgePath('bottom', 12)} fill="none" stroke="#fff" strokeOpacity="0.6"
+            strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
+
+          {/* Clickable stage overlays */}
+          {STAGES.map((s, i) => (
+            <rect key={`click-${s.key}`}
+              x={SW * i} y={0} width={SW} height={H}
+              fill="transparent" style={{ cursor: 'pointer' }}
+              onClick={() => toggle(s.key)}/>
+          ))}
+        </svg>
+
+        {/* AI model logos */}
+        {AI_LOGOS.map((l) => (
+          <div key={l.alt} className="pipeline-logo"
+            style={{ left: l.left, top: l.top, pointerEvents: 'none' }}>
+            <img src={l.src} alt={l.alt}/>
+          </div>
+        ))}
+
+        {/* Bottleneck badge — only on the single primary bottleneck */}
+        {bnIdx >= 0 && (
+          <div className="pipeline-bottleneck-badge"
+            style={{ ...svgPct(stageCX(bnIdx), stageAY(bnIdx)), transform: 'translate(-50%,-100%)', pointerEvents: 'none' }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+              strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-          </span>
-          <span className="vis-check-label">{c.label}</span>
-          <span className="vis-check-score">{c.score}</span>
+            Bottleneck
+          </div>
+        )}
+
+        {/* "Capped by" badges — only on stages downstream of the primary bottleneck */}
+        {bnIdx >= 0 && STAGES.map((s, i) => {
+          if (i <= bnIdx) return null;
+          return (
+            <div key={`cap-${s.key}`} className="pipeline-capped-badge"
+              style={{ ...svgPct(stageCX(i), stageAY(i)), transform: 'translate(-50%,-100%)', pointerEvents: 'none' }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              Capped by {STAGES[bnIdx].label}
+            </div>
+          );
+        })}
+
+        {/* Score pills */}
+        {STAGES.map((s, i) => (
+          <div key={`pill-${s.key}`}
+            className={`pipeline-pill${activeKey === s.key ? ' pipeline-pill--active' : ''}`}
+            style={{
+              ...svgPct(stageCX(i), CY),
+              transform: 'translate(-50%,-50%)',
+              cursor: 'pointer',
+              borderColor: activeKey === s.key ? s.color : undefined,
+            }}
+            onClick={() => toggle(s.key)}>
+            <span className="pipeline-pill-lbl">{s.label}</span>
+            <span className="pipeline-pill-val" style={{ color: activeKey === s.key ? s.color : undefined }}>
+              {s.value}%
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Stage tabs ─────────────────────────────────────── */}
+      <div className="pipeline-questions">
+        {STAGES.map((s) => (
+          <div key={`q-${s.key}`}
+            className={`pipeline-question${activeKey === s.key ? ' pipeline-question--on' : ''}`}
+            style={{ borderTopColor: activeKey === s.key ? s.color : undefined }}
+            onClick={() => toggle(s.key)}>
+            {s.question}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Detail panel ───────────────────────────────────── */}
+      {activeStage && (
+        <div className="pipeline-detail-panel" key={activeKey}
+          style={{ borderLeftColor: activeStage.color }}>
+          <div className="pipeline-detail-hdr">
+            <span className="pipeline-detail-name" style={{ color: activeStage.color }}>
+              {activeStage.label}
+            </span>
+            <span className="pipeline-detail-score">{activeStage.value}%</span>
+            {activeStage.value < BN_THRESH && (
+              <span className="pipeline-detail-tag pipeline-detail-tag--bottleneck">Bottleneck</span>
+            )}
+          </div>
+          <div className="pipeline-detail-checks">
+            {activeStage.checks.map((c, i) => (
+              <div key={i} className={`pipeline-detail-check pipeline-detail-check--${c.ok ? 'ok' : 'fail'}`}>
+                <span className="pipeline-detail-ic">{c.ok ? '✓' : '✗'}</span>
+                {c.text}
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
+      )}
+
+      {/* ── Sliders ────────────────────────────────────────── */}
+      <div className="pipeline-controls">
+        {STAGES.map((s, i) => (
+          <div key={s.key} className="pipeline-ctrl">
+            <div className="pipeline-ctrl-hdr">
+              <span className="pipeline-ctrl-name">{s.label}</span>
+              <span className="pipeline-ctrl-badge"
+                style={{ background: s.color + '22', color: s.color }}>
+                {s.value}%
+              </span>
+            </div>
+            <input
+              type="range" min="0" max="100" value={s.value}
+              className="pipeline-slider"
+              style={{
+                '--thumb-c': s.color,
+                background: `linear-gradient(to right, ${s.color} ${s.value}%, ${s.color}28 ${s.value}%)`,
+              }}
+              onChange={e => {
+                const next = [...vals];
+                next[i] = +e.target.value;
+                setVals(next);
+              }}/>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Footer chips ───────────────────────────────────── */}
+      <div className="pipeline-footer">
+        <span className="pipeline-chip">
+          Effective reach <strong>{reach}%</strong>
+        </span>
+        <span className="pipeline-chip">
+          Status <strong style={{ color: ringColor }}>{status}</strong>
+        </span>
+      </div>
     </div>
   );
 }
 
+const IDEA_SETS = [
+  [
+    {
+      priority: 'HIGH PRIORITY', pColor: '#dc2626', pBg: '#fee2e2',
+      title: 'Nike Air Max: 35 Years of Performance Innovation',
+      desc: 'This article positions Nike as the pioneer of cushioning technology, showcasing the evolution from Air Max 1 to today.',
+      draft: {
+        intro: 'In 1987, Nike designer Tinker Hatfield did something unthinkable — he cut a window into the sole of a running shoe. What was once hidden became the centerpiece of a design language that still dominates athletic footwear today.',
+        outline: ['The 1987 Revolution: Making Air Visible', 'From Running Track to Streetwear Icon', 'The Technology Behind Every Air Unit', 'Air Max 2025 and What\'s Next'],
+        words: '720', read: '4 min', score: 91,
+      },
+    },
+    {
+      priority: 'HIGH PRIORITY', pColor: '#dc2626', pBg: '#fee2e2',
+      title: "How Nike's Move to Zero is Reshaping Sustainable Footwear",
+      desc: "This article highlights Nike's recycled materials, carbon commitments, and sustainability story to capture eco-conscious AI answers.",
+      draft: {
+        intro: "Nike's Move to Zero initiative isn't just a marketing campaign — it's a measurable commitment. By 2025, the company aims to use 100% renewable energy across owned facilities, and the Space Hippie collection already proves recycled materials can outperform virgin ones.",
+        outline: ['What Is Move to Zero?', 'Space Hippie: Recycled Materials That Perform', 'Carbon Footprint by the Numbers', 'How to Shop More Sustainably with Nike'],
+        words: '680', read: '3 min', score: 88,
+      },
+    },
+    {
+      priority: 'MEDIUM', pColor: '#d97706', pBg: '#fef3c7',
+      title: 'Nike vs. Adidas: Who Leads the Future of Athletic Performance?',
+      desc: 'Directly pits Nike against its main competitor in technology and cultural impact, potentially displacing Adidas in AI engine results.',
+      draft: {
+        intro: "In the race to dominate AI-era search, brand authority matters as much as product quality. Nike's ZoomX foam and Adidas's Lightstrike Pro represent two very different philosophies — and AI engines are paying close attention to which brand answers consumer questions best.",
+        outline: ['Cushioning Tech Compared: ZoomX vs. Lightstrike Pro', 'Sustainability Score: Move to Zero vs. Stan Smith Mylo', 'Collaborations That Won the Algorithm', 'Who AI Recommends More — and Why'],
+        words: '810', read: '5 min', score: 79,
+      },
+    },
+  ],
+  [
+    {
+      priority: 'HIGH PRIORITY', pColor: '#dc2626', pBg: '#fee2e2',
+      title: 'Nike React Technology: Why Runners Are Switching',
+      desc: 'An in-depth look at Nike React foam, its energy return properties, and why it has converted distance runners away from competing brands.',
+      draft: {
+        intro: "Nike React foam changed the running shoe game. Developed after years of materials research, it delivers energy return that rivals more expensive carbon-fiber plate shoes — at a price point that makes it the go-to for everyday training.",
+        outline: ['What Makes React Foam Different', 'Test Data: Energy Return vs. Competitors', 'Best Nike React Shoes of 2025', 'Is React Right for Your Running Style?'],
+        words: '660', read: '3 min', score: 85,
+      },
+    },
+    {
+      priority: 'MEDIUM', pColor: '#d97706', pBg: '#fef3c7',
+      title: 'Nike Training Club: Building the Digital Fitness Community',
+      desc: "Explores Nike's NTC app strategy and how its free content model builds brand loyalty and increases AI discoverability for fitness queries.",
+      draft: {
+        intro: "When Nike made NTC free in 2020, it wasn't just a pandemic move — it was a long-term play for brand loyalty. Today, the Nike Training Club app is one of the most-cited fitness resources in AI answers, giving Nike a visibility edge that goes far beyond shoes.",
+        outline: ['From Paid to Free: The NTC Pivot', 'Top Workouts Driving AI Citations', 'How NTC Content Improves Nike\'s Search Authority', 'Building Your Training Plan with NTC'],
+        words: '590', read: '3 min', score: 77,
+      },
+    },
+    {
+      priority: 'MEDIUM', pColor: '#d97706', pBg: '#fef3c7',
+      title: 'The Nike Flyknit Story: Engineering Performance Through Fabric',
+      desc: "Chronicles the development of Flyknit technology and its impact on performance, sustainability, and Nike's manufacturing story for AI audiences.",
+      draft: {
+        intro: "Nike Flyknit started with a simple question: what if a shoe's upper could be as precisely engineered as its sole? The answer — a seamless, lightweight knit upper woven from a single thread — cut waste by 80% and fundamentally changed how athletic shoes are made.",
+        outline: ['The Problem Flyknit Was Built to Solve', 'From 2012 Olympics to Everyday Training', 'Flyknit vs. Primeknit: A Technical Comparison', 'The Future of Knit Performance Footwear'],
+        words: '700', read: '4 min', score: 82,
+      },
+    },
+  ],
+];
+
+const SUGGEST_TOPICS = [
+  'Nike ZoomX: The Science Behind Elite Marathon Performance',
+  'Nike Air Force 1 — 40 Years of Sneaker Culture',
+  'How Nike Designs Shoes for Different Running Gaits',
+];
+
 function ContentVis() {
-  const lineWidths = ['75%', '90%', '70%', '85%', '60%'];
+  const [topic, setTopic] = useState('');
+  const [topicError, setTopicError] = useState('');
+  const [draft, setDraft] = useState(null);
+  const [ideaSet, setIdeaSet] = useState(0);
+  const [suggestIdx, setSuggestIdx] = useState(0);
+
+  const ideas = IDEA_SETS[ideaSet];
+
+  const openDraft = (idea) => {
+    setTopicError('');
+    setTopic(idea.title);
+    setDraft({ title: idea.title, ...idea.draft });
+  };
+
+  const handleStart = () => {
+    const t = topic.trim();
+    if (!t) {
+      setTopicError('Please describe your topic or pick one of the suggested ideas below.');
+      return;
+    }
+    if (t.length < 12) {
+      setTopicError('Topic too short — try something like "Nike running shoes for beginners" or pick a card below.');
+      return;
+    }
+    setTopicError('');
+    const match = IDEA_SETS.flat().find(i => i.title.toLowerCase() === t.toLowerCase());
+    if (match) { openDraft(match); return; }
+    setDraft({
+      title: t,
+      intro: `Nike has long been a leader in athletic innovation. This article explores ${t.toLowerCase()} and positions Nike as the authority in this space — optimised for AI-powered search results.`,
+      outline: ['Introduction & Brand Context', 'Key Performance Differentiators', 'Consumer Benefits & Use Cases', "Nike's Competitive Edge"],
+      words: '640', read: '3 min', score: 74,
+    });
+  };
+
+  /* ── Draft view ──────────────────────────────────────────────── */
+  if (draft) {
+    return (
+      <div className="vis-card cstudio-card">
+        <button className="cstudio-back-btn" onClick={() => setDraft(null)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+            <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+          </svg>
+          Back
+        </button>
+        <div className="cstudio-draft-meta">
+          <span className="cstudio-draft-badge cstudio-draft-badge--ai">AI Draft</span>
+          <span className="cstudio-draft-badge cstudio-draft-badge--schema">Schema.org ready</span>
+          <span className="cstudio-draft-stat">{draft.words} words · {draft.read} read</span>
+          <span className="cstudio-draft-score" style={{ color: draft.score >= 85 ? '#16a34a' : draft.score >= 75 ? '#d97706' : '#dc2626' }}>
+            AI score {draft.score}
+          </span>
+        </div>
+        <div className="cstudio-draft-title">{draft.title}</div>
+        <div className="cstudio-draft-intro">{draft.intro}</div>
+        <div className="cstudio-draft-outline-lbl">Article outline</div>
+        <div className="cstudio-draft-outline">
+          {draft.outline.map((s, i) => (
+            <div key={i} className="cstudio-draft-section">
+              <span className="cstudio-draft-num">{i + 1}</span>
+              {s}
+            </div>
+          ))}
+        </div>
+        <div className="cstudio-draft-actions">
+          <button className="cstudio-start-btn">Publish →</button>
+          <button className="cstudio-edit-btn">Edit draft</button>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── Input view ──────────────────────────────────────────────── */
   return (
-    <div className="vis-card">
-      <div className="vis-content-sub">Draft — FAQ page</div>
-      <div className="vis-lines">
-        <div className="vis-line vis-line--blue" style={{ width: '75%' }} />
-        {lineWidths.slice(1).map((w, i) => (
-          <div key={i} className="vis-line vis-line--gray" style={{ width: w }} />
+    <div className="vis-card cstudio-card">
+      <div className="cstudio-hdr">
+        <span className="cstudio-title">Kate · Content Studio</span>
+        <span className="cstudio-sub">Write articles that rank in AI answers</span>
+      </div>
+
+      <div className="cstudio-input-box">
+        <div className="cstudio-q">What do you want to write about?</div>
+        <div className="cstudio-q-sub">Describe your topic or pick a suggestion below</div>
+        <textarea
+          className={`cstudio-textarea${topicError ? ' cstudio-textarea--error' : ''}`}
+          placeholder="e.g. Nike running shoes for beginners, or Nike vs Adidas performance comparison…"
+          value={topic}
+          onChange={e => { setTopic(e.target.value); if (topicError) setTopicError(''); }}
+          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleStart())}
+          rows={3}
+        />
+        {topicError && (
+          <div className="cstudio-topic-error">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".5" fill="currentColor"/>
+            </svg>
+            {topicError}
+          </div>
+        )}
+        <div className="cstudio-input-row">
+          <button className="cstudio-recommend-btn" onClick={() => {
+            setTopic(SUGGEST_TOPICS[suggestIdx % SUGGEST_TOPICS.length]);
+            setSuggestIdx(n => n + 1);
+          }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".5" fill="currentColor"/>
+            </svg>
+            Recommend a topic
+          </button>
+          <button className="cstudio-start-btn" onClick={handleStart}>Start writing →</button>
+        </div>
+      </div>
+
+      <div className="cstudio-ideas-hdr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#3B6FF5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+          <path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/>
+        </svg>
+        Suggested article ideas
+      </div>
+
+      <div className="cstudio-ideas">
+        {ideas.map((idea, i) => (
+          <div key={i} className="cstudio-idea-card" onClick={() => openDraft(idea)}>
+            <span className="cstudio-priority" style={{ color: idea.pColor, background: idea.pBg }}>
+              {idea.priority}
+            </span>
+            <div className="cstudio-idea-title">{idea.title}</div>
+            <div className="cstudio-idea-desc">{idea.desc}</div>
+          </div>
         ))}
       </div>
-      <div className="vis-content-footer">
-        <span className="vis-content-text">Content agent · Schema.org ready</span>
-        <span className="vis-content-action">Publish →</span>
-      </div>
+
+      <button className="cstudio-more-btn" onClick={() => setIdeaSet(s => (s + 1) % IDEA_SETS.length)}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+        </svg>
+        Recommend another ideas
+      </button>
     </div>
   );
 }
@@ -476,8 +960,8 @@ const SLIDES = [
         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     ),
-    tabLabel: 'AI Authority',
-    eyebrow: 'AI Authority',
+    tabLabel: 'Technical Audit',
+    eyebrow: 'Technical Audit',
     title: "Know exactly what's blocking you from AI results.",
     lead: 'Crawl your site the way LLMs do. Surface every missing schema, crawlability gap, and trust signal that prevents AI from citing you.',
     points: ['Schema.org coverage & quality score', 'LLM-crawlability diagnosis', 'Prioritised fix list by impact'],

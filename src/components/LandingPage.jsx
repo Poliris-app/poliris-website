@@ -259,9 +259,11 @@ function ComparisonTable() {
     { need: 'No SEO expertise required',    other: 'x',               pol: '' },
   ];
   const CheckIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="#1E9E6A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-      <path d="M20 6 9 17l-5-5"/>
-    </svg>
+    <span className="comparison__check-bg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+        <path d="M20 6 9 17l-5-5"/>
+      </svg>
+    </span>
   );
   return (
     <section className="comparison">
@@ -285,7 +287,7 @@ function ComparisonTable() {
                   <td className="comparison__td">{row.need}</td>
                   <td className="comparison__td comparison__td--other">
                     {row.other === 'x'
-                      ? <span className="comparison__x">×</span>
+                      ? <span className="comparison__x-bg"><span className="comparison__x">×</span></span>
                       : <span>{row.other}</span>}
                   </td>
                   <td className="comparison__td comparison__td--pol">
