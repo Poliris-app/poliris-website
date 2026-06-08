@@ -1,0 +1,245 @@
+import { useState, useMemo } from 'react';
+
+/* ── Single-brand chart data ─────────────────────────────────────── */
+const NIKE_DATA = [88, 92, 86, 74, 90, 91, 83, 67, 78, 73];
+const X_LABELS  = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+
+/* ── Score Breakdown data ────────────────────────────────────────── */
+const SB_SCORE = 73;
+
+const RAW_AXES = [
+  { id: 'performance',   name: 'Performance',   pct: 92 },
+  { id: 'innovation',    name: 'Innovation',    pct: 67 },
+  { id: 'sustainability',name: 'Sustainability',pct: 57 },
+];
+const RAW_MODELS = [
+  { id: 'gemini',  name: 'Gemini',  icon: '/gemini-ai-logo.png',   pct: 80 },
+  { id: 'chatgpt', name: 'ChatGPT', icon: '/chatgpt-com-logo.png', pct: 60 },
+  { id: 'claude',  name: 'Claude',  icon: '/claudeai-com-logo.png',pct: 60 },
+];
+
+function getScoreLabel(score) {
+  if (score >= 80) return { label: 'Excellent', color: '#16a34a', bg: '#dcfce7' };
+  if (score >= 60) return { label: 'Good',      color: '#2563eb', bg: '#dbeafe' };
+  if (score >= 40) return { label: 'Moderate',  color: '#d97706', bg: '#fef3c7' };
+  return               { label: 'Weak',      color: '#dc2626', bg: '#fee2e2' };
+}
+
+function applyTags(sorted) {
+  const highest = sorted[0].pct;
+  const lowest  = sorted[sorted.length - 1].pct;
+  return sorted.map(item => ({
+    ...item,
+    tag:      item.pct === highest ? 'Leader'   : item.pct === lowest ? 'Priority' : null,
+    tagColor: item.pct === highest ? '#16a34a'  : '#FA7319',
+    tagBg:    item.pct === highest ? '#dcfce7'  : '#FFF3EB',
+  }));
+}
+
+/* ── Chart helpers ───────────────────────────────────────────────── */
+const VW = 540, VH = 130, PT = 8, PR = 8, PB = 20, PL = 26, n = 10;
+function yAt(v) { return PT + (1 - v / 100) * (VH - PT - PB); }
+function xAt(i) { return PL + (i / (n - 1)) * (VW - PL - PR); }
+function makePath(vals) {
+  const pts = vals.map((v, i) => [xAt(i), yAt(v)]);
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 1; i < pts.length; i++) {
+    const [px, py] = pts[i - 1]; const [cx, cy] = pts[i];
+    const mx = ((px + cx) / 2).toFixed(1);
+    d += ` C${mx},${py.toFixed(1)} ${mx},${cy.toFixed(1)} ${cx.toFixed(1)},${cy.toFixed(1)}`;
+  }
+  return d;
+}
+
+/* ── Score Breakdown right panel ─────────────────────────────────── */
+function ScoreBreakdown() {
+  const [activeTab, setActiveTab] = useState('Axes');
+
+  const scoreInfo = getScoreLabel(SB_SCORE);
+
+  const barsDisplay = useMemo(() => {
+    const raw = activeTab === 'Axes' ? RAW_AXES : RAW_MODELS;
+    const sorted = [...raw].sort((a, b) => b.pct - a.pct);
+    return applyTags(sorted);
+  }, [activeTab]);
+
+  const R = 35, SW = 7;
+  const circ  = 2 * Math.PI * R;
+  const offset = circ - (SB_SCORE / 100) * circ;
+
+  return (
+    <div className="hdash__sb-wrap">
+
+      <div className="hdash__sb-hdr2">
+        <div>
+          <p className="hdash__sb-title2">Score Breakdown</p>
+          <p className="hdash__sb-sub2">Quick read of what lifts or limits visibility</p>
+        </div>
+        <span className="hdash__sb-score-badge" style={{ color: scoreInfo.color, background: scoreInfo.bg }}>
+          {scoreInfo.label}
+        </span>
+      </div>
+
+      <div className="hdash__sb-tabs-row">
+        <div className="hdash__sb-tab-group2">
+          {['Axes', 'AI Models'].map(tab => (
+            <button key={tab}
+              className={`hdash__sb-tab2${activeTab === tab ? ' hdash__sb-tab2--on' : ''}`}
+              onClick={() => setActiveTab(tab)}>
+              {tab}
+            </button>
+          ))}
+        </div>
+        <div className="hdash__sb-donut">
+          <svg width="88" height="88" viewBox="0 0 88 88" className="hdash__sb-donut-svg">
+            <circle cx="44" cy="44" r={R} fill="none" stroke="#bfdbfe" strokeWidth={SW} />
+            <circle cx="44" cy="44" r={R} fill="none" stroke="#2563eb" strokeWidth={SW}
+              strokeDasharray={circ}
+              strokeDashoffset={offset}
+              transform="rotate(-90 44 44)"
+              style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+            />
+          </svg>
+          <div className="hdash__sb-donut-text">
+            <span className="hdash__sb-donut-num">{SB_SCORE}</span>
+            <span className="hdash__sb-donut-denom">/100</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="hdash__sb-bars">
+        {barsDisplay.map(bar => (
+          <div key={bar.id} className="hdash__sb-bar-card">
+            <div className="hdash__sb-bar-card-top">
+              <span className="hdash__sb-bar-card-name">
+                {bar.icon && <img src={bar.icon} alt={bar.name} className="hdash__sb-bar-card-icon" />}
+                {bar.name}
+              </span>
+              <span className="hdash__sb-bar-card-right">
+                {bar.tag && (
+                  <span className="hdash__sb-bar-tag" style={{ color: bar.tagColor, background: bar.tagBg }}>
+                    {bar.tag}
+                  </span>
+                )}
+                <span className="hdash__sb-bar-pct2">{bar.pct}%</span>
+              </span>
+            </div>
+            <div className="hdash__sb-bar-track2">
+              <div className="hdash__sb-bar-fill" style={{ width: `${bar.pct}%` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+}
+
+/* ── Main component ──────────────────────────────────────────────── */
+export default function VisibilityDashboard() {
+  const [chartHov, setChartHov] = useState(null);
+
+  function handleChartMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const svgX = ((e.clientX - rect.left) / rect.width) * VW;
+    const rawI = (svgX - PL) / ((VW - PL - PR) / (n - 1));
+    setChartHov(Math.max(0, Math.min(n - 1, Math.round(rawI))));
+  }
+
+  const tipXPct = chartHov !== null ? (xAt(chartHov) / VW) * 100 : 0;
+  const tipFlip = chartHov !== null && chartHov > n * 0.6;
+
+  return (
+    <div className="hero__dashboard">
+
+      <div className="dash__appbar">
+        <span className="dash__dot" /><span className="dash__dot" /><span className="dash__dot" />
+        <span className="dash__url">app.poliris.io · Nike</span>
+      </div>
+
+      <div className="hdash__v2-body">
+
+        <div className="hdash__v2-main">
+
+          <div className="hdash__v2-brand-row">
+            <div className="hdash__v2-brand-left">
+              <div className="hdash__v2-brand-logo">
+                <img src="/nike-com-logo.png" alt="Nike" />
+              </div>
+              <div>
+                <div className="hdash__v2-brand-name">Nike</div>
+                <div className="hdash__v2-brand-sub">AI Visibility · Updated today</div>
+              </div>
+            </div>
+            <div className="hdash__v2-score-wrap">
+              <span className="hdash__v2-score-label">Overall score</span>
+              <span className="hdash__v2-score-badge">↑ 73 / 100</span>
+            </div>
+          </div>
+
+          <div className="hdash__v2-nora">
+            <span className="hdash__v2-nora-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.8" strokeLinecap="round" width="12" height="12">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </span>
+            <p><b>Nora:</b> Strong overall — but your Value coverage is slipping. Worth a look before it spreads.</p>
+          </div>
+
+          <div className="hdash__v2-section-label">Over time</div>
+
+          <div className="hdash__v2-chart-wrap" onMouseLeave={() => setChartHov(null)}>
+            <svg viewBox={`0 0 ${VW} ${VH}`} className="hdash__v2-svg"
+              preserveAspectRatio="none" onMouseMove={handleChartMove}>
+              <defs>
+                <linearGradient id="visGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#2563eb" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#2563eb" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path
+                d={`${makePath(NIKE_DATA)} L${xAt(n-1)},${yAt(0)} L${xAt(0)},${yAt(0)} Z`}
+                fill="url(#visGrad)"
+              />
+              {[0, 25, 50, 75, 100].map(v => (
+                <g key={v}>
+                  <line x1={PL} y1={yAt(v)} x2={VW-PR} y2={yAt(v)} stroke="#eef0f4" strokeWidth="1"/>
+                  <text x={PL-4} y={yAt(v)+3} textAnchor="end" fontSize="7.5" fill="#9a9aa0">{v}</text>
+                </g>
+              ))}
+              {X_LABELS.map((label, i) => (
+                <text key={i} x={xAt(i)} y={VH-4} textAnchor="middle" fontSize="7.5" fill="#9a9aa0">{label}</text>
+              ))}
+              <path d={makePath(NIKE_DATA)} fill="none" stroke="#2563eb" strokeWidth="2" />
+              {chartHov !== null && (
+                <>
+                  <line x1={xAt(chartHov)} y1={PT} x2={xAt(chartHov)} y2={VH-PB}
+                    stroke="#b0b8cc" strokeWidth="1" strokeDasharray="3,2" />
+                  <circle cx={xAt(chartHov)} cy={yAt(NIKE_DATA[chartHov])}
+                    r="4" fill="#2563eb" stroke="#fff" strokeWidth="2" />
+                </>
+              )}
+            </svg>
+
+            {chartHov !== null && (
+              <div className="hdash__v2-tip"
+                style={{ left: `${tipXPct}%`, transform: tipFlip ? 'translateX(calc(-100% - 8px))' : 'translateX(8px)' }}>
+                <div className="hdash__v2-tip-date">{X_LABELS[chartHov]} 2026</div>
+                <div className="hdash__v2-tip-row">
+                  <span className="hdash__v2-tip-dot" style={{ background: '#2563eb' }} />
+                  <span className="hdash__v2-tip-name">Nike</span>
+                  <span className="hdash__v2-tip-val">{NIKE_DATA[chartHov]}%</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="hdash__v2-right">
+          <ScoreBreakdown />
+        </div>
+
+      </div>
+    </div>
+  );
+}

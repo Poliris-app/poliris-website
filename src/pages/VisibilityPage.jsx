@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import MarketMapSvg from '../components/MarketMapSvg';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import VisibilityDashboard from '../components/VisibilityDashboard';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -55,7 +56,6 @@ const SCOPE_DATA = {
 };
 
 export default function VisibilityPage() {
-  const [dashTab, setDashTab] = useState('v1');
   const [scope, setScope] = useState('worldwide');
 
   /* Reveal-on-scroll: adds .in to every .reveal element */
@@ -98,117 +98,7 @@ export default function VisibilityPage() {
         <div className="dash-wrap">
           <div className="wrap reveal">
             <div className="dash-cap"><span className="eyebrow">Inside the dashboard</span></div>
-            <div className="browser">
-              <div className="browser-bar">
-                <div className="dots">
-                  <i /><i /><i />
-                </div>
-                <span className="url">app.poliris.io · Sprout HR</span>
-              </div>
-              <div className="app-canvas">
-                <div className="app-head">
-                  <div className="app-brand">
-                    <div className="ab-logo">S</div>
-                    <div>
-                      <div className="ab-name">Sprout HR</div>
-                      <div className="ab-tag">AI Visibility · <span className="ab-meta">Updated today</span></div>
-                    </div>
-                  </div>
-                  <div className="app-status">
-                    <span className="sl">Overall score</span>
-                    <span className="status-pill">↑ 73 / 100</span>
-                  </div>
-                </div>
-                <div className="nora-banner">
-                  <span className="sp">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
-                    </svg>
-                  </span>
-                  <p><b>Nora:</b> Strong overall — but your Pricing coverage is slipping. Worth a look before it spreads.</p>
-                </div>
-                <div className="app-tabs">
-                  {[
-                    { id: 'v1', label: 'By topic' },
-                    { id: 'v2', label: 'By AI model' },
-                    { id: 'v3', label: 'Over time' },
-                  ].map((t) => (
-                    <button
-                      key={t.id}
-                      className={`app-tab${dashTab === t.id ? ' active' : ''}`}
-                      onClick={() => setDashTab(t.id)}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Tab: By topic */}
-                <div className={`app-panel${dashTab === 'v1' ? ' active' : ''}`}>
-                  <div className="axis-row">
-                    <div className="ar-top"><span>Reliability</span><span className="vp good">Leading</span></div>
-                    <div className="dbar"><i style={{ width: '88%' }} /></div>
-                  </div>
-                  <div className="axis-row">
-                    <div className="ar-top"><span>Integrations</span><span className="vp mid">On par</span></div>
-                    <div className="dbar"><i className="mid" style={{ width: '67%' }} /></div>
-                  </div>
-                  <div className="axis-row">
-                    <div className="ar-top"><span>Pricing &amp; value</span><span className="vp low">Behind</span></div>
-                    <div className="dbar"><i className="low" style={{ width: '54%' }} /></div>
-                  </div>
-                </div>
-
-                {/* Tab: By AI model */}
-                <div className={`app-panel${dashTab === 'v2' ? ' active' : ''}`}>
-                  <div className="byai-row">
-                    <span className="eng">◍ ChatGPT</span>
-                    <div className="dbar"><i style={{ width: '81%' }} /></div>
-                    <span className="vp good">Strong</span>
-                  </div>
-                  <div className="byai-row">
-                    <span className="eng">✦ Gemini</span>
-                    <div className="dbar"><i className="mid" style={{ width: '59%' }} /></div>
-                    <span className="vp mid">Mixed</span>
-                  </div>
-                  <div className="byai-row">
-                    <span className="eng">✶ Perplexity</span>
-                    <div className="dbar"><i style={{ width: '74%' }} /></div>
-                    <span className="vp good">Strong</span>
-                  </div>
-                  <p className="byai-cap">Same brand, different engines — strong on ChatGPT, softer on Gemini.</p>
-                </div>
-
-                {/* Tab: Over time */}
-                <div className={`app-panel${dashTab === 'v3' ? ' active' : ''}`}>
-                  <div className="trend-top">
-                    <span className="big">Growing</span>
-                    <span className="alert">▼ Pricing −8 pts / 30d</span>
-                  </div>
-                  <svg className="trend-svg" viewBox="0 0 560 130" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="vtg" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stopColor="#1e3893" stopOpacity="0.16"/>
-                        <stop offset="1" stopColor="#1e3893" stopOpacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <line x1="0" y1="34" x2="560" y2="34" stroke="#eef0f5"/>
-                    <line x1="0" y1="68" x2="560" y2="68" stroke="#eef0f5"/>
-                    <line x1="0" y1="102" x2="560" y2="102" stroke="#eef0f5"/>
-                    <path d="M0,60 L112,57 L224,55 L336,52 L448,48 L560,45 L560,130 L0,130 Z" fill="url(#vtg)"/>
-                    <path d="M0,60 L112,57 L224,55 L336,52 L448,48 L560,45" fill="none" stroke="#1e3893" strokeWidth="2.5" strokeLinecap="round"/>
-                    <path d="M0,72 L112,75 L224,80 L336,90 L448,100 L560,110" fill="none" stroke="#d98a2b" strokeWidth="2" strokeDasharray="5 4" strokeLinecap="round"/>
-                    <circle cx="560" cy="45" r="5" fill="#1e3893" stroke="#fff" strokeWidth="2.5"/>
-                    <circle cx="560" cy="110" r="4.5" fill="#d98a2b" stroke="#fff" strokeWidth="2.5"/>
-                  </svg>
-                  <div className="trend-axis">
-                    <span>30 days ago</span>
-                    <span>Today · overall up, Pricing slipping</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
+            <VisibilityDashboard />
           </div>
         </div>
 
