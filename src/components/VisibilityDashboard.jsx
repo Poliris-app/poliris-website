@@ -14,10 +14,10 @@ const RAW_AXES = [
   { id: 'durability',      name: 'Durability',       pct: 13 },
 ];
 const RAW_MODELS = [
-  { id: 'chatgpt', name: 'ChatGPT', icon: '/chatgpt-com-logo.png',  pct: 50 },
-  { id: 'mistral', name: 'Mistral', icon: '/mistral-ai-logo.png',   pct: 50 },
-  { id: 'gemini',  name: 'Gemini',  icon: '/gemini-ai-logo.png',    pct: 60 },
-  { id: 'claude',  name: 'Claude',  icon: '/claudeai-com-logo.png', pct: 20 },
+  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  pct: 50 },
+  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   pct: 50 },
+  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    pct: 60 },
+  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, pct: 20 },
 ];
 
 function getScoreLabel(score) {
@@ -165,7 +165,7 @@ export default function VisibilityDashboard() {
         <aside className="dash__sidebar">
           <div className="dsb__brand">
             <div className="dsb__brand-logo">
-              <img src="/nike-com-logo.png" alt="Nike" />
+              <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
             </div>
             <div className="dsb__brand-info">
               <span className="dsb__brand-name">Nike</span>
@@ -219,7 +219,7 @@ export default function VisibilityDashboard() {
           <div className="hdash__v2-brand-row">
             <div className="hdash__v2-brand-left">
               <div className="hdash__v2-brand-logo">
-                <img src="/nike-com-logo.png" alt="Nike" />
+                <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
               </div>
               <div>
                 <div className="hdash__v2-brand-name">Nike</div>

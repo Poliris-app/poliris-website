@@ -42,18 +42,18 @@ function HeatCell({ score }) {
 function VisibilityVis() {
   const MODELS = [
     { label: 'Avg.',        icon: null },
-    { label: 'ChatGPT',     icon: '/chatgpt-com-logo.png' },
-    { label: 'Claude',      icon: '/claudeai-com-logo.png' },
-    { label: 'Mistral',     icon: '/mistral-ai-logo.png' },
-    { label: 'Gemini Web',  icon: '/gemini-ai-logo.png' },
+    { label: 'ChatGPT',     icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png` },
+    { label: 'Claude',      icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png` },
+    { label: 'Mistral',     icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png` },
+    { label: 'Gemini Web',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png` },
   ];
   const BRANDS = [
-    { name: 'Adidas',      logo: '/adidas-group-com-logo.png',  scores: [72, 76, 62, 84, 66] },
-    { name: 'Nike',        logo: '/nike-com-logo.png',          scores: [45, 50, 20, 50, 60], isYou: true },
-    { name: 'On',          logo: '/on-com-logo.png',            scores: [40, 42, 35, 45, 38] },
-    { name: 'Hoka',        logo: '/hoka-com-logo.png',          scores: [38, 40, 32, 42, 38] },
-    { name: 'Brooks',      logo: '/brooksrunning-com-logo.png', scores: [36, 40, 28, 40, 36] },
-    { name: 'New Balance', logo: '/newbalance-com-logo.png',    scores: [34, 38, 28, 38, 32] },
+    { name: 'Adidas',      logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,  scores: [72, 76, 62, 84, 66] },
+    { name: 'Nike',        logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,          scores: [45, 50, 20, 50, 60], isYou: true },
+    { name: 'On',          logo: `${import.meta.env.BASE_URL}on-com-logo.png`,            scores: [40, 42, 35, 45, 38] },
+    { name: 'Hoka',        logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,          scores: [38, 40, 32, 42, 38] },
+    { name: 'Brooks',      logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`, scores: [36, 40, 28, 40, 36] },
+    { name: 'New Balance', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,    scores: [34, 38, 28, 38, 32] },
   ];
 
   return (
@@ -133,32 +133,32 @@ function VisibilityVis() {
 function SentimentVis() {
   const BRANDS = [
     {
-      name: 'Nike',   logo: '/nike-com-logo.png',           color: '#0f172a', isYou: true,
+      name: 'Nike',   logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,           color: '#0f172a', isYou: true,
       overall: 'Very Strong',
       scores: { Innovation: 92, Performance: 90, Range: 70, Quality: 85, Trust: 88 },
     },
     {
-      name: 'On',     logo: '/on-com-logo.png',             color: '#e55a2b',
+      name: 'On',     logo: `${import.meta.env.BASE_URL}on-com-logo.png`,             color: '#e55a2b',
       overall: 'Strong',
       scores: { Innovation: 75, Performance: 78, Range: 65, Quality: 68, Trust: 72 },
     },
     {
-      name: 'Hoka',   logo: '/hoka-com-logo.png',           color: '#0ea5e9',
+      name: 'Hoka',   logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,           color: '#0ea5e9',
       overall: 'Strong',
       scores: { Innovation: 65, Performance: 73, Range: 58, Quality: 50, Trust: 65 },
     },
     {
-      name: 'Adidas',  logo: '/adidas-group-com-logo.png',          color: '#7c3aed',
+      name: 'Adidas',  logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,          color: '#7c3aed',
       overall: 'Very Strong',
       scores: { Innovation: 95, Performance: 94, Range: 76, Quality: 90, Trust: 92 },
     },
     {
-      name: 'Brooks',      logo: '/brooksrunning-com-logo.png',   color: '#14b8a6',
+      name: 'Brooks',      logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,   color: '#14b8a6',
       overall: 'Moderate',
       scores: { Innovation: 50, Performance: 62, Range: 48, Quality: 42, Trust: 58 },
     },
     {
-      name: 'New Balance', logo: '/newbalance-com-logo.png',       color: '#ea580c',
+      name: 'New Balance', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,       color: '#ea580c',
       overall: 'Strong',
       scores: { Innovation: 74, Performance: 80, Range: 68, Quality: 72, Trust: 76 },
     },
@@ -489,11 +489,11 @@ function AuditVis() {
   const toggle = key => setActiveKey(k => k === key ? null : key);
 
   const AI_LOGOS = [
-    { src: '/mistral-ai-logo.png',    alt: 'Mistral',    left: '1.5%', top: '27%' },
-    { src: '/chatgpt-com-logo.png',   alt: 'ChatGPT',    left: '6.5%', top: '40%' },
-    { src: '/claudeai-com-logo.png',  alt: 'Claude',     left: '12%',  top: '27%' },
-    { src: '/perplexity-ai-logo.png', alt: 'Perplexity', left: '2%',   top: '65%' },
-    { src: '/gemini-ai-logo.png',     alt: 'Gemini',     left: '7.5%', top: '76%' },
+    { src: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,    alt: 'Mistral',    left: '1.5%', top: '27%' },
+    { src: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   alt: 'ChatGPT',    left: '6.5%', top: '40%' },
+    { src: `${import.meta.env.BASE_URL}claudeai-com-logo.png`,  alt: 'Claude',     left: '12%',  top: '27%' },
+    { src: `${import.meta.env.BASE_URL}perplexity-ai-logo.png`, alt: 'Perplexity', left: '2%',   top: '65%' },
+    { src: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,     alt: 'Gemini',     left: '7.5%', top: '76%' },
   ];
 
   const activeStage = STAGES.find(s => s.key === activeKey);

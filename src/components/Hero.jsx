@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import HeroDashboard from './HeroDashboard';
 
 const LOGOS = [
-  { src: '/Chatgpt-logo-2.svg',    alt: 'ChatGPT' },
-  { src: '/Gemini-logo-2.svg',     alt: 'Gemini' },
-  { src: '/Deepseek-logo.svg',     alt: 'Deepseek' },
-  { src: '/Mistral-ai-logo.svg',   alt: 'Mistral AI' },
-  { src: '/Claude-logo-2.svg',     alt: 'Claude' },
-  { src: '/Perplexity-logo-2.svg', alt: 'Perplexity' },
+  { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`,    alt: 'ChatGPT' },
+  { src: `${import.meta.env.BASE_URL}Gemini-logo-2.svg`,     alt: 'Gemini' },
+  { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`,     alt: 'Deepseek' },
+  { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`,   alt: 'Mistral AI' },
+  { src: `${import.meta.env.BASE_URL}Claude-logo-2.svg`,     alt: 'Claude' },
+  { src: `${import.meta.env.BASE_URL}Perplexity-logo-2.svg`, alt: 'Perplexity' },
 ];
 
 function AiBand() {

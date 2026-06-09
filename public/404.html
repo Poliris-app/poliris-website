@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.host + '/poliris-website/' +
+        '?p=' + encodeURIComponent(l.pathname.slice('/poliris-website/'.length) + l.search) +
+        '&h=' + encodeURIComponent(l.hash)
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

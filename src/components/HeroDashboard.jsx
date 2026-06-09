@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
 const BRANDS = [
-  { id: 'nike',       name: 'Nike',        color: '#111827', isYou: true, abbr: 'NK', logo: '/nike-com-logo.png' },
-  { id: 'newbalance', name: 'New Balance', color: '#ea580c', abbr: 'NB', logo: '/newbalance-com-logo.png' },
-  { id: 'brooks',     name: 'Brooks',      color: '#7c3aed', abbr: 'BR', logo: '/brooksrunning-com-logo.png' },
-  { id: 'on',         name: 'On',          color: '#16a34a', abbr: 'ON', logo: '/on-com-logo.png' },
-  { id: 'adidas',      name: 'Adidas',       color: '#dc2626', abbr: 'AS', logo: '/adidas-group-com-logo.png' },
-  { id: 'hoka',       name: 'Hoka',        color: '#0891b2', abbr: 'HK', logo: '/hoka-com-logo.png' },
+  { id: 'nike',       name: 'Nike',        color: '#111827', isYou: true, abbr: 'NK', logo: `${import.meta.env.BASE_URL}nike-com-logo.png` },
+  { id: 'newbalance', name: 'New Balance', color: '#ea580c', abbr: 'NB', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png` },
+  { id: 'brooks',     name: 'Brooks',      color: '#7c3aed', abbr: 'BR', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png` },
+  { id: 'on',         name: 'On',          color: '#16a34a', abbr: 'ON', logo: `${import.meta.env.BASE_URL}on-com-logo.png` },
+  { id: 'adidas',      name: 'Adidas',       color: '#dc2626', abbr: 'AS', logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png` },
+  { id: 'hoka',       name: 'Hoka',        color: '#0891b2', abbr: 'HK', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png` },
 ];
 
 const VIS_DATA = {
@@ -165,7 +165,7 @@ export default function HeroDashboard() {
           {/* Brand header */}
           <div className="dsb__brand">
             <div className="dsb__brand-logo">
-              <img src="/nike-com-logo.png" alt="Nike" />
+              <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
             </div>
             <div className="dsb__brand-info">
               <span className="dsb__brand-name">Nike</span>
@@ -506,10 +506,10 @@ export default function HeroDashboard() {
             </div>
             <div className="hdash__plat-scroll">
             {[
-              { name: 'Gemini',  icon: '/gemini-ai-logo.png',      pct: 60, color: 'rgb(59, 130, 246)' },
-              { name: 'ChatGPT', icon: '/chatgpt-com-logo.png',   pct: 50, color: 'rgb(59, 130, 246)' },
-              { name: 'Mistral', icon: '/mistral-ai-logo.png',     pct: 50, color: 'rgb(59, 130, 246)' },
-              { name: 'Claude',  icon: '/claudeai-com-logo.png',   pct: 20, color: 'rgb(59, 130, 246)' },
+              { name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,      pct: 60, color: 'rgb(59, 130, 246)' },
+              { name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   pct: 50, color: 'rgb(59, 130, 246)' },
+              { name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,     pct: 50, color: 'rgb(59, 130, 246)' },
+              { name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`,   pct: 20, color: 'rgb(59, 130, 246)' },
             ].map(p => (
               <div key={p.name} className="hdash__plat-row">
                 <div className="hdash__plat-header">

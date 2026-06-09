@@ -7,6 +7,17 @@
     <title>Poliris</title>
   </head>
   <body>
+    <script>
+      (function() {
+        var p = window.location.search.match(/[?&]p=([^&]*)/);
+        var h = window.location.search.match(/[?&]h=([^&]*)/);
+        if (p) {
+          window.history.replaceState(null, null,
+            '/poliris-website/' + decodeURIComponent(p[1]) + decodeURIComponent(h ? h[1] : '')
+          );
+        }
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

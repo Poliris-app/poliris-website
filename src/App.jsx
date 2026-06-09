@@ -28,7 +28,7 @@ function HomePage() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/poliris-website">
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
