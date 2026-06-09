@@ -1,21 +1,23 @@
 import { useState, useMemo } from 'react';
 
 /* ── Single-brand chart data ─────────────────────────────────────── */
-const NIKE_DATA = [88, 92, 86, 74, 90, 91, 83, 67, 78, 73];
-const X_LABELS  = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+const NIKE_DATA = [88, 92, 86, 74, 90, 91, 83, 67, 78, 64];
+const X_LABELS  = ['Apr 24', 'Apr 25', 'Apr 26', 'Apr 27', 'Apr 28', 'May 1', 'May 3', 'May 7', 'May 10', 'May 15'];
 
 /* ── Score Breakdown data ────────────────────────────────────────── */
-const SB_SCORE = 73;
+const SB_SCORE = 64;
 
 const RAW_AXES = [
-  { id: 'performance',   name: 'Performance',   pct: 92 },
-  { id: 'innovation',    name: 'Innovation',    pct: 67 },
-  { id: 'sustainability',name: 'Sustainability',pct: 57 },
+  { id: 'performance',    name: 'Performance',   pct: 82 },
+  { id: 'coverage',       name: 'Coverage',      pct: 64 },
+  { id: 'innovation',     name: 'Innovation',    pct: 62 },
+  { id: 'sustainability', name: 'Sustainability', pct: 48 },
 ];
 const RAW_MODELS = [
-  { id: 'gemini',  name: 'Gemini',  icon: '/gemini-ai-logo.png',   pct: 80 },
-  { id: 'chatgpt', name: 'ChatGPT', icon: '/chatgpt-com-logo.png', pct: 60 },
-  { id: 'claude',  name: 'Claude',  icon: '/claudeai-com-logo.png',pct: 60 },
+  { id: 'chatgpt', name: 'ChatGPT', icon: '/chatgpt-com-logo.png',  pct: 67 },
+  { id: 'mistral', name: 'Mistral', icon: '/mistral-ai-logo.png',   pct: 76 },
+  { id: 'gemini',  name: 'Gemini',  icon: '/gemini-ai-logo.png',    pct: 59 },
+  { id: 'claude',  name: 'Claude',  icon: '/claudeai-com-logo.png', pct: 54 },
 ];
 
 function getScoreLabel(score) {
@@ -37,7 +39,7 @@ function applyTags(sorted) {
 }
 
 /* ── Chart helpers ───────────────────────────────────────────────── */
-const VW = 540, VH = 130, PT = 8, PR = 8, PB = 20, PL = 26, n = 10;
+const VW = 540, VH = 200, PT = 8, PR = 8, PB = 20, PL = 26, n = 10;
 function yAt(v) { return PT + (1 - v / 100) * (VH - PT - PB); }
 function xAt(i) { return PL + (i / (n - 1)) * (VW - PL - PR); }
 function makePath(vals) {
@@ -154,10 +156,63 @@ export default function VisibilityDashboard() {
 
       <div className="dash__appbar">
         <span className="dash__dot" /><span className="dash__dot" /><span className="dash__dot" />
-        <span className="dash__url">app.poliris.io · Nike</span>
+        <span className="dash__url">app.poliris.io · Visibility</span>
       </div>
 
       <div className="hdash__v2-body">
+
+        {/* ── Sidebar ── */}
+        <aside className="dash__sidebar">
+          <div className="dsb__brand">
+            <div className="dsb__brand-logo">
+              <img src="/nike-com-logo.png" alt="Nike" />
+            </div>
+            <div className="dsb__brand-info">
+              <span className="dsb__brand-name">Nike</span>
+              <span className="dsb__brand-meta">Active project</span>
+            </div>
+          </div>
+          <div className="dsb__ask-poli">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+              <path d="M20 2v4"/><path d="M22 4h-4"/>
+              <circle cx="4" cy="20" r="2"/>
+            </svg>
+            Ask Poli AI
+          </div>
+          <div className="dsb__section-hdr">
+            <span className="dsb__section-lbl">GEO AUDIT</span>
+          </div>
+          <div className="dsb__tree">
+            <div className="dsb__tree-brand">
+              <span className="dsb__tree-chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+              <span className="dsb__avatar dsb__avatar--n">N</span>
+              <span className="dsb__tree-brand-name">nike</span>
+            </div>
+            <div className="dsb__tree-l1">
+              <div className="dsb__tree-category">
+                <span className="dsb__tree-chevron">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+                </span>
+                <span className="dsb__avatar dsb__avatar--n">A</span>
+                <span className="dsb__tree-cat-name">Footwear</span>
+              </div>
+              <div className="dsb__tree-l2">
+                {['Overview', 'AI Visibility', 'Sentiment'].map(l => (
+                  <div key={l} className={`dash__nav-item${l === 'AI Visibility' ? ' dash__nav-item--active' : ''}`}>{l}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="dsb__section-hdr dsb__section-hdr--mt">
+            <span className="dsb__section-lbl">TECHNICAL AUDIT</span>
+          </div>
+          <div className="dsb__section-hdr">
+            <span className="dsb__section-lbl">CONTENT GENERATION</span>
+          </div>
+        </aside>
 
         <div className="hdash__v2-main">
 
@@ -173,7 +228,7 @@ export default function VisibilityDashboard() {
             </div>
             <div className="hdash__v2-score-wrap">
               <span className="hdash__v2-score-label">Overall score</span>
-              <span className="hdash__v2-score-badge">↑ 73 / 100</span>
+              <span className="hdash__v2-score-badge">↑ 64 / 100</span>
             </div>
           </div>
 
@@ -190,7 +245,7 @@ export default function VisibilityDashboard() {
 
           <div className="hdash__v2-chart-wrap" onMouseLeave={() => setChartHov(null)}>
             <svg viewBox={`0 0 ${VW} ${VH}`} className="hdash__v2-svg"
-              preserveAspectRatio="none" onMouseMove={handleChartMove}>
+              onMouseMove={handleChartMove}>
               <defs>
                 <linearGradient id="visGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#2563eb" stopOpacity="0.12" />
@@ -224,7 +279,7 @@ export default function VisibilityDashboard() {
             {chartHov !== null && (
               <div className="hdash__v2-tip"
                 style={{ left: `${tipXPct}%`, transform: tipFlip ? 'translateX(calc(-100% - 8px))' : 'translateX(8px)' }}>
-                <div className="hdash__v2-tip-date">{X_LABELS[chartHov]} 2026</div>
+                <div className="hdash__v2-tip-date">{X_LABELS[chartHov]}, 2026</div>
                 <div className="hdash__v2-tip-row">
                   <span className="hdash__v2-tip-dot" style={{ background: '#2563eb' }} />
                   <span className="hdash__v2-tip-name">Nike</span>

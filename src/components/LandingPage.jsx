@@ -129,6 +129,7 @@ function WorkflowVs() {
    VALUE CHAIN
    ================================================================ */
 function ValueChain() {
+  const [mode, setMode] = useState('poliris');
   const steps = [
     {
       num: '01', name: 'Understand', desc: 'Your brand, offers & technical stakes.', monitor: false,
@@ -160,9 +161,11 @@ function ValueChain() {
           <h2 className="sec-h2">Most tools tell you what's happening.<br />Poliris lets you <HL>take control.</HL></h2>
           <p className="sec-lead">Other tools stop at monitoring. Poliris runs the whole chain — technical audit, content, and the fixes shipped live on your site.</p>
         </div>
-        <WorkflowVs />
+        {/* <WorkflowVs /> */}
         <div className="vchain-diagram">
           <div className="vchain-frame reveal reveal--scale reveal--d1">
+
+            {/* Header */}
             <div className="vcf-head">
               <span className="vcf-badge">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
@@ -170,29 +173,51 @@ function ValueChain() {
                 </svg>
               </span>
               <span className="vcf-title">Poliris</span>
-              <span className="vcf-sub">runs the entire chain — end to end</span>
             </div>
-            <div className="vc-track">
-              {steps.map((step, i) => (
-                <div key={step.num} className={`vc-node${step.monitor ? ' vc-monitor' : ''} reveal reveal--d${i + 2}`}>
-                  <div className="vc-ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="23" height="23">
-                      {step.icon}
-                    </svg>
-                  </div>
-                  <div className="vc-step">{step.num}</div>
-                  <div className="vc-name">{step.name}</div>
-                  <div className="vc-desc">{step.desc}</div>
-                  {step.monitor && (
-                    <div className="vc-others">
-                      <span className="vco-bracket" />
-                      <span className="vco-label">Other tools</span>
-                      <span className="vco-sub">stop at this step</span>
+
+            {/* Toggle */}
+            <div className="vcf-toggle-wrap">
+              <div className="vcf-toggle">
+                <button
+                  className={`vcf-toggle-btn${mode === 'poliris' ? ' vcf-toggle-btn--on' : ''}`}
+                  onClick={() => setMode('poliris')}
+                >
+                  Poliris
+                </button>
+                <button
+                  className={`vcf-toggle-btn${mode === 'other' ? ' vcf-toggle-btn--on vcf-toggle-btn--other' : ''}`}
+                  onClick={() => setMode('other')}
+                >
+                  Other Tools
+                </button>
+              </div>
+              <p className="vcf-toggle-sub">
+                {mode === 'poliris' ? 'runs the entire chain — end to end' : 'Cut the chain'}
+              </p>
+            </div>
+
+            <div className={`vc-track${mode === 'other' ? ' vc-track--other' : ''}`}>
+              {steps.map((step) => {
+                const isActive = mode === 'poliris' || step.monitor;
+                return (
+                  <div key={step.num} className={`vc-node${!isActive ? ' vc-node--dim' : ''}`}>
+                    <div className="vc-ic">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="23" height="23">
+                        {step.icon}
+                      </svg>
                     </div>
-                  )}
-                </div>
-              ))}
+                    <div className="vc-step">{step.num}</div>
+                    <div className="vc-name">{step.name}</div>
+                    <div className="vc-desc">{step.desc}</div>
+                  </div>
+                );
+              })}
             </div>
+
+            {mode === 'other' && (
+              <p className="vcf-other-note">Other tools stop at monitoring — they don't prioritize, recommend, or implement.</p>
+            )}
+
           </div>
         </div>
       </div>

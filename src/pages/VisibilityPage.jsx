@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import MarketMapSvg from '../components/MarketMapSvg';
+import GlobeMap from '../components/GlobeMap';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import VisibilityDashboard from '../components/VisibilityDashboard';
@@ -176,57 +176,90 @@ export default function VisibilityPage() {
               <p className="lead">Dozens of questions, one theme. We map each to the topic it speaks to and score your coverage — the view that drives decisions.</p>
             </div>
             <div className="pf-wrap reveal">
-              <svg viewBox="0 0 980 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Real buyer questions mapped to topic coverage" className="pf-svg">
+              <svg viewBox="0 0 980 920" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Real buyer questions mapped to topic coverage" className="pf-svg">
                 <text x="36" y="46" className="pf-collbl">REAL BUYER QUESTIONS</text>
                 <text x="950" y="46" textAnchor="end" className="pf-collbl">PERCENTAGE COVERAGE</text>
-                {/* Connector curves */}
-                <path d="M 440 96 C 526 96 524 129 610 129" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path d="M 440 174 C 526 174 524 129 610 129" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path d="M 440 252 C 526 252 524 291 610 291" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path d="M 440 330 C 526 330 524 291 610 291" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path d="M 440 408 C 526 408 524 453 610 453" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path d="M 440 486 C 526 486 524 453 610 453" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Question boxes */}
-                <rect x="30" y="70" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="80" width="5" height="32" rx="2.5" fill="#1e3893"/>
-                <text x="54" y="101" className="pf-q">"What's the best payroll software to scale with?"</text>
+                {/* Connector curves — Performance (4) */}
+                <path className="pf-line pf-line--1"  d="M 440 96  C 526 96  524 213 610 213" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--2"  d="M 440 174 C 526 174 524 213 610 213" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--3"  d="M 440 252 C 526 252 524 213 610 213" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--4"  d="M 440 330 C 526 330 524 213 610 213" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Connector curves — Quality (2) */}
+                <path className="pf-line pf-line--5"  d="M 440 408 C 526 408 524 447 610 447" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--6"  d="M 440 486 C 526 486 524 447 610 447" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Connector curves — Design (2) */}
+                <path className="pf-line pf-line--7"  d="M 440 564 C 526 564 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--8"  d="M 440 642 C 526 642 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Connector curves — Durability (3) */}
+                <path className="pf-line pf-line--9"  d="M 440 720 C 526 720 524 798 610 798" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--10" d="M 440 798 C 526 798 524 798 610 798" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                <path className="pf-line pf-line--11" d="M 440 876 C 526 876 524 798 610 798" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Question boxes — Performance */}
+                <rect x="30" y="70"  width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="80"  width="5" height="32" rx="2.5" fill="#1e3893"/>
+                <text x="54" y="101" className="pf-q">"Which lightweight training shoes maximise stability?"</text>
                 <rect x="30" y="148" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
                 <rect x="30" y="158" width="5" height="32" rx="2.5" fill="#1e3893"/>
-                <text x="54" y="179" className="pf-q">"Which HR platform handles multi-country payroll?"</text>
+                <text x="54" y="179" className="pf-q">"Best footwear for intense cross-training workouts?"</text>
                 <rect x="30" y="226" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="236" width="5" height="32" rx="2.5" fill="#7c5cbf"/>
-                <text x="54" y="257" className="pf-q">"What's the best tool to sync payroll to accounting?"</text>
+                <rect x="30" y="236" width="5" height="32" rx="2.5" fill="#1e3893"/>
+                <text x="54" y="257" className="pf-q">"Professional advice on cross-training shoe selection?"</text>
                 <rect x="30" y="304" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="314" width="5" height="32" rx="2.5" fill="#7c5cbf"/>
-                <text x="54" y="335" className="pf-q">"Which HRIS integrates best with Slack and Xero?"</text>
+                <rect x="30" y="314" width="5" height="32" rx="2.5" fill="#1e3893"/>
+                <text x="54" y="335" className="pf-q">"Which athletic shoes improve gym training performance?"</text>
+                {/* Question boxes — Quality */}
                 <rect x="30" y="382" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="392" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="413" className="pf-q">"What's the best-value HRIS for a 200-person team?"</text>
+                <rect x="30" y="392" width="5" height="32" rx="2.5" fill="#7c5cbf"/>
+                <text x="54" y="413" className="pf-q">"Where to find affordable, reliable everyday sneakers?"</text>
                 <rect x="30" y="460" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="470" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="491" className="pf-q">"Which payroll tool gives the best value for money?"</text>
+                <rect x="30" y="470" width="5" height="32" rx="2.5" fill="#7c5cbf"/>
+                <text x="54" y="491" className="pf-q">"Most comfortable everyday shoes with arch support?"</text>
+                {/* Question boxes — Design */}
+                <rect x="30" y="538" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="548" width="5" height="32" rx="2.5" fill="#d98a2b"/>
+                <text x="54" y="569" className="pf-q">"Top footwear collections for a minimalist aesthetic?"</text>
+                <rect x="30" y="616" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="626" width="5" height="32" rx="2.5" fill="#d98a2b"/>
+                <text x="54" y="647" className="pf-q">"Which trendy sneakers lead casual street style?"</text>
+                {/* Question boxes — Durability */}
+                <rect x="30" y="694" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="704" width="5" height="32" rx="2.5" fill="#0d7963"/>
+                <text x="54" y="725" className="pf-q">"Best durable footwear for long-distance walking?"</text>
+                <rect x="30" y="772" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="782" width="5" height="32" rx="2.5" fill="#0d7963"/>
+                <text x="54" y="803" className="pf-q">"Top-rated waterproof hiking boots for mountain terrain?"</text>
+                <rect x="30" y="850" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="860" width="5" height="32" rx="2.5" fill="#0d7963"/>
+                <text x="54" y="881" className="pf-q">"High-performance running shoes for trail conditions?"</text>
                 {/* Topic boxes */}
-                <rect x="610" y="70" width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
-                <rect x="610" y="84" width="5" height="90" rx="2.5" fill="#1e3893"/>
-                <text x="636" y="118" className="pf-tname">Reliability</text>
-                <text x="636" y="144" className="pf-tsub">from 18 prompts</text>
-                <text x="926" y="124" textAnchor="end" className="pf-tscore">88%</text>
-                <rect x="848" y="140" width="78" height="24" rx="12" fill="#e7f4ee"/>
-                <text x="887" y="156" textAnchor="middle" className="pf-tlab" fill="#1f8a5b">Leading</text>
-                <rect x="610" y="232" width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
-                <rect x="610" y="246" width="5" height="90" rx="2.5" fill="#7c5cbf"/>
-                <text x="636" y="280" className="pf-tname">Integrations</text>
-                <text x="636" y="306" className="pf-tsub">from 14 prompts</text>
-                <text x="926" y="286" textAnchor="end" className="pf-tscore">67%</text>
-                <rect x="856" y="302" width="70" height="24" rx="12" fill="#fbf2e3"/>
-                <text x="891" y="318" textAnchor="middle" className="pf-tlab" fill="#d98a2b">On par</text>
-                <rect x="610" y="394" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
-                <rect x="610" y="408" width="5" height="90" rx="2.5" fill="#d98a2b"/>
-                <text x="636" y="442" className="pf-tname">Pricing &amp; value</text>
-                <text x="636" y="468" className="pf-tsub">from 16 prompts</text>
-                <text x="926" y="448" textAnchor="end" className="pf-tscore">54%</text>
-                <rect x="856" y="464" width="70" height="24" rx="12" fill="#fbeae8"/>
-                <text x="891" y="480" textAnchor="middle" className="pf-tlab" fill="#d2453a">Behind</text>
+                <rect x="610" y="154" width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
+                <rect x="610" y="168" width="5" height="90" rx="2.5" fill="#1e3893"/>
+                <text x="636" y="202" className="pf-tname">Performance</text>
+                <text x="636" y="228" className="pf-tsub">from 22 prompts</text>
+                <text x="926" y="208" textAnchor="end" className="pf-tscore">75%</text>
+                <rect x="856" y="224" width="70" height="24" rx="12" fill="#fbf2e3"/>
+                <text x="891" y="240" textAnchor="middle" className="pf-tlab" fill="#d98a2b">On par</text>
+                <rect x="610" y="388" width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
+                <rect x="610" y="402" width="5" height="90" rx="2.5" fill="#7c5cbf"/>
+                <text x="636" y="436" className="pf-tname">Quality</text>
+                <text x="636" y="462" className="pf-tsub">from 18 prompts</text>
+                <text x="926" y="442" textAnchor="end" className="pf-tscore">67%</text>
+                <rect x="856" y="458" width="70" height="24" rx="12" fill="#fbf2e3"/>
+                <text x="891" y="474" textAnchor="middle" className="pf-tlab" fill="#d98a2b">On par</text>
+                <rect x="610" y="544" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
+                <rect x="610" y="558" width="5" height="90" rx="2.5" fill="#d98a2b"/>
+                <text x="636" y="592" className="pf-tname">Design</text>
+                <text x="636" y="618" className="pf-tsub">from 20 prompts</text>
+                <text x="926" y="598" textAnchor="end" className="pf-tscore">42%</text>
+                <rect x="856" y="614" width="70" height="24" rx="12" fill="#fbeae8"/>
+                <text x="891" y="630" textAnchor="middle" className="pf-tlab" fill="#d2453a">Behind</text>
+                <rect x="610" y="739" width="340" height="118" rx="13" fill="#e6f7f3" stroke="#0d7963" strokeOpacity=".30"/>
+                <rect x="610" y="753" width="5" height="90" rx="2.5" fill="#0d7963"/>
+                <text x="636" y="787" className="pf-tname">Durability</text>
+                <text x="636" y="813" className="pf-tsub">from 15 prompts</text>
+                <text x="926" y="793" textAnchor="end" className="pf-tscore">34%</text>
+                <rect x="856" y="809" width="70" height="24" rx="12" fill="#fbeae8"/>
+                <text x="891" y="825" textAnchor="middle" className="pf-tlab" fill="#d2453a">Behind</text>
               </svg>
               <div className="pf-foot">
                 Each topic is a real buying decision — so your score stops being a ranking and becomes a <b>to-do list</b>.
@@ -290,7 +323,7 @@ export default function VisibilityPage() {
                     </span>
                   </div>
                   <div className="mkt-map">
-                    <MarketMapSvg scope={scope} />
+                    <GlobeMap scope={scope} />
                   </div>
                   <div className="mkt-rivals">
                     <div
@@ -350,48 +383,104 @@ export default function VisibilityPage() {
               </div>
             </div>
 
-            {/* Domain table */}
-            <div className="src-table reveal">
-              <div className="src-head">
-                <div>Source domain</div>
-                <div>Authority</div>
-                <div>Who it cites</div>
-                <div>Your move</div>
-              </div>
+            {/* Stats row */}
+            <div className="src-stats reveal">
               {[
-                { fav: 'G', bg: '#e8443b', domain: 'g2.com', da: 91, cite: 'comp', citeLabel: 'Cites competitors', opp: 'out', oppLabel: 'Outreach' },
-                { fav: 'C', bg: '#f47b20', domain: 'capterra.com', da: 88, cite: 'both', citeLabel: 'You & competitors', opp: 'def', oppLabel: 'Defend' },
-                { fav: 'V', bg: '#111', domain: 'theverge.com', da: 95, cite: 'comp', citeLabel: 'Cites competitors', opp: 'out', oppLabel: 'Outreach' },
-                { fav: 'A', bg: '#5e74c4', domain: 'appvizer.fr', da: 71, cite: 'comp', citeLabel: 'Cites competitors', opp: 'part', oppLabel: 'Partnership' },
-                { fav: 'R', bg: '#ff5722', domain: 'reddit.com', da: 92, cite: 'both', citeLabel: 'You & competitors', opp: 'def', oppLabel: 'Defend' },
-                { fav: 'G', bg: '#1f8a5b', domain: 'getapp.com', da: 84, cite: 'you', citeLabel: 'Cites you', opp: 'has', oppLabel: 'Already citing you' },
-              ].map((row) => (
-                <div key={row.domain} className="src-row">
-                  <div className="src-dom">
-                    <span className="fav" style={{ background: row.bg }}>{row.fav}</span>
-                    <span className="u">{row.domain}</span>
-                  </div>
-                  <div className="src-da">
-                    <span className="n">{row.da}</span>
-                    <span className="t"><i style={{ width: `${row.da}%` }} /></span>
-                  </div>
-                  <div><span className={`cite ${row.cite}`}>{row.citeLabel}</span></div>
-                  <div>
-                    <span className={`opp ${row.opp}`}>
-                      {row.opp === 'out' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>}
-                      {row.opp === 'def' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>}
-                      {row.opp === 'part' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>}
-                      {row.opp === 'has' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>}
-                      {row.oppLabel}
-                    </span>
-                  </div>
+                { n: '149', label: 'Sources tracked',      sub: 'Across 6 AI engines'   },
+                { n: '87',  label: 'Cite competitors only', sub: 'Visibility gaps'        },
+                { n: '14',  label: 'Cite your brand',       sub: 'Expand influence'       },
+                { n: '48',  label: 'Cite both',             sub: 'Strengthen position'    },
+              ].map(s => (
+                <div key={s.n} className="src-stat">
+                  <div className="src-stat-n">{s.n}</div>
+                  <div className="src-stat-label">{s.label}</div>
+                  <div className="src-stat-sub">{s.sub}</div>
                 </div>
               ))}
-              <div className="src-foot">
-                <span><b>9</b> high-authority domains cite competitors, not you</span>
-                <span><b>12</b> outreach targets, ranked by influence</span>
-                <span><b>4</b> partnership leads in your category</span>
+            </div>
+
+            {/* Source intelligence report */}
+            <div className="src-intel reveal">
+              <div className="src-intel-hdr">
+                <div>
+                  <div className="src-intel-title">Source intelligence report</div>
+                  <div className="src-intel-meta">Running Shoes · nike.com · Updated 2 hours ago</div>
+                </div>
+                <span className="src-intel-engines">6 AI engines</span>
               </div>
+
+              <div className="sit-head">
+                <div className="sit-c">Source</div>
+                <div className="sit-c">Authority</div>
+                <div className="sit-c">Citations</div>
+                <div className="sit-c">Brand Attribution</div>
+                <div className="sit-c">Your Visibility</div>
+                <div className="sit-c">Opportunity</div>
+              </div>
+
+              {[
+                { fav: 'R', bg: '#cc2200', domain: 'runrepeat.com',      type: 'Review',               da: 72, cite: 14, attr: 'both', vis: 38,   opp: 'strengthen', oppLabel: 'Strengthen'    },
+                { fav: 'T', bg: '#e8321c', domain: 'tomsguide.com',      type: 'Media',                da: 91, cite: 7,  attr: 'both', vis: 45,   opp: 'expand',     oppLabel: 'Expand reach'  },
+                { fav: 'O', bg: '#5b8c5a', domain: 'outdoorgearlab.com', type: 'Review',               da: 68, cite: 7,  attr: 'comp', vis: 0,    opp: 'featured',   oppLabel: 'Get featured'  },
+                { fav: 'W', bg: '#1c1c1c', domain: 'whowhatwear.com',    type: 'Media',                da: 82, cite: 6,  attr: 'both', vis: 41,   opp: 'strengthen', oppLabel: 'Strengthen'    },
+                { fav: 'R', bg: '#ff4500', domain: 'reddit.com',         type: 'Social',               da: 95, cite: 6,  attr: 'both', vis: 31,   opp: 'strengthen', oppLabel: 'Strengthen'    },
+                { fav: 'R', bg: '#111111', domain: 'rei.com',            type: 'Retail',               da: 84, cite: 5,  attr: 'you',  vis: 74,   opp: 'expand',     oppLabel: 'Expand reach'  },
+                { fav: 'A', bg: '#111111', domain: 'adidas.com',         type: 'Retail',               da: 92, cite: 4,  attr: 'comp', vis: 0,    opp: 'pitch',      oppLabel: 'Pitch content' },
+                { fav: 'C', bg: '#cc0000', domain: 'cnn.com',            type: 'News',                 da: 95, cite: 4,  attr: 'both', vis: 35,   opp: 'strengthen', oppLabel: 'Strengthen'    },
+                { fav: 'R', bg: '#e64c00', domain: 'runnersworld.com',   type: 'Media',                da: 84, cite: 4,  attr: 'both', vis: 48,   opp: 'expand',     oppLabel: 'Expand reach'  },
+                { fav: 'N', bg: '#e8243c', domain: 'newbalance.com',     type: 'Retail',               da: 88, cite: 4,  attr: 'comp', vis: 0,    opp: 'pitch',      oppLabel: 'Pitch content' },
+              ].map(row => {
+                const attrLabels = { comp: 'Competitors only', both: 'Both brands', you: 'Your brand', none: 'Not yet cited' };
+                const visColor = row.attr === 'comp' ? '#ef4444' : row.attr === 'you' ? '#16a34a' : '#111827';
+                return (
+                  <div key={row.domain} className="sit-row">
+                    <div className="sit-c sit-c--source">
+                      <span className="fav" style={{ background: row.bg }}>{row.fav}</span>
+                      <div>
+                        <div className="sit-domain">{row.domain}</div>
+                        <div className="sit-type">{row.type}</div>
+                      </div>
+                    </div>
+                    <div className="sit-c sit-c--da">
+                      <span className="sit-da-n">{row.da}</span>
+                      <span className="sit-bar-track"><i style={{ width: `${row.da}%`, background: '#2563eb' }} /></span>
+                    </div>
+                    <div className="sit-c sit-c--cite">
+                      <div className="sit-cite-n">{row.cite}</div>
+                      <div className="sit-cite-sub">this month</div>
+                    </div>
+                    <div className="sit-c">
+                      <span className={`sit-attr sit-attr--${row.attr}`}>{attrLabels[row.attr]}</span>
+                    </div>
+                    <div className="sit-c sit-c--vis">
+                      {row.vis !== null ? (
+                        <>
+                          <span className="sit-vis-n" style={{ color: visColor }}>{row.vis}%</span>
+                          <span className="sit-bar-track"><i style={{ width: `${Math.max(row.vis, 4)}%`, background: visColor }} /></span>
+                        </>
+                      ) : (
+                        <span className="sit-vis-dash">—</span>
+                      )}
+                    </div>
+                    <div className="sit-c">
+                      <span className={`sit-opp sit-opp--${row.opp}`}>
+                        {row.opp === 'featured'   && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>}
+                        {row.opp === 'strengthen' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>}
+                        {row.opp === 'expand'     && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>}
+                        {row.opp === 'pitch'      && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>}
+                        {row.oppLabel}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div className="src-intel-legend">
+                <span><span className="sil-chip sil-chip--you">Your brand</span> Source already cites you</span>
+                <span><span className="sil-chip sil-chip--comp">Competitors only</span> Visibility gap, an opportunity to enter</span>
+                <span><span className="sil-chip sil-chip--both">Both brands</span> Shared citation, opportunity to strengthen your position</span>
+              </div>
+              <div className="src-intel-count">Showing 10 of 149 sources</div>
             </div>
           </div>
         </section>
@@ -402,6 +491,7 @@ export default function VisibilityPage() {
             <div className="dark reveal" id="nora">
               <div className="inner">
                 <div className="nora-grid">
+                  {/* LEFT */}
                   <div>
                     <div className="agent-pill">
                       <span className="sp">
@@ -409,78 +499,135 @@ export default function VisibilityPage() {
                           <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
                         </svg>
                       </span>
-                      Meet Nora · your AI visibility agent
+                      Meet Nora — your AI visibility expert
                     </div>
-                    <h2>Your analyst, on tap.</h2>
-                    <p className="lead">Nora reads every topic, engine and source — then tells you what changed, why, and what to do, in plain language.</p>
+                    <div className="eyebrow nora-eyebrow">04 — NORA ACTS ON IT</div>
+                    <h2>Not just insights.<br />A clear path forward.</h2>
+                    <p className="lead">Nora reads every data point from your visibility report and turns it into a ranked action plan — then helps you implement it, step by step.</p>
                     <ul className="agent-pts">
                       <li>
                         <span className="ic">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                           </svg>
                         </span>
                         <span>
-                          <span className="tt">Explains</span>
-                          <span className="dd">What's lifting each topic, what's dragging it.</span>
+                          <span className="tt">Understands your situation</span>
+                          <span className="dd">Nora reads your full visibility report, sentiment data and source analysis — then explains what it means in plain language.</span>
                         </span>
                       </li>
                       <li>
                         <span className="ic">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M13 2 3 14h9l-1 8 10-12h-9z"/>
+                            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
                           </svg>
                         </span>
                         <span>
-                          <span className="tt">Alerts</span>
-                          <span className="dd">Flags a slipping topic before it becomes a problem.</span>
+                          <span className="tt">Prioritises what matters most</span>
+                          <span className="dd">Every recommendation is ranked by expected impact — so you always know what to fix first.</span>
                         </span>
                       </li>
                       <li>
                         <span className="ic">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                            <polyline points="20 6 9 17 4 12"/>
                           </svg>
                         </span>
                         <span>
-                          <span className="tt">Recommends</span>
-                          <span className="dd">A concrete next step, not just a number.</span>
+                          <span className="tt">Implements the fix for you</span>
+                          <span className="dd">From structured data to FAQ content — Nora prepares the changes and Poliris publishes them directly to your site.</span>
                         </span>
                       </li>
                     </ul>
                   </div>
+
+                  {/* RIGHT */}
                   <div className="shot">
-                    <span className="tab">Screenshot</span>
-                    <div className="chat">
-                      <div className="chat-id">
-                        <span className="av">N</span> Nora · Visibility analyst
+                    <span className="tab tab--live">LIVE SESSION</span>
+                    <div className="chat chat--v2">
+
+                      {/* Chat header */}
+                      <div className="chat-hdr-v2">
+                        <div className="chat-hdr-left">
+                          <span className="av av--nora-v2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+                            </svg>
+                          </span>
+                          <div className="chat-hdr-info">
+                            <span className="chat-hdr-name">Nora</span>
+                            <span className="chat-hdr-sub"><span className="chat-online-dot" />Online · Sprout · Pricing focus</span>
+                          </div>
+                        </div>
+                        <div className="chat-hdr-right">
+                          <span className="chat-hdr-date">Visibility report · 2 Jun 2026</span>
+                        </div>
                       </div>
-                      <div className="bub user">Why is my Pricing topic so low in France?</div>
-                      <div className="bub bot">
-                        On French pricing prompts you sit at <b>#6</b>. PayFit and Lucca win because comparison sites publish their plans — and yours aren't listed.
+
+                      {/* Messages */}
+                      <div className="chat-msgs">
+                        <div className="chat-msg chat-msg--user">
+                          <div className="bub user">Why is our Pricing score only 54% when Reliability is at 88%?</div>
+                          <span className="av av--j av--sm">J</span>
+                        </div>
+                        <div className="chat-msg chat-msg--bot">
+                          <span className="av av--nora-v2 av--sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+                              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+                            </svg>
+                          </span>
+                          <div className="bub bot">Good question. <b>Two root causes:</b> First, your pricing page is blocked by robots.txt — AI engines can't read it. Second, Competitor A has two detailed pricing comparison articles on forbes.com and techradar.com that dominate results for value-related queries. You appear in neither.</div>
+                        </div>
+                        <div className="chat-msg chat-msg--user">
+                          <div className="bub user">What should we fix first?</div>
+                          <span className="av av--j av--sm">J</span>
+                        </div>
+                        <div className="chat-msg chat-msg--bot">
+                          <span className="av av--nora-v2 av--sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+                              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+                            </svg>
+                          </span>
+                          <div className="bub bot">I've built your action plan. Start here — these three changes move the needle fastest:</div>
+                        </div>
                       </div>
-                      <div className="bub user">What do I do?</div>
-                    </div>
-                    <div className="plan">
-                      <div className="plan-h">
-                        <span className="av" style={{ width: 20, height: 20, fontSize: 11 }}>N</span>
-                        Nora's action plan
+
+                      {/* Nested action plan */}
+                      <div className="plan plan--v2">
+                        <div className="plan-h plan-h--v2">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                          </svg>
+                          NORA'S ACTION PLAN — PRICING &amp; VALUE
+                        </div>
+                        <div className="plan-items">
+                          <div className="plan-item">
+                            <span className="rk">1</span>
+                            <span className="t">Fix robots.txt — allow AI crawlers to index /pricing</span>
+                            <span className="impact hi">High impact</span>
+                          </div>
+                          <div className="plan-item">
+                            <span className="rk">2</span>
+                            <span className="t">Add FAQ schema to pricing page with 6 value-question answers</span>
+                            <span className="impact hi">High impact</span>
+                          </div>
+                          <div className="plan-item">
+                            <span className="rk">3</span>
+                            <span className="t">Pitch a pricing comparison article to techradar.com</span>
+                            <span className="impact md">Medium impact</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="plan-item">
-                        <span className="rk">1</span>
-                        <span className="t">Publish pricing on your G2 &amp; Capterra profiles</span>
-                        <span className="impact hi">High</span>
+
+                      {/* Action buttons */}
+                      <div className="chat-btns">
+                        <button className="chat-btn chat-btn--primary">✓ Implement fix #1</button>
+                        <button className="chat-btn">Approve FAQ schema</button>
+                        <button className="chat-btn">Ask follow-up</button>
+                        <button className="chat-btn">Continue analysis</button>
                       </div>
-                      <div className="plan-item">
-                        <span className="rk">2</span>
-                        <span className="t">Get listed on 2 French comparison sites</span>
-                        <span className="impact hi">High</span>
-                      </div>
-                      <div className="plan-item">
-                        <span className="rk">3</span>
-                        <span className="t">Add a French pricing FAQ page</span>
-                        <span className="impact md">Medium</span>
-                      </div>
+
                     </div>
                   </div>
                 </div>

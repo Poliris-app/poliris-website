@@ -5,7 +5,7 @@ const BRANDS = [
   { id: 'newbalance', name: 'New Balance', color: '#ea580c', abbr: 'NB', logo: '/newbalance-com-logo.png' },
   { id: 'brooks',     name: 'Brooks',      color: '#7c3aed', abbr: 'BR', logo: '/brooksrunning-com-logo.png' },
   { id: 'on',         name: 'On',          color: '#16a34a', abbr: 'ON', logo: '/on-com-logo.png' },
-  { id: 'asics',      name: 'ASICS',       color: '#dc2626', abbr: 'AS', logo: '/asics-com-logo.png' },
+  { id: 'adidas',      name: 'Adidas',       color: '#dc2626', abbr: 'AS', logo: '/adidas-group-com-logo.png' },
   { id: 'hoka',       name: 'Hoka',        color: '#0891b2', abbr: 'HK', logo: '/hoka-com-logo.png' },
 ];
 
@@ -13,8 +13,8 @@ const VIS_DATA = {
   nike:       [88, 92, 86, 74, 90, 91, 83, 67, 78, 64],
   newbalance: [84, 82, 78, 72, 64, 56, 48, 44, 40, 38],
   brooks:     [58, 60, 64, 66, 62, 56, 48, 42, 40, 42],
-  on:         [20, 26, 34, 42, 50, 58, 65, 70, 72, 74],
-  asics:      [28, 24, 20, 16, 14, 16, 18, 20, 22, 20],
+  on:         [20, 26, 34, 42, 50, 58, 65, 70, 72, 60],
+  adidas:      [92, 96, 90, 80, 94, 95, 88, 74, 84, 76],
   hoka:       [22, 28, 36, 44, 50, 54, 58, 56, 54, 56],
 };
 // Sentiment lines snap to tier gridline values: Very Strong=100, Strong=75, Moderate=50, Weak=25, Very Weak=0
@@ -22,19 +22,19 @@ const VIS_DATA = {
 const SENT_DATA = {
   nike:       [ 75,  50,  75, 100, 100,  75,  75, 100, 100,  100],
   newbalance: [ 75,  75,  75,  75,  75,  75,  75,  75,  75,  75],
-  brooks:     [ 75,  75,  75,  75,  50,  50,  50,  75,  75,  75],
-  on:         [ 50,  50,  50,  0,  50,  0,  50,  50,  50,  50],
-  asics:      [ 25,  25,  25,  25,  50,  25,  25,  0,  25,  25],
-  hoka:       [ 0,  50,  50,  50,  50,  75,  75,  75,  75,  75],
+  brooks:     [ 75,  75,  75,  75,  50,  50,  50,  75,  50,  50],
+  on:         [ 50,  50,  50,  25,  25,  0,  50,  50,  50,  50],
+  adidas:      [100, 100, 100, 100,  100, 100, 100, 100, 100, 100],
+  hoka:       [ 50,  50,  50,  50,  50,  75,  75,  75,  75,  75],
 };
 
 const QUAD_POS = {
   nike:       { x: 64, y: 85 },
-  newbalance: { x: 42, y: 75 },
-  brooks:     { x: 36, y: 68 },
-  on:         { x: 27, y: 50 },
-  asics:      { x: 20, y: 25 },
-  hoka:       { x: 58, y: 62 },
+  newbalance: { x: 38, y: 75 },
+  brooks:     { x: 42, y: 50 },
+  on:         { x: 60, y: 50 },
+  adidas:      { x: 76, y: 91 },
+  hoka:       { x: 56, y: 62 },
 };
 
 const X_DATES = [
@@ -161,9 +161,75 @@ export default function HeroDashboard() {
 
         {/* ── Sidebar ── */}
         <aside className="dash__sidebar">
-          {['Overview','AI Visibility','Sentiment','Technical audit','Content','Agents'].map(l => (
-            <div key={l} className={`dash__nav-item${l === 'Overview' ? ' dash__nav-item--active' : ''}`}>{l}</div>
-          ))}
+
+          {/* Brand header */}
+          <div className="dsb__brand">
+            <div className="dsb__brand-logo">
+              <img src="/nike-com-logo.png" alt="Nike" />
+            </div>
+            <div className="dsb__brand-info">
+              <span className="dsb__brand-name">Nike</span>
+              <span className="dsb__brand-meta">Active project</span>
+            </div>
+          </div>
+
+          {/* Ask Poli AI */}
+          <div className="dsb__ask-poli">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+              <path d="M20 2v4"/><path d="M22 4h-4"/>
+              <circle cx="4" cy="20" r="2"/>
+            </svg>
+            Ask Poli AI
+          </div>
+
+          {/* GEO AUDIT */}
+          <div className="dsb__section-hdr">
+            <span className="dsb__section-lbl">GEO AUDIT</span>
+          </div>
+          <div className="dsb__tree">
+
+            {/* Brand row */}
+            <div className="dsb__tree-brand">
+              <span className="dsb__tree-chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+              <span className="dsb__avatar dsb__avatar--n">N</span>
+              <span className="dsb__tree-brand-name">nike</span>
+            </div>
+
+            {/* Level 1 children — line from brand */}
+            <div className="dsb__tree-l1">
+
+              {/* Category row */}
+              <div className="dsb__tree-category">
+                <span className="dsb__tree-chevron">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+                </span>
+                <span className="dsb__avatar dsb__avatar--n">A</span>
+                <span className="dsb__tree-cat-name">Footwear</span>
+              </div>
+
+              {/* Level 2 children — line from category */}
+              <div className="dsb__tree-l2">
+                {['Overview','AI Visibility','Sentiment'].map(l => (
+                  <div key={l} className={`dash__nav-item${l === 'Overview' ? ' dash__nav-item--active' : ''}`}>{l}</div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+
+          {/* TECHNICAL AUDIT */}
+          <div className="dsb__section-hdr dsb__section-hdr--mt">
+            <span className="dsb__section-lbl">TECHNICAL AUDIT</span>
+          </div>
+
+          {/* CONTENT GENERATION */}
+          <div className="dsb__section-hdr">
+            <span className="dsb__section-lbl">CONTENT GENERATION</span>
+          </div>
+
         </aside>
 
         {/* ── Main content ── */}
@@ -274,7 +340,7 @@ export default function HeroDashboard() {
                   Array.from({ length: n }, (_, i) => (
                     <circle key={`pt-${b.id}-${i}`}
                       cx={xAt(i)} cy={yAt(chartData[b.id][i])}
-                      r="3" fill="#fff" stroke={b.color} strokeWidth="2"
+                      r="2" fill="#fff" stroke={b.color} strokeWidth="1"
                     />
                   ))
                 )}
@@ -438,10 +504,12 @@ export default function HeroDashboard() {
             <div className="hdash__plat-header">
               <span>Score by platform</span><span>Percent</span>
             </div>
+            <div className="hdash__plat-scroll">
             {[
-              { name: 'ChatGPT', icon: '/chatgpt-com-logo.png', pct: 80, color: 'rgb(59, 130, 246)' },
-              { name: 'Claude',  icon: '/claudeai-com-logo.png',  pct: 40, color: 'rgb(59, 130, 246)' },
-              { name: 'Gemini',  icon: '/gemini-ai-logo.png',  pct: 70, color: 'rgb(59, 130, 246)' },
+              { name: 'ChatGPT', icon: '/chatgpt-com-logo.png',   pct: 67, color: 'rgb(59, 130, 246)' },
+              { name: 'Claude',  icon: '/claudeai-com-logo.png',   pct: 54, color: 'rgb(59, 130, 246)' },
+              { name: 'Gemini',  icon: '/gemini-ai-logo.png',      pct: 59, color: 'rgb(59, 130, 246)' },
+              { name: 'Mistral', icon: '/mistral-ai-logo.png',     pct: 76, color: 'rgb(59, 130, 246)' },
             ].map(p => (
               <div key={p.name} className="hdash__plat-row">
                 <div className="hdash__plat-header">
@@ -456,6 +524,7 @@ export default function HeroDashboard() {
                 </div>
               </div>
             ))}
+            </div>
 
             <p className="hdash__insight-note">Claude coverage is weakest, highest opportunity to improve mention rate.</p>
             <button className="hdash__details-btn">Details</button>
@@ -478,10 +547,13 @@ export default function HeroDashboard() {
             </div>
 
             <p className="hdash__plat-label-sm">Score by platform</p>
+            <div className="hdash__plat-scroll">
             {[
               { label: 'Performance', pct: 100 },
               { label: 'Quality',     pct: 100 },
-              { label: 'Safety',      pct: 80 },
+              { label: 'Range',      pct: 80 },
+              { label: 'Innovation',  pct: 100 },
+              { label: 'Trust',       pct: 100 },
             ].map(s => {
               const tier = sentTier(s.pct);
               return (
@@ -496,6 +568,7 @@ export default function HeroDashboard() {
               </div>
               );
             })}
+            </div>
 
             <p className="hdash__insight-note">All platforms are performing well. Quality leads with the strongest sentiment coverage.</p>
             <button className="hdash__details-btn">Details</button>

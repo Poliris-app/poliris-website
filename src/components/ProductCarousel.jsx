@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const ChevronLeft = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
@@ -47,11 +48,12 @@ function VisibilityVis() {
     { label: 'Gemini Web',  icon: '/gemini-ai-logo.png' },
   ];
   const BRANDS = [
-    { name: 'Nike',        logo: '/nike-com-logo.png',        scores: [73, 78, 63, 88, 68], isYou: true },
-    { name: 'New Balance', logo: '/newbalance-com-logo.png',  scores: [55, 62, 48, 58, 45] },
-    { name: 'Hoka',        logo: '/hoka-com-logo.png',        scores: [42, 45, 35, 52, 38] },
-    { name: 'ASICS',       logo: '/asics-com-logo.png',       scores: [60, 65, 52, 70, 55] },
-    { name: 'Brooks',      logo: '/brooksrunning-com-logo.png', scores: [32, 38, 25, 40, 28] },
+    { name: 'Adidas',      logo: '/adidas-group-com-logo.png',  scores: [72, 76, 62, 84, 66] },
+    { name: 'Nike',        logo: '/nike-com-logo.png',          scores: [64, 67, 54, 76, 59], isYou: true },
+    { name: 'On',          logo: '/on-com-logo.png',            scores: [60, 78, 63, 86, 69] },
+    { name: 'Hoka',        logo: '/hoka-com-logo.png',          scores: [56, 59, 46, 69, 50] },
+    { name: 'Brooks',      logo: '/brooksrunning-com-logo.png', scores: [42, 49, 32, 51, 36] },
+    { name: 'New Balance', logo: '/newbalance-com-logo.png',    scores: [38, 44, 34, 41, 33] },
   ];
 
   return (
@@ -63,10 +65,10 @@ function VisibilityVis() {
           <span className="vheat__excellent">Excellent</span>
         </div>
         <div className="vheat__score-row">
-          <span className="vheat__score-num">83</span>
+          <span className="vheat__score-num">64</span>
           <span className="vheat__score-denom">/100</span>
           <div className="vheat__bar-track">
-            <div className="vheat__bar-fill" style={{ width: '83%' }} />
+            <div className="vheat__bar-fill" style={{ width: '64%' }} />
           </div>
         </div>
       </div>
@@ -82,8 +84,8 @@ function VisibilityVis() {
           <div className="vheat__stat">
             <span className="vheat__stat-label">Visibility Score</span>
             <div className="vheat__stat-row">
-              <span className="vheat__stat-val">70%</span>
-              <span className="vheat__stat-delta">↓2%</span>
+              <span className="vheat__stat-val">64%</span>
+              <span className="vheat__stat-delta">↓14%</span>
             </div>
           </div>
         </div>
@@ -95,6 +97,7 @@ function VisibilityVis() {
               <div className="vheat__brand">
                 <img src={b.logo} alt={b.name} className="vheat__brand-logo" />
                 <span className="vheat__brand-name">{b.name}</span>
+                {b.isYou && <span className="vheat__you-tag">You</span>}
               </div>
               <div className="vheat__cells">
                 {b.scores.map((s, i) => <HeatCell key={i} score={s} />)}
@@ -131,32 +134,37 @@ function SentimentVis() {
   const BRANDS = [
     {
       name: 'Nike',   logo: '/nike-com-logo.png',           color: '#0f172a', isYou: true,
-      overall: 'Strong',
-      scores: { Innovation: 80, Performance: 90, Range: 70, Premium: 85, Trust: 88 },
+      overall: 'Very Strong',
+      scores: { Innovation: 92, Performance: 90, Range: 70, Quality: 85, Trust: 88 },
     },
     {
       name: 'On',     logo: '/on-com-logo.png',             color: '#e55a2b',
-      overall: 'Moderate',
-      scores: { Innovation: 75, Performance: 78, Range: 65, Premium: 68, Trust: 72 },
+      overall: 'Strong',
+      scores: { Innovation: 75, Performance: 78, Range: 65, Quality: 68, Trust: 72 },
     },
     {
       name: 'Hoka',   logo: '/hoka-com-logo.png',           color: '#0ea5e9',
-      overall: 'Moderate',
-      scores: { Innovation: 65, Performance: 73, Range: 58, Premium: 50, Trust: 65 },
-    },
-    {
-      name: 'ASICS',  logo: '/asics-com-logo.png',          color: '#7c3aed',
       overall: 'Strong',
-      scores: { Innovation: 70, Performance: 84, Range: 72, Premium: 65, Trust: 80 },
+      scores: { Innovation: 65, Performance: 73, Range: 58, Quality: 50, Trust: 65 },
     },
     {
-      name: 'Brooks', logo: '/brooksrunning-com-logo.png',  color: '#14b8a6',
-      overall: 'Weak',
-      scores: { Innovation: 50, Performance: 62, Range: 48, Premium: 42, Trust: 58 },
+      name: 'Adidas',  logo: '/adidas-group-com-logo.png',          color: '#7c3aed',
+      overall: 'Very Strong',
+      scores: { Innovation: 95, Performance: 94, Range: 76, Quality: 90, Trust: 92 },
+    },
+    {
+      name: 'Brooks',      logo: '/brooksrunning-com-logo.png',   color: '#14b8a6',
+      overall: 'Moderate',
+      scores: { Innovation: 50, Performance: 62, Range: 48, Quality: 42, Trust: 58 },
+    },
+    {
+      name: 'New Balance', logo: '/newbalance-com-logo.png',       color: '#ea580c',
+      overall: 'Strong',
+      scores: { Innovation: 74, Performance: 80, Range: 68, Quality: 72, Trust: 76 },
     },
   ];
 
-  const AXES = ['Innovation', 'Performance', 'Range', 'Premium', 'Trust'];
+  const AXES = ['Innovation', 'Performance', 'Range', 'Quality', 'Trust'];
   const n = AXES.length;
 
   const TIER_STYLE = {
@@ -668,42 +676,6 @@ function AuditVis() {
         </div>
       )}
 
-      {/* ── Sliders ────────────────────────────────────────── */}
-      <div className="pipeline-controls">
-        {STAGES.map((s, i) => (
-          <div key={s.key} className="pipeline-ctrl">
-            <div className="pipeline-ctrl-hdr">
-              <span className="pipeline-ctrl-name">{s.label}</span>
-              <span className="pipeline-ctrl-badge"
-                style={{ background: s.color + '22', color: s.color }}>
-                {s.value}%
-              </span>
-            </div>
-            <input
-              type="range" min="0" max="100" value={s.value}
-              className="pipeline-slider"
-              style={{
-                '--thumb-c': s.color,
-                background: `linear-gradient(to right, ${s.color} ${s.value}%, ${s.color}28 ${s.value}%)`,
-              }}
-              onChange={e => {
-                const next = [...vals];
-                next[i] = +e.target.value;
-                setVals(next);
-              }}/>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Footer chips ───────────────────────────────────── */}
-      <div className="pipeline-footer">
-        <span className="pipeline-chip">
-          Effective reach <strong>{reach}%</strong>
-        </span>
-        <span className="pipeline-chip">
-          Status <strong style={{ color: ringColor }}>{status}</strong>
-        </span>
-      </div>
     </div>
   );
 }
@@ -938,6 +910,7 @@ const SLIDES = [
     lead: 'See how often AI names and recommends you — broken down by offer and by zone, against the competitors that actually win the answer.',
     points: ['Share of voice, offer by offer × zone', 'Ranked next to your real competitors', 'Tracked across all six engines'],
     cta: 'Track all visibility',
+    ctaHref: '/visibility',
     visual: <VisibilityVis />,
   },
   {
@@ -952,6 +925,7 @@ const SLIDES = [
     lead: "AI answers carry a tone. Find out whether engines describe your brand as trustworthy, innovative, or risky — and fix it.",
     points: ['Positive vs negative qualifier breakdown', 'Perception radar by attribute', 'Before / after optimisation comparison'],
     cta: 'Analyse sentiment',
+    ctaHref: '/sentiment',
     visual: <SentimentVis />,
   },
   {
@@ -966,6 +940,7 @@ const SLIDES = [
     lead: 'Crawl your site the way LLMs do. Surface every missing schema, crawlability gap, and trust signal that prevents AI from citing you.',
     points: ['Schema.org coverage & quality score', 'LLM-crawlability diagnosis', 'Prioritised fix list by impact'],
     cta: 'Run your audit',
+    ctaHref: '#',
     visual: <AuditVis />,
   },
   {
@@ -980,6 +955,7 @@ const SLIDES = [
     lead: "Once audit and sentiment tell you what needs changing, our content agents draft on-brand pages, FAQs, and structured data — ready to push live.",
     points: ['AI-drafted content aligned to your brand voice', 'FAQ & structured-data generation', 'One-click publish to your CMS'],
     cta: 'Generate content',
+    ctaHref: '#',
     visual: <ContentVis />,
   },
 ];
@@ -1049,10 +1025,17 @@ export default function ProductCarousel() {
                           </li>
                         ))}
                       </ul>
-                      <a href="#" className="slide__cta">
-                        {sl.cta}
-                        <span className="slide__cta-icon"><ChevronRight /></span>
-                      </a>
+                      {sl.ctaHref && sl.ctaHref !== '#' ? (
+                        <Link to={sl.ctaHref} className="slide__cta">
+                          {sl.cta}
+                          <span className="slide__cta-icon"><ChevronRight /></span>
+                        </Link>
+                      ) : (
+                        <a href="#" className="slide__cta">
+                          {sl.cta}
+                          <span className="slide__cta-icon"><ChevronRight /></span>
+                        </a>
+                      )}
                     </div>
                     <div className="slide__visual">
                       <div className="slide__visual-inner">{sl.visual}</div>
