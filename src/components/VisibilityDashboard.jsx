@@ -1,23 +1,23 @@
 import { useState, useMemo } from 'react';
 
 /* ── Single-brand chart data ─────────────────────────────────────── */
-const NIKE_DATA = [88, 92, 86, 74, 90, 91, 83, 67, 78, 64];
+const NIKE_DATA = [88, 92, 86, 74, 90, 91, 83, 67, 78, 45];
 const X_LABELS  = ['Apr 24', 'Apr 25', 'Apr 26', 'Apr 27', 'Apr 28', 'May 1', 'May 3', 'May 7', 'May 10', 'May 15'];
 
 /* ── Score Breakdown data ────────────────────────────────────────── */
-const SB_SCORE = 64;
+const SB_SCORE = 45;
 
 const RAW_AXES = [
-  { id: 'performance',    name: 'Performance',   pct: 82 },
-  { id: 'coverage',       name: 'Coverage',      pct: 64 },
-  { id: 'innovation',     name: 'Innovation',    pct: 62 },
-  { id: 'sustainability', name: 'Sustainability', pct: 48 },
+  { id: 'brand-awareness', name: 'Brand awareness', pct: 75 },
+  { id: 'performance',     name: 'Performance',     pct: 67 },
+  { id: 'design',          name: 'Design',           pct: 42 },
+  { id: 'durability',      name: 'Durability',       pct: 13 },
 ];
 const RAW_MODELS = [
-  { id: 'chatgpt', name: 'ChatGPT', icon: '/chatgpt-com-logo.png',  pct: 67 },
-  { id: 'mistral', name: 'Mistral', icon: '/mistral-ai-logo.png',   pct: 76 },
-  { id: 'gemini',  name: 'Gemini',  icon: '/gemini-ai-logo.png',    pct: 59 },
-  { id: 'claude',  name: 'Claude',  icon: '/claudeai-com-logo.png', pct: 54 },
+  { id: 'chatgpt', name: 'ChatGPT', icon: '/chatgpt-com-logo.png',  pct: 50 },
+  { id: 'mistral', name: 'Mistral', icon: '/mistral-ai-logo.png',   pct: 50 },
+  { id: 'gemini',  name: 'Gemini',  icon: '/gemini-ai-logo.png',    pct: 60 },
+  { id: 'claude',  name: 'Claude',  icon: '/claudeai-com-logo.png', pct: 20 },
 ];
 
 function getScoreLabel(score) {
@@ -228,7 +228,7 @@ export default function VisibilityDashboard() {
             </div>
             <div className="hdash__v2-score-wrap">
               <span className="hdash__v2-score-label">Overall score</span>
-              <span className="hdash__v2-score-badge">↑ 64 / 100</span>
+              <span className="hdash__v2-score-badge">↑ 45 / 100</span>
             </div>
           </div>
 
@@ -238,7 +238,7 @@ export default function VisibilityDashboard() {
                 <path d="M12 5v14M5 12h14"/>
               </svg>
             </span>
-            <p><b>Nora:</b> Strong overall — but your Value coverage is slipping. Worth a look before it spreads.</p>
+            <p><b>Nora:</b> Strong overall   but your Value coverage is slipping. Worth a look before it spreads.</p>
           </div>
 
           <div className="hdash__v2-section-label">Over time</div>
@@ -263,7 +263,7 @@ export default function VisibilityDashboard() {
                 </g>
               ))}
               {X_LABELS.map((label, i) => (
-                <text key={i} x={xAt(i)} y={VH-4} textAnchor="middle" fontSize="7.5" fill="#9a9aa0">{label}</text>
+                <text key={i} x={xAt(i)} y={VH-4} textAnchor={i === n - 1 ? 'end' : 'middle'} fontSize="7.5" fill="#9a9aa0">{label}</text>
               ))}
               <path d={makePath(NIKE_DATA)} fill="none" stroke="#2563eb" strokeWidth="2" />
               {chartHov !== null && (

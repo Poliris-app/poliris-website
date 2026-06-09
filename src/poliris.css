@@ -300,6 +300,30 @@ button { cursor: pointer; border: none; background: none; }
 .nav__link--btn:hover { color: var(--blue); }
 .nav__link--btn:hover .nav__chevron { color: var(--blue); }
 
+.nav__toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  animation: toast-lifecycle 2.5s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes toast-lifecycle {
+  0%   { opacity: 0; transform: translateY(40px); }
+  12%  { opacity: 1; transform: translateY(0);    }
+  78%  { opacity: 1; transform: translateY(0);    }
+  100% { opacity: 0; transform: translateY(40px); }
+}
+
 .nav__chevron {
   color: #9ca3af;
   transition: transform 0.2s ease, color 0.2s;
@@ -355,6 +379,8 @@ button { cursor: pointer; border: none; background: none; }
   padding: 10px 12px;
   border-radius: 9px;
   text-decoration: none;
+  text-align: left;
+  width: 100%;
   transition: background 0.12s ease;
 }
 .nav__dropdown-item:hover { background: #f8fafc; }
@@ -650,7 +676,7 @@ button { cursor: pointer; border: none; background: none; }
 /* Dashboard mockup */
 .hero__dashboard {
   max-width: 1120px;
-  margin: 58px auto 0;
+  margin: 50px auto 0;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: #fff;
@@ -3077,6 +3103,15 @@ button { cursor: pointer; border: none; background: none; }
   border-radius: 999px;
   padding: 2px 8px;
 }
+.vheat__moderate {
+  font-family: var(--manrope);
+  font-size: 10px;
+  font-weight: 700;
+  color: #d97706;
+  background: #fef3c7;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
 .vheat__score-row {
   display: flex;
   align-items: baseline;
@@ -4269,7 +4304,7 @@ button { cursor: pointer; border: none; background: none; }
 .vis-page .dash-wrap { 
   padding: 40px 0; 
 }
-.vis-page .dash-cap  { max-width: 1060px; margin: 0 auto 16px; text-align: center; }
+.vis-page .dash-cap  { max-width: 1060px; margin: 0 auto; text-align: center; }
 .vis-page .browser {
   max-width: 1060px;
   margin: 0 auto;
@@ -4506,6 +4541,7 @@ button { cursor: pointer; border: none; background: none; }
 .reveal.in .pf-line--10 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.45s forwards; }
 .reveal.in .pf-line--11 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.7s  forwards; }
 .reveal.in .pf-line--12 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.95s forwards; }
+.reveal.in .pf-line--13 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 3.2s  forwards; }
 .vis-page .pf-foot { text-align: center; font-size: 13.5px; color: var(--fg-5); margin-top: 16px; line-height: 1.55; }
 .vis-page .pf-foot b { color: var(--fg-2); font-weight: 600; }
 
@@ -4639,6 +4675,58 @@ button { cursor: pointer; border: none; background: none; }
 }
 .vis-page .src-arrow     { display: flex; align-items: center; justify-content: center; color: var(--poliris-blue-300); padding: 0 18px; }
 .vis-page .src-arrow svg { width: 28px; height: 28px; }
+
+/* ── 6-step pipeline ─────────────────────────────────── */
+.vis-page .src-pipeline {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 28px;
+  margin-bottom: 40px;
+  gap: 0;
+}
+.vis-page .src-pipeline-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  padding-right: 28px;
+}
+.vis-page .src-pipeline-item--sep {
+  border-right: 1px solid var(--border);
+  margin-right: 28px;
+}
+.vis-page .src-pipeline-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--poliris-blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.vis-page .src-pipeline-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vis-page .src-pipeline-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--fg-1);
+  white-space: nowrap;
+}
+.vis-page .src-pipeline-sub {
+  font-size: 11.5px;
+  color: var(--fg-5);
+  white-space: nowrap;
+}
 
 .vis-page .src-table {
   background: #fff;

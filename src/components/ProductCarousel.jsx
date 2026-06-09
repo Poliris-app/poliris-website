@@ -49,11 +49,11 @@ function VisibilityVis() {
   ];
   const BRANDS = [
     { name: 'Adidas',      logo: '/adidas-group-com-logo.png',  scores: [72, 76, 62, 84, 66] },
-    { name: 'Nike',        logo: '/nike-com-logo.png',          scores: [64, 67, 54, 76, 59], isYou: true },
-    { name: 'On',          logo: '/on-com-logo.png',            scores: [60, 78, 63, 86, 69] },
-    { name: 'Hoka',        logo: '/hoka-com-logo.png',          scores: [56, 59, 46, 69, 50] },
-    { name: 'Brooks',      logo: '/brooksrunning-com-logo.png', scores: [42, 49, 32, 51, 36] },
-    { name: 'New Balance', logo: '/newbalance-com-logo.png',    scores: [38, 44, 34, 41, 33] },
+    { name: 'Nike',        logo: '/nike-com-logo.png',          scores: [45, 50, 20, 50, 60], isYou: true },
+    { name: 'On',          logo: '/on-com-logo.png',            scores: [40, 42, 35, 45, 38] },
+    { name: 'Hoka',        logo: '/hoka-com-logo.png',          scores: [38, 40, 32, 42, 38] },
+    { name: 'Brooks',      logo: '/brooksrunning-com-logo.png', scores: [36, 40, 28, 40, 36] },
+    { name: 'New Balance', logo: '/newbalance-com-logo.png',    scores: [34, 38, 28, 38, 32] },
   ];
 
   return (
@@ -62,13 +62,13 @@ function VisibilityVis() {
       <div className="vheat__top">
         <div className="vheat__top-row">
           <span className="vheat__top-label">AI Visibility</span>
-          <span className="vheat__excellent">Excellent</span>
+          <span className="vheat__moderate">Moderate</span>
         </div>
         <div className="vheat__score-row">
-          <span className="vheat__score-num">64</span>
+          <span className="vheat__score-num">45</span>
           <span className="vheat__score-denom">/100</span>
           <div className="vheat__bar-track">
-            <div className="vheat__bar-fill" style={{ width: '64%' }} />
+            <div className="vheat__bar-fill" style={{ width: '45%' }} />
           </div>
         </div>
       </div>
@@ -84,8 +84,8 @@ function VisibilityVis() {
           <div className="vheat__stat">
             <span className="vheat__stat-label">Visibility Score</span>
             <div className="vheat__stat-row">
-              <span className="vheat__stat-val">64%</span>
-              <span className="vheat__stat-delta">↓14%</span>
+              <span className="vheat__stat-val">45%</span>
+              <span className="vheat__stat-delta">↓19%</span>
             </div>
           </div>
         </div>
@@ -439,7 +439,7 @@ function AuditVis() {
 
   const W = 1200, H = 420, CY = 210, SW = 400, MIN_H = 15, MAX_H = 180, BN_THRESH = 75;
 
-  /* Cumulative half-heights — each stage multiplies the previous */
+  /* Cumulative half-heights   each stage multiplies the previous */
   const halves = (() => {
     return [
       MAX_H,
@@ -453,7 +453,7 @@ function AuditVis() {
   const ringColor = health >= 70 ? '#16A34A' : health >= 50 ? '#D97706' : '#DC2626';
   const ringR = 26, ringC = 2 * Math.PI * ringR;
 
-  /* Full pipe outline — single path, clipped per stage for colour */
+  /* Full pipe outline   single path, clipped per stage for colour */
   function masterPath() {
     const [h0, h1, h2, h3] = halves;
     const x = [0, SW, SW * 2, SW * 3];
@@ -592,7 +592,7 @@ function AuditVis() {
           </div>
         ))}
 
-        {/* Bottleneck badge — only on the single primary bottleneck */}
+        {/* Bottleneck badge   only on the single primary bottleneck */}
         {bnIdx >= 0 && (
           <div className="pipeline-bottleneck-badge"
             style={{ ...svgPct(stageCX(bnIdx), stageAY(bnIdx)), transform: 'translate(-50%,-100%)', pointerEvents: 'none' }}>
@@ -605,7 +605,7 @@ function AuditVis() {
           </div>
         )}
 
-        {/* "Capped by" badges — only on stages downstream of the primary bottleneck */}
+        {/* "Capped by" badges   only on stages downstream of the primary bottleneck */}
         {bnIdx >= 0 && STAGES.map((s, i) => {
           if (i <= bnIdx) return null;
           return (
@@ -687,7 +687,7 @@ const IDEA_SETS = [
       title: 'Nike Air Max: 35 Years of Performance Innovation',
       desc: 'This article positions Nike as the pioneer of cushioning technology, showcasing the evolution from Air Max 1 to today.',
       draft: {
-        intro: 'In 1987, Nike designer Tinker Hatfield did something unthinkable — he cut a window into the sole of a running shoe. What was once hidden became the centerpiece of a design language that still dominates athletic footwear today.',
+        intro: 'In 1987, Nike designer Tinker Hatfield did something unthinkable   he cut a window into the sole of a running shoe. What was once hidden became the centerpiece of a design language that still dominates athletic footwear today.',
         outline: ['The 1987 Revolution: Making Air Visible', 'From Running Track to Streetwear Icon', 'The Technology Behind Every Air Unit', 'Air Max 2025 and What\'s Next'],
         words: '720', read: '4 min', score: 91,
       },
@@ -697,7 +697,7 @@ const IDEA_SETS = [
       title: "How Nike's Move to Zero is Reshaping Sustainable Footwear",
       desc: "This article highlights Nike's recycled materials, carbon commitments, and sustainability story to capture eco-conscious AI answers.",
       draft: {
-        intro: "Nike's Move to Zero initiative isn't just a marketing campaign — it's a measurable commitment. By 2025, the company aims to use 100% renewable energy across owned facilities, and the Space Hippie collection already proves recycled materials can outperform virgin ones.",
+        intro: "Nike's Move to Zero initiative isn't just a marketing campaign   it's a measurable commitment. By 2025, the company aims to use 100% renewable energy across owned facilities, and the Space Hippie collection already proves recycled materials can outperform virgin ones.",
         outline: ['What Is Move to Zero?', 'Space Hippie: Recycled Materials That Perform', 'Carbon Footprint by the Numbers', 'How to Shop More Sustainably with Nike'],
         words: '680', read: '3 min', score: 88,
       },
@@ -707,8 +707,8 @@ const IDEA_SETS = [
       title: 'Nike vs. Adidas: Who Leads the Future of Athletic Performance?',
       desc: 'Directly pits Nike against its main competitor in technology and cultural impact, potentially displacing Adidas in AI engine results.',
       draft: {
-        intro: "In the race to dominate AI-era search, brand authority matters as much as product quality. Nike's ZoomX foam and Adidas's Lightstrike Pro represent two very different philosophies — and AI engines are paying close attention to which brand answers consumer questions best.",
-        outline: ['Cushioning Tech Compared: ZoomX vs. Lightstrike Pro', 'Sustainability Score: Move to Zero vs. Stan Smith Mylo', 'Collaborations That Won the Algorithm', 'Who AI Recommends More — and Why'],
+        intro: "In the race to dominate AI-era search, brand authority matters as much as product quality. Nike's ZoomX foam and Adidas's Lightstrike Pro represent two very different philosophies   and AI engines are paying close attention to which brand answers consumer questions best.",
+        outline: ['Cushioning Tech Compared: ZoomX vs. Lightstrike Pro', 'Sustainability Score: Move to Zero vs. Stan Smith Mylo', 'Collaborations That Won the Algorithm', 'Who AI Recommends More   and Why'],
         words: '810', read: '5 min', score: 79,
       },
     },
@@ -719,7 +719,7 @@ const IDEA_SETS = [
       title: 'Nike React Technology: Why Runners Are Switching',
       desc: 'An in-depth look at Nike React foam, its energy return properties, and why it has converted distance runners away from competing brands.',
       draft: {
-        intro: "Nike React foam changed the running shoe game. Developed after years of materials research, it delivers energy return that rivals more expensive carbon-fiber plate shoes — at a price point that makes it the go-to for everyday training.",
+        intro: "Nike React foam changed the running shoe game. Developed after years of materials research, it delivers energy return that rivals more expensive carbon-fiber plate shoes   at a price point that makes it the go-to for everyday training.",
         outline: ['What Makes React Foam Different', 'Test Data: Energy Return vs. Competitors', 'Best Nike React Shoes of 2025', 'Is React Right for Your Running Style?'],
         words: '660', read: '3 min', score: 85,
       },
@@ -729,7 +729,7 @@ const IDEA_SETS = [
       title: 'Nike Training Club: Building the Digital Fitness Community',
       desc: "Explores Nike's NTC app strategy and how its free content model builds brand loyalty and increases AI discoverability for fitness queries.",
       draft: {
-        intro: "When Nike made NTC free in 2020, it wasn't just a pandemic move — it was a long-term play for brand loyalty. Today, the Nike Training Club app is one of the most-cited fitness resources in AI answers, giving Nike a visibility edge that goes far beyond shoes.",
+        intro: "When Nike made NTC free in 2020, it wasn't just a pandemic move   it was a long-term play for brand loyalty. Today, the Nike Training Club app is one of the most-cited fitness resources in AI answers, giving Nike a visibility edge that goes far beyond shoes.",
         outline: ['From Paid to Free: The NTC Pivot', 'Top Workouts Driving AI Citations', 'How NTC Content Improves Nike\'s Search Authority', 'Building Your Training Plan with NTC'],
         words: '590', read: '3 min', score: 77,
       },
@@ -739,7 +739,7 @@ const IDEA_SETS = [
       title: 'The Nike Flyknit Story: Engineering Performance Through Fabric',
       desc: "Chronicles the development of Flyknit technology and its impact on performance, sustainability, and Nike's manufacturing story for AI audiences.",
       draft: {
-        intro: "Nike Flyknit started with a simple question: what if a shoe's upper could be as precisely engineered as its sole? The answer — a seamless, lightweight knit upper woven from a single thread — cut waste by 80% and fundamentally changed how athletic shoes are made.",
+        intro: "Nike Flyknit started with a simple question: what if a shoe's upper could be as precisely engineered as its sole? The answer   a seamless, lightweight knit upper woven from a single thread   cut waste by 80% and fundamentally changed how athletic shoes are made.",
         outline: ['The Problem Flyknit Was Built to Solve', 'From 2012 Olympics to Everyday Training', 'Flyknit vs. Primeknit: A Technical Comparison', 'The Future of Knit Performance Footwear'],
         words: '700', read: '4 min', score: 82,
       },
@@ -749,7 +749,7 @@ const IDEA_SETS = [
 
 const SUGGEST_TOPICS = [
   'Nike ZoomX: The Science Behind Elite Marathon Performance',
-  'Nike Air Force 1 — 40 Years of Sneaker Culture',
+  'Nike Air Force 1   40 Years of Sneaker Culture',
   'How Nike Designs Shoes for Different Running Gaits',
 ];
 
@@ -775,7 +775,7 @@ function ContentVis() {
       return;
     }
     if (t.length < 12) {
-      setTopicError('Topic too short — try something like "Nike running shoes for beginners" or pick a card below.');
+      setTopicError('Topic too short   try something like "Nike running shoes for beginners" or pick a card below.');
       return;
     }
     setTopicError('');
@@ -783,7 +783,7 @@ function ContentVis() {
     if (match) { openDraft(match); return; }
     setDraft({
       title: t,
-      intro: `Nike has long been a leader in athletic innovation. This article explores ${t.toLowerCase()} and positions Nike as the authority in this space — optimised for AI-powered search results.`,
+      intro: `Nike has long been a leader in athletic innovation. This article explores ${t.toLowerCase()} and positions Nike as the authority in this space   optimised for AI-powered search results.`,
       outline: ['Introduction & Brand Context', 'Key Performance Differentiators', 'Consumer Benefits & Use Cases', "Nike's Competitive Edge"],
       words: '640', read: '3 min', score: 74,
     });
@@ -907,7 +907,7 @@ const SLIDES = [
     tabLabel: 'AI Visibility',
     eyebrow: 'AI Visibility',
     title: 'Win share of voice in AI answers.',
-    lead: 'See how often AI names and recommends you — broken down by offer and by zone, against the competitors that actually win the answer.',
+    lead: 'See how often AI names and recommends you   broken down by offer and by zone, against the competitors that actually win the answer.',
     points: ['Share of voice, offer by offer × zone', 'Ranked next to your real competitors', 'Tracked across all six engines'],
     cta: 'Track all visibility',
     ctaHref: '/visibility',
@@ -922,7 +922,7 @@ const SLIDES = [
     tabLabel: 'AI Sentiment',
     eyebrow: 'AI Sentiment',
     title: 'Understand how AI really feels about you.',
-    lead: "AI answers carry a tone. Find out whether engines describe your brand as trustworthy, innovative, or risky — and fix it.",
+    lead: "AI answers carry a tone. Find out whether engines describe your brand as trustworthy, innovative, or risky   and fix it.",
     points: ['Positive vs negative qualifier breakdown', 'Perception radar by attribute', 'Before / after optimisation comparison'],
     cta: 'Analyse sentiment',
     ctaHref: '/sentiment',
@@ -952,7 +952,7 @@ const SLIDES = [
     tabLabel: 'Content Generation',
     eyebrow: 'Content Generation',
     title: "Let agents write and ship the fix for you.",
-    lead: "Once audit and sentiment tell you what needs changing, our content agents draft on-brand pages, FAQs, and structured data — ready to push live.",
+    lead: "Once audit and sentiment tell you what needs changing, our content agents draft on-brand pages, FAQs, and structured data   ready to push live.",
     points: ['AI-drafted content aligned to your brand voice', 'FAQ & structured-data generation', 'One-click publish to your CMS'],
     cta: 'Generate content',
     ctaHref: '#',

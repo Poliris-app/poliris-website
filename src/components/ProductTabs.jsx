@@ -17,7 +17,7 @@ const tabs = [
     features: [
       'Score de visibilité par LLM (ChatGPT, Gemini, Claude…)',
       'Classement face à vos concurrents directs',
-      'Requêtes sur lesquelles vous apparaissez — ou non',
+      'Requêtes sur lesquelles vous apparaissez   ou non',
       'Évolution mensuelle de vos citations',
     ],
   },

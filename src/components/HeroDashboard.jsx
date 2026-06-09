@@ -10,17 +10,17 @@ const BRANDS = [
 ];
 
 const VIS_DATA = {
-  nike:       [88, 92, 86, 74, 90, 91, 83, 67, 78, 64],
+  nike:       [88, 92, 86, 74, 90, 91, 83, 67, 78, 45],
   newbalance: [84, 82, 78, 72, 64, 56, 48, 44, 40, 38],
-  brooks:     [58, 60, 64, 66, 62, 56, 48, 42, 40, 42],
-  on:         [20, 26, 34, 42, 50, 58, 65, 70, 72, 60],
+  brooks:     [58, 60, 64, 66, 62, 56, 48, 42, 40, 36],
+  on:         [20, 26, 34, 42, 50, 58, 65, 70, 72, 40],
   adidas:      [92, 96, 90, 80, 94, 95, 88, 74, 84, 76],
-  hoka:       [22, 28, 36, 44, 50, 54, 58, 56, 54, 56],
+  hoka:       [22, 28, 36, 44, 50, 54, 58, 56, 54, 38],
 };
 // Sentiment lines snap to tier gridline values: Very Strong=100, Strong=75, Moderate=50, Weak=25, Very Weak=0
 // Transitions between tiers produce smooth S-curves via bezier math.
 const SENT_DATA = {
-  nike:       [ 75,  50,  75, 100, 100,  75,  75, 100, 100,  100],
+  nike:       [ 75,  50,  75, 100, 100,  75,  75, 100, 100,  75],
   newbalance: [ 75,  75,  75,  75,  75,  75,  75,  75,  75,  75],
   brooks:     [ 75,  75,  75,  75,  50,  50,  50,  75,  50,  50],
   on:         [ 50,  50,  50,  25,  25,  0,  50,  50,  50,  50],
@@ -29,12 +29,12 @@ const SENT_DATA = {
 };
 
 const QUAD_POS = {
-  nike:       { x: 64, y: 85 },
+  nike:       { x: 45, y: 80 },
   newbalance: { x: 38, y: 75 },
-  brooks:     { x: 42, y: 50 },
-  on:         { x: 60, y: 50 },
+  brooks:     { x: 36, y: 50 },
+  on:         { x: 40, y: 50 },
   adidas:      { x: 76, y: 91 },
-  hoka:       { x: 56, y: 62 },
+  hoka:       { x: 38, y: 62 },
 };
 
 const X_DATES = [
@@ -59,7 +59,7 @@ const PL_VIS = 32, PL_SENT = 50;
 function yAt(v) { return PT + (1 - v / 100) * (VH - PT - PB); }
 
 const VIS_Y_LINES = [0, 25, 50, 75, 100];
-// Same positions as visibility — tier names replace numbers on Y-axis
+// Same positions as visibility   tier names replace numbers on Y-axis
 const SENT_Y_LINES = [
   { val: 100, label: 'Very Strong', color: '#16a34a' },
   { val: 75,  label: 'Strong',      color: '#16a34a' },
@@ -198,7 +198,7 @@ export default function HeroDashboard() {
               <span className="dsb__tree-brand-name">nike</span>
             </div>
 
-            {/* Level 1 children — line from brand */}
+            {/* Level 1 children   line from brand */}
             <div className="dsb__tree-l1">
 
               {/* Category row */}
@@ -210,7 +210,7 @@ export default function HeroDashboard() {
                 <span className="dsb__tree-cat-name">Footwear</span>
               </div>
 
-              {/* Level 2 children — line from category */}
+              {/* Level 2 children   line from category */}
               <div className="dsb__tree-l2">
                 {['Overview','AI Visibility','Sentiment'].map(l => (
                   <div key={l} className={`dash__nav-item${l === 'Overview' ? ' dash__nav-item--active' : ''}`}>{l}</div>
@@ -474,7 +474,7 @@ export default function HeroDashboard() {
                 <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/>
               </svg>
             </span>
-            <p><b>Poli AI Insight:</b> Nike leads with Very Strong sentiment and 64% visibility. Hoka is the fastest riser — monitor its sentiment trajectory before it reaches the Leaders zone.</p>
+            <p><b>Poli AI Insight:</b> Adidas leads at 76% visibility. Nike holds #2 at 45% with Very Strong sentiment   closing the gap is a content and source authority play. On's drop opens a window.</p>
           </div>
         </div>
 
@@ -489,7 +489,7 @@ export default function HeroDashboard() {
             <div className="hdash__kpi-row">
               <div className="hdash__kpi">
                 <span className="hdash__kpi-label">Avg. Score</span>
-                <span className="hdash__kpi-val-vis">64%</span>
+                <span className="hdash__kpi-val-vis">45%</span>
               </div>
               <div className="hdash__kpi">
                 <span className="hdash__kpi-label">Avg. Position</span>
@@ -506,10 +506,10 @@ export default function HeroDashboard() {
             </div>
             <div className="hdash__plat-scroll">
             {[
-              { name: 'ChatGPT', icon: '/chatgpt-com-logo.png',   pct: 67, color: 'rgb(59, 130, 246)' },
-              { name: 'Claude',  icon: '/claudeai-com-logo.png',   pct: 54, color: 'rgb(59, 130, 246)' },
-              { name: 'Gemini',  icon: '/gemini-ai-logo.png',      pct: 59, color: 'rgb(59, 130, 246)' },
-              { name: 'Mistral', icon: '/mistral-ai-logo.png',     pct: 76, color: 'rgb(59, 130, 246)' },
+              { name: 'Gemini',  icon: '/gemini-ai-logo.png',      pct: 60, color: 'rgb(59, 130, 246)' },
+              { name: 'ChatGPT', icon: '/chatgpt-com-logo.png',   pct: 50, color: 'rgb(59, 130, 246)' },
+              { name: 'Mistral', icon: '/mistral-ai-logo.png',     pct: 50, color: 'rgb(59, 130, 246)' },
+              { name: 'Claude',  icon: '/claudeai-com-logo.png',   pct: 20, color: 'rgb(59, 130, 246)' },
             ].map(p => (
               <div key={p.name} className="hdash__plat-row">
                 <div className="hdash__plat-header">
@@ -538,7 +538,7 @@ export default function HeroDashboard() {
             <div className="hdash__kpi-row">
               <div className="hdash__kpi2">
                 <span className="hdash__kpi-label">Avg. Score</span>
-                <span className="hdash__kpi-val hdash__kpi--verystrong">Very Strong</span>
+                <span className="hdash__kpi-val hdash__kpi--strong">Strong</span>
               </div>
               <div className="hdash__kpi2">
                 <span className="hdash__kpi-label">Trend</span>
@@ -549,11 +549,10 @@ export default function HeroDashboard() {
             <p className="hdash__plat-label-sm">Score by platform</p>
             <div className="hdash__plat-scroll">
             {[
-              { label: 'Performance', pct: 100 },
-              { label: 'Quality',     pct: 100 },
-              { label: 'Range',      pct: 80 },
-              { label: 'Innovation',  pct: 100 },
-              { label: 'Trust',       pct: 100 },
+              { label: 'Brand awareness', pct: 100 },
+              { label: 'Performance',     pct: 80 },
+              { label: 'Design',      pct: 80 },
+              { label: 'Durability',  pct: 40 },
             ].map(s => {
               const tier = sentTier(s.pct);
               return (

@@ -159,7 +159,7 @@ function ValueChain() {
         <div className="sec-head reveal">
           <Eyebrow>The full value chain</Eyebrow>
           <h2 className="sec-h2">Most tools tell you what's happening.<br />Poliris lets you <HL>take control.</HL></h2>
-          <p className="sec-lead">Other tools stop at monitoring. Poliris runs the whole chain — technical audit, content, and the fixes shipped live on your site.</p>
+          <p className="sec-lead">Other tools stop at monitoring. Poliris runs the whole chain   technical audit, content, and the fixes shipped live on your site.</p>
         </div>
         {/* <WorkflowVs /> */}
         <div className="vchain-diagram">
@@ -192,7 +192,7 @@ function ValueChain() {
                 </button>
               </div>
               <p className="vcf-toggle-sub">
-                {mode === 'poliris' ? 'runs the entire chain — end to end' : 'Cut the chain'}
+                {mode === 'poliris' ? 'runs the entire chain   end to end' : 'Cut the chain'}
               </p>
             </div>
 
@@ -215,7 +215,7 @@ function ValueChain() {
             </div>
 
             {mode === 'other' && (
-              <p className="vcf-other-note">Other tools stop at monitoring — they don't prioritize, recommend, or implement.</p>
+              <p className="vcf-other-note">Other tools stop at monitoring   they don't prioritize, recommend, or implement.</p>
             )}
 
           </div>
@@ -248,7 +248,7 @@ function Agents() {
               <span className="agents__h2-blue">living inside the app.</span>
             </h2>
             <p className="agents__lead">
-              A complete team of specialized AI agents that help you operate like an expert — from analyzing performance and spotting opportunities to recommending next steps and implementing improvements, all from within the platform.
+              A complete team of specialized AI agents that help you operate like an expert   from analyzing performance and spotting opportunities to recommending next steps and implementing improvements, all from within the platform.
             </p>
           </div>
           <div className="agents__grid">
@@ -260,7 +260,7 @@ function Agents() {
             <svg viewBox="0 0 24 24" fill="none" stroke="#1e3893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="agents__foot-icon">
               <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
             </svg>
-            <p>Each agent brings specialized expertise to the platform — helping you understand the data, identify opportunities, and implement improvements. The agents do the heavy lifting; you make the decisions.</p>
+            <p>Each agent brings specialized expertise to the platform   helping you understand the data, identify opportunities, and implement improvements. The agents do the heavy lifting; you make the decisions.</p>
           </div>
         </div>
       </div>
@@ -317,7 +317,7 @@ function ComparisonTable() {
         <div className="sec-head reveal">
           <Eyebrow>One platform, not a stack</Eyebrow>
           <h2 className="sec-h2">Replace your whole toolstack.</h2>
-          <p className="sec-lead">AI visibility, sentiment, technical SEO and content — usually four separate tools. With Poliris, it&rsquo;s one.</p>
+          <p className="sec-lead">AI visibility, sentiment, technical SEO and content   usually four separate tools. With Poliris, it&rsquo;s one.</p>
         </div>
         <div className="comparison__table-wrap reveal reveal--scale reveal--d1">
           <table className="comparison__table">
@@ -354,7 +354,7 @@ function ComparisonTable() {
               <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
-          <span className="comparison__concl-text">One subscription instead of four — everything above lives inside Poliris.</span>
+          <span className="comparison__concl-text">One subscription instead of four   everything above lives inside Poliris.</span>
         </div>
       </div>
     </section>

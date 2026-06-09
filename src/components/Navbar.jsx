@@ -16,6 +16,7 @@ const PRODUCTS = [
     label: 'AI Sentiment',
     description: 'See how AI engines describe your brand',
     href: '/sentiment',
+    comingSoon: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -26,6 +27,7 @@ const PRODUCTS = [
     label: 'Technical Audit',
     description: 'Identify and fix what blocks AI from reading your site',
     href: '#products',
+    comingSoon: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
         <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
@@ -36,6 +38,7 @@ const PRODUCTS = [
     label: 'Content Writing',
     description: 'Generate AI-optimised pages and structured data',
     href: '#products',
+    comingSoon: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
         <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
@@ -54,6 +57,12 @@ export default function Navbar() {
   const [stuck, setStuck] = useState(false);
   const [open, setOpen] = useState(false);
   const [mobileProducts, setMobileProducts] = useState(false);
+  const [toast, setToast] = useState(false);
+
+  function showToast() {
+    setToast(true);
+    setTimeout(() => setToast(false), 2500);
+  }
 
   useEffect(() => {
     const onScroll = () => setStuck(window.scrollY > 16);
@@ -69,11 +78,12 @@ export default function Navbar() {
   }, []);
 
   return (
+    <>
     <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
       <div className="nav__inner">
         <Link to="/" className="nav__logo">
           <img src="/Logo-Poliris-1.svg" alt="Poliris" />
-          <span className="nav__logo-text">Poliris</span>
+          {/* <span className="nav__logo-text">Poliris</span> */}
         </Link>
 
         <div className="nav__links">
@@ -95,6 +105,8 @@ export default function Navbar() {
                     </span>
                   </>
                 );
+                if (p.comingSoon)
+                  return <button key={p.label} className="nav__dropdown-item nav__link--btn" onClick={showToast}>{inner}</button>;
                 return p.href.startsWith('/')
                   ? <Link key={p.label} to={p.href} className="nav__dropdown-item">{inner}</Link>
                   : <a key={p.label} href={p.href} className="nav__dropdown-item">{inner}</a>;
@@ -103,15 +115,15 @@ export default function Navbar() {
           </div>
 
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="nav__link">
+            <button key={l.label} className="nav__link nav__link--btn" onClick={showToast}>
               {l.label}
-            </a>
+            </button>
           ))}
         </div>
 
         <div className="nav__actions">
-          <a href="#" className="nav__login">Log in</a>
-          <a href="#" className="nav__cta">Get your free trial</a>
+          <button className="nav__login nav__link--btn" onClick={showToast}>Log in</button>
+          <button className="nav__cta" onClick={showToast}>Get your free trial</button>
         </div>
 
         <button
@@ -142,27 +154,38 @@ export default function Navbar() {
             </button>
             {mobileProducts && (
               <div className="nav__mobile-subnav">
-                {PRODUCTS.map((p) =>
-                  p.href.startsWith('/')
+                {PRODUCTS.map((p) => {
+                  if (p.comingSoon)
+                    return <button key={p.label} className="nav__mobile-sublink nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>{p.label}</button>;
+                  return p.href.startsWith('/')
                     ? <Link key={p.label} to={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</Link>
-                    : <a key={p.label} href={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</a>
-                )}
+                    : <a key={p.label} href={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</a>;
+                })}
               </div>
             )}
           </div>
 
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="nav__mobile-link" onClick={() => setOpen(false)}>
+            <button key={l.label} className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>
               {l.label}
-            </a>
+            </button>
           ))}
 
           <div className="nav__mobile-bottom">
-            <a href="#" className="nav__mobile-link" onClick={() => setOpen(false)}>Log in</a>
-            <a href="#" className="nav__mobile-cta" onClick={() => setOpen(false)}>Get your free trial</a>
+            <button className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>Log in</button>
+            <button className="nav__mobile-cta" onClick={() => { setOpen(false); showToast(); }}>Get your free trial</button>
           </div>
         </div>
       )}
     </nav>
+    {toast && (
+      <div className="nav__toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+          <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
+        </svg>
+        Coming soon!
+      </div>
+    )}
+    </>
   );
 }

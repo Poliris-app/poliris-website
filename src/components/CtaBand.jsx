@@ -3,7 +3,7 @@ const tripled = [...MODELS, ...MODELS, ...MODELS];
 
 export default function CtaBand({
   heading    = 'See how AI describes your brand.',
-  lead       = 'Start a 14-day free trial. No setup, no expertise needed — just the picture of how AI sees you today.',
+  lead       = 'Start a 14-day free trial. No setup, no expertise needed   just the picture of how AI sees you today.',
   primaryCta = 'Get your free trial',
   secondaryCta = 'Book a demo',
   note       = '14 days free · No credit card required',
