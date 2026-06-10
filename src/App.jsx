@@ -5,6 +5,7 @@ import LandingPage from './components/LandingPage';
 import Footer from './components/Footer';
 import VisibilityPage from './pages/VisibilityPage';
 import SentimentPage from './pages/SentimentPage';
+import ContentWritingPage from './pages/ContentWritingPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/visibility" element={<VisibilityPage />} />
         <Route path="/sentiment" element={<SentimentPage />} />
+        <Route path="/content-writing" element={<ContentWritingPage />} />
       </Routes>
     </BrowserRouter>
   );

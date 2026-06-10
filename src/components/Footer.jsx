@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="footer__inner">
         <a href="#top" className="footer__logo">
           <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
-          <span className="footer__logo-text">Poliris</span>
+          {/* <span className="footer__logo-text">Poliris</span> */}
         </a>
         <nav className="footer__nav">
           {LINKS.map((l) => (
