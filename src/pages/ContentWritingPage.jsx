@@ -118,15 +118,15 @@ const PIPELINE_STEPS = [
   { num:'07', label:'Result',    text:'Full article with SEO score and meta tags. Edit inline, re-score, and publish when ready.',                                                tags:['Article','Score','Meta','Publish'] },
 ];
 
-function PipeIcon({ index }) {
+function PipeIcon({ index, active, done }) {
   const icons = [
-    <svg key="0" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
-    <svg key="1" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="17" y2="18"/><polyline points="15 15 18 18 22 11"/></svg>,
-    <svg key="2" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>,
-    <svg key="3" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
-    <svg key="4" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-    <svg key="5" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-    <svg key="6" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+    <span key="0" className="cw-pipe-letter">K</span>,
+    <span key="1" className="cw-pipe-letter">A</span>,
+    <svg key="2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>,
+    <span key="3" className="cw-pipe-letter">L</span>,
+    <svg key="4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
+    <svg key="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
+    <svg key="6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2"><polyline points="20 6 9 17 4 12"/></svg>,
   ];
   return icons[index];
 }
@@ -399,17 +399,25 @@ export default function ContentWritingPage() {
             <div className="impl2 cw-reveal">
               <div className="mbw">
                 <div className="mbw-bar">
-                  <span className="mbw-dot"/><span className="mbw-dot"/><span className="mbw-dot"/>
-                  <span className="mbw-url">worldbalance.com/blog/lifestyle-footwear</span>
+                  <span className="mbw-dot red"/><span className="mbw-dot yellow"/><span className="mbw-dot green"/>
+                  <div className="mbw-url">
+                    <svg className="mbw-lock" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                    </svg>
+                    nike.com/blog/lifestyle-footwear
+                  </div>
                   <span className="mbw-live">✓ Live</span>
+                </div>
+                <div className="mbw-hero">
+                  <span className="mbw-hero-cat">Lifestyle · Sport</span>
                 </div>
                 <div className="mbw-body">
                   <div className="mbw-meta"><span className="mbw-pin"/>Blog · 6 min read · Just published</div>
                   <h6>Lifestyle footwear that flexes with modern aesthetics</h6>
                   <p className="mbw-p">
-                    Modern lifestyle sneakers aren't built for one moment. The pair you wear on a morning coffee run
-                    should still feel right walking into a Friday dinner — see our{' '}
-                    <span className="lk">guide to picking your size</span>.
+                    Nike lifestyle sneakers aren't built for one moment. The pair you lace up for a morning
+                    run should still carry you into a Friday dinner — see our{' '}
+                    <span className="lk">guide to picking your fit</span>.
                   </p>
                   <div className="mbw-ln"/>
                   <div className="mbw-ln"/>
