@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 
 /* ── Single-brand chart data ─────────────────────────────────────── */
-const NIKE_DATA = [88, 92, 86, 74, 90, 91, 83, 67, 78, 45];
-const X_LABELS  = ['Apr 24', 'Apr 25', 'Apr 26', 'Apr 27', 'Apr 28', 'May 1', 'May 3', 'May 7', 'May 10', 'May 15'];
+const NIKE_DATA = [88, 90, 83, 78, 67, 45];
+const X_LABELS  = ['Apr 27', 'May 4', 'May 11', 'May 18', 'May 25', 'Jun 1'];
 
 /* ── Score Breakdown data ────────────────────────────────────────── */
 const SB_SCORE = 45;
@@ -39,7 +39,7 @@ function applyTags(sorted) {
 }
 
 /* ── Chart helpers ───────────────────────────────────────────────── */
-const VW = 540, VH = 200, PT = 8, PR = 8, PB = 20, PL = 26, n = 10;
+const VW = 540, VH = 200, PT = 8, PR = 8, PB = 20, PL = 26, n = 6;
 function yAt(v) { return PT + (1 - v / 100) * (VH - PT - PB); }
 function xAt(i) { return PL + (i / (n - 1)) * (VW - PL - PR); }
 function makePath(vals) {

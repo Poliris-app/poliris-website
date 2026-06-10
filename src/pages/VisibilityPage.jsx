@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import '../visibility.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import GlobeMap from '../components/GlobeMap';
@@ -12,51 +13,79 @@ const HL = ({ children }) => <span className="hl">{children}</span>;
 const SCOPE_DATA = {
   worldwide: {
     loc: 'World · global',
-    verdict: "Against the global platforms you're invisible   and that's fine. They're not who your buyers compare you to.",
+    verdict: "Against the global giants you're invisible — and that's fine. They're not who your buyers compare you to.",
     comps: [
-      { nm: 'Workday', v: 96 },
-      { nm: 'SAP SuccessFactors', v: 93 },
-      { nm: 'ADP', v: 90 },
-      { nm: 'BambooHR', v: 78 },
-      { nm: 'Rippling', v: 74 },
-      { nm: 'Sprout (you)', v: 9, me: true },
+      { nm: 'Adidas', v: 96 },
+      { nm: 'New Balance', v: 88 },
+      { nm: 'Puma', v: 82 },
+      { nm: 'ASICS', v: 75 },
+      { nm: 'Under Armour', v: 68 },
+      { nm: 'Nike (you)', v: 9, me: true },
     ],
   },
   country: {
     loc: 'France · national',
-    verdict: 'At national level you rank <b>#6</b>   behind names you rarely meet in a real deal.',
+    verdict: 'At national level you rank <b>#6</b> — behind names you rarely meet in a real deal.',
     comps: [
-      { nm: 'PayFit', v: 92 },
-      { nm: 'Lucca', v: 81 },
-      { nm: 'Silae', v: 70 },
-      { nm: 'Sage', v: 63 },
-      { nm: 'Cegid', v: 58 },
-      { nm: 'Sprout (you)', v: 44, me: true },
+      { nm: 'Adidas', v: 91 },
+      { nm: 'New Balance', v: 78 },
+      { nm: 'Salomon', v: 70 },
+      { nm: 'Hoka', v: 62 },
+      { nm: 'On Running', v: 55 },
+      { nm: 'Nike (you)', v: 44, me: true },
     ],
   },
   region: {
     loc: 'Auvergne-Rhône-Alpes',
-    verdict: 'Across your region you climb to <b>#3</b>   the enterprise names fade.',
+    verdict: 'Across your region you climb to <b>#3</b> — the global names fade out.',
     comps: [
-      { nm: 'Lucca', v: 78 },
-      { nm: 'Combo', v: 70 },
-      { nm: 'Sprout (you)', v: 66, me: true },
-      { nm: 'Skello', v: 51 },
+      { nm: 'Salomon', v: 79 },
+      { nm: 'Hoka', v: 71 },
+      { nm: 'Nike (you)', v: 66, me: true },
+      { nm: 'On Running', v: 54 },
     ],
   },
   local: {
     loc: 'Lyon · 69001–69009',
-    verdict: "In your real market you're <b>#2</b>   a fight you can actually win.",
+    verdict: "In your real market you're <b>#2</b> — a fight you can actually win.",
     comps: [
-      { nm: 'Combo', v: 71 },
-      { nm: 'Sprout (you)', v: 68, me: true },
-      { nm: 'Skello', v: 52 },
+      { nm: 'Salomon', v: 72 },
+      { nm: 'Nike (you)', v: 68, me: true },
+      { nm: 'On Running', v: 51 },
     ],
   },
 };
 
+const SCOPES = ['worldwide', 'country', 'region', 'local'];
+
 export default function VisibilityPage() {
-  const [scope, setScope] = useState('worldwide');
+  const [scope, setScope]   = useState('worldwide');
+  const [fading, setFading] = useState(false);
+  const timerRef  = useRef(null);
+  const fadeTimer = useRef(null);
+
+  /* Fade out → swap scope → fade in */
+  const changeScope = useCallback((nextOrFn) => {
+    clearTimeout(fadeTimer.current);
+    setFading(true);
+    fadeTimer.current = setTimeout(() => {
+      setScope(nextOrFn);
+      setFading(false);
+    }, 200);
+  }, []);
+
+  /* Auto-cycle scope: Worldwide → Country → Region → Local → … */
+  const startCycle = useCallback(() => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      changeScope(prev => SCOPES[(SCOPES.indexOf(prev) + 1) % SCOPES.length]);
+    }, 3000);
+  }, [changeScope]);
+
+  useEffect(() => {
+    startCycle();
+    return () => { clearInterval(timerRef.current); clearTimeout(fadeTimer.current); };
+  }, [startCycle]);
 
   /* Reveal-on-scroll: adds .in to every .reveal element */
   useEffect(() => {
@@ -320,11 +349,11 @@ export default function VisibilityPage() {
                     Scope
                   </span>
                   <div className="scope-tog">
-                    {['worldwide', 'country', 'region', 'local'].map((s) => (
+                    {SCOPES.map((s) => (
                       <button
                         key={s}
                         className={scope === s ? 'on' : ''}
-                        onClick={() => setScope(s)}
+                        onClick={() => { changeScope(s); startCycle(); }}
                       >
                         {s.charAt(0).toUpperCase() + s.slice(1)}
                       </button>
@@ -334,7 +363,7 @@ export default function VisibilityPage() {
                 <div className="mkt-card">
                   <div className="mkt-bar">
                     <span className="d" /><span className="d" /><span className="d" />
-                    <span className="loc">
+                    <span className={`loc${fading ? ' fading' : ''}`}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
                       </svg>
@@ -344,7 +373,7 @@ export default function VisibilityPage() {
                   <div className="mkt-map">
                     <GlobeMap scope={scope} />
                   </div>
-                  <div className="mkt-rivals">
+                  <div className={`mkt-rivals${fading ? ' fading' : ''}`}>
                     <div
                       className="mkt-verdict"
                       dangerouslySetInnerHTML={{ __html: scopeData.verdict }}
@@ -499,7 +528,7 @@ export default function VisibilityPage() {
               <div className="inner">
                 <div className="nora-grid">
                   {/* LEFT */}
-                  <div>
+                  <div className="vis-agent-body">
                     <div className="agent-pill">
                       <span className="sp">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -564,7 +593,7 @@ export default function VisibilityPage() {
                           </span>
                           <div className="chat-hdr-info">
                             <span className="chat-hdr-name">Nora</span>
-                            <span className="chat-hdr-sub"><span className="chat-online-dot" />Online · Sprout · Pricing focus</span>
+                            <span className="chat-hdr-sub"><span className="chat-online-dot" />Online · Nike · Pricing focus</span>
                           </div>
                         </div>
                         <div className="chat-hdr-right">

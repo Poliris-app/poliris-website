@@ -1,0 +1,756 @@
+/* ============================================================
+   POLIRIS SENTIMENT — page-specific components
+   Scoped under .vis-page (shared with visibility) and
+   .sent-page for sentiment-only overrides.
+   ============================================================ */
+
+/* ── surface-1 token (needed by evx-bin background) ─────── */
+:root { --surface-1: #fafbfd; }
+
+/* ── pill tags ─────────────────────────────────────────── */
+.vis-page .pill-tag {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.vis-page .pt-pos  { background: #e7f4ee; color: var(--positive); }
+.vis-page .pt-warn { background: #fbf2e3; color: var(--warning); }
+.vis-page .pt-neg  { background: #fbeae8; color: var(--negative); }
+
+/* ============================================================
+   SENTIMENT DASHBOARD (app mock with sidebar)
+   ============================================================ */
+.vis-page .app {
+  max-width: 1080px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  background: #fff;
+  box-shadow: 0 40px 110px -30px rgba(20,30,80,.32);
+  overflow: hidden;
+}
+.vis-page .app-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: #fbfcfe;
+}
+.vis-page .app-bar .d { width: 11px; height: 11px; border-radius: 50%; background: #dcdfe8; }
+.vis-page .app-bar .url {
+  margin-left: 14px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--fg-5);
+}
+.vis-page .app-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 380px;
+}
+.vis-page .app-side {
+  border-right: 1px solid var(--border);
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #fcfdff;
+}
+.vis-page .app-side .si {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-4);
+  font-weight: 500;
+  cursor: default;
+}
+.vis-page .app-side .si.on { background: var(--poliris-blue); color: #fff; }
+.vis-page .app-side .si.on svg { color: #fff; }
+.vis-page .app-side .si svg { color: var(--fg-5); width: 16px; height: 16px; flex: 0 0 auto; }
+.vis-page .app-main {
+  padding: 26px 28px;
+  display: grid;
+  grid-template-columns: 1.3fr .9fr;
+  gap: 22px;
+  align-content: start;
+}
+.vis-page .app-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  background: #fff;
+}
+.vis-page .ac-lbl {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--fg-5);
+}
+.vis-page .ac-score {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+.vis-page .ac-score b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 42px;
+  letter-spacing: -.02em;
+  color: var(--poliris-blue);
+  line-height: 1;
+}
+.vis-page .ac-score .delta {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--positive);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 7px;
+}
+.vis-page .ac-note { font-size: 12px; color: var(--fg-5); margin-top: 7px; line-height: 1.4; }
+.vis-page .ac-note b { color: var(--warning); font-family: var(--font-display); font-weight: 700; }
+.vis-page .app-rows { display: flex; flex-direction: column; gap: 13px; margin-top: 6px; }
+.vis-page .app-row { display: flex; align-items: center; gap: 11px; }
+.vis-page .app-row .nm {
+  width: 92px;
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--fg-2);
+}
+.vis-page .app-row .track {
+  flex: 1;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.vis-page .app-row .track i { display: block; height: 100%; border-radius: 99px; background: var(--poliris-blue); }
+.vis-page .app-row .track i.pos  { background: var(--positive); }
+.vis-page .app-row .track i.warn { background: var(--warning); }
+.vis-page .app-row .track i.bad  { background: var(--negative); }
+.vis-page .app-row .pill-tag { flex: 0 0 auto; min-width: 78px; text-align: center; }
+
+/* mini-stat (LLM model list in app-card) */
+.vis-page .mini-stat { display: flex; flex-direction: column; gap: 14px; }
+.vis-page .mini-stat .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.vis-page .mini-stat .row:last-child { border-bottom: 0; padding-bottom: 0; }
+.vis-page .mini-stat .t { font-family: var(--font-body); font-size: 12.5px; color: var(--fg-3); }
+.vis-page .tri { font-family: var(--font-display); font-weight: 800; font-size: 13px; width: 18px; text-align: center; flex: 0 0 auto; }
+.vis-page .tri.pos { color: var(--positive); }
+.vis-page .tri.neu { color: var(--fg-6); }
+.vis-page .tri.neg { color: var(--negative); }
+.vis-page .mini-stat .row .l { display: flex; align-items: center; gap: 8px; }
+.vis-page .mini-stat .row .pct { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--fg-1); }
+
+/* ============================================================
+   02 FULL BREAKDOWN — lens2 grid + overband
+   ============================================================ */
+.vis-page .lens2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 46px;
+}
+.vis-page .slens {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 28px 26px;
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.vis-page .slens:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.vis-page .slens .ic {
+  width: 46px; height: 46px;
+  border-radius: var(--r-md);
+  background: rgba(30,56,147,.08);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.vis-page .slens .ic svg { width: 21px; height: 21px; color: var(--poliris-blue); }
+.vis-page .slens h3 { font-size: 18px; margin: 0 0 7px; color: var(--fg-1); }
+.vis-page .slens > p { font-size: 13.5px; color: var(--fg-5); line-height: 1.55; margin: 0 0 20px; }
+.vis-page .srow { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
+.vis-page .srow:last-child { margin-bottom: 0; }
+.vis-page .srow .nm {
+  width: 96px; flex: 0 0 auto;
+  font-family: var(--font-body); font-weight: 600; font-size: 12.5px; color: var(--fg-2);
+}
+.vis-page .srow .track { flex: 1; height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.vis-page .srow .track i { display: block; height: 100%; border-radius: 99px; background: var(--positive); }
+.vis-page .srow .track i.warn { background: var(--warning); }
+.vis-page .srow .track i.bad  { background: var(--negative); }
+.vis-page .srow .pill-tag { flex: 0 0 auto; min-width: 76px; text-align: center; }
+.vis-page .lens-note {
+  font-size: 12px;
+  color: var(--fg-6);
+  margin-top: 16px;
+  padding-top: 16px;
+  line-height: 1.5;
+}
+.vis-page #angles .hdash__sb-bars {
+  flex: none;
+  overflow-y: visible;
+}
+.vis-page #angles .hdash__sb-bar-track2 {
+  background: #e5e7eb;
+}
+
+/* ── AI Sentiment Trend panel ─────────────────── */
+.vis-page .sent-trend {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 24px 26px 20px;
+  margin-top: 20px;
+}
+.vis-page .st-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.vis-page .st-title {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.vis-page .st-tab-grp {
+  display: flex;
+  gap: 4px;
+}
+.vis-page .st-tab {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg-4);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+.vis-page .st-tab--on {
+  background: var(--poliris-blue);
+  border-color: var(--poliris-blue);
+  color: #fff;
+}
+.vis-page .st-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.vis-page .st-stat {
+  padding: 14px 18px;
+  border-right: 1px solid var(--border);
+}
+.vis-page .st-stat:last-child { border-right: none; }
+.vis-page .st-stat-lbl {
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg-5);
+  margin-bottom: 4px;
+}
+.vis-page .st-stat-val {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: rgb(22, 163, 74);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.vis-page .st-stat-sub {
+  font-size: 11px;
+  color: var(--fg-5);
+}
+.vis-page .st-sub-pos  { color: #16a34a; }
+.vis-page .st-sub-warn { color: #FA7319; }
+.vis-page .st-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.vis-page .st-models {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vis-page .st-model-tags {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.vis-page .st-mtag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--fg-4);
+}
+.vis-page .st-mtag--hi {
+  font-weight: 600;
+  color: var(--fg-2);
+}
+.vis-page .st-mdot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.vis-page .st-mon-note {
+  font-size: 10.5px;
+  color: var(--fg-6);
+}
+.vis-page .st-foot {
+  font-size: 12.5px;
+  color: var(--fg-5);
+  text-align: center;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  line-height: 1.5;
+}
+.vis-page .st-foot b { color: var(--fg-2); }
+
+.vis-page .st-chart-wrap {
+  position: relative;
+  overflow: visible;
+}
+
+/* overband — "over time" chart card */
+.vis-page .overband {
+  display: grid;
+  grid-template-columns: .9fr 1.2fr;
+  gap: 34px;
+  align-items: center;
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 30px 34px;
+}
+.vis-page .ob-eyebrow {
+  font-family: var(--font-display);
+  font-size: 10.5px; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--poliris-blue);
+  margin-bottom: 9px;
+}
+.vis-page .overband h3 { font-size: 21px; margin: 0 0 9px; color: var(--fg-1); }
+.vis-page .ob-copy p  { font-size: 13.5px; color: var(--fg-4); line-height: 1.55; margin: 0; }
+.vis-page .ob-flag {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-top: 16px;
+  background: #fbf3e6;
+  border: 1px solid rgba(217,138,43,.28);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  font-size: 13px; color: var(--fg-2); line-height: 1.45;
+}
+.vis-page .ob-flag svg { flex: 0 0 auto; width: 17px; height: 17px; color: var(--warning); margin-top: 1px; }
+.vis-page .ob-flag b   { font-family: var(--font-display); font-weight: 700; color: var(--negative); }
+.vis-page .ob-chart    { width: 100%; }
+.vis-page .ob-svg      { width: 100%; height: auto; display: block; }
+.vis-page .ob-leg      { display: flex; gap: 18px; justify-content: flex-end; margin-top: 10px; font-size: 11.5px; color: var(--fg-5); }
+.vis-page .ob-leg span { display: inline-flex; align-items: center; gap: 6px; }
+.vis-page .ob-leg .dot { width: 13px; height: 3px; border-radius: 2px; display: inline-block; }
+
+/* ============================================================
+   03 COMPETITIVE — cmpx table
+   ============================================================ */
+.vis-page .cmpx {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  margin-top: 46px;
+}
+.vis-page .cmpx-head,
+.vis-page .cmpx-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr 1.6fr;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 24px;
+}
+.vis-page .cmpx-head {
+  background: #fbfcfe;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--fg-5);
+}
+.vis-page .cmpx-head span:not(:first-child) { text-align: center; }
+.vis-page .cmpx-head span:last-child { text-align: left; }
+.vis-page .cmpx-row { border-bottom: 1px solid var(--border); }
+.vis-page .cmpx-row:last-child { border-bottom: 0; }
+.vis-page .cmpx-row.you { background: #f4f7ff; }
+.vis-page .cmpx .cell { display: flex; justify-content: center; }
+.vis-page .cmpx .brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-display); font-weight: 700;
+  color: var(--fg-1); font-size: 14.5px;
+}
+.vis-page .cmpx .brand .bd { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.vis-page .cmpx .brand .yt {
+  font-family: var(--font-display);
+  font-size: 9px; 
+  font-weight: 800;
+  color: #2563eb; 
+  background: #dbeafe;
+  border-radius: 99px; 
+  padding: 3px 7px; 
+  letter-spacing: .04em;
+}
+.vis-page .cmpx-brand-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #f1f3f5;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.vis-page .cmpx-overall {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.vis-page .cmpx-bar-track {
+  flex: 1;
+  height: 7px;
+  background: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+  max-width: 140px;
+}
+
+.vis-page .cmpx-bar-fill {
+  height: 100%;
+  background: #16a34a;
+  border-radius: 99px;
+}
+
+.vis-page .cmpx-overall-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: #16a34a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.vis-page .pill-tag.pt-neu {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+.vis-page .cmpx .cell.lead .pill-tag {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--positive);
+}
+.vis-page .shotline {
+  display: flex; align-items: flex-start; gap: 10px;
+  justify-content: center;
+  margin: 20px auto 0;
+  max-width: 760px;
+  font-size: 13.5px; color: var(--fg-4); line-height: 1.5; text-align: center;
+}
+.vis-page .shotline svg { flex: 0 0 auto; width: 17px; height: 17px; color: var(--poliris-blue); margin-top: 2px; }
+.vis-page .shotline b   { color: var(--poliris-blue); font-family: var(--font-display); font-weight: 700; }
+
+/* ============================================================
+   01 PER-AXIS — pf-legend
+   ============================================================ */
+.vis-page .pf-legend {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 7px 18px;
+  justify-content: center;
+  font-size: 13px; color: var(--fg-5); margin: 0 0 14px;
+}
+.vis-page .pf-legend .tg {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+}
+.vis-page .pf-legend .tg.pos { color: var(--positive); }
+.vis-page .pf-legend .tg.neu { color: var(--fg-6); }
+.vis-page .pf-legend .tg.neg { color: var(--negative); }
+
+/* ============================================================
+   05 EVIDENCE — accordion + annotated answer
+   ============================================================ */
+.vis-page .ev { margin-top: 46px; display: flex; flex-direction: column; gap: 20px; }
+.vis-page .evx {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.vis-page .evx-head {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; text-align: left;
+  background: none; border: 0; cursor: pointer; padding: 22px 26px; font: inherit;
+}
+.vis-page .evx-head:hover { background: #fafbff; }
+.vis-page .evx-q {
+  flex: 1;
+  font-family: var(--font-display); font-weight: 600; font-size: 15.5px;
+  color: var(--fg-1); line-height: 1.4;
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+}
+.vis-page .evx-right { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+.vis-page .evx .chev {
+  color: var(--fg-6); font-size: 20px; line-height: 1;
+  transition: transform var(--dur) var(--ease-out);
+}
+.vis-page .evx.open .chev { transform: rotate(90deg); color: var(--poliris-blue); }
+.vis-page .evx-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .38s var(--ease-out);
+}
+.vis-page .evx.open .evx-body { max-height: 900px; border-top: 1px solid var(--border); }
+.vis-page .evx-bin { padding: 22px 26px; background: #fff; }
+.vis-page .evc-anslab {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 10.5px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: var(--fg-6); margin-bottom: 9px;
+}
+.vis-page .evc-anslab .ln { flex: 1; height: 1px; background: var(--border); }
+.vis-page .evc-ans {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  font-size: 14.5px; line-height: 1.75; color: var(--fg-2);
+}
+.vis-page .evc-ans .ell { color: var(--fg-6); font-weight: 800; padding: 0 3px; letter-spacing: .06em; }
+.vis-page .hl-brand {
+  font-weight: 700; color: var(--fg-1);
+  border-bottom: 2px solid #111827;
+  padding-bottom: 1px;
+}
+.vis-page .hl-pos { color: #15803d; background: #dcfce7; border-radius: 4px; padding: 1px 5px; font-weight: 600; }
+.vis-page .hl-neg { color: #c2410c; background: #ffedd5; border-radius: 4px; padding: 1px 5px; font-weight: 600; }
+.vis-page .evx-map {
+  margin-top: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.vis-page .evx-maplab {
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--fg-6); margin-bottom: 12px;
+}
+.vis-page .evx-words { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.vis-page .evx-flow {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+}
+.vis-page .evx-eq  { color: var(--fg-5); font-weight: 700; font-size: 14px; }
+.vis-page .evx-on  { font-size: 13px; color: var(--fg-5); }
+.vis-page .evc-srcchip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-display); font-weight: 700; font-size: 11px;
+  color: var(--fg-3); background: #f1f5f9;
+  border: 1px solid var(--border); border-radius: 99px; padding: 4px 11px;
+}
+.vis-page .evc-asklab {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-display); font-size: 9.5px; font-weight: 800;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--fg-3); background: #f1f5f9;
+  border: 1px solid var(--border); border-radius: 99px; padding: 4px 10px; flex: 0 0 auto;
+}
+.vis-page .sig { font-family: var(--font-display); font-weight: 700; font-size: 12px; border-radius: 99px; padding: 5px 12px; }
+.vis-page .sig.pos { background: #dcfce7; color: #15803d; }
+.vis-page .sig.neg { background: #ffedd5; color: #c2410c; }
+.vis-page .dims { display: flex; flex-wrap: wrap; gap: 7px; }
+.vis-page .dim {
+  font-family: var(--font-display); font-size: 11.5px; font-weight: 600;
+  padding: 5px 12px; border-radius: 99px;
+  background: #f1f5f9; color: var(--fg-3);
+  border: 1px solid var(--border);
+}
+
+/* ============================================================
+   01 PER-AXIS DIAGRAM — HTML layout with bezier curves
+   ============================================================ */
+
+/* pf-wrap has no padding on sentiment page — handled inside */
+.sent-page .pf-wrap { padding: 0; overflow: hidden; }
+
+.vis-page .pf-legend-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 13px;
+  color: var(--fg-4);
+  padding: 14px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.vis-page .pf-legend-hdr .tg {
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+}
+.vis-page .pf-legend-hdr .tg.pos { color: var(--positive); }
+.vis-page .pf-legend-hdr .tg.neu { color: #ca8a04; }
+.vis-page .pf-legend-hdr .tg.neg { color: var(--negative); }
+.vis-page .tg-stacked {
+  display: inline-flex; flex-direction: column;
+  align-items: center; line-height: 0.85;
+  font-size: 8px; gap: 0; vertical-align: middle;
+  margin-right: 2px;
+}
+.vis-page .pf-diagram { padding: 20px 24px 0; }
+.vis-page .pf-col-hdrs {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  margin-bottom: 14px;
+}
+.vis-page .pf-col-hdrs .lbl {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--fg-6);
+}
+.vis-page .pf-col-hdrs .r { text-align: right; }
+.vis-page .pf-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  height: 116px;
+  margin-bottom: 12px;
+}
+.vis-page .pf-group {
+  border-left: 3px solid;
+  padding: 0 12px 0 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.vis-page .pf-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: var(--fg-2);
+  font-family: var(--font-body);
+  font-weight: 500;
+  gap: 10px;
+}
+.vis-page .pf-prompt .tri { flex: 0 0 auto; font-size: 11px; }
+.vis-page .pf-curve-col { position: relative; }
+.vis-page .pf-curve-col svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+}
+.vis-page .pf-axis-card {
+  border-radius: var(--r-xl);
+  border: 1.5px solid transparent;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.vis-page .pf-axis-card h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 2px;
+  color: var(--fg-1);
+}
+.vis-page .pf-axis-card .from-ct {
+  font-size: 11.5px;
+  color: var(--fg-5);
+  margin: 0 0 9px;
+}
+.sent-page .pf-foot { padding: 14px 24px 22px; }
+
+/* ============================================================
+   SENTIMENT TOUR — 5-column override
+   ============================================================ */
+.sent-page .tour { grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.sent-page .tcard { padding: 18px 16px 15px; }
+.sent-page .tcard-top { margin-bottom: 12px; }
+.sent-page .tcard .ic  { width: 38px; height: 38px; }
+.sent-page .tcard .ic svg { width: 18px; height: 18px; }
+.sent-page .tcard .num { font-size: 12px; }
+.sent-page .tcard h3   { font-size: 14.5px; margin: 0 0 6px; line-height: 1.22; }
+.sent-page .tcard p    { font-size: 11.5px; line-height: 1.45; margin: 0 0 14px; }
+.sent-page .tcard .jump { font-size: 11px; gap: 7px; }
+.sent-page .tcard .jump .arr { width: 22px; height: 22px; }
+.sent-page .tcard .jump .arr svg { width: 12px; height: 12px; }
+
+/* ============================================================
+   SENTIMENT RESPONSIVE
+   ============================================================ */
+@media(max-width: 1040px) { .sent-page .tour { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+@media(max-width: 760px) {
+  .sent-page .tour   { grid-template-columns: 1fr 1fr; }
+  .vis-page .lens2   { grid-template-columns: 1fr; }
+  .vis-page .overband { grid-template-columns: 1fr; }
+  .vis-page .app-body { grid-template-columns: 1fr; }
+  .vis-page .app-side { display: none; }
+  .vis-page .app-main { grid-template-columns: 1fr; }
+  .vis-page .cmpx-head,
+  .vis-page .cmpx-row { grid-template-columns: 1.4fr 1fr 1fr; }
+  .vis-page .cmpx-head span:last-child,
+  .vis-page .cmpx-row .cell:last-child { display: none; }
+}
+@media(max-width: 480px) {
+  .sent-page .tour { grid-template-columns: 1fr; }
+  .vis-page .cmpx-head,
+  .vis-page .cmpx-row { grid-template-columns: 1.3fr 1fr; }
+  .vis-page .cmpx-head span:nth-child(3),
+  .vis-page .cmpx-row .cell:nth-child(3) { display: none; }
+}
+

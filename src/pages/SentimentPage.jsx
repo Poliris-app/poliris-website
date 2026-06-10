@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import '../sentiment.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
@@ -7,15 +8,15 @@ import CtaBand from '../components/CtaBand';
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
 /* ── Sentiment chart data ───────────────────────────────────── */
-const SENT_DATA     = [75, 50, 75, 100, 100, 75, 75, 100, 100, 75];
-const SENT_X_LABELS = ['Apr 24', 'Apr 25', 'Apr 26', 'Apr 27', 'Apr 28', 'May 1', 'May 3', 'May 7', 'May 10', 'May 15'];
-const CVW = 540, CVH = 160, CPT = 8, CPR = 8, CPB = 20, CPL = 70, CN = 10;
+const SENT_DATA     = [75, 100, 75, 100, 75, 75];
+const SENT_X_LABELS = ['Apr 27', 'May 4', 'May 11', 'May 18', 'May 25', 'Jun 1'];
+const CVW = 540, CVH = 160, CPT = 8, CPR = 8, CPB = 20, CPL = 70, CN = 6;
 const CHART_TIERS = [
-  { v: 100, label: 'Very Strong', color: '#16a34a' },
-  { v: 75,  label: 'Strong',      color: '#16a34a' },
-  { v: 50,  label: 'Moderate',    color: '#ca8a04' },
-  { v: 25,  label: 'Weak',        color: '#ea580c' },
-  { v: 0,   label: 'Very Weak',   color: '#dc2626' },
+  { v: 100, label: 'Very Strong', color: '#15803d' },
+  { v: 75,  label: 'Strong',      color: '#22c55e' },
+  { v: 50,  label: 'Moderate',    color: '#eab308' },
+  { v: 25,  label: 'Weak',        color: '#f97316' },
+  { v: 0,   label: 'Very Weak',   color: '#ef4444' },
 ];
 function cyAt(v) { return CPT + (1 - v / 100) * (CVH - CPT - CPB); }
 function cxAt(i) { return CPL + (i / (CN - 1)) * (CVW - CPL - CPR); }
@@ -33,11 +34,11 @@ function makeSentPath(vals) {
 /* ── Sentiment Breakdown panel ──────────────────────────────── */
 const SENT_OVERALL = 'Strong';
 const TIER_STYLE = {
-  'Very Strong': { color: '#16a34a', bg: '#dcfce7', bar: '#16a34a' },
-  'Strong':      { color: '#16a34a', bg: '#d1fae5', bar: '#22c55e' },
-  'Moderate':    { color: '#ca8a04', bg: '#fef9c3', bar: '#eab308' },
-  'Weak':        { color: '#ea580c', bg: '#fff7ed', bar: '#f97316' },
-  'Very Weak':   { color: '#dc2626', bg: '#fee2e2', bar: '#ef4444' },
+  'Very Strong': { color: '#15803d', bg: '#d1fae5', bar: '#15803d' },
+  'Strong':      { color: '#22c55e', bg: '#dcfce7', bar: '#22c55e' },
+  'Moderate':    { color: '#eab308', bg: '#fefce8', bar: '#eab308' },
+  'Weak':        { color: '#f97316', bg: '#fff7ed', bar: '#f97316' },
+  'Very Weak':   { color: '#ef4444', bg: '#fef2f2', bar: '#ef4444' },
 };
 const SENT_AXES = [
   { id: 'brand-awareness', name: 'Brand awareness', score: 92, tier: 'Very Strong' },
@@ -179,33 +180,52 @@ const TOUR_CARDS = [
 /* ── competitor data ─────────────────────────────────────────── */
 const COMPETITORS = [
   {
-    name: 'Gleamer',
-    you: true,
-    bd: '#1e3893',
-    compliance: { label: 'Moderate', cls: 'pt-warn' },
-    expertise:  { label: 'Strong',   cls: 'pt-pos'  },
-    innovation: { label: 'V. strong',cls: 'pt-pos', lead: true },
+    name: 'Adidas',   you: false, bd: '#dc2626', logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,
+    awareness: { label: 'Very Strong', cls: 'pt-pos' },
+    design:    { label: 'Strong',      cls: 'pt-pos' },
+    durability:{ label: 'Moderate',    cls: 'pt-warn' },
+    performance:{ label: 'Strong',     cls: 'pt-pos' },
+    overall: 80,
   },
   {
-    name: 'Raidium',
-    bd: '#1f8a5b',
-    compliance: { label: 'V. strong',cls: 'pt-pos', lead: true },
-    expertise:  { label: 'Strong',   cls: 'pt-pos'  },
-    innovation: { label: 'Moderate', cls: 'pt-warn' },
+    name: 'Nike',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,
+    awareness: { label: 'Very Strong', cls: 'pt-pos' },
+    design:    { label: 'Strong',      cls: 'pt-pos' },
+    durability:{ label: 'Weak',        cls: 'pt-neg' },
+    performance:{ label: 'Strong',     cls: 'pt-pos' },
+    overall: 80,
   },
   {
-    name: 'Pixyl',
-    bd: '#5e74c4',
-    compliance: { label: 'Strong',   cls: 'pt-pos'  },
-    expertise:  { label: 'Moderate', cls: 'pt-warn' },
-    innovation: { label: 'Strong',   cls: 'pt-pos'  },
+    name: 'On',       you: false, bd: '#16a34a', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
+    awareness: { label: 'Strong',      cls: 'pt-pos' },
+    design:    { label: 'Strong',      cls: 'pt-pos' },
+    durability:{ label: 'Strong',      cls: 'pt-pos' },
+    performance:{ label: 'Strong',     cls: 'pt-pos' },
+    overall: 80,
   },
   {
-    name: 'Therapixel',
-    bd: '#d98a2b',
-    compliance: { label: 'Strong',   cls: 'pt-pos'  },
-    expertise:  { label: 'Strong',   cls: 'pt-pos'  },
-    innovation: { label: 'Weak',     cls: 'pt-neg'  },
+    name: 'Hoka',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,
+    awareness: { label: 'Moderate',    cls: 'pt-warn' },
+    design:    { label: 'Moderate',    cls: 'pt-warn' },
+    durability:{ label: 'Very Strong', cls: 'pt-pos' },
+    performance:{ label: 'Strong',     cls: 'pt-pos' },
+    overall: 80,
+  },
+  {
+    name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
+    awareness: { label: '—',           cls: 'pt-neu' },
+    design:    { label: '—',           cls: 'pt-neu' },
+    durability:{ label: 'Very Strong', cls: 'pt-pos' },
+    performance:{ label: 'Strong',     cls: 'pt-pos' },
+    overall: 80,
+  },
+  {
+    name: 'New Balance',   you: false, bd: 'rgb(28, 229, 206)', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
+    awareness: { label: 'Very Strong',           cls: 'pt-neu' },
+    design:    { label: 'Strong',           cls: 'pt-neu' },
+    durability:{ label: 'Strong', cls: 'pt-pos' },
+    performance:{ label: 'Moderate',     cls: 'pt-pos' },
+    overall: 80,
   },
 ];
 
@@ -450,95 +470,122 @@ export default function SentimentPage() {
               <div className="pf-legend-hdr">
                 <span>Each answer is scored:</span>
                 <span className="tg pos">▲ Endorsement</span>
-                <span className="tg neu">▲▼ Mention</span>
+                <span className="tg neu"><span className="tg-stacked"><span>▲</span><span>▼</span></span> Mention</span>
                 <span className="tg neg">▼ Critique</span>
                 <span>  then rolled into one sentiment per axis.</span>
               </div>
 
-              {/* diagram */}
-              <div className="pf-diagram">
-                {/* column headers */}
-                <div className="pf-col-hdrs">
-                  <span className="lbl">Hundreds of AI answers</span>
-                  <span />
-                  <span className="lbl r">One sentiment per axis</span>
-                </div>
+              <svg viewBox="0 0 980 670" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI answers mapped to sentiment per axis" className="pf-svg">
+                <defs>
+                  {/* Shared Q1: Brand awareness (purple) + Design (orange) */}
+                  <linearGradient id="bar-ba-d" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="50%" stopColor="#7c5cbf"/>
+                    <stop offset="50%" stopColor="#d98a2b"/>
+                  </linearGradient>
+                  {/* Shared Q5: Durability (teal) + Performance (navy) */}
+                  <linearGradient id="bar-dp" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="50%" stopColor="#0d7963"/>
+                    <stop offset="50%" stopColor="#1e3893"/>
+                  </linearGradient>
+                </defs>
 
-                {/* row 1   Compliance */}
-                <div className="pf-row">
-                  <div className="pf-group" style={{ borderLeftColor: '#d98a2b' }}>
-                    <div className="pf-prompt">
-                      <span>Most CE / MDR-compliant vendor?</span>
-                      <span className="tri neg">▼</span>
-                    </div>
-                    <div className="pf-prompt">
-                      <span>Does it meet EU medical-device rules?</span>
-                      <span className="tri neu">↕</span>
-                    </div>
-                  </div>
-                  <div className="pf-curve-col">
-                    <svg viewBox="0 0 80 116" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M 0,30 C 40,30 40,58 80,58" stroke="#d98a2b" strokeWidth="2" strokeLinecap="round"/>
-                      <path d="M 0,86 C 40,86 40,58 80,58" stroke="#d98a2b" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                  <div className="pf-axis-card" style={{ background: '#fef3e2', borderColor: 'rgba(217,138,43,.35)' }}>
-                    <h3>Compliance</h3>
-                    <p className="from-ct">from 14 prompts</p>
-                    <span className="pill-tag pt-warn">Moderate</span>
-                  </div>
-                </div>
+                {/* Column headers */}
+                <text x="36" y="46" className="pf-collbl">HUNDREDS OF AI ANSWERS</text>
+                <text x="950" y="46" textAnchor="end" className="pf-collbl">ONE SENTIMENT PER AXIS</text>
 
-                {/* row 2   Expertise */}
-                <div className="pf-row">
-                  <div className="pf-group" style={{ borderLeftColor: '#7c6ccf' }}>
-                    <div className="pf-prompt">
-                      <span>Best for fracture-detection accuracy?</span>
-                      <span className="tri pos">▲</span>
-                    </div>
-                    <div className="pf-prompt">
-                      <span>Which AI is most clinically validated?</span>
-                      <span className="tri pos">▲</span>
-                    </div>
-                  </div>
-                  <div className="pf-curve-col">
-                    <svg viewBox="0 0 80 116" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M 0,30 C 40,30 40,58 80,58" stroke="#7c6ccf" strokeWidth="2" strokeLinecap="round"/>
-                      <path d="M 0,86 C 40,86 40,58 80,58" stroke="#7c6ccf" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                  <div className="pf-axis-card" style={{ background: '#f1f0fa', borderColor: 'rgba(124,108,207,.35)' }}>
-                    <h3>Expertise</h3>
-                    <p className="from-ct">from 11 prompts</p>
-                    <span className="pill-tag pt-pos">Strong</span>
-                  </div>
-                </div>
+                {/* Q1 → Brand awareness */}
+                <path className="pf-line pf-line--1" d="M 440 96  C 526 96  524 129 610 129" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q1 → Design (shared) */}
+                <path className="pf-line pf-line--2" d="M 440 96  C 526 96  524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q2 → Design */}
+                <path className="pf-line pf-line--3" d="M 440 174 C 526 174 524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q3 → Design */}
+                <path className="pf-line pf-line--4" d="M 440 252 C 526 252 524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q4 → Design */}
+                <path className="pf-line pf-line--5" d="M 440 330 C 526 330 524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q5 → Durability (shared) */}
+                <path className="pf-line pf-line--6" d="M 440 408 C 526 408 524 439 610 439" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q5 → Performance (shared) */}
+                <path className="pf-line pf-line--7" d="M 440 408 C 526 408 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q6 → Performance */}
+                <path className="pf-line pf-line--8" d="M 440 486 C 526 486 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                {/* Q7 → Performance */}
+                <path className="pf-line pf-line--9" d="M 440 564 C 526 564 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
 
-                {/* row 3   Innovation */}
-                <div className="pf-row">
-                  <div className="pf-group" style={{ borderLeftColor: '#1e3893' }}>
-                    <div className="pf-prompt">
-                      <span>Newest breakthroughs in radiology AI?</span>
-                      <span className="tri pos">▲</span>
-                    </div>
-                    <div className="pf-prompt">
-                      <span>Most advanced imaging AI today?</span>
-                      <span className="tri pos">▲</span>
-                    </div>
-                  </div>
-                  <div className="pf-curve-col">
-                    <svg viewBox="0 0 80 116" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M 0,30 C 40,30 40,58 80,58" stroke="#1e3893" strokeWidth="2" strokeLinecap="round"/>
-                      <path d="M 0,86 C 40,86 40,58 80,58" stroke="#1e3893" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                  <div className="pf-axis-card" style={{ background: '#eef1fb', borderColor: 'rgba(30,56,147,.3)' }}>
-                    <h3>Innovation</h3>
-                    <p className="from-ct">from 9 prompts</p>
-                    <span className="pill-tag pt-pos">Very strong</span>
-                  </div>
-                </div>
-              </div>
+                {/* Q1: Brand awareness + Design (shared — gradient accent bar) */}
+                <rect x="30" y="70"  width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="80"  width="5" height="32" rx="2.5" fill="url(#bar-ba-d)"/>
+                <text x="54" y="101" className="pf-q">"Which trendy sneakers dominate street style?"</text>
+                <rect x="412" y="80" width="26" height="30" fill="#fff"/>
+                <text x="428" y="101" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
+                {/* Q2: Design */}
+                <rect x="30" y="148" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="158" width="5" height="32" rx="2.5" fill="#d98a2b"/>
+                <text x="54" y="179" className="pf-q">"Best affordable and reliable everyday sneakers?"</text>
+                <rect x="412" y="158" width="26" height="30" fill="#fff"/>
+                <text x="428" y="179" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
+                {/* Q3: Design */}
+                <rect x="30" y="226" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="236" width="5" height="32" rx="2.5" fill="#d98a2b"/>
+                <text x="54" y="257" className="pf-q">"Best value-for-money sneakers for commuting?"</text>
+                <rect x="412" y="236" width="26" height="30" fill="#fff"/>
+                <text x="428" y="250" textAnchor="end" fontSize="7.5" fill="#ca8a04">▲</text>
+                <text x="428" y="259" textAnchor="end" fontSize="7.5" fill="#ca8a04">▼</text>
+                {/* Q4: Design */}
+                <rect x="30" y="304" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="314" width="5" height="32" rx="2.5" fill="#d98a2b"/>
+                <text x="54" y="335" className="pf-q">"Most comfortable shoes with arch support?"</text>
+                <rect x="412" y="314" width="26" height="30" fill="#fff"/>
+                <text x="428" y="335" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
+                {/* Q5: Durability + Performance (shared — gradient accent bar) */}
+                <rect x="30" y="382" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="392" width="5" height="32" rx="2.5" fill="url(#bar-dp)"/>
+                <text x="54" y="413" className="pf-q">"High-performance running shoes for trails?"</text>
+                <rect x="412" y="392" width="26" height="30" fill="#fff"/>
+                <text x="428" y="406" textAnchor="end" fontSize="7.5" fill="#ca8a04">▲</text>
+                <text x="428" y="415" textAnchor="end" fontSize="7.5" fill="#ca8a04">▼</text>
+                {/* Q6: Performance */}
+                <rect x="30" y="460" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="470" width="5" height="32" rx="2.5" fill="#1e3893"/>
+                <text x="54" y="491" className="pf-q">"Lightweight gym shoes for maximum stability?"</text>
+                <rect x="412" y="470" width="26" height="30" fill="#fff"/>
+                <text x="428" y="491" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
+                {/* Q7: Performance */}
+                <rect x="30" y="538" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
+                <rect x="30" y="548" width="5" height="32" rx="2.5" fill="#1e3893"/>
+                <text x="54" y="569" className="pf-q">"Best cross-training shoes for intense workouts?"</text>
+                <rect x="412" y="548" width="26" height="30" fill="#fff"/>
+                <text x="428" y="569" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
+
+                {/* Axis card: Brand awareness (purple) — y=70, center=129 */}
+                <rect x="610" y="70"  width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
+                <rect x="610" y="84"  width="5" height="90" rx="2.5" fill="#7c5cbf"/>
+                <text x="636" y="118" className="pf-tname">Brand awareness</text>
+                <text x="636" y="144" className="pf-tsub">from 18 prompts</text>
+                <rect x="836" y="140" width="94" height="24" rx="12" fill="#dcfce7"/>
+                <text x="883" y="156" textAnchor="middle" className="pf-tlab" fill="#16a34a">Very strong</text>
+                {/* Axis card: Design (orange) — y=200, center=259 */}
+                <rect x="610" y="200" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
+                <rect x="610" y="214" width="5" height="90" rx="2.5" fill="#d98a2b"/>
+                <text x="636" y="248" className="pf-tname">Design</text>
+                <text x="636" y="274" className="pf-tsub">from 20 prompts</text>
+                <rect x="856" y="270" width="70" height="24" rx="12" fill="#dcfce7"/>
+                <text x="891" y="286" textAnchor="middle" className="pf-tlab" fill="#16a34a">Strong</text>
+                {/* Axis card: Durability (teal) — y=380, center=439 */}
+                <rect x="610" y="380" width="340" height="118" rx="13" fill="#e6f7f3" stroke="#0d7963" strokeOpacity=".30"/>
+                <rect x="610" y="394" width="5" height="90" rx="2.5" fill="#0d7963"/>
+                <text x="636" y="428" className="pf-tname">Durability</text>
+                <text x="636" y="454" className="pf-tsub">from 15 prompts</text>
+                <rect x="856" y="450" width="70" height="24" rx="12" fill="#fee2e2"/>
+                <text x="891" y="466" textAnchor="middle" className="pf-tlab" fill="#dc2626">Weak</text>
+                {/* Axis card: Performance (navy) — y=510, center=569 */}
+                <rect x="610" y="510" width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
+                <rect x="610" y="524" width="5" height="90" rx="2.5" fill="#1e3893"/>
+                <text x="636" y="558" className="pf-tname">Performance</text>
+                <text x="636" y="584" className="pf-tsub">from 22 prompts</text>
+                <rect x="856" y="580" width="70" height="24" rx="12" fill="#dcfce7"/>
+                <text x="891" y="596" textAnchor="middle" className="pf-tlab" fill="#16a34a">Strong</text>
+              </svg>
 
               <p className="pf-foot">Each axis is a real buying decision   the score tells you exactly where AI is helping or hurting your pipeline.</p>
             </div>
@@ -564,25 +611,52 @@ export default function SentimentPage() {
                 </div>
                 <h3>By axis</h3>
                 <p>Every score broken out by the four axes we track. See what's holding you back and what's already working.</p>
-                <div className="srow">
-                  <span className="nm">CE / MDR</span>
-                  <div className="track"><i style={{ width: '82%' }} /></div>
-                  <span className="pill-tag pt-pos">82</span>
-                </div>
-                <div className="srow">
-                  <span className="nm">Expertise</span>
-                  <div className="track"><i style={{ width: '76%' }} /></div>
-                  <span className="pill-tag pt-pos">76</span>
-                </div>
-                <div className="srow">
-                  <span className="nm">Innovation</span>
-                  <div className="track"><i className="warn" style={{ width: '48%' }} /></div>
-                  <span className="pill-tag pt-warn">48</span>
-                </div>
-                <div className="srow">
-                  <span className="nm">Workflow</span>
-                  <div className="track"><i style={{ width: '71%' }} /></div>
-                  <span className="pill-tag pt-pos">71</span>
+                <div className="hdash__sb-bars">
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name">Brand awareness</span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>Very Strong</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '100%', background: '#16a34a' }} />
+                    </div>
+                  </div>
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name">Performance</span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    </div>
+                  </div>
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name">Design</span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    </div>
+                  </div>
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name">Durability</span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>Priority</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>Weak</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
+                    </div>
+                  </div>
                 </div>
                 <p className="lens-note">Scores averaged across all models · updated weekly</p>
               </div>
@@ -596,76 +670,213 @@ export default function SentimentPage() {
                   </svg>
                 </div>
                 <h3>By model</h3>
-                <p>The same brand, five different AI voices. Find which models are your allies and which need work.</p>
-                <div className="srow">
-                  <span className="nm">ChatGPT</span>
-                  <div className="track"><i style={{ width: '81%' }} /></div>
-                  <span className="pill-tag pt-pos">81</span>
+                <p>The same brand, four different AI voices. Find which models are your allies and which need work.</p>
+                <div className="hdash__sb-bars">
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
+                        <img src={`${import.meta.env.BASE_URL}gemini-ai-logo.png`} alt="Gemini" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <span>
+                          <span style={{ display: 'block', lineHeight: '1.3' }}>Gemini</span>
+                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gemini-3.1-pro-preview</span>
+                        </span>
+                      </span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>Very Strong</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '100%', background: '#16a34a' }} />
+                    </div>
+                  </div>
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
+                        <img src={`${import.meta.env.BASE_URL}chatgpt-com-logo.png`} alt="ChatGPT" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <span>
+                          <span style={{ display: 'block', lineHeight: '1.3' }}>ChatGPT</span>
+                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gpt-4o-mini</span>
+                        </span>
+                      </span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    </div>
+                  </div>
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
+                        <img src={`${import.meta.env.BASE_URL}mistral-ai-logo.png`} alt="Mistral" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <span>
+                          <span style={{ display: 'block', lineHeight: '1.3' }}>Mistral</span>
+                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>mistral-7b-instruct-v0.2</span>
+                        </span>
+                      </span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    </div>
+                  </div>
+                  <div className="hdash__sb-bar-card">
+                    <div className="hdash__sb-bar-card-top">
+                      <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
+                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="Claude" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <span>
+                          <span style={{ display: 'block', lineHeight: '1.3' }}>Claude</span>
+                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>claude-haiku-4-5-20251001</span>
+                        </span>
+                      </span>
+                      <span className="hdash__sb-bar-card-right">
+                        <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>Priority</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>Weak</span>
+                      </span>
+                    </div>
+                    <div className="hdash__sb-bar-track2">
+                      <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
+                    </div>
+                  </div>
                 </div>
-                <div className="srow">
-                  <span className="nm">Claude</span>
-                  <div className="track"><i style={{ width: '78%' }} /></div>
-                  <span className="pill-tag pt-pos">78</span>
-                </div>
-                <div className="srow">
-                  <span className="nm">Gemini</span>
-                  <div className="track"><i style={{ width: '72%' }} /></div>
-                  <span className="pill-tag pt-pos">72</span>
-                </div>
-                <div className="srow">
-                  <span className="nm">Perplexity</span>
-                  <div className="track"><i className="warn" style={{ width: '61%' }} /></div>
-                  <span className="pill-tag pt-warn">61</span>
-                </div>
-                <div className="srow">
-                  <span className="nm">Mistral</span>
-                  <div className="track"><i style={{ width: '76%' }} /></div>
-                  <span className="pill-tag pt-pos">76</span>
-                </div>
-                <p className="lens-note">Innovation axis · last 90 days</p>
+                <p className="lens-note">Brand awareness axis · last 90 days</p>
               </div>
             </div>
 
-            {/* overband   over time */}
-            <div className="overband reveal">
-              <div className="ob-copy">
-                <div className="ob-eyebrow">Trend tracking</div>
-                <h3>Watch your scores move over time.</h3>
-                <p>Monthly snapshots across every axis so you can see what your content changes and PR moves actually did to AI perception.</p>
-                <div className="ob-flag">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                  </svg>
-                  <span><b>Innovation dropped 11 pts</b> in March   correlates with competitor product launch. IVY flagged a content gap in your roadmap messaging.</span>
+            {/* ───── AI Sentiment Trend ───── */}
+            <div className="sent-trend reveal">
+              <div className="st-hdr">
+                <span className="st-title">AI Sentiment Trend · Nike</span>
+                <div className="st-tab-grp">
+                  <button className="st-tab st-tab--on">6 Weeks</button>
+                  <button className="st-tab">3 Months</button>
+                  <button className="st-tab">1 Year</button>
                 </div>
               </div>
 
-              <div className="ob-chart">
-                <svg className="ob-svg" viewBox="0 0 460 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* grid lines */}
-                  {[40, 80, 120, 160].map((y) => (
-                    <line key={y} x1="40" y1={y} x2="440" y2={y} stroke="#e9ebf1" strokeWidth="1"/>
-                  ))}
-                  {/* y-axis labels */}
-                  {[{ y: 40, l: '100' }, { y: 80, l: '75' }, { y: 120, l: '50' }, { y: 160, l: '25' }].map((r) => (
-                    <text key={r.y} x="32" y={r.y + 4} textAnchor="end" fontSize="9" fill="#9a9aa0" fontFamily="Chivo,sans-serif">{r.l}</text>
-                  ))}
-                  {/* x-axis labels */}
-                  {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map((m, i) => (
-                    <text key={m} x={60 + i * 76} y="185" textAnchor="middle" fontSize="9" fill="#9a9aa0" fontFamily="Chivo,sans-serif">{m}</text>
-                  ))}
-                  {/* Compliance line (green)   stays strong */}
-                  <polyline points="60,72 136,68 212,66 288,64 364,62 440,60" stroke="#22c55e" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round"/>
-                  {/* Innovation line (orange)   dips in Mar */}
-                  <polyline points="60,96 136,92 212,128 288,124 364,116 440,112" stroke="#d98a2b" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round"/>
-                  {/* dot on innovation dip */}
-                  <circle cx="212" cy="128" r="5" fill="#d98a2b" stroke="#fff" strokeWidth="2"/>
-                </svg>
-                <div className="ob-leg">
-                  <span><span className="dot" style={{ background: '#22c55e' }} />CE / MDR compliance</span>
-                  <span><span className="dot" style={{ background: '#d98a2b' }} />Innovation</span>
+              <div className="st-stats">
+                <div className="st-stat">
+                  <div className="st-stat-lbl">Overall Score</div>
+                  <div className="st-stat-val">Strong</div>
+                  <div className="st-stat-sub st-sub-pos">↑ +5 pts vs. 30 days ago</div>
                 </div>
+                <div className="st-stat">
+                  <div className="st-stat-lbl">Models Tracked</div>
+                  <div className="st-stat-val">4</div>
+                  <div className="st-stat-sub">AI engines · real-time</div>
+                </div>
+                <div className="st-stat">
+                  <div className="st-stat-lbl">At-Risk Axis</div>
+                  <div className="st-stat-val">1</div>
+                  <div className="st-stat-sub st-sub-warn">Durability · dropping</div>
+                </div>
+              </div>
+
+              <div className="st-chart-wrap">
+                <svg viewBox="0 0 830 270" className="st-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="greenFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#16a34a" stopOpacity="0.13"/>
+                      <stop offset="100%" stopColor="#16a34a" stopOpacity="0.01"/>
+                    </linearGradient>
+                    <linearGradient id="blueFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#2563eb" stopOpacity="0.08"/>
+                      <stop offset="100%" stopColor="#2563eb" stopOpacity="0.01"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* 5 tier lines only — no bottom line */}
+                  <line x1="110" y1="20"  x2="760" y2="20"  stroke="#e5e7eb" strokeWidth="1"/>
+                  <line x1="110" y1="68"  x2="760" y2="68"  stroke="#e5e7eb" strokeWidth="1"/>
+                  <line x1="110" y1="116" x2="760" y2="116" stroke="#e5e7eb" strokeWidth="1"/>
+                  <line x1="110" y1="164" x2="760" y2="164" stroke="#e5e7eb" strokeWidth="1"/>
+                  <line x1="110" y1="212" x2="760" y2="212" stroke="#e5e7eb" strokeWidth="1"/>
+
+                  {/* Tier labels */}
+                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Manrope,sans-serif">Very Strong</text>
+                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Manrope,sans-serif">Strong</text>
+                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Manrope,sans-serif">Moderate</text>
+                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Manrope,sans-serif">Weak</text>
+                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Manrope,sans-serif">Very Weak</text>
+
+                  {/* X-axis labels — Apr 27, May 4, May 11, May 18, May 25, Jun 1 */}
+                  <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Apr 27</text>
+                  <text x="240" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 4</text>
+                  <text x="370" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 11</text>
+                  <text x="500" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 18</text>
+                  <text x="630" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 25</text>
+                  <text x="760" y="250" textAnchor="end"    fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Jun 1</text>
+
+                  {/* Green fill below overall line */}
+                  {/* Data: [75,100,75,100,75,75] → Strong,VStrong,Strong,VStrong,Strong,Strong */}
+                  {/* x positions: 110, 240, 370, 500, 630, 760 */}
+                  {/* y positions: Strong=68, Very Strong=20 */}
+                  <path
+                    d="M110,68 C175,68 175,20 240,20 C305,20 305,68 370,68 C435,68 435,20 500,20 C565,20 565,68 630,68 C695,68 695,68 760,68
+                      L760,240 L110,240 Z"
+                    fill="url(#greenFill)"
+                  />
+
+                  {/* Blue fill under slipping line */}
+                  <path
+                    d="M110,68 C200,68 260,116 380,116 C480,116 560,164 686,164 C710,164 735,164 760,164
+                      L760,240 L110,240 Z"
+                    fill="url(#blueFill)"
+                  />
+
+                  {/* Slipping axis — smooth S-curve Strong → Moderate → Weak */}
+                  <path
+                    d="M110,68 C200,68 260,116 380,116 C480,116 560,164 686,164 C710,164 735,164 760,164"
+                    stroke="#2563eb" strokeWidth="1.5" strokeDasharray="6,3" strokeLinecap="round"
+                  />
+
+                  {/* Overall sentiment — [75,100,75,100,75,75] Strong→VStrong→Strong→VStrong→Strong→Strong */}
+                  <path
+                    d="M110,68 C175,68 175,20 240,20 C305,20 305,68 370,68 C435,68 435,20 500,20 C565,20 565,68 630,68 C695,68 695,68 760,68"
+                    stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"
+                  />
+
+                  {/* Flagged open-ring on slipping line */}
+                  <circle cx="686" cy="164" r="9" fill="rgba(255,255,255,0.8)" stroke="#2563eb" strokeWidth="2"/>
+                  <circle cx="686" cy="164" r="3" fill="#2563eb"/>
+
+                  {/* Connector line up to bubble */}
+                  <line x1="686" y1="155" x2="686" y2="138" stroke="#2563eb" strokeDasharray="3,2" strokeWidth="1.5"/>
+
+                  {/* Annotation bubble — small white pill */}
+                  <rect x="615" y="120" width="135" height="22" rx="6" fill="#fff" stroke="#2563eb" strokeWidth="1"/>
+                  <circle cx="625" cy="131" r="3" fill="#2563eb"/>
+                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">Flagged early · Day 25</text>
+
+                  {/* End dots — green ends at Strong (y=68), blue ends at Weak (y=164) */}
+                  <circle cx="760" cy="68"  r="5" fill="#16a34a" stroke="#fff" strokeWidth="2"/>
+                  <circle cx="760" cy="164" r="5" fill="#2563eb" stroke="#fff" strokeWidth="2"/>
+
+                  {/* End score badges */}
+                  <rect x="770" y="61"  width="45" height="17" rx="8.5" fill="rgb(209, 250, 229)"/>
+                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Manrope,sans-serif" fontWeight="700">Strong</text>
+                  <rect x="770" y="157" width="45" height="17" rx="8.5" fill="rgb(255, 247, 237)"/>
+                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Manrope,sans-serif" fontWeight="700">Weak</text>
+                </svg>
+              </div>
+
+              <div className="st-models">
+                <div className="st-model-tags">
+                  <span className="st-mtag">
+                    <span className="st-mdot" style={{ background: '#16a34a' }}/>Overall sentiment
+                  </span>
+                  <span className="st-mtag st-mtag--hi">
+                    <span className="st-mdot" style={{ background: '#2563eb' }}/>Slipping axis (Durability)
+                  </span>
+                </div>
+                <span className="st-mon-note">Poliris monitors every axis, every day</span>
+              </div>
+
+              <div className="st-foot">
+                Poliris flags a slipping axis <b>before it becomes a lost deal</b> — so you can act on the signal, not the damage.
               </div>
             </div>
           </div>
@@ -683,25 +894,38 @@ export default function SentimentPage() {
             <div className="cmpx reveal">
               <div className="cmpx-head">
                 <span>Brand</span>
-                <span>CE / MDR</span>
-                <span>Expertise</span>
-                <span>Innovation</span>
+                <span>Brand Awareness</span>
+                <span>Design</span>
+                <span>Durability</span>
+                <span>Performance</span>
+                <span>Overall Axes</span>
               </div>
               {COMPETITORS.map((c) => (
                 <div key={c.name} className={`cmpx-row${c.you ? ' you' : ''}`}>
                   <div className="brand">
                     <span className="bd" style={{ background: c.bd }} />
+                    {c.logo && <img src={c.logo} alt={c.name} className="cmpx-brand-logo" />}
                     {c.name}
-                    {c.you && <span className="yt">YOU</span>}
+                    {c.you && <span className="yt">You</span>}
                   </div>
-                  <div className={`cell${c.compliance.lead ? ' lead' : ''}`}>
-                    <span className={`pill-tag ${c.compliance.cls}`}>{c.compliance.label}</span>
-                  </div>
-                  <div className={`cell${c.expertise?.lead ? ' lead' : ''}`}>
-                    <span className={`pill-tag ${c.expertise.cls}`}>{c.expertise.label}</span>
-                  </div>
-                  <div className={`cell${c.innovation.lead ? ' lead' : ''}`}>
-                    <span className={`pill-tag ${c.innovation.cls}`}>{c.innovation.label}</span>
+                  {[c.awareness, c.design, c.durability, c.performance].map((cell, i) => {
+                    const ts = TIER_STYLE[cell.label];
+                    return (
+                      <div key={i} className="cell">
+                        <span
+                          className={`pill-tag${!ts ? ' pt-neu' : ''}`}
+                          style={ts ? { color: ts.color, background: ts.bg } : undefined}
+                        >
+                          {cell.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                  <div className="cell cmpx-overall">
+                    <div className="cmpx-bar-track">
+                      <div className="cmpx-bar-fill" style={{ width: `${c.overall}%` }} />
+                    </div>
+                    <span className="cmpx-overall-label">Strong</span>
                   </div>
                 </div>
               ))}
@@ -723,29 +947,52 @@ export default function SentimentPage() {
               <div className="inner">
                 <div className="nora-grid">
                   {/* left: copy */}
-                  <div>
+                  <div className="copy">
                     <div className="agent-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                      </svg>
-                      IVY   Poliris AI Agent
+                      <span className="sp">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
+                        </svg>
+                      </span>
+                      Meet IVY · your AI sentiment agent
                     </div>
-                    <h2>IVY reads your sentiment scores and <HL>writes the playbook.</HL></h2>
+                    <h2>Your analyst, on tap.</h2>
                     <p className="lead" style={{ color: 'rgba(255,255,255,.75)', margin: '18px 0 28px' }}>
-                      IVY doesn't just surface a gap   it reads the AI answers behind each score, identifies which content signals are missing, and writes a targeted fix. One click from score to action plan.
+                      IVY reads every axis, engine and answer — then tells you what changed, why, and what to do, in plain language.
                     </p>
                     <ul className="agent-pts">
                       <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><polyline points="20 6 9 17 4 12"/></svg>
-                        Diagnoses the root cause in 30 seconds
+                        <span className="ic">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>
+                          </svg>
+                        </span>
+                        <span>
+                          <span className="tt">Explains</span>
+                          <span className="dd">What's lifting each axis, what's dragging it.</span>
+                        </span>
                       </li>
                       <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><polyline points="20 6 9 17 4 12"/></svg>
-                        Writes axis-specific content briefs
+                        <span className="ic">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M13 2 3 14h9l-1 8 10-12h-9z"/>
+                          </svg>
+                        </span>
+                        <span>
+                          <span className="tt">Alerts</span>
+                          <span className="dd">Flags a slipping axis before it becomes a problem.</span>
+                        </span>
                       </li>
                       <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><polyline points="20 6 9 17 4 12"/></svg>
-                        Prioritises fixes by expected score lift
+                        <span className="ic">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                          </svg>
+                        </span>
+                        <span>
+                          <span className="tt">Recommends</span>
+                          <span className="dd">A concrete next step, not just a score.</span>
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -754,37 +1001,36 @@ export default function SentimentPage() {
                   <div className="shot">
                     <span className="tab">IVY agent</span>
                     <div className="chat">
-                      <div className="bub agent">
-                        <strong>IVY</strong>
-                        Your Innovation score dropped 11 pts in March. Perplexity and Gemini are now describing Gleamer as "legacy" on AI-assisted triage   a term that didn't appear before the Raidium launch. Want me to run a gap analysis?
+                      <div className="chat-id">
+                        <span className="av">I</span> IVY · Sentiment analyst
                       </div>
-                      <div className="bub user">Yes   and prioritise by score impact.</div>
-                      <div className="bub agent">
-                        <strong>IVY</strong>
-                        Done. Three content gaps are responsible for 80% of the drop. Drafting targeted briefs now   ranked by expected lift. Top fix: a clinical AI roadmap page targeting the "AI-assisted triage" query cluster.
+                      <div className="bub user">Why is my Durability sentiment slipping?</div>
+                      <div className="bub bot">
+                        On durability questions, <b>Gemini</b> now puts Hoka and Brooks first and mentions Nike later — dragging Durability down <span style={{ color: '#f87171', fontWeight: 700 }}>11 points in 30 days</span>. Every other axis is stable.
                       </div>
+                      <div className="bub user">What do I do?</div>
                     </div>
                     <div className="plan">
-                      <div className="plan-item">
-                        <span className="plan-ic">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>
-                        </span>
-                        <span className="t">AI roadmap page   triage cluster</span>
-                        <span className="impact hi">+9 pts</span>
+                      <div className="plan-h">
+                        <span className="av" style={{ width: '20px', height: '20px', fontSize: '11px' }}>I</span>
+                        IVY's action plan
                       </div>
-                      <div className="plan-item">
-                        <span className="plan-ic">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>
-                        </span>
-                        <span className="t">Update product page with FDA/CE integration signals</span>
-                        <span className="impact md">+4 pts</span>
-                      </div>
-                      <div className="plan-item">
-                        <span className="plan-ic">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>
-                        </span>
-                        <span className="t">Add structured data: innovation claims with citations</span>
-                        <span className="impact md">+3 pts</span>
+                      <div className="plan-body">
+                        <div className="plan-item">
+                          <span className="rk">1</span>
+                          <span className="t">Publish durability test results and materials data</span>
+                          <span className="impact hi">+9 pts</span>
+                        </div>
+                        <div className="plan-item">
+                          <span className="rk">2</span>
+                          <span className="t">Add a long-term wear FAQ with athlete testimonials</span>
+                          <span className="impact hi">+5 pts</span>
+                        </div>
+                        <div className="plan-item">
+                          <span className="rk">3</span>
+                          <span className="t">Get cited on 2 running-gear review sites</span>
+                          <span className="impact md">+3 pts</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -812,11 +1058,14 @@ export default function SentimentPage() {
                   onClick={() => setEvxOpen((v) => !v)}
                 >
                   <span className="evx-q">
-                    <span className="evc-asklab">Perplexity</span>
-                    "What are the best AI solutions for radiology in the EU market?"
+                    <span className="evc-asklab">
+                      <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="" style={{ width: '13px', height: '13px', objectFit: 'contain' }} />
+                      Claude
+                    </span>
+                    "Where can I find affordable and reliable everyday sneakers?"
                   </span>
                   <span className="evx-right">
-                    <span className="sig pos">+2 pts Innovation</span>
+                    <span className="sig pos">+2 pts Brand awareness</span>
                     <span className="chev">›</span>
                   </span>
                 </button>
@@ -827,42 +1076,40 @@ export default function SentimentPage() {
                       AI answer
                       <span className="ln" />
                       <span className="evc-srcchip">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-                          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                        </svg>
-                        Perplexity
+                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="" style={{ width: '13px', height: '13px', objectFit: 'contain' }} />
+                        Claude
                       </span>
                     </div>
 
                     <div className="evc-ans">
                       <span className="ell">…</span>
-                      {' '}In the EU market, <span className="hl-brand">Gleamer</span> stands out for its{' '}
-                      <span className="hl-pos">strong CE-mark compliance record</span> and{' '}
-                      <span className="hl-pos">deep radiologist workflow integration</span>. While competitors have moved faster on{' '}
-                      <span className="hl-neg">AI-assisted triage features</span>, Gleamer remains a{' '}
-                      <span className="hl-pos">trusted choice for compliance-first procurement teams</span>.{' '}
+                      {' '}For everyday sneakers, <span className="hl-brand">Nike</span> is a go-to for{' '}
+                      <span className="hl-pos">iconic style and wide availability</span>, with the Air Force 1 remaining{' '}
+                      <span className="hl-pos">consistently popular across budgets</span>. That said, some reviewers note{' '}
+                      <span className="hl-neg">recent models show reduced sole durability</span> versus older releases. Overall,{' '}
+                      <span className="hl-pos">Nike offers solid value in the $70–$120 range</span>.{' '}
                       <span className="ell">…</span>
                     </div>
 
                     <div className="evx-map">
                       <div className="evx-maplab">How we scored it</div>
                       <div className="evx-words">
-                        <span className="sig pos">CE compliance ↑</span>
-                        <span className="sig pos">Workflow fit ↑</span>
-                        <span className="sig neg">Innovation ↓</span>
-                        <span className="sig pos">Expertise ↑</span>
+                        <span className="sig pos">Brand awareness ↑</span>
+                        <span className="sig pos">Design ↑</span>
+                        <span className="sig neg">Durability ↓</span>
+                        <span className="sig pos">Value ↑</span>
                       </div>
                       <div className="evx-flow">
                         <div className="dims">
-                          <span className="dim">CE / MDR</span>
-                          <span className="dim">Workflow</span>
-                          <span className="dim">Expertise</span>
+                          <span className="dim">Brand awareness</span>
+                          <span className="dim">Design</span>
+                          <span className="dim">Value</span>
                         </div>
                         <span className="evx-eq">→</span>
                         <span className="sig pos">+positive signals</span>
                         <span className="evx-eq">+</span>
                         <div className="dims">
-                          <span className="dim">Innovation</span>
+                          <span className="dim">Durability</span>
                         </div>
                         <span className="evx-eq">→</span>
                         <span className="sig neg">−negative signal</span>

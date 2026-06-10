@@ -10,22 +10,22 @@ const BRANDS = [
 ];
 
 const VIS_DATA = {
-  nike:       [88, 92, 86, 74, 90, 91, 83, 67, 78, 45],
-  newbalance: [84, 82, 78, 72, 64, 56, 48, 44, 40, 38],
-  brooks:     [58, 60, 64, 66, 62, 56, 48, 42, 40, 36],
-  on:         [20, 26, 34, 42, 50, 58, 65, 70, 72, 40],
-  adidas:      [92, 96, 90, 80, 94, 95, 88, 74, 84, 76],
-  hoka:       [22, 28, 36, 44, 50, 54, 58, 56, 54, 38],
+  nike:       [88, 90, 83, 78, 67, 45],
+  newbalance: [84, 72, 56, 48, 42, 38],
+  brooks:     [58, 64, 56, 48, 42, 36],
+  on:         [20, 38, 54, 65, 72, 40],
+  adidas:     [92, 88, 94, 88, 84, 76],
+  hoka:       [22, 40, 52, 58, 56, 38],
 };
 // Sentiment lines snap to tier gridline values: Very Strong=100, Strong=75, Moderate=50, Weak=25, Very Weak=0
 // Transitions between tiers produce smooth S-curves via bezier math.
 const SENT_DATA = {
-  nike:       [ 75,  50,  75, 100, 100,  75,  75, 100, 100,  75],
-  newbalance: [ 75,  75,  75,  75,  75,  75,  75,  75,  75,  75],
-  brooks:     [ 75,  75,  75,  75,  50,  50,  50,  75,  50,  50],
-  on:         [ 50,  50,  50,  25,  25,  0,  50,  50,  50,  50],
-  adidas:      [100, 100, 100, 100,  100, 100, 100, 100, 100, 100],
-  hoka:       [ 50,  50,  50,  50,  50,  75,  75,  75,  75,  75],
+  nike:       [ 75, 100,  75, 100, 100,  75],
+  newbalance: [ 75,  75,  75,  75,  75,  75],
+  brooks:     [ 75,  75,  50,  50,  75,  50],
+  on:         [ 50,  25,   0,  50,  50,  50],
+  adidas:     [100, 100, 100, 100, 100, 100],
+  hoka:       [ 50,  50,  75,  75,  75,  75],
 };
 
 const QUAD_POS = {
@@ -38,17 +38,17 @@ const QUAD_POS = {
 };
 
 const X_DATES = [
-  'Apr 24, 2026 6:40 AM', 'Apr 25, 2026 6:40 AM', 'Apr 26, 2026 6:40 AM',
-  'Apr 27, 2026 6:40 AM', 'Apr 28, 2026 6:40 AM', 'May 1, 2026 6:40 AM',
-  'May 3, 2026 6:40 AM',  'May 7, 2026 6:40 AM',  'May 10, 2026 6:40 AM',
-  'May 15, 2026 6:40 AM',
+  'Apr 27, 2026 6:40 AM', 'May 4, 2026 6:40 AM',  'May 11, 2026 6:40 AM',
+  'May 18, 2026 6:40 AM', 'May 25, 2026 6:40 AM', 'Jun 1, 2026 6:40 AM',
 ];
 
 const X_TICKS = [
-  { i: 0, label: 'Apr 24' },
-  { i: 3, label: 'Apr 27' },
-  { i: 4, label: 'Apr 28' },
-  { i: 9, label: 'May 15' },
+  { i: 0, label: 'Apr 27' },
+  { i: 1, label: 'May 4'  },
+  { i: 2, label: 'May 11' },
+  { i: 3, label: 'May 18' },
+  { i: 4, label: 'May 25' },
+  { i: 5, label: 'Jun 1'  },
 ];
 
 // SVG chart constants
@@ -247,7 +247,7 @@ export default function HeroDashboard() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
                     <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
                   </svg>
-                  Apr 1 – May 31
+                  Apr 27 – Jun 1
                 </span>
                 <div className="hdash__tab-group">
                   {['visibility','sentiment'].map(t => (
@@ -409,7 +409,7 @@ export default function HeroDashboard() {
             <div className="hdash__quad-head">
               <p className="hdash__card-title">Position vs Competitors</p>
               <p className="hdash__card-sub">
-                Each dot is a brand. Based on May 15 analysis
+                Each dot is a brand. Based on Jun 1 analysis
               </p>
             </div>
 
