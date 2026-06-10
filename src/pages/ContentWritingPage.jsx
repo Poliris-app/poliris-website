@@ -230,6 +230,130 @@ export default function ContentWritingPage() {
           showDashboard={false}
         />
 
+        {/* ── PRODUCT PREVIEW — Kate Studio dashboard ──────── */}
+        <section className="cw-sec cw-sec--preview" style={{ background: 'var(--surface-2)' }}>
+          <div className="cw-wrap">
+            <div className="cw-dash-preview cw-reveal">
+              {/* Browser chrome */}
+              <div className="cw-dash-chrome">
+                <div className="cw-dash-dots">
+                  <span className="mbw-dot red"/><span className="mbw-dot yellow"/><span className="mbw-dot green"/>
+                </div>
+                <span className="cw-dash-url-pill">app.poliris.io · Content Generation</span>
+              </div>
+
+              {/* Dashboard body */}
+              <div className="cw-dash-body">
+
+                {/* ── Sidebar — exact copy of VisibilityDashboard ── */}
+                <aside className="dash__sidebar">
+                  <div className="dsb__brand">
+                    <div className="dsb__brand-logo">
+                      <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                    </div>
+                    <div className="dsb__brand-info">
+                      <span className="dsb__brand-name">Nike</span>
+                      <span className="dsb__brand-meta">Active project</span>
+                    </div>
+                  </div>
+                  <div className="dsb__ask-poli">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+                      <path d="M20 2v4"/><path d="M22 4h-4"/>
+                      <circle cx="4" cy="20" r="2"/>
+                    </svg>
+                    Ask Poli AI
+                  </div>
+                  <div className="dsb__section-hdr">
+                    <span className="dsb__section-lbl">GEO AUDIT</span>
+                  </div>
+                  <div className="dsb__tree">
+                    <div className="dsb__tree-brand">
+                      <span className="dsb__tree-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+                      </span>
+                      <span className="dsb__avatar dsb__avatar--n">N</span>
+                      <span className="dsb__tree-brand-name">nike</span>
+                    </div>
+                    <div className="dsb__tree-l1">
+                      <div className="dsb__tree-category">
+                        <span className="dsb__tree-chevron">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+                        </span>
+                        <span className="dsb__avatar dsb__avatar--a">A</span>
+                        <span className="dsb__tree-cat-name">Footwear</span>
+                      </div>
+                      <div className="dsb__tree-l2">
+                        {['Overview', 'AI Visibility', 'Sentiment'].map(l => (
+                          <div key={l} className="dash__nav-item">{l}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="dsb__section-hdr dsb__section-hdr--mt">
+                    <span className="dsb__section-lbl">TECHNICAL AUDIT</span>
+                  </div>
+                  <div className="dash__nav-item dash__nav-item--active" style={{marginTop:'4px'}}>CONTENT GENERATION</div>
+                </aside>
+
+                {/* ── Main — Kate Content Studio ── */}
+                <main className="cw-dash-main">
+                  <div className="cw-studio-hd">
+                    <div>
+                      <div className="cw-studio-title">Kate · Content Studio</div>
+                      <div className="cw-studio-sub">Write articles that rank in AI answers</div>
+                    </div>
+                    <button className="cw-studio-new">+ New article</button>
+                  </div>
+
+                  <div className="cw-studio-ask">
+                    <div className="cw-studio-ask-q">What do you want to write about?</div>
+                    <div className="cw-studio-ask-hint">Describe your topic or pick a suggestion below</div>
+                    <div className="cw-studio-input">e.g. How Nike leads in sustainable footwear innovation...</div>
+                    <div className="cw-studio-ask-foot">
+                      <span className="cw-studio-rec-lbl">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+                        Recommend a topic
+                      </span>
+                      <button className="cw-studio-start">Start writing →</button>
+                    </div>
+                  </div>
+
+                  <div className="cw-studio-ideas-hd">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/>
+                    </svg>
+                    Suggested article ideas
+                  </div>
+
+                  <div className="cw-studio-ideas">
+                    {[
+                      { pri: 'HIGH PRIORITY', cls: 'hi', title: "Sustainable Practices Behind Nike's Success",       desc: "Addresses a perception gap by highlighting Nike's sustainability efforts, helping to position the brand positively in…" },
+                      { pri: 'HIGH PRIORITY', cls: 'hi', title: 'How Nike Innovates in Athletic Footwear Technology', desc: "Leverages Nike's innovation leadership to capture AI attention in technology-focused sportswear discussions…"           },
+                      { pri: 'MEDIUM',        cls: 'md', title: "A Beginner's Guide to Choosing Nike Running Shoes",  desc: 'Targets high-intent queries from new runners, helping Nike capture purchase-driven traffic and guide potential…'   },
+                    ].map((idea, i) => (
+                      <div key={i} className="cw-studio-card">
+                        <span className={`cw-studio-pri cw-sp--${idea.cls}`}>{idea.pri}</span>
+                        <div className="cw-studio-card-t">{idea.title}</div>
+                        <div className="cw-studio-card-d">{idea.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button className="cw-studio-refresh">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+                      <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                    </svg>
+                    Recommend another idea
+                  </button>
+                </main>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── DATA SYNERGY — orbital hub ────────────────────── */}
         <section className="cw-sec">
           <div className="cw-wrap">
@@ -450,61 +574,106 @@ export default function ContentWritingPage() {
             </div>
 
             <div className="lk3 cw-reveal">
-              <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keywords in an article linking to pages of your website">
-                {/* Article panel */}
-                <rect x="20" y="20" width="340" height="280" rx="8" fill="#fff" stroke="#EEEEEE" strokeWidth="1"/>
-                <rect x="20" y="20" width="340" height="38" rx="8" fill="#F7FAFE" stroke="#EEEEEE" strokeWidth="1"/>
-                <rect x="20" y="46" width="340" height="12" rx="0" fill="#F7FAFE"/>
-                <circle cx="38" cy="39" r="5" fill="#EEEEEE"/>
-                <circle cx="52" cy="39" r="5" fill="#EEEEEE"/>
-                <circle cx="66" cy="39" r="5" fill="#EEEEEE"/>
-                <rect x="88" y="33" width="160" height="12" rx="6" fill="#EEEEEE"/>
-                <rect x="36" y="74" width="300" height="10" rx="5" fill="#EEF2FB"/>
-                <rect x="36" y="90" width="270" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36" y="104" width="290" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36" y="124" width="180" height="10" rx="5" fill="#F4F4F4"/>
-                {/* keyword links in text */}
-                <rect x="36"  y="140" width="88" height="10" rx="5" fill="#D6E0F5"/>
-                <rect x="132" y="140" width="70" height="10" rx="5" fill="#F4F4F4"/>
-                <rect x="210" y="140" width="110" height="10" rx="5" fill="#D6E0F5"/>
-                <rect x="36"  y="158" width="200" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="244" y="158" width="90"  height="8" rx="4" fill="#D6E0F5"/>
-                <rect x="36"  y="174" width="130" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36"  y="194" width="100" height="8" rx="4" fill="#D6E0F5"/>
-                <rect x="144" y="194" width="160" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36"  y="210" width="260" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36"  y="226" width="190" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36"  y="246" width="120" height="8" rx="4" fill="#D6E0F5"/>
-                <rect x="164" y="246" width="150" height="8" rx="4" fill="#F4F4F4"/>
-                <rect x="36"  y="264" width="220" height="8" rx="4" fill="#F4F4F4"/>
+              <svg viewBox="0 0 860 490" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Article keywords linking to Nike site pages">
+                <defs>
+                  <marker id="lk-arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
+                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#1e3893"/>
+                  </marker>
+                  <marker id="lk-arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
+                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#3d52b8"/>
+                  </marker>
+                  <marker id="lk-arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
+                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#5b7bfb"/>
+                  </marker>
+                </defs>
 
-                {/* Link lines to destination pages */}
-                <line x1="80"  y1="145" x2="420" y2="80"  stroke="#5B7BFB" strokeWidth="1.2" strokeDasharray="4 3" opacity=".7"/>
-                <line x1="264" y1="145" x2="420" y2="165" stroke="#5B7BFB" strokeWidth="1.2" strokeDasharray="4 3" opacity=".7"/>
-                <line x1="290" y1="162" x2="420" y2="245" stroke="#5B7BFB" strokeWidth="1.2" strokeDasharray="4 3" opacity=".7"/>
-                <line x1="86"  y1="198" x2="420" y2="85"  stroke="#5B7BFB" strokeWidth="1.2" strokeDasharray="4 3" opacity=".5"/>
-                <line x1="86"  y1="250" x2="420" y2="248" stroke="#5B7BFB" strokeWidth="1.2" strokeDasharray="4 3" opacity=".5"/>
+                {/* Column labels */}
+                <text x="157" y="19" fontSize="9" fill="#9AA0AB" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">YOUR ARTICLE</text>
+                <text x="632" y="19" fontSize="9" fill="#1e3893" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">PAGES ON YOUR SITE</text>
 
-                {/* Destination page cards */}
-                {[
-                  { y: 48, label: '/running-shoes',  sub: 'Product page' },
-                  { y: 133, label: '/size-guide',     sub: 'Guide page'   },
-                  { y: 218, label: '/lifestyle-blog', sub: 'Blog index'   },
-                ].map((card, i) => (
-                  <g key={i}>
-                    <rect x="420" y={card.y} width="320" height="70" rx="8" fill="#fff" stroke="#EEEEEE" strokeWidth="1"/>
-                    <rect x="438" y={card.y + 14} width="16" height="16" rx="4" fill="#EEF2FB"/>
-                    <rect x="462" y={card.y + 16} width="140" height="8" rx="4" fill="#141414" opacity=".7"/>
-                    <rect x="438" y={card.y + 38} width="220" height="6" rx="3" fill="#F4F4F4"/>
-                    <rect x="438" y={card.y + 50} width="160" height="6" rx="3" fill="#F4F4F4"/>
-                    <text x="684" y={card.y + 22} fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">{card.label}</text>
-                    <text x="684" y={card.y + 35} fontSize="8" fill="#C0C0C0" fontFamily="sans-serif">{card.sub}</text>
-                  </g>
-                ))}
+                {/* Left: Article card */}
+                <rect x="30" y="28" width="255" height="444" rx="12" fill="#fff" stroke="#e8ecf5" strokeWidth="1.5"/>
+                <rect x="48" y="48" width="220" height="52" rx="6" fill="#EEF2FB"/>
+                <rect x="48" y="114" width="185" height="9" rx="4.5" fill="#E8ECFB"/>
+                <rect x="48" y="129" width="155" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="142" width="170" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="155" width="125" height="7" rx="3.5" fill="#F4F4F4"/>
+
+                {/* Keyword pill 1 — Footwear */}
+                <rect x="48" y="176" width="130" height="26" rx="5" fill="#1e3893"/>
+                <text x="113" y="193" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Footwear</text>
+                <rect x="48" y="215" width="160" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="228" width="135" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="241" width="150" height="7" rx="3.5" fill="#F4F4F4"/>
+
+                {/* Keyword pill 2 — Apparel */}
+                <rect x="48" y="262" width="125" height="26" rx="5" fill="#3d52b8"/>
+                <text x="110" y="279" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Apparel</text>
+                <rect x="48" y="300" width="145" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="313" width="120" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="326" width="165" height="7" rx="3.5" fill="#F4F4F4"/>
+
+                {/* Keyword pill 3 — Gear & Accessories */}
+                <rect x="48" y="348" width="165" height="26" rx="5" fill="#5b7bfb"/>
+                <text x="130" y="365" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Gear &amp; Accessories</text>
+                <rect x="48" y="386" width="140" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="399" width="115" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="412" width="155" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="48" y="425" width="100" height="7" rx="3.5" fill="#F4F4F4"/>
 
                 {/* Kate badge */}
-                <rect x="155" y="284" width="90" height="24" rx="12" fill="#EEF2FB"/>
-                <text x="200" y="300" fontSize="9.5" fill="var(--poliris-blue, #1E3893)" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">linked by Kate</text>
+                <rect x="92" y="450" width="100" height="22" rx="11" fill="#EEF2FB"/>
+                <text x="142" y="465" fontSize="9.5" fill="#1E3893" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">linked by Kate</text>
+
+                {/* Right: Dashed pages container */}
+                <rect x="425" y="28" width="410" height="444" rx="12" fill="rgba(238,242,251,.35)" stroke="#c5cce8" strokeWidth="1.5" strokeDasharray="6 4"/>
+
+                {/* Card 1 — nike.com/footwear */}
+                <rect x="438" y="46" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
+                <rect x="438" y="46" width="5" height="118" rx="2" fill="#1e3893"/>
+                <circle cx="455" cy="64" r="3" fill="#e8ecf5"/>
+                <circle cx="465" cy="64" r="3" fill="#e8ecf5"/>
+                <circle cx="475" cy="64" r="3" fill="#e8ecf5"/>
+                <text x="488" y="68" fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">nike.com/footwear</text>
+                <rect x="450" y="80" width="70" height="60" rx="5" fill="#EEF2FB"/>
+                <rect x="530" y="83" width="115" height="8" rx="4" fill="#e8ecf5"/>
+                <rect x="530" y="97" width="88" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="110" width="100" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="123" width="75" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="137" width="58" height="7" rx="3.5" fill="#F4F4F4"/>
+
+                {/* Card 2 — nike.com/apparel */}
+                <rect x="438" y="186" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
+                <rect x="438" y="186" width="5" height="118" rx="2" fill="#3d52b8"/>
+                <circle cx="455" cy="204" r="3" fill="#e8ecf5"/>
+                <circle cx="465" cy="204" r="3" fill="#e8ecf5"/>
+                <circle cx="475" cy="204" r="3" fill="#e8ecf5"/>
+                <text x="488" y="208" fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">nike.com/apparel</text>
+                <rect x="450" y="220" width="70" height="60" rx="5" fill="#EEF2FB"/>
+                <rect x="530" y="223" width="108" height="8" rx="4" fill="#e8ecf5"/>
+                <rect x="530" y="237" width="82" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="250" width="95" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="263" width="70" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="277" width="55" height="7" rx="3.5" fill="#F4F4F4"/>
+
+                {/* Card 3 — nike.com/gear */}
+                <rect x="438" y="326" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
+                <rect x="438" y="326" width="5" height="118" rx="2" fill="#5b7bfb"/>
+                <circle cx="455" cy="344" r="3" fill="#e8ecf5"/>
+                <circle cx="465" cy="344" r="3" fill="#e8ecf5"/>
+                <circle cx="475" cy="344" r="3" fill="#e8ecf5"/>
+                <text x="488" y="348" fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">nike.com/gear</text>
+                <rect x="450" y="360" width="70" height="60" rx="5" fill="#EEF2FB"/>
+                <rect x="530" y="363" width="112" height="8" rx="4" fill="#e8ecf5"/>
+                <rect x="530" y="377" width="86" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="390" width="98" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="403" width="68" height="7" rx="3.5" fill="#F4F4F4"/>
+                <rect x="530" y="417" width="52" height="7" rx="3.5" fill="#F4F4F4"/>
+
+                {/* Curved arrows: pill right-edge → card left-edge */}
+                <path d="M 178 189 C 290 189, 355 105, 438 105" fill="none" stroke="#1e3893" strokeWidth="2" markerEnd="url(#lk-arr1)"/>
+                <path d="M 173 275 C 285 275, 350 245, 438 245" fill="none" stroke="#3d52b8" strokeWidth="2" markerEnd="url(#lk-arr2)"/>
+                <path d="M 213 361 C 310 361, 370 385, 438 385" fill="none" stroke="#5b7bfb" strokeWidth="2" markerEnd="url(#lk-arr3)"/>
               </svg>
             </div>
 
@@ -595,7 +764,10 @@ export default function ContentWritingPage() {
                 <div className="cw-cell cw-cap">Capability</div>
                 <div className="cw-cell">Generic AI writers</div>
                 <div className="cw-cell">Standalone SEO tools</div>
-                <div className="cw-cell cw-us">✦ Kate · Poliris</div>
+                <div className="cw-cell cw-us">
+                  ✦ Kate · Poliris
+                  <span className="cw-rec">Recommended</span>
+                </div>
               </div>
               {CMP_ROWS.map((row, i) => (
                 <div key={i} className="cw-row">
