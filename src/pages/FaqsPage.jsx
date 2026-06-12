@@ -12,11 +12,11 @@ const FAQ_GROUPS = [
     items: [
       {
         q: 'What is GEO?',
-        a: 'Generative Engine Optimisation (GEO) is the practice of making your brand visible inside AI-generated answers — in tools like ChatGPT, Perplexity, Gemini, and Copilot. Where traditional SEO targets search rankings, GEO targets citations and mentions inside AI responses.',
+        a: 'Generative Engine Optimisation (GEO) is the practice of making your brand visible inside AI-generated answers   in tools like ChatGPT, Perplexity, Gemini, and Copilot. Where traditional SEO targets search rankings, GEO targets citations and mentions inside AI responses.',
       },
       {
         q: 'Why is GEO essential?',
-        a: 'AI engines are increasingly the first stop for research, product discovery, and brand comparisons. If your brand isn\'t cited in those answers, you\'re invisible at the moment buyers are forming an opinion — often before they ever visit your site.',
+        a: 'AI engines are increasingly the first stop for research, product discovery, and brand comparisons. If your brand isn\'t cited in those answers, you\'re invisible at the moment buyers are forming an opinion   often before they ever visit your site.',
       },
       {
         q: 'Which AI platforms are supported?',
@@ -24,11 +24,11 @@ const FAQ_GROUPS = [
       },
       {
         q: 'Which markets and languages do you cover?',
-        a: 'We currently support English, French, German, Spanish, and Portuguese across major global markets. Additional languages are being added on a rolling basis — reach out if yours isn\'t listed.',
+        a: 'We currently support English, French, German, Spanish, and Portuguese across major global markets. Additional languages are being added on a rolling basis   reach out if yours isn\'t listed.',
       },
       {
         q: 'Is my site\'s data secure?',
-        a: 'Yes. Poliris only reads publicly available signals — we never access your CMS, database, or backend. All data in transit is TLS-encrypted and stored in ISO 27001-certified infrastructure.',
+        a: 'Yes. Poliris only reads publicly available signals   we never access your CMS, database, or backend. All data in transit is TLS-encrypted and stored in ISO 27001-certified infrastructure.',
       },
     ],
   },
@@ -44,12 +44,12 @@ const FAQ_GROUPS = [
         a: 'The full audit covers AI visibility by product and market, sentiment analysis (tone, qualifiers, narrative), a technical crawlability report, competitor citation benchmarking, and a ranked action plan with effort and impact scores.',
       },
       {
-        q: 'Scoping audit vs full audit — which one do I need?',
+        q: 'Scoping audit vs full audit   which one do I need?',
         a: 'Start with the scoping audit if you\'re new to GEO or want to validate the opportunity before committing. Upgrade to the full audit when you need the complete picture to brief a team or set a roadmap.',
       },
       {
         q: 'How do you assess AI sentiment?',
-        a: 'We send structured prompts to each AI engine and analyse how they describe your brand — the adjectives used, the qualifiers, the context they place you in, and how that compares to how they describe your competitors.',
+        a: 'We send structured prompts to each AI engine and analyse how they describe your brand   the adjectives used, the qualifiers, the context they place you in, and how that compares to how they describe your competitors.',
       },
       {
         q: 'How do you measure visibility?',
@@ -70,7 +70,7 @@ const FAQ_GROUPS = [
       },
       {
         q: 'What deliverables do you receive?',
-        a: 'You get a live dashboard (always up to date), a PDF snapshot report for stakeholders, an exportable action plan, and — if you\'re on a plan with Kate — draft content targeted at your top gaps.',
+        a: 'You get a live dashboard (always up to date), a PDF snapshot report for stakeholders, an exportable action plan, and   if you\'re on a plan with Kate   draft content targeted at your top gaps.',
       },
       {
         q: 'What action plans does Poliris propose after the audit?',
@@ -91,7 +91,7 @@ const FAQ_GROUPS = [
     items: [
       {
         q: 'What is Kate?',
-        a: 'Kate is Poliris\'s AI content agent. She\'s pre-loaded with your audit data — visibility gaps, sentiment findings, brand, products and audiences — and writes articles designed to close those gaps and get you cited in AI answers.',
+        a: 'Kate is Poliris\'s AI content agent. She\'s pre-loaded with your audit data   visibility gaps, sentiment findings, brand, products and audiences   and writes articles designed to close those gaps and get you cited in AI answers.',
       },
       {
         q: 'Is Kate included in all plans?',
@@ -99,7 +99,7 @@ const FAQ_GROUPS = [
       },
       {
         q: 'Can Kate publish directly to my site?',
-        a: 'Yes. Kate integrates with major CMS platforms (WordPress, Webflow, Contentful, and more) and can push a formatted, linked article live with a single approval click — no copy-paste, no developer needed.',
+        a: 'Yes. Kate integrates with major CMS platforms (WordPress, Webflow, Contentful, and more) and can push a formatted, linked article live with a single approval click   no copy-paste, no developer needed.',
       },
     ],
   },

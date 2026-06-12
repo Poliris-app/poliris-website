@@ -24,7 +24,7 @@ const POSTS = [
     id: 2,
     label: 'SEO → GEO',
     gradient: 'radial-gradient(ellipse 60% 60% at 28% 72%, rgba(60,190,110,0.52) 0%, transparent 62%), radial-gradient(ellipse 50% 50% at 75% 28%, rgba(140,230,170,0.30) 0%, transparent 60%), #dff5e8',
-    title: 'SEO vs GEO — what changes when AI becomes the front page.',
+    title: 'SEO vs GEO   what changes when AI becomes the front page.',
     desc: "The same playbook that won Google clicks won't win an AI citation. A short field guide to the new visibility layer.",
     date: 'May 24, 2026',
     category: 'GEO',
@@ -52,7 +52,7 @@ const POSTS = [
     label: 'AUDIT',
     gradient: 'radial-gradient(ellipse 60% 60% at 28% 70%, rgba(230,165,40,0.52) 0%, transparent 62%), radial-gradient(ellipse 50% 50% at 72% 28%, rgba(255,210,100,0.28) 0%, transparent 58%), #fef6d0',
     title: 'The technical audit, reimagined for the AI-readable web.',
-    desc: "Three pillars — Access, Structure, Content. What changes when your audience is no longer just a crawler.",
+    desc: "Three pillars   Access, Structure, Content. What changes when your audience is no longer just a crawler.",
     date: 'May 14, 2026',
     category: 'AUDIT',
   },
@@ -60,7 +60,7 @@ const POSTS = [
     id: 6,
     label: 'TRENDS',
     gradient: 'radial-gradient(ellipse 60% 60% at 60% 38%, rgba(140,100,220,0.50) 0%, transparent 62%), radial-gradient(ellipse 48% 48% at 28% 68%, rgba(190,160,245,0.28) 0%, transparent 58%), #ede8fc',
-    title: 'AI search in 2026 — five shifts every brand should plan for.',
+    title: 'AI search in 2026   five shifts every brand should plan for.',
     desc: "From answer-first behavior to vertical AI engines. The shifts redrawing the search map this year.",
     date: 'May 11, 2026',
     category: 'TRENDS',
@@ -206,7 +206,7 @@ export default function BlogPage() {
 
         <CtaBand
           heading="Want updates from the team?"
-          lead="One short email a month — new posts, product moves, and what's changing in AI search."
+          lead="One short email a month   new posts, product moves, and what's changing in AI search."
           primaryCta="Subscribe"
           secondaryCta="Browse posts"
           note="No spam · Unsubscribe anytime"

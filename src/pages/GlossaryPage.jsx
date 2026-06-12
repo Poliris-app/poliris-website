@@ -15,7 +15,7 @@ const TERMS = [
   { term: 'Client',          category: 'poliris', def: 'A brand you work with (agency mode). Each Client has its own Workspace.' },
   { term: 'Dashboard',       category: 'poliris', def: 'The main screen with charts and numbers. One audit = one dashboard.' },
   { term: 'GEO',             category: 'poliris', def: <>Generative Engine Optimization. Making sure AI tools mention and understand your brand. See the longer industry definition under <em>GEO & AI</em>.</> },
-  { term: 'LLM',             category: 'poliris', def: '"Large Language Model." The AI brains — ChatGPT, Claude, Gemini, Perplexity, Mistral, and more.' },
+  { term: 'LLM',             category: 'poliris', def: '"Large Language Model." The AI brains   ChatGPT, Claude, Gemini, Perplexity, Mistral, and more.' },
   { term: 'Member',          category: 'poliris', def: 'A person on your team. Roles: Owner, Admin, Editor, Viewer.' },
   { term: 'Organization',    category: 'poliris', def: 'Your top-level Poliris account. Holds your branding, members, billing, and clients.' },
   { term: 'Plan',            category: 'poliris', def: 'Your subscription: Starter, Growth, or Scale. Decides your monthly limits.' },
@@ -28,7 +28,7 @@ const TERMS = [
   { term: 'Trading Zone',    category: 'poliris', def: 'A country or region where you sell. AI answers can change from zone to zone.' },
   { term: 'Visibility Area', category: 'poliris', def: 'The combination of Trading Zones, audiences, and LLMs where Poliris watches for mentions of your brand.' },
   { term: 'Visibility Audit',category: 'poliris', def: 'Part of the GEO Audit. Counts how often AI mentions your brand compared to competitors.' },
-  { term: 'Workspace',       category: 'poliris', def: 'One project inside your Organization — usually one brand or one client.' },
+  { term: 'Workspace',       category: 'poliris', def: 'One project inside your Organization   usually one brand or one client.' },
 
   // ── GEO & AI Terms ─────────────────────────────────────────
   { term: 'AI Answer Box / AI Summary',        category: 'geo', def: 'AI-generated boxes on results pages that provide a summary or direct answer to a query. They often combine information from multiple sources and include links to references.' },
@@ -136,7 +136,7 @@ export default function GlossaryPage() {
         <Hero
           eyebrow="Glossary"
           title={<>The plain-English <span style={{ color: 'var(--poliris-blue)' }}>AI-visibility</span> glossary.</>}
-          lead="Every term we use — defined the way you'd explain it to your CEO."
+          lead="Every term we use   defined the way you'd explain it to your CEO."
           primaryCta="Start free trial"
           secondaryCta="Book a demo"
           showDashboard={false}
