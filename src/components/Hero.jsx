@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react';
 import HeroDashboard from './HeroDashboard';
 
+const TRIAL_URL = 'https://app.poliris.io';
+const isTrialCta = (label) => typeof label === 'string' && /trial/i.test(label);
+
 const LOGOS = [
-  { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`,    alt: 'ChatGPT' },
-  { src: `${import.meta.env.BASE_URL}Gemini-logo-2.svg`,     alt: 'Gemini' },
-  { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`,     alt: 'Deepseek' },
-  { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`,   alt: 'Mistral AI' },
-  { src: `${import.meta.env.BASE_URL}Claude-logo-2.svg`,     alt: 'Claude' },
+  { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`, alt: 'ChatGPT' },
+  { src: `${import.meta.env.BASE_URL}Gemini-logo-2.svg`, alt: 'Gemini' },
+  { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`, alt: 'Deepseek' },
+  { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`, alt: 'Mistral AI' },
+  { src: `${import.meta.env.BASE_URL}Claude-logo-2.svg`, alt: 'Claude' },
   { src: `${import.meta.env.BASE_URL}Perplexity-logo-2.svg`, alt: 'Perplexity' },
 ];
 
@@ -52,6 +55,8 @@ function ScrollHint() {
 }
 
 export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, note, showDashboard = true, showAiBand = true, dark = false }) {
+  const primaryTrial = isTrialCta(primaryCta);
+  const secondaryTrial = isTrialCta(secondaryCta);
   return (
     <>
       <ScrollHint />
@@ -62,7 +67,11 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
           <h1 className="hero__h1">{title}</h1>
           <p className="hero__lead">{lead}</p>
           <div className="hero__actions">
-            <a href="#" className="btn btn--primary">
+            <a
+              href={primaryTrial ? TRIAL_URL : '#'}
+              className="btn btn--primary"
+              {...(primaryTrial ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
               {primaryCta}
               {!dark && (
                 <span className="btn__icon btn__icon--dark">
@@ -72,7 +81,13 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
                 </span>
               )}
             </a>
-            <a href="#" className="btn btn--secondary">{secondaryCta}</a>
+            <a
+              href={secondaryTrial ? TRIAL_URL : '#'}
+              className="btn btn--secondary"
+              {...(secondaryTrial ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {secondaryCta}
+            </a>
           </div>
           <p className="hero__note">{note}</p>
 
