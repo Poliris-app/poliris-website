@@ -51,7 +51,7 @@ function ScrollHint() {
   );
 }
 
-export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, note, showDashboard = true, dark = false }) {
+export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, note, showDashboard = true, showAiBand = true, dark = false }) {
   return (
     <>
       <ScrollHint />
@@ -76,7 +76,7 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
           </div>
           <p className="hero__note">{note}</p>
 
-          <AiBand />
+          {showAiBand && <AiBand />}
 
           {showDashboard && <HeroDashboard />}
         </div>

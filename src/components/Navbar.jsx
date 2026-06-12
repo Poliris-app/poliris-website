@@ -45,16 +45,23 @@ const PRODUCTS = [
   },
 ];
 
-const NAV_LINKS = [
-  { label: 'For teams', href: '#team' },
+const RESOURCES = [
+  { label: 'Blog',      description: 'Insights on AI visibility and GEO strategy', href: '/blog'     },
+  { label: 'FAQs',      description: 'Common questions about Poliris and Kate',    href: '/faqs'     },
+  { label: 'Glossary',  description: 'Key terms in AI search and GEO explained',   href: '/glossary' },
+];
+
+const NAV_LINKS_BEFORE = [{ label: 'For teams', href: '#team' }];
+const NAV_LINKS_AFTER  = [
   { label: 'How it works', href: '#how' },
-  { label: 'Pricing', href: '#' },
+  { label: 'Pricing',      href: '#'    },
 ];
 
 export default function Navbar() {
   const [stuck, setStuck] = useState(false);
   const [open, setOpen] = useState(false);
   const [mobileProducts, setMobileProducts] = useState(false);
+  const [mobileResources, setMobileResources] = useState(false);
   const [toast, setToast] = useState(false);
 
   function showToast() {
@@ -112,10 +119,31 @@ export default function Navbar() {
             </div>
           </div>
 
-          {NAV_LINKS.map((l) => (
-            <button key={l.label} className="nav__link nav__link--btn" onClick={showToast}>
-              {l.label}
+          {NAV_LINKS_BEFORE.map((l) => (
+            <button key={l.label} className="nav__link nav__link--btn" onClick={showToast}>{l.label}</button>
+          ))}
+
+          <div className="nav__dropdown-wrap">
+            <button className="nav__link nav__link--btn">
+              Resources
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" className="nav__chevron">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
             </button>
+            <div className="nav__dropdown">
+              {RESOURCES.map((r) => (
+                <Link key={r.label} to={r.href} className="nav__dropdown-item">
+                  <span className="nav__dropdown-text">
+                    <span className="nav__dropdown-label">{r.label}</span>
+                    <span className="nav__dropdown-desc">{r.description}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {NAV_LINKS_AFTER.map((l) => (
+            <button key={l.label} className="nav__link nav__link--btn" onClick={showToast}>{l.label}</button>
           ))}
         </div>
 
@@ -163,10 +191,28 @@ export default function Navbar() {
             )}
           </div>
 
-          {NAV_LINKS.map((l) => (
-            <button key={l.label} className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>
-              {l.label}
+          {NAV_LINKS_BEFORE.map((l) => (
+            <button key={l.label} className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>{l.label}</button>
+          ))}
+
+          <div>
+            <button className="nav__mobile-link nav__mobile-link--btn" onClick={() => setMobileResources(!mobileResources)}>
+              Resources
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" style={{ transform: mobileResources ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
             </button>
+            {mobileResources && (
+              <div className="nav__mobile-subnav">
+                {RESOURCES.map((r) => (
+                  <Link key={r.label} to={r.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{r.label}</Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {NAV_LINKS_AFTER.map((l) => (
+            <button key={l.label} className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>{l.label}</button>
           ))}
 
           <div className="nav__mobile-bottom">

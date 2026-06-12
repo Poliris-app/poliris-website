@@ -59,7 +59,7 @@ const CMP_ROWS = [
 const FAQS = [
   {
     q: 'Is Kate a generic AI writer in a wrapper?',
-    a: 'No. Kate is loaded with your live Poliris data — visibility gaps, sentiment, technical audit, brand, products and audiences — and writes to fix your real weaknesses. A generic writer starts from nothing.',
+    a: 'No. Kate is loaded with your live Poliris data   visibility gaps, sentiment, technical audit, brand, products and audiences   and writes to fix your real weaknesses. A generic writer starts from nothing.',
   },
   {
     q: 'How long does a full article take?',
@@ -75,11 +75,11 @@ const FAQS = [
   },
   {
     q: 'How does the scoring work?',
-    a: 'Three independent layers: deterministic programmatic checks, a qualitative LLM judge, and a hallucination auditor — combined into one 0–100 score across SEO, GEO and AEO signals.',
+    a: 'Three independent layers: deterministic programmatic checks, a qualitative LLM judge, and a hallucination auditor   combined into one 0–100 score across SEO, GEO and AEO signals.',
   },
   {
     q: 'Do I need to be an SEO expert?',
-    a: 'No. Kate is built for non-experts — product managers, founders, teams without an in-house marketing desk. You talk in plain language; she handles the technical depth.',
+    a: 'No. Kate is built for non-experts   product managers, founders, teams without an in-house marketing desk. You talk in plain language; she handles the technical depth.',
   },
 ];
 
@@ -109,12 +109,12 @@ const IconStar = () => (
 );
 
 const PIPELINE_STEPS = [
-  { num:'01', label:'Brief',     text:'Kate interviews you. Three options surface for product, audience, and format — you pick the one that fits your goal.',                        tags:['Interview','Format','Audience'] },
-  { num:'02', label:'Angles',    text:'Three distinct editorial takes on the same topic — different hooks, different arguments. You choose the direction that fits.',               tags:['Hook','Direction','Editorial'] },
+  { num:'01', label:'Brief',     text:'Kate interviews you. Three options surface for product, audience, and format   you pick the one that fits your goal.',                        tags:['Interview','Format','Audience'] },
+  { num:'02', label:'Angles',    text:'Three distinct editorial takes on the same topic   different hooks, different arguments. You choose the direction that fits.',               tags:['Hook','Direction','Editorial'] },
   { num:'03', label:'Configure', text:'Set keyword focus, writing tone, intent, length target, and grounding facts. Every field is editable before writing starts.',               tags:['Keyword','Tone','Intent','Length'] },
   { num:'04', label:'Links',     text:'Sitemap-aware internal link suggestions appear automatically. Pick the ones you want woven into the piece naturally.',                       tags:['Internal links','Sitemap','SEO'] },
   { num:'05', label:'Outline',   text:'H2 and H3 structure generated with per-section word budgets. Drag to reorder, add, or remove sections freely.',                            tags:['H2 / H3','Word budget','Reorder'] },
-  { num:'06', label:'Generate',  text:"Research, write, and score — section by section in the background. Watch each part land as it's written.",                                tags:['Research','Write','Score'] },
+  { num:'06', label:'Generate',  text:"Research, write, and score   section by section in the background. Watch each part land as it's written.",                                tags:['Research','Write','Score'] },
   { num:'07', label:'Result',    text:'Full article with SEO score and meta tags. Edit inline, re-score, and publish when ready.',                                                tags:['Article','Score','Meta','Publish'] },
 ];
 
@@ -129,6 +129,33 @@ function PipeIcon({ index, active, done }) {
     <svg key="6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2"><polyline points="20 6 9 17 4 12"/></svg>,
   ];
   return icons[index];
+}
+
+function FaqAccordion() {
+  const [open, setOpen] = useState(null);
+  return (
+    <div className="cw-faq">
+      {FAQS.map((item, i) => {
+        const isOpen = open === i;
+        return (
+          <div key={i} className={`faq-item${isOpen ? ' open' : ''}`}>
+            <button className="faq-q" onClick={() => setOpen(isOpen ? null : i)} aria-expanded={isOpen}>
+              <span className="faq-num">0{i + 1}</span>
+              <span className="faq-qtxt">{item.q}</span>
+              <span className="faq-chevron">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </span>
+            </button>
+            <div className="faq-body">
+              <p className="faq-a">{item.a}</p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function PipelineTrack() {
@@ -223,14 +250,14 @@ export default function ContentWritingPage() {
         <Hero
           eyebrow="Content Writing · Meet Kate"
           title={<>The AI writing room <HL>built for your brand.</HL></>}
-          lead="Kate is your content agent. She already knows your brand and exactly where AI isn't citing you — so you just talk: she writes, optimises and publishes content that gets you cited."
+          lead="Kate is your content agent. She already knows your brand and exactly where AI isn't citing you   so you just talk: she writes, optimises and publishes content that gets you cited."
           primaryCta="Start free trial"
           secondaryCta="Book a demo"
           note="Publish-ready draft in ~90 seconds · No SEO expertise · You stay in control"
           showDashboard={false}
         />
 
-        {/* ── PRODUCT PREVIEW — Kate Studio dashboard ──────── */}
+        {/* ── PRODUCT PREVIEW   Kate Studio dashboard ──────── */}
         <section className="cw-sec cw-sec--preview" style={{ background: 'var(--surface-2)' }}>
           <div className="cw-wrap">
             <div className="cw-dash-preview cw-reveal">
@@ -245,7 +272,7 @@ export default function ContentWritingPage() {
               {/* Dashboard body */}
               <div className="cw-dash-body">
 
-                {/* ── Sidebar — exact copy of VisibilityDashboard ── */}
+                {/* ── Sidebar   exact copy of VisibilityDashboard ── */}
                 <aside className="dash__sidebar">
                   <div className="dsb__brand">
                     <div className="dsb__brand-logo">
@@ -296,7 +323,7 @@ export default function ContentWritingPage() {
                   <div className="dash__nav-item dash__nav-item--active" style={{marginTop:'4px'}}>CONTENT GENERATION</div>
                 </aside>
 
-                {/* ── Main — Kate Content Studio ── */}
+                {/* ── Main   Kate Content Studio ── */}
                 <main className="cw-dash-main">
                   <div className="cw-studio-hd">
                     <div>
@@ -354,14 +381,14 @@ export default function ContentWritingPage() {
           </div>
         </section>
 
-        {/* ── DATA SYNERGY — orbital hub ────────────────────── */}
+        {/* ── DATA SYNERGY   orbital hub ────────────────────── */}
         <section className="cw-sec">
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
               <div className="eyebrow">Why Kate is different</div>
               <h2>Kate is already briefed on your<br />entire brand.</h2>
               <p className="cw-lede">
-                She knows your products, audiences, competitors and every Poliris audit you've run —
+                She knows your products, audiences, competitors and every Poliris audit you've run  
                 so she starts writing the moment you ask, with no blank page and nothing to re-explain.
               </p>
             </div>
@@ -398,7 +425,7 @@ export default function ContentWritingPage() {
             </div>
 
             <p className="hub-cap cw-reveal">
-              Change your market or audience and Kate adapts the angle, tone and references — so the content
+              Change your market or audience and Kate adapts the angle, tone and references   so the content
               stays <b>aligned with your branding strategy</b>, automatically.
             </p>
           </div>
@@ -410,7 +437,7 @@ export default function ContentWritingPage() {
             <div className="cw-head cw-center cw-reveal">
               <div className="eyebrow">One agent, three jobs</div>
               <h2>Write it. Optimize it. Implement it.</h2>
-              <p className="cw-lede">Kate covers the full content loop — and you can start anywhere.</p>
+              <p className="cw-lede">Kate covers the full content loop   and you can start anywhere.</p>
             </div>
 
             <div className="cw-tour cw-reveal">
@@ -440,13 +467,13 @@ export default function ContentWritingPage() {
           </div>
         </section>
 
-        {/* ── WRITE — 7 STEPS ───────────────────────────────── */}
+        {/* ── WRITE   7 STEPS ───────────────────────────────── */}
         <section id="write" className="cw-sec">
           <div className="cw-wrap">
             <div className="cw-adv-head cw-center cw-reveal">
               <span className="cw-adv-tag">01 · Write</span>
               <h3>From a topic to a publish-ready article, in seven steps.</h3>
-              <p>Conversational up front, structured underneath. Every step is editable — you stay in control of the inputs.</p>
+              <p>Conversational up front, structured underneath. Every step is editable   you stay in control of the inputs.</p>
             </div>
 
             <PipelineTrack />
@@ -517,7 +544,7 @@ export default function ContentWritingPage() {
             <div className="cw-adv-head cw-center cw-reveal">
               <span className="cw-adv-tag">03 · Implement</span>
               <h3>Approve once. Kate publishes it for you.</h3>
-              <p>No copy-paste, no handover to a developer. The moment you approve, Kate pushes it live — formatted, linked and ready to be indexed.</p>
+              <p>No copy-paste, no handover to a developer. The moment you approve, Kate pushes it live   formatted, linked and ready to be indexed.</p>
             </div>
 
             <div className="impl2 cw-reveal">
@@ -540,7 +567,7 @@ export default function ContentWritingPage() {
                   <h6>Lifestyle footwear that flexes with modern aesthetics</h6>
                   <p className="mbw-p">
                     Nike lifestyle sneakers aren't built for one moment. The pair you lace up for a morning
-                    run should still carry you into a Friday dinner — see our{' '}
+                    run should still carry you into a Friday dinner   see our{' '}
                     <span className="lk">guide to picking your fit</span>.
                   </p>
                   <div className="mbw-ln"/>
@@ -599,21 +626,21 @@ export default function ContentWritingPage() {
                 <rect x="48" y="142" width="170" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="48" y="155" width="125" height="7" rx="3.5" fill="#F4F4F4"/>
 
-                {/* Keyword pill 1 — Footwear */}
+                {/* Keyword pill 1   Footwear */}
                 <rect x="48" y="176" width="130" height="26" rx="5" fill="#1e3893"/>
                 <text x="113" y="193" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Footwear</text>
                 <rect x="48" y="215" width="160" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="48" y="228" width="135" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="48" y="241" width="150" height="7" rx="3.5" fill="#F4F4F4"/>
 
-                {/* Keyword pill 2 — Apparel */}
+                {/* Keyword pill 2   Apparel */}
                 <rect x="48" y="262" width="125" height="26" rx="5" fill="#3d52b8"/>
                 <text x="110" y="279" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Apparel</text>
                 <rect x="48" y="300" width="145" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="48" y="313" width="120" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="48" y="326" width="165" height="7" rx="3.5" fill="#F4F4F4"/>
 
-                {/* Keyword pill 3 — Gear & Accessories */}
+                {/* Keyword pill 3   Gear & Accessories */}
                 <rect x="48" y="348" width="165" height="26" rx="5" fill="#5b7bfb"/>
                 <text x="130" y="365" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Gear &amp; Accessories</text>
                 <rect x="48" y="386" width="140" height="7" rx="3.5" fill="#F4F4F4"/>
@@ -628,7 +655,7 @@ export default function ContentWritingPage() {
                 {/* Right: Dashed pages container */}
                 <rect x="425" y="28" width="410" height="444" rx="12" fill="rgba(238,242,251,.35)" stroke="#c5cce8" strokeWidth="1.5" strokeDasharray="6 4"/>
 
-                {/* Card 1 — nike.com/footwear */}
+                {/* Card 1   nike.com/footwear */}
                 <rect x="438" y="46" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
                 <rect x="438" y="46" width="5" height="118" rx="2" fill="#1e3893"/>
                 <circle cx="455" cy="64" r="3" fill="#e8ecf5"/>
@@ -642,7 +669,7 @@ export default function ContentWritingPage() {
                 <rect x="530" y="123" width="75" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="530" y="137" width="58" height="7" rx="3.5" fill="#F4F4F4"/>
 
-                {/* Card 2 — nike.com/apparel */}
+                {/* Card 2   nike.com/apparel */}
                 <rect x="438" y="186" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
                 <rect x="438" y="186" width="5" height="118" rx="2" fill="#3d52b8"/>
                 <circle cx="455" cy="204" r="3" fill="#e8ecf5"/>
@@ -656,7 +683,7 @@ export default function ContentWritingPage() {
                 <rect x="530" y="263" width="70" height="7" rx="3.5" fill="#F4F4F4"/>
                 <rect x="530" y="277" width="55" height="7" rx="3.5" fill="#F4F4F4"/>
 
-                {/* Card 3 — nike.com/gear */}
+                {/* Card 3   nike.com/gear */}
                 <rect x="438" y="326" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
                 <rect x="438" y="326" width="5" height="118" rx="2" fill="#5b7bfb"/>
                 <circle cx="455" cy="344" r="3" fill="#e8ecf5"/>
@@ -715,7 +742,7 @@ export default function ContentWritingPage() {
             <div className="cw-head cw-center cw-reveal">
               <div className="eyebrow">Wherever content lives</div>
               <h2>Not just your blog.</h2>
-              <p className="cw-lede">Kate is built to work wherever your brand needs to show up — so you stay present across every channel that matters.</p>
+              <p className="cw-lede">Kate is built to work wherever your brand needs to show up   so you stay present across every channel that matters.</p>
             </div>
 
             <div className="channels cw-reveal">
@@ -797,13 +824,8 @@ export default function ContentWritingPage() {
               <div className="eyebrow">Good to know</div>
               <h2>Quick answers about Kate.</h2>
             </div>
-            <div className="cw-faq cw-reveal">
-              {FAQS.map((item, i) => (
-                <details key={i}>
-                  <summary>{item.q}</summary>
-                  <div className="faq-a">{item.a}</div>
-                </details>
-              ))}
+            <div className="cw-reveal">
+              <FaqAccordion />
             </div>
           </div>
         </section>
@@ -811,7 +833,7 @@ export default function ContentWritingPage() {
         {/* ── CTA BAND ──────────────────────────────────────── */}
         <CtaBand
           heading="Add Kate into your content team."
-          lead="The Writing Room ships with every Poliris plan. Your first article in about 90 seconds — no SEO expertise required."
+          lead="The Writing Room ships with every Poliris plan. Your first article in about 90 seconds   no SEO expertise required."
           primaryCta="Start free trial"
           secondaryCta="See pricing"
           note="First draft in ~90 seconds · No credit card · Cancel anytime"
