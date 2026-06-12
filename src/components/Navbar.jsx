@@ -46,15 +46,15 @@ const PRODUCTS = [
 ];
 
 const RESOURCES = [
-  { label: 'Blog',      description: 'Insights on AI visibility and GEO strategy', href: '/blog'     },
-  { label: 'FAQs',      description: 'Common questions about Poliris and Kate',    href: '/faqs'     },
-  { label: 'Glossary',  description: 'Key terms in AI search and GEO explained',   href: '/glossary' },
+  { label: 'Blog', description: 'Insights on AI visibility and GEO strategy', href: '/blog' },
+  { label: 'FAQs', description: 'Common questions about Poliris and Kate', href: '/faqs' },
+  { label: 'Glossary', description: 'Key terms in AI search and GEO explained', href: '/glossary' },
 ];
 
 const NAV_LINKS_BEFORE = [{ label: 'For teams', href: '#team' }];
-const NAV_LINKS_AFTER  = [
+const NAV_LINKS_AFTER = [
   { label: 'How it works', href: '#how' },
-  { label: 'Pricing',      href: '#'    },
+  { label: 'Pricing', href: '#' },
 ];
 
 export default function Navbar() {
@@ -93,190 +93,190 @@ export default function Navbar() {
 
   return (
     <>
-    <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
-      <div className="nav__inner">
-        <Link to="/" className="nav__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
-          {/* <span className="nav__logo-text">Poliris</span> */}
-        </Link>
+      <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
+        <div className="nav__inner">
+          <Link to="/" className="nav__logo">
+            <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
+            {/* <span className="nav__logo-text">Poliris</span> */}
+          </Link>
 
-        <div className="nav__links">
-          <div className="nav__dropdown-wrap">
-            <button className="nav__link nav__link--btn">
-              Products
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" className="nav__chevron">
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            <div className="nav__dropdown">
-              {PRODUCTS.map((p) => {
-                const inner = (
-                  <>
-                    <span className="nav__dropdown-icon">{p.icon}</span>
-                    <span className="nav__dropdown-text">
-                      <span className="nav__dropdown-label">{p.label}</span>
-                      <span className="nav__dropdown-desc">{p.description}</span>
-                    </span>
-                  </>
-                );
-                if (p.comingSoon)
-                  return <button key={p.label} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
-                return p.href.startsWith('/')
-                  ? <Link key={p.label} to={p.href} className="nav__dropdown-item">{inner}</Link>
-                  : <a key={p.label} href={p.href} className="nav__dropdown-item">{inner}</a>;
-              })}
-            </div>
-          </div>
-
-          {NAV_LINKS_BEFORE.map((l) => (
-            <button key={l.label} className="nav__link nav__link--btn" disabled>{l.label}</button>
-          ))}
-
-          <div className="nav__dropdown-wrap">
-            <button className="nav__link nav__link--btn">
-              Resources
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" className="nav__chevron">
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            <div className="nav__dropdown">
-              {RESOURCES.map((r) => (
-                <Link key={r.label} to={r.href} className="nav__dropdown-item">
-                  <span className="nav__dropdown-text">
-                    <span className="nav__dropdown-label">{r.label}</span>
-                    <span className="nav__dropdown-desc">{r.description}</span>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {NAV_LINKS_AFTER.map((l) => (
-            <button key={l.label} className="nav__link nav__link--btn" disabled>{l.label}</button>
-          ))}
-
-        </div>
-
-        <div className="nav__actions">
-          <div className="nav__lang" ref={langRef}>
-            <button className="nav__lang-btn nav__link--btn" disabled>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
-              </svg>
-              {lang}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" style={{ transform: langOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            {langOpen && (
-              <div className="nav__lang-drop">
-                {[{ code: 'EN', label: 'English' }, { code: 'FR', label: 'Français' }].map(l => (
-                  <button key={l.code} className={`nav__lang-opt${lang === l.code ? ' active' : ''}`} onClick={() => { setLang(l.code); setLangOpen(false); }}>
-                    {l.label}
-                    {lang === l.code && (
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 6 9 17l-5-5"/>
-                      </svg>
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <a className="nav__login" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer">Log in</a>
-          <a className="nav__cta" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer">Get your free trial</a>
-        </div>
-
-        <button
-          className="nav__toggle"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            {open
-              ? (<><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>)
-              : (<><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>)
-            }
-          </svg>
-        </button>
-      </div>
-
-      {open && (
-        <div className="nav__mobile">
-          <div>
-            <button
-              className="nav__mobile-link nav__mobile-link--btn"
-              onClick={() => setMobileProducts(!mobileProducts)}
-            >
-              Products
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" style={{ transform: mobileProducts ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            {mobileProducts && (
-              <div className="nav__mobile-subnav">
+          <div className="nav__links">
+            <div className="nav__dropdown-wrap">
+              <button className="nav__link nav__link--btn">
+                Products
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" className="nav__chevron">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              <div className="nav__dropdown">
                 {PRODUCTS.map((p) => {
-                  if (p.comingSoon) return <button key={p.label} className="nav__mobile-sublink nav__link--btn" disabled>{p.label}</button>;
+                  const inner = (
+                    <>
+                      <span className="nav__dropdown-icon">{p.icon}</span>
+                      <span className="nav__dropdown-text">
+                        <span className="nav__dropdown-label">{p.label}</span>
+                        <span className="nav__dropdown-desc">{p.description}</span>
+                      </span>
+                    </>
+                  );
+                  if (p.comingSoon)
+                    return <button key={p.label} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
                   return p.href.startsWith('/')
-                    ? <Link key={p.label} to={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</Link>
-                    : <a key={p.label} href={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</a>;
+                    ? <Link key={p.label} to={p.href} className="nav__dropdown-item">{inner}</Link>
+                    : <a key={p.label} href={p.href} className="nav__dropdown-item">{inner}</a>;
                 })}
               </div>
-            )}
-          </div>
+            </div>
 
-          <div>
-            <button className="nav__mobile-link nav__mobile-link--btn" onClick={() => setMobileResources(!mobileResources)}>
-              Resources
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" style={{ transform: mobileResources ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            {mobileResources && (
-              <div className="nav__mobile-subnav">
+            {NAV_LINKS_BEFORE.map((l) => (
+              <button key={l.label} className="nav__link nav__link--btn" disabled>{l.label}</button>
+            ))}
+
+            <div className="nav__dropdown-wrap">
+              <button className="nav__link nav__link--btn">
+                Resources
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" className="nav__chevron">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              <div className="nav__dropdown">
                 {RESOURCES.map((r) => (
-                  <Link key={r.label} to={r.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{r.label}</Link>
+                  <Link key={r.label} to={r.href} className="nav__dropdown-item">
+                    <span className="nav__dropdown-text">
+                      <span className="nav__dropdown-label">{r.label}</span>
+                      <span className="nav__dropdown-desc">{r.description}</span>
+                    </span>
+                  </Link>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
 
-          {NAV_LINKS_BEFORE.map((l) => (
-            <button key={l.label} className="nav__mobile-link nav__mobile-link--btn" disabled>{l.label}</button>
-          ))}
-
-          {NAV_LINKS_AFTER.map((l) => (
-            <button key={l.label} className="nav__mobile-link nav__mobile-link--btn" disabled>{l.label}</button>
-          ))}
-
-          <div className="nav__mobile-lang">
-            {[{ code: 'EN', label: 'English' }, { code: 'FR', label: 'Français' }].map(l => (
-              <button key={l.code} className={`nav__mobile-lang-btn${lang === l.code ? ' active' : ''}`} disabled>
-                {lang === l.code && (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6 9 17l-5-5"/>
-                  </svg>
-                )}
-                {l.label}
-              </button>
+            {NAV_LINKS_AFTER.map((l) => (
+              <button key={l.label} className="nav__link nav__link--btn" disabled>{l.label}</button>
             ))}
+
           </div>
 
-          <div className="nav__mobile-bottom">
-            <a className="nav__mobile-link" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Log in</a>
-            <a className="nav__mobile-cta" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Get your free trial</a>
+          <div className="nav__actions">
+            <div className="nav__lang" ref={langRef}>
+              <button className="nav__lang-btn nav__link--btn" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
+                </svg>
+                {lang}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" style={{ transform: langOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              {langOpen && (
+                <div className="nav__lang-drop">
+                  {[{ code: 'EN', label: 'English' }, { code: 'FR', label: 'Français' }].map(l => (
+                    <button key={l.code} className={`nav__lang-opt${lang === l.code ? ' active' : ''}`} onClick={() => { setLang(l.code); setLangOpen(false); }}>
+                      {l.label}
+                      {lang === l.code && (
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <a className="nav__login" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">Log in</a>
+            <a className="nav__cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">Get your free trial</a>
           </div>
+
+          <button
+            className="nav__toggle"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              {open
+                ? (<><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>)
+                : (<><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>)
+              }
+            </svg>
+          </button>
+        </div>
+
+        {open && (
+          <div className="nav__mobile">
+            <div>
+              <button
+                className="nav__mobile-link nav__mobile-link--btn"
+                onClick={() => setMobileProducts(!mobileProducts)}
+              >
+                Products
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" style={{ transform: mobileProducts ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              {mobileProducts && (
+                <div className="nav__mobile-subnav">
+                  {PRODUCTS.map((p) => {
+                    if (p.comingSoon) return <button key={p.label} className="nav__mobile-sublink nav__link--btn" disabled>{p.label}</button>;
+                    return p.href.startsWith('/')
+                      ? <Link key={p.label} to={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</Link>
+                      : <a key={p.label} href={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</a>;
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <button className="nav__mobile-link nav__mobile-link--btn" onClick={() => setMobileResources(!mobileResources)}>
+                Resources
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" style={{ transform: mobileResources ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              {mobileResources && (
+                <div className="nav__mobile-subnav">
+                  {RESOURCES.map((r) => (
+                    <Link key={r.label} to={r.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{r.label}</Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {NAV_LINKS_BEFORE.map((l) => (
+              <button key={l.label} className="nav__mobile-link nav__mobile-link--btn" disabled>{l.label}</button>
+            ))}
+
+            {NAV_LINKS_AFTER.map((l) => (
+              <button key={l.label} className="nav__mobile-link nav__mobile-link--btn" disabled>{l.label}</button>
+            ))}
+
+            <div className="nav__mobile-lang">
+              {[{ code: 'EN', label: 'English' }, { code: 'FR', label: 'Français' }].map(l => (
+                <button key={l.code} className={`nav__mobile-lang-btn${lang === l.code ? ' active' : ''}`} disabled>
+                  {lang === l.code && (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  )}
+                  {l.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="nav__mobile-bottom">
+              <a className="nav__mobile-link" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Log in</a>
+              <a className="nav__mobile-cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Get your free trial</a>
+            </div>
+          </div>
+        )}
+      </nav>
+      {toast && (
+        <div className="nav__toast">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+            <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
+          </svg>
+          Coming soon!
         </div>
       )}
-    </nav>
-    {toast && (
-      <div className="nav__toast">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-          <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
-        </svg>
-        Coming soon!
-      </div>
-    )}
     </>
   );
 }
