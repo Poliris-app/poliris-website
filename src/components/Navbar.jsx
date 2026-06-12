@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const PRODUCTS = [
@@ -63,6 +63,15 @@ export default function Navbar() {
   const [mobileProducts, setMobileProducts] = useState(false);
   const [mobileResources, setMobileResources] = useState(false);
   const [toast, setToast] = useState(false);
+  const [lang, setLang] = useState('EN');
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef(null);
+
+  useEffect(() => {
+    const onOutside = (e) => { if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false); };
+    document.addEventListener('mousedown', onOutside);
+    return () => document.removeEventListener('mousedown', onOutside);
+  }, []);
 
   function showToast() {
     setToast(true);
@@ -111,7 +120,7 @@ export default function Navbar() {
                   </>
                 );
                 if (p.comingSoon)
-                  return <button key={p.label} className="nav__dropdown-item nav__link--btn" onClick={showToast}>{inner}</button>;
+                  return <button key={p.label} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
                 return p.href.startsWith('/')
                   ? <Link key={p.label} to={p.href} className="nav__dropdown-item">{inner}</Link>
                   : <a key={p.label} href={p.href} className="nav__dropdown-item">{inner}</a>;
@@ -120,7 +129,7 @@ export default function Navbar() {
           </div>
 
           {NAV_LINKS_BEFORE.map((l) => (
-            <button key={l.label} className="nav__link nav__link--btn" onClick={showToast}>{l.label}</button>
+            <button key={l.label} className="nav__link nav__link--btn" disabled>{l.label}</button>
           ))}
 
           <div className="nav__dropdown-wrap">
@@ -143,13 +152,39 @@ export default function Navbar() {
           </div>
 
           {NAV_LINKS_AFTER.map((l) => (
-            <button key={l.label} className="nav__link nav__link--btn" onClick={showToast}>{l.label}</button>
+            <button key={l.label} className="nav__link nav__link--btn" disabled>{l.label}</button>
           ))}
+
         </div>
 
         <div className="nav__actions">
-          <button className="nav__login nav__link--btn" onClick={showToast}>Log in</button>
-          <button className="nav__cta" onClick={showToast}>Get your free trial</button>
+          <div className="nav__lang" ref={langRef}>
+            <button className="nav__lang-btn nav__link--btn" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
+              </svg>
+              {lang}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" style={{ transform: langOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+            {langOpen && (
+              <div className="nav__lang-drop">
+                {[{ code: 'EN', label: 'English' }, { code: 'FR', label: 'Français' }].map(l => (
+                  <button key={l.code} className={`nav__lang-opt${lang === l.code ? ' active' : ''}`} onClick={() => { setLang(l.code); setLangOpen(false); }}>
+                    {l.label}
+                    {lang === l.code && (
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <a className="nav__login" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer">Log in</a>
+          <a className="nav__cta" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer">Get your free trial</a>
         </div>
 
         <button
@@ -181,8 +216,7 @@ export default function Navbar() {
             {mobileProducts && (
               <div className="nav__mobile-subnav">
                 {PRODUCTS.map((p) => {
-                  if (p.comingSoon)
-                    return <button key={p.label} className="nav__mobile-sublink nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>{p.label}</button>;
+                  if (p.comingSoon) return <button key={p.label} className="nav__mobile-sublink nav__link--btn" disabled>{p.label}</button>;
                   return p.href.startsWith('/')
                     ? <Link key={p.label} to={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</Link>
                     : <a key={p.label} href={p.href} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</a>;
@@ -190,10 +224,6 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
-          {NAV_LINKS_BEFORE.map((l) => (
-            <button key={l.label} className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>{l.label}</button>
-          ))}
 
           <div>
             <button className="nav__mobile-link nav__mobile-link--btn" onClick={() => setMobileResources(!mobileResources)}>
@@ -211,13 +241,30 @@ export default function Navbar() {
             )}
           </div>
 
-          {NAV_LINKS_AFTER.map((l) => (
-            <button key={l.label} className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>{l.label}</button>
+          {NAV_LINKS_BEFORE.map((l) => (
+            <button key={l.label} className="nav__mobile-link nav__mobile-link--btn" disabled>{l.label}</button>
           ))}
 
+          {NAV_LINKS_AFTER.map((l) => (
+            <button key={l.label} className="nav__mobile-link nav__mobile-link--btn" disabled>{l.label}</button>
+          ))}
+
+          <div className="nav__mobile-lang">
+            {[{ code: 'EN', label: 'English' }, { code: 'FR', label: 'Français' }].map(l => (
+              <button key={l.code} className={`nav__mobile-lang-btn${lang === l.code ? ' active' : ''}`} disabled>
+                {lang === l.code && (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                )}
+                {l.label}
+              </button>
+            ))}
+          </div>
+
           <div className="nav__mobile-bottom">
-            <button className="nav__mobile-link nav__link--btn" onClick={() => { setOpen(false); showToast(); }}>Log in</button>
-            <button className="nav__mobile-cta" onClick={() => { setOpen(false); showToast(); }}>Get your free trial</button>
+            <a className="nav__mobile-link" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Log in</a>
+            <a className="nav__mobile-cta" href="https://www.polirisapp.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Get your free trial</a>
           </div>
         </div>
       )}

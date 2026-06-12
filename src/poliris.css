@@ -238,6 +238,98 @@ button { cursor: pointer; border: none; background: none; }
   border-color: #000;
 }
 
+/* ── Language switcher ─────────────────────────────────────── */
+.nav__lang {
+  position: relative;
+}
+.nav__lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--chivo);
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+.nav__lang-btn:hover { color: var(--blue); background: #f5f7fc; }
+.nav__lang-drop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #fff;
+  border: 1.5px solid #e8ecf5;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.09);
+  min-width: 148px;
+  overflow: hidden;
+  z-index: 300;
+  animation: drop-in 0.15s ease;
+}
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.nav__lang-opt {
+  width: 100%;
+  padding: 11px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  font-family: var(--chivo);
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.12s;
+}
+.nav__lang-opt:hover { background: #f5f7fc; }
+.nav__lang-opt.active { color: var(--blue); font-weight: 600; }
+
+/* ── Mobile language switcher ──────────────────────────────── */
+.nav__mobile-lang {
+  display: flex;
+  gap: 8px;
+  padding: 12px 0 4px;
+  border-top: 1px solid #f0f2f6;
+}
+.nav__mobile-lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #e4e8f2;
+  background: none;
+  font-family: var(--chivo);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav__mobile-lang-btn.active {
+  border-color: var(--blue);
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* ── Disabled nav items ────────────────────────────────────── */
+.nav__link--btn:disabled,
+.nav__lang-btn:disabled,
+.nav__mobile-link--btn:disabled,
+.nav__mobile-sublink:disabled,
+.nav__mobile-lang-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .nav__toggle {
   display: none;
   padding: 8px;
@@ -384,6 +476,7 @@ button { cursor: pointer; border: none; background: none; }
   transition: background 0.12s ease;
 }
 .nav__dropdown-item:hover { background: #f8fafc; }
+.nav__dropdown-item:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
 .nav__dropdown-icon {
   display: flex;
