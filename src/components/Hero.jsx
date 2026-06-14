@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import HeroDashboard from './HeroDashboard';
+import { useLang } from '../contexts/LangContext';
 
 const TRIAL_URL = 'https://app.poliris.io';
 const isTrialCta = (label) => typeof label === 'string' && /trial/i.test(label);
@@ -27,6 +28,7 @@ function AiBand() {
 }
 
 function ScrollHint() {
+  const { t } = useLang();
   const travelRef = useRef(null);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ function ScrollHint() {
 
   return (
     <div className="scroll-hint" aria-hidden="true">
-      <span className="scroll-hint__label">scroll</span>
+      <span className="scroll-hint__label">{t('scroll')}</span>
       <span className="scroll-hint__line">
         <span className="scroll-hint__travel" ref={travelRef} />
       </span>

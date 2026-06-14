@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -121,8 +122,8 @@ const TOUR_CARDS = [
         <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
       </svg>
     ),
-    title: 'Per-axis sentiment',
-    desc: 'Score every axis your buyers judge   not just one blended number.',
+    titleKey: 'title',
+    descKey: 'desc',
   },
   {
     num: '02',
@@ -133,8 +134,8 @@ const TOUR_CARDS = [
         <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
     ),
-    title: 'Full breakdown',
-    desc: 'Drill into sentiment by axis and by model, with over-time tracking.',
+    titleKey: 'title',
+    descKey: 'desc',
   },
   {
     num: '03',
@@ -147,8 +148,8 @@ const TOUR_CARDS = [
         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg>
     ),
-    title: 'Competitive',
-    desc: 'See how AI ranks your brand against every competitor, axis by axis.',
+    titleKey: 'title',
+    descKey: 'desc',
   },
   {
     num: '04',
@@ -158,8 +159,8 @@ const TOUR_CARDS = [
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     ),
-    title: 'IVY agent',
-    desc: 'AI that reads your scores, finds the gaps, and builds the fix plan.',
+    titleKey: 'title',
+    descKey: 'desc',
   },
   {
     num: '05',
@@ -172,8 +173,8 @@ const TOUR_CARDS = [
         <line x1="9" y1="17" x2="12" y2="17"/>
       </svg>
     ),
-    title: 'Evidence',
-    desc: 'See the exact AI words behind every score   annotated and traceable.',
+    titleKey: 'title',
+    descKey: 'desc',
   },
 ];
 
@@ -230,6 +231,7 @@ const COMPETITORS = [
 ];
 
 export default function SentimentPage() {
+  const { t } = useLang();
   const [evxOpen, setEvxOpen] = useState(true);
   const [sentHov, setSentHov] = useState(null);
 
@@ -261,12 +263,12 @@ export default function SentimentPage() {
       <main>
         {/* ===== HERO ===== */}
         <Hero
-          eyebrow="Poliris Sentiment"
-          title={<>Understand <HL>how</HL> AI describes your brand.</>}
-          lead="Showing up in AI answers isn't enough   what matters is how you show up. Poliris scores the way AI talks about you, on every axis your market buys on, across every model, against every competitor."
-          primaryCta="Get your free trial"
-          secondaryCta="Book a demo"
-          note="14 days free · No credit card required"
+          eyebrow={t('sentiment.hero.eyebrow')}
+          title={<>{t('sentiment.hero.titlePre')} <HL>{t('sentiment.hero.titleHl')}</HL> {t('sentiment.hero.titlePost')}</>}
+          lead={t('sentiment.hero.lead')}
+          primaryCta={t('sentiment.hero.primaryCta')}
+          secondaryCta={t('sentiment.hero.secondaryCta')}
+          note={t('sentiment.hero.note')}
           showDashboard={false}
         />
 
@@ -274,8 +276,8 @@ export default function SentimentPage() {
         <section style={{ paddingTop: '72px' }}>
           <div className="wrap">
             <div className="sec-head mid reveal" style={{ marginBottom: '44px' }}>
-              <h2>Your AI reputation, <HL>in plain sight.</HL></h2>
-              <p className="lead">Transparent and granular: your sentiment broken down by axis and by model, with every score traceable to the exact words AI uses about you.</p>
+              <h2>{t('sentiment.dashboard.h2Pre')} <HL>{t('sentiment.dashboard.h2Hl')}</HL></h2>
+              <p className="lead">{t('sentiment.dashboard.lead')}</p>
             </div>
 
             <div className="app reveal">
@@ -427,9 +429,11 @@ export default function SentimentPage() {
         <section style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <div className="sec-head mid reveal" style={{ marginBottom: '40px' }}>
-              <span className="eyebrow">What's inside</span>
-              <h2>Five reasons it's <HL>more than monitoring.</HL></h2>
-              <p className="lead">Most tools stop at a number. Each one below is a strength of the analysis   and what turns AI sentiment into something you can act on.</p>
+              {(() => { const wi = t('sentiment.whatsInside'); return (<>
+                <span className="eyebrow">{wi.eyebrow}</span>
+                <h2>{wi.h2Pre} <HL>{wi.h2Hl}</HL></h2>
+                <p className="lead">{wi.lead}</p>
+              </>); })()}
             </div>
             <div className="tour reveal">
               {TOUR_CARDS.map((c) => (
@@ -440,10 +444,10 @@ export default function SentimentPage() {
                     </div>
                     <span className="num">{c.num}</span>
                   </div>
-                  <h3>{c.title}</h3>
-                  <p>{c.desc}</p>
+                  <h3>{t('sentiment.tourCards')[parseInt(c.num)-1]?.title ?? c.num}</h3>
+                  <p>{t('sentiment.tourCards')[parseInt(c.num)-1]?.desc ?? ''}</p>
                   <div className="jump">
-                    See it
+                    {t('sentiment.seeIt')}
                     <span className="arr">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
@@ -459,20 +463,22 @@ export default function SentimentPage() {
         {/* ===== 01   PER-AXIS SENTIMENT ===== */}
         <section id="axes">
           <div className="wrap">
-            <div className="adv-head reveal">
-              <span className="eyebrow">01   Product focus</span>
-              <h2>We grade <HL>axes.</HL> Not just prompts.</h2>
-              <p className="lead">We start from your product, not a prompt list   scoring every AI answer on the axes your buyers actually judge, then rolling them into one sentiment per axis.</p>
+            <div className="adv-head mid reveal">
+              {(() => { const pa = t('sentiment.perAxis'); return (<>
+                <span className="eyebrow">{pa.eyebrow}</span>
+                <h2>{pa.h2Pre} <HL>{pa.h2Hl}</HL> {pa.h2Post}</h2>
+                <p className="lead">{pa.lead}</p>
+              </>); })()}
             </div>
 
             <div className="pf-wrap reveal">
               {/* legend header */}
               <div className="pf-legend-hdr">
-                <span>Each answer is scored:</span>
+                <span>{t('sentiment.perAxis.legendLabel')}</span>
                 <span className="tg pos">▲ Endorsement</span>
                 <span className="tg neu"><span className="tg-stacked"><span>▲</span><span>▼</span></span> Mention</span>
                 <span className="tg neg">▼ Critique</span>
-                <span>  then rolled into one sentiment per axis.</span>
+                <span>  {t('sentiment.perAxis.legendSuffix')}</span>
               </div>
 
               <svg viewBox="0 0 980 670" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI answers mapped to sentiment per axis" className="pf-svg">
@@ -596,9 +602,11 @@ export default function SentimentPage() {
         <section id="angles" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <div className="adv-head mid reveal">
-              <span className="eyebrow">02   Full breakdown</span>
-              <h2>Break it down, <HL>every way.</HL></h2>
-              <p className="lead">One number hides what matters. We read your sentiment by axis and by model   because the fix is never the same twice.</p>
+              {(() => { const fb = t('sentiment.fullBreakdown'); return (<>
+                <span className="eyebrow">{fb.eyebrow}</span>
+                <h2>{fb.h2Pre} <HL>{fb.h2Hl}</HL></h2>
+                <p className="lead">{fb.lead}</p>
+              </>); })()}
             </div>
 
             <div className="lens2 reveal">
@@ -609,8 +617,8 @@ export default function SentimentPage() {
                     <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
                   </svg>
                 </div>
-                <h3>By axis</h3>
-                <p>Every score broken out by the four axes we track. See what's holding you back and what's already working.</p>
+                <h3>{t('sentiment.fullBreakdown.byAxis.h3')}</h3>
+                <p>{t('sentiment.fullBreakdown.byAxis.p')}</p>
                 <div className="hdash__sb-bars">
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
@@ -658,7 +666,7 @@ export default function SentimentPage() {
                     </div>
                   </div>
                 </div>
-                <p className="lens-note">Scores averaged across all models · updated weekly</p>
+                <p className="lens-note">{t('sentiment.fullBreakdown.byAxis.note')}</p>
               </div>
 
               {/* by model */}
@@ -669,8 +677,8 @@ export default function SentimentPage() {
                     <path d="M12 8v4l3 3"/>
                   </svg>
                 </div>
-                <h3>By model</h3>
-                <p>The same brand, four different AI voices. Find which models are your allies and which need work.</p>
+                <h3>{t('sentiment.fullBreakdown.byModel.h3')}</h3>
+                <p>{t('sentiment.fullBreakdown.byModel.p')}</p>
                 <div className="hdash__sb-bars">
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
@@ -742,18 +750,18 @@ export default function SentimentPage() {
                     </div>
                   </div>
                 </div>
-                <p className="lens-note">Brand awareness axis · last 90 days</p>
+                <p className="lens-note">{t('sentiment.fullBreakdown.byModel.note')}</p>
               </div>
             </div>
 
             {/* ───── AI Sentiment Trend ───── */}
             <div className="sent-trend reveal">
               <div className="st-hdr">
-                <span className="st-title">AI Sentiment Trend · Nike</span>
+                <span className="st-title">{t('sentiment.fullBreakdown.trend.title')}</span>
                 <div className="st-tab-grp">
-                  <button className="st-tab st-tab--on">6 Weeks</button>
-                  <button className="st-tab">3 Months</button>
-                  <button className="st-tab">1 Year</button>
+                  {t('sentiment.fullBreakdown.trend.tabs').map((tab, i) => (
+                    <button key={i} className={`st-tab${i === 0 ? ' st-tab--on' : ''}`}>{tab}</button>
+                  ))}
                 </div>
               </div>
 
@@ -865,19 +873,16 @@ export default function SentimentPage() {
 
               <div className="st-models">
                 <div className="st-model-tags">
-                  <span className="st-mtag">
-                    <span className="st-mdot" style={{ background: '#16a34a' }}/>Overall sentiment
-                  </span>
-                  <span className="st-mtag st-mtag--hi">
-                    <span className="st-mdot" style={{ background: '#2563eb' }}/>Slipping axis (Durability)
-                  </span>
+                  {t('sentiment.fullBreakdown.trend.legend').map((lbl, i) => (
+                    <span key={i} className={`st-mtag${i === 1 ? ' st-mtag--hi' : ''}`}>
+                      <span className="st-mdot" style={{ background: i === 0 ? '#16a34a' : '#2563eb' }}/>{lbl}
+                    </span>
+                  ))}
                 </div>
-                <span className="st-mon-note">Poliris monitors every axis, every day</span>
+                <span className="st-mon-note">{t('sentiment.fullBreakdown.trend.monNote')}</span>
               </div>
 
-              <div className="st-foot">
-                Poliris flags a slipping axis <b>before it becomes a lost deal</b> — so you can act on the signal, not the damage.
-              </div>
+              <div className="st-foot" dangerouslySetInnerHTML={{ __html: t('sentiment.fullBreakdown.trend.foot') }} />
             </div>
           </div>
         </section>
@@ -886,19 +891,18 @@ export default function SentimentPage() {
         <section id="compare">
           <div className="wrap">
             <div className="adv-head mid reveal">
-              <span className="eyebrow">03   Your competitors</span>
-              <h2>See how AI <HL>ranks the field.</HL></h2>
-              <p className="lead">These are your real competitors   scored on the same axes. See where AI is handing them wins you should own.</p>
+              {(() => { const comp = t('sentiment.competitive'); return (<>
+                <span className="eyebrow">{comp.eyebrow}</span>
+                <h2>{comp.h2Pre} <HL>{comp.h2Hl}</HL></h2>
+                <p className="lead">{comp.lead}</p>
+              </>); })()}
             </div>
 
             <div className="cmpx reveal">
               <div className="cmpx-head">
-                <span>Brand</span>
-                <span>Brand Awareness</span>
-                <span>Design</span>
-                <span>Durability</span>
-                <span>Performance</span>
-                <span>Overall Axes</span>
+                {t('sentiment.competitive.tableHeaders').map((h, i) => (
+                  <span key={i}>{h}</span>
+                ))}
               </div>
               {COMPETITORS.map((c) => (
                 <div key={c.name} className={`cmpx-row${c.you ? ' you' : ''}`}>
@@ -935,7 +939,7 @@ export default function SentimentPage() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
-              <span>Sample data. Your real report shows your brand and up to <b>10 competitors</b>, scored on the axes that matter in your market   refreshed weekly.</span>
+              <span dangerouslySetInnerHTML={{ __html: t('sentiment.competitive.disclaimer') }} />
             </div>
           </div>
         </section>
@@ -954,55 +958,37 @@ export default function SentimentPage() {
                           <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
                         </svg>
                       </span>
-                      Meet IVY · your AI sentiment agent
+                      {t('sentiment.ivy.agentPill')}
                     </div>
-                    <h2>Your analyst, on tap.</h2>
+                    <h2>{t('sentiment.ivy.h2')}</h2>
                     <p className="lead" style={{ color: 'rgba(255,255,255,.75)', margin: '18px 0 28px' }}>
-                      IVY reads every axis, engine and answer — then tells you what changed, why, and what to do, in plain language.
+                      {t('sentiment.ivy.lead')}
                     </p>
                     <ul className="agent-pts">
-                      <li>
-                        <span className="ic">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>
-                          </svg>
-                        </span>
-                        <span>
-                          <span className="tt">Explains</span>
-                          <span className="dd">What's lifting each axis, what's dragging it.</span>
-                        </span>
-                      </li>
-                      <li>
-                        <span className="ic">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M13 2 3 14h9l-1 8 10-12h-9z"/>
-                          </svg>
-                        </span>
-                        <span>
-                          <span className="tt">Alerts</span>
-                          <span className="dd">Flags a slipping axis before it becomes a problem.</span>
-                        </span>
-                      </li>
-                      <li>
-                        <span className="ic">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                          </svg>
-                        </span>
-                        <span>
-                          <span className="tt">Recommends</span>
-                          <span className="dd">A concrete next step, not just a score.</span>
-                        </span>
-                      </li>
+                      {t('sentiment.ivy.points').map((pt, i) => (
+                        <li key={i}>
+                          <span className="ic">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              {i === 0 && <><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></>}
+                              {i === 1 && <path d="M13 2 3 14h9l-1 8 10-12h-9z"/>}
+                              {i === 2 && <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>}
+                            </svg>
+                          </span>
+                          <span>
+                            <span className="tt">{pt.tt}</span>
+                            <span className="dd">{pt.dd}</span>
+                          </span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
 
                   {/* right: chat mock */}
                   <div className="shot">
-                    <span className="tab">IVY agent</span>
+                    <span className="tab">{t('sentiment.ivy.chatId').split('·')[0].trim()}</span>
                     <div className="chat">
                       <div className="chat-id">
-                        <span className="av">I</span> IVY · Sentiment analyst
+                        <span className="av">I</span> {t('sentiment.ivy.chatId')}
                       </div>
                       <div className="bub user">Why is my Durability sentiment slipping?</div>
                       <div className="bub bot">
@@ -1013,7 +999,7 @@ export default function SentimentPage() {
                     <div className="plan">
                       <div className="plan-h">
                         <span className="av" style={{ width: '20px', height: '20px', fontSize: '11px' }}>I</span>
-                        IVY's action plan
+                        {t('sentiment.ivy.planTitle')}
                       </div>
                       <div className="plan-body">
                         <div className="plan-item">
@@ -1044,9 +1030,11 @@ export default function SentimentPage() {
         <section id="evidence" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <div className="adv-head mid reveal">
-              <span className="eyebrow">05   Evidence</span>
-              <h2>Open the <HL>black box.</HL></h2>
-              <p className="lead">Every score is built from the actual words AI uses about you   here's how we read one answer.</p>
+              {(() => { const ev = t('sentiment.evidence'); return (<>
+                <span className="eyebrow">{ev.eyebrow}</span>
+                <h2>{ev.h2Pre} <HL>{ev.h2Hl}</HL></h2>
+                <p className="lead">{ev.lead}</p>
+              </>); })()}
             </div>
 
             <div className="ev reveal">
@@ -1073,7 +1061,7 @@ export default function SentimentPage() {
                 <div className="evx-body">
                   <div className="evx-bin">
                     <div className="evc-anslab">
-                      AI answer
+                      {t('sentiment.evidence.aiAnswer')}
                       <span className="ln" />
                       <span className="evc-srcchip">
                         <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="" style={{ width: '13px', height: '13px', objectFit: 'contain' }} />
@@ -1092,7 +1080,7 @@ export default function SentimentPage() {
                     </div>
 
                     <div className="evx-map">
-                      <div className="evx-maplab">How we scored it</div>
+                      <div className="evx-maplab">{t('sentiment.evidence.howWeScored')}</div>
                       <div className="evx-words">
                         <span className="sig pos">Brand awareness ↑</span>
                         <span className="sig pos">Design ↑</span>
@@ -1124,11 +1112,11 @@ export default function SentimentPage() {
         </section>
 
         <CtaBand
-          heading="See how AI talks about you   free."
-          lead="Run a sentiment scan on your brand and your competitors   axis by axis, model by model   and find out exactly where you're slipping."
-          primaryCta="Start your free trial"
-          secondaryCta="Talk to an expert"
-          note="Free · no credit card · results in 60 seconds"
+          heading={t('sentiment.cta.heading')}
+          lead={t('sentiment.cta.lead')}
+          primaryCta={t('sentiment.cta.primaryCta')}
+          secondaryCta={t('sentiment.cta.secondaryCta')}
+          note={t('sentiment.cta.note')}
         />
       </main>
       <Footer />

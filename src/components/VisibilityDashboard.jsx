@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLang } from '../contexts/LangContext';
 
 /* ── Single-brand chart data ─────────────────────────────────────── */
 const NIKE_DATA = [88, 90, 83, 78, 67, 45];
@@ -7,12 +8,8 @@ const X_LABELS  = ['Apr 27', 'May 4', 'May 11', 'May 18', 'May 25', 'Jun 1'];
 /* ── Score Breakdown data ────────────────────────────────────────── */
 const SB_SCORE = 45;
 
-const RAW_AXES = [
-  { id: 'brand-awareness', name: 'Brand awareness', pct: 75 },
-  { id: 'performance',     name: 'Performance',     pct: 67 },
-  { id: 'design',          name: 'Design',           pct: 42 },
-  { id: 'durability',      name: 'Durability',       pct: 13 },
-];
+const RAW_AXES_PCT = [75, 67, 42, 13];
+const RAW_AXES_IDS = ['brand-awareness', 'performance', 'design', 'durability'];
 const RAW_MODELS = [
   { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  pct: 50 },
   { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   pct: 50 },
@@ -55,15 +52,20 @@ function makePath(vals) {
 
 /* ── Score Breakdown right panel ─────────────────────────────────── */
 function ScoreBreakdown() {
+  const { t } = useLang();
+  const vd = t('visibilityDashboard');
   const [activeTab, setActiveTab] = useState('Axes');
 
   const scoreInfo = getScoreLabel(SB_SCORE);
+
+  const axisLabels = t('dashboard.sentPanel.axes');
+  const RAW_AXES = RAW_AXES_IDS.map((id, i) => ({ id, name: axisLabels[i], pct: RAW_AXES_PCT[i] }));
 
   const barsDisplay = useMemo(() => {
     const raw = activeTab === 'Axes' ? RAW_AXES : RAW_MODELS;
     const sorted = [...raw].sort((a, b) => b.pct - a.pct);
     return applyTags(sorted);
-  }, [activeTab]);
+  }, [activeTab, axisLabels]);
 
   const R = 35, SW = 7;
   const circ  = 2 * Math.PI * R;
@@ -74,21 +76,21 @@ function ScoreBreakdown() {
 
       <div className="hdash__sb-hdr2">
         <div>
-          <p className="hdash__sb-title2">Score Breakdown</p>
-          <p className="hdash__sb-sub2">Quick read of what lifts or limits visibility</p>
+          <p className="hdash__sb-title2">{vd.scoreBreakdown.title}</p>
+          <p className="hdash__sb-sub2">{vd.scoreBreakdown.sub}</p>
         </div>
         <span className="hdash__sb-score-badge" style={{ color: scoreInfo.color, background: scoreInfo.bg }}>
-          {scoreInfo.label}
+          {t('dashboard.scoreBadges')[scoreInfo.label]}
         </span>
       </div>
 
       <div className="hdash__sb-tabs-row">
         <div className="hdash__sb-tab-group2">
-          {['Axes', 'AI Models'].map(tab => (
-            <button key={tab}
-              className={`hdash__sb-tab2${activeTab === tab ? ' hdash__sb-tab2--on' : ''}`}
-              onClick={() => setActiveTab(tab)}>
-              {tab}
+          {vd.scoreBreakdown.tabs.map((tabLabel, ti) => (
+            <button key={ti}
+              className={`hdash__sb-tab2${activeTab === (ti === 0 ? 'Axes' : 'AI Models') ? ' hdash__sb-tab2--on' : ''}`}
+              onClick={() => setActiveTab(ti === 0 ? 'Axes' : 'AI Models')}>
+              {tabLabel}
             </button>
           ))}
         </div>
@@ -120,7 +122,7 @@ function ScoreBreakdown() {
               <span className="hdash__sb-bar-card-right">
                 {bar.tag && (
                   <span className="hdash__sb-bar-tag" style={{ color: bar.tagColor, background: bar.tagBg }}>
-                    {bar.tag}
+                    {bar.tag === 'Leader' ? vd.scoreBreakdown.tags.leader : vd.scoreBreakdown.tags.priority}
                   </span>
                 )}
                 <span className="hdash__sb-bar-pct2">{bar.pct}%</span>
@@ -139,6 +141,9 @@ function ScoreBreakdown() {
 
 /* ── Main component ──────────────────────────────────────────────── */
 export default function VisibilityDashboard() {
+  const { t } = useLang();
+  const vd = t('visibilityDashboard');
+  const ds = t('dashboard');
   const [chartHov, setChartHov] = useState(null);
 
   function handleChartMove(e) {
@@ -156,7 +161,7 @@ export default function VisibilityDashboard() {
 
       <div className="dash__appbar">
         <span className="dash__dot" /><span className="dash__dot" /><span className="dash__dot" />
-        <span className="dash__url">app.poliris.io · Visibility</span>
+        <span className="dash__url">{vd.appbar}</span>
       </div>
 
       <div className="hdash__v2-body">
@@ -168,8 +173,8 @@ export default function VisibilityDashboard() {
               <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
             </div>
             <div className="dsb__brand-info">
-              <span className="dsb__brand-name">Nike</span>
-              <span className="dsb__brand-meta">Active project</span>
+              <span className="dsb__brand-name">{ds.sidebar.nike}</span>
+              <span className="dsb__brand-meta">{ds.sidebar.activeProject}</span>
             </div>
           </div>
           <div className="dsb__ask-poli">
@@ -178,10 +183,10 @@ export default function VisibilityDashboard() {
               <path d="M20 2v4"/><path d="M22 4h-4"/>
               <circle cx="4" cy="20" r="2"/>
             </svg>
-            Ask Poli AI
+            {ds.sidebar.askPoliAI}
           </div>
           <div className="dsb__section-hdr">
-            <span className="dsb__section-lbl">GEO AUDIT</span>
+            <span className="dsb__section-lbl">{ds.sidebar.geoAudit}</span>
           </div>
           <div className="dsb__tree">
             <div className="dsb__tree-brand">
@@ -197,20 +202,20 @@ export default function VisibilityDashboard() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
                 </span>
                 <span className="dsb__avatar dsb__avatar--n">A</span>
-                <span className="dsb__tree-cat-name">Footwear</span>
+                <span className="dsb__tree-cat-name">{ds.sidebar.footwear}</span>
               </div>
               <div className="dsb__tree-l2">
-                {['Overview', 'AI Visibility', 'Sentiment'].map(l => (
-                  <div key={l} className={`dash__nav-item${l === 'AI Visibility' ? ' dash__nav-item--active' : ''}`}>{l}</div>
+                {ds.sidebar.navItems.map((l, li) => (
+                  <div key={l} className={`dash__nav-item${li === 1 ? ' dash__nav-item--active' : ''}`}>{l}</div>
                 ))}
               </div>
             </div>
           </div>
           <div className="dsb__section-hdr dsb__section-hdr--mt">
-            <span className="dsb__section-lbl">TECHNICAL AUDIT</span>
+            <span className="dsb__section-lbl">{ds.sidebar.technicalAudit}</span>
           </div>
           <div className="dsb__section-hdr">
-            <span className="dsb__section-lbl">CONTENT GENERATION</span>
+            <span className="dsb__section-lbl">{ds.sidebar.contentGeneration}</span>
           </div>
         </aside>
 
@@ -223,12 +228,12 @@ export default function VisibilityDashboard() {
               </div>
               <div>
                 <div className="hdash__v2-brand-name">Nike</div>
-                <div className="hdash__v2-brand-sub">AI Visibility · Updated today</div>
+                <div className="hdash__v2-brand-sub">{vd.brandSub}</div>
               </div>
             </div>
             <div className="hdash__v2-score-wrap">
-              <span className="hdash__v2-score-label">Overall score</span>
-              <span className="hdash__v2-score-badge">↑ 45 / 100</span>
+              <span className="hdash__v2-score-label">{vd.overallScore}</span>
+              <span className="hdash__v2-score-badge">{vd.scoreBadge}</span>
             </div>
           </div>
 
@@ -238,10 +243,10 @@ export default function VisibilityDashboard() {
                 <path d="M12 5v14M5 12h14"/>
               </svg>
             </span>
-            <p><b>Nora:</b> Strong overall   but your Value coverage is slipping. Worth a look before it spreads.</p>
+            <p><b>Nora:</b> {vd.noraNote}</p>
           </div>
 
-          <div className="hdash__v2-section-label">Over time</div>
+          <div className="hdash__v2-section-label">{vd.overTime}</div>
 
           <div className="hdash__v2-chart-wrap" onMouseLeave={() => setChartHov(null)}>
             <svg viewBox={`0 0 ${VW} ${VH}`} className="hdash__v2-svg"

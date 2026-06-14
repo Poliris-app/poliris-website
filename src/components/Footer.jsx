@@ -1,27 +1,25 @@
-const LINKS = [
-  { label: 'Products', href: '#products' },
-  { label: 'For teams', href: '#team' },
-  { label: 'How it works', href: '#how' },
-  { label: 'Pricing', href: '#' },
-  { label: 'Blog', href: '#' },
-];
+import { useLang } from '../contexts/LangContext';
+
+const FOOTER_HREFS = ['#products', '#team', '#how', '#', '#'];
 
 export default function Footer() {
+  const { lang, t } = useLang();
+  const links = t('footer.links');
+
   return (
     <footer className="footer">
       <div className="footer__inner">
-        <a href="#top" className="footer__logo">
+        <a href={`/${lang}/`} className="footer__logo">
           <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
-          {/* <span className="footer__logo-text">Poliris</span> */}
         </a>
         <nav className="footer__nav">
-          {LINKS.map((l) => (
-            <a key={l.label} href={l.href} className="footer__link">
-              {l.label}
+          {links.map((label, i) => (
+            <a key={i} href={FOOTER_HREFS[i]} className="footer__link">
+              {label}
             </a>
           ))}
         </nav>
-        <p className="footer__copy">© 2026 Poliris · Brand intelligence for the AI era</p>
+        <p className="footer__copy">{t('footer.copy')}</p>
       </div>
     </footer>
   );

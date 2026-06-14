@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ProductCarousel from './ProductCarousel';
 import Hero from './Hero';
 import CtaBand from './CtaBand';
+import { useLang } from '../contexts/LangContext';
 
 /* ── Avatar images (base64 from original design) ─────────────── */
 const AVATARS = {
@@ -20,6 +21,8 @@ const HL = ({ children }) => <span className="hl">{children}</span>;
 const Eyebrow = ({ children }) => <div className="eyebrow">{children}</div>;
 
 export default function LandingPage() {
+  const { t } = useLang();
+
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
     if (!els.length) return;
@@ -33,22 +36,31 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
+  const h = t('home.hero');
+  const cta = t('home.cta');
+
   return (
     <div className="landing">
       <Hero
-        eyebrow="AI brand management, beyond monitoring"
-        title={<>Take control of how<br /><HL>AI sees</HL> your brand.</>}
-        lead="Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan."
-        primaryCta="Start your free trial"
-        secondaryCta="Book a demo"
-        note="No setup. No SEO expertise required."
+        eyebrow={h.eyebrow}
+        title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
+        lead={h.lead}
+        primaryCta={h.primaryCta}
+        secondaryCta={h.secondaryCta}
+        note={h.note}
       />
       <ValueChain />
       <ProductCarousel />
       <Agents />
       <ComparisonTable />
       <Stakes />
-      <CtaBand />
+      <CtaBand
+        heading={cta.heading}
+        lead={cta.lead}
+        primaryCta={cta.primaryCta}
+        secondaryCta={cta.secondaryCta}
+        note={cta.note}
+      />
     </div>
   );
 }
@@ -130,36 +142,27 @@ function WorkflowVs() {
    ================================================================ */
 function ValueChain() {
   const [mode, setMode] = useState('poliris');
-  const steps = [
-    {
-      num: '01', name: 'Understand', desc: 'Your brand, offers & technical stakes.', monitor: false,
-      icon: (<><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></>),
-    },
-    {
-      num: '02', name: 'Monitor', desc: 'Your positions across AI engines.', monitor: true,
-      icon: <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />,
-    },
-    {
-      num: '03', name: 'Prioritize', desc: 'The highest-impact opportunities.', monitor: false,
-      icon: (<><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/></>),
-    },
-    {
-      num: '04', name: 'Recommend', desc: 'Concrete, on-brand fixes & content.', monitor: false,
-      icon: (<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>),
-    },
-    {
-      num: '05', name: 'Implement', desc: 'Content & technical fixes, shipped to your site.', monitor: false,
-      icon: (<><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></>),
-    },
+  const { t } = useLang();
+  const vcSteps = t('home.valueChain.steps');
+  const STEP_ICONS = [
+    (<><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></>),
+    (<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />),
+    (<><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/></>),
+    (<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>),
+    (<><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></>),
   ];
+  const MONITOR_IDX = 1;
+  const steps = vcSteps.map((s, i) => ({ ...s, monitor: i === MONITOR_IDX, icon: STEP_ICONS[i] }));
 
   return (
     <section className="value-chain" id="value-chain">
       <div className="container">
         <div className="sec-head reveal">
-          <Eyebrow>The full value chain</Eyebrow>
-          <h2 className="sec-h2">Most tools tell you what's happening.<br />Poliris lets you <HL>take control.</HL></h2>
-          <p className="sec-lead">Other tools stop at monitoring. Poliris runs the whole chain   technical audit, content, and the fixes shipped live on your site.</p>
+          {(() => { const vc = t('home.valueChain'); return (<>
+            <Eyebrow>{vc.eyebrow}</Eyebrow>
+            <h2 className="sec-h2">{vc.h2Pre}<br />Poliris lets you <HL>{vc.h2Hl}</HL></h2>
+            <p className="sec-lead">{vc.lead}</p>
+          </>); })()}
         </div>
         {/* <WorkflowVs /> */}
         <div className="vchain-diagram">
@@ -192,7 +195,7 @@ function ValueChain() {
                 </button>
               </div>
               <p className="vcf-toggle-sub">
-                {mode === 'poliris' ? 'runs the entire chain   end to end' : 'Cut the chain'}
+                {mode === 'poliris' ? t('home.valueChain.polirisSub') : t('home.valueChain.otherSub')}
               </p>
             </div>
 
@@ -215,7 +218,7 @@ function ValueChain() {
             </div>
 
             {mode === 'other' && (
-              <p className="vcf-other-note">Other tools stop at monitoring   they don't prioritize, recommend, or implement.</p>
+              <p className="vcf-other-note">{t('home.valueChain.otherNote')}</p>
             )}
 
           </div>
@@ -229,28 +232,29 @@ function ValueChain() {
    AGENTS
    ================================================================ */
 function Agents() {
-  const agents = [
-    { name: 'Leo',  role: 'Strategy & Orchestration', gradient: 'linear-gradient(140deg,#4fb87a,#2f8f56)', desc: 'Reads the whole picture and sets the game plan, like a lead strategist briefing the team.' },
-    { name: 'Nora', role: 'Visibility Analyst',        gradient: 'linear-gradient(140deg,#f7c948,#e6a700)', desc: "Tracks where you show up in AI answers and flags where you're losing ground." },
-    { name: 'Tom',  role: 'Technical SEO Audit',       gradient: 'linear-gradient(140deg,#46bdd6,#2a93ad)', desc: "Combs through your site for what's broken and tells you exactly what to fix first." },
-    { name: 'Kate', role: 'Strategic Content',          gradient: 'linear-gradient(140deg,#ef5d92,#d23a73)', desc: 'Turns the findings into a content plan and writes what AI needs to recommend you.' },
-    { name: 'Ivy',  role: 'Sentiment & Reputation',     gradient: 'linear-gradient(140deg,#2f9e63,#1c7a49)', desc: 'Watches how AI talks about you and catches anything off: wrong, cautious, or harmful.' },
-    { name: 'Emma', role: 'Competitor Intelligence',    gradient: 'linear-gradient(140deg,#8b62d6,#6b40bf)', desc: "Maps your real rivals in each zone and shows where they're beating you in AI." },
+  const { t } = useLang();
+  const AGENT_GRADIENTS = [
+    'linear-gradient(140deg,#4fb87a,#2f8f56)',
+    'linear-gradient(140deg,#f7c948,#e6a700)',
+    'linear-gradient(140deg,#46bdd6,#2a93ad)',
+    'linear-gradient(140deg,#ef5d92,#d23a73)',
+    'linear-gradient(140deg,#2f9e63,#1c7a49)',
+    'linear-gradient(140deg,#8b62d6,#6b40bf)',
   ];
+  const agents = t('home.agents.list').map((a, i) => ({ ...a, gradient: AGENT_GRADIENTS[i] }));
   return (
     <section id="team" className="agents">
       <div className="container">
         <div className="agents__panel">
+          {(() => { const ag = t('home.agents'); return (
           <div className="agents__head reveal">
-            <Eyebrow>The team</Eyebrow>
+            <Eyebrow>{ag.eyebrow}</Eyebrow>
             <h2 className="agents__h2">
-              A full team working for you,
-              <span className="agents__h2-blue">living inside the app.</span>
+              {ag.h2}
+              <span className="agents__h2-blue">{ag.h2Blue}</span>
             </h2>
-            <p className="agents__lead">
-              A complete team of specialized AI agents that help you operate like an expert   from analyzing performance and spotting opportunities to recommending next steps and implementing improvements, all from within the platform.
-            </p>
-          </div>
+            <p className="agents__lead">{ag.lead}</p>
+          </div>); })()}
           <div className="agents__grid">
             {agents.map((agent) => (
               <AgentCard key={agent.name} agent={agent} />
@@ -260,7 +264,7 @@ function Agents() {
             <svg viewBox="0 0 24 24" fill="none" stroke="#1e3893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="agents__foot-icon">
               <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
             </svg>
-            <p>Each agent brings specialized expertise to the platform   helping you understand the data, identify opportunities, and implement improvements. The agents do the heavy lifting; you make the decisions.</p>
+            <p>{t('home.agents.footNote')}</p>
           </div>
         </div>
       </div>
@@ -289,14 +293,9 @@ function AgentCard({ agent }) {
    COMPARISON TABLE
    ================================================================ */
 function ComparisonTable() {
-  const rows = [
-    { need: 'AI visibility tracking',       other: 'standalone tool', pol: 'per product & trading zone' },
-    { need: 'AI sentiment tracking',        other: 'x',               pol: '' },
-    { need: 'Technical SEO audit',          other: 'another tool',    pol: '' },
-    { need: 'On-brand content production',  other: 'agency or tool',  pol: 'by agents' },
-    { need: 'Implemented on your site',     other: 'you do it',       pol: 'done for you' },
-    { need: 'No SEO expertise required',    other: 'x',               pol: '' },
-  ];
+  const { t } = useLang();
+  const cp = t('home.comparison');
+  const rows = cp.rows;
   const CheckIcon = () => (
     <span className="comparison__check-bg">
       <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
@@ -315,17 +314,19 @@ function ComparisonTable() {
     <section className="comparison">
       <div className="container">
         <div className="sec-head reveal">
-          <Eyebrow>One platform, not a stack</Eyebrow>
-          <h2 className="sec-h2">Replace your whole toolstack.</h2>
-          <p className="sec-lead">AI visibility, sentiment, technical SEO and content   usually four separate tools. With Poliris, it&rsquo;s one.</p>
+          {(() => { const cp = t('home.comparison'); return (<>
+            <Eyebrow>{cp.eyebrow}</Eyebrow>
+            <h2 className="sec-h2">{cp.h2}</h2>
+            <p className="sec-lead">{cp.lead}</p>
+          </>); })()}
         </div>
         <div className="comparison__table-wrap reveal reveal--scale reveal--d1">
           <table className="comparison__table">
             <thead>
               <tr>
-                <th className="comparison__th">Capability</th>
-                <th className="comparison__th">Other GEO tools</th>
-                <th className="comparison__th comparison__th--pol">Poliris</th>
+                <th className="comparison__th">{cp.headers.capability}</th>
+                <th className="comparison__th">{cp.headers.otherTools}</th>
+                <th className="comparison__th comparison__th--pol">{cp.headers.poliris}</th>
               </tr>
             </thead>
             <tbody>
@@ -354,7 +355,7 @@ function ComparisonTable() {
               <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
-          <span className="comparison__concl-text">One subscription instead of four   everything above lives inside Poliris.</span>
+          <span className="comparison__concl-text">{cp.concl}</span>
         </div>
       </div>
     </section>
@@ -365,35 +366,24 @@ function ComparisonTable() {
    STAKES
    ================================================================ */
 function Stakes() {
-  const cards = [
-    {
-      title: 'Buyers ask AI first',
-      desc: 'Your customers research products through ChatGPT and Perplexity before they ever reach your site.',
-      icon: <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />,
-    },
-    {
-      title: "You're flying blind",
-      desc: "You don't know if AI recommends you, gets you wrong, or sends buyers straight to your competitors.",
-      icon: (<><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></>),
-    },
-    {
-      title: 'Tools only watch',
-      desc: 'The tools that do exist hand you a dashboard, then leave the actual work entirely to you.',
-      icon: <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />,
-    },
+  const { t } = useLang();
+  const CARD_ICONS = [
+    <path key="c0" d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />,
+    (<><path key="c1a" d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path key="c1b" d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path key="c1c" d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path key="c1d" d="m2 2 20 20"/></>),
+    <path key="c2" d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />,
   ];
+  const cards = t('home.stakes.cards').map((c, i) => ({ ...c, icon: CARD_ICONS[i] }));
   return (
     <section className="stakes">
       <div className="container">
-        <div className="sec-head reveal">
-          <Eyebrow>The stakes</Eyebrow>
-          <h2 className="sec-h2">
-            AI is already shaping your brand.<br />With or <HL>without you.</HL>
-          </h2>
-          <p className="sec-lead">
-            Every day, AI assistants describe, recommend, or ignore your products. Most brands can&rsquo;t see it, and have no way to act on it.
-          </p>
-        </div>
+        {(() => { const st = t('home.stakes'); return (
+          <div className="sec-head reveal">
+            <Eyebrow>{st.eyebrow}</Eyebrow>
+            <h2 className="sec-h2">
+              {st.h2Pre}<br />{st.h2Mid} <HL>{st.h2Hl}</HL>
+            </h2>
+            <p className="sec-lead">{st.lead}</p>
+          </div>); })()}
         <div className="stakes__grid">
           {cards.map((card, i) => (
             <div key={i} className={`stakes__card reveal reveal--d${i + 1}`}>

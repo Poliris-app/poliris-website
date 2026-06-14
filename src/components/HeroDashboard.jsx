@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLang } from '../contexts/LangContext';
 
 const BRANDS = [
   { id: 'nike',       name: 'Nike',        color: '#111827', isYou: true, abbr: 'NK', logo: `${import.meta.env.BASE_URL}nike-com-logo.png` },
@@ -87,6 +88,8 @@ const TIER_CLASS = {
 function tierClass(label) { return TIER_CLASS[label] ?? ''; }
 
 export default function HeroDashboard() {
+  const { t } = useLang();
+  const d = t('dashboard');
   const [tab,        setTab]        = useState('visibility');
   const [hovered,    setHovered]    = useState(null);
   const [filters,    setFilters]    = useState(new Set());
@@ -153,7 +156,7 @@ export default function HeroDashboard() {
       {/* Window chrome */}
       <div className="dash__appbar">
         <span className="dash__dot" /><span className="dash__dot" /><span className="dash__dot" />
-        <span className="dash__url">app.poliris.io · dashboard</span>
+        <span className="dash__url">{d.appbar}</span>
       </div>
 
       {/* Body: sidebar | main | right panel */}
@@ -168,8 +171,8 @@ export default function HeroDashboard() {
               <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
             </div>
             <div className="dsb__brand-info">
-              <span className="dsb__brand-name">Nike</span>
-              <span className="dsb__brand-meta">Active project</span>
+              <span className="dsb__brand-name">{d.sidebar.nike}</span>
+              <span className="dsb__brand-meta">{d.sidebar.activeProject}</span>
             </div>
           </div>
 
@@ -180,12 +183,12 @@ export default function HeroDashboard() {
               <path d="M20 2v4"/><path d="M22 4h-4"/>
               <circle cx="4" cy="20" r="2"/>
             </svg>
-            Ask Poli AI
+            {d.sidebar.askPoliAI}
           </div>
 
           {/* GEO AUDIT */}
           <div className="dsb__section-hdr">
-            <span className="dsb__section-lbl">GEO AUDIT</span>
+            <span className="dsb__section-lbl">{d.sidebar.geoAudit}</span>
           </div>
           <div className="dsb__tree">
 
@@ -207,13 +210,13 @@ export default function HeroDashboard() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
                 </span>
                 <span className="dsb__avatar dsb__avatar--n">A</span>
-                <span className="dsb__tree-cat-name">Footwear</span>
+                <span className="dsb__tree-cat-name">{d.sidebar.footwear}</span>
               </div>
 
               {/* Level 2 children   line from category */}
               <div className="dsb__tree-l2">
-                {['Overview','AI Visibility','Sentiment'].map(l => (
-                  <div key={l} className={`dash__nav-item${l === 'Overview' ? ' dash__nav-item--active' : ''}`}>{l}</div>
+                {d.sidebar.navItems.map((l, li) => (
+                  <div key={l} className={`dash__nav-item${li === 0 ? ' dash__nav-item--active' : ''}`}>{l}</div>
                 ))}
               </div>
 
@@ -222,12 +225,12 @@ export default function HeroDashboard() {
 
           {/* TECHNICAL AUDIT */}
           <div className="dsb__section-hdr dsb__section-hdr--mt">
-            <span className="dsb__section-lbl">TECHNICAL AUDIT</span>
+            <span className="dsb__section-lbl">{d.sidebar.technicalAudit}</span>
           </div>
 
           {/* CONTENT GENERATION */}
           <div className="dsb__section-hdr">
-            <span className="dsb__section-lbl">CONTENT GENERATION</span>
+            <span className="dsb__section-lbl">{d.sidebar.contentGeneration}</span>
           </div>
 
         </aside>
@@ -239,23 +242,23 @@ export default function HeroDashboard() {
           <div className="hdash__card">
             <div className="hdash__chart-head">
               <div>
-                <p className="hdash__card-title">Evolution</p>
-                <p className="hdash__card-sub">Score by LLM over time</p>
+                <p className="hdash__card-title">{d.evolution.title}</p>
+                <p className="hdash__card-sub">{d.evolution.sub}</p>
               </div>
               <div className="hdash__controls">
                 <span className="hdash__date-pill">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
                     <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
                   </svg>
-                  Apr 27 – Jun 1
+                  {d.evolution.datePill}
                 </span>
                 <div className="hdash__tab-group">
-                  {['visibility','sentiment'].map(t => (
-                    <button key={t}
-                      className={`hdash__tab${tab === t ? ' hdash__tab--on' : ''}`}
-                      onClick={() => { setTab(t); setChartHover(null); }}
+                  {[['visibility', d.evolution.visTab], ['sentiment', d.evolution.sentTab]].map(([key, label]) => (
+                    <button key={key}
+                      className={`hdash__tab${tab === key ? ' hdash__tab--on' : ''}`}
+                      onClick={() => { setTab(key); setChartHover(null); }}
                     >
-                      {t[0].toUpperCase() + t.slice(1)}
+                      {label}
                     </button>
                   ))}
                 </div>
@@ -263,7 +266,7 @@ export default function HeroDashboard() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
                     <path d="M22 3H2l8 9.46V19l4 2v-8.54z"/>
                   </svg>
-                  Filter <span className="hdash__filter-badge">6</span>
+                  {d.evolution.filter} <span className="hdash__filter-badge">6</span>
                 </span>
               </div>
             </div>
@@ -285,7 +288,7 @@ export default function HeroDashboard() {
                       <img src={b.logo} alt={b.name} />
                     </span>
                     {b.name}
-                    {b.isYou && <span className="hdash__you-badge">You</span>}
+                    {b.isYou && <span className="hdash__you-badge">{d.you}</span>}
                   </button>
                 );
               })}
@@ -308,10 +311,10 @@ export default function HeroDashboard() {
                     </g>
                   ))
                 ) : (
-                  SENT_Y_LINES.map(t => (
-                    <g key={t.val}>
-                      <line x1={PL} y1={yAt(t.val)} x2={VW-PR} y2={yAt(t.val)} stroke="#eef0f4" strokeWidth="1"/>
-                      <text x={PL-5} y={yAt(t.val)+3.5} textAnchor="end" fontSize="7" fill={t.color} fontWeight="600">{t.label}</text>
+                  SENT_Y_LINES.map(sl => (
+                    <g key={sl.val}>
+                      <line x1={PL} y1={yAt(sl.val)} x2={VW-PR} y2={yAt(sl.val)} stroke="#eef0f4" strokeWidth="1"/>
+                      <text x={PL-5} y={yAt(sl.val)+3.5} textAnchor="end" fontSize="7" fill={sl.color} fontWeight="600">{d.tierLabels[sl.label]}</text>
                     </g>
                   ))
                 )}
@@ -394,7 +397,7 @@ export default function HeroDashboard() {
                         {tab === 'visibility' ? (
                           <span className="hdash__tip-val" style={{ color: tier.color }}>{val}%</span>
                         ) : (
-                          <span className={`hdash__tip-val ${tierClass(tier.label)}`}>{tier.label}</span>
+                          <span className={`hdash__tip-val ${tierClass(tier.label)}`}>{d.tierLabels[tier.label]}</span>
                         )}
                       </div>
                     );
@@ -407,10 +410,8 @@ export default function HeroDashboard() {
           {/* Position vs Competitors */}
           <div className="hdash__card hdash__card--quad">
             <div className="hdash__quad-head">
-              <p className="hdash__card-title">Position vs Competitors</p>
-              <p className="hdash__card-sub">
-                Each dot is a brand. Based on Jun 1 analysis
-              </p>
+              <p className="hdash__card-title">{d.quad.title}</p>
+              <p className="hdash__card-sub">{d.quad.sub}</p>
             </div>
 
             <div className="hdash__quad-wrap">
@@ -420,10 +421,10 @@ export default function HeroDashboard() {
 
               <div className="hdash__quad-area">
                 <div className="hdash__quad-grid">
-                  <div className="hdash__qcell hdash__qcell--tl"><span className="hdash__qcell-label">STRONG SENTIMENT · LOW VISIBILITY</span></div>
-                  <div className="hdash__qcell hdash__qcell--tr"><span className="hdash__qcell-label">LEADERS</span></div>
-                  <div className="hdash__qcell hdash__qcell--bl"><span className="hdash__qcell-label">AT RISK</span></div>
-                  <div className="hdash__qcell hdash__qcell--br"><span className="hdash__qcell-label">STRONG VISIBILITY · WEAK SENTIMENT</span></div>
+                  <div className="hdash__qcell hdash__qcell--tl"><span className="hdash__qcell-label">{d.quad.tlCell}</span></div>
+                  <div className="hdash__qcell hdash__qcell--tr"><span className="hdash__qcell-label">{d.quad.trCell}</span></div>
+                  <div className="hdash__qcell hdash__qcell--bl"><span className="hdash__qcell-label">{d.quad.blCell}</span></div>
+                  <div className="hdash__qcell hdash__qcell--br"><span className="hdash__qcell-label">{d.quad.brCell}</span></div>
                 </div>
 
                 {BRANDS.map(b => {
@@ -442,15 +443,15 @@ export default function HeroDashboard() {
                       </span>
                       {quadTip === b.id && (
                         <div className="hdash__qtip">
-                          {b.isYou && <div className="hdash__qtip-your">Your Brand</div>}
+                          {b.isYou && <div className="hdash__qtip-your">{d.yourBrand}</div>}
                           <div className="hdash__qtip-name">{b.name}</div>
                           <div className="hdash__qtip-row">
-                            <span className="hdash__qtip-key">Visibility:</span>
+                            <span className="hdash__qtip-key">{d.quad.tipVisibility}</span>
                             <span className="hdash__qtip-vis">{pos.x}%</span>
                           </div>
                           <div className="hdash__qtip-row">
-                            <span className="hdash__qtip-key">Sentiment:</span>
-                            <span className={`hdash__qtip-badge ${tierClass(tier.label)}`}>{tier.label}</span>
+                            <span className="hdash__qtip-key">{d.quad.tipSentiment}</span>
+                            <span className={`hdash__qtip-badge ${tierClass(tier.label)}`}>{d.tierLabels[tier.label]}</span>
                           </div>
                         </div>
                       )}
@@ -460,9 +461,9 @@ export default function HeroDashboard() {
               </div>
 
               <div className="hdash__quad-xlabel">
-                <span>Low</span>
-                <span>← VISIBILITY →</span>
-                <span>High</span>
+                <span>{d.quad.low}</span>
+                <span>{d.quad.visLabel}</span>
+                <span>{d.quad.high}</span>
               </div>
             </div>
           </div>
@@ -474,7 +475,7 @@ export default function HeroDashboard() {
                 <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/>
               </svg>
             </span>
-            <p><b>Poli AI Insight:</b> Adidas leads at 76% visibility. Nike holds #2 at 45% with Very Strong sentiment   closing the gap is a content and source authority play. On's drop opens a window.</p>
+            <p><b>Poli AI Insight:</b> {d.insight}</p>
           </div>
         </div>
 
@@ -483,26 +484,26 @@ export default function HeroDashboard() {
 
           {/* Visibility Analysis */}
           <div className="hdash__analysis-card">
-            <p className="hdash__analysis-title">Visibility Analysis</p>
-            <p className="hdash__analysis-sub">How often your product appears in AI answers</p>
+            <p className="hdash__analysis-title">{d.visPanel.title}</p>
+            <p className="hdash__analysis-sub">{d.visPanel.sub}</p>
 
             <div className="hdash__kpi-row">
               <div className="hdash__kpi">
-                <span className="hdash__kpi-label">Avg. Score</span>
+                <span className="hdash__kpi-label">{d.visPanel.avgScore}</span>
                 <span className="hdash__kpi-val-vis">45%</span>
               </div>
               <div className="hdash__kpi">
-                <span className="hdash__kpi-label">Avg. Position</span>
+                <span className="hdash__kpi-label">{d.visPanel.avgPosition}</span>
                 <span className="hdash__kpi-val-vis">#2</span>
               </div>
               <div className="hdash__kpi">
-                <span className="hdash__kpi-label">Trend</span>
-                <span className="hdash__kpi-val hdash__kpi--down">↓ Declining</span>
+                <span className="hdash__kpi-label">{d.visPanel.trend}</span>
+                <span className="hdash__kpi-val hdash__kpi--down">{d.visPanel.declining}</span>
               </div>
             </div>
 
             <div className="hdash__plat-header">
-              <span>Score by platform</span><span>Percent</span>
+              <span>{d.visPanel.scorePlatform}</span><span>{d.visPanel.percent}</span>
             </div>
             <div className="hdash__plat-scroll">
             {[
@@ -526,40 +527,36 @@ export default function HeroDashboard() {
             ))}
             </div>
 
-            <p className="hdash__insight-note">Claude coverage is weakest, highest opportunity to improve mention rate.</p>
-            <button className="hdash__details-btn">Details</button>
+            <p className="hdash__insight-note">{d.visPanel.claudeNote}</p>
+            <button className="hdash__details-btn">{d.details}</button>
           </div>
 
           {/* Sentiment Analysis */}
           <div className="hdash__analysis-card">
-            <p className="hdash__analysis-title">Sentiment Analysis</p>
-            <p className="hdash__analysis-sub">How your product is described by AI</p>
+            <p className="hdash__analysis-title">{d.sentPanel.title}</p>
+            <p className="hdash__analysis-sub">{d.sentPanel.sub}</p>
 
             <div className="hdash__kpi-row">
               <div className="hdash__kpi2">
-                <span className="hdash__kpi-label">Avg. Score</span>
-                <span className="hdash__kpi-val hdash__kpi--strong">Strong</span>
+                <span className="hdash__kpi-label">{d.sentPanel.avgScore}</span>
+                <span className="hdash__kpi-val hdash__kpi--strong">{d.tierLabels['Strong']}</span>
               </div>
               <div className="hdash__kpi2">
-                <span className="hdash__kpi-label">Trend</span>
-                <span className="hdash__kpi-val">→ Stable</span>
+                <span className="hdash__kpi-label">{d.sentPanel.trend}</span>
+                <span className="hdash__kpi-val">{d.sentPanel.stable}</span>
               </div>
             </div>
 
-            <p className="hdash__plat-label-sm">Score by platform</p>
+            <p className="hdash__plat-label-sm">{d.sentPanel.scorePlatform}</p>
             <div className="hdash__plat-scroll">
-            {[
-              { label: 'Brand awareness', pct: 100 },
-              { label: 'Performance',     pct: 80 },
-              { label: 'Design',      pct: 80 },
-              { label: 'Durability',  pct: 40 },
-            ].map(s => {
+            {d.sentPanel.axes.map((axLabel, axi) => {
+              const s = { label: axLabel, pct: [100, 80, 80, 40][axi] };
               const tier = sentTier(s.pct);
               return (
-              <div key={s.label} className="hdash__sent-row">
+              <div key={axi} className="hdash__sent-row">
                 <div className="hdash__sent-top">
-                  <span className="hdash__sent-label">{s.label}</span>
-                  <span className={`hdash__sent-badge ${tierClass(tier.label)}`}>{tier.label}</span>
+                  <span className="hdash__sent-label">{axLabel}</span>
+                  <span className={`hdash__sent-badge ${tierClass(tier.label)}`}>{d.tierLabels[tier.label]}</span>
                 </div>
                 <div className="hdash__sent-track">
                   <div className={`hdash__sent-bar hdash__sent-bar--${tier.label.toLowerCase().replace(' ', '')}`} style={{ width: `${s.pct}%` }} />
@@ -569,8 +566,8 @@ export default function HeroDashboard() {
             })}
             </div>
 
-            <p className="hdash__insight-note">All platforms are performing well. Quality leads with the strongest sentiment coverage.</p>
-            <button className="hdash__details-btn">Details</button>
+            <p className="hdash__insight-note">{d.sentPanel.allPlatformsNote}</p>
+            <button className="hdash__details-btn">{d.details}</button>
           </div>
         </div>
 

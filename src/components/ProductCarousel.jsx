@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useLang } from '../contexts/LangContext';
 
 const ChevronLeft = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
@@ -40,8 +41,10 @@ function HeatCell({ score }) {
 
 /* ── Slide visual components ───────────────────────────────────── */
 function VisibilityVis() {
+  const { t } = useLang();
+  const vv = t('productCarousel.visibilityVis');
   const MODELS = [
-    { label: 'Avg.',        icon: null },
+    { label: vv.avg,        icon: null },
     { label: 'ChatGPT',     icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png` },
     { label: 'Claude',      icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png` },
     { label: 'Mistral',     icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png` },
@@ -61,8 +64,8 @@ function VisibilityVis() {
       {/* Score bar */}
       <div className="vheat__top">
         <div className="vheat__top-row">
-          <span className="vheat__top-label">AI Visibility</span>
-          <span className="vheat__moderate">Moderate</span>
+          <span className="vheat__top-label">{vv.label}</span>
+          <span className="vheat__moderate">{vv.moderate}</span>
         </div>
         <div className="vheat__score-row">
           <span className="vheat__score-num">45</span>
@@ -77,12 +80,12 @@ function VisibilityVis() {
         {/* Stats */}
         <div className="vheat__stats">
           <div className="vheat__stat">
-            <span className="vheat__stat-label">Visibility Rank</span>
+            <span className="vheat__stat-label">{vv.visibilityRank}</span>
             <span className="vheat__stat-val">#2</span>
           </div>
           <div className="vheat__stat-divider" />
           <div className="vheat__stat">
-            <span className="vheat__stat-label">Visibility Score</span>
+            <span className="vheat__stat-label">{vv.visibilityScore}</span>
             <div className="vheat__stat-row">
               <span className="vheat__stat-val">45%</span>
               <span className="vheat__stat-delta">↓19%</span>
@@ -97,7 +100,7 @@ function VisibilityVis() {
               <div className="vheat__brand">
                 <img src={b.logo} alt={b.name} className="vheat__brand-logo" />
                 <span className="vheat__brand-name">{b.name}</span>
-                {b.isYou && <span className="vheat__you-tag">You</span>}
+                {b.isYou && <span className="vheat__you-tag">{vv.you}</span>}
               </div>
               <div className="vheat__cells">
                 {b.scores.map((s, i) => <HeatCell key={i} score={s} />)}
@@ -120,9 +123,9 @@ function VisibilityVis() {
 
           {/* Legend */}
           <div className="vheat__legend">
-            <span className="vheat__legend-text">Low</span>
+            <span className="vheat__legend-text">{vv.low}</span>
             <div className="vheat__legend-bar" />
-            <span className="vheat__legend-text">High</span>
+            <span className="vheat__legend-text">{vv.high}</span>
           </div>
         </div>
       </div>
@@ -131,6 +134,9 @@ function VisibilityVis() {
 }
 
 function SentimentVis() {
+  const { t } = useLang();
+  const sv = t('productCarousel.sentimentVis');
+  const AXES = sv.axes;
   const BRANDS = [
     {
       name: 'Nike',   logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,           color: '#0f172a', isYou: true,
@@ -164,7 +170,7 @@ function SentimentVis() {
     },
   ];
 
-  const AXES = ['Innovation', 'Performance', 'Range', 'Quality', 'Trust'];
+
   const n = AXES.length;
 
   const TIER_STYLE = {
@@ -283,7 +289,7 @@ function SentimentVis() {
             <span className="srad__chip-dot" style={{ background: b.color }} />
             <img src={b.logo} alt={b.name} className="srad__chip-logo" />
             <span className="srad__chip-name">{b.name}</span>
-            {b.isYou && <span className="srad__chip-you">You</span>}
+            {b.isYou && <span className="srad__chip-you">{sv.you}</span>}
           </button>
         ))}
       </div>
@@ -349,13 +355,13 @@ function SentimentVis() {
           }}>
             {tooltip.singleBrand ? (
               <>
-                <div className="srad__rtip-title">Web score</div>
+                <div className="srad__rtip-title">{sv.webScore}</div>
                 <div className="srad__rtip-brand-row">
                   <span className="srad__rtip-dot" style={{ background: tooltip.singleBrand.color }} />
                   <img src={tooltip.singleBrand.logo} alt={tooltip.singleBrand.name} className="srad__rtip-logo" />
                   <span className="srad__rtip-brand">{tooltip.singleBrand.name}</span>
                   <span className="srad__rtip-badge" style={TIER_STYLE[tooltip.singleBrand.overall]}>
-                    {tooltip.singleBrand.overall}
+                    {sv.tiers[tooltip.singleBrand.overall]}
                   </span>
                 </div>
                 <div className="srad__rtip-axes">
@@ -364,7 +370,7 @@ function SentimentVis() {
                     return (
                       <div key={ax} className="srad__rtip-row">
                         <span className="srad__rtip-attr">{ax}</span>
-                        <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{tier}</span>
+                        <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{sv.tiers[tier]}</span>
                       </div>
                     );
                   })}
@@ -381,7 +387,7 @@ function SentimentVis() {
                         <span className="srad__rtip-dot" style={{ background: b.color }} />
                         <img src={b.logo} alt={b.name} className="srad__rtip-logo" />
                         <span className="srad__rtip-brand">{b.name}</span>
-                        <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{tier}</span>
+                        <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{sv.tiers[tier]}</span>
                       </div>
                     );
                   })}
@@ -396,44 +402,12 @@ function SentimentVis() {
 }
 
 function AuditVis() {
+  const { t } = useLang();
+  const av = t('productCarousel.auditVis');
   const [activeKey, setActiveKey] = useState(null);
   const [vals, setVals] = useState([81, 80, 36]);
 
-  const STAGE_META = [
-    {
-      key: 'page', label: 'Page Access', color: '#3B6FF5',
-      question: 'Can AI reach your pages?',
-      checks: [
-        { ok: true,  text: 'Robots.txt allows AI crawlers' },
-        { ok: true,  text: 'XML sitemap is present and valid' },
-        { ok: true,  text: 'Key pages return HTTP 200' },
-        { ok: true,  text: 'No disallow rules blocking GPTBot / ClaudeBot' },
-        { ok: false, text: 'AI-specific crawl directives not configured' },
-      ],
-    },
-    {
-      key: 'content', label: 'Content Access', color: '#F97316',
-      question: 'Can AI read your content?',
-      checks: [
-        { ok: true,  text: 'Core content loads without JavaScript' },
-        { ok: true,  text: 'Structured data (JSON-LD) present' },
-        { ok: true,  text: 'Open Graph and meta tags configured' },
-        { ok: false, text: 'Some pages require login to read' },
-        { ok: false, text: 'PDF and video content not accessible to AI' },
-      ],
-    },
-    {
-      key: 'quality', label: 'Content Quality', color: '#EF4444',
-      question: 'Is your content good quality?',
-      checks: [
-        { ok: true,  text: 'Content is original (no duplicate pages)' },
-        { ok: false, text: 'Answers buried in long unstructured paragraphs' },
-        { ok: false, text: 'No FAQ or Q&A formatted sections' },
-        { ok: false, text: 'Content not updated in 90+ days' },
-        { ok: false, text: 'No direct answers to common user queries' },
-      ],
-    },
-  ];
+  const STAGE_META = av.stages.map(s => ({ ...s }));
 
   const STAGES = STAGE_META.map((m, i) => ({ ...m, value: vals[i] }));
 
@@ -503,15 +477,13 @@ function AuditVis() {
       {/* ── Header ─────────────────────────────────────────── */}
       <div className="pipeline-hdr">
         <div className="pipeline-hdr-text">
-          <div className="pipeline-title">Site Health Pipeline</div>
-          <div className="pipeline-sub">
-            Your content flows through 3 stages. A bottleneck at any stage limits everything after it.
-          </div>
+          <div className="pipeline-title">{av.title}</div>
+          <div className="pipeline-sub">{av.sub}</div>
         </div>
         <div className="pipeline-score-wrap">
           <div className="pipeline-score-info">
-            <span className="pipeline-score-lbl">Health score</span>
-            <span className="pipeline-score-desc">Based on all 3 stages</span>
+            <span className="pipeline-score-lbl">{av.healthScore}</span>
+            <span className="pipeline-score-desc">{av.basedOn}</span>
           </div>
           <div className="pipeline-ring">
             <svg viewBox="0 0 64 64" width="52" height="52"
@@ -601,7 +573,7 @@ function AuditVis() {
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
               <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-            Bottleneck
+            {av.bottleneck}
           </div>
         )}
 
@@ -616,7 +588,7 @@ function AuditVis() {
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
-              Capped by {STAGES[bnIdx].label}
+              {av.cappedBy} {STAGES[bnIdx].label}
             </div>
           );
         })}
@@ -662,7 +634,7 @@ function AuditVis() {
             </span>
             <span className="pipeline-detail-score">{activeStage.value}%</span>
             {activeStage.value < BN_THRESH && (
-              <span className="pipeline-detail-tag pipeline-detail-tag--bottleneck">Bottleneck</span>
+              <span className="pipeline-detail-tag pipeline-detail-tag--bottleneck">{av.bottleneck}</span>
             )}
           </div>
           <div className="pipeline-detail-checks">
@@ -680,87 +652,16 @@ function AuditVis() {
   );
 }
 
-const IDEA_SETS = [
-  [
-    {
-      priority: 'HIGH PRIORITY', pColor: '#dc2626', pBg: '#fee2e2',
-      title: 'Nike Air Max: 35 Years of Performance Innovation',
-      desc: 'This article positions Nike as the pioneer of cushioning technology, showcasing the evolution from Air Max 1 to today.',
-      draft: {
-        intro: 'In 1987, Nike designer Tinker Hatfield did something unthinkable   he cut a window into the sole of a running shoe. What was once hidden became the centerpiece of a design language that still dominates athletic footwear today.',
-        outline: ['The 1987 Revolution: Making Air Visible', 'From Running Track to Streetwear Icon', 'The Technology Behind Every Air Unit', 'Air Max 2025 and What\'s Next'],
-        words: '720', read: '4 min', score: 91,
-      },
-    },
-    {
-      priority: 'HIGH PRIORITY', pColor: '#dc2626', pBg: '#fee2e2',
-      title: "How Nike's Move to Zero is Reshaping Sustainable Footwear",
-      desc: "This article highlights Nike's recycled materials, carbon commitments, and sustainability story to capture eco-conscious AI answers.",
-      draft: {
-        intro: "Nike's Move to Zero initiative isn't just a marketing campaign   it's a measurable commitment. By 2025, the company aims to use 100% renewable energy across owned facilities, and the Space Hippie collection already proves recycled materials can outperform virgin ones.",
-        outline: ['What Is Move to Zero?', 'Space Hippie: Recycled Materials That Perform', 'Carbon Footprint by the Numbers', 'How to Shop More Sustainably with Nike'],
-        words: '680', read: '3 min', score: 88,
-      },
-    },
-    {
-      priority: 'MEDIUM', pColor: '#d97706', pBg: '#fef3c7',
-      title: 'Nike vs. Adidas: Who Leads the Future of Athletic Performance?',
-      desc: 'Directly pits Nike against its main competitor in technology and cultural impact, potentially displacing Adidas in AI engine results.',
-      draft: {
-        intro: "In the race to dominate AI-era search, brand authority matters as much as product quality. Nike's ZoomX foam and Adidas's Lightstrike Pro represent two very different philosophies   and AI engines are paying close attention to which brand answers consumer questions best.",
-        outline: ['Cushioning Tech Compared: ZoomX vs. Lightstrike Pro', 'Sustainability Score: Move to Zero vs. Stan Smith Mylo', 'Collaborations That Won the Algorithm', 'Who AI Recommends More   and Why'],
-        words: '810', read: '5 min', score: 79,
-      },
-    },
-  ],
-  [
-    {
-      priority: 'HIGH PRIORITY', pColor: '#dc2626', pBg: '#fee2e2',
-      title: 'Nike React Technology: Why Runners Are Switching',
-      desc: 'An in-depth look at Nike React foam, its energy return properties, and why it has converted distance runners away from competing brands.',
-      draft: {
-        intro: "Nike React foam changed the running shoe game. Developed after years of materials research, it delivers energy return that rivals more expensive carbon-fiber plate shoes   at a price point that makes it the go-to for everyday training.",
-        outline: ['What Makes React Foam Different', 'Test Data: Energy Return vs. Competitors', 'Best Nike React Shoes of 2025', 'Is React Right for Your Running Style?'],
-        words: '660', read: '3 min', score: 85,
-      },
-    },
-    {
-      priority: 'MEDIUM', pColor: '#d97706', pBg: '#fef3c7',
-      title: 'Nike Training Club: Building the Digital Fitness Community',
-      desc: "Explores Nike's NTC app strategy and how its free content model builds brand loyalty and increases AI discoverability for fitness queries.",
-      draft: {
-        intro: "When Nike made NTC free in 2020, it wasn't just a pandemic move   it was a long-term play for brand loyalty. Today, the Nike Training Club app is one of the most-cited fitness resources in AI answers, giving Nike a visibility edge that goes far beyond shoes.",
-        outline: ['From Paid to Free: The NTC Pivot', 'Top Workouts Driving AI Citations', 'How NTC Content Improves Nike\'s Search Authority', 'Building Your Training Plan with NTC'],
-        words: '590', read: '3 min', score: 77,
-      },
-    },
-    {
-      priority: 'MEDIUM', pColor: '#d97706', pBg: '#fef3c7',
-      title: 'The Nike Flyknit Story: Engineering Performance Through Fabric',
-      desc: "Chronicles the development of Flyknit technology and its impact on performance, sustainability, and Nike's manufacturing story for AI audiences.",
-      draft: {
-        intro: "Nike Flyknit started with a simple question: what if a shoe's upper could be as precisely engineered as its sole? The answer   a seamless, lightweight knit upper woven from a single thread   cut waste by 80% and fundamentally changed how athletic shoes are made.",
-        outline: ['The Problem Flyknit Was Built to Solve', 'From 2012 Olympics to Everyday Training', 'Flyknit vs. Primeknit: A Technical Comparison', 'The Future of Knit Performance Footwear'],
-        words: '700', read: '4 min', score: 82,
-      },
-    },
-  ],
-];
-
-const SUGGEST_TOPICS = [
-  'Nike ZoomX: The Science Behind Elite Marathon Performance',
-  'Nike Air Force 1   40 Years of Sneaker Culture',
-  'How Nike Designs Shoes for Different Running Gaits',
-];
-
 function ContentVis() {
+  const { t } = useLang();
+  const cv = t('productCarousel.contentVis');
   const [topic, setTopic] = useState('');
   const [topicError, setTopicError] = useState('');
   const [draft, setDraft] = useState(null);
   const [ideaSet, setIdeaSet] = useState(0);
   const [suggestIdx, setSuggestIdx] = useState(0);
 
-  const ideas = IDEA_SETS[ideaSet];
+  const ideas = cv.ideaSets[ideaSet];
 
   const openDraft = (idea) => {
     setTopicError('');
@@ -769,21 +670,21 @@ function ContentVis() {
   };
 
   const handleStart = () => {
-    const t = topic.trim();
-    if (!t) {
-      setTopicError('Please describe your topic or pick one of the suggested ideas below.');
+    const tVal = topic.trim();
+    if (!tVal) {
+      setTopicError(cv.errorEmpty);
       return;
     }
-    if (t.length < 12) {
-      setTopicError('Topic too short   try something like "Nike running shoes for beginners" or pick a card below.');
+    if (tVal.length < 12) {
+      setTopicError(cv.errorShort);
       return;
     }
     setTopicError('');
-    const match = IDEA_SETS.flat().find(i => i.title.toLowerCase() === t.toLowerCase());
+    const match = cv.ideaSets.flat().find(i => i.title.toLowerCase() === tVal.toLowerCase());
     if (match) { openDraft(match); return; }
     setDraft({
-      title: t,
-      intro: `Nike has long been a leader in athletic innovation. This article explores ${t.toLowerCase()} and positions Nike as the authority in this space   optimised for AI-powered search results.`,
+      title: tVal,
+      intro: `Nike has long been a leader in athletic innovation. This article explores ${tVal.toLowerCase()} and positions Nike as the authority in this space — optimised for AI-powered search results.`,
       outline: ['Introduction & Brand Context', 'Key Performance Differentiators', 'Consumer Benefits & Use Cases', "Nike's Competitive Edge"],
       words: '640', read: '3 min', score: 74,
     });
@@ -797,19 +698,19 @@ function ContentVis() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
             <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
           </svg>
-          Back
+          {cv.back}
         </button>
         <div className="cstudio-draft-meta">
-          <span className="cstudio-draft-badge cstudio-draft-badge--ai">AI Draft</span>
-          <span className="cstudio-draft-badge cstudio-draft-badge--schema">Schema.org ready</span>
+          <span className="cstudio-draft-badge cstudio-draft-badge--ai">{cv.aiDraft}</span>
+          <span className="cstudio-draft-badge cstudio-draft-badge--schema">{cv.schemaReady}</span>
           <span className="cstudio-draft-stat">{draft.words} words · {draft.read} read</span>
           <span className="cstudio-draft-score" style={{ color: draft.score >= 85 ? '#16a34a' : draft.score >= 75 ? '#d97706' : '#dc2626' }}>
-            AI score {draft.score}
+            {cv.aiScore} {draft.score}
           </span>
         </div>
         <div className="cstudio-draft-title">{draft.title}</div>
         <div className="cstudio-draft-intro">{draft.intro}</div>
-        <div className="cstudio-draft-outline-lbl">Article outline</div>
+        <div className="cstudio-draft-outline-lbl">{cv.articleOutline}</div>
         <div className="cstudio-draft-outline">
           {draft.outline.map((s, i) => (
             <div key={i} className="cstudio-draft-section">
@@ -819,8 +720,8 @@ function ContentVis() {
           ))}
         </div>
         <div className="cstudio-draft-actions">
-          <button className="cstudio-start-btn">Publish →</button>
-          <button className="cstudio-edit-btn">Edit draft</button>
+          <button className="cstudio-start-btn">{cv.publish}</button>
+          <button className="cstudio-edit-btn">{cv.editDraft}</button>
         </div>
       </div>
     );
@@ -830,16 +731,16 @@ function ContentVis() {
   return (
     <div className="vis-card cstudio-card">
       <div className="cstudio-hdr">
-        <span className="cstudio-title">Kate · Content Studio</span>
-        <span className="cstudio-sub">Write articles that rank in AI answers</span>
+        <span className="cstudio-title">{cv.title}</span>
+        <span className="cstudio-sub">{cv.sub}</span>
       </div>
 
       <div className="cstudio-input-box">
-        <div className="cstudio-q">What do you want to write about?</div>
-        <div className="cstudio-q-sub">Describe your topic or pick a suggestion below</div>
+        <div className="cstudio-q">{cv.question}</div>
+        <div className="cstudio-q-sub">{cv.questionSub}</div>
         <textarea
           className={`cstudio-textarea${topicError ? ' cstudio-textarea--error' : ''}`}
-          placeholder="e.g. Nike running shoes for beginners, or Nike vs Adidas performance comparison…"
+          placeholder={cv.placeholder}
           value={topic}
           onChange={e => { setTopic(e.target.value); if (topicError) setTopicError(''); }}
           onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleStart())}
@@ -855,15 +756,15 @@ function ContentVis() {
         )}
         <div className="cstudio-input-row">
           <button className="cstudio-recommend-btn" onClick={() => {
-            setTopic(SUGGEST_TOPICS[suggestIdx % SUGGEST_TOPICS.length]);
+            setTopic(cv.suggestTopics[suggestIdx % cv.suggestTopics.length]);
             setSuggestIdx(n => n + 1);
           }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
               <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".5" fill="currentColor"/>
             </svg>
-            Recommend a topic
+            {cv.recommendTopic}
           </button>
-          <button className="cstudio-start-btn" onClick={handleStart}>Start writing →</button>
+          <button className="cstudio-start-btn" onClick={handleStart}>{cv.startWriting}</button>
         </div>
       </div>
 
@@ -871,14 +772,14 @@ function ContentVis() {
         <svg viewBox="0 0 24 24" fill="none" stroke="#3B6FF5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
           <path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/>
         </svg>
-        Suggested article ideas
+        {cv.suggestedIdeas}
       </div>
 
       <div className="cstudio-ideas">
         {ideas.map((idea, i) => (
           <div key={i} className="cstudio-idea-card" onClick={() => openDraft(idea)}>
             <span className="cstudio-priority" style={{ color: idea.pColor, background: idea.pBg }}>
-              {idea.priority}
+              {idea.priority === 'HIGH PRIORITY' ? cv.priority.high : cv.priority.medium}
             </span>
             <div className="cstudio-idea-title">{idea.title}</div>
             <div className="cstudio-idea-desc">{idea.desc}</div>
@@ -890,26 +791,20 @@ function ContentVis() {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
           <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
         </svg>
-        Recommend another ideas
+        {cv.moreIdeas}
       </button>
     </div>
   );
 }
 
-/* ── Slides data ───────────────────────────────────────────────── */
-const SLIDES = [
+/* ── Slide visual/href metadata (text comes from locale) ────────── */
+const SLIDE_META = [
   {
     tabIcon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
         <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
       </svg>
     ),
-    tabLabel: 'AI Visibility',
-    eyebrow: 'AI Visibility',
-    title: 'Win share of voice in AI answers.',
-    lead: 'See how often AI names and recommends you   broken down by offer and by zone, against the competitors that actually win the answer.',
-    points: ['Share of voice, offer by offer × zone', 'Ranked next to your real competitors', 'Tracked across all six engines'],
-    cta: 'Track all visibility',
     ctaHref: '/visibility',
     visual: <VisibilityVis />,
   },
@@ -919,12 +814,6 @@ const SLIDES = [
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
       </svg>
     ),
-    tabLabel: 'AI Sentiment',
-    eyebrow: 'AI Sentiment',
-    title: 'Understand how AI really feels about you.',
-    lead: "AI answers carry a tone. Find out whether engines describe your brand as trustworthy, innovative, or risky   and fix it.",
-    points: ['Positive vs negative qualifier breakdown', 'Perception radar by attribute', 'Before / after optimisation comparison'],
-    cta: 'Analyse sentiment',
     ctaHref: '/sentiment',
     visual: <SentimentVis />,
   },
@@ -934,12 +823,6 @@ const SLIDES = [
         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     ),
-    tabLabel: 'Technical Audit',
-    eyebrow: 'Technical Audit',
-    title: "Know exactly what's blocking you from AI results.",
-    lead: 'Crawl your site the way LLMs do. Surface every missing schema, crawlability gap, and trust signal that prevents AI from citing you.',
-    points: ['Schema.org coverage & quality score', 'LLM-crawlability diagnosis', 'Prioritised fix list by impact'],
-    cta: 'Run your audit',
     ctaHref: '#',
     visual: <AuditVis />,
   },
@@ -949,12 +832,6 @@ const SLIDES = [
         <circle cx="12" cy="12" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><path d="M12 6v4M12 14l-6.5 2.5M12 14l6.5 2.5"/>
       </svg>
     ),
-    tabLabel: 'Content Generation',
-    eyebrow: 'Content Generation',
-    title: "Let agents write and ship the fix for you.",
-    lead: "Once audit and sentiment tell you what needs changing, our content agents draft on-brand pages, FAQs, and structured data   ready to push live.",
-    points: ['AI-drafted content aligned to your brand voice', 'FAQ & structured-data generation', 'One-click publish to your CMS'],
-    cta: 'Generate content',
     ctaHref: '#',
     visual: <ContentVis />,
   },
@@ -962,6 +839,9 @@ const SLIDES = [
 
 /* ── Main component ────────────────────────────────────────────── */
 export default function ProductCarousel() {
+  const { t, lang } = useLang();
+  const pc = t('productCarousel');
+  const SLIDES = SLIDE_META.map((meta, i) => ({ ...meta, ...pc.slides[i] }));
   const [active, setActive] = useState(0);
   const trackRef = useRef(null);
   const windowRef = useRef(null);
@@ -979,15 +859,13 @@ export default function ProductCarousel() {
     <section id="products" className="products">
       <div className="container">
         <div className="products__head">
-          <p className="products__eyebrow">How it works</p>
+          <p className="products__eyebrow">{pc.eyebrow}</p>
           <h2 className="products__h2">
-            Four tools. One platform.<br />
-            Built for the{' '}
-            <span className="hl">AI era.</span>
+            {pc.h2}<br />
+            {pc.h2Pre}{' '}
+            <span className="hl">{pc.h2Hl}</span>
           </h2>
-          <p className="products__lead">
-            Be discoverable in AI. Understand how it sees you. Optimize for it. Act on it.
-          </p>
+          <p className="products__lead">{pc.lead}</p>
         </div>
 
         <div className="products__tabs">

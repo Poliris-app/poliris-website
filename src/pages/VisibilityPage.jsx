@@ -6,6 +6,7 @@ import GlobeMap from '../components/GlobeMap';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import VisibilityDashboard from '../components/VisibilityDashboard';
+import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -59,6 +60,7 @@ const SCOPE_DATA = {
 const SCOPES = ['worldwide', 'country', 'region', 'local'];
 
 export default function VisibilityPage() {
+  const { t } = useLang();
   const [scope, setScope]   = useState('worldwide');
   const [fading, setFading] = useState(false);
   const timerRef  = useRef(null);
@@ -114,19 +116,19 @@ export default function VisibilityPage() {
 
         {/* ======================== HERO ======================== */}
         <Hero
-          eyebrow="Poliris Visibility"
-          title={<>Win the share of voice<br />inside <HL>AI answers.</HL></>}
-          lead="The AI-visibility analysis built around your product   and your real market. See exactly where you're recommended, topic by topic and market by market."
-          primaryCta="Get your free trial"
-          secondaryCta="Book a demo"
-          note="14 days free · No credit card required"
+          eyebrow={t('visibility.hero.eyebrow')}
+          title={<>{t('visibility.hero.titlePre')}<br />inside <HL>{t('visibility.hero.titleHl')}</HL></>}
+          lead={t('visibility.hero.lead')}
+          primaryCta={t('visibility.hero.primaryCta')}
+          secondaryCta={t('visibility.hero.secondaryCta')}
+          note={t('visibility.hero.note')}
           showDashboard={false}
         />
 
         {/* ======================== DASHBOARD ======================== */}
         <div className="dash-wrap">
           <div className="wrap reveal">
-            <div className="dash-cap"><span className="eyebrow">Inside the dashboard</span></div>
+            <div className="dash-cap"><span className="eyebrow">{t('visibility.insideDash')}</span></div>
             <VisibilityDashboard />
           </div>
         </div>
@@ -135,63 +137,31 @@ export default function VisibilityPage() {
         <section style={{ background: 'var(--surface-2)', paddingTop: 84, paddingBottom: 84 }}>
           <div className="wrap">
             <div className="sec-head mid reveal">
-              <div className="eyebrow">What's inside</div>
-              <h2>Four ways we read <span className="hl">your AI visibility.</span></h2>
-              <p className="lead">Not prompt counts   the way buyers actually judge you. Tap any card to jump straight to it.</p>
+              {(() => { const wi = t('visibility.whatsInside'); return (<>
+                <div className="eyebrow">{wi.eyebrow}</div>
+                <h2>{wi.h2Pre} <span className="hl">{wi.h2Hl}</span></h2>
+                <p className="lead">{wi.lead}</p>
+              </>); })()}
             </div>
             <div className="tour reveal">
-              <a href="#focus" className="tcard">
+{t('visibility.tourCards').map((card, i) => (
+              <a key={i} href={['#focus','#market','#sources','#nora'][i]} className="tcard">
                 <div className="tcard-top">
                   <div className="ic">
                     <svg className="licon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                      {i === 0 && <><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>}
+                      {i === 1 && <><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></>}
+                      {i === 2 && <><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></>}
+                      {i === 3 && <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>}
                     </svg>
                   </div>
-                  <div className="num">01</div>
+                  <div className="num">0{i + 1}</div>
                 </div>
-                <h3>Product focus</h3>
-                <p>Scored on the topics buyers judge on   reliability, integrations, pricing   not isolated prompts.</p>
-                <span className="jump">See it below <span className="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></span>
+                <h3>{card.h3}</h3>
+                <p>{card.p}</p>
+                <span className="jump">{t('visibility.seeBelow')} <span className="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></span>
               </a>
-              <a href="#market" className="tcard">
-                <div className="tcard-top">
-                  <div className="ic">
-                    <svg className="licon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-                    </svg>
-                  </div>
-                  <div className="num">02</div>
-                </div>
-                <h3>Real market</h3>
-                <p>Benchmarked against the brands that actually surface in your market   from worldwide down to local.</p>
-                <span className="jump">See it below <span className="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></span>
-              </a>
-              <a href="#sources" className="tcard">
-                <div className="tcard-top">
-                  <div className="ic">
-                    <svg className="licon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
-                    </svg>
-                  </div>
-                  <div className="num">03</div>
-                </div>
-                <h3>Source intelligence</h3>
-                <p>Every answer traced back to the domains AI trusts   and the ones citing competitors instead of you.</p>
-                <span className="jump">See it below <span className="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></span>
-              </a>
-              <a href="#nora" className="tcard">
-                <div className="tcard-top">
-                  <div className="ic">
-                    <svg className="licon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
-                    </svg>
-                  </div>
-                  <div className="num">04</div>
-                </div>
-                <h3>Nora acts on it</h3>
-                <p>Your dedicated AI analyst turns every gap above into one clear, prioritised next step.</p>
-                <span className="jump">See it below <span className="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></span>
-              </a>
+            ))}
             </div>
           </div>
         </section>
@@ -200,9 +170,11 @@ export default function VisibilityPage() {
         <section id="focus">
           <div className="wrap">
             <div className="adv-head mid reveal">
-              <div className="eyebrow">01   Product focus</div>
-              <h2>We score topics. <span className="hl">Not just prompts.</span></h2>
-              <p className="lead">Dozens of questions, one theme. We map each to the topic it speaks to and score your coverage   the view that drives decisions.</p>
+              {(() => { const pf = t('visibility.productFocus'); return (<>
+                <div className="eyebrow">{pf.eyebrow}</div>
+                <h2>{pf.h2Pre} <span className="hl">{pf.h2Hl}</span></h2>
+                <p className="lead">{pf.lead}</p>
+              </>); })()}
             </div>
             <div className="pf-wrap reveal">
               <svg viewBox="0 0 980 920" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Real buyer questions mapped to topic coverage" className="pf-svg">
@@ -309,9 +281,7 @@ export default function VisibilityPage() {
                 <rect x="856" y="809" width="70" height="24" rx="12" fill="#fbf2e3"/>
                 <text x="891" y="825" textAnchor="middle" className="pf-tlab" fill="#d98a2b">On par</text>
               </svg>
-              <div className="pf-foot">
-                Each topic is a real buying decision   so your score stops being a ranking and becomes a <b>to-do list</b>.
-              </div>
+              <div className="pf-foot" dangerouslySetInnerHTML={{ __html: t('visibility.productFocus.foot') }} />
             </div>
           </div>
         </section>
@@ -322,20 +292,21 @@ export default function VisibilityPage() {
             <div className="mkt">
               {/* Left: text */}
               <div className="adv-head reveal">
-                <div className="eyebrow">02   Real market</div>
-                <h2>Your real market, <span className="hl">not the whole world.</span></h2>
-                <p className="lead">Scope from worldwide down to your city. Zoom in and the global giants fall away   leaving the competitors you actually meet.</p>
+                {(() => { const rm = t('visibility.realMarket'); return (<>
+                  <div className="eyebrow">{rm.eyebrow}</div>
+                  <h2>{rm.h2Pre} <span className="hl">{rm.h2Post}</span></h2>
+                  <p className="lead">{rm.lead}</p>
+                </>); })()}
                 <div className="scope-ladder">
-                  <span className="sl">Worldwide</span><span className="sep">›</span>
-                  <span className="sl">Country</span><span className="sep">›</span>
-                  <span className="sl">Region</span><span className="sep">›</span>
-                  <span className="sl">Local</span>
+                  {t('visibility.realMarket.ladder').map((l, i, arr) => (
+                    <span key={i}><span className="sl">{l}</span>{i < arr.length - 1 && <span className="sep">›</span>}</span>
+                  ))}
                 </div>
                 <div className="mkt-hint">
                   <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                   </svg>
-                  Each level has its own competitors   pick a scope and watch the names change.
+                  {t('visibility.realMarket.hint')}
                 </div>
               </div>
 
@@ -346,7 +317,7 @@ export default function VisibilityPage() {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                     </svg>
-                    Scope
+                    {t('visibility.realMarket.scopeLabel')}
                   </span>
                   <div className="scope-tog">
                     {SCOPES.map((s) => (
@@ -396,21 +367,18 @@ export default function VisibilityPage() {
         <section id="sources">
           <div className="wrap">
             <div className="adv-head mid reveal">
-              <div className="eyebrow">03   Source intelligence</div>
-              <h2>The domains AI trusts   <span className="hl">and where you're missing.</span></h2>
-              <p className="lead">We collect the domains AI cites on your category, then show where you're present, absent, or beaten.</p>
+              {(() => { const si = t('visibility.sourceIntel'); return (<>
+                <div className="eyebrow">{si.eyebrow}</div>
+                <h2>{si.h2Pre} <span className="hl">{si.h2Hl}</span></h2>
+                <p className="lead">{si.lead}</p>
+              </>); })()}
             </div>
 
             {/* 6-step pipeline */}
             <div className="src-pipeline reveal">
-              {[
-                { n: 1, title: 'AI generates a response',    sub: 'Cites external sources'       },
-                { n: 2, title: 'Poliris collects sources',   sub: '100+ source types tracked'    },
-                { n: 3, title: 'Analyses influence',         sub: 'Brand attribution per source' },
-                { n: 4, title: 'Recommends opportunities',   sub: 'Prioritised action plan'      },
-              ].map((step, idx, arr) => (
-                <div key={step.n} className={`src-pipeline-item${idx < arr.length - 1 ? ' src-pipeline-item--sep' : ''}`}>
-                  <div className="src-pipeline-num">{step.n}</div>
+              {t('visibility.sourceIntel.pipeline').map((step, idx, arr) => (
+                <div key={idx} className={`src-pipeline-item${idx < arr.length - 1 ? ' src-pipeline-item--sep' : ''}`}>
+                  <div className="src-pipeline-num">{idx + 1}</div>
                   <div className="src-pipeline-text">
                     <span className="src-pipeline-title">{step.title}</span>
                     <span className="src-pipeline-sub">{step.sub}</span>
@@ -421,12 +389,7 @@ export default function VisibilityPage() {
 
             {/* Stats row */}
             <div className="src-stats reveal">
-              {[
-                { n: '149', label: 'Sources tracked',      sub: 'Across 6 AI engines'   },
-                { n: '87',  label: 'Cite competitors only', sub: 'Visibility gaps'        },
-                { n: '14',  label: 'Cite your brand',       sub: 'Expand influence'       },
-                { n: '48',  label: 'Cite both',             sub: 'Strengthen position'    },
-              ].map(s => (
+              {t('visibility.sourceIntel.stats').map(s => (
                 <div key={s.n} className="src-stat">
                   <div className="src-stat-n">{s.n}</div>
                   <div className="src-stat-label">{s.label}</div>
@@ -446,12 +409,14 @@ export default function VisibilityPage() {
               </div>
 
               <div className="sit-head">
-                <div className="sit-c">Source</div>
-                <div className="sit-c">Authority</div>
-                <div className="sit-c">Citations</div>
-                <div className="sit-c">Brand Attribution</div>
-                <div className="sit-c">Your Visibility</div>
-                <div className="sit-c">Opportunity</div>
+                {(() => { const h = t('visibility.sourceIntel.tableHeaders'); return (<>
+                  <div className="sit-c">{h.source}</div>
+                  <div className="sit-c">{h.authority}</div>
+                  <div className="sit-c">{h.citations}</div>
+                  <div className="sit-c">{h.brandAttr}</div>
+                  <div className="sit-c">{h.visibility}</div>
+                  <div className="sit-c">{h.opportunity}</div>
+                </>); })()}
               </div>
 
               {[
@@ -466,7 +431,7 @@ export default function VisibilityPage() {
                 { fav: 'R', bg: '#e64c00', domain: 'runnersworld.com',   type: 'Media',                da: 84, cite: 4,  attr: 'both', vis: 48,   opp: 'expand',     oppLabel: 'Expand reach'  },
                 { fav: 'N', bg: '#e8243c', domain: 'newbalance.com',     type: 'Retail',               da: 88, cite: 4,  attr: 'comp', vis: 0,    opp: 'pitch',      oppLabel: 'Pitch content' },
               ].map(row => {
-                const attrLabels = { comp: 'Competitors only', both: 'Both brands', you: 'Your brand', none: 'Not yet cited' };
+                const attrLabels = t('visibility.sourceIntel.attrLabels');
                 const visColor = row.attr === 'comp' ? '#ef4444' : row.attr === 'you' ? '#16a34a' : '#111827';
                 return (
                   <div key={row.domain} className="sit-row">
@@ -483,7 +448,7 @@ export default function VisibilityPage() {
                     </div>
                     <div className="sit-c sit-c--cite">
                       <div className="sit-cite-n">{row.cite}</div>
-                      <div className="sit-cite-sub">this month</div>
+                      <div className="sit-cite-sub">{t('visibility.sourceIntel.thisMonth')}</div>
                     </div>
                     <div className="sit-c">
                       <span className={`sit-attr sit-attr--${row.attr}`}>{attrLabels[row.attr]}</span>
@@ -512,11 +477,13 @@ export default function VisibilityPage() {
               })}
 
               <div className="src-intel-legend">
-                <span><span className="sil-chip sil-chip--you">Your brand</span> Source already cites you</span>
-                <span><span className="sil-chip sil-chip--comp">Competitors only</span> Visibility gap, an opportunity to enter</span>
-                <span><span className="sil-chip sil-chip--both">Both brands</span> Shared citation, opportunity to strengthen your position</span>
+                {t('visibility.sourceIntel.legend').map((l, i) => {
+                  const cls = ['you','comp','both'][i];
+                  const lbl = Object.values(t('visibility.sourceIntel.attrLabels'))[i < 2 ? i === 0 ? 2 : 0 : 1];
+                  return <span key={i}><span className={`sil-chip sil-chip--${cls}`}>{lbl}</span> {l}</span>;
+                })}
               </div>
-              <div className="src-intel-count">Showing 10 of 149 sources</div>
+              <div className="src-intel-count">{t('visibility.sourceIntel.showingOf')}</div>
             </div>
           </div>
         </section>
@@ -535,52 +502,33 @@ export default function VisibilityPage() {
                           <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
                         </svg>
                       </span>
-                      Meet Nora   your AI visibility expert
+                      {t('visibility.nora.agentPill')}
                     </div>
-                    <div className="eyebrow nora-eyebrow">04   NORA ACTS ON IT</div>
-                    <h2>Not just insights.<br />A clear path forward.</h2>
-                    <p className="lead">Nora reads every data point from your visibility report and turns it into a ranked action plan   then helps you implement it, step by step.</p>
+                    <div className="eyebrow nora-eyebrow">{t('visibility.nora.eyebrow')}</div>
+                    <h2 dangerouslySetInnerHTML={{ __html: t('visibility.nora.h2').replace('\n', '<br />') }} />
+                    <p className="lead">{t('visibility.nora.lead')}</p>
                     <ul className="agent-pts">
-                      <li>
-                        <span className="ic">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                          </svg>
-                        </span>
-                        <span>
-                          <span className="tt">Understands your situation</span>
-                          <span className="dd">Nora reads your full visibility report, sentiment data and source analysis   then explains what it means in plain language.</span>
-                        </span>
-                      </li>
-                      <li>
-                        <span className="ic">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
-                            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
-                          </svg>
-                        </span>
-                        <span>
-                          <span className="tt">Prioritises what matters most</span>
-                          <span className="dd">Every recommendation is ranked by expected impact   so you always know what to fix first.</span>
-                        </span>
-                      </li>
-                      <li>
-                        <span className="ic">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                        </span>
-                        <span>
-                          <span className="tt">Implements the fix for you</span>
-                          <span className="dd">From structured data to FAQ content   Nora prepares the changes and Poliris publishes them directly to your site.</span>
-                        </span>
-                      </li>
+                      {t('visibility.nora.points').map((pt, i) => (
+                        <li key={i}>
+                          <span className="ic">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              {i === 0 && <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>}
+                              {i === 1 && <><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></>}
+                              {i === 2 && <polyline points="20 6 9 17 4 12"/>}
+                            </svg>
+                          </span>
+                          <span>
+                            <span className="tt">{pt.tt}</span>
+                            <span className="dd">{pt.dd}</span>
+                          </span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
 
                   {/* RIGHT */}
                   <div className="shot">
-                    <span className="tab tab--live">LIVE SESSION</span>
+                    <span className="tab tab--live">{t('visibility.nora.liveSession')}</span>
                     <div className="chat chat--v2">
 
                       {/* Chat header */}
@@ -635,7 +583,7 @@ export default function VisibilityPage() {
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
                             <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
                           </svg>
-                          NORA'S ACTION PLAN   PRICING &amp; VALUE
+                          {t('visibility.nora.planTitle')}
                         </div>
                         <div className="plan-items">
                           <div className="plan-item">
@@ -658,10 +606,9 @@ export default function VisibilityPage() {
 
                       {/* Action buttons */}
                       <div className="chat-btns">
-                        <button className="chat-btn chat-btn--primary">✓ Implement fix #1</button>
-                        <button className="chat-btn">Approve FAQ schema</button>
-                        <button className="chat-btn">Ask follow-up</button>
-                        <button className="chat-btn">Continue analysis</button>
+                        {t('visibility.nora.chatBtns').map((btn, i) => (
+                          <button key={i} className={`chat-btn${i === 0 ? ' chat-btn--primary' : ''}`}>{btn}</button>
+                        ))}
                       </div>
 
                     </div>
@@ -676,37 +623,27 @@ export default function VisibilityPage() {
         <section style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <div className="sec-head mid reveal" style={{ marginBottom: 42 }}>
-              <h2>Visibility is the <span className="hl">new traffic.</span></h2>
+              <h2>{t('visibility.stakes.h2Pre')} <span className="hl">{t('visibility.stakes.h2Hl')}</span></h2>
             </div>
             <div className="vstakes reveal">
               <div className="vstakes-grid">
-                <div>
-                  <div className="n">60%</div>
-                  <div className="d">of B2B buyers now use AI in their research phase</div>
-                </div>
-                <div>
-                  <div className="n">3 in 4</div>
-                  <div className="d">brands have zero visibility into their AI mention data</div>
-                </div>
-                <div>
-                  <div className="n">+3.4×</div>
-                  <div className="d">average mention lift on Poliris within 90 days</div>
-                </div>
-                <div>
-                  <div className="n">5×</div>
-                  <div className="d">faster decisions when buyers see your brand in AI</div>
-                </div>
+                {t('visibility.stakes.stats').map((s, i) => (
+                  <div key={i}>
+                    <div className="n">{s.n}</div>
+                    <div className="d">{s.d}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
         <CtaBand
-          heading="See your AI visibility score   free."
-          lead="Find out where you appear in AI answers today   by topic and by market   and exactly what's eating your share."
-          primaryCta="Get a free audit"
-          secondaryCta="Talk to an expert"
-          note="No credit card · result in 60s · cancel anytime"
+          heading={t('visibility.cta.heading')}
+          lead={t('visibility.cta.lead')}
+          primaryCta={t('visibility.cta.primaryCta')}
+          secondaryCta={t('visibility.cta.secondaryCta')}
+          note={t('visibility.cta.note')}
         />
 
       </main>

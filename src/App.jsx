@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useLayoutEffect } from 'react';
+import { LangWrapper } from './contexts/LangContext';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import Footer from './components/Footer';
@@ -35,13 +36,19 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/visibility" element={<VisibilityPage />} />
-        <Route path="/sentiment" element={<SentimentPage />} />
-        <Route path="/content-writing" element={<ContentWritingPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/faqs" element={<FaqsPage />} />
-        <Route path="/glossary" element={<GlossaryPage />} />
+        {/* Redirect bare root to /en/ */}
+        <Route path="/" element={<Navigate to="/en/" replace />} />
+
+        {/* Language-prefixed routes */}
+        <Route path="/:lang" element={<LangWrapper />}>
+          <Route index element={<HomePage />} />
+          <Route path="visibility" element={<VisibilityPage />} />
+          <Route path="sentiment" element={<SentimentPage />} />
+          <Route path="content-writing" element={<ContentWritingPage />} />
+          <Route path="blog" element={<BlogPage />} />
+          <Route path="faqs" element={<FaqsPage />} />
+          <Route path="glossary" element={<GlossaryPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

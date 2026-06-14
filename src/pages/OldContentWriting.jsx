@@ -275,7 +275,126 @@ export default function ContentWritingPage() {
         />
 
         {/* ── PRODUCT PREVIEW   Kate Studio dashboard ──────── */}
-        
+        <section className="cw-sec cw-sec--preview" style={{ background: 'var(--surface-2)' }}>
+          <div className="cw-wrap">
+            <div className="cw-dash-preview cw-reveal">
+              {/* Browser chrome */}
+              <div className="cw-dash-chrome">
+                <div className="cw-dash-dots">
+                  <span className="mbw-dot red"/><span className="mbw-dot yellow"/><span className="mbw-dot green"/>
+                </div>
+                <span className="cw-dash-url-pill">app.poliris.io · Content Generation</span>
+              </div>
+
+              {/* Dashboard body */}
+              <div className="cw-dash-body">
+
+                {/* ── Sidebar   exact copy of VisibilityDashboard ── */}
+                <aside className="dash__sidebar">
+                  <div className="dsb__brand">
+                    <div className="dsb__brand-logo">
+                      <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                    </div>
+                    <div className="dsb__brand-info">
+                      <span className="dsb__brand-name">Nike</span>
+                      <span className="dsb__brand-meta">{t('dashboard.sidebar.activeProject')}</span>
+                    </div>
+                  </div>
+                  <div className="dsb__ask-poli">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
+                      <path d="M20 2v4"/><path d="M22 4h-4"/>
+                      <circle cx="4" cy="20" r="2"/>
+                    </svg>
+                    {t('dashboard.sidebar.askPoliAI')}
+                  </div>
+                  <div className="dsb__section-hdr">
+                  <span className="dsb__section-lbl">{t('dashboard.sidebar.geoAudit')}</span>
+                  </div>
+                  <div className="dsb__tree">
+                    <div className="dsb__tree-brand">
+                      <span className="dsb__tree-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+                      </span>
+                      <span className="dsb__avatar dsb__avatar--n">N</span>
+                      <span className="dsb__tree-brand-name">nike</span>
+                    </div>
+                    <div className="dsb__tree-l1">
+                      <div className="dsb__tree-category">
+                        <span className="dsb__tree-chevron">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
+                        </span>
+                        <span className="dsb__avatar dsb__avatar--a">A</span>
+                        <span className="dsb__tree-cat-name">{t('dashboard.sidebar.footwear')}</span>
+                      </div>
+                      <div className="dsb__tree-l2">
+                        {t('dashboard.sidebar.navItems').map((l) => (
+                          <div key={l} className="dash__nav-item">{l}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="dsb__section-hdr dsb__section-hdr--mt">
+                  <span className="dsb__section-lbl">{t('dashboard.sidebar.technicalAudit')}</span>
+                  </div>
+                  <div className="dash__nav-item dash__nav-item--active" style={{marginTop:'4px'}}>{t('dashboard.sidebar.contentGeneration')}</div>
+                </aside>
+
+                {/* ── Main   Kate Content Studio ── */}
+                <main className="cw-dash-main">
+                  <div className="cw-studio-hd">
+                    <div>
+                      <div className="cw-studio-title">Kate · Content Studio</div>
+                      <div className="cw-studio-sub">Write articles that rank in AI answers</div>
+                    </div>
+                    <button className="cw-studio-new">+ New article</button>
+                  </div>
+
+                  <div className="cw-studio-ask">
+                    <div className="cw-studio-ask-q">What do you want to write about?</div>
+                    <div className="cw-studio-ask-hint">Describe your topic or pick a suggestion below</div>
+                    <div className="cw-studio-input">e.g. How Nike leads in sustainable footwear innovation...</div>
+                    <div className="cw-studio-ask-foot">
+                      <span className="cw-studio-rec-lbl">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+                        Recommend a topic
+                      </span>
+                      <button className="cw-studio-start">Start writing →</button>
+                    </div>
+                  </div>
+
+                  <div className="cw-studio-ideas-hd">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/>
+                    </svg>
+                    {contentIdeas.heading}
+                  </div>
+
+                  <div className="cw-studio-ideas">
+                    {contentIdeas.ideas.map((idea, i) => (
+                      <div key={i} className="cw-studio-card">
+                        <span className={`cw-studio-pri cw-sp--${idea.priority === 'HIGH PRIORITY' ? 'hi' : 'md'}`}>
+                          {idea.priority === 'HIGH PRIORITY' ? contentIdeas.priority.high : contentIdeas.priority.medium}
+                        </span>
+                        <div className="cw-studio-card-t">{idea.title}</div>
+                        <div className="cw-studio-card-d">{idea.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button className="cw-studio-refresh">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+                      <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                    </svg>
+                    {contentIdeas.refresh}
+                  </button>
+                </main>
+
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ── DATA SYNERGY   orbital hub ────────────────────── */}
         <section className="cw-sec">
