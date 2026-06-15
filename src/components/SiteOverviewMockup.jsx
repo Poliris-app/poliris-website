@@ -1,63 +1,6 @@
 import { useLang } from '../contexts/LangContext';
 import '../site-overview-mockup.css';
 
-function DonutChart({ pct, color = '#1e3893', bg = '#e5e7eb' }) {
-  const r = 38;
-  const C = 2 * Math.PI * r;
-  const dash = C * (pct / 100);
-  return (
-    <svg className="som-donut" viewBox="0 0 92 92" width="92" height="92">
-      <circle cx="46" cy="46" r={r} fill="none" stroke={bg} strokeWidth="10" />
-      <circle
-        cx="46" cy="46" r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="10"
-        strokeDasharray={`${dash} ${C - dash}`}
-        strokeDashoffset={C * 0.25}
-        strokeLinecap="round"
-      />
-      <text x="46" y="41" textAnchor="middle" fontSize="17" fontWeight="800" fill="#111827">{pct}%</text>
-      <text x="46" y="57" textAnchor="middle" fontSize="10.5" fill="#6b7280" fontWeight="500">Indexed</text>
-    </svg>
-  );
-}
-
-function ScoreRing({ score }) {
-  const r = 24;
-  const C = 2 * Math.PI * r;
-  const dash = C * (score / 100);
-  const color = score >= 90 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444';
-  return (
-    <svg viewBox="0 0 60 60" width="56" height="56">
-      <circle cx="30" cy="30" r={r} fill="none" stroke="#e5e7eb" strokeWidth="5.5" />
-      <circle
-        cx="30" cy="30" r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="5.5"
-        strokeDasharray={`${dash} ${C}`}
-        strokeDashoffset={C * 0.25}
-        strokeLinecap="round"
-      />
-      <text x="30" y="35" textAnchor="middle" fontSize="15" fontWeight="800" fill="#111827">{score}</text>
-    </svg>
-  );
-}
-
-function VitalsBar({ position }) {
-  return (
-    <div className="som-vbar">
-      <div className="som-vbar-track">
-        <div className="som-vbar-g" />
-        <div className="som-vbar-f" />
-        <div className="som-vbar-p" />
-      </div>
-      <div className="som-vbar-pin" style={{ left: `${position}%` }} />
-    </div>
-  );
-}
-
 /* ── Icons ─────────────────────────────────────────────────── */
 const IconRefresh = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -69,19 +12,14 @@ const IconCalendar = () => (
     <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
   </svg>
 );
-const IconExternalLink = () => (
+const IconExternal = () => (
   <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#1e3893" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M2.5 9.5L9.5 2.5M9.5 2.5H5.5M9.5 2.5V6.5"/>
   </svg>
 );
-const IconList = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-  </svg>
-);
-const IconBars = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <rect x="3" y="12" width="4" height="9"/><rect x="10" y="6" width="4" height="15"/><rect x="17" y="3" width="4" height="18"/>
+const IconInfo = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
   </svg>
 );
 const IconStar = () => (
@@ -89,13 +27,142 @@ const IconStar = () => (
     <path d="M12 3l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
   </svg>
 );
+const IconList = () => (
+  <svg width="14" height="14" viewBox="0 0 15 10" fill="none" stroke="currentColor" strokeWidth="1.17" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4.375.875H13.708M4.375 4.958H13.708M4.375 9.041H13.708M.875.875h.006M.875 4.958h.006M.875 9.041h.006"/>
+  </svg>
+);
+const IconGraph = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.17" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M.583 8.458h3.5v5.25H.583V8.458ZM5.833 4.083h3.5v9.625h-3.5V4.083ZM11.083.583h3.5v13.125h-3.5V.583Z"/>
+  </svg>
+);
 
+/* ── IndexedDonut ──────────────────────────────────────────── */
+function IndexedDonut({ pct }) {
+  const radius = 48;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (pct / 100) * circumference;
+  return (
+    <div className="som-donut">
+      <svg width="96" height="96" viewBox="0 0 120 120" className="som-donut-svg">
+        <circle cx="60" cy="60" r={radius} fill="none" stroke="#e5e7eb" strokeWidth="8" />
+        <circle
+          cx="60" cy="60" r={radius}
+          fill="none" stroke="#2563eb" strokeWidth="8"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          transform="rotate(-90 60 60)"
+        />
+      </svg>
+      <div className="som-donut-inner">
+        <span className="som-donut-pct">{pct}%</span>
+        <span className="som-donut-lbl">Indexed</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── SegmentedBar (stacked pills with gap) ─────────────────── */
+function SegmentedBar({ segments }) {
+  const visible = segments.filter(s => s.value > 0);
+  const total = visible.reduce((s, x) => s + x.value, 0) || 1;
+  return (
+    <div className="som-seg-bar">
+      {visible.map(s => (
+        <div key={s.key} className="som-seg-pill" style={{ width: `${(s.value / total) * 100}%`, background: s.color }} />
+      ))}
+    </div>
+  );
+}
+
+/* ── PerformanceGauge (40×40 compact) ─────────────────────── */
+function PerformanceGauge({ score }) {
+  const size = 40, sw = 4, r = (size - sw) / 2;
+  const C = 2 * Math.PI * r;
+  const v = Math.max(0, Math.min(100, Math.round(score)));
+  const offset = C * (1 - v / 100);
+  const stroke = v >= 90 ? '#16A34A' : v >= 50 ? '#F59E0B' : '#EF4444';
+  const textColor = v >= 90 ? '#16A34A' : v >= 50 ? '#B45309' : '#DC2626';
+  return (
+    <div className="som-perf-gauge">
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#EEF0F3" strokeWidth={sw} />
+        <circle
+          cx={size / 2} cy={size / 2} r={r}
+          fill="none" stroke={stroke} strokeWidth={sw}
+          strokeLinecap="round"
+          strokeDasharray={C}
+          strokeDashoffset={offset}
+        />
+      </svg>
+      <span className="som-perf-num" style={{ color: textColor }}>{v}</span>
+    </div>
+  );
+}
+
+/* ── SegmentedRatingBar (vital bar) ───────────────────────── */
+const R_COLORS = ['#22c55e', '#eab308', '#ef4444'];
+const R_LABELS = ['Good', 'Needs Improv.', 'Poor'];
+
+function SegmentedRatingBar({ activeIndex, fraction, weights }) {
+  return (
+    <div>
+      <div className="som-rating-track">
+        {R_COLORS.map((color, i) => {
+          if (i !== activeIndex) {
+            return (
+              <div key={i} className="som-rating-seg" style={{ flexGrow: weights[i], flexBasis: 0, background: color, opacity: 0.25 }} />
+            );
+          }
+          return (
+            <div
+              key={i}
+              className="som-rating-seg-active"
+              style={{ flexGrow: weights[i], flexBasis: 0, outline: `2px solid ${color}`, outlineOffset: '2px' }}
+            >
+              <div style={{ flexGrow: fraction, flexBasis: 0, height: '100%', borderRadius: 99, background: color }} />
+              <span className="som-rating-pin-wrap" aria-hidden="true">
+                <span className="som-rating-pin" style={{ borderColor: color }} />
+              </span>
+              <div style={{ flexGrow: Math.max(0, 1 - fraction), flexBasis: 0, height: '100%', borderRadius: 99, background: color }} />
+            </div>
+          );
+        })}
+      </div>
+      <div className="som-rating-labels">
+        {R_LABELS.map((lbl, i) => (
+          <span key={i} style={{
+            flexGrow: weights[i], flexBasis: 0,
+            color: i === activeIndex ? '#3F3F46' : '#9ca3af',
+            fontWeight: i === activeIndex ? 600 : 400,
+          }}>{lbl}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Main component ────────────────────────────────────────── */
 export default function SiteOverviewMockup() {
   const { t } = useLang();
   const d = t('siteOverviewMockup');
 
+  const crawlSegs = [
+    { key: 'indexed',    value: 25, color: '#2563eb', label: d.indexed },
+    { key: 'notIndexed', value: 75, color: '#ef4444', label: d.notIndexed },
+  ];
+  const statusSegs = [
+    { key: 'accessible', value: 32, color: '#1e3893', label: d.accessible, bg: '#dbeafe', fg: '#1e40af' },
+    { key: 'redirecting',value:  4, color: '#f97316', label: d.redirecting, bg: '#ffedd5', fg: '#9a3412' },
+    { key: 'blocked',    value:  0, color: '#fb923c', label: d.blocked,     bg: '#ffedd5', fg: '#9a3412' },
+    { key: 'error',      value: 64, color: '#ef4444', label: d.error,       bg: '#fee2e2', fg: '#991b1b' },
+  ];
+
   return (
     <div className="som">
+
       {/* Browser chrome */}
       <div className="som-chrome">
         <span className="som-dot som-dot-r" />
@@ -104,24 +171,23 @@ export default function SiteOverviewMockup() {
         <span className="som-chrome-label">Poliris · {d.tabTechnical}</span>
       </div>
 
-      {/* Page body */}
       <div className="som-body">
 
-        {/* ── Header ───────────────────────────────────────── */}
+        {/* ── Header ─────────────────────────────────────── */}
         <div className="som-head">
           <div className="som-head-left">
             <h2 className="som-h2">{d.siteOverview}</h2>
             <div className="som-url-row">
               <a className="som-url" href="#">www.nike.com</a>
-              <IconExternalLink />
+              <IconExternal />
               <span className="som-sep">·</span>
               <span className="som-brand">Nike</span>
             </div>
             <div className="som-meta-row">
               <IconRefresh />
+              <IconCalendar />
               <span>{d.lastUpdate}</span>
               <span className="som-sep">·</span>
-              <IconCalendar />
               <span>100/100 {d.pagesCrawled}</span>
             </div>
           </div>
@@ -129,6 +195,11 @@ export default function SiteOverviewMockup() {
             <div className="som-thumb-inner">
               <div className="som-thumb-nav" />
               <div className="som-thumb-hero" />
+              <div className="som-thumb-content">
+                <div className="som-thumb-line som-thumb-line--wide" />
+                <div className="som-thumb-line" />
+                <div className="som-thumb-line som-thumb-line--short" />
+              </div>
               <div className="som-thumb-rows">
                 <div /><div /><div />
               </div>
@@ -136,20 +207,16 @@ export default function SiteOverviewMockup() {
           </div>
         </div>
 
-        {/* ── Tabs + view toggle ───────────────────────────── */}
+        {/* ── Tabs ───────────────────────────────────────── */}
         <div className="som-tab-row">
           <div className="som-tabs">
             <button className="som-tab som-tab-active">{d.tabOverview}</button>
             <button className="som-tab">{d.tabIssues}</button>
             <button className="som-tab">{d.tabViz}</button>
           </div>
-          <div className="som-view-btns">
-            <button className="som-view-btn"><IconList /></button>
-            <button className="som-view-btn"><IconBars /></button>
-          </div>
         </div>
 
-        {/* ── Poli AI Insight ──────────────────────────────── */}
+        {/* ── AI Insight ─────────────────────────────────── */}
         <div className="som-insight">
           <div className="som-insight-title">
             <IconStar />
@@ -158,143 +225,119 @@ export default function SiteOverviewMockup() {
           <p className="som-insight-text">{d.insightText}</p>
         </div>
 
-        {/* ── Cards ────────────────────────────────────────── */}
-        <div className="som-cards">
+        {/* ── View toggle (above columns, right-aligned) ── */}
+        <div className="som-controls">
+          <div className="som-view-toggle">
+            <button className="som-vt-btn som-vt-active" aria-pressed="true"><IconList /></button>
+            <button className="som-vt-btn" aria-pressed="false"><IconGraph /></button>
+          </div>
+        </div>
 
-          {/* Card 1 — Crawl & Indexation */}
-          <div className="som-card">
-            <div className="som-card-top">
-              <div className="som-card-title-row">
-                <span className="som-card-title">{d.crawlTitle}</span>
-                <span className="som-iicon">ⓘ</span>
+        {/* ── Three columns ──────────────────────────────── */}
+        <div className="som-cols">
+
+          {/* Col 1 — Crawl & Indexation */}
+          <div className="som-col som-col-1">
+            <div className="som-col-head">
+              <div className="som-col-head-text">
+                <h3 className="som-col-title">{d.crawlTitle} <IconInfo /></h3>
+                <p className="som-col-sub">{d.crawlSub}</p>
               </div>
-              <span className="som-badge som-badge-crit">{d.critical}</span>
+              <span className="som-tone-badge som-tone-crit">{d.critical}</span>
             </div>
-            <p className="som-card-sub">{d.crawlSub}</p>
-
-            <div className="som-card-viz">
-              <div className="som-donut-row">
-                <DonutChart pct={25} color="#1e3893" bg="#e5e7eb" />
-                <div className="som-donut-aside">
-                  <span className="som-pages-label">100 {d.pagesOf} 100 {d.pagesCrawledShort}</span>
-                  <div className="som-mini-bar">
-                    <div style={{ width: '25%', background: '#1e3893' }} />
-                    <div style={{ width: '75%', background: '#ef4444' }} />
-                  </div>
-                  <div className="som-legend">
-                    <span><em style={{ background: '#1e3893' }} />{d.indexed}</span>
-                    <span><em style={{ background: '#ef4444' }} />{d.notIndexed}</span>
-                  </div>
+            <div className="som-col-body">
+              <div className="som-crawl-row">
+                <IndexedDonut pct={25} />
+                <div className="som-crawl-aside">
+                  <span className="som-crawl-lbl">100 {d.pagesOf} 100 {d.pagesCrawledShort}</span>
+                  <SegmentedBar segments={crawlSegs} />
+                  <ul className="som-crawl-legend">
+                    {crawlSegs.map(s => (
+                      <li key={s.key}>
+                        <span className="som-legend-dot" style={{ background: s.color }} />
+                        {s.label}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
-
-            <div className="som-card-foot">
-              <p className="som-foot-text">{d.crawlDesc}</p>
-              <button className="som-ask-btn">{d.askPoli}</button>
+              <div className="som-hint-box">
+                <p className="som-hint-text">{d.crawlDesc}</p>
+                <button className="som-ask-btn">{d.askPoli}</button>
+              </div>
             </div>
           </div>
 
-          {/* Card 2 — Page Status */}
-          <div className="som-card">
-            <div className="som-card-top">
-              <div className="som-card-title-row">
-                <span className="som-card-title">{d.statusTitle}</span>
-                <span className="som-iicon">ⓘ</span>
+          {/* Col 2 — Page Status */}
+          <div className="som-col som-col-2">
+            <div className="som-col-head">
+              <div className="som-col-head-text">
+                <h3 className="som-col-title">{d.statusTitle} <IconInfo /></h3>
+                <p className="som-col-sub">{d.statusSub}</p>
               </div>
-              <span className="som-badge som-badge-crit">{d.critical}</span>
+              <span className="som-tone-badge som-tone-crit">{d.critical}</span>
             </div>
-            <p className="som-card-sub">{d.statusSub}</p>
-
-            <div className="som-card-viz">
-              <div className="som-status-bar">
-                <div style={{ width: '32%', background: '#1e3893', borderRadius: '4px 0 0 4px' }} />
-                <div style={{ width: '4%',  background: '#f97316' }} />
-                <div style={{ width: '64%', background: '#ef4444', borderRadius: '0 4px 4px 0' }} />
+            <div className="som-col-body">
+              <SegmentedBar segments={statusSegs} />
+              <ul className="som-status-list">
+                {statusSegs.map(s => (
+                  <li key={s.key} className="som-status-row">
+                    <div className="som-status-left">
+                      <span className="som-status-dot" style={{ background: s.color }} />
+                      <span className="som-status-lbl">{s.label}</span>
+                    </div>
+                    <span className="som-pct-chip" style={{ background: s.bg, color: s.fg }}>{s.value}%</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="som-hint-box">
+                <p className="som-hint-text">{d.statusDesc}</p>
+                <button className="som-ask-btn">{d.askPoli}</button>
               </div>
-              <div className="som-status-list">
-                <div className="som-status-row">
-                  <span className="som-dot-sm" style={{ background: '#1e3893' }} />
-                  <span className="som-status-lbl">{d.accessible}</span>
-                  <span className="som-pct-pill som-pct-blue">100%</span>
-                </div>
-                <div className="som-status-row">
-                  <span className="som-dot-sm" style={{ background: '#f97316' }} />
-                  <span className="som-status-lbl">{d.redirecting}</span>
-                  <span className="som-pct-pill som-pct-orange">4%</span>
-                </div>
-                <div className="som-status-row">
-                  <span className="som-dot-sm" style={{ background: '#fb923c' }} />
-                  <span className="som-status-lbl">{d.blocked}</span>
-                  <span className="som-pct-pill som-pct-orange">0%</span>
-                </div>
-                <div className="som-status-row">
-                  <span className="som-dot-sm" style={{ background: '#ef4444' }} />
-                  <span className="som-status-lbl">{d.error}</span>
-                  <span className="som-pct-pill som-pct-red">64%</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="som-card-foot">
-              <p className="som-foot-text">{d.statusDesc}</p>
-              <button className="som-ask-btn">{d.askPoli}</button>
             </div>
           </div>
 
-          {/* Card 3 — Page Speed Insights */}
-          <div className="som-card">
-            <div className="som-card-top">
-              <div className="som-card-title-row">
-                <span className="som-card-title">{d.speedTitle}</span>
-                <span className="som-iicon">ⓘ</span>
+          {/* Col 3 — Page Speed Insights */}
+          <div className="som-col som-col-3">
+            <div className="som-col-head">
+              <div className="som-col-head-text">
+                <h3 className="som-col-title">{d.speedTitle} <IconInfo /></h3>
+                <p className="som-col-sub">{d.speedSub}</p>
               </div>
-              <ScoreRing score={70} />
+              <PerformanceGauge score={70} />
             </div>
-            <p className="som-card-sub">{d.speedSub}</p>
-
-            <div className="som-card-viz som-cwv">
-              <div className="som-cwv-item">
-                <div className="som-cwv-head">
-                  <span className="som-iicon">ⓘ</span>
-                  <span className="som-cwv-name">{d.lcp}</span>
-                  <span className="som-cwv-val">· 3.7 s</span>
-                  <span className="som-chip som-chip-fair">{d.needsImprovement}</span>
-                </div>
-                <VitalsBar position={59} />
-                <div className="som-cwv-labels">
-                  <span>{d.good}</span><span>{d.needsImprovementShort}</span><span>{d.poor}</span>
-                </div>
-              </div>
-
-              <div className="som-cwv-item">
-                <div className="som-cwv-head">
-                  <span className="som-iicon">ⓘ</span>
-                  <span className="som-cwv-name">{d.inp}</span>
-                  <span className="som-cwv-val">· 818 ms</span>
-                  <span className="som-chip som-chip-poor">{d.poor}</span>
-                </div>
-                <VitalsBar position={87} />
-                <div className="som-cwv-labels">
-                  <span>{d.good}</span><span>{d.needsImprovementShort}</span><span>{d.poor}</span>
-                </div>
-              </div>
-
-              <div className="som-cwv-item">
-                <div className="som-cwv-head">
-                  <span className="som-iicon">ⓘ</span>
-                  <span className="som-cwv-name">{d.cls}</span>
-                  <span className="som-cwv-val">· 0.040</span>
-                  <span className="som-chip som-chip-good">{d.good}</span>
-                </div>
-                <VitalsBar position={13} />
-                <div className="som-cwv-labels">
-                  <span>{d.good}</span><span>{d.needsImprovementShort}</span><span>{d.poor}</span>
-                </div>
-              </div>
+            <div className="som-col-body">
+              <ul className="som-vitals">
+                {/* LCP — Needs Improvement, fraction 0.8 */}
+                <li className="som-vital">
+                  <div className="som-vital-head">
+                    <span className="som-vital-name">{d.lcp}</span>
+                    <span className="som-vital-val">· 3.7 s</span>
+                    <span className="som-vital-chip" style={{ background: '#fefce8', color: '#eab308' }}>{d.needsImprovement}</span>
+                  </div>
+                  <SegmentedRatingBar activeIndex={1} fraction={0.8} weights={[41.7, 25, 33.3]} />
+                </li>
+                {/* INP — Poor, fraction 1 */}
+                <li className="som-vital">
+                  <div className="som-vital-head">
+                    <span className="som-vital-name">{d.inp}</span>
+                    <span className="som-vital-val">· 818 ms</span>
+                    <span className="som-vital-chip" style={{ background: '#fef2f2', color: '#ef4444' }}>{d.poor}</span>
+                  </div>
+                  <SegmentedRatingBar activeIndex={2} fraction={1} weights={[26.7, 40, 33.3]} />
+                </li>
+                {/* CLS — Good, fraction 0.4 */}
+                <li className="som-vital">
+                  <div className="som-vital-head">
+                    <span className="som-vital-name">{d.cls}</span>
+                    <span className="som-vital-val">· 0.040</span>
+                    <span className="som-vital-chip" style={{ background: '#dcfce7', color: '#22c55e' }}>{d.good}</span>
+                  </div>
+                  <SegmentedRatingBar activeIndex={0} fraction={0.4} weights={[26.7, 40, 33.3]} />
+                </li>
+              </ul>
+              <a href="#" className="som-see-more">{d.seeMore} →</a>
             </div>
-
-            <a href="#" className="som-see-more">{d.seeMore} →</a>
           </div>
 
         </div>
