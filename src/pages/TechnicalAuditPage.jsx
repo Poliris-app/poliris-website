@@ -6,6 +6,7 @@ import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import { useLang } from '../contexts/LangContext';
 import { AuditVis } from '../components/ProductCarousel';
+import SiteOverviewMockup from '../components/SiteOverviewMockup';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -159,16 +160,8 @@ export default function TechnicalAuditPage() {
         <section style={{ background: 'var(--surface-2)', paddingTop: 48, paddingBottom: 64 }}>
           <div className="ta-app-wrap reveal">
             <p className="ta-app-cap">{dash.cap}</p>
-            <div className="ta-app">
-              <div className="ta-app-bar">
-                <span className="d" /><span className="d" /><span className="d" />
-                <span className="ttl">{dash.barTitle}</span>
-              </div>
-              <img
-                className="ta-app-shot"
-                src={`${import.meta.env.BASE_URL}ta-dashboard-1.jpg`}
-                alt="Poliris technical audit dashboard"
-              />
+            <div className="ta-app ta-app--mockup">
+              <SiteOverviewMockup />
             </div>
           </div>
         </section>

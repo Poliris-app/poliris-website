@@ -145,6 +145,12 @@
   height: auto;
   display: block;
 }
+.ta-app--mockup {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
 
 /* ── Section helpers ── */
 .ta-sec {
