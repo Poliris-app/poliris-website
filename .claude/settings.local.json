@@ -12,7 +12,8 @@
       "Bash(curl -s -o /dev/null -w \"/en/ → %{http_code}\\\\n\" http://localhost:5174/en/)",
       "Bash(curl -s -o /dev/null -w \"/fr/ → %{http_code}\\\\n\" http://localhost:5174/fr/)",
       "Bash(curl -s -o /dev/null -w \"/fr/visibility → %{http_code}\\\\n\" http://localhost:5174/fr/visibility)",
-      "Bash(curl -s -o /dev/null -w \"/en/blog → %{http_code}\\\\n\" http://localhost:5174/en/blog)"
+      "Bash(curl -s -o /dev/null -w \"/en/blog → %{http_code}\\\\n\" http://localhost:5174/en/blog)",
+      "Bash(npm run *)"
     ]
   }
 }

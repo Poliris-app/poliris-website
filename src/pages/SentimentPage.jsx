@@ -214,8 +214,8 @@ const COMPETITORS = [
   },
   {
     name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
-    awareness: { label: '—',           cls: 'pt-neu' },
-    design:    { label: '—',           cls: 'pt-neu' },
+    awareness: { label: ' ',           cls: 'pt-neu' },
+    design:    { label: ' ',           cls: 'pt-neu' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
     overall: 80,
@@ -518,7 +518,7 @@ export default function SentimentPage() {
                 {/* Q7 → Performance */}
                 <path className="pf-line pf-line--9" d="M 440 564 C 526 564 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
 
-                {/* Q1: Brand awareness + Design (shared — gradient accent bar) */}
+                {/* Q1: Brand awareness + Design (shared   gradient accent bar) */}
                 <rect x="30" y="70"  width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
                 <rect x="30" y="80"  width="5" height="32" rx="2.5" fill="url(#bar-ba-d)"/>
                 <text x="54" y="101" className="pf-q">"Which trendy sneakers dominate street style?"</text>
@@ -543,7 +543,7 @@ export default function SentimentPage() {
                 <text x="54" y="335" className="pf-q">"Most comfortable shoes with arch support?"</text>
                 <rect x="412" y="314" width="26" height="30" fill="#fff"/>
                 <text x="428" y="335" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
-                {/* Q5: Durability + Performance (shared — gradient accent bar) */}
+                {/* Q5: Durability + Performance (shared   gradient accent bar) */}
                 <rect x="30" y="382" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
                 <rect x="30" y="392" width="5" height="32" rx="2.5" fill="url(#bar-dp)"/>
                 <text x="54" y="413" className="pf-q">"High-performance running shoes for trails?"</text>
@@ -563,28 +563,28 @@ export default function SentimentPage() {
                 <rect x="412" y="548" width="26" height="30" fill="#fff"/>
                 <text x="428" y="569" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
 
-                {/* Axis card: Brand awareness (purple) — y=70, center=129 */}
+                {/* Axis card: Brand awareness (purple)   y=70, center=129 */}
                 <rect x="610" y="70"  width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
                 <rect x="610" y="84"  width="5" height="90" rx="2.5" fill="#7c5cbf"/>
                 <text x="636" y="118" className="pf-tname">Brand awareness</text>
                 <text x="636" y="144" className="pf-tsub">from 18 prompts</text>
                 <rect x="836" y="140" width="94" height="24" rx="12" fill="#dcfce7"/>
                 <text x="883" y="156" textAnchor="middle" className="pf-tlab" fill="#16a34a">Very strong</text>
-                {/* Axis card: Design (orange) — y=200, center=259 */}
+                {/* Axis card: Design (orange)   y=200, center=259 */}
                 <rect x="610" y="200" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
                 <rect x="610" y="214" width="5" height="90" rx="2.5" fill="#d98a2b"/>
                 <text x="636" y="248" className="pf-tname">Design</text>
                 <text x="636" y="274" className="pf-tsub">from 20 prompts</text>
                 <rect x="856" y="270" width="70" height="24" rx="12" fill="#dcfce7"/>
                 <text x="891" y="286" textAnchor="middle" className="pf-tlab" fill="#16a34a">Strong</text>
-                {/* Axis card: Durability (teal) — y=380, center=439 */}
+                {/* Axis card: Durability (teal)   y=380, center=439 */}
                 <rect x="610" y="380" width="340" height="118" rx="13" fill="#e6f7f3" stroke="#0d7963" strokeOpacity=".30"/>
                 <rect x="610" y="394" width="5" height="90" rx="2.5" fill="#0d7963"/>
                 <text x="636" y="428" className="pf-tname">Durability</text>
                 <text x="636" y="454" className="pf-tsub">from 15 prompts</text>
                 <rect x="856" y="450" width="70" height="24" rx="12" fill="#fee2e2"/>
                 <text x="891" y="466" textAnchor="middle" className="pf-tlab" fill="#dc2626">Weak</text>
-                {/* Axis card: Performance (navy) — y=510, center=569 */}
+                {/* Axis card: Performance (navy)   y=510, center=569 */}
                 <rect x="610" y="510" width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
                 <rect x="610" y="524" width="5" height="90" rx="2.5" fill="#1e3893"/>
                 <text x="636" y="558" className="pf-tname">Performance</text>
@@ -796,7 +796,7 @@ export default function SentimentPage() {
                     </linearGradient>
                   </defs>
 
-                  {/* 5 tier lines only — no bottom line */}
+                  {/* 5 tier lines only   no bottom line */}
                   <line x1="110" y1="20"  x2="760" y2="20"  stroke="#e5e7eb" strokeWidth="1"/>
                   <line x1="110" y1="68"  x2="760" y2="68"  stroke="#e5e7eb" strokeWidth="1"/>
                   <line x1="110" y1="116" x2="760" y2="116" stroke="#e5e7eb" strokeWidth="1"/>
@@ -810,7 +810,7 @@ export default function SentimentPage() {
                   <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Manrope,sans-serif">Weak</text>
                   <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Manrope,sans-serif">Very Weak</text>
 
-                  {/* X-axis labels — Apr 27, May 4, May 11, May 18, May 25, Jun 1 */}
+                  {/* X-axis labels   Apr 27, May 4, May 11, May 18, May 25, Jun 1 */}
                   <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Apr 27</text>
                   <text x="240" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 4</text>
                   <text x="370" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 11</text>
@@ -835,13 +835,13 @@ export default function SentimentPage() {
                     fill="url(#blueFill)"
                   />
 
-                  {/* Slipping axis — smooth S-curve Strong → Moderate → Weak */}
+                  {/* Slipping axis   smooth S-curve Strong → Moderate → Weak */}
                   <path
                     d="M110,68 C200,68 260,116 380,116 C480,116 560,164 686,164 C710,164 735,164 760,164"
                     stroke="#2563eb" strokeWidth="1.5" strokeDasharray="6,3" strokeLinecap="round"
                   />
 
-                  {/* Overall sentiment — [75,100,75,100,75,75] Strong→VStrong→Strong→VStrong→Strong→Strong */}
+                  {/* Overall sentiment   [75,100,75,100,75,75] Strong→VStrong→Strong→VStrong→Strong→Strong */}
                   <path
                     d="M110,68 C175,68 175,20 240,20 C305,20 305,68 370,68 C435,68 435,20 500,20 C565,20 565,68 630,68 C695,68 695,68 760,68"
                     stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"
@@ -854,12 +854,12 @@ export default function SentimentPage() {
                   {/* Connector line up to bubble */}
                   <line x1="686" y1="155" x2="686" y2="138" stroke="#2563eb" strokeDasharray="3,2" strokeWidth="1.5"/>
 
-                  {/* Annotation bubble — small white pill */}
+                  {/* Annotation bubble   small white pill */}
                   <rect x="615" y="120" width="135" height="22" rx="6" fill="#fff" stroke="#2563eb" strokeWidth="1"/>
                   <circle cx="625" cy="131" r="3" fill="#2563eb"/>
                   <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">Flagged early · Day 25</text>
 
-                  {/* End dots — green ends at Strong (y=68), blue ends at Weak (y=164) */}
+                  {/* End dots   green ends at Strong (y=68), blue ends at Weak (y=164) */}
                   <circle cx="760" cy="68"  r="5" fill="#16a34a" stroke="#fff" strokeWidth="2"/>
                   <circle cx="760" cy="164" r="5" fill="#2563eb" stroke="#fff" strokeWidth="2"/>
 
@@ -992,7 +992,7 @@ export default function SentimentPage() {
                       </div>
                       <div className="bub user">Why is my Durability sentiment slipping?</div>
                       <div className="bub bot">
-                        On durability questions, <b>Gemini</b> now puts Hoka and Brooks first and mentions Nike later — dragging Durability down <span style={{ color: '#f87171', fontWeight: 700 }}>11 points in 30 days</span>. Every other axis is stable.
+                        On durability questions, <b>Gemini</b> now puts Hoka and Brooks first and mentions Nike later   dragging Durability down <span style={{ color: '#f87171', fontWeight: 700 }}>11 points in 30 days</span>. Every other axis is stable.
                       </div>
                       <div className="bub user">What do I do?</div>
                     </div>

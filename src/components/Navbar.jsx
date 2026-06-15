@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 
-const PRODUCT_HREFS = ['/visibility', '/sentiment', null, '/content-writing'];
+const PRODUCT_HREFS = ['/visibility', '/sentiment', '/technical-audit', '/content-writing'];
 const RESOURCE_HREFS = ['/blog', '/faqs', '/glossary', null];
 
 const CHEVRON_DN = (

@@ -137,7 +137,7 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.05;
   letter-spacing: -0.01em;
   color: #000;
-  margin: 0 0 16px;
+  margin: 20px 0 20px 0px;
 }
 
 .sec-lead {
@@ -4307,7 +4307,7 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.05;
   letter-spacing: -0.01em;
   color: #000;
-  margin: 0 0 16px;
+  margin: 20px 0 20px 0px;
 }
 .vis-page .sec-head .lead { 
   margin-bottom: 20px; 
@@ -4475,7 +4475,7 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.05;
   letter-spacing: -0.01em;
   color: #000;
-  margin: 6px 0 14px;
+  margin: 20px 0 20px 0px;
 }
 .vis-page .adv-head .lead { 
   color: var(--fg-4); 

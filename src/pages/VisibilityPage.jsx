@@ -14,7 +14,7 @@ const HL = ({ children }) => <span className="hl">{children}</span>;
 const SCOPE_DATA = {
   worldwide: {
     loc: 'World · global',
-    verdict: "Against the global giants you're invisible — and that's fine. They're not who your buyers compare you to.",
+    verdict: "Against the global giants you're invisible   and that's fine. They're not who your buyers compare you to.",
     comps: [
       { nm: 'Adidas', v: 96 },
       { nm: 'New Balance', v: 88 },
@@ -26,7 +26,7 @@ const SCOPE_DATA = {
   },
   country: {
     loc: 'France · national',
-    verdict: 'At national level you rank <b>#6</b> — behind names you rarely meet in a real deal.',
+    verdict: 'At national level you rank <b>#6</b>   behind names you rarely meet in a real deal.',
     comps: [
       { nm: 'Adidas', v: 91 },
       { nm: 'New Balance', v: 78 },
@@ -38,7 +38,7 @@ const SCOPE_DATA = {
   },
   region: {
     loc: 'Auvergne-Rhône-Alpes',
-    verdict: 'Across your region you climb to <b>#3</b> — the global names fade out.',
+    verdict: 'Across your region you climb to <b>#3</b>   the global names fade out.',
     comps: [
       { nm: 'Salomon', v: 79 },
       { nm: 'Hoka', v: 71 },
@@ -48,7 +48,7 @@ const SCOPE_DATA = {
   },
   local: {
     loc: 'Lyon · 69001–69009',
-    verdict: "In your real market you're <b>#2</b> — a fight you can actually win.",
+    verdict: "In your real market you're <b>#2</b>   a fight you can actually win.",
     comps: [
       { nm: 'Salomon', v: 72 },
       { nm: 'Nike (you)', v: 68, me: true },

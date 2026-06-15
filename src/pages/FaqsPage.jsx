@@ -40,6 +40,7 @@ export default function FaqsPage() {
   const fh   = t('faqs.hero');
   const fcta = t('faqs.cta');
   const FAQ_GROUPS = t('faqs.groups');
+  const totalQ = FAQ_GROUPS.reduce((acc, g) => acc + g.items.length, 0);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -76,27 +77,36 @@ export default function FaqsPage() {
           secondaryCta={fh.secondaryCta}
           showDashboard={false}
           showAiBand={false}
+          bottom={
+            <div className="faq-hero-bottom">
+              <div className="faq-stats">
+                <span><strong>{totalQ}</strong> {fh.statsQ}</span>
+                <span className="faq-stats-dot" aria-hidden="true">·</span>
+                <span><strong>{FAQ_GROUPS.length}</strong> {fh.statsTopics}</span>
+                <span className="faq-stats-dot" aria-hidden="true">·</span>
+                <span>{fh.statsDocs}</span>
+              </div>
+              <div className="faqs-search faq-hero-search">
+                <span className="faqs-search-icon">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+                  </svg>
+                </span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder={t('faqs.searchPlaceholder')}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+                <span className="faqs-search-slash">/</span>
+              </div>
+            </div>
+          }
         />
 
         <section className="faqs-sec">
           <div className="faqs-wrap">
-
-            {/* Search */}
-            <div className="faqs-search">
-              <span className="faqs-search-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
-                </svg>
-              </span>
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder={t('faqs.searchPlaceholder')}
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
-              <span className="faqs-search-slash">/</span>
-            </div>
 
             {/* FAQ groups */}
             {filtered.length > 0 ? (

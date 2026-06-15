@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import VisibilityPage from './pages/VisibilityPage';
 import SentimentPage from './pages/SentimentPage';
 import ContentWritingPage from './pages/ContentWritingPage';
+import TechnicalAuditPage from './pages/TechnicalAuditPage';
 import BlogPage from './pages/BlogPage';
 import FaqsPage from './pages/FaqsPage';
 import GlossaryPage from './pages/GlossaryPage';
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="visibility" element={<VisibilityPage />} />
           <Route path="sentiment" element={<SentimentPage />} />
           <Route path="content-writing" element={<ContentWritingPage />} />
+          <Route path="technical-audit" element={<TechnicalAuditPage />} />
           <Route path="blog" element={<BlogPage />} />
           <Route path="faqs" element={<FaqsPage />} />
           <Route path="glossary" element={<GlossaryPage />} />

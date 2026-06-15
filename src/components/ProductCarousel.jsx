@@ -401,7 +401,7 @@ function SentimentVis() {
   );
 }
 
-function AuditVis() {
+export function AuditVis() {
   const { t } = useLang();
   const av = t('productCarousel.auditVis');
   const [activeKey, setActiveKey] = useState(null);
@@ -684,7 +684,7 @@ function ContentVis() {
     if (match) { openDraft(match); return; }
     setDraft({
       title: tVal,
-      intro: `Nike has long been a leader in athletic innovation. This article explores ${tVal.toLowerCase()} and positions Nike as the authority in this space — optimised for AI-powered search results.`,
+      intro: `Nike has long been a leader in athletic innovation. This article explores ${tVal.toLowerCase()} and positions Nike as the authority in this space   optimised for AI-powered search results.`,
       outline: ['Introduction & Brand Context', 'Key Performance Differentiators', 'Consumer Benefits & Use Cases', "Nike's Competitive Edge"],
       words: '640', read: '3 min', score: 74,
     });

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import '../content-writing.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -159,6 +159,138 @@ function FaqAccordion({ items }) {
   );
 }
 
+/* ---- count-up hook ---------------------------------------- */
+function useCountUp(target, active, duration = 900, delay = 0) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let raf;
+    const timer = setTimeout(() => {
+      let start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        const t = Math.min((ts - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        setValue(Math.round(target * ease));
+        if (t < 1) raf = requestAnimationFrame(step);
+      }
+      raf = requestAnimationFrame(step);
+    }, delay);
+    return () => { clearTimeout(timer); cancelAnimationFrame(raf); };
+  }, [active, target, duration, delay]);
+  return value;
+}
+
+/* ---- animated before/after score cards -------------------- */
+function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, afterLabel, afterKate, beforeVerdict, afterVerdict }) {
+  const containerRef = useRef(null);
+  const [phase, setPhase] = useState('idle'); // idle | before | arrow | after
+
+  /* trigger sequence on scroll */
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        io.disconnect();
+        setPhase('before');
+        setTimeout(() => setPhase('arrow'),  900);
+        setTimeout(() => setPhase('after'),  1300);
+      }
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const beforeActive = phase !== 'idle';
+  const afterActive  = phase === 'after';
+  const arrowActive  = phase === 'arrow' || phase === 'after';
+
+  const beforeNum = useCountUp(38, beforeActive, 700, 0);
+  const afterNum  = useCountUp(82, afterActive,  800, 0);
+
+  return (
+    <div className="ba" ref={containerRef}>
+
+      {/* ── Before card ── */}
+      <div className={`cscore before${beforeActive ? ' cs-active' : ''}`}>
+        <div className="cs-header">
+          <div className="cs-header-left">
+            <div className="cs-tag">{beforeLabel}</div>
+            <div className="cs-ttl">
+              <IconStar /> Content Score
+            </div>
+          </div>
+          <div className="cs-bubble">
+            <div className="cs-num">{beforeNum}<em>/100</em></div>
+          </div>
+        </div>
+        <div className="cs-track-wrap">
+          <div className="cs-track">
+            <i style={{ width: beforeActive ? '38%' : '0%' }} />
+          </div>
+          <div className="cs-verdict">{beforeVerdict}</div>
+        </div>
+        <div className="cs-rows">
+          {beforeScores.map((s, i) => (
+            <div key={s.label} className="cs-row">
+              <span className="cs-lab">{s.label}</span>
+              <div className="cs-bar">
+                <i className={s.cls} style={{ width: beforeActive ? `${s.pct}%` : '0%', transitionDelay: `${i * 80}ms` }} />
+              </div>
+              <span className="cs-val">{s.val}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Arrow divider ── */}
+      <div className="ba-arrow">
+        <span className="ba-lab">{afterKate}</span>
+        <div className={`ba-arrow-icon${arrowActive ? ' ba-arrow-pulse' : ''}`}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </div>
+        <span className="ba-lab">+44</span>
+      </div>
+
+      {/* ── After card ── */}
+      <div className={`cscore after${afterActive ? ' cs-active' : ''}`}>
+        <div className="cs-header">
+          <div className="cs-header-left">
+            <div className="cs-tag">{afterLabel}</div>
+            <div className="cs-ttl">
+              <IconStar /> Content Score
+            </div>
+          </div>
+          <div className="cs-bubble">
+            <div className="cs-num">{afterNum}<em>/100</em></div>
+          </div>
+        </div>
+        <div className="cs-track-wrap">
+          <div className="cs-track">
+            <i style={{ width: afterActive ? '82%' : '0%' }} />
+          </div>
+          <div className="cs-verdict">{afterVerdict}</div>
+        </div>
+        <div className="cs-rows">
+          {afterScores.map((s, i) => (
+            <div key={s.label} className="cs-row">
+              <span className="cs-lab">{s.label}</span>
+              <div className="cs-bar">
+                <i style={{ width: afterActive ? `${s.pct}%` : '0%', transitionDelay: `${i * 80}ms` }} />
+              </div>
+              <span className="cs-val">{s.val}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
 function PipelineTrack() {
   const [cur, setCur] = useState(0);
   const [fading, setFading] = useState(false);
@@ -283,7 +415,7 @@ export default function ContentWritingPage() {
             <div className="cw-head cw-center cw-reveal">
               {(() => { const ds = t('contentWriting.dataSynergy'); return (<>
                 <div className="eyebrow">{ds.eyebrow}</div>
-                <h2>{ds.h2}</h2>
+                <h2>{ds.h2Pre} <HL>{ds.h2Hl}</HL></h2>
                 <p className="cw-lede">{ds.lead}</p>
               </>); })()}
             </div>
@@ -329,7 +461,7 @@ export default function ContentWritingPage() {
             <div className="cw-head cw-center cw-reveal">
               {(() => { const tj = t('contentWriting.threeJobs'); return (<>
                 <div className="eyebrow">{tj.eyebrow}</div>
-                <h2>{tj.h2}</h2>
+                <h2>{tj.h2Pre} <HL>{tj.h2Hl}</HL></h2>
                 <p className="cw-lede">{tj.lead}</p>
               </>); })()}
             </div>
@@ -369,7 +501,7 @@ export default function ContentWritingPage() {
             <div className="cw-adv-head cw-center cw-reveal">
               {(() => { const wr = t('contentWriting.write'); return (<>
                 <span className="cw-adv-tag">{wr.tag}</span>
-                <h3>{wr.h3}</h3>
+                <h3>{wr.h3Pre} <HL>{wr.h3Hl}</HL> {wr.h3Post}</h3>
                 <p>{wr.p}</p>
               </>); })()}
             </div>
@@ -384,7 +516,7 @@ export default function ContentWritingPage() {
             <div className="cw-adv-head cw-center cw-reveal">
               {(() => { const op = t('contentWriting.optimize'); return (<>
                 <span className="cw-adv-tag">{op.tag}</span>
-                <h3>{op.h3}</h3>
+                <h3>{op.h3Pre} <HL>{op.h3Hl}</HL></h3>
                 <p>{op.p}</p>
               </>); })()}
             </div>
@@ -392,47 +524,65 @@ export default function ContentWritingPage() {
             <div className="ba cw-reveal">
               {/* Before */}
               <div className="cscore before">
-                <div className="cs-tag">{t('contentWriting.optimize.beforeLabel')}</div>
-                <div className="cs-top">
-                  <div className="cs-ttl"><IconStar /> Content Score</div>
-                  <div className="cs-num">38<em>/100</em></div>
-                </div>
-                <div className="cs-track"><i style={{ width: '38%' }}/></div>
-                <div className="cs-verdict">{t('contentWriting.optimize.beforeVerdict')}</div>
-                {BEFORE_SCORES.map(s => (
-                  <div key={s.label} className="cs-row">
-                    <span className="cs-lab">{s.label}</span>
-                    <div className="cs-bar"><i className={s.cls} style={{ width: `${s.pct}%` }}/></div>
-                    <span className="cs-val">{s.val}</span>
+                <div className="cs-header">
+                  <div className="cs-header-left">
+                    <div className="cs-tag">{t('contentWriting.optimize.beforeLabel')}</div>
+                    <div className="cs-ttl"><IconStar /> Content Score</div>
                   </div>
-                ))}
+                  <div className="cs-bubble">
+                    <div className="cs-num">38<em>/100</em></div>
+                  </div>
+                </div>
+                <div className="cs-track-wrap">
+                  <div className="cs-track"><i style={{ width: '38%' }}/></div>
+                  <div className="cs-verdict">{t('contentWriting.optimize.beforeVerdict')}</div>
+                </div>
+                <div className="cs-rows">
+                  {BEFORE_SCORES.map(s => (
+                    <div key={s.label} className="cs-row">
+                      <span className="cs-lab">{s.label}</span>
+                      <div className="cs-bar"><i className={s.cls} style={{ width: `${s.pct}%` }}/></div>
+                      <span className="cs-val">{s.val}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Arrow */}
               <div className="ba-arrow">
                 <span className="ba-lab">{t('contentWriting.optimize.afterKate')}</span>
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M13 6l6 6-6 6"/>
-                </svg>
+                <div className="ba-arrow-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                  </svg>
+                </div>
                 <span className="ba-lab">+44</span>
               </div>
 
               {/* After */}
               <div className="cscore after">
-                <div className="cs-tag">{t('contentWriting.optimize.afterLabel')}</div>
-                <div className="cs-top">
-                  <div className="cs-ttl"><IconStar /> Content Score</div>
-                  <div className="cs-num">82<em>/100</em></div>
-                </div>
-                <div className="cs-track"><i style={{ width: '82%' }}/></div>
-                <div className="cs-verdict">{t('contentWriting.optimize.afterVerdict')}</div>
-                {AFTER_SCORES.map(s => (
-                  <div key={s.label} className="cs-row">
-                    <span className="cs-lab">{s.label}</span>
-                    <div className="cs-bar"><i style={{ width: `${s.pct}%` }}/></div>
-                    <span className="cs-val">{s.val}</span>
+                <div className="cs-header">
+                  <div className="cs-header-left">
+                    <div className="cs-tag">{t('contentWriting.optimize.afterLabel')}</div>
+                    <div className="cs-ttl"><IconStar /> Content Score</div>
                   </div>
-                ))}
+                  <div className="cs-bubble">
+                    <div className="cs-num">82<em>/100</em></div>
+                  </div>
+                </div>
+                <div className="cs-track-wrap">
+                  <div className="cs-track"><i style={{ width: '82%' }}/></div>
+                  <div className="cs-verdict">{t('contentWriting.optimize.afterVerdict')}</div>
+                </div>
+                <div className="cs-rows">
+                  {AFTER_SCORES.map(s => (
+                    <div key={s.label} className="cs-row">
+                      <span className="cs-lab">{s.label}</span>
+                      <div className="cs-bar"><i style={{ width: `${s.pct}%` }}/></div>
+                      <span className="cs-val">{s.val}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -444,7 +594,7 @@ export default function ContentWritingPage() {
             <div className="cw-adv-head cw-center cw-reveal">
               {(() => { const im = t('contentWriting.implement'); return (<>
                 <span className="cw-adv-tag">{im.tag}</span>
-                <h3>{im.h3}</h3>
+                <h3>{im.h3Pre} <HL>{im.h3Hl}</HL></h3>
                 <p>{im.p}</p>
               </>); })()}
             </div>
@@ -495,7 +645,7 @@ export default function ContentWritingPage() {
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
               <div className="eyebrow">Internal linking, automatic</div>
-              <h2>Kate links your article to the<br />rest of your site.</h2>
+              <h2>Kate links your article to the<br /><HL>rest of your site.</HL></h2>
               <p className="cw-lede">
                 As she writes, Kate turns key phrases in your article into links to your other pages.
                 Readers click through, and search engines and AI follow the very same links to discover your whole site.
@@ -643,7 +793,7 @@ export default function ContentWritingPage() {
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
               <div className="eyebrow">Wherever content lives</div>
-              <h2>Not just your blog.</h2>
+              <h2>Not just <HL>your blog.</HL></h2>
               <p className="cw-lede">Kate is built to work wherever your brand needs to show up   so you stay present across every channel that matters.</p>
             </div>
 
@@ -685,7 +835,7 @@ export default function ContentWritingPage() {
             <div className="cw-head cw-center cw-reveal">
               {(() => { const cmp = t('contentWriting.comparison'); return (<>
                 <div className="eyebrow">Kate vs. the others</div>
-                <h2>{cmp.h2}</h2>
+                <h2>{cmp.h2Pre} <HL>{cmp.h2Hl}</HL></h2>
                 <p className="cw-lede">{cmp.lead}</p>
               </>); })()}
             </div>
@@ -726,7 +876,7 @@ export default function ContentWritingPage() {
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
               <div className="eyebrow">{cwFaqs.eyebrow}</div>
-              <h2>{cwFaqs.h2}</h2>
+              <h2>{cwFaqs.h2Pre} <HL>{cwFaqs.h2Hl}</HL></h2>
             </div>
             <div className="cw-reveal">
               <FaqAccordion items={cwFaqs.items} />
