@@ -23,8 +23,8 @@ const IconInfo = () => (
   </svg>
 );
 const IconStar = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="#3b82f6" aria-hidden="true">
-    <path d="M12 3l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+  <svg className="som-insight-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+    <path d="M327.5 85.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L384 128l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L448 128l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L448 74.8 426.8 18.3C425.1 13.8 420.8 11 416 11s-9.1 3-10.8 7.5L384 74.8l-56.5 21.2zM205.1 73.3c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3L123.5 187.4 9.3 240c-5.7 2.6-9.3 8.3-9.3 14.5s3.6 11.9 9.3 14.5l114.1 52.6L176.1 435c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l52.6-114.1 114.1-52.6c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5L257.7 187.4 205.1 73.3zM384 374.8l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 438.8l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L448 438.8l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L448 374.8l-21.2-56.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L384 374.8z" />
   </svg>
 );
 const IconList = () => (
@@ -192,18 +192,7 @@ export default function SiteOverviewMockup() {
             </div>
           </div>
           <div className="som-thumb">
-            <div className="som-thumb-inner">
-              <div className="som-thumb-nav" />
-              <div className="som-thumb-hero" />
-              <div className="som-thumb-content">
-                <div className="som-thumb-line som-thumb-line--wide" />
-                <div className="som-thumb-line" />
-                <div className="som-thumb-line som-thumb-line--short" />
-              </div>
-              <div className="som-thumb-rows">
-                <div /><div /><div />
-              </div>
-            </div>
+            <img src="/nike_landingpage.png" alt="Nike landing page" className="som-thumb-img" />
           </div>
         </div>
 
@@ -218,11 +207,11 @@ export default function SiteOverviewMockup() {
 
         {/* ── AI Insight ─────────────────────────────────── */}
         <div className="som-insight">
-          <div className="som-insight-title">
-            <IconStar />
-            <strong>Poli AI Insight</strong>
+          <IconStar />
+          <div className="som-insight-body">
+            <p className="som-insight-title">{d.poliAiInsight}</p>
+            <p className="som-insight-text">{d.insightText}</p>
           </div>
-          <p className="som-insight-text">{d.insightText}</p>
         </div>
 
         {/* ── View toggle (above columns, right-aligned) ── */}

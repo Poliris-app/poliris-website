@@ -672,75 +672,324 @@ export default {
     },
     searchPlaceholder: 'Search questions...',
     noResults: 'No results for',
+    allLabel: 'All',
     groups: [
       {
         label: 'Getting Started',
         items: [
-          { q: 'What is Poliris and who is it for?', a: "Poliris is the platform that gets your brand picked by AI. When people ask ChatGPT, Gemini, or Perplexity \"what's the best…?\", only a few brands get recommended, Poliris helps make sure yours is one of them. It is built for brands and marketers who want to be mentioned by AI, SEO and GEO specialists who want one place to run audits, agencies that manage many clients, and content teams who want AI-assisted drafts without sacrificing quality." },
-          { q: 'How do I set up my account and run my first audit?', a: 'Poliris walks you through a 5-step onboarding wizard. You can go from sign-up to your first audit result in about 5 minutes: sign in, paste your URL so Poliris auto-detects your brand, answer four optional questions to tailor the dashboard, select the products to track, then choose your LLMs, categories, and trading zone and click Start analysis. All settings can be edited later under Settings.' },
-          { q: 'What is a "Product" in Poliris?', a: 'A Product is something your brand sells, the thing Poliris looks for in AI answers. Poliris auto-detects your Products from your website during onboarding, and you can track multiple products in parallel. Each Product gets its own GEO Audit with independent visibility and sentiment scores. You can add, remove, or re-prioritize Products anytime from Settings › Products.' },
-          { q: 'What is a "Trading Zone" and why does it matter?', a: 'A Trading Zone is the country or region where you sell, for example, United States, France, or Japan. AI answers vary significantly from zone to zone, so the Trading Zone tells Poliris where to look when running your audit. Different markets have different leading AI platforms and different perceptions of your brand. Tracking multiple Trading Zones lets you spot regional gaps and opportunities.' },
-          { q: 'What is a "Category" and how should I choose them?', a: "A Category is one of the perception dimensions Poliris scores your brand on, topics your customers actually care about, like Customer Experience, Innovation and Technology, Quality and Performance, or Value and Pricing. Poliris suggests the best four to six Categories based on your detected product. Pick Categories that match your positioning, not just your features, the right four to six save you from chasing metrics that don't reflect what customers actually care about." },
-          { q: 'What is the difference between a scoping audit and a full audit?', a: 'The scoping audit is a quick initial overview covering your visibility ranking vs. competitors, top sentiment qualifiers AI uses to describe you, and an accessibility status. Results are returned within 24 hours. The full audit is an in-depth analysis covering multiple LLMs, a detailed brand perception radar, a full Access / Structure / Content audit of your key pages, and a structured GEO action plan. Use the scoping audit to decide where to go; use the full audit to decide exactly what to do.' },
+          { q: 'What is Poliris and who is it for?', a: {
+            intro: "Poliris is the platform that gets your brand picked by AI. When people ask ChatGPT, Gemini, or Perplexity \"what's the best…?\", only a few brands get recommended, Poliris helps make sure yours is one of them.",
+            bullets: [
+              { label: 'Brands & marketers', text: 'who want to be mentioned by AI.' },
+              { label: 'SEO & GEO specialists', text: 'who want one place to run audits.' },
+              { label: 'Agencies', text: 'that manage many clients.' },
+              { label: 'Content teams', text: 'who want AI-assisted drafts without sacrificing quality.' },
+            ],
+          } },
+          { q: 'How do I set up my account and run my first audit?', a: {
+            intro: 'Poliris walks you through a 5-step onboarding wizard: sign-up to your first audit result in about 5 minutes.',
+            bullets: [
+              { label: '1.', text: 'Sign in.' },
+              { label: '2.', text: 'Paste your URL so Poliris auto-detects your brand.' },
+              { label: '3.', text: 'Answer four optional questions to tailor the dashboard.' },
+              { label: '4.', text: 'Select the products to track.' },
+              { label: '5.', text: 'Choose your LLMs, categories, and trading zone, then click Start analysis.' },
+            ],
+            callout: 'All settings can be edited later under Settings.',
+          } },
+          { q: 'What is a "Product" in Poliris?', a: {
+            intro: 'A Product is something your brand sells, the thing Poliris looks for in AI answers.',
+            bullets: [
+              { label: 'Auto-detected', text: 'Poliris detects your Products from your website during onboarding.' },
+              { label: 'Tracked in parallel', text: 'follow multiple products at once.' },
+              { label: 'Scored independently', text: 'each Product gets its own GEO Audit with independent visibility and sentiment scores.' },
+            ],
+            callout: 'Add, remove, or re-prioritize Products anytime from Settings › Products.',
+          } },
+          { q: 'What is a "Trading Zone" and why does it matter?', a: {
+            intro: 'A Trading Zone is the country or region where you sell, for example, United States, France, or Japan. AI answers vary significantly from zone to zone, so the Trading Zone tells Poliris where to look when running your audit. Different markets have different leading AI platforms and different perceptions of your brand.',
+            callout: 'Tracking multiple Trading Zones lets you spot regional gaps and opportunities.',
+          } },
+          { q: 'What is a "Category" and how should I choose them?', a: {
+            intro: 'A Category is one of the perception dimensions Poliris scores your brand on, topics your customers actually care about, like Customer Experience, Innovation and Technology, Quality and Performance, or Value and Pricing.',
+            bullets: [
+              { label: 'Auto-suggested', text: 'Poliris suggests the best four to six Categories based on your detected product.' },
+              { label: 'Choose by positioning', text: 'pick Categories that match your positioning, not just your features.' },
+            ],
+            callout: "The right four to six save you from chasing metrics that don't reflect what customers actually care about.",
+          } },
+          { q: 'Scoping Audit vs. Full Audit: what is the difference?', a: {
+            intro: 'A Scoping Audit and a Full Audit serve different moments in your GEO journey.',
+            bullets: [
+              { label: 'Scoping Audit', text: "a quick overview delivered within 24 hours, designed to show you where you stand today and whether a deeper dive is worth it. It covers your visibility ranking against top competitors, the sentiment qualifiers AI uses to describe your brand, and an accessibility status on how easily LLMs can discover and parse your content." },
+              { label: 'Full Audit', text: 'a comprehensive analysis that gives you a step-by-step roadmap for optimization. It covers multi-LLM analysis across engines like ChatGPT, Claude, and Gemini, a detailed brand perception radar of your AI-perceived strengths and weaknesses, a deep Access / Structure / Content evaluation of your high-priority pages, and a structured GEO action plan.' },
+            ],
+            callout: 'Use the Scoping Audit to decide where to go; use the Full Audit to decide exactly what to do.',
+          } },
         ],
       },
       {
         label: 'GEO Audit',
         items: [
-          { q: 'What is GEO (Generative Engine Optimization)?', a: "GEO stands for Generative Engine Optimization, all techniques aimed at optimizing a brand's presence in responses generated by AI engines. In practice, this means optimizing your content, site structure, and reputation signals so that AI can easily find you, cite you accurately, and represent you faithfully according to your positioning. Unlike SEO, which targets traditional search ranking, GEO targets the AI-generated answers that are replacing classic search results." },
-          { q: 'Which AI platforms does Poliris analyze?', a: "Poliris analyzes visibility on the main general-purpose AI engines: ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok, and Deepseek. Poliris combines both web-interface LLMs (which browse live sources) and API LLMs (which reflect the model's training data) to give a complete picture of what the web shows vs. what the underlying models believe. Poliris does not audit specialized or vertical AI assistants." },
-          { q: "What does the GEO Audit's Product Overview screen show?", a: 'The Product Overview is the at-a-glance landing page for any product you track. It combines all four GEO signals on one screen: Global GEO score (Visibility + Sentiment out of 100), competitive position rank, evolution chart with score trends, a BCG-style quadrant plotting visibility vs. perception, sentiment analysis, target audience AI associates with your product, competitor momentum, and PULSE Recommended Actions, a prioritized list of next-best actions. Start every session here.' },
-          { q: 'How does Poliris measure visibility?', a: 'Poliris builds a set of representative test queries for your market, brand queries, product/service queries, and problem/need queries from your customers, then tests them on the main LLMs. Results are consolidated into visibility rankings vs. competitors, explicit gaps by product, category, and AI engine, and Source Intelligence showing which websites AI reads when it answers questions in your category.' },
-          { q: 'How does Poliris assess AI sentiment?', a: 'Poliris analyzes AI engine responses to extract key attributes associated with your brand, the strengths highlighted, the weaknesses or areas of uncertainty, and any gaps with your current positioning. The goal is twofold: to correct what is still circulating (outdated data, biased perceptions) and to emphasize your strengths via additional evidence, reference content, and client cases. The Sentiment Audit displays an overall tone, per-Category radar chart scores, and two lenses: Web Analysis and Model Analysis.' },
-          { q: 'What are "Prompts" and "Requests" in the context of an audit?', a: 'A Request is a question you want Poliris to ask the AI, usually written the way a real customer would type it. A Request Prompt is the behind-the-scenes template Poliris uses to deliver that question to an LLM in a structured, consistent way. During setup you review a table of all Requests showing the prompt text, Category tags, and a Traffic indicator (High / Medium / Low) based on how often that question is actually asked. Prioritize high-traffic prompts, they have the biggest impact on your visibility scores.' },
-          { q: 'What is Source Intelligence and why does it matter?', a: 'When an AI model answers a question, it visits live web sources and uses what it finds to build the response. Source Intelligence shows you where those visits are happening for prompts about your category, and how often your website is among the pages cited. The card shows total source count, a concentration label, a breakdown by type (Your Site, Retail, Industry, Social, Blog, Media, Academic), and the top cited websites.' },
-          { q: 'What action plans does Poliris provide after an audit?', a: 'After an audit, you receive a concrete action plan: how to optimize your content so it is understood and cited by AI engines, how to select and structure keywords and topics, and which gaps and competitive opportunities to prioritize first. Inside the platform, the PULSE Recommended Actions card on the Product Overview shows a prioritized list of next-best actions (High / Medium / Low priority) generated from all audit data. Each action links to a Poli AI conversation for deeper guidance.' },
-          { q: 'What markets and languages does Poliris cover?', a: 'Poliris operates worldwide. The methodology adapts to the required language, priority markets, languages to audit, and the most relevant AI engines per region are defined with you. During setup and in Workspace Settings, you select Trading Zones and the language the LLMs should answer in. Content drafts currently support 12 languages.' },
+          { q: 'What is GEO (Generative Engine Optimization)?', a: {
+            intro: "GEO stands for Generative Engine Optimization, all techniques aimed at optimizing a brand's presence in responses generated by AI engines.",
+            bullets: [
+              { label: 'GEO', text: 'targets the AI-generated answers that are replacing classic search results.' },
+              { label: 'SEO', text: 'targets traditional search engine ranking.' },
+            ],
+            callout: 'In practice, that means optimizing your content, site structure, and reputation signals so AI can find you, cite you accurately, and represent you faithfully.',
+          } },
+          { q: 'Which AI platforms does Poliris analyze?', a: {
+            intro: 'Poliris analyzes visibility on the main general-purpose AI engines: ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok, and Deepseek.',
+            bullets: [
+              { label: 'Web-interface LLMs', text: 'browse live sources, showing what the web currently shows.' },
+              { label: 'API LLMs', text: "reflect the model's training data, showing what it believes." },
+            ],
+            callout: 'Poliris does not audit specialized or vertical AI assistants.',
+          } },
+          { q: "What does the GEO Audit's Product Overview screen show?", a: {
+            intro: 'The Product Overview is the at-a-glance landing page for any product you track. It combines all four GEO signals on one screen.',
+            bullets: [
+              { label: 'Score & rank', text: 'Global GEO score (Visibility + Sentiment out of 100) and competitive position rank.' },
+              { label: 'Trends', text: 'an evolution chart with score trends and a BCG-style quadrant plotting visibility vs. perception.' },
+              { label: 'Audience & competitors', text: 'sentiment analysis, the target audience AI associates with your product, and competitor momentum.' },
+              { label: 'Next actions', text: 'PULSE Recommended Actions, a prioritized list of next-best actions.' },
+            ],
+            callout: 'Start every session here.',
+          } },
+          { q: 'How does Poliris measure visibility?', a: {
+            intro: 'Poliris builds a set of representative test queries for your market, brand queries, product/service queries, and problem/need queries from your customers, then tests them on the main LLMs.',
+            bullets: [
+              { label: 'Visibility rankings', text: 'how you rank vs. competitors.' },
+              { label: 'Explicit gaps', text: 'by product, category, and AI engine.' },
+              { label: 'Source Intelligence', text: 'which websites AI reads when it answers questions in your category.' },
+            ],
+          } },
+          { q: 'How does Poliris assess AI sentiment?', a: {
+            intro: "Poliris analyzes AI engine responses to extract key attributes associated with your brand, the strengths highlighted, the weaknesses or areas of uncertainty, and any gaps with your current positioning. The goal is twofold:",
+            bullets: [
+              { label: 'Correct', text: "what's still circulating, like outdated data or biased perceptions." },
+              { label: 'Emphasize', text: 'your strengths via additional evidence, reference content, and client cases.' },
+            ],
+            callout: 'The Sentiment Audit displays an overall tone, per-Category radar chart scores, and two lenses: Web Analysis and Model Analysis.',
+          } },
+          { q: 'What are "Prompts" and "Requests" in the context of an audit?', a: {
+            intro: "Requests and Prompts work together but aren't the same thing.",
+            bullets: [
+              { label: 'Request', text: 'a question you want Poliris to ask the AI, usually written the way a real customer would type it.' },
+              { label: 'Request Prompt', text: 'the behind-the-scenes template Poliris uses to deliver that question to an LLM in a structured, consistent way.' },
+            ],
+            callout: 'During setup, prioritize high-traffic prompts, they have the biggest impact on your visibility scores.',
+          } },
+          { q: 'What is Source Intelligence and why does it matter?', a: {
+            intro: 'When an AI model answers a question, it visits live web sources and uses what it finds to build the response. Source Intelligence shows you where those visits are happening for prompts about your category, and how often your website is among the pages cited.',
+            bullets: [
+              { label: 'Source count', text: 'total source count and a concentration label.' },
+              { label: 'Breakdown by type', text: 'Your Site, Retail, Industry, Social, Blog, Media, Academic.' },
+              { label: 'Top cited websites', text: 'the pages AI actually relies on most.' },
+            ],
+          } },
+          { q: 'What action plans does Poliris provide after an audit?', a: {
+            intro: 'After an audit, you receive a concrete action plan covering what to fix and where to focus next.',
+            bullets: [
+              { label: 'Content', text: "how to optimize your content so it's understood and cited by AI engines." },
+              { label: 'Keywords & topics', text: 'how to select and structure them.' },
+              { label: 'Priorities', text: 'which gaps and competitive opportunities to tackle first.' },
+            ],
+            callout: 'Inside the platform, the PULSE Recommended Actions card shows a prioritized list (High / Medium / Low) generated from all audit data. Each action links to a Poli AI conversation for deeper guidance.',
+          } },
+          { q: 'What markets and languages does Poliris cover?', a: {
+            intro: 'Poliris operates worldwide. The methodology adapts to the required language, priority markets, and the most relevant AI engines per region, defined with you.',
+            callout: 'During setup and in Workspace Settings, you select Trading Zones and the language the LLMs should answer in. Content drafts currently support 12 languages.',
+          } },
+          { q: 'What is the recommended weekly workflow?', a: {
+            intro: 'Poliris recommends a 4-step weekly workflow that takes 30–45 minutes:',
+            bullets: [
+              { label: 'Read the headlines', text: 'on Product Overview, noting changes in Visibility, Sentiment, and overall GEO score.' },
+              { label: 'Find the priority Category', text: 'where Visibility and Sentiment both surface the same gap.' },
+              { label: 'Pull the evidence', text: 'matching technical evidence in Page Explorer, sorted by severity.' },
+              { label: 'Hand off', text: 'use Prompt Explorer to grab full AI answers and cited sources, then ship one focused brief to content, PR, and dev teams.' },
+            ],
+          } },
         ],
       },
       {
         label: 'Technical Audit',
         items: [
-          { q: 'What does the Technical Audit check?', a: "The Technical Audit runs 102 tests (96 page-level, 6 site-level) across three site health stages: Page Access (can AI reach your pages, reachability, status codes, redirects, robots rules, page speed), Content Access (can AI read your content, metadata, schema, headings, alt text, hreflang, OG tags), and Content Quality (is your content well-structured, word counts, readability, uniqueness, depth). Each test is tagged with a severity (Critical / Warning / Notice) and whether it's specifically AI-relevant." },
-          { q: 'What is the difference between Critical, Warning, and Notice issues?', a: 'Critical issues are the most urgent, they block AI or search engines from reaching, reading, or trusting key pages. Fix these first. Warning issues hurt performance or coverage without fully blocking it, plan a fix soon. Notice issues are minor recommendations and polish items, fix when you have time. There are 15 Critical-severity tests in Poliris, including broken internal links, Core Web Vitals failures, and pages set to noindex.' },
-          { q: 'What is the Page Explorer and how do I use it?', a: 'The Page Explorer lets you drill from site-level scores down to any individual URL. For each page it shows a meta strip, a per-page Site Health Pipeline with a Bottleneck chip, AI Crawlers Access status (which AI systems are allowed or blocked), Top Issues, Health Score Evolution, Page Speed Insights with Core Web Vitals, and Connected Services cards from Google Search Console and Analytics if connected.' },
-          { q: 'Why does blocking AI crawlers hurt my visibility?', a: "AI systems can only describe pages they've been allowed to read. Blocking even one major crawler, often unintentionally via a generic robots.txt rule, takes you out of that model's answers entirely. This is a quiet way to lose AI visibility that would never appear in classic search reports. Poliris's Page Explorer shows per-page AI crawler access status for Mistral, ChatGPT, Claude, Perplexity, Gemini, and Grok." },
-          { q: 'How are Technical and GEO results connected?', a: 'The Technical Audit and GEO Audit are most valuable when read side by side. Technical → GEO: schema, speed, internal links, and crawlability set the upper bound of your Visibility and Sentiment scores, what you fix changes what AI can say. GEO → Technical: a weak Visibility Category points you straight at the URLs that need attention, and negative Sentiment points at pages that need stronger evidence, schema, or counter-narrative content.' },
-          { q: 'What is the recommended weekly workflow?', a: 'Poliris recommends a 4-step weekly workflow that takes 30–45 minutes: (1) Read the headlines on Product Overview, noting changes in Visibility, Sentiment, and overall GEO score. (2) Find the priority Category, where Visibility and Sentiment both surface the same gap. (3) Pull the matching technical evidence in Page Explorer, sorting issues by severity. (4) Hand off with evidence, use Prompt Explorer to grab full AI answers and cited sources, then ship one focused brief to content, PR, and dev teams.' },
+          { q: 'What does the Technical Audit check?', a: {
+            intro: 'The Technical Audit runs 102 tests (96 page-level, 6 site-level) across three site health stages:',
+            bullets: [
+              { label: 'Page Access', text: 'can AI reach your pages: reachability, status codes, redirects, robots rules, page speed.' },
+              { label: 'Content Access', text: 'can AI read your content: metadata, schema, headings, alt text, hreflang, OG tags.' },
+              { label: 'Content Quality', text: 'is your content well-structured: word counts, readability, uniqueness, depth.' },
+            ],
+            callout: "Each test is tagged with a severity (Critical / Warning / Notice) and whether it's specifically AI-relevant.",
+          } },
+          { q: 'What is the difference between Critical, Warning, and Notice issues?', a: {
+            intro: 'Every Technical Audit issue is tagged with one of three severities:',
+            bullets: [
+              { label: 'Critical', text: 'blocks AI or search engines from reaching, reading, or trusting key pages. Fix these first.' },
+              { label: 'Warning', text: 'hurts performance or coverage without fully blocking it. Plan a fix soon.' },
+              { label: 'Notice', text: 'minor recommendations and polish items. Fix when you have time.' },
+            ],
+            callout: 'There are 15 Critical-severity tests in Poliris, including broken internal links, Core Web Vitals failures, and pages set to noindex.',
+          } },
+          { q: 'What is the Page Explorer and how do I use it?', a: {
+            intro: 'The Page Explorer lets you drill from site-level scores down to any individual URL.',
+            bullets: [
+              { label: 'Per-page health', text: 'a meta strip, Site Health Pipeline with a Bottleneck chip, and Top Issues.' },
+              { label: 'AI crawler access', text: 'which AI systems are allowed or blocked on that page.' },
+              { label: 'Performance', text: 'Health Score Evolution and Page Speed Insights with Core Web Vitals.' },
+            ],
+            callout: 'Connected Services cards from Google Search Console and Analytics appear too, if connected.',
+          } },
+          { q: 'Why does blocking AI crawlers hurt my visibility?', a: {
+            intro: "AI systems can only describe pages they've been allowed to read. Blocking even one major crawler, often unintentionally via a generic robots.txt rule, takes you out of that model's answers entirely.",
+            callout: "This is a quiet way to lose AI visibility that would never appear in classic search reports. Poliris's Page Explorer shows per-page AI crawler access status for Mistral, ChatGPT, Claude, Perplexity, Gemini, and Grok.",
+          } },
+          { q: 'How are Technical SEO and GEO results connected?', a: {
+            intro: 'The Technical Audit and GEO Audit are most valuable when read side by side. Each one explains the other:',
+            bullets: [
+              { label: 'Technical → GEO', text: 'Schema, speed, internal links, and crawlability set the upper bound of your Visibility and Sentiment scores. What you fix changes what AI can say.' },
+              { label: 'GEO → Technical', text: 'A weak Visibility Category points you straight at the URLs that need attention. Negative Sentiment points at pages that need stronger evidence, schema, or counter-narrative content.' },
+            ],
+            callout: 'A great GEO score with a broken site is fragile. A perfect Technical score with no AI visibility is invisible.',
+          } },
         ],
       },
       {
         label: 'Poli Agent & Content',
         items: [
-          { q: 'What can Poli Agent do for me?', a: 'Poli Agent is your Poliris assistant, a helpful teammate who knows every corner of the platform and can do work for you on command. It can answer questions about your dashboards, run an audit with one sentence, summarize long reports into a two-line briefing, suggest next actions and execute them if you approve, and draft messages to your team based on the latest audit. Poli Agent also powers the Poli AI Insight banners throughout the platform and is available on every plan.' },
-          { q: 'What does Content Generation produce, and how do I publish?', a: "Content Generation is Poliris's writing room. You pick a topic and Poliris drafts the page for you, shaped by what it already learned in your GEO and Technical audits, good for landing pages, blog posts, FAQ sections, and product descriptions. You get a full draft you can edit inside Poliris, download as Word, Markdown, or HTML, or publish in one click to WordPress, Webflow, or Shopify. Always read the draft before you publish." },
-          { q: 'What is the Poli AI Insight banner I see throughout the platform?', a: 'The Poli AI Insight is a blue banner that appears at the top of Visibility Audit, Sentiment Audit, and Issues tabs. It reads your live data and writes a two-sentence strategic summary: Sentence 1 highlights the most important gap or strength in your current data; Sentence 2 gives one clear, high-leverage action you can take right now. Use the refresh icon to regenerate it at any time.' },
-          { q: 'Does Poliris work with SEO agencies?', a: 'Yes, on a B2B2B basis. Poliris co-builds GEO action plans with partners, SEO agencies, integrators, internal web teams, translating GEO insights into concrete actions and accelerating execution by relying on teams already in place rather than replacing them. For agencies managing multiple brands, the platform includes dedicated Clients and Prospect Clients management, per-client branding, and a Prospect credit pool for pitches.' },
+          { q: 'What can Poli Agent do for me?', a: {
+            intro: 'Poli Agent is your Poliris assistant, a helpful teammate who knows every corner of the platform and can do work for you on command.',
+            bullets: [
+              { label: 'Answer & summarize', text: 'answers questions about your dashboards and summarizes long reports into a two-line briefing.' },
+              { label: 'Act', text: 'runs an audit with one sentence, suggests next actions, and executes them if you approve.' },
+              { label: 'Draft', text: 'writes messages to your team based on the latest audit.' },
+            ],
+            callout: 'Poli Agent also powers the Poli AI Insight banners throughout the platform and is available on every plan.',
+          } },
+          { q: 'What does Content Generation produce, and how do I publish?', a: {
+            intro: "Content Generation is Poliris's writing room. You pick a topic and Poliris drafts the page for you, shaped by what it already learned in your GEO and Technical audits, good for landing pages, blog posts, FAQ sections, and product descriptions.",
+            bullets: [
+              { label: 'Edit', text: 'a full draft you can edit inside Poliris.' },
+              { label: 'Download', text: 'as Word, Markdown, or HTML.' },
+              { label: 'Publish', text: 'in one click to WordPress, Webflow, or Shopify.' },
+            ],
+            callout: 'Always read the draft before you publish.',
+          } },
+          { q: 'What is the Poli AI Insight banner I see throughout the platform?', a: {
+            intro: 'The Poli AI Insight is a blue banner that appears at the top of Visibility Audit, Sentiment Audit, and Issues tabs. It reads your live data and writes a two-sentence strategic summary:',
+            bullets: [
+              { label: 'Sentence 1', text: 'highlights the most important gap or strength in your current data.' },
+              { label: 'Sentence 2', text: 'gives one clear, high-leverage action you can take right now.' },
+            ],
+            callout: 'Use the refresh icon to regenerate it at any time.',
+          } },
+          { q: 'Does Poliris work with SEO agencies?', a: {
+            intro: 'Yes, on a B2B2B basis. Poliris co-builds GEO action plans with partners, SEO agencies, integrators, internal web teams, translating GEO insights into concrete actions and accelerating execution by relying on teams already in place rather than replacing them.',
+            callout: 'For agencies managing multiple brands, the platform includes dedicated Clients and Prospect Clients management, per-client branding, and a Prospect credit pool for pitches.',
+          } },
         ],
       },
       {
         label: 'Admin & Team',
         items: [
-          { q: 'What are the different team roles and what can each do?', a: "Poliris has four roles: Owner (everything, billing, deleting the org, all settings), Admin (all workspace settings, members, clients, integrations), Editor (create audits, edit Products, edit Prompts, publish content), and Viewer (read dashboards and reports, can't change anything). Only users with Admin or Owner roles can access the Administrator Settings panels." },
-          { q: 'What is the difference between an Organization and a Workspace?', a: "An Organization is your top-level Poliris account, it holds your branding, members, billing, and clients, and is essentially your company's account. A Workspace is one project inside your Organization, usually one brand or one client. Workspace Settings control that specific project: which Products to track, which LLMs to query, which Prompts to run, and when to run them. For agencies, each Client gets its own Workspace." },
-          { q: 'How do I manage Prospect Clients for sales pitches?', a: "Prospect Clients is the \"pitch shelf\", for brands you don't work with yet. You can run a light audit on a Prospect to show them what their GEO score looks like today, then convert them into a real Client with one click when the deal closes. Prospect audits use a reduced credit pool so you can run lots of pitches without burning your monthly budget. As of March 2026, Prospect Clients has its own dedicated credit pool." },
-          { q: 'How do I customize audit prompts, and is it safe to edit them?', a: 'Under Settings › Prompts, admins can edit the system prompt used for GEO queries, tweak the prompt used to write content drafts, add custom prompts for recurring tasks, and reset any prompt back to the Poliris default. Editing system prompts can change how every audit behaves, test a change on one Workspace before rolling it out to all Clients.' },
-          { q: 'How do I view audit logs and trace changes?', a: 'Logs is the black-box recorder of your account. Every meaningful action, who ran an audit, who edited a Prompt, who invited a member, shows up here with a timestamp. Use it for debugging, compliance reviews, tracing a change, and investigating unusual credit spikes. Log retention is 7 days on Starter, 30 days on Growth, and 1 year (with CSV export) on Scale.' },
+          { q: 'What are the different team roles and what can each do?', a: {
+            intro: 'Poliris has four roles, each with a different scope of access:',
+            bullets: [
+              { label: 'Owner', text: 'everything, billing, deleting the org, all settings.' },
+              { label: 'Admin', text: 'all workspace settings, members, clients, integrations.' },
+              { label: 'Editor', text: 'create audits, edit Products, edit Prompts, publish content.' },
+              { label: 'Viewer', text: "read dashboards and reports, can't change anything." },
+            ],
+            callout: 'Only users with Admin or Owner roles can access the Administrator Settings panels.',
+          } },
+          { q: 'What is the difference between an Organization and a Workspace?', a: {
+            intro: 'Organizations and Workspaces sit at different levels of your account:',
+            bullets: [
+              { label: 'Organization', text: "your top-level Poliris account, holds your branding, members, billing, and clients. Essentially your company's account." },
+              { label: 'Workspace', text: 'one project inside your Organization, usually one brand or one client. Controls which Products to track, which LLMs to query, and which Prompts to run.' },
+            ],
+            callout: 'For agencies, each Client gets its own Workspace.',
+          } },
+          { q: 'How do I manage Prospect Clients for sales pitches?', a: {
+            intro: 'Prospect Clients is the "pitch shelf", for brands you don\'t work with yet.',
+            bullets: [
+              { label: 'Pitch', text: 'run a light audit on a Prospect to show them what their GEO score looks like today.' },
+              { label: 'Convert', text: 'turn them into a real Client with one click when the deal closes.' },
+            ],
+            callout: 'Prospect audits use their own dedicated, reduced credit pool, so you can run lots of pitches without burning your monthly budget.',
+          } },
+          { q: 'How do I customize audit prompts, and is it safe to edit them?', a: {
+            intro: 'Under Settings › Prompts, admins can manage every prompt Poliris uses.',
+            bullets: [
+              { label: 'Edit', text: 'the system prompt used for GEO queries, or the prompt used to write content drafts.' },
+              { label: 'Add', text: 'custom prompts for recurring tasks.' },
+              { label: 'Reset', text: 'any prompt back to the Poliris default.' },
+            ],
+            callout: 'Editing system prompts can change how every audit behaves, test a change on one Workspace before rolling it out to all Clients.',
+          } },
+          { q: 'How do I view audit logs and trace changes?', a: {
+            intro: 'Logs is the black-box recorder of your account. Every meaningful action, who ran an audit, who edited a Prompt, who invited a member, shows up here with a timestamp. Use it for debugging, compliance reviews, tracing a change, and investigating unusual credit spikes.',
+            callout: 'Log retention is 7 days on Starter, 30 days on Growth, and 1 year (with CSV export) on Scale.',
+          } },
         ],
       },
       {
         label: 'Plans & Billing',
         items: [
-          { q: 'What plans does Poliris offer?', a: 'Poliris offers three subscription tiers: Starter (entry-level with 7-day log retention), Growth (includes 30-day log retention and a dedicated Prospect Client credit pool), and Scale (includes 1-year log retention with CSV export and a custom domain for hosted reports). Plan details, renewal dates, and upgrade options are managed under Settings › Billing.' },
-          { q: 'How do credits work, and how do I track usage?', a: "Credits are consumed by LLM queries, technical scans, and content drafts. The Usage panel shows credits used vs. remaining by month, breakdown by action type, breakdown by Client or Workspace, and trend charts so you can predict when you'll run out. You can buy credit top-up packs from the Billing panel and set a usage alert at 80% so your team gets a heads-up before the monthly reset." },
-          { q: 'How often should I schedule audits to get the best value?', a: 'Poliris recommends a weekly cadence as the sweet spot. Daily burns credits without adding much signal. Weekly gives fresh data, catches fast competitor moves, and aligns with a weekly review workflow. Monthly may miss fast competitor moves or sudden visibility changes. You can schedule recurring GEO audits per Workspace, per Product, or per Zone; weekly technical scans; monthly content-draft batches; and alert emails if visibility drops, all from Settings › Scheduling.' },
+          { q: 'What plans does Poliris offer?', a: {
+            intro: 'Poliris offers three subscription tiers:',
+            bullets: [
+              { label: 'Starter', text: 'entry-level, with 7-day log retention.' },
+              { label: 'Growth', text: 'includes 30-day log retention and a dedicated Prospect Client credit pool.' },
+              { label: 'Scale', text: 'includes 1-year log retention with CSV export and a custom domain for hosted reports.' },
+            ],
+            callout: 'Plan details, renewal dates, and upgrade options are managed under Settings › Billing.',
+          } },
+          { q: 'How do credits work, and how do I track usage?', a: {
+            intro: 'Credits are consumed by LLM queries, technical scans, and content drafts.',
+            bullets: [
+              { label: 'Usage panel', text: 'credits used vs. remaining by month, broken down by action type and by Client or Workspace, plus trend charts.' },
+              { label: 'Top-ups', text: 'buy credit packs from the Billing panel.' },
+            ],
+            callout: 'Set a usage alert at 80% so your team gets a heads-up before the monthly reset.',
+          } },
+          { q: 'How often should I schedule audits to get the best value?', a: {
+            intro: 'Poliris recommends a weekly cadence as the sweet spot:',
+            bullets: [
+              { label: 'Daily', text: 'burns credits without adding much signal.' },
+              { label: 'Weekly', text: 'fresh data, catches fast competitor moves, aligns with a weekly review workflow.' },
+              { label: 'Monthly', text: 'may miss fast competitor moves or sudden visibility changes.' },
+            ],
+            callout: 'Schedule recurring GEO audits per Workspace, Product, or Zone, weekly technical scans, monthly content-draft batches, and alert emails on visibility drops, all from Settings › Scheduling.',
+          } },
         ],
       },
       {
         label: 'Integrations',
         items: [
-          { q: 'What tools can I connect to Poliris?', a: 'Poliris integrates with: Slack (alerts when visibility changes or audits finish), Google Search Console (combines classic SEO with GEO, unlocks Clicks vs. Impressions and Top Queries in Page Explorer), Google Analytics (attribute traffic gains to Poliris actions), WordPress / Webflow / Shopify (publish content drafts in one click), Zapier / webhooks (pipe audit results to anything), and API key access for custom dashboards. Connecting both GSC and GA during onboarding earns you free trial days on the Technical Audit.' },
-          { q: 'Can I bring my own LLM API keys?', a: "Yes. Under Settings › LLM Models, you can bring your own API key for each model or use Poliris's bundled access. Per-model controls include turning a model on/off for your Workspace, selecting the model version (e.g., GPT-4o vs. GPT-4.1), and setting the temperature (how creative vs. predictable). Turn on the models your customers actually use and turn off ones that only add noise to your reports." },
+          { q: 'What tools can I connect to Poliris?', a: {
+            intro: 'Poliris integrates with a range of tools to fit into your existing workflow:',
+            bullets: [
+              { label: 'Slack', text: 'alerts when visibility changes or audits finish.' },
+              { label: 'Google Search Console', text: 'combines classic SEO with GEO, unlocks Clicks vs. Impressions and Top Queries in Page Explorer.' },
+              { label: 'Google Analytics', text: 'attribute traffic gains to Poliris actions.' },
+              { label: 'WordPress / Webflow / Shopify', text: 'publish content drafts in one click.' },
+              { label: 'Zapier / webhooks & API', text: 'pipe audit results to anything, or build custom dashboards.' },
+            ],
+            callout: 'Connecting both GSC and GA during onboarding earns you free trial days on the Technical Audit.',
+          } },
+          { q: 'Can I bring my own LLM API keys?', a: {
+            intro: "Yes. Under Settings › LLM Models, you can bring your own API key for each model or use Poliris's bundled access.",
+            bullets: [
+              { label: 'On/off', text: 'turn a model on or off for your Workspace.' },
+              { label: 'Version', text: 'select the model version (e.g., GPT-4o vs. GPT-4.1).' },
+              { label: 'Temperature', text: 'set how creative vs. predictable responses are.' },
+            ],
+            callout: 'Turn on the models your customers actually use, and turn off ones that only add noise to your reports.',
+          } },
         ],
       },
     ],
@@ -1173,6 +1422,7 @@ export default {
     tabOverview: 'Overview',
     tabIssues: 'Issues',
     tabViz: 'Visualization',
+    poliAiInsight: 'Poli AI Insight',
     insightText: 'Your site health is dragged down by poor topical alignment on 11 pages. Audit these pages to ensure they strictly support your core topic clusters, which will recover 10 points of overall technical health.',
     critical: 'Critical',
     crawlTitle: 'Crawl & Indexation',

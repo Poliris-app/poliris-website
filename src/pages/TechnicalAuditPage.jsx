@@ -304,9 +304,9 @@ export default function TechnicalAuditPage() {
               <p>{p3.p}</p>
             </div>
 
-            <div className="ta-bana reveal">
+            <div className="ta-bana">
               {/* Before */}
-              <div>
+              <div className="reveal reveal--left">
                 <div className="ta-ba-tag">{p3.beforeLabel}</div>
                 <div className="ta-ba-card ta-ba-before">
                   <div className="ta-ba-page">
@@ -322,7 +322,7 @@ export default function TechnicalAuditPage() {
               </div>
 
               {/* Action */}
-              <div className="ta-ba-act">
+              <div className="ta-ba-act reveal reveal--d3">
                 <div className="ta-ba-rec">
                   <span className="ta-ba-rav">P</span>{p3.fixesReady}
                 </div>
@@ -331,7 +331,7 @@ export default function TechnicalAuditPage() {
               </div>
 
               {/* After */}
-              <div>
+              <div className="reveal reveal--right reveal--d5">
                 <div className="ta-ba-tag ok">{p3.afterLabel}</div>
                 <div className="ta-ba-card ta-ba-after">
                   <div className="ta-ba-page">
@@ -339,7 +339,7 @@ export default function TechnicalAuditPage() {
                     <span className="ta-ba-live">{p3.liveLabel}</span>
                   </div>
                   {p3.issues.after.map((issue, i) => (
-                    <div key={i} className="ta-ba-issue">
+                    <div key={i} className="ta-ba-issue" style={{ transitionDelay: `${0.5 + i * 0.12}s` }}>
                       <span className="ta-ba-ic ok">{ISSUE_ICONS[i]}</span>
                       <div><b>{issue.b}</b><span>{issue.span}</span></div>
                     </div>
@@ -353,54 +353,57 @@ export default function TechnicalAuditPage() {
         </section>
 
         {/* ── P4 · TOM AGENT ────────────────────────── */}
-        <section className="ta-sec dark" id="p4">
+        <section className="ta-sec" id="p4">
           <div className="wrap">
-            <div className="ta-agent-grid">
+            <div className="ta-agent-card reveal">
+              <div className="ta-agent-grid">
 
-              {/* Left: text */}
-              <div className="reveal">
-                <div className="eyebrow">{p4.eyebrow}</div>
-                <h2>{p4.h2Pre}<br /><HL>{p4.h2Hl}</HL> {p4.h2Post}</h2>
-                <p className="lead ta-agent-lead">{p4.lead}</p>
-                <ul className="ta-agent-list">
-                  {p4.points.map((pt, i) => (
-                    <li key={i}><i>›</i> {pt}</li>
-                  ))}
-                </ul>
-                <a className="ta-btn-blue" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">
-                  {p4.meetTom}
-                </a>
-              </div>
-
-              {/* Right: chat UI */}
-              <div className="reveal">
-                <div className="ta-chat">
-                  <div className="ta-tom-id">
-                    <span className="ta-tom-av">T</span>
-                    {p4.chatAgentLabel}
-                  </div>
-                  {p4.bubbles.map((bub, i) => (
-                    <div
-                      key={i}
-                      className={`ta-bub ${bub.from}`}
-                      dangerouslySetInnerHTML={{ __html: bub.text }}
-                    />
-                  ))}
+                {/* Left: text */}
+                <div>
+                  <div className="eyebrow">{p4.eyebrow}</div>
+                  <h2>{p4.h2Pre}<br /><HL>{p4.h2Hl}</HL> {p4.h2Post}</h2>
+                  <p className="lead ta-agent-lead">{p4.lead}</p>
+                  <ul className="ta-agent-list">
+                    {p4.points.map((pt, i) => (
+                      <li key={i}><i>›</i> {pt}</li>
+                    ))}
+                  </ul>
+                  <a className="ta-btn-blue" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">
+                    {p4.meetTom}
+                  </a>
                 </div>
-                <div className="ta-plan">
-                  <div className="ta-plan-h">
-                    <span className="ta-tom-av">T</span>
-                    {p4.planTitle}
-                  </div>
-                  {p4.planItems.map((item, i) => (
-                    <div key={i} className="ta-plan-item">
-                      <span className="t">{item.t}</span>
-                      <span className={`ta-impact ${item.impact}`}>{item.label}</span>
+
+                {/* Right: chat UI */}
+                <div className="ta-agent-shot">
+                  <span className="ta-agent-tab">{p4.chatAgentLabel.split('·')[0].trim()}</span>
+                  <div className="ta-chat">
+                    <div className="ta-tom-id">
+                      <span className="ta-tom-av">T</span>
+                      {p4.chatAgentLabel}
                     </div>
-                  ))}
+                    {p4.bubbles.map((bub, i) => (
+                      <div
+                        key={i}
+                        className={`ta-bub ${bub.from}`}
+                        dangerouslySetInnerHTML={{ __html: bub.text }}
+                      />
+                    ))}
+                  </div>
+                  <div className="ta-plan">
+                    <div className="ta-plan-h">
+                      <span className="ta-tom-av">T</span>
+                      {p4.planTitle}
+                    </div>
+                    {p4.planItems.map((item, i) => (
+                      <div key={i} className="ta-plan-item">
+                        <span className="t">{item.t}</span>
+                        <span className={`ta-impact ${item.impact}`}>{item.label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
+              </div>
             </div>
           </div>
         </section>

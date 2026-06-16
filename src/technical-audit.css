@@ -159,22 +159,41 @@
 .ta-sec.soft {
   background: var(--surface-2, #F7FAFE);
 }
-.ta-sec.dark {
-  background: linear-gradient(90deg, #1A1F2B 0%, #000 60%);
+.ta-agent-card {
+  background: var(--surface-ink, #0d1630);
+  color: #fff;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  padding: 48px 56px;
+}
+.ta-agent-card::after {
+  content: "";
+  position: absolute;
+  right: -180px;
+  top: -200px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(94, 116, 196, .42), transparent 64%);
+  pointer-events: none;
+}
+.ta-agent-card > * { position: relative; z-index: 1; }
+.ta-agent-card h2,
+.ta-agent-card h3 {
   color: #fff;
 }
-.ta-sec.dark h2,
-.ta-sec.dark h3 {
-  color: #fff;
-}
-.ta-sec.dark .hl {
+.ta-agent-card .hl {
   background: none;
   -webkit-background-clip: unset;
   background-clip: unset;
   color: #7da3ff;
 }
-.ta-sec.dark .eyebrow {
+.ta-agent-card .eyebrow {
   color: var(--blue-bright);
+}
+@media (max-width: 620px) {
+  .ta-agent-card { padding: 36px 24px; }
 }
 .ta-adv-head {
   max-width: 700px;
@@ -193,10 +212,6 @@
   color: var(--muted);
   font-size: 16px;
 }
-.ta-sec.dark .ta-adv-head p {
-  color: var(--on-dark-muted, #AEB6C6);
-}
-
 /* ── Tour cards (matches Sentiment page design) ── */
 .ta-page .tour {
   display: grid;
@@ -693,6 +708,9 @@
   color: var(--muted);
 }
 .ta-ba-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--display);
   font-size: 10px;
   font-weight: 700;
@@ -703,6 +721,18 @@
   border-radius: var(--r-pill);
   padding: 3px 9px;
 }
+.ta-ba-live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: ta-ba-live-pulse 1.8s ease-in-out infinite;
+}
+@keyframes ta-ba-live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(30, 158, 106, 0.45); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(30, 158, 106, 0); }
+}
 .ta-ba-issue {
   display: flex;
   gap: 11px;
@@ -711,6 +741,16 @@
   border-bottom: 1px solid var(--line-2);
 }
 .ta-ba-issue:last-child { border-bottom: 0; }
+
+.ta-ba-after .ta-ba-issue {
+  opacity: 0;
+  transform: translateY(8px) scale(0.97);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible .ta-ba-after .ta-ba-issue {
+  opacity: 1;
+  transform: none;
+}
 .ta-ba-issue b {
   font-family: var(--display);
   font-size: 14px;
@@ -778,6 +818,13 @@
   cursor: pointer;
   white-space: nowrap;
 }
+.reveal.visible .ta-ba-apply {
+  animation: ta-ba-glow 2.2s ease-in-out 0.9s infinite;
+}
+@keyframes ta-ba-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(30, 56, 147, 0.35); }
+  50% { box-shadow: 0 0 0 7px rgba(30, 56, 147, 0); }
+}
 .ta-ba-flow {
   font-size: 11.5px;
   color: var(--ok);
@@ -821,19 +868,41 @@
   color: var(--on-dark-muted, #AEB6C6) !important;
 }
 
+.ta-agent-shot {
+  position: relative;
+}
+.ta-agent-tab {
+  position: absolute;
+  top: -15px;
+  right: 18px;
+  z-index: 2;
+  font-family: var(--display);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--blue);
+  border-radius: var(--r-pill);
+  padding: 6px 13px;
+  box-shadow: 0 10px 24px -8px rgba(30, 56, 147, .55);
+}
+
 .ta-chat {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.12);
+  background: #fff;
   border-radius: var(--r-media);
   padding: 22px;
+  box-shadow: 0 34px 70px -24px rgba(0, 0, 0, .55);
 }
 .ta-tom-id {
   display: flex;
   align-items: center;
   gap: 11px;
   margin-bottom: 15px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line-2);
   font-size: 13.5px;
-  color: var(--on-dark-muted, #AEB6C6);
+  color: var(--muted);
 }
 .ta-tom-av {
   width: 32px;
@@ -862,7 +931,7 @@
   color: #fff;
 }
 .ta-bub.tom {
-  background: #fff;
+  background: var(--surface-2, #F7FAFE);
   color: var(--ink-2);
 }
 .ta-bub.tom b { color: var(--blue); }
@@ -872,6 +941,7 @@
   background: #fff;
   border-radius: 18px;
   padding: 18px;
+  box-shadow: 0 34px 70px -24px rgba(0, 0, 0, .55);
 }
 .ta-plan-h {
   font-family: var(--display);

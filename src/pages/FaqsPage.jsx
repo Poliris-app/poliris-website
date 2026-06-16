@@ -8,23 +8,50 @@ import useReveal from '../hooks/useReveal';
 import { useLang } from '../contexts/LangContext';
 import '../faqs.css';
 
+function FaqItem({ item, id, isOpen, onToggle }) {
+  const contentRef = useRef(null);
+  const [height, setHeight] = useState(0);
+  const { intro, bullets, callout } = item.a;
+
+  useEffect(() => {
+    if (isOpen) {
+      setHeight(contentRef.current.scrollHeight);
+    } else {
+      setHeight(0);
+    }
+  }, [isOpen, intro, bullets, callout]);
+
+  return (
+    <div className={`faq2-item${isOpen ? ' open' : ''}`}>
+      <button className="faq2-btn" onClick={() => onToggle(id)} aria-expanded={isOpen}>
+        <span className="faq2-q">{item.q}</span>
+        <span className="faq2-icon">+</span>
+      </button>
+      <div className="faq2-body" style={{ height }}>
+        <div ref={contentRef} className="faq2-content">
+          <p className="faq2-a">{intro}</p>
+          {bullets && (
+            <ul className="faq2-list">
+              {bullets.map((b, bi) => (
+                <li key={bi}><b>{b.label}</b> {b.text}</li>
+              ))}
+            </ul>
+          )}
+          {callout && <div className="faq2-callout">{callout}</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FaqGroup({ group, openId, onToggle }) {
   return (
     <div className="faqs-group">
-      <div className="faqs-group-hdr">{group.label}</div>
+      <h2 className="faqs-group-hdr">{group.label}</h2>
       {group.items.map((item, i) => {
         const id = `${group.label}-${i}`;
-        const isOpen = openId === id;
         return (
-          <div key={i} className={`faq2-item${isOpen ? ' open' : ''}`}>
-            <button className="faq2-btn" onClick={() => onToggle(id)} aria-expanded={isOpen}>
-              <span className="faq2-q">{item.q}</span>
-              <span className="faq2-icon">+</span>
-            </button>
-            <div className="faq2-body">
-              <p className="faq2-a">{item.a}</p>
-            </div>
-          </div>
+          <FaqItem key={i} item={item} id={id} isOpen={openId === id} onToggle={onToggle} />
         );
       })}
     </div>
@@ -35,13 +62,16 @@ export default function FaqsPage() {
   useReveal();
   const { t } = useLang();
   const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('all');
   const [openId, setOpenId] = useState(null);
   const inputRef = useRef(null);
 
   const fh   = t('faqs.hero');
   const fcta = t('faqs.cta');
+  const allLabel = t('faqs.allLabel');
   const FAQ_GROUPS = t('faqs.groups');
   const totalQ = FAQ_GROUPS.reduce((acc, g) => acc + g.items.length, 0);
+  const categories = [{ id: 'all', label: allLabel }, ...FAQ_GROUPS.map(g => ({ id: g.label, label: g.label }))];
 
   useEffect(() => {
     const onKey = (e) => {
@@ -59,11 +89,12 @@ export default function FaqsPage() {
   }
 
   const q = search.toLowerCase();
-  const filtered = FAQ_GROUPS.map(group => ({
+  const byCategory = category === 'all'
+    ? FAQ_GROUPS
+    : FAQ_GROUPS.filter(group => group.label === category);
+  const filtered = byCategory.map(group => ({
     ...group,
-    items: group.items.filter(item =>
-      !q || item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q)
-    ),
+    items: group.items.filter(item => !q || item.q.toLowerCase().includes(q)),
   })).filter(group => group.items.length > 0);
 
   return (
@@ -109,6 +140,20 @@ export default function FaqsPage() {
 
         <section className="faqs-sec">
           <div className="faqs-wrap">
+
+            {/* Category filter */}
+            <div className="faqs-cats">
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`faqs-cat${category === cat.id ? ' faqs-cat--active' : ''}`}
+                  onClick={() => setCategory(cat.id)}
+                  aria-pressed={category === cat.id}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
 
             {/* FAQ groups */}
             {filtered.length > 0 ? (

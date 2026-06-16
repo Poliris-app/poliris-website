@@ -12,6 +12,39 @@
   padding: 0 40px;
 }
 
+/* ── Category filter pills ─────────────────────────────────── */
+.faqs-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.faqs-cat {
+  background: #fff;
+  border: 1.5px solid #e4e8f2;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.faqs-cat:hover {
+  border-color: var(--poliris-blue);
+  color: var(--poliris-blue);
+}
+.faqs-cat--active {
+  background: var(--poliris-blue);
+  border-color: var(--poliris-blue);
+  color: #fff;
+}
+.faqs-cat--active:hover {
+  color: #fff;
+}
+
 /* ── Search ─────────────────────────────────────────────────── */
 .faqs-search {
   position: relative;
@@ -103,6 +136,7 @@
   margin-bottom: 8px;
 }
 .faqs-group-hdr {
+  margin: 0;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -135,6 +169,7 @@
   font-family: inherit;
 }
 .faq2-q {
+  margin: 0;
   font-size: 16px;
   font-weight: 600;
   color: #1a1d23;
@@ -171,18 +206,61 @@
 }
 
 .faq2-body {
-  max-height: 0;
+  height: 0;
   overflow: hidden;
-  transition: max-height 0.32s cubic-bezier(.4,0,.2,1);
+  transition: height 0.32s cubic-bezier(.4,0,.2,1);
 }
-.faq2-item.open .faq2-body {
-  max-height: 320px;
+.faq2-content {
+  padding: 0 48px 22px 0;
 }
 .faq2-a {
-  padding: 0 48px 22px 0;
   font-size: 14.5px;
   color: #4b5563;
   line-height: 1.7;
+  margin: 0 0 16px;
+}
+.faq2-a:last-child {
+  margin-bottom: 0;
+}
+
+.faq2-list {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq2-list li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14.5px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+.faq2-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--poliris-blue);
+}
+.faq2-list b {
+  color: #1a1d23;
+  font-weight: 700;
+}
+
+.faq2-callout {
+  background: #eef1fb;
+  border-left: 3px solid var(--poliris-blue);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.6;
 }
 
 /* ── Empty state ────────────────────────────────────────────── */
@@ -198,4 +276,5 @@
   .faqs-wrap { padding: 0 20px; }
   .faq2-q { font-size: 14.5px; }
   .faq2-btn { padding: 18px 0; }
+  .faq2-content { padding-right: 0; }
 }
