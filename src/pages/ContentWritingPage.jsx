@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import '../content-writing.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import { useLang } from '../contexts/LangContext';
@@ -392,6 +393,7 @@ export default function ContentWritingPage() {
 
   return (
     <div className="cw-page">
+      <Seo page="content-writing" />
       <Navbar />
       <main>
 

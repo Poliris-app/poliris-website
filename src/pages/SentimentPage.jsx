@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import '../sentiment.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import { useLang } from '../contexts/LangContext';
@@ -259,6 +260,7 @@ export default function SentimentPage() {
 
   return (
     <div className="vis-page sent-page">
+      <Seo page="sentiment" />
       <Navbar />
       <main>
         {/* ===== HERO ===== */}

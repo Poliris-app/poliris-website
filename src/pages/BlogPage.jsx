@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import useReveal from '../hooks/useReveal';
@@ -53,6 +54,7 @@ export default function BlogPage() {
 
   return (
     <div>
+      <Seo page="blog" />
       <Navbar />
       <main>
         <Hero

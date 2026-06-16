@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import useReveal from '../hooks/useReveal';
@@ -67,6 +68,7 @@ export default function FaqsPage() {
 
   return (
     <div>
+      <Seo page="faqs" />
       <Navbar />
       <main>
         <Hero

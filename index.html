@@ -4,20 +4,10 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/Logo-Poliris-1.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Poliris</title>
+    <meta name="robots" content="index, follow" />
+    <!-- title + description are injected per-route by <Seo> (react-helmet via vite-react-ssg). -->
   </head>
   <body>
-    <script>
-      (function() {
-        var p = window.location.search.match(/[?&]p=([^&]*)/);
-        var h = window.location.search.match(/[?&]h=([^&]*)/);
-        if (p) {
-          window.history.replaceState(null, null,
-            '/poliris-website/' + decodeURIComponent(p[1]) + decodeURIComponent(h ? h[1] : '')
-          );
-        }
-      })();
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
