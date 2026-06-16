@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation, Outlet, Navigate } from 'react-router-dom';
 import en from '../locales/en';
 import fr from '../locales/fr';
@@ -20,6 +20,11 @@ export function LangWrapper() {
   const { lang } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Reset scroll on navigation (was a top-level <ScrollToTop /> in App.jsx).
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
 
   if (!VALID_LANGS.includes(lang)) {
     return <Navigate to={`/en${location.pathname.replace(/^\/[^/]*/, '')}`} replace />;

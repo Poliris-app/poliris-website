@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import '../visibility.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Seo from '../components/Seo';
 import GlobeMap from '../components/GlobeMap';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
@@ -111,6 +112,7 @@ export default function VisibilityPage() {
 
   return (
     <div className="vis-page">
+      <Seo page="visibility" />
       <Navbar />
       <main>
 
