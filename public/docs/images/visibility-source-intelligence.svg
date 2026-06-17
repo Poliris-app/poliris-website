@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 500" role="img" aria-label="Source Intelligence card with 66 sources and 132 citations, Diversified tag, and top five cited websites">
+  <defs>
+    <filter id="si-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .si-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .si-title { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; letter-spacing: 0.2px; }
+      .si-big { font: 700 34px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-big-label { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .si-dot { font: 700 14px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .si-div-bg { fill: #F3E8FF; }
+      .si-div-tx { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #7E22CE; }
+      .si-legend { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .si-cat-bg { fill: #F1F5F9; }
+      .si-cat-tx { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .si-site { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-delta { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #16A34A; }
+      .si-cit { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-bar-track { fill: #E5E7EB; }
+      .si-divider { stroke: #EEF2F7; stroke-width: 1; }
+      .si-btn { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .si-btn-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <!-- Card -->
+  <rect class="si-bg" x="1" y="1" width="558" height="498" rx="14" ry="14" filter="url(#si-shadow)"/>
+
+  <!-- Header -->
+  <text class="si-title" x="24" y="32">Source intelligence</text>
+  <rect class="si-div-bg" x="484" y="19" width="52" height="20" rx="10" ry="10"/>
+  <text class="si-div-tx" x="510" y="33" text-anchor="middle">Diversified</text>
+
+  <!-- 66 sources · 132 citations -->
+  <text class="si-big" x="24" y="78">66</text>
+  <text class="si-big-label" x="72" y="78">sources</text>
+  <text class="si-dot" x="150" y="76">&middot;</text>
+  <text class="si-big" x="164" y="78">132</text>
+  <text class="si-big-label" x="226" y="78">citations</text>
+
+  <!-- Stacked category bar (Retail purple, Industry blue, Social pink, Blog green, Media orange, General gray) -->
+  <!-- total width 512 -->
+  <g>
+    <rect x="24" y="98" width="130" height="14" fill="#7C3AED" rx="2"/>
+    <rect x="154" y="98" width="28" height="14" fill="#2563EB"/>
+    <rect x="182" y="98" width="24" height="14" fill="#EC4899"/>
+    <rect x="206" y="98" width="38" height="14" fill="#10B981"/>
+    <rect x="244" y="98" width="36" height="14" fill="#F59E0B"/>
+    <rect x="280" y="98" width="256" height="14" fill="#6B7280" rx="2"/>
+  </g>
+
+  <!-- Legend dots -->
+  <g transform="translate(24 132)">
+    <circle cx="4" cy="0" r="4" fill="#7C3AED"/>
+    <text class="si-legend" x="14" y="4">Retail</text>
+    <circle cx="64" cy="0" r="4" fill="#2563EB"/>
+    <text class="si-legend" x="74" y="4">Industry</text>
+    <circle cx="132" cy="0" r="4" fill="#EC4899"/>
+    <text class="si-legend" x="142" y="4">Social</text>
+    <circle cx="188" cy="0" r="4" fill="#10B981"/>
+    <text class="si-legend" x="198" y="4">Blog</text>
+    <circle cx="240" cy="0" r="4" fill="#F59E0B"/>
+    <text class="si-legend" x="250" y="4">Media</text>
+    <circle cx="298" cy="0" r="4" fill="#6B7280"/>
+    <text class="si-legend" x="308" y="4">General</text>
+  </g>
+
+  <!-- Divider -->
+  <line class="si-divider" x1="24" y1="158" x2="536" y2="158"/>
+
+  <!-- Row 1: google.com General ↑13 / 13 cit. -->
+  <g transform="translate(24 178)">
+    <rect width="20" height="20" rx="10" ry="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <text x="10" y="14" text-anchor="middle" font-size="11" font-weight="700" font-family="'Geist', system-ui" fill="#4285F4">G</text>
+  </g>
+  <text class="si-site" x="54" y="193">google.com</text>
+  <rect class="si-cat-bg" x="138" y="180" width="48" height="18" rx="9" ry="9"/>
+  <text class="si-cat-tx" x="162" y="193" text-anchor="middle">General</text>
+  <text class="si-delta" x="466" y="193" text-anchor="end">&#8593; 13</text>
+  <text class="si-cit" x="536" y="193" text-anchor="end">13 cit.</text>
+  <rect class="si-bar-track" x="24" y="204" width="512" height="6" rx="3" ry="3"/>
+  <rect x="24" y="204" width="512" height="6" rx="3" ry="3" fill="#6B7280"/>
+
+  <!-- Row 2: sneakerjagers.com Retail ↑8 / 8 cit. -->
+  <g transform="translate(24 232)">
+    <circle cx="10" cy="10" r="10" fill="#111827"/>
+    <circle cx="10" cy="10" r="5" fill="#F59E0B"/>
+  </g>
+  <text class="si-site" x="54" y="247">sneakerjagers.com</text>
+  <rect class="si-cat-bg" x="190" y="234" width="40" height="18" rx="9" ry="9"/>
+  <text class="si-cat-tx" x="210" y="247" text-anchor="middle">Retail</text>
+  <text class="si-delta" x="476" y="247" text-anchor="end">&#8593; 8</text>
+  <text class="si-cit" x="536" y="247" text-anchor="end">8 cit.</text>
+  <rect class="si-bar-track" x="24" y="258" width="512" height="6" rx="3" ry="3"/>
+  <rect x="24" y="258" width="315" height="6" rx="3" ry="3" fill="#7C3AED"/>
+
+  <!-- Row 3: japantravel.navitime.com General -->
+  <g transform="translate(24 286)">
+    <rect width="20" height="20" rx="10" ry="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="10" cy="10" r="6" fill="none" stroke="#3B82F6" stroke-width="1.6"/>
+    <circle cx="10" cy="10" r="2" fill="#3B82F6"/>
+  </g>
+  <text class="si-site" x="54" y="301">japantravel.navitime.com</text>
+  <rect class="si-cat-bg" x="214" y="288" width="48" height="18" rx="9" ry="9"/>
+  <text class="si-cat-tx" x="238" y="301" text-anchor="middle">General</text>
+  <text class="si-delta" x="476" y="301" text-anchor="end">&#8593; 8</text>
+  <text class="si-cit" x="536" y="301" text-anchor="end">8 cit.</text>
+  <rect class="si-bar-track" x="24" y="312" width="512" height="6" rx="3" ry="3"/>
+  <rect x="24" y="312" width="315" height="6" rx="3" ry="3" fill="#6B7280"/>
+
+  <!-- Row 4: zenmarket.jp Retail -->
+  <g transform="translate(24 340)">
+    <rect width="20" height="20" rx="10" ry="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M5 7 L15 7 L5 15 L15 15" stroke="#0891B2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </g>
+  <text class="si-site" x="54" y="355">zenmarket.jp</text>
+  <rect class="si-cat-bg" x="138" y="342" width="40" height="18" rx="9" ry="9"/>
+  <text class="si-cat-tx" x="158" y="355" text-anchor="middle">Retail</text>
+  <text class="si-delta" x="476" y="355" text-anchor="end">&#8593; 6</text>
+  <text class="si-cit" x="536" y="355" text-anchor="end">6 cit.</text>
+  <rect class="si-bar-track" x="24" y="366" width="512" height="6" rx="3" ry="3"/>
+  <rect x="24" y="366" width="236" height="6" rx="3" ry="3" fill="#7C3AED"/>
+
+  <!-- Row 5: vertexaisearch.cloud.google.com General -->
+  <g transform="translate(24 394)">
+    <rect width="20" height="20" rx="10" ry="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="10" cy="10" r="5" fill="#1D4ED8"/>
+  </g>
+  <text class="si-site" x="54" y="409">vertexaisearch.cloud.google.com</text>
+  <rect class="si-cat-bg" x="278" y="396" width="48" height="18" rx="9" ry="9"/>
+  <text class="si-cat-tx" x="302" y="409" text-anchor="middle">General</text>
+  <text class="si-delta" x="476" y="409" text-anchor="end">&#8593; 6</text>
+  <text class="si-cit" x="536" y="409" text-anchor="end">6 cit.</text>
+  <rect class="si-bar-track" x="24" y="420" width="512" height="6" rx="3" ry="3"/>
+  <rect x="24" y="420" width="236" height="6" rx="3" ry="3" fill="#6B7280"/>
+
+  <!-- See 61 more button -->
+  <rect class="si-btn" x="200" y="450" width="160" height="32" rx="8" ry="8"/>
+  <text class="si-btn-tx" x="280" y="470" text-anchor="middle">See 61 more &#9662;</text>
+</svg>

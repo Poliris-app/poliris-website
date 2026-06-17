@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" role="img" aria-label="Visibility Analysis showing Position #5 and Visibility Score 59%, brand ranking bars, and a brand-by-model heat grid">
+  <defs>
+    <filter id="va-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .va-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .va-title { font: 600 15px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .va-sub { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .va-tab-bg { fill: #F1F5F9; }
+      .va-tab-active-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .va-tab-tx-active { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .va-tab-tx { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .va-kpi-label { font: 400 13px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .va-kpi-val { font: 700 32px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .va-kpi-delta { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #16A34A; }
+      .va-brand { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .va-score { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .va-you-bg { fill: #DBEAFE; }
+      .va-you-tx { font: 500 10px "Geist", "Inter", system-ui, sans-serif; fill: #1D4ED8; }
+      .va-legend { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .va-axis { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <!-- Card -->
+  <rect class="va-bg" x="1" y="1" width="1038" height="498" rx="14" ry="14" filter="url(#va-shadow)"/>
+
+  <!-- Header left -->
+  <text class="va-title" x="24" y="34">Visibility Analysis</text>
+  <text class="va-sub" x="24" y="54">How often your product appears in AI answers</text>
+
+  <!-- KPI boxes -->
+  <rect class="va-bg" x="540" y="20" width="240" height="70" rx="10" ry="10" fill="#F8FAFC" stroke="none"/>
+  <text class="va-kpi-label" x="560" y="44">Position</text>
+  <text class="va-kpi-val" x="560" y="78">#5</text>
+
+  <rect class="va-bg" x="796" y="20" width="220" height="70" rx="10" ry="10" fill="#F8FAFC" stroke="none"/>
+  <text class="va-kpi-label" x="816" y="44">Visibility Score</text>
+  <text class="va-kpi-val" x="816" y="78">59%</text>
+  <text class="va-kpi-delta" x="996" y="80" text-anchor="end">&#8593;59%</text>
+
+  <!-- Tabs row -->
+  <rect class="va-tab-bg" x="24" y="108" width="420" height="38" rx="10" ry="10"/>
+  <rect class="va-tab-active-bg" x="28" y="112" width="96" height="30" rx="8" ry="8"/>
+  <text class="va-tab-tx-active" x="76" y="131" text-anchor="middle">All LLMs</text>
+  <!-- ChatGPT tab -->
+  <circle cx="150" cy="127" r="5" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+  <circle cx="150" cy="127" r="2" fill="#10A37F"/>
+  <text class="va-tab-tx" x="164" y="131">ChatGPT</text>
+  <!-- Gemini tab -->
+  <path d="M252 123 L254 127 L258 129 L254 131 L252 135 L250 131 L246 129 L250 127 Z" fill="#3B82F6"/>
+  <text class="va-tab-tx" x="268" y="131">Gemini</text>
+  <!-- Gemini Web tab -->
+  <path d="M340 123 L342 127 L346 129 L342 131 L340 135 L338 131 L334 129 L338 127 Z" fill="#3B82F6"/>
+  <text class="va-tab-tx" x="356" y="131">Gemini Web</text>
+
+  <!-- LEFT: brand bars -->
+  <!-- Row 1: Nike 7 -->
+  <g transform="translate(24 176)">
+    <circle cx="16" cy="16" r="16" fill="#000000"/>
+    <path d="M6 20 L28 10 L12 22 L10 22 Z" fill="#FFFFFF"/>
+  </g>
+  <text class="va-brand" x="68" y="196">Nike</text>
+  <rect x="170" y="192" width="240" height="10" rx="5" fill="#DBEAFE"/>
+  <rect x="170" y="192" width="168" height="10" rx="5" fill="#1E3A8A"/>
+  <text class="va-score" x="440" y="199" text-anchor="end">7</text>
+
+  <!-- Row 2: ASICS 7 -->
+  <g transform="translate(24 218)">
+    <circle cx="16" cy="16" r="16" fill="#F1F5F9"/>
+    <path d="M6 20 Q16 8 26 20" stroke="#0B3E78" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  </g>
+  <text class="va-brand" x="68" y="238">ASICS</text>
+  <rect x="170" y="234" width="240" height="10" rx="5" fill="#E2E8F0"/>
+  <rect x="170" y="234" width="168" height="10" rx="5" fill="#0B3E78"/>
+  <text class="va-score" x="440" y="241" text-anchor="end">7</text>
+
+  <!-- Row 3: Adidas 7 -->
+  <g transform="translate(24 260)">
+    <circle cx="16" cy="16" r="16" fill="#000000"/>
+    <polygon points="10,24 14,10 16,10 12,24" fill="#FFFFFF"/>
+    <polygon points="14,24 18,10 20,10 16,24" fill="#FFFFFF"/>
+    <polygon points="18,24 22,10 24,10 20,24" fill="#FFFFFF"/>
+  </g>
+  <text class="va-brand" x="68" y="280">Adidas</text>
+  <rect x="170" y="276" width="240" height="10" rx="5" fill="#CFFAFE"/>
+  <rect x="170" y="276" width="144" height="10" rx="5" fill="#06B6D4"/>
+  <text class="va-score" x="440" y="283" text-anchor="end">7</text>
+
+  <!-- Row 4: New Balance 7 -->
+  <g transform="translate(24 302)">
+    <circle cx="16" cy="16" r="16" fill="#E11D48"/>
+    <text x="16" y="22" text-anchor="middle" font-size="14" font-weight="700" font-family="'Geist', system-ui" fill="#FFFFFF">N</text>
+  </g>
+  <text class="va-brand" x="68" y="322">New Balance</text>
+  <rect x="170" y="318" width="240" height="10" rx="5" fill="#DCFCE7"/>
+  <rect x="170" y="318" width="132" height="10" rx="5" fill="#22C55E"/>
+  <text class="va-score" x="440" y="325" text-anchor="end">7</text>
+
+  <!-- Row 5: Onitsuka Tiger (You) 6 -->
+  <g transform="translate(24 344)">
+    <rect width="32" height="32" rx="6" ry="6" fill="#1E293B"/>
+    <path d="M6 22 L16 8 L26 22 Z" fill="#F59E0B"/>
+  </g>
+  <text class="va-brand" x="68" y="359">Onitsuka</text>
+  <text class="va-brand" x="68" y="374">Tiger</text>
+  <rect class="va-you-bg" x="128" y="356" width="30" height="16" rx="8" ry="8"/>
+  <text class="va-you-tx" x="143" y="367" text-anchor="middle">You</text>
+  <rect x="170" y="360" width="240" height="10" rx="5" fill="#CBD5E1"/>
+  <rect x="170" y="360" width="108" height="10" rx="5" fill="#334155"/>
+  <text class="va-score" x="440" y="367" text-anchor="end">6</text>
+
+  <!-- Row 6: Hender Scheme 2 -->
+  <g transform="translate(24 390)">
+    <circle cx="16" cy="16" r="16" fill="#F1F5F9"/>
+    <path d="M10 10 L10 22 M22 10 L22 22 M10 16 L22 16" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <text class="va-brand" x="68" y="404">Hender</text>
+  <text class="va-brand" x="68" y="418">Scheme</text>
+  <rect x="170" y="402" width="240" height="10" rx="5" fill="#FFEDD5"/>
+  <rect x="170" y="402" width="58" height="10" rx="5" fill="#F59E0B"/>
+  <text class="va-score" x="440" y="409" text-anchor="end">2</text>
+
+  <!-- RIGHT: heat grid (brands x models) -->
+  <!-- brand labels (left side of grid) -->
+  <text class="va-brand" x="540" y="196">Nike</text>
+  <text class="va-brand" x="540" y="238">ASICS</text>
+  <text class="va-brand" x="540" y="280">Adidas</text>
+  <text class="va-brand" x="540" y="322">New Balance</text>
+  <text class="va-brand" x="540" y="357">Onitsuka</text>
+  <text class="va-brand" x="540" y="372">Tiger</text>
+  <text class="va-brand" x="540" y="404">Hender</text>
+  <text class="va-brand" x="540" y="418">Scheme</text>
+
+  <!-- Grid cells: 6 rows x 4 columns -->
+  <!-- Columns: Avg (x=640), ChatGPT (x=740), Gemini (x=840), Gemini Web (x=940), width 80, height 22 -->
+  <!-- Row 1: Nike -->
+  <rect x="640" y="182" width="80" height="22" rx="4" fill="#60A5FA"/>
+  <rect x="740" y="182" width="80" height="22" rx="4" fill="#3B82F6"/>
+  <rect x="840" y="182" width="80" height="22" rx="4" fill="#60A5FA"/>
+  <rect x="940" y="182" width="80" height="22" rx="4" fill="#93C5FD"/>
+  <!-- Row 2: ASICS -->
+  <rect x="640" y="224" width="80" height="22" rx="4" fill="#93C5FD"/>
+  <rect x="740" y="224" width="80" height="22" rx="4" fill="#BFDBFE"/>
+  <rect x="840" y="224" width="80" height="22" rx="4" fill="#60A5FA"/>
+  <rect x="940" y="224" width="80" height="22" rx="4" fill="#1D4ED8"/>
+  <!-- Row 3: Adidas -->
+  <rect x="640" y="266" width="80" height="22" rx="4" fill="#93C5FD"/>
+  <rect x="740" y="266" width="80" height="22" rx="4" fill="#BFDBFE"/>
+  <rect x="840" y="266" width="80" height="22" rx="4" fill="#3B82F6"/>
+  <rect x="940" y="266" width="80" height="22" rx="4" fill="#1D4ED8"/>
+  <!-- Row 4: New Balance -->
+  <rect x="640" y="308" width="80" height="22" rx="4" fill="#60A5FA"/>
+  <rect x="740" y="308" width="80" height="22" rx="4" fill="#BFDBFE"/>
+  <rect x="840" y="308" width="80" height="22" rx="4" fill="#3B82F6"/>
+  <rect x="940" y="308" width="80" height="22" rx="4" fill="#3B82F6"/>
+  <!-- Row 5: Onitsuka Tiger -->
+  <rect x="640" y="354" width="80" height="22" rx="4" fill="#93C5FD"/>
+  <rect x="740" y="354" width="80" height="22" rx="4" fill="#BFDBFE"/>
+  <rect x="840" y="354" width="80" height="22" rx="4" fill="#60A5FA"/>
+  <rect x="940" y="354" width="80" height="22" rx="4" fill="#93C5FD"/>
+  <!-- Row 6: Hender Scheme (lighter for low scores) -->
+  <rect x="640" y="400" width="80" height="22" rx="4" fill="#E0F2FE"/>
+  <rect x="740" y="400" width="80" height="22" rx="4" fill="#CBD5E1"/>
+  <rect x="840" y="400" width="80" height="22" rx="4" fill="#DBEAFE"/>
+  <rect x="940" y="400" width="80" height="22" rx="4" fill="#CBD5E1"/>
+
+  <!-- X-axis labels -->
+  <text class="va-axis" x="680" y="446" text-anchor="middle">Avg.</text>
+  <text class="va-axis" x="780" y="446" text-anchor="middle">ChatGPT</text>
+  <text class="va-axis" x="880" y="446" text-anchor="middle">Gemini</text>
+  <text class="va-axis" x="980" y="446" text-anchor="middle">Gemini Web</text>
+
+  <!-- Low-High legend (gradient strip) -->
+  <defs>
+    <linearGradient id="va-legend-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#DBEAFE"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <text class="va-legend" x="650" y="476">Low</text>
+  <rect x="680" y="466" width="300" height="10" rx="5" fill="url(#va-legend-grad)"/>
+  <text class="va-legend" x="990" y="476">High</text>
+</svg>

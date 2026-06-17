@@ -1,0 +1,279 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" role="img" aria-label="Prompt Explorer table showing prompt questions, topic tags, Traffic indicator, and responding LLM badges">
+  <defs>
+    <filter id="pe-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .pe-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .pe-title { font: 600 15px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .pe-sub { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .pe-col { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #475569; letter-spacing: 0.3px; }
+      .pe-prompt { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .pe-tag { font: 500 11px "Geist", "Inter", system-ui, sans-serif; }
+      .pe-traffic { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .pe-llm { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .pe-llm-more { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #1D4ED8; }
+      .pe-divider { stroke: #EEF2F7; stroke-width: 1; }
+      .pe-search { fill: #F8FAFC; stroke: #E5E7EB; stroke-width: 1; }
+      .pe-search-tx { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .pe-filter-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .pe-filter-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <!-- Card -->
+  <rect class="pe-bg" x="1" y="1" width="998" height="678" rx="14" ry="14" filter="url(#pe-shadow)"/>
+
+  <!-- Header -->
+  <text class="pe-title" x="24" y="28">Prompt Explorer</text>
+  <text class="pe-sub" x="24" y="48">How AI platforms respond to prompts about your industry</text>
+
+  <!-- Search -->
+  <rect class="pe-search" x="760" y="16" width="160" height="28" rx="8" ry="8"/>
+  <circle cx="776" cy="30" r="5" fill="none" stroke="#94A3B8" stroke-width="1.4"/>
+  <line x1="780" y1="34" x2="784" y2="38" stroke="#94A3B8" stroke-width="1.4" stroke-linecap="round"/>
+  <text class="pe-search-tx" x="790" y="34">Search&hellip;</text>
+
+  <!-- Filter button -->
+  <rect class="pe-filter-bg" x="930" y="16" width="56" height="28" rx="8" ry="8"/>
+  <path d="M940 26 L952 26 M942 31 L950 31 M944 36 L948 36" stroke="#475569" stroke-width="1.4" stroke-linecap="round"/>
+  <text class="pe-filter-tx" x="958" y="34">Filter</text>
+
+  <!-- Column headers row -->
+  <line class="pe-divider" x1="24" y1="70" x2="976" y2="70"/>
+  <text class="pe-col" x="24" y="88">Prompts</text>
+  <text class="pe-col" x="680" y="88">Traffic</text>
+  <!-- small up/down arrows next to Traffic -->
+  <polygon points="720,82 724,78 728,82" fill="#94A3B8"/>
+  <polygon points="720,90 724,94 728,90" fill="#94A3B8"/>
+  <text class="pe-col" x="800" y="88">LLMs</text>
+  <line class="pe-divider" x1="24" y1="100" x2="976" y2="100"/>
+
+  <!-- Rows definition: each row 56px tall; start y=114 -->
+  <g id="rows">
+    <!-- Row 1: What are the best sneakers suitable for office wear in Japan? / design,quality / High -->
+    <text class="pe-prompt" x="24" y="130">What are the best sneakers suitable for office wear in Japan?</text>
+    <rect x="24" y="140" width="52" height="16" rx="8" fill="#FCE7F3"/>
+    <text class="pe-tag" x="50" y="152" text-anchor="middle" fill="#BE185D">design</text>
+    <rect x="82" y="140" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="106" y="152" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <!-- Traffic High -->
+    <g transform="translate(660 136)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#3B82F6"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#3B82F6"/>
+      <rect x="12" y="4" width="4" height="14" rx="1" fill="#3B82F6"/>
+    </g>
+    <text class="pe-traffic" x="690" y="150">High</text>
+    <!-- LLM chips -->
+    <rect x="780" y="140" width="82" height="24" rx="6" fill="#F1F5F9"/>
+    <circle cx="794" cy="152" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="152" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="156">ChatGPT</text>
+    <rect x="868" y="140" width="72" height="24" rx="6" fill="#EFF6FF"/>
+    <path d="M880 148 L882 152 L886 154 L882 156 L880 160 L878 156 L874 154 L878 152 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="156">Gemini</text>
+    <rect x="946" y="140" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="156" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="170" x2="976" y2="170"/>
+
+    <!-- Row 2: Where can I reliably purchase vintage or deadstock sneakers in Japan? / availability,quality / High -->
+    <text class="pe-prompt" x="24" y="188">Where can I reliably purchase vintage or deadstock sneakers in Japan?</text>
+    <rect x="24" y="198" width="68" height="16" rx="8" fill="#FFEDD5"/>
+    <text class="pe-tag" x="58" y="210" text-anchor="middle" fill="#C2410C">availability</text>
+    <rect x="98" y="198" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="122" y="210" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <g transform="translate(660 194)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#3B82F6"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#3B82F6"/>
+      <rect x="12" y="4" width="4" height="14" rx="1" fill="#3B82F6"/>
+    </g>
+    <text class="pe-traffic" x="690" y="208">High</text>
+    <rect x="780" y="198" width="82" height="24" rx="6" fill="#F1F5F9"/>
+    <circle cx="794" cy="210" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="210" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="214">ChatGPT</text>
+    <rect x="868" y="198" width="72" height="24" rx="6" fill="#EFF6FF"/>
+    <path d="M880 206 L882 210 L886 212 L882 214 L880 218 L878 214 L874 212 L878 210 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="214">Gemini</text>
+    <rect x="946" y="198" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="214" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="228" x2="976" y2="228"/>
+
+    <!-- Row 3: most comfortable sneakers for business casual / quality,design / High -->
+    <text class="pe-prompt" x="24" y="246">What are the most comfortable sneakers for business casual styles in Japan?</text>
+    <rect x="24" y="256" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="48" y="268" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <rect x="78" y="256" width="52" height="16" rx="8" fill="#FCE7F3"/>
+    <text class="pe-tag" x="104" y="268" text-anchor="middle" fill="#BE185D">design</text>
+    <g transform="translate(660 252)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#3B82F6"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#3B82F6"/>
+      <rect x="12" y="4" width="4" height="14" rx="1" fill="#3B82F6"/>
+    </g>
+    <text class="pe-traffic" x="690" y="266">High</text>
+    <rect x="780" y="256" width="82" height="24" rx="6" fill="#F1F5F9"/>
+    <circle cx="794" cy="268" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="268" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="272">ChatGPT</text>
+    <rect x="868" y="256" width="72" height="24" rx="6" fill="#EFF6FF"/>
+    <path d="M880 264 L882 268 L886 270 L882 272 L880 276 L878 272 L874 270 L878 268 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="272">Gemini</text>
+    <rect x="946" y="256" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="272" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="286" x2="976" y2="286"/>
+
+    <!-- Row 4: calendar of upcoming sneaker releases / availability / Medium -->
+    <text class="pe-prompt" x="24" y="304">Where can I view a calendar of upcoming sneaker releases in Japan?</text>
+    <rect x="24" y="314" width="68" height="16" rx="8" fill="#FFEDD5"/>
+    <text class="pe-tag" x="58" y="326" text-anchor="middle" fill="#C2410C">availability</text>
+    <g transform="translate(660 310)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#F59E0B"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#F59E0B"/>
+      <rect x="12" y="6" width="4" height="12" rx="1" fill="#FDE68A"/>
+    </g>
+    <text class="pe-traffic" x="690" y="324">Medium</text>
+    <rect x="780" y="314" width="82" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="794" cy="326" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="326" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="330">ChatGPT</text>
+    <rect x="868" y="314" width="72" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M880 322 L882 326 L886 328 L882 330 L880 334 L878 330 L874 328 L878 326 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="330">Gemini</text>
+    <rect x="946" y="314" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="330" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="344" x2="976" y2="344"/>
+
+    <!-- Row 5: best stores to shop for sneakers / availability / Medium -->
+    <text class="pe-prompt" x="24" y="362">What are the best stores to shop for sneakers in Japan?</text>
+    <rect x="24" y="372" width="68" height="16" rx="8" fill="#FFEDD5"/>
+    <text class="pe-tag" x="58" y="384" text-anchor="middle" fill="#C2410C">availability</text>
+    <g transform="translate(660 368)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#F59E0B"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#F59E0B"/>
+      <rect x="12" y="6" width="4" height="12" rx="1" fill="#FDE68A"/>
+    </g>
+    <text class="pe-traffic" x="690" y="382">Medium</text>
+    <rect x="780" y="372" width="82" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="794" cy="384" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="384" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="388">ChatGPT</text>
+    <rect x="868" y="372" width="72" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M880 380 L882 384 L886 386 L882 388 L880 392 L878 388 L874 386 L878 384 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="388">Gemini</text>
+    <rect x="946" y="372" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="388" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="402" x2="976" y2="402"/>
+
+    <!-- Row 6: stylish professional-looking / design,quality / Medium -->
+    <text class="pe-prompt" x="24" y="420">What are the best stylish, professional-looking sneakers available in Japan?</text>
+    <rect x="24" y="430" width="52" height="16" rx="8" fill="#FCE7F3"/>
+    <text class="pe-tag" x="50" y="442" text-anchor="middle" fill="#BE185D">design</text>
+    <rect x="82" y="430" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="106" y="442" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <g transform="translate(660 426)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#F59E0B"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#F59E0B"/>
+      <rect x="12" y="6" width="4" height="12" rx="1" fill="#FDE68A"/>
+    </g>
+    <text class="pe-traffic" x="690" y="440">Medium</text>
+    <rect x="780" y="430" width="82" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="794" cy="442" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="442" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="446">ChatGPT</text>
+    <rect x="868" y="430" width="72" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M880 438 L882 442 L886 444 L882 446 L880 450 L878 446 L874 444 L878 442 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="446">Gemini</text>
+    <rect x="946" y="430" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="446" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="460" x2="976" y2="460"/>
+
+    <!-- Row 7: sneaker shops in Japan curate / quality,design / Medium -->
+    <text class="pe-prompt" x="24" y="478">Which sneaker shops in Japan curate the best professional-style footwear?</text>
+    <rect x="24" y="488" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="48" y="500" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <rect x="78" y="488" width="52" height="16" rx="8" fill="#FCE7F3"/>
+    <text class="pe-tag" x="104" y="500" text-anchor="middle" fill="#BE185D">design</text>
+    <g transform="translate(660 484)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#F59E0B"/>
+      <rect x="6" y="8" width="4" height="10" rx="1" fill="#F59E0B"/>
+      <rect x="12" y="6" width="4" height="12" rx="1" fill="#FDE68A"/>
+    </g>
+    <text class="pe-traffic" x="690" y="498">Medium</text>
+    <rect x="780" y="488" width="82" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="794" cy="500" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="500" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="504">ChatGPT</text>
+    <rect x="868" y="488" width="72" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M880 496 L882 500 L886 502 L882 504 L880 508 L878 504 L874 502 L878 500 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="504">Gemini</text>
+    <rect x="946" y="488" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="504" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="518" x2="976" y2="518"/>
+
+    <!-- Row 8: smart casual sneakers for men / design,quality / Low -->
+    <text class="pe-prompt" x="24" y="536">What are the best smart casual sneakers for men in Japan?</text>
+    <rect x="24" y="546" width="52" height="16" rx="8" fill="#FCE7F3"/>
+    <text class="pe-tag" x="50" y="558" text-anchor="middle" fill="#BE185D">design</text>
+    <rect x="82" y="546" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="106" y="558" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <g transform="translate(660 542)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#EF4444"/>
+      <rect x="6" y="10" width="4" height="8" rx="1" fill="#FCA5A5"/>
+      <rect x="12" y="8" width="4" height="10" rx="1" fill="#FCA5A5"/>
+    </g>
+    <text class="pe-traffic" x="690" y="556">Low</text>
+    <rect x="780" y="546" width="82" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="794" cy="558" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="558" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="562">ChatGPT</text>
+    <rect x="868" y="546" width="72" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M880 554 L882 558 L886 560 L882 562 L880 566 L878 562 L874 560 L878 558 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="562">Gemini</text>
+    <rect x="946" y="546" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="562" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="576" x2="976" y2="576"/>
+
+    <!-- Row 9: high-quality minimalist sneakers / design,quality / Low -->
+    <text class="pe-prompt" x="24" y="594">Where can I find high-quality minimalist sneakers in Japan?</text>
+    <rect x="24" y="604" width="52" height="16" rx="8" fill="#FCE7F3"/>
+    <text class="pe-tag" x="50" y="616" text-anchor="middle" fill="#BE185D">design</text>
+    <rect x="82" y="604" width="48" height="16" rx="8" fill="#DBEAFE"/>
+    <text class="pe-tag" x="106" y="616" text-anchor="middle" fill="#1D4ED8">quality</text>
+    <g transform="translate(660 600)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#EF4444"/>
+      <rect x="6" y="10" width="4" height="8" rx="1" fill="#FCA5A5"/>
+      <rect x="12" y="8" width="4" height="10" rx="1" fill="#FCA5A5"/>
+    </g>
+    <text class="pe-traffic" x="690" y="614">Low</text>
+    <rect x="780" y="604" width="82" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle cx="794" cy="616" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="616" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="620">ChatGPT</text>
+    <rect x="868" y="604" width="72" height="24" rx="6" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M880 612 L882 616 L886 618 L882 620 L880 624 L878 620 L874 618 L878 616 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="620">Gemini</text>
+    <rect x="946" y="604" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="620" text-anchor="middle">+1</text>
+    <line class="pe-divider" x1="24" y1="634" x2="976" y2="634"/>
+
+    <!-- Row 10: limited edition sneaker releases / availability / Low (selected/highlighted) -->
+    <text class="pe-prompt" x="24" y="652">Which retailers in Japan are best for finding limited edition sneaker releases?</text>
+    <rect x="24" y="662" width="68" height="16" rx="8" fill="#FFEDD5"/>
+    <text class="pe-tag" x="58" y="674" text-anchor="middle" fill="#C2410C">availability</text>
+    <g transform="translate(660 658)">
+      <rect x="0" y="12" width="4" height="6" rx="1" fill="#EF4444"/>
+      <rect x="6" y="10" width="4" height="8" rx="1" fill="#FCA5A5"/>
+      <rect x="12" y="8" width="4" height="10" rx="1" fill="#FCA5A5"/>
+    </g>
+    <text class="pe-traffic" x="690" y="672">Low</text>
+    <rect x="780" y="662" width="82" height="24" rx="6" fill="#DBEAFE"/>
+    <circle cx="794" cy="674" r="6" fill="none" stroke="#10A37F" stroke-width="1.5"/>
+    <circle cx="794" cy="674" r="2" fill="#10A37F"/>
+    <text class="pe-llm" x="806" y="678">ChatGPT</text>
+    <rect x="868" y="662" width="72" height="24" rx="6" fill="#EFF6FF"/>
+    <path d="M880 670 L882 674 L886 676 L882 678 L880 682 L878 678 L874 676 L878 674 Z" fill="#3B82F6"/>
+    <text class="pe-llm" x="892" y="678">Gemini</text>
+    <rect x="946" y="662" width="28" height="24" rx="6" fill="#EFF6FF"/>
+    <text class="pe-llm-more" x="960" y="678" text-anchor="middle">+1</text>
+  </g>
+</svg>

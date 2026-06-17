@@ -8,6 +8,7 @@ import TechnicalAuditPage from './pages/TechnicalAuditPage';
 import BlogPage from './pages/BlogPage';
 import FaqsPage from './pages/FaqsPage';
 import GlossaryPage from './pages/GlossaryPage';
+import DocsPage from './pages/DocsPage';
 
 export const routes = [
   // Bare root: client-side redirect to the default locale.
@@ -25,6 +26,7 @@ export const routes = [
       { path: 'blog', element: <BlogPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       { path: 'glossary', element: <GlossaryPage /> },
+      { path: 'docs', element: <DocsPage /> },
     ],
   },
 ];

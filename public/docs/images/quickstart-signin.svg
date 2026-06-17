@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 620" role="img" aria-label="Sign in screen with Google and Microsoft sign-in buttons, email and password fields, Keep me signed in option, Forgot password link, Sign in button, and a Sign up link.">
+  <defs>
+    <filter id="si-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .si-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .si-h1 { font: 700 30px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-sub { font: 400 14px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .si-label { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-btn-tx { font: 600 14px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-btn-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .si-divider-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .si-input-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .si-input-tx { font: 400 13px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .si-primary-bg { fill: #0062FF; }
+      .si-primary-tx { font: 600 14px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+      .si-kmsi-tx { font: 400 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .si-link-tx { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0062FF; }
+      .si-footer-tx { font: 400 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <rect class="si-bg" x="1" y="1" width="558" height="618" rx="14" ry="14" filter="url(#si-shadow)"/>
+
+  <text class="si-h1" x="40" y="70">Sign in</text>
+  <text class="si-sub" x="40" y="100">Log in to unlock tailored content and stay connected</text>
+  <text class="si-sub" x="40" y="118">with your community.</text>
+
+  <!-- Google button -->
+  <rect class="si-btn-bg" x="40" y="150" width="480" height="48" rx="10"/>
+  <g transform="translate(170 164)">
+    <circle cx="10" cy="10" r="10" fill="#FFFFFF"/>
+    <path d="M19.6 10.23a11.4 11.4 0 0 0-.18-2.03H10v3.85h5.4a4.62 4.62 0 0 1-2 3.03v2.52h3.24A9.78 9.78 0 0 0 19.6 10.23z" fill="#4285F4"/>
+    <path d="M10 20a9.55 9.55 0 0 0 6.64-2.43l-3.24-2.52a6.03 6.03 0 0 1-8.97-3.17H1.06v2.6A10 10 0 0 0 10 20z" fill="#34A853"/>
+    <path d="M4.43 11.88a6.01 6.01 0 0 1 0-3.76V5.52H1.06a10 10 0 0 0 0 8.96z" fill="#FBBC05"/>
+    <path d="M10 3.96a5.41 5.41 0 0 1 3.83 1.5l2.87-2.88A9.6 9.6 0 0 0 10 0 10 10 0 0 0 1.06 5.52l3.37 2.6A6 6 0 0 1 10 3.96z" fill="#EA4335"/>
+  </g>
+  <text class="si-btn-tx" x="280" y="180" text-anchor="middle" dx="10">Sign in with Google</text>
+
+  <!-- Microsoft button -->
+  <rect class="si-btn-bg" x="40" y="214" width="480" height="48" rx="10"/>
+  <g transform="translate(166 228)">
+    <rect x="0" y="0" width="9" height="9" fill="#F25022"/>
+    <rect x="11" y="0" width="9" height="9" fill="#7FBA00"/>
+    <rect x="0" y="11" width="9" height="9" fill="#00A4EF"/>
+    <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+  </g>
+  <text class="si-btn-tx" x="280" y="244" text-anchor="middle" dx="12">Sign in with Microsoft</text>
+
+  <!-- OR divider -->
+  <line x1="40" y1="296" x2="260" y2="296" stroke="#E5E7EB"/>
+  <line x1="300" y1="296" x2="520" y2="296" stroke="#E5E7EB"/>
+  <text class="si-divider-tx" x="280" y="300" text-anchor="middle">OR</text>
+
+  <!-- Email -->
+  <text class="si-label" x="40" y="338">Email</text>
+  <rect class="si-input-bg" x="40" y="350" width="480" height="44" rx="10"/>
+  <text class="si-input-tx" x="56" y="377">Email or username</text>
+
+  <!-- Password -->
+  <text class="si-label" x="40" y="422">Password</text>
+  <rect class="si-input-bg" x="40" y="434" width="480" height="44" rx="10"/>
+  <text class="si-input-tx" x="56" y="461">Password</text>
+
+  <!-- Keep me signed in + Forgot password -->
+  <rect x="40" y="498" width="16" height="16" rx="3" fill="#0062FF"/>
+  <path d="M44 506 L47 509 L53 503" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="si-kmsi-tx" x="64" y="511">Keep me signed in</text>
+  <text class="si-link-tx" x="520" y="511" text-anchor="end">Forgot password?</text>
+
+  <!-- Sign in primary button -->
+  <rect class="si-primary-bg" x="40" y="540" width="480" height="48" rx="10"/>
+  <text class="si-primary-tx" x="280" y="570" text-anchor="middle">Sign in</text>
+
+  <!-- Sign up -->
+  <text class="si-footer-tx" x="280" y="610" text-anchor="middle">Don&#x2019;t have an account? <tspan class="si-link-tx">Sign up</tspan></text>
+</svg>

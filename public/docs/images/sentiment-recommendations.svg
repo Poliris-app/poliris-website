@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" role="img" aria-label="Recommendations and Opportunities card: four prioritized suggestions - High Strengthen Local Brand Awareness, Medium Enhance Availability in Stores, Low Promote Quality Craftsmanship, Medium Boost Innovation Perception.">
+  <defs>
+    <filter id="rec-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .rec-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .rec-title { font: 600 15px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .rec-sub { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .rec-ask-bg { fill: #1E3A8A; }
+      .rec-ask-tx { font: 600 12px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+      .rec-card-bg { fill: #F8FAFC; }
+      .rec-high-bg { fill: #EF4444; }
+      .rec-high-tx { font: 600 11px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+      .rec-med-bg { fill: #F59E0B; }
+      .rec-med-tx { font: 600 11px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+      .rec-low-bg { fill: #0062FF; }
+      .rec-low-tx { font: 600 11px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+      .rec-card-title { font: 600 14px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .rec-card-body { font: 400 12.5px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <!-- Main card -->
+  <rect class="rec-bg" x="1" y="1" width="1198" height="258" rx="14" ry="14" filter="url(#rec-shadow)"/>
+
+  <!-- Header -->
+  <text class="rec-title" x="24" y="30">Recommendations &amp; Opportunities</text>
+  <text class="rec-sub" x="24" y="48">Suggestions to improve your sentiment visibility</text>
+
+  <!-- Refresh icon -->
+  <g transform="translate(1050 18)">
+    <path d="M4 12 A8 8 0 0 1 18 8 M18 4 L18 10 L12 10" stroke="#64748B" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M20 12 A8 8 0 0 1 6 16 M6 20 L6 14 L12 14" stroke="#64748B" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Ask Poli AI button -->
+  <rect class="rec-ask-bg" x="1088" y="14" width="98" height="30" rx="15"/>
+  <text class="rec-ask-tx" x="1137" y="33" text-anchor="middle">Ask Poli AI</text>
+
+  <!-- Card 1: High - Strengthen Local Brand Awareness (top-left) -->
+  <rect class="rec-card-bg" x="24" y="76" width="568" height="74" rx="8" ry="8"/>
+  <rect x="24" y="76" width="4" height="74" fill="#EF4444" rx="2"/>
+  <rect class="rec-high-bg" x="44" y="90" width="42" height="20" rx="10"/>
+  <text class="rec-high-tx" x="65" y="104" text-anchor="middle">High</text>
+  <text class="rec-card-title" x="104" y="105">Strengthen Local Brand Awareness</text>
+  <text class="rec-card-body" x="104" y="126">Leverage Tokyo fashion weeks to increase local presence.</text>
+
+  <!-- Card 2: Medium - Enhance Availability in Stores (top-right) -->
+  <rect class="rec-card-bg" x="608" y="76" width="568" height="74" rx="8" ry="8"/>
+  <rect x="608" y="76" width="4" height="74" fill="#F59E0B" rx="2"/>
+  <rect class="rec-med-bg" x="628" y="90" width="62" height="20" rx="10"/>
+  <text class="rec-med-tx" x="659" y="104" text-anchor="middle">Medium</text>
+  <text class="rec-card-title" x="708" y="105">Enhance Availability in Stores</text>
+  <text class="rec-card-body" x="708" y="126">Address size availability issues highlighted on Reddit.</text>
+
+  <!-- Card 3: Low - Promote Quality Craftsmanship (bottom-left) -->
+  <rect class="rec-card-bg" x="24" y="162" width="568" height="74" rx="8" ry="8"/>
+  <rect x="24" y="162" width="4" height="74" fill="#0062FF" rx="2"/>
+  <rect class="rec-low-bg" x="44" y="176" width="42" height="20" rx="10"/>
+  <text class="rec-low-tx" x="65" y="190" text-anchor="middle">Low</text>
+  <text class="rec-card-title" x="104" y="191">Promote Quality Craftsmanship</text>
+  <text class="rec-card-body" x="104" y="212">Focus on &lsquo;Nippon Made&rsquo; line on Instagram.</text>
+
+  <!-- Card 4: Medium - Boost Innovation Perception (bottom-right) -->
+  <rect class="rec-card-bg" x="608" y="162" width="568" height="74" rx="8" ry="8"/>
+  <rect x="608" y="162" width="4" height="74" fill="#F59E0B" rx="2"/>
+  <rect class="rec-med-bg" x="628" y="176" width="62" height="20" rx="10"/>
+  <text class="rec-med-tx" x="659" y="190" text-anchor="middle">Medium</text>
+  <text class="rec-card-title" x="708" y="191">Boost Innovation Perception</text>
+  <text class="rec-card-body" x="708" y="212">Highlight innovative designs in global campaigns.</text>
+</svg>

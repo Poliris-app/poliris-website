@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Cited Prompts table with axis filter tabs, prompt text with axis tags, sentiment badges, and coverage model badges.">
+  <defs>
+    <filter id="cp2-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .cp2-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .cp2-title { font: 600 15px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .cp2-sub { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .cp2-tab-bg-inactive { fill: transparent; }
+      .cp2-tab-active-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .cp2-tab-tx { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .cp2-tab-tx-active { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .cp2-col { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #475569; letter-spacing: 0.3px; }
+      .cp2-prompt { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .cp2-tag { font: 500 11px "Geist", "Inter", system-ui, sans-serif; }
+      .cp2-pos-bg { fill: #DCFCE7; }
+      .cp2-pos-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #15803D; }
+      .cp2-neu-bg { fill: #FEF3C7; }
+      .cp2-neu-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #B45309; }
+      .cp2-chip-g-bg { fill: #DCFCE7; }
+      .cp2-chip-g-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #15803D; }
+      .cp2-chip-white-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .cp2-chip-white-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .cp2-divider { stroke: #EEF2F7; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect class="cp2-bg" x="1" y="1" width="1198" height="898" rx="14" ry="14" filter="url(#cp2-shadow)"/>
+
+  <!-- Header -->
+  <text class="cp2-title" x="24" y="30">Cited Prompts</text>
+  <text class="cp2-sub" x="24" y="48">Prompts with dominant sentiment</text>
+
+  <!-- Filter tabs: All Axes (active), Availability, Brand awareness, Design, Quality -->
+  <rect class="cp2-tab-active-bg" x="720" y="14" width="96" height="32" rx="8"/>
+  <text class="cp2-tab-tx-active" x="768" y="34" text-anchor="middle">All Axes</text>
+  <text class="cp2-tab-tx" x="854" y="34">Availability</text>
+  <text class="cp2-tab-tx" x="960" y="34">Brand awareness</text>
+  <text class="cp2-tab-tx" x="1096" y="34">Design</text>
+  <text class="cp2-tab-tx" x="1154" y="34">Quality</text>
+
+  <!-- Column headers row -->
+  <line class="cp2-divider" x1="1" y1="68" x2="1199" y2="68"/>
+  <text class="cp2-col" x="24" y="86">Prompts</text>
+  <text class="cp2-col" x="900" y="86">Sentiment</text>
+  <polygon points="970,80 974,76 978,80" fill="#94A3B8"/>
+  <polygon points="970,88 974,92 978,88" fill="#94A3B8"/>
+  <text class="cp2-col" x="1020" y="86">Coverage</text>
+  <line class="cp2-divider" x1="1" y1="100" x2="1199" y2="100"/>
+
+  <!-- Rows helper: row height ~62, starting y=118 -->
+
+  <!-- Row 1: Where is the best place to buy high-quality minimalist sneakers in Japan? — Availability — Positive — Gemini Web, Gemini Web -->
+  <text class="cp2-prompt" x="24" y="130">Where is the best place to buy high-quality minimalist sneakers in Japan?</text>
+  <rect x="24" y="140" width="72" height="18" rx="9" fill="#DBEAFE"/>
+  <text class="cp2-tag" x="60" y="153" text-anchor="middle" fill="#1D4ED8">Availability</text>
+  <rect class="cp2-pos-bg" x="900" y="134" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="149" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="134" width="80" height="22" rx="11"/>
+  <path d="M1032 140 L1034 144 L1038 146 L1034 148 L1032 152 L1030 148 L1026 146 L1030 144 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="149" text-anchor="middle">Gemini Web</text>
+  <rect class="cp2-chip-g-bg" x="1108" y="134" width="80" height="22" rx="11"/>
+  <path d="M1120 140 L1122 144 L1126 146 L1122 148 L1120 152 L1118 148 L1114 146 L1118 144 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1156" y="149" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="170" x2="1199" y2="170"/>
+
+  <!-- Row 2: What are the best stores to shop for sneakers in Japan? — Availability — Positive — Gemini Web -->
+  <text class="cp2-prompt" x="24" y="188">What are the best stores to shop for sneakers in Japan?</text>
+  <rect x="24" y="198" width="72" height="18" rx="9" fill="#DBEAFE"/>
+  <text class="cp2-tag" x="60" y="211" text-anchor="middle" fill="#1D4ED8">Availability</text>
+  <rect class="cp2-pos-bg" x="900" y="192" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="207" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="192" width="80" height="22" rx="11"/>
+  <path d="M1032 198 L1034 202 L1038 204 L1034 206 L1032 210 L1030 206 L1026 204 L1030 202 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="207" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="228" x2="1199" y2="228"/>
+
+  <!-- Row 3: Where can I buy simple, high-quality white sneakers in Japan? — Availability — Positive — Gemini Web, ChatGPT Web -->
+  <text class="cp2-prompt" x="24" y="246">Where can I buy simple, high-quality white sneakers in Japan?</text>
+  <rect x="24" y="256" width="72" height="18" rx="9" fill="#DBEAFE"/>
+  <text class="cp2-tag" x="60" y="269" text-anchor="middle" fill="#1D4ED8">Availability</text>
+  <rect class="cp2-pos-bg" x="900" y="250" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="265" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="250" width="80" height="22" rx="11"/>
+  <path d="M1032 256 L1034 260 L1038 262 L1034 264 L1032 268 L1030 264 L1026 262 L1030 260 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="265" text-anchor="middle">Gemini Web</text>
+  <rect class="cp2-chip-white-bg" x="1108" y="250" width="80" height="22" rx="11"/>
+  <circle cx="1120" cy="261" r="5" fill="none" stroke="#10A37F" stroke-width="1.4"/>
+  <circle cx="1120" cy="261" r="2" fill="#10A37F"/>
+  <text class="cp2-chip-white-tx" x="1156" y="265" text-anchor="middle">ChatGPT Web</text>
+  <line class="cp2-divider" x1="1" y1="286" x2="1199" y2="286"/>
+
+  <!-- Row 4: What are the current popular sneaker trends in the Japanese market? — Brand awareness — Positive — ChatGPT Web, Gemini Web -->
+  <text class="cp2-prompt" x="24" y="304">What are the current popular sneaker trends in the Japanese market?</text>
+  <rect x="24" y="314" width="100" height="18" rx="9" fill="#F3E8FF"/>
+  <text class="cp2-tag" x="74" y="327" text-anchor="middle" fill="#7E22CE">Brand awareness</text>
+  <rect class="cp2-pos-bg" x="900" y="308" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="323" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-white-bg" x="1020" y="308" width="80" height="22" rx="11"/>
+  <circle cx="1032" cy="319" r="5" fill="none" stroke="#10A37F" stroke-width="1.4"/>
+  <circle cx="1032" cy="319" r="2" fill="#10A37F"/>
+  <text class="cp2-chip-white-tx" x="1068" y="323" text-anchor="middle">ChatGPT Web</text>
+  <rect class="cp2-chip-g-bg" x="1108" y="308" width="80" height="22" rx="11"/>
+  <path d="M1120 314 L1122 318 L1126 320 L1122 322 L1120 326 L1118 322 L1114 320 L1118 318 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1156" y="323" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="344" x2="1199" y2="344"/>
+
+  <!-- Row 5: What are the most comfortable sneakers for business casual styles in Japan? — Design — Positive — Gemini Web -->
+  <text class="cp2-prompt" x="24" y="362">What are the most comfortable sneakers for business casual styles in Japan?</text>
+  <rect x="24" y="372" width="52" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="50" y="385" text-anchor="middle" fill="#0E7490">Design</text>
+  <rect class="cp2-pos-bg" x="900" y="366" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="381" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="366" width="80" height="22" rx="11"/>
+  <path d="M1032 372 L1034 376 L1038 378 L1034 380 L1032 384 L1030 380 L1026 378 L1030 376 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="381" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="402" x2="1199" y2="402"/>
+
+  <!-- Row 6: What are the best smart casual sneakers for men in Japan? — Design — Positive — Gemini Web -->
+  <text class="cp2-prompt" x="24" y="420">What are the best smart casual sneakers for men in Japan?</text>
+  <rect x="24" y="430" width="52" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="50" y="443" text-anchor="middle" fill="#0E7490">Design</text>
+  <rect class="cp2-pos-bg" x="900" y="424" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="439" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="424" width="80" height="22" rx="11"/>
+  <path d="M1032 430 L1034 434 L1038 436 L1034 438 L1032 442 L1030 438 L1026 436 L1030 434 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="439" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="460" x2="1199" y2="460"/>
+
+  <!-- Row 7: Where can I find high-quality minimalist sneakers in Japan? — Design — Positive — Gemini Web, Gemini Web -->
+  <text class="cp2-prompt" x="24" y="478">Where can I find high-quality minimalist sneakers in Japan?</text>
+  <rect x="24" y="488" width="52" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="50" y="501" text-anchor="middle" fill="#0E7490">Design</text>
+  <rect class="cp2-pos-bg" x="900" y="482" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="497" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="482" width="80" height="22" rx="11"/>
+  <path d="M1032 488 L1034 492 L1038 494 L1034 496 L1032 500 L1030 496 L1026 494 L1030 492 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="497" text-anchor="middle">Gemini Web</text>
+  <rect class="cp2-chip-g-bg" x="1108" y="482" width="80" height="22" rx="11"/>
+  <path d="M1120 488 L1122 492 L1126 494 L1122 496 L1120 500 L1118 496 L1114 494 L1118 492 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1156" y="497" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="518" x2="1199" y2="518"/>
+
+  <!-- Row 8: What are the most comfortable sneakers for business casual styles in Japan? — Quality — Positive — Gemini Web -->
+  <text class="cp2-prompt" x="24" y="536">What are the most comfortable sneakers for business casual styles in Japan?</text>
+  <rect x="24" y="546" width="54" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="51" y="559" text-anchor="middle" fill="#0E7490">Quality</text>
+  <rect class="cp2-pos-bg" x="900" y="540" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="555" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="540" width="80" height="22" rx="11"/>
+  <path d="M1032 546 L1034 550 L1038 552 L1034 554 L1032 558 L1030 554 L1026 552 L1030 550 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="555" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="576" x2="1199" y2="576"/>
+
+  <!-- Row 9: Where is the best place to buy high-quality minimalist sneakers in Japan? — Quality — Positive — Gemini Web, Gemini Web -->
+  <text class="cp2-prompt" x="24" y="594">Where is the best place to buy high-quality minimalist sneakers in Japan?</text>
+  <rect x="24" y="604" width="54" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="51" y="617" text-anchor="middle" fill="#0E7490">Quality</text>
+  <rect class="cp2-pos-bg" x="900" y="598" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="613" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="598" width="80" height="22" rx="11"/>
+  <path d="M1032 604 L1034 608 L1038 610 L1034 612 L1032 616 L1030 612 L1026 610 L1030 608 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="613" text-anchor="middle">Gemini Web</text>
+  <rect class="cp2-chip-g-bg" x="1108" y="598" width="80" height="22" rx="11"/>
+  <path d="M1120 604 L1122 608 L1126 610 L1122 612 L1120 616 L1118 612 L1114 610 L1118 608 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1156" y="613" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="634" x2="1199" y2="634"/>
+
+  <!-- Row 10: Where can I buy simple, high-quality white sneakers in Japan? — Quality — Positive — Gemini Web, ChatGPT Web -->
+  <text class="cp2-prompt" x="24" y="652">Where can I buy simple, high-quality white sneakers in Japan?</text>
+  <rect x="24" y="662" width="54" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="51" y="675" text-anchor="middle" fill="#0E7490">Quality</text>
+  <rect class="cp2-pos-bg" x="900" y="656" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="671" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="656" width="80" height="22" rx="11"/>
+  <path d="M1032 662 L1034 666 L1038 668 L1034 670 L1032 674 L1030 670 L1026 668 L1030 666 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="671" text-anchor="middle">Gemini Web</text>
+  <rect class="cp2-chip-white-bg" x="1108" y="656" width="80" height="22" rx="11"/>
+  <circle cx="1120" cy="667" r="5" fill="none" stroke="#10A37F" stroke-width="1.4"/>
+  <circle cx="1120" cy="667" r="2" fill="#10A37F"/>
+  <text class="cp2-chip-white-tx" x="1156" y="671" text-anchor="middle">ChatGPT Web</text>
+  <line class="cp2-divider" x1="1" y1="692" x2="1199" y2="692"/>
+
+  <!-- Row 11: What are the best smart casual sneakers for men in Japan? — Quality — Positive — Gemini Web -->
+  <text class="cp2-prompt" x="24" y="710">What are the best smart casual sneakers for men in Japan?</text>
+  <rect x="24" y="720" width="54" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="51" y="733" text-anchor="middle" fill="#0E7490">Quality</text>
+  <rect class="cp2-pos-bg" x="900" y="714" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="729" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="714" width="80" height="22" rx="11"/>
+  <path d="M1032 720 L1034 724 L1038 726 L1034 728 L1032 732 L1030 728 L1026 726 L1030 724 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="729" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="750" x2="1199" y2="750"/>
+
+  <!-- Row 12: Where can I find high-quality minimalist sneakers in Japan? — Quality — Positive — Gemini Web, Gemini Web -->
+  <text class="cp2-prompt" x="24" y="768">Where can I find high-quality minimalist sneakers in Japan?</text>
+  <rect x="24" y="778" width="54" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="51" y="791" text-anchor="middle" fill="#0E7490">Quality</text>
+  <rect class="cp2-pos-bg" x="900" y="772" width="60" height="22" rx="11"/>
+  <text class="cp2-pos-tx" x="930" y="787" text-anchor="middle">Positive</text>
+  <rect class="cp2-chip-g-bg" x="1020" y="772" width="80" height="22" rx="11"/>
+  <path d="M1032 778 L1034 782 L1038 784 L1034 786 L1032 790 L1030 786 L1026 784 L1030 782 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1068" y="787" text-anchor="middle">Gemini Web</text>
+  <rect class="cp2-chip-g-bg" x="1108" y="772" width="80" height="22" rx="11"/>
+  <path d="M1120 778 L1122 782 L1126 784 L1122 786 L1120 790 L1118 786 L1114 784 L1118 782 Z" fill="#3B82F6"/>
+  <text class="cp2-chip-g-tx" x="1156" y="787" text-anchor="middle">Gemini Web</text>
+  <line class="cp2-divider" x1="1" y1="808" x2="1199" y2="808"/>
+
+  <!-- Row 13: Which types of shoes are recommended for comfort during extensive walking in Japan? — Quality — Neutral — Gemini Web, Gemini Web (yellow chips) -->
+  <text class="cp2-prompt" x="24" y="826">Which types of shoes are recommended for comfort during extensive walking in Japan?</text>
+  <rect x="24" y="836" width="54" height="18" rx="9" fill="#CFFAFE"/>
+  <text class="cp2-tag" x="51" y="849" text-anchor="middle" fill="#0E7490">Quality</text>
+  <rect class="cp2-neu-bg" x="900" y="830" width="60" height="22" rx="11"/>
+  <text class="cp2-neu-tx" x="930" y="845" text-anchor="middle">Neutral</text>
+  <rect x="1020" y="830" width="80" height="22" rx="11" fill="#FEF3C7"/>
+  <path d="M1032 836 L1034 840 L1038 842 L1034 844 L1032 848 L1030 844 L1026 842 L1030 840 Z" fill="#B45309"/>
+  <text font="500 12px 'Geist'" x="1068" y="845" text-anchor="middle" font-size="12" font-weight="500" fill="#B45309" font-family="'Geist', system-ui">Gemini Web</text>
+  <rect x="1108" y="830" width="80" height="22" rx="11" fill="#FEF3C7"/>
+  <path d="M1120 836 L1122 840 L1126 842 L1122 844 L1120 848 L1118 844 L1114 842 L1118 840 Z" fill="#B45309"/>
+  <text x="1156" y="845" text-anchor="middle" font-size="12" font-weight="500" fill="#B45309" font-family="'Geist', system-ui">Gemini Web</text>
+</svg>

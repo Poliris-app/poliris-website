@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="Onboarding Step 1 of 5 titled We found your brand, with a website URL input and a Next button.">
+  <defs>
+    <filter id="qs1-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .qs1-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs1-logo { font: 800 24px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs1-step { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs1-h2 { font: 700 24px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs1-sub { font: 400 14px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .qs1-label { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs1-hint { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .qs1-input-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs1-prefix-bg { fill: #F8FAFC; }
+      .qs1-prefix-tx { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .qs1-input-tx { font: 400 13px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .qs1-btn-disabled-bg { fill: #94A3B8; }
+      .qs1-btn-disabled-tx { font: 600 14px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+    </style>
+  </defs>
+
+  <rect class="qs1-bg" x="1" y="1" width="558" height="458" rx="14" ry="14" filter="url(#qs1-shadow)"/>
+
+  <!-- Poliris wordmark with dot -->
+  <text class="qs1-logo" x="36" y="52"><tspan fill="#1E3A8A">P</tspan>oli<tspan fill="#0062FF">&#9711;</tspan>ris</text>
+
+  <!-- Step label -->
+  <text class="qs1-step" x="36" y="82">Step 1 of 5</text>
+
+  <!-- Progress pips -->
+  <line x1="36" y1="92" x2="130" y2="92" stroke="#0062FF" stroke-width="2"/>
+  <line x1="138" y1="92" x2="232" y2="92" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="240" y1="92" x2="334" y2="92" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="342" y1="92" x2="436" y2="92" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="444" y1="92" x2="524" y2="92" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- Heading -->
+  <text class="qs1-h2" x="36" y="148">We found your brand</text>
+  <text class="qs1-sub" x="36" y="174">Confirm it, then answer a few quick questions to tailor your experience.</text>
+
+  <!-- Add your website label + subtext -->
+  <text class="qs1-label" x="36" y="226">Add your website</text>
+  <text class="qs1-hint" x="36" y="246">We&#x2019;ll automatically detect your brand and products from your URL.</text>
+
+  <!-- URL input with https:// prefix -->
+  <rect class="qs1-input-bg" x="36" y="266" width="488" height="48" rx="10"/>
+  <rect class="qs1-prefix-bg" x="36" y="266" width="80" height="48" rx="10"/>
+  <rect class="qs1-prefix-bg" x="106" y="266" width="10" height="48"/>
+  <line x1="116" y1="266" x2="116" y2="314" stroke="#E5E7EB"/>
+  <text class="qs1-prefix-tx" x="76" y="295" text-anchor="middle">https://</text>
+  <text class="qs1-input-tx" x="134" y="295">website url</text>
+  <!-- info icon -->
+  <circle cx="498" cy="290" r="8" fill="none" stroke="#94A3B8" stroke-width="1.4"/>
+  <text x="498" y="294" text-anchor="middle" font-family="Geist, system-ui" font-size="10" font-weight="700" fill="#94A3B8">i</text>
+
+  <!-- Disabled Next button -->
+  <rect class="qs1-btn-disabled-bg" x="36" y="356" width="488" height="48" rx="10"/>
+  <text class="qs1-btn-disabled-tx" x="280" y="386" text-anchor="middle">Next</text>
+</svg>

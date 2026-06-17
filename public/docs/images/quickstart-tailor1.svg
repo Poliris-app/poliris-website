@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 660" role="img" aria-label="Onboarding Step 2 of 5 titled Help us tailor your experience, with chip selectors for Company size (51-200 selected), Role (Brand/Communications selected), Main goal (Monitor sentiment selected), and How you now us (Monitor sentiment selected), plus Back and Next buttons.">
+  <defs>
+    <filter id="qs2-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .qs2-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs2-logo { font: 800 22px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs2-step { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs2-h2 { font: 700 22px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs2-label { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs2-chip-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs2-chip-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs2-chip-sel-bg { fill: #E5F0FF; stroke: #0062FF; stroke-width: 1; }
+      .qs2-chip-sel-tx { font: 600 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs2-primary-bg { fill: #0062FF; }
+      .qs2-primary-tx { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+      .qs2-back-bg { fill: #F1F5F9; stroke: #E5E7EB; stroke-width: 1; }
+      .qs2-back-tx { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <rect class="qs2-bg" x="1" y="1" width="558" height="658" rx="14" ry="14" filter="url(#qs2-shadow)"/>
+
+  <!-- Logo + step -->
+  <text class="qs2-logo" x="28" y="46"><tspan fill="#1E3A8A">P</tspan>oli<tspan fill="#0062FF">&#9711;</tspan>ris</text>
+  <text class="qs2-step" x="28" y="74">Step 2 of 5</text>
+  <line x1="28" y1="84" x2="132" y2="84" stroke="#0062FF" stroke-width="2"/>
+  <line x1="140" y1="84" x2="244" y2="84" stroke="#0062FF" stroke-width="2"/>
+  <line x1="252" y1="84" x2="356" y2="84" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="364" y1="84" x2="468" y2="84" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="476" y1="84" x2="532" y2="84" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- H2 -->
+  <text class="qs2-h2" x="28" y="130">Help us tailor your experience</text>
+
+  <!-- Company size -->
+  <text class="qs2-label" x="28" y="172">Company size:</text>
+  <g transform="translate(28 184)">
+    <g><rect class="qs2-chip-bg" x="0" y="0" width="56" height="28" rx="6"/><text class="qs2-chip-tx" x="28" y="18" text-anchor="middle">1-10</text></g>
+    <g transform="translate(66 0)"><rect class="qs2-chip-bg" x="0" y="0" width="60" height="28" rx="6"/><text class="qs2-chip-tx" x="30" y="18" text-anchor="middle">11-50</text></g>
+    <g transform="translate(136 0)">
+      <rect class="qs2-chip-sel-bg" x="0" y="0" width="88" height="28" rx="6"/>
+      <circle cx="12" cy="14" r="7" fill="#0062FF"/>
+      <path d="M9 14 L11 16 L15 12" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text class="qs2-chip-sel-tx" x="52" y="18" text-anchor="middle">51-200</text>
+    </g>
+    <g transform="translate(234 0)"><rect class="qs2-chip-bg" x="0" y="0" width="82" height="28" rx="6"/><text class="qs2-chip-tx" x="41" y="18" text-anchor="middle">201-1000</text></g>
+    <g transform="translate(326 0)"><rect class="qs2-chip-bg" x="0" y="0" width="72" height="28" rx="6"/><text class="qs2-chip-tx" x="36" y="18" text-anchor="middle">1000+</text></g>
+  </g>
+
+  <!-- Role -->
+  <text class="qs2-label" x="28" y="248">Your role:</text>
+  <g transform="translate(28 260)">
+    <g><rect class="qs2-chip-bg" x="0" y="0" width="98" height="28" rx="6"/><text class="qs2-chip-tx" x="49" y="18" text-anchor="middle">Founder / CEO</text></g>
+    <g transform="translate(108 0)"><rect class="qs2-chip-bg" x="0" y="0" width="80" height="28" rx="6"/><text class="qs2-chip-tx" x="40" y="18" text-anchor="middle">Marketing</text></g>
+    <g transform="translate(198 0)">
+      <rect class="qs2-chip-sel-bg" x="0" y="0" width="154" height="28" rx="6"/>
+      <circle cx="12" cy="14" r="7" fill="#0062FF"/>
+      <path d="M9 14 L11 16 L15 12" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text class="qs2-chip-sel-tx" x="88" y="18" text-anchor="middle">Brand / Communications</text>
+    </g>
+    <g transform="translate(362 0)"><rect class="qs2-chip-bg" x="0" y="0" width="64" height="28" rx="6"/><text class="qs2-chip-tx" x="32" y="18" text-anchor="middle">Agency</text></g>
+  </g>
+  <g transform="translate(28 296)">
+    <g><rect class="qs2-chip-bg" x="0" y="0" width="76" height="28" rx="6"/><text class="qs2-chip-tx" x="38" y="18" text-anchor="middle">Freelance</text></g>
+    <g transform="translate(84 0)"><rect class="qs2-chip-bg" x="0" y="0" width="56" height="28" rx="6"/><text class="qs2-chip-tx" x="28" y="18" text-anchor="middle">Other</text></g>
+  </g>
+
+  <!-- Main goal -->
+  <text class="qs2-label" x="28" y="360">Main goal / use case:</text>
+  <g transform="translate(28 372)">
+    <g>
+      <rect class="qs2-chip-sel-bg" x="0" y="0" width="148" height="28" rx="6"/>
+      <circle cx="12" cy="14" r="7" fill="#0062FF"/>
+      <path d="M9 14 L11 16 L15 12" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text class="qs2-chip-sel-tx" x="84" y="18" text-anchor="middle">Monitor sentiment</text>
+    </g>
+    <g transform="translate(158 0)"><rect class="qs2-chip-bg" x="0" y="0" width="146" height="28" rx="6"/><text class="qs2-chip-tx" x="73" y="18" text-anchor="middle">Track brand visibility</text></g>
+    <g transform="translate(314 0)"><rect class="qs2-chip-bg" x="0" y="0" width="130" height="28" rx="6"/><text class="qs2-chip-tx" x="65" y="18" text-anchor="middle">Compare products</text></g>
+  </g>
+  <g transform="translate(28 408)"><rect class="qs2-chip-bg" x="0" y="0" width="130" height="28" rx="6"/><text class="qs2-chip-tx" x="65" y="18" text-anchor="middle">Follow competitors</text></g>
+
+  <!-- How you now us -->
+  <text class="qs2-label" x="28" y="472">How you now us:</text>
+  <g transform="translate(28 484)">
+    <g>
+      <rect class="qs2-chip-sel-bg" x="0" y="0" width="148" height="28" rx="6"/>
+      <circle cx="12" cy="14" r="7" fill="#0062FF"/>
+      <path d="M9 14 L11 16 L15 12" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text class="qs2-chip-sel-tx" x="84" y="18" text-anchor="middle">Monitor sentiment</text>
+    </g>
+    <g transform="translate(158 0)"><rect class="qs2-chip-bg" x="0" y="0" width="146" height="28" rx="6"/><text class="qs2-chip-tx" x="73" y="18" text-anchor="middle">Track brand visibility</text></g>
+    <g transform="translate(314 0)"><rect class="qs2-chip-bg" x="0" y="0" width="130" height="28" rx="6"/><text class="qs2-chip-tx" x="65" y="18" text-anchor="middle">Compare products</text></g>
+  </g>
+  <g transform="translate(28 520)"><rect class="qs2-chip-bg" x="0" y="0" width="130" height="28" rx="6"/><text class="qs2-chip-tx" x="65" y="18" text-anchor="middle">Follow competitors</text></g>
+
+  <!-- Back + Next -->
+  <rect class="qs2-back-bg" x="28" y="598" width="248" height="42" rx="10"/>
+  <text class="qs2-back-tx" x="152" y="624" text-anchor="middle">Back</text>
+  <rect class="qs2-primary-bg" x="284" y="598" width="248" height="42" rx="10"/>
+  <text class="qs2-primary-tx" x="408" y="624" text-anchor="middle">Next</text>
+</svg>

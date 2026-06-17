@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" role="img" aria-label="Brand Comparison Table with 7 brands rated Strong across Avg., Qualite, Brand Awareness, Design, and Availability axes.">
+  <defs>
+    <filter id="bc-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .bc-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .bc-col { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .bc-brand { font: 600 14px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .bc-strong-bg { fill: #DCFCE7; }
+      .bc-strong-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #15803D; }
+      .bc-you-bg { fill: #DBEAFE; }
+      .bc-you-tx { font: 500 10px "Geist", "Inter", system-ui, sans-serif; fill: #1D4ED8; }
+      .bc-divider { stroke: #EEF2F7; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect class="bc-bg" x="1" y="1" width="1198" height="458" rx="14" ry="14" filter="url(#bc-shadow)"/>
+
+  <!-- Column headers -->
+  <rect x="1" y="1" width="1198" height="44" fill="#F8FAFC"/>
+  <text class="bc-col" x="24" y="28">Company</text>
+  <text class="bc-col" x="660" y="28">Avg.</text>
+  <polygon points="696,20 700,16 704,20" fill="#94A3B8"/>
+  <polygon points="696,28 700,32 704,28" fill="#94A3B8"/>
+  <text class="bc-col" x="780" y="28">Qualite</text>
+  <text class="bc-col" x="900" y="28">Brand Awareness</text>
+  <text class="bc-col" x="1046" y="28">Design</text>
+  <text class="bc-col" x="1136" y="28">Availability</text>
+  <line class="bc-divider" x1="1" y1="45" x2="1199" y2="45"/>
+
+  <!-- Helper: each row height ~56, starting y=70 -->
+  <!-- Badge definitions, 60px wide centered at each column center: Avg ~680, Qualite ~800, BrandAwareness ~940, Design ~1060, Availability ~1160 -->
+
+  <!-- Row 1: Mizuno -->
+  <g transform="translate(24 58)">
+    <circle cx="16" cy="16" r="16" fill="#1E3A8A"/>
+    <path d="M8 20 Q16 8 24 20" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+  <text class="bc-brand" x="68" y="80">Mizuno</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="66" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="81" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="66" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="81" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="66" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="81" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="66" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="81" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="66" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="81" text-anchor="middle">Strong</text>
+  </g>
+  <line class="bc-divider" x1="1" y1="108" x2="1199" y2="108"/>
+
+  <!-- Row 2: Adidas -->
+  <g transform="translate(24 114)">
+    <circle cx="16" cy="16" r="16" fill="#000000"/>
+    <polygon points="10,24 14,10 16,10 12,24" fill="#FFFFFF"/>
+    <polygon points="14,24 18,10 20,10 16,24" fill="#FFFFFF"/>
+    <polygon points="18,24 22,10 24,10 20,24" fill="#FFFFFF"/>
+  </g>
+  <text class="bc-brand" x="68" y="136">Adidas</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="122" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="137" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="122" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="137" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="122" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="137" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="122" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="137" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="122" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="137" text-anchor="middle">Strong</text>
+  </g>
+  <line class="bc-divider" x1="1" y1="164" x2="1199" y2="164"/>
+
+  <!-- Row 3: New Balance -->
+  <g transform="translate(24 170)">
+    <circle cx="16" cy="16" r="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <text x="16" y="22" text-anchor="middle" font-size="14" font-weight="700" font-family="'Geist', system-ui" fill="#E11D48">N</text>
+  </g>
+  <text class="bc-brand" x="68" y="192">New Balance</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="178" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="193" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="178" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="193" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="178" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="193" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="178" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="193" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="178" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="193" text-anchor="middle">Strong</text>
+  </g>
+  <line class="bc-divider" x1="1" y1="220" x2="1199" y2="220"/>
+
+  <!-- Row 4: Nike -->
+  <g transform="translate(24 226)">
+    <circle cx="16" cy="16" r="16" fill="#000000"/>
+    <path d="M7 22 L25 10 L12 24 L10 24 Z" fill="#FFFFFF"/>
+  </g>
+  <text class="bc-brand" x="68" y="248">Nike</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="234" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="249" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="234" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="249" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="234" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="249" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="234" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="249" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="234" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="249" text-anchor="middle">Strong</text>
+  </g>
+  <line class="bc-divider" x1="1" y1="276" x2="1199" y2="276"/>
+
+  <!-- Row 5: ASICS -->
+  <g transform="translate(24 282)">
+    <circle cx="16" cy="16" r="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M7 20 Q16 8 25 20" stroke="#0B3E78" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  </g>
+  <text class="bc-brand" x="68" y="304">ASICS</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="290" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="305" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="290" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="305" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="290" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="305" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="290" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="305" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="290" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="305" text-anchor="middle">Strong</text>
+  </g>
+  <line class="bc-divider" x1="1" y1="332" x2="1199" y2="332"/>
+
+  <!-- Row 6: Onitsuka Tiger (You) -->
+  <g transform="translate(24 338)">
+    <rect width="32" height="32" rx="6" ry="6" fill="#1E293B"/>
+    <path d="M6 22 L16 8 L26 22 Z" fill="#F59E0B"/>
+  </g>
+  <text class="bc-brand" x="68" y="360">Onitsuka Tiger</text>
+  <rect class="bc-you-bg" x="204" y="348" width="32" height="18" rx="9"/>
+  <text class="bc-you-tx" x="220" y="360" text-anchor="middle">You</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="346" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="361" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="346" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="361" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="346" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="361" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="346" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="361" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="346" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="361" text-anchor="middle">Strong</text>
+  </g>
+  <line class="bc-divider" x1="1" y1="388" x2="1199" y2="388"/>
+
+  <!-- Row 7: Hender Scheme -->
+  <g transform="translate(24 394)">
+    <circle cx="16" cy="16" r="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <path d="M10 10 L10 22 M22 10 L22 22 M10 16 L22 16" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <text class="bc-brand" x="68" y="416">Hender Scheme</text>
+  <g>
+    <rect class="bc-strong-bg" x="650" y="402" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="680" y="417" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="770" y="402" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="800" y="417" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="910" y="402" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="940" y="417" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1030" y="402" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1060" y="417" text-anchor="middle">Strong</text>
+    <rect class="bc-strong-bg" x="1130" y="402" width="60" height="22" rx="11"/>
+    <text class="bc-strong-tx" x="1160" y="417" text-anchor="middle">Strong</text>
+  </g>
+</svg>

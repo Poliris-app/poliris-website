@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-label="Tone Analysis radar chart with four axes (Qualite, Brand Awareness, Design, Availability) next to the Tone Evolution line chart with 1W-1Y time range filters.">
+  <defs>
+    <filter id="tc-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .tc-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .tc-title { font: 600 15px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .tc-sub { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .tc-axis { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .tc-chip-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .tc-chip-tx { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .tc-range-bg { fill: #F1F5F9; }
+      .tc-range-tx { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .tc-time-axis { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .tc-legend { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <!-- Left card: Tone Analysis -->
+  <rect class="tc-bg" x="1" y="1" width="580" height="518" rx="14" ry="14" filter="url(#tc-shadow)"/>
+  <text class="tc-title" x="24" y="30">Tone Analysis</text>
+  <text class="tc-sub" x="24" y="48">Per-axis visibility scores across brands</text>
+
+  <!-- Brand chips (2 rows) -->
+  <g transform="translate(24 68)">
+    <!-- Row 1 -->
+    <g>
+      <rect class="tc-chip-bg" x="0" y="0" width="78" height="26" rx="13"/>
+      <circle cx="12" cy="13" r="4" fill="#6366F1"/>
+      <circle cx="26" cy="13" r="5" fill="#DBEAFE"/>
+      <text x="20" y="16" font-size="6" text-anchor="middle" fill="#1E40AF" font-weight="700" font-family="'Geist', system-ui">M</text>
+      <text class="tc-chip-tx" x="40" y="17">Mizuno</text>
+    </g>
+    <g transform="translate(86 0)">
+      <rect class="tc-chip-bg" x="0" y="0" width="70" height="26" rx="13"/>
+      <circle cx="12" cy="13" r="4" fill="#EF4444"/>
+      <circle cx="26" cy="13" r="5" fill="#000000"/>
+      <polygon points="22,11 27,11 30,15 25,15" fill="#FFFFFF"/>
+      <text class="tc-chip-tx" x="36" y="17">Adidas</text>
+    </g>
+    <g transform="translate(164 0)">
+      <rect class="tc-chip-bg" x="0" y="0" width="108" height="26" rx="13"/>
+      <circle cx="12" cy="13" r="4" fill="#22C55E"/>
+      <circle cx="26" cy="13" r="5" fill="#E11D48"/>
+      <text x="26" y="16" font-size="6" text-anchor="middle" fill="#FFFFFF" font-weight="700" font-family="'Geist', system-ui">N</text>
+      <text class="tc-chip-tx" x="36" y="17">New Balance</text>
+    </g>
+    <g transform="translate(280 0)">
+      <rect class="tc-chip-bg" x="0" y="0" width="68" height="26" rx="13"/>
+      <circle cx="12" cy="13" r="4" fill="#F59E0B"/>
+      <circle cx="26" cy="13" r="5" fill="#000000"/>
+      <path d="M22 13 L30 11 L25 14 L23 14 Z" fill="#FFFFFF"/>
+      <text class="tc-chip-tx" x="36" y="17">Nike</text>
+    </g>
+    <g transform="translate(356 0)">
+      <rect class="tc-chip-bg" x="0" y="0" width="70" height="26" rx="13"/>
+      <circle cx="12" cy="13" r="4" fill="#A855F7"/>
+      <circle cx="26" cy="13" r="5" fill="#F1F5F9"/>
+      <path d="M22 15 Q26 10 30 15" stroke="#0B3E78" stroke-width="1.2" fill="none"/>
+      <text class="tc-chip-tx" x="36" y="17">ASICS</text>
+    </g>
+    <g transform="translate(434 0)">
+      <rect class="tc-chip-bg" x="0" y="0" width="112" height="26" rx="13"/>
+      <circle cx="12" cy="13" r="4" fill="#EC4899"/>
+      <rect x="22" y="9" width="8" height="8" rx="2" fill="#1E293B"/>
+      <path d="M23 16 L26 11 L29 16 Z" fill="#F59E0B"/>
+      <text class="tc-chip-tx" x="36" y="17">Onitsuka Tiger</text>
+    </g>
+  </g>
+  <!-- Row 2 -->
+  <g transform="translate(24 104)">
+    <rect class="tc-chip-bg" x="0" y="0" width="108" height="26" rx="13"/>
+    <circle cx="12" cy="13" r="4" fill="#F97316"/>
+    <circle cx="26" cy="13" r="5" fill="#F1F5F9"/>
+    <path d="M23 10 L23 17 M29 10 L29 17 M23 13.5 L29 13.5" stroke="#0A0A0A" stroke-width="1.2"/>
+    <text class="tc-chip-tx" x="38" y="17">Hender Scheme</text>
+  </g>
+
+  <!-- Radar chart -->
+  <!-- Center at (290, 320), radius 140 -->
+  <g transform="translate(290 320)">
+    <!-- Grid (4 concentric diamonds) -->
+    <polygon points="0,-140 140,0 0,140 -140,0" fill="none" stroke="#E5E7EB"/>
+    <polygon points="0,-105 105,0 0,105 -105,0" fill="none" stroke="#E5E7EB"/>
+    <polygon points="0,-70 70,0 0,70 -70,0" fill="none" stroke="#E5E7EB"/>
+    <polygon points="0,-35 35,0 0,35 -35,0" fill="none" stroke="#E5E7EB"/>
+    <!-- Axis lines -->
+    <line x1="0" y1="-140" x2="0" y2="140" stroke="#E5E7EB"/>
+    <line x1="-140" y1="0" x2="140" y2="0" stroke="#E5E7EB"/>
+
+    <!-- Red brand polygon (all strong, near outer ring) -->
+    <polygon points="0,-125 125,0 0,125 -125,0" fill="#DC2626" fill-opacity="0.55" stroke="#DC2626" stroke-opacity="0.9" stroke-width="1.5"/>
+    <!-- Vertex markers -->
+    <circle cx="0" cy="-125" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2"/>
+    <circle cx="125" cy="0" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2"/>
+    <circle cx="0" cy="125" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2"/>
+    <circle cx="-125" cy="0" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2"/>
+  </g>
+
+  <!-- Axis labels -->
+  <text class="tc-axis" x="290" y="170" text-anchor="middle">Qualite</text>
+  <text class="tc-axis" x="440" y="324" text-anchor="start">Brand Awareness</text>
+  <text class="tc-axis" x="290" y="484" text-anchor="middle">Design</text>
+  <text class="tc-axis" x="140" y="324" text-anchor="end">Availability</text>
+
+  <!-- Right card: Tone Evolution -->
+  <rect class="tc-bg" x="600" y="1" width="600" height="518" rx="14" ry="14" filter="url(#tc-shadow)"/>
+  <text class="tc-title" x="624" y="30">Tone Evolution</text>
+  <text class="tc-sub" x="624" y="48">Axis score trend over time</text>
+
+  <!-- Range tabs (1W, 1M, 3M, 6M, 1Y) -->
+  <rect class="tc-range-bg" x="1010" y="16" width="170" height="28" rx="8" ry="8"/>
+  <text class="tc-range-tx" x="1027" y="34">1W</text>
+  <text class="tc-range-tx" x="1060" y="34">1M</text>
+  <text class="tc-range-tx" x="1093" y="34">3M</text>
+  <text class="tc-range-tx" x="1126" y="34">6M</text>
+  <text class="tc-range-tx" x="1158" y="34">1Y</text>
+
+  <!-- Line chart area -->
+  <!-- Plot area: 624,80 to 1176,360 -->
+  <!-- Four horizontal lines close together at top (flat Strong scores) -->
+  <line x1="624" y1="110" x2="1176" y2="110" stroke="#F59E0B" stroke-width="2"/>
+  <line x1="624" y1="113" x2="1176" y2="113" stroke="#22C55E" stroke-width="2"/>
+  <line x1="624" y1="116" x2="1176" y2="116" stroke="#EF4444" stroke-width="2"/>
+  <line x1="624" y1="119" x2="1176" y2="119" stroke="#3B82F6" stroke-width="2"/>
+
+  <!-- Start markers -->
+  <circle cx="624" cy="114" r="5" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2"/>
+  <!-- End markers -->
+  <circle cx="1176" cy="114" r="5" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2"/>
+
+  <!-- Baseline -->
+  <line x1="624" y1="360" x2="1176" y2="360" stroke="#E5E7EB" stroke-width="1"/>
+
+  <!-- Time axis labels -->
+  <text class="tc-time-axis" x="624" y="388">6 PM</text>
+  <text class="tc-time-axis" x="1176" y="388" text-anchor="end">2:35</text>
+
+  <!-- Legend -->
+  <g transform="translate(760 432)">
+    <rect x="0" y="0" width="12" height="12" rx="2" fill="#3B82F6"/>
+    <text class="tc-legend" x="18" y="11">Qualite</text>
+    <rect x="80" y="0" width="12" height="12" rx="2" fill="#EF4444"/>
+    <text class="tc-legend" x="98" y="11">Brand Awareness</text>
+    <rect x="220" y="0" width="12" height="12" rx="2" fill="#22C55E"/>
+    <text class="tc-legend" x="238" y="11">Design</text>
+    <rect x="296" y="0" width="12" height="12" rx="2" fill="#F59E0B"/>
+    <text class="tc-legend" x="314" y="11">Availability</text>
+  </g>
+</svg>

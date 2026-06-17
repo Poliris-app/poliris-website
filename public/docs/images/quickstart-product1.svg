@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="Onboarding Step 3 of 5 titled We found your product, showing the detected brand Gleamer and an empty Choose your product dropdown with Back and Next buttons.">
+  <defs>
+    <filter id="qs3-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .qs3-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs3-logo { font: 800 22px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs3-step { font: 500 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs3-h2 { font: 700 22px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs3-sub { font: 400 13px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .qs3-card-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs3-brand-tx { font: 600 14px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs3-label { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .qs3-dd-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .qs3-back-bg { fill: #F1F5F9; stroke: #E5E7EB; stroke-width: 1; }
+      .qs3-back-tx { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #475569; }
+      .qs3-next-bg { fill: #94A3B8; }
+      .qs3-next-tx { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #FFFFFF; }
+    </style>
+  </defs>
+
+  <rect class="qs3-bg" x="1" y="1" width="558" height="458" rx="14" ry="14" filter="url(#qs3-shadow)"/>
+
+  <!-- Logo + step -->
+  <text class="qs3-logo" x="28" y="46"><tspan fill="#1E3A8A">P</tspan>oli<tspan fill="#0062FF">&#9711;</tspan>ris</text>
+  <text class="qs3-step" x="28" y="74">Step 3 of 5</text>
+  <line x1="28" y1="84" x2="132" y2="84" stroke="#0062FF" stroke-width="2"/>
+  <line x1="140" y1="84" x2="244" y2="84" stroke="#0062FF" stroke-width="2"/>
+  <line x1="252" y1="84" x2="356" y2="84" stroke="#0062FF" stroke-width="2"/>
+  <line x1="364" y1="84" x2="468" y2="84" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="476" y1="84" x2="532" y2="84" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- H2 -->
+  <text class="qs3-h2" x="28" y="130">We found your product</text>
+  <text class="qs3-sub" x="28" y="152">Choose your product and start your analysis.</text>
+
+  <!-- Gleamer card -->
+  <rect class="qs3-card-bg" x="28" y="176" width="504" height="54" rx="10"/>
+  <circle cx="56" cy="203" r="14" fill="#0A0A0A"/>
+  <circle cx="56" cy="203" r="6" fill="#FFFFFF"/>
+  <text class="qs3-brand-tx" x="86" y="208">Gleamer</text>
+
+  <!-- Choose product label + empty dropdown -->
+  <text class="qs3-label" x="28" y="268">Choose your product:</text>
+  <rect class="qs3-dd-bg" x="28" y="278" width="504" height="48" rx="10"/>
+  <path d="M504 298 L516 298 L510 308 Z" fill="#94A3B8"/>
+
+  <!-- Back + Next (Next disabled) -->
+  <rect class="qs3-back-bg" x="28" y="392" width="248" height="44" rx="10"/>
+  <text class="qs3-back-tx" x="152" y="420" text-anchor="middle">Back</text>
+  <rect class="qs3-next-bg" x="284" y="392" width="248" height="44" rx="10"/>
+  <text class="qs3-next-tx" x="408" y="420" text-anchor="middle">Next</text>
+</svg>

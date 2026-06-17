@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" role="img" aria-label="Score Breakdown card showing 59/100 Average score with AI Models breakdown">
+  <defs>
+    <filter id="sb-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .sb-bg { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .sb-title { font: 600 16px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .sb-sub { font: 400 12px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .sb-pill-avg-bg { fill: #FEF3C7; }
+      .sb-pill-avg-tx { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #B45309; }
+      .sb-pill-leader-bg { fill: #DCFCE7; }
+      .sb-pill-leader-tx { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #15803D; }
+      .sb-pill-priority-bg { fill: #FFEDD5; }
+      .sb-pill-priority-tx { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #C2410C; }
+      .sb-tab-bg-inactive { fill: #F1F5F9; }
+      .sb-tab-bg-active { fill: #FFFFFF; stroke: #E5E7EB; stroke-width: 1; }
+      .sb-tab-tx-inactive { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #94A3B8; }
+      .sb-tab-tx-active { font: 600 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .sb-num { font: 700 22px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .sb-num-sm { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #64748B; }
+      .sb-row-name { font: 500 13px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .sb-row-delta { font: 500 11px "Geist", "Inter", system-ui, sans-serif; fill: #16A34A; }
+      .sb-row-pct { font: 700 12px "Geist", "Inter", system-ui, sans-serif; fill: #0A0A0A; }
+      .sb-bar-track { fill: #DBEAFE; }
+      .sb-bar-fill { fill: #0062FF; }
+      .sb-divider { stroke: #EEF2F7; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <!-- Card -->
+  <rect class="sb-bg" x="1" y="1" width="558" height="418" rx="14" ry="14" filter="url(#sb-shadow)"/>
+
+  <!-- Header -->
+  <text class="sb-title" x="24" y="34">Score Breakdown</text>
+  <rect class="sb-pill-avg-bg" x="478" y="19" width="62" height="20" rx="10" ry="10"/>
+  <text class="sb-pill-avg-tx" x="509" y="33" text-anchor="middle">Average</text>
+  <text class="sb-sub" x="24" y="54">Quick read of what lifts or limits visibility</text>
+
+  <!-- Tab switcher -->
+  <rect class="sb-tab-bg-inactive" x="24" y="72" width="280" height="36" rx="8" ry="8"/>
+  <rect class="sb-tab-bg-active" x="166" y="76" width="134" height="28" rx="6" ry="6"/>
+  <text class="sb-tab-tx-inactive" x="94" y="94" text-anchor="middle">Axes</text>
+  <text class="sb-tab-tx-active" x="233" y="94" text-anchor="middle">AI Models</text>
+
+  <!-- Donut gauge (59/100) - 59% of circle -->
+  <!-- Track -->
+  <circle cx="474" cy="90" r="30" fill="none" stroke="#DBEAFE" stroke-width="8"/>
+  <!-- Fill: arc from top, 59% of 2*pi. Using stroke-dasharray trick. circumference = 2*pi*30 = 188.496 -->
+  <circle cx="474" cy="90" r="30" fill="none" stroke="#0062FF" stroke-width="8"
+          stroke-dasharray="111.21 77.29" stroke-dashoffset="47.12"
+          transform="rotate(-90 474 90)" stroke-linecap="round"/>
+  <text class="sb-num" x="474" y="95" text-anchor="middle">59</text>
+  <text class="sb-num-sm" x="474" y="108" text-anchor="middle">/100</text>
+
+  <!-- Divider -->
+  <line class="sb-divider" x1="24" y1="134" x2="536" y2="134"/>
+
+  <!-- Row 1: Gemini - 70% Leader -->
+  <!-- Sparkle icon -->
+  <g transform="translate(24 156)">
+    <path d="M9 0 L11 7 L18 9 L11 11 L9 18 L7 11 L0 9 L7 7 Z" fill="#0062FF" opacity="0.9"/>
+  </g>
+  <text class="sb-row-name" x="54" y="170">Gemini</text>
+  <rect class="sb-pill-leader-bg" x="358" y="156" width="52" height="20" rx="10" ry="10"/>
+  <text class="sb-pill-leader-tx" x="384" y="170" text-anchor="middle">Leader</text>
+  <text class="sb-row-delta" x="444" y="170" text-anchor="end">&#8593;70%</text>
+  <text class="sb-row-pct" x="536" y="170" text-anchor="end">70%</text>
+  <rect class="sb-bar-track" x="24" y="182" width="512" height="8" rx="4" ry="4"/>
+  <rect class="sb-bar-fill" x="24" y="182" width="358.4" height="8" rx="4" ry="4"/>
+
+  <!-- Row 2: Gemini Web - 63% -->
+  <g transform="translate(24 222)">
+    <path d="M9 0 L11 7 L18 9 L11 11 L9 18 L7 11 L0 9 L7 7 Z" fill="#0062FF" opacity="0.9"/>
+  </g>
+  <text class="sb-row-name" x="54" y="236">Gemini Web</text>
+  <text class="sb-row-delta" x="444" y="236" text-anchor="end">&#8593;63%</text>
+  <text class="sb-row-pct" x="536" y="236" text-anchor="end">63%</text>
+  <rect class="sb-bar-track" x="24" y="248" width="512" height="8" rx="4" ry="4"/>
+  <rect class="sb-bar-fill" x="24" y="248" width="322.56" height="8" rx="4" ry="4"/>
+
+  <!-- Row 3: ChatGPT - 44% Priority -->
+  <circle cx="33" cy="296" r="9" fill="none" stroke="#10A37F" stroke-width="2"/>
+  <circle cx="33" cy="296" r="3" fill="#10A37F"/>
+  <text class="sb-row-name" x="54" y="300">ChatGPT</text>
+  <rect class="sb-pill-priority-bg" x="352" y="286" width="58" height="20" rx="10" ry="10"/>
+  <text class="sb-pill-priority-tx" x="381" y="300" text-anchor="middle">Priority</text>
+  <text class="sb-row-delta" x="444" y="300" text-anchor="end">&#8593;44%</text>
+  <text class="sb-row-pct" x="536" y="300" text-anchor="end">44%</text>
+  <rect class="sb-bar-track" x="24" y="312" width="512" height="8" rx="4" ry="4"/>
+  <rect class="sb-bar-fill" x="24" y="312" width="225.28" height="8" rx="4" ry="4"/>
+</svg>
