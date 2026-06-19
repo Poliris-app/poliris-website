@@ -90,14 +90,6 @@ const TOC_ICONS = [
 ];
 
 /* ─── Hub diagram (P2 section) ─── */
-const AUDIT_HUB_TOOLS = [
-  { abbr: 'GS', name: 'Search Console',  sub: 'google.com',   dashed: false },
-  { abbr: 'GA', name: 'Analytics',       sub: 'google.com',   dashed: false },
-  { abbr: 'Mt', name: 'Matomo',          sub: 'analytics',    dashed: false },
-  { abbr: '+',  name: 'Add a tool',      sub: null,           dashed: true  },
-  { abbr: 'SF', name: 'Screaming Frog',  sub: 'crawler',      dashed: false },
-  { abbr: 'SA', name: 'SearchAtlas',     sub: 'SEO platform', dashed: false },
-];
 const AUDIT_HUB_STYLES = [
   { left: '50%', top: '7%'  },
   { left: '84%', top: '25%' },
@@ -126,6 +118,15 @@ export default function TechnicalAuditPage() {
   const p1      = ta.p1;
   const p2      = ta.p2;
   const p3      = ta.p3;
+
+  const AUDIT_HUB_TOOLS = [
+    { abbr: 'GS', name: 'Search Console',  sub: 'google.com',           dashed: false },
+    { abbr: 'GA', name: 'Analytics',       sub: 'google.com',           dashed: false },
+    { abbr: 'Mt', name: 'Matomo',          sub: p2.toolSubs.analytics,  dashed: false },
+    { abbr: '+',  name: p2.addTool,        sub: null,                   dashed: true  },
+    { abbr: 'SF', name: 'Screaming Frog',  sub: p2.toolSubs.crawler,    dashed: false },
+    { abbr: 'SA', name: 'SearchAtlas',     sub: p2.toolSubs.seoPlatform,dashed: false },
+  ];
   const p4      = ta.p4;
   const cta     = ta.cta;
 

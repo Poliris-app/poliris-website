@@ -2,7 +2,9 @@ const MODELS = ['ChatGPT', 'Gemini', 'Perplexity', 'Claude', 'Mistral', 'DeepSee
 const tripled = [...MODELS, ...MODELS, ...MODELS];
 
 const TRIAL_URL = 'https://app.poliris.io';
-const isTrialCta = (label) => typeof label === 'string' && /trial/i.test(label);
+const DEMO_URL  = 'https://cal.com/team/poliris/application-demo';
+const isTrialCta = (label) => typeof label === 'string' && /trial|essai/i.test(label);
+const isDemoCta  = (label) => typeof label === 'string' && /demo|démo/i.test(label);
 
 export default function CtaBand({
   heading = 'See how AI describes your brand.',
@@ -12,7 +14,15 @@ export default function CtaBand({
   note = '14 days free · No credit card required',
 }) {
   const primaryTrial = isTrialCta(primaryCta);
+  const primaryDemo  = isDemoCta(primaryCta);
   const secondaryTrial = isTrialCta(secondaryCta);
+  const secondaryDemo  = isDemoCta(secondaryCta);
+
+  const primaryHref  = primaryTrial ? TRIAL_URL : primaryDemo ? DEMO_URL : '#';
+  const secondaryHref = secondaryTrial ? TRIAL_URL : secondaryDemo ? DEMO_URL : '#';
+  const primaryExternal  = primaryTrial || primaryDemo;
+  const secondaryExternal = secondaryTrial || secondaryDemo;
+
   return (
     <section id="how" className="cta-band">
       <div className="cta-band__glow" aria-hidden="true" />
@@ -22,16 +32,16 @@ export default function CtaBand({
         <p className="cta-band__lead reveal reveal--d1">{lead}</p>
         <div className="cta-band__actions reveal reveal--d2">
           <a
-            href={primaryTrial ? TRIAL_URL : '#'}
+            href={primaryHref}
             className="btn btn--primary"
-            {...(primaryTrial ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            {...(primaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           >
             {primaryCta}
           </a>
           <a
-            href={secondaryTrial ? TRIAL_URL : '#'}
+            href={secondaryHref}
             className="btn btn--secondary"
-            {...(secondaryTrial ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            {...(secondaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           >
             {secondaryCta}
           </a>

@@ -293,9 +293,12 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
 }
 
 function PipelineTrack() {
+  const { t } = useLang();
+  const wr = t('contentWriting.write');
+  const steps = wr.steps;
   const [cur, setCur] = useState(0);
   const [fading, setFading] = useState(false);
-  const N = PIPELINE_STEPS.length;
+  const N = steps.length;
 
   function go(i) {
     if (i < 0 || i >= N || i === cur) return;
@@ -303,17 +306,17 @@ function PipelineTrack() {
     setTimeout(() => { setCur(i); setFading(false); }, 150);
   }
 
-  const d = PIPELINE_STEPS[cur];
+  const d = steps[cur];
   return (
     <div className="cw-pipe cw-reveal">
       <div className="cw-pipe-track">
-        {PIPELINE_STEPS.map((_, i) => [
-          <button key={`dot-${i}`} className={`cw-pipe-dot${i === cur ? ' active' : i < cur ? ' done' : ''}`} onClick={() => go(i)} aria-label={PIPELINE_STEPS[i].label} />,
+        {steps.map((_, i) => [
+          <button key={`dot-${i}`} className={`cw-pipe-dot${i === cur ? ' active' : i < cur ? ' done' : ''}`} onClick={() => go(i)} aria-label={steps[i].label} />,
           i < N - 1 && <div key={`line-${i}`} className="cw-pipe-line"><div className="cw-pipe-line-fill" style={{ width: i < cur ? '100%' : '0%' }} /></div>,
         ])}
       </div>
       <div className="cw-pipe-cards">
-        {PIPELINE_STEPS.map((s, i) => (
+        {steps.map((s, i) => (
           <button key={i} className={`cw-pipe-card${i === cur ? ' active' : ''}`} onClick={() => go(i)}>
             <div className="cw-pipe-card-num">{s.num}</div>
             <div className="cw-pipe-card-ic"><PipeIcon index={i} /></div>
@@ -329,7 +332,7 @@ function PipelineTrack() {
         </div>
         <div className="cw-pipe-detail-right">
           <div className="cw-pipe-pills">
-            {d.tags.map(t => <span key={t} className="cw-pipe-pill">{t}</span>)}
+            {d.tags.map(tag => <span key={tag} className="cw-pipe-pill">{tag}</span>)}
           </div>
           <div className="cw-pipe-nav">
             <button className="cw-pipe-nav-btn" onClick={() => go(cur - 1)} disabled={cur === 0}>
@@ -339,7 +342,7 @@ function PipelineTrack() {
               <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
             </button>
           </div>
-          <div className="cw-pipe-count"><strong>{cur + 1}</strong> of {N} steps</div>
+          <div className="cw-pipe-count"><strong>{cur + 1}</strong> {wr.ofSteps} {N} {wr.steps2}</div>
         </div>
       </div>
     </div>
@@ -371,6 +374,11 @@ export default function ContentWritingPage() {
   const cwCta  = t('contentWriting.cta');
   const scoreLabels = t('contentWriting.scoreLabels');
   const contentIdeas = t('contentWriting.contentIdeas');
+  const cwImpl = t('contentWriting.implement');
+  const cwLink = t('contentWriting.internalLinking');
+  const cwChan = t('contentWriting.multiChannel');
+  const cwCmp  = t('contentWriting.comparison');
+  const cwScore = t('contentWriting.contentScore');
   const BEFORE_SCORES = BEFORE_SCORES_DATA.map((d, i) => ({ ...d, label: scoreLabels[i] }));
   const AFTER_SCORES  = AFTER_SCORES_DATA.map((d, i) => ({ ...d, label: scoreLabels[i] }));
   const HUB_NODES = t('contentWriting.dataSynergy.hubNodes').map((n, i) => ({
@@ -529,7 +537,7 @@ export default function ContentWritingPage() {
                 <div className="cs-header">
                   <div className="cs-header-left">
                     <div className="cs-tag">{t('contentWriting.optimize.beforeLabel')}</div>
-                    <div className="cs-ttl"><IconStar /> Content Score</div>
+                    <div className="cs-ttl"><IconStar /> {cwScore}</div>
                   </div>
                   <div className="cs-bubble">
                     <div className="cs-num">38<em>/100</em></div>
@@ -566,7 +574,7 @@ export default function ContentWritingPage() {
                 <div className="cs-header">
                   <div className="cs-header-left">
                     <div className="cs-tag">{t('contentWriting.optimize.afterLabel')}</div>
-                    <div className="cs-ttl"><IconStar /> Content Score</div>
+                    <div className="cs-ttl"><IconStar /> {cwScore}</div>
                   </div>
                   <div className="cs-bubble">
                     <div className="cs-num">82<em>/100</em></div>
@@ -611,18 +619,17 @@ export default function ContentWritingPage() {
                     </svg>
                     nike.com/blog/lifestyle-footwear
                   </div>
-                  <span className="mbw-live">✓ Live</span>
+                  <span className="mbw-live">{cwImpl.mockup.live}</span>
                 </div>
                 <div className="mbw-hero">
-                  <span className="mbw-hero-cat">Lifestyle · Sport</span>
+                  <span className="mbw-hero-cat">{cwImpl.mockup.category}</span>
                 </div>
                 <div className="mbw-body">
-                  <div className="mbw-meta"><span className="mbw-pin"/>Blog · 6 min read · Just published</div>
-                  <h6>Lifestyle footwear that flexes with modern aesthetics</h6>
+                  <div className="mbw-meta"><span className="mbw-pin"/>{cwImpl.mockup.meta}</div>
+                  <h6>{cwImpl.mockup.h6}</h6>
                   <p className="mbw-p">
-                    Nike lifestyle sneakers aren't built for one moment. The pair you lace up for a morning
-                    run should still carry you into a Friday dinner   see our{' '}
-                    <span className="lk">guide to picking your fit</span>.
+                    {cwImpl.mockup.p}{' '}
+                    <span className="lk">{cwImpl.mockup.linkText}</span>.
                   </p>
                   <div className="mbw-ln"/>
                   <div className="mbw-ln"/>
@@ -636,7 +643,7 @@ export default function ContentWritingPage() {
                     <path d="M20 6 9 17l-5-5"/>
                   </svg>
                 </span>
-                <span>Published by Kate<small>One click, no developer</small></span>
+                <span>{cwImpl.mockup.publishedByKate}<small>{cwImpl.mockup.oneClick}</small></span>
               </div>
             </div>
           </div>
@@ -646,12 +653,9 @@ export default function ContentWritingPage() {
         <section className="cw-sec" style={{ background: 'var(--surface-2)' }}>
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
-              <div className="eyebrow">Internal linking, automatic</div>
-              <h2>Kate links your article to the<br /><HL>rest of your site.</HL></h2>
-              <p className="cw-lede">
-                As she writes, Kate turns key phrases in your article into links to your other pages.
-                Readers click through, and search engines and AI follow the very same links to discover your whole site.
-              </p>
+              <div className="eyebrow">{cwLink.eyebrow}</div>
+              <h2>{cwLink.h2Pre}<br /><HL>{cwLink.h2Hl}</HL></h2>
+              <p className="cw-lede">{cwLink.lead}</p>
             </div>
 
             <div className="lk3 cw-reveal">
@@ -669,8 +673,8 @@ export default function ContentWritingPage() {
                 </defs>
 
                 {/* Column labels */}
-                <text x="157" y="19" fontSize="9" fill="#9AA0AB" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">YOUR ARTICLE</text>
-                <text x="632" y="19" fontSize="9" fill="#1e3893" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">PAGES ON YOUR SITE</text>
+                <text x="157" y="19" fontSize="9" fill="#9AA0AB" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">{cwLink.yourArticle}</text>
+                <text x="632" y="19" fontSize="9" fill="#1e3893" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">{cwLink.pagesOnSite}</text>
 
                 {/* Left: Article card */}
                 <rect x="30" y="28" width="255" height="444" rx="12" fill="#fff" stroke="#e8ecf5" strokeWidth="1.5"/>
@@ -704,7 +708,7 @@ export default function ContentWritingPage() {
 
                 {/* Kate badge */}
                 <rect x="92" y="450" width="100" height="22" rx="11" fill="#EEF2FB"/>
-                <text x="142" y="465" fontSize="9.5" fill="#1E3893" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">linked by Kate</text>
+                <text x="142" y="465" fontSize="9.5" fill="#1E3893" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">{cwLink.linkedByKate}</text>
 
                 {/* Right: Dashed pages container */}
                 <rect x="425" y="28" width="410" height="444" rx="12" fill="rgba(238,242,251,.35)" stroke="#c5cce8" strokeWidth="1.5" strokeDasharray="6 4"/>
@@ -766,7 +770,7 @@ export default function ContentWritingPage() {
                     <path d="M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5"/>
                   </svg>
                 </span>
-                Readers
+                {cwLink.chips[0]}
               </span>
               <span className="lk2-chip">
                 <span className="lk-ic">
@@ -774,7 +778,7 @@ export default function ContentWritingPage() {
                     <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
                   </svg>
                 </span>
-                Search engines
+                {cwLink.chips[1]}
               </span>
               <span className="lk2-chip">
                 <span className="lk-ic">
@@ -783,10 +787,10 @@ export default function ContentWritingPage() {
                     <path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8z"/>
                   </svg>
                 </span>
-                AI engines
+                {cwLink.chips[2]}
               </span>
             </div>
-            <p className="lk2-note cw-reveal">All three follow Kate's links to reach every page on your site, so your content is found, ranked and cited.</p>
+            <p className="lk2-note cw-reveal">{cwLink.note}</p>
           </div>
         </section>
 
@@ -794,37 +798,22 @@ export default function ContentWritingPage() {
         <section className="cw-sec">
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
-              <div className="eyebrow">Wherever content lives</div>
-              <h2>Not just <HL>your blog.</HL></h2>
-              <p className="cw-lede">Kate is built to work wherever your brand needs to show up   so you stay present across every channel that matters.</p>
+              <div className="eyebrow">{cwChan.eyebrow}</div>
+              <h2>{cwChan.h2Pre} <HL>{cwChan.h2Hl}</HL></h2>
+              <p className="cw-lede">{cwChan.lead}</p>
             </div>
 
             <div className="channels cw-reveal">
               {[
-                {
-                  label: 'Blog & site',
-                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>,
-                },
-                {
-                  label: 'Docs',
-                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5V5a1 1 0 0 1 1-1h10l5 5v10.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M14 4v6h6M8 14h8M8 17h5"/></svg>,
-                },
-                {
-                  label: 'LinkedIn',
-                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7"/></svg>,
-                },
-                {
-                  label: 'Social posts',
-                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg>,
-                },
-                {
-                  label: 'Newsletter',
-                  icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/></svg>,
-                },
-              ].map(ch => (
-                <div key={ch.label} className="chan">
+                { icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg> },
+                { icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5V5a1 1 0 0 1 1-1h10l5 5v10.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M14 4v6h6M8 14h8M8 17h5"/></svg> },
+                { icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7"/></svg> },
+                { icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg> },
+                { icon: <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/></svg> },
+              ].map((ch, idx) => (
+                <div key={idx} className="chan">
                   <span className="chan-ic">{ch.icon}</span>
-                  {ch.label}
+                  {cwChan.channels[idx]}
                 </div>
               ))}
             </div>
@@ -835,40 +824,42 @@ export default function ContentWritingPage() {
         <section className="cw-sec" style={{ background: 'var(--surface-2)' }}>
           <div className="cw-wrap">
             <div className="cw-head cw-center cw-reveal">
-              {(() => { const cmp = t('contentWriting.comparison'); return (<>
-                <div className="eyebrow">Kate vs. the others</div>
-                <h2>{cmp.h2Pre} <HL>{cmp.h2Hl}</HL></h2>
-                <p className="cw-lede">{cmp.lead}</p>
-              </>); })()}
+              <>
+                <div className="eyebrow">{cwCmp.eyebrow}</div>
+                <h2>{cwCmp.h2Pre} <HL>{cwCmp.h2Hl}</HL></h2>
+                <p className="cw-lede">{cwCmp.lead}</p>
+              </>
             </div>
 
             <div className="cw-ctable cw-reveal">
               <div className="cw-row cw-thead">
-                {t('contentWriting.comparison.headers').slice(0, 3).map((h, i) => (
+                {cwCmp.headers.slice(0, 3).map((h, i) => (
                   <div key={i} className={`cw-cell${i === 0 ? ' cw-cap' : ''}`}>{h}</div>
                 ))}
                 <div className="cw-cell cw-us">
                   ✦ Kate · Poliris
-                  <span className="cw-rec">Recommended</span>
+                  <span className="cw-rec">{cwCmp.recommended}</span>
                 </div>
               </div>
-              {CMP_ROWS.map((row, i) => (
-                <div key={i} className="cw-row">
-                  <div className="cw-cell cw-cap">{(t('contentWriting.comparison.rows')[i]) || row.cap}</div>
-                  <div className="cw-cell">
-                    <CK type={row.gen[0]}/>
-                    {row.gen[1] && <span className="cw-cmini">{row.gen[1]}</span>}
+              {CMP_ROWS.map((row, i) => {
+                const note = cwCmp.rowNotes[i] || {};
+                return (
+                  <div key={i} className="cw-row">
+                    <div className="cw-cell cw-cap">{cwCmp.rows[i] || row.cap}</div>
+                    <div className="cw-cell">
+                      <CK type={row.gen[0]}/>
+                      {note.gen && <span className="cw-cmini">{note.gen}</span>}
+                    </div>
+                    <div className="cw-cell">
+                      <CK type={row.seo[0]}/>
+                      {note.seo && <span className="cw-cmini">{note.seo}</span>}
+                    </div>
+                    <div className="cw-cell cw-us">
+                      <CK type={row.us[0]}/>
+                    </div>
                   </div>
-                  <div className="cw-cell">
-                    <CK type={row.seo[0]}/>
-                    {row.seo[1] && <span className="cw-cmini">{row.seo[1]}</span>}
-                  </div>
-                  <div className="cw-cell cw-us">
-                    <CK type={row.us[0]}/>
-                    {row.us[1] && <span className="cw-cmini">{row.us[1]}</span>}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

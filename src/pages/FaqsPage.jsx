@@ -11,7 +11,7 @@ import '../faqs.css';
 function FaqItem({ item, id, isOpen, onToggle }) {
   const contentRef = useRef(null);
   const [height, setHeight] = useState(0);
-  const { intro, bullets, callout } = item.a;
+  const { intro, bullets, sections, callout } = item.a;
 
   useEffect(() => {
     if (isOpen) {
@@ -19,7 +19,7 @@ function FaqItem({ item, id, isOpen, onToggle }) {
     } else {
       setHeight(0);
     }
-  }, [isOpen, intro, bullets, callout]);
+  }, [isOpen, intro, bullets, sections, callout]);
 
   return (
     <div className={`faq2-item${isOpen ? ' open' : ''}`}>
@@ -29,13 +29,30 @@ function FaqItem({ item, id, isOpen, onToggle }) {
       </button>
       <div className="faq2-body" style={{ height }}>
         <div ref={contentRef} className="faq2-content">
-          <p className="faq2-a">{intro}</p>
-          {bullets && (
-            <ul className="faq2-list">
-              {bullets.map((b, bi) => (
-                <li key={bi}><b>{b.label}</b> {b.text}</li>
-              ))}
-            </ul>
+          {sections ? (
+            sections.map((s, si) => (
+              <div key={si}>
+                <p className="faq2-a">{s.label && <><b>{s.label}</b>{' '}</>}{s.intro}</p>
+                {s.bullets && s.bullets.length > 0 && (
+                  <ul className="faq2-list">
+                    {s.bullets.map((b, bi) => (
+                      <li key={bi}><b>{b.label}</b> {b.text}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))
+          ) : (
+            <>
+              <p className="faq2-a">{intro}</p>
+              {bullets && (
+                <ul className="faq2-list">
+                  {bullets.map((b, bi) => (
+                    <li key={bi}><b>{b.label}</b> {b.text}</li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
           {callout && <div className="faq2-callout">{callout}</div>}
         </div>

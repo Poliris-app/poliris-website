@@ -219,7 +219,7 @@
   line-height: 1.7;
   margin: 0 0 16px;
 }
-.faq2-a:last-child {
+.faq2-content > .faq2-a:last-child {
   margin-bottom: 0;
 }
 

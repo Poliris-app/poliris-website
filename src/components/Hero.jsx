@@ -3,7 +3,9 @@ import HeroDashboard from './HeroDashboard';
 import { useLang } from '../contexts/LangContext';
 
 const TRIAL_URL = 'https://app.poliris.io';
-const isTrialCta = (label) => typeof label === 'string' && /trial/i.test(label);
+const DEMO_URL  = 'https://cal.com/team/poliris/application-demo';
+const isTrialCta = (label) => typeof label === 'string' && /trial|essai/i.test(label);
+const isDemoCta  = (label) => typeof label === 'string' && /demo|démo/i.test(label);
 
 const LOGOS = [
   { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`, alt: 'ChatGPT' },
@@ -58,7 +60,15 @@ function ScrollHint() {
 
 export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, note, showDashboard = true, showAiBand = true, dark = false, bottom = null }) {
   const primaryTrial = isTrialCta(primaryCta);
+  const primaryDemo  = isDemoCta(primaryCta);
   const secondaryTrial = isTrialCta(secondaryCta);
+  const secondaryDemo  = isDemoCta(secondaryCta);
+
+  const primaryHref  = primaryTrial ? TRIAL_URL : primaryDemo ? DEMO_URL : '#';
+  const secondaryHref = secondaryTrial ? TRIAL_URL : secondaryDemo ? DEMO_URL : '#';
+  const primaryExternal  = primaryTrial || primaryDemo;
+  const secondaryExternal = secondaryTrial || secondaryDemo;
+
   return (
     <>
       <ScrollHint />
@@ -70,9 +80,9 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
           <p className="hero__lead">{lead}</p>
           <div className="hero__actions">
             <a
-              href={primaryTrial ? TRIAL_URL : '#'}
+              href={primaryHref}
               className="btn btn--primary"
-              {...(primaryTrial ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              {...(primaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               {primaryCta}
               {!dark && (
@@ -84,9 +94,9 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
               )}
             </a>
             <a
-              href={secondaryTrial ? TRIAL_URL : '#'}
+              href={secondaryHref}
               className="btn btn--secondary"
-              {...(secondaryTrial ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              {...(secondaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               {secondaryCta}
             </a>

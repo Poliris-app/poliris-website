@@ -56,10 +56,12 @@ const SENT_MODELS = [
 ];
 
 function SentimentBreakdown() {
-  const [activeTab, setActiveTab] = useState('Axes');
+  const { t } = useLang();
+  const [activeTabIdx, setActiveTabIdx] = useState(0);
+  const md = t('sentiment.mockDash');
   const items = useMemo(
-    () => activeTab === 'Axes' ? SENT_AXES : SENT_MODELS,
-    [activeTab]
+    () => activeTabIdx === 0 ? SENT_AXES : SENT_MODELS,
+    [activeTabIdx]
   );
   const overall = TIER_STYLE[SENT_OVERALL];
 
@@ -67,19 +69,19 @@ function SentimentBreakdown() {
     <div className="hdash__sb-wrap">
       <div className="hdash__sb-hdr2">
         <div>
-          <p className="hdash__sb-title2">Sentiment Breakdown</p>
-          <p className="hdash__sb-sub2">Quick read of what lifts or limits sentiment</p>
+          <p className="hdash__sb-title2">{md.breakdownTitle}</p>
+          <p className="hdash__sb-sub2">{md.breakdownSub}</p>
         </div>
         <span className="hdash__sb-score-badge" style={{ color: overall.color, background: overall.bg }}>
-          {SENT_OVERALL}
+          {md.overallScore}
         </span>
       </div>
       <div className="hdash__sb-tabs-row">
         <div className="hdash__sb-tab-group2">
-          {['Axes', 'AI Models'].map(tab => (
-            <button key={tab}
-              className={`hdash__sb-tab2${activeTab === tab ? ' hdash__sb-tab2--on' : ''}`}
-              onClick={() => setActiveTab(tab)}>
+          {md.tabs.map((tab, idx) => (
+            <button key={idx}
+              className={`hdash__sb-tab2${activeTabIdx === idx ? ' hdash__sb-tab2--on' : ''}`}
+              onClick={() => setActiveTabIdx(idx)}>
               {tab}
             </button>
           ))}
@@ -88,18 +90,19 @@ function SentimentBreakdown() {
       <div className="hdash__sb-bars">
         {items.map(item => {
           const ts = TIER_STYLE[item.tier];
+          const displayName = item.name;
           return (
             <div key={item.id} className="hdash__sb-bar-card">
               <div className="hdash__sb-bar-card-top">
                 <span className="hdash__sb-bar-card-name">
                   {item.icon && <img src={item.icon} alt={item.name} className="hdash__sb-bar-card-icon" />}
-                  {item.name}
+                  {displayName}
                 </span>
                 <span className="hdash__sb-bar-card-right">
                   {item.isPriority && (
-                    <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>Priority</span>
+                    <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>{md.priority}</span>
                   )}
-                  <span className="hdash__sb-bar-tag" style={{ color: ts.color, background: ts.bg }}>{item.tier}</span>
+                  <span className="hdash__sb-bar-tag" style={{ color: ts.color, background: ts.bg }}>{md.tiers[item.tier]}</span>
                 </span>
               </div>
               <div className="hdash__sb-bar-track2">
@@ -187,7 +190,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Moderate',    cls: 'pt-warn' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80,
+    overall: 80, overallLabel: 'Strong',
   },
   {
     name: 'Nike',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,
@@ -195,7 +198,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Weak',        cls: 'pt-neg' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80,
+    overall: 80, overallLabel: 'Strong',
   },
   {
     name: 'On',       you: false, bd: '#16a34a', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
@@ -203,7 +206,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80,
+    overall: 80, overallLabel: 'Strong',
   },
   {
     name: 'Hoka',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,
@@ -211,7 +214,7 @@ const COMPETITORS = [
     design:    { label: 'Moderate',    cls: 'pt-warn' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80,
+    overall: 80, overallLabel: 'Strong',
   },
   {
     name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
@@ -219,7 +222,7 @@ const COMPETITORS = [
     design:    { label: ' ',           cls: 'pt-neu' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80,
+    overall: 80, overallLabel: 'Strong',
   },
   {
     name: 'New Balance',   you: false, bd: 'rgb(28, 229, 206)', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
@@ -227,12 +230,13 @@ const COMPETITORS = [
     design:    { label: 'Strong',           cls: 'pt-neu' },
     durability:{ label: 'Strong', cls: 'pt-pos' },
     performance:{ label: 'Moderate',     cls: 'pt-pos' },
-    overall: 80,
+    overall: 80, overallLabel: 'Strong',
   },
 ];
 
 export default function SentimentPage() {
   const { t } = useLang();
+  const md = t('sentiment.mockDash');
   const [evxOpen, setEvxOpen] = useState(true);
   const [sentHov, setSentHov] = useState(null);
 
@@ -296,7 +300,7 @@ export default function SentimentPage() {
                     </div>
                     <div className="dsb__brand-info">
                       <span className="dsb__brand-name">Nike</span>
-                      <span className="dsb__brand-meta">Active project</span>
+                      <span className="dsb__brand-meta">{md.activeProject}</span>
                     </div>
                   </div>
                   <div className="dsb__ask-poli">
@@ -305,10 +309,10 @@ export default function SentimentPage() {
                       <path d="M20 2v4"/><path d="M22 4h-4"/>
                       <circle cx="4" cy="20" r="2"/>
                     </svg>
-                    Ask Poli AI
+                    {md.askPoliAI}
                   </div>
                   <div className="dsb__section-hdr">
-                    <span className="dsb__section-lbl">GEO AUDIT</span>
+                    <span className="dsb__section-lbl">{md.geoAudit}</span>
                   </div>
                   <div className="dsb__tree">
                     <div className="dsb__tree-brand">
@@ -324,20 +328,20 @@ export default function SentimentPage() {
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
                         </span>
                         <span className="dsb__avatar dsb__avatar--n">A</span>
-                        <span className="dsb__tree-cat-name">Footwear</span>
+                        <span className="dsb__tree-cat-name">{md.footwear}</span>
                       </div>
                       <div className="dsb__tree-l2">
-                        {['Overview', 'AI Visibility', 'Sentiment'].map(l => (
-                          <div key={l} className={`dash__nav-item${l === 'Sentiment' ? ' dash__nav-item--active' : ''}`}>{l}</div>
+                        {md.navItems.map((l, idx) => (
+                          <div key={idx} className={`dash__nav-item${idx === 2 ? ' dash__nav-item--active' : ''}`}>{l}</div>
                         ))}
                       </div>
                     </div>
                   </div>
                   <div className="dsb__section-hdr dsb__section-hdr--mt">
-                    <span className="dsb__section-lbl">TECHNICAL AUDIT</span>
+                    <span className="dsb__section-lbl">{md.technicalAudit}</span>
                   </div>
                   <div className="dsb__section-hdr">
-                    <span className="dsb__section-lbl">CONTENT GENERATION</span>
+                    <span className="dsb__section-lbl">{md.contentGen}</span>
                   </div>
                 </aside>
 
@@ -350,12 +354,12 @@ export default function SentimentPage() {
                       </div>
                       <div>
                         <div className="hdash__v2-brand-name">Nike</div>
-                        <div className="hdash__v2-brand-sub">Sentiment · Updated today</div>
+                        <div className="hdash__v2-brand-sub">{md.updatedToday}</div>
                       </div>
                     </div>
                     <div className="hdash__v2-score-wrap">
-                      <span className="hdash__v2-score-label">Overall sentiment</span>
-                      <span className="hdash__v2-score-badge" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                      <span className="hdash__v2-score-label">{md.overallSentiment}</span>
+                      <span className="hdash__v2-score-badge" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.overallScore}</span>
                     </div>
                   </div>
 
@@ -365,10 +369,10 @@ export default function SentimentPage() {
                         <path d="M12 5v14M5 12h14"/>
                       </svg>
                     </span>
-                    <p><b>Nora:</b> Sentiment is Strong overall   Durability is the weak point. Prioritize it before competitors exploit the gap.</p>
+                    <p><b>Nora:</b> {md.noraMsg}</p>
                   </div>
 
-                  <div className="hdash__v2-section-label">Over time</div>
+                  <div className="hdash__v2-section-label">{md.overTime}</div>
 
                   <div className="hdash__v2-chart-wrap" onMouseLeave={() => setSentHov(null)}>
                     <svg viewBox="20 0 515 160" className="hdash__v2-svg" onMouseMove={handleSentMove}>
@@ -385,7 +389,7 @@ export default function SentimentPage() {
                       {CHART_TIERS.map(({ v, label, color }) => (
                         <g key={v}>
                           <line x1={CPL} y1={cyAt(v)} x2={CVW-CPR} y2={cyAt(v)} stroke="#eef0f4" strokeWidth="1"/>
-                          <text x={CPL-6} y={cyAt(v)+3} textAnchor="end" fontSize="7.5" fontWeight="600" fill={color}>{label}</text>
+                          <text x={CPL-6} y={cyAt(v)+3} textAnchor="end" fontSize="7.5" fontWeight="600" fill={color}>{md.tiers[label]}</text>
                         </g>
                       ))}
                       {SENT_X_LABELS.map((label, i) => (
@@ -410,7 +414,7 @@ export default function SentimentPage() {
                           <div className="hdash__v2-tip-row">
                             <span className="hdash__v2-tip-dot" style={{ background: hovTier.color }} />
                             <span className="hdash__v2-tip-name">Nike</span>
-                            <span className="hdash__v2-tip-val" style={{ color: hovTier.color }}>{hovTier.label}</span>
+                            <span className="hdash__v2-tip-val" style={{ color: hovTier.color }}>{md.tiers[hovTier.label]}</span>
                           </div>
                         </div>
                       );
@@ -477,9 +481,9 @@ export default function SentimentPage() {
               {/* legend header */}
               <div className="pf-legend-hdr">
                 <span>{t('sentiment.perAxis.legendLabel')}</span>
-                <span className="tg pos">▲ Endorsement</span>
-                <span className="tg neu"><span className="tg-stacked"><span>▲</span><span>▼</span></span> Mention</span>
-                <span className="tg neg">▼ Critique</span>
+                <span className="tg pos">▲ {t('sentiment.perAxis.legendItems')[0]}</span>
+                <span className="tg neu"><span className="tg-stacked"><span>▲</span><span>▼</span></span> {t('sentiment.perAxis.legendItems')[1]}</span>
+                <span className="tg neg">▼ {t('sentiment.perAxis.legendItems')[2]}</span>
                 <span>  {t('sentiment.perAxis.legendSuffix')}</span>
               </div>
 
@@ -498,8 +502,8 @@ export default function SentimentPage() {
                 </defs>
 
                 {/* Column headers */}
-                <text x="36" y="46" className="pf-collbl">HUNDREDS OF AI ANSWERS</text>
-                <text x="950" y="46" textAnchor="end" className="pf-collbl">ONE SENTIMENT PER AXIS</text>
+                <text x="36" y="46" className="pf-collbl">{t('sentiment.perAxis.hundredsLabel')}</text>
+                <text x="950" y="46" textAnchor="end" className="pf-collbl">{t('sentiment.perAxis.onePerAxis')}</text>
 
                 {/* Q1 → Brand awareness */}
                 <path className="pf-line pf-line--1" d="M 440 96  C 526 96  524 129 610 129" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
@@ -569,33 +573,33 @@ export default function SentimentPage() {
                 <rect x="610" y="70"  width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
                 <rect x="610" y="84"  width="5" height="90" rx="2.5" fill="#7c5cbf"/>
                 <text x="636" y="118" className="pf-tname">Brand awareness</text>
-                <text x="636" y="144" className="pf-tsub">from 18 prompts</text>
+                <text x="636" y="144" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 18)}</text>
                 <rect x="836" y="140" width="94" height="24" rx="12" fill="#dcfce7"/>
-                <text x="883" y="156" textAnchor="middle" className="pf-tlab" fill="#16a34a">Very strong</text>
+                <text x="883" y="156" textAnchor="middle" className="pf-tlab" fill="#16a34a">{md.tiers['Very Strong']}</text>
                 {/* Axis card: Design (orange)   y=200, center=259 */}
                 <rect x="610" y="200" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
                 <rect x="610" y="214" width="5" height="90" rx="2.5" fill="#d98a2b"/>
                 <text x="636" y="248" className="pf-tname">Design</text>
-                <text x="636" y="274" className="pf-tsub">from 20 prompts</text>
+                <text x="636" y="274" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 20)}</text>
                 <rect x="856" y="270" width="70" height="24" rx="12" fill="#dcfce7"/>
-                <text x="891" y="286" textAnchor="middle" className="pf-tlab" fill="#16a34a">Strong</text>
+                <text x="891" y="286" textAnchor="middle" className="pf-tlab" fill="#16a34a">{md.tiers['Strong']}</text>
                 {/* Axis card: Durability (teal)   y=380, center=439 */}
                 <rect x="610" y="380" width="340" height="118" rx="13" fill="#e6f7f3" stroke="#0d7963" strokeOpacity=".30"/>
                 <rect x="610" y="394" width="5" height="90" rx="2.5" fill="#0d7963"/>
                 <text x="636" y="428" className="pf-tname">Durability</text>
-                <text x="636" y="454" className="pf-tsub">from 15 prompts</text>
+                <text x="636" y="454" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 15)}</text>
                 <rect x="856" y="450" width="70" height="24" rx="12" fill="#fee2e2"/>
-                <text x="891" y="466" textAnchor="middle" className="pf-tlab" fill="#dc2626">Weak</text>
+                <text x="891" y="466" textAnchor="middle" className="pf-tlab" fill="#dc2626">{md.tiers['Weak']}</text>
                 {/* Axis card: Performance (navy)   y=510, center=569 */}
                 <rect x="610" y="510" width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
                 <rect x="610" y="524" width="5" height="90" rx="2.5" fill="#1e3893"/>
                 <text x="636" y="558" className="pf-tname">Performance</text>
-                <text x="636" y="584" className="pf-tsub">from 22 prompts</text>
+                <text x="636" y="584" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 22)}</text>
                 <rect x="856" y="580" width="70" height="24" rx="12" fill="#dcfce7"/>
-                <text x="891" y="596" textAnchor="middle" className="pf-tlab" fill="#16a34a">Strong</text>
+                <text x="891" y="596" textAnchor="middle" className="pf-tlab" fill="#16a34a">{md.tiers['Strong']}</text>
               </svg>
 
-              <p className="pf-foot">Each axis is a real buying decision   the score tells you exactly where AI is helping or hurting your pipeline.</p>
+              <p className="pf-foot">{t('sentiment.perAxis.foot')}</p>
             </div>
           </div>
         </section>
@@ -614,19 +618,24 @@ export default function SentimentPage() {
             <div className="lens2 reveal">
               {/* by axis */}
               <div className="slens">
-                <div className="ic">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
-                  </svg>
+                <div className="slens-hdr">
+                  <div className="ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+                    </svg>
+                  </div>
+                  <div className="slens-hdr-text">
+                    <h3>{t('sentiment.fullBreakdown.byAxis.h3')}</h3>
+                    <p>{t('sentiment.fullBreakdown.byAxis.p')}</p>
+                  </div>
                 </div>
-                <h3>{t('sentiment.fullBreakdown.byAxis.h3')}</h3>
-                <p>{t('sentiment.fullBreakdown.byAxis.p')}</p>
+                <div className="slens-body">
                 <div className="hdash__sb-bars">
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name">Brand awareness</span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>Very Strong</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>{md.tiers['Very Strong']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -637,7 +646,7 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name">Performance</span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -648,7 +657,7 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name">Design</span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -659,8 +668,8 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name">Durability</span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>Priority</span>
-                        <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>Weak</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>{md.priority}</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>{md.tiers['Weak']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -668,19 +677,25 @@ export default function SentimentPage() {
                     </div>
                   </div>
                 </div>
+                </div>
                 <p className="lens-note">{t('sentiment.fullBreakdown.byAxis.note')}</p>
               </div>
 
               {/* by model */}
               <div className="slens">
-                <div className="ic">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 8v4l3 3"/>
-                  </svg>
+                <div className="slens-hdr">
+                  <div className="ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 8v4l3 3"/>
+                    </svg>
+                  </div>
+                  <div className="slens-hdr-text">
+                    <h3>{t('sentiment.fullBreakdown.byModel.h3')}</h3>
+                    <p>{t('sentiment.fullBreakdown.byModel.p')}</p>
+                  </div>
                 </div>
-                <h3>{t('sentiment.fullBreakdown.byModel.h3')}</h3>
-                <p>{t('sentiment.fullBreakdown.byModel.p')}</p>
+                <div className="slens-body">
                 <div className="hdash__sb-bars">
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
@@ -692,7 +707,7 @@ export default function SentimentPage() {
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>Very Strong</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>{md.tiers['Very Strong']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -709,7 +724,7 @@ export default function SentimentPage() {
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -726,7 +741,7 @@ export default function SentimentPage() {
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>Strong</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
@@ -743,14 +758,15 @@ export default function SentimentPage() {
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
-                        <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>Priority</span>
-                        <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>Weak</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#FA7319', background: '#FFF3EB' }}>{md.priority}</span>
+                        <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>{md.tiers['Weak']}</span>
                       </span>
                     </div>
                     <div className="hdash__sb-bar-track2">
                       <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
                     </div>
                   </div>
+                </div>
                 </div>
                 <p className="lens-note">{t('sentiment.fullBreakdown.byModel.note')}</p>
               </div>
@@ -768,21 +784,13 @@ export default function SentimentPage() {
               </div>
 
               <div className="st-stats">
-                <div className="st-stat">
-                  <div className="st-stat-lbl">Overall Score</div>
-                  <div className="st-stat-val">Strong</div>
-                  <div className="st-stat-sub st-sub-pos">↑ +5 pts vs. 30 days ago</div>
-                </div>
-                <div className="st-stat">
-                  <div className="st-stat-lbl">Models Tracked</div>
-                  <div className="st-stat-val">4</div>
-                  <div className="st-stat-sub">AI engines · real-time</div>
-                </div>
-                <div className="st-stat">
-                  <div className="st-stat-lbl">At-Risk Axis</div>
-                  <div className="st-stat-val">1</div>
-                  <div className="st-stat-sub st-sub-warn">Durability · dropping</div>
-                </div>
+                {t('sentiment.fullBreakdown.trend.stats').map((s, i) => (
+                  <div key={i} className="st-stat">
+                    <div className="st-stat-lbl">{s.lbl}</div>
+                    <div className="st-stat-val">{s.val}</div>
+                    <div className={`st-stat-sub${i === 0 ? ' st-sub-pos' : i === 2 ? ' st-sub-warn' : ''}`}>{s.sub}</div>
+                  </div>
+                ))}
               </div>
 
               <div className="st-chart-wrap">
@@ -806,11 +814,11 @@ export default function SentimentPage() {
                   <line x1="110" y1="212" x2="760" y2="212" stroke="#e5e7eb" strokeWidth="1"/>
 
                   {/* Tier labels */}
-                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Manrope,sans-serif">Very Strong</text>
-                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Manrope,sans-serif">Strong</text>
-                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Manrope,sans-serif">Moderate</text>
-                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Manrope,sans-serif">Weak</text>
-                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Manrope,sans-serif">Very Weak</text>
+                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Manrope,sans-serif">{md.tiers['Very Strong']}</text>
+                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Manrope,sans-serif">{md.tiers['Strong']}</text>
+                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Manrope,sans-serif">{md.tiers['Moderate']}</text>
+                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Manrope,sans-serif">{md.tiers['Weak']}</text>
+                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Manrope,sans-serif">{md.tiers['Very Weak']}</text>
 
                   {/* X-axis labels   Apr 27, May 4, May 11, May 18, May 25, Jun 1 */}
                   <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Apr 27</text>
@@ -859,7 +867,7 @@ export default function SentimentPage() {
                   {/* Annotation bubble   small white pill */}
                   <rect x="615" y="120" width="135" height="22" rx="6" fill="#fff" stroke="#2563eb" strokeWidth="1"/>
                   <circle cx="625" cy="131" r="3" fill="#2563eb"/>
-                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">Flagged early · Day 25</text>
+                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">{t('sentiment.fullBreakdown.trend.flaggedEarly')}</text>
 
                   {/* End dots   green ends at Strong (y=68), blue ends at Weak (y=164) */}
                   <circle cx="760" cy="68"  r="5" fill="#16a34a" stroke="#fff" strokeWidth="2"/>
@@ -867,9 +875,9 @@ export default function SentimentPage() {
 
                   {/* End score badges */}
                   <rect x="770" y="61"  width="45" height="17" rx="8.5" fill="rgb(209, 250, 229)"/>
-                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Manrope,sans-serif" fontWeight="700">Strong</text>
+                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Strong']}</text>
                   <rect x="770" y="157" width="45" height="17" rx="8.5" fill="rgb(255, 247, 237)"/>
-                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Manrope,sans-serif" fontWeight="700">Weak</text>
+                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Weak']}</text>
                 </svg>
               </div>
 
@@ -912,7 +920,7 @@ export default function SentimentPage() {
                     <span className="bd" style={{ background: c.bd }} />
                     {c.logo && <img src={c.logo} alt={c.name} className="cmpx-brand-logo" />}
                     {c.name}
-                    {c.you && <span className="yt">You</span>}
+                    {c.you && <span className="yt">{t('sentiment.competitive.you')}</span>}
                   </div>
                   {[c.awareness, c.design, c.durability, c.performance].map((cell, i) => {
                     const ts = TIER_STYLE[cell.label];
@@ -922,7 +930,7 @@ export default function SentimentPage() {
                           className={`pill-tag${!ts ? ' pt-neu' : ''}`}
                           style={ts ? { color: ts.color, background: ts.bg } : undefined}
                         >
-                          {cell.label}
+                          {md.tiers[cell.label] || cell.label}
                         </span>
                       </div>
                     );
@@ -931,7 +939,7 @@ export default function SentimentPage() {
                     <div className="cmpx-bar-track">
                       <div className="cmpx-bar-fill" style={{ width: `${c.overall}%` }} />
                     </div>
-                    <span className="cmpx-overall-label">Strong</span>
+                    <span className="cmpx-overall-label">{md.tiers[c.overallLabel]}</span>
                   </div>
                 </div>
               ))}

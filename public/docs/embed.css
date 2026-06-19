@@ -1,0 +1,8 @@
+/* Hide the docs' own top navbar.
+   --header-h drives sidebar top, TOC top, height, and scroll-padding in document.css.
+   Setting it to 1rem gives both panels breathing room at the top without
+   needing separate overrides. */
+.site-header { display: none !important; }
+:root        { --header-h: 4.625rem !important; } /* 74px = Poliris navbar height */
+
+.content { padding-top: var(--header-h) !important; }

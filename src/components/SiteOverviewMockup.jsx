@@ -39,7 +39,7 @@ const IconGraph = () => (
 );
 
 /* ── IndexedDonut ──────────────────────────────────────────── */
-function IndexedDonut({ pct }) {
+function IndexedDonut({ pct, label }) {
   const radius = 48;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (pct / 100) * circumference;
@@ -58,7 +58,7 @@ function IndexedDonut({ pct }) {
       </svg>
       <div className="som-donut-inner">
         <span className="som-donut-pct">{pct}%</span>
-        <span className="som-donut-lbl">Indexed</span>
+        <span className="som-donut-lbl">{label}</span>
       </div>
     </div>
   );
@@ -104,9 +104,8 @@ function PerformanceGauge({ score }) {
 
 /* ── SegmentedRatingBar (vital bar) ───────────────────────── */
 const R_COLORS = ['#22c55e', '#eab308', '#ef4444'];
-const R_LABELS = ['Good', 'Needs Improv.', 'Poor'];
 
-function SegmentedRatingBar({ activeIndex, fraction, weights }) {
+function SegmentedRatingBar({ activeIndex, fraction, weights, labels }) {
   return (
     <div>
       <div className="som-rating-track">
@@ -132,7 +131,7 @@ function SegmentedRatingBar({ activeIndex, fraction, weights }) {
         })}
       </div>
       <div className="som-rating-labels">
-        {R_LABELS.map((lbl, i) => (
+        {labels.map((lbl, i) => (
           <span key={i} style={{
             flexGrow: weights[i], flexBasis: 0,
             color: i === activeIndex ? '#3F3F46' : '#9ca3af',
@@ -148,6 +147,8 @@ function SegmentedRatingBar({ activeIndex, fraction, weights }) {
 export default function SiteOverviewMockup() {
   const { t } = useLang();
   const d = t('siteOverviewMockup');
+
+  const ratingLabels = [d.good, d.needsImprovementShort, d.poor];
 
   const crawlSegs = [
     { key: 'indexed',    value: 25, color: '#2563eb', label: d.indexed },
@@ -236,7 +237,7 @@ export default function SiteOverviewMockup() {
             </div>
             <div className="som-col-body">
               <div className="som-crawl-row">
-                <IndexedDonut pct={25} />
+                <IndexedDonut pct={25} label={d.indexed} />
                 <div className="som-crawl-aside">
                   <span className="som-crawl-lbl">100 {d.pagesOf} 100 {d.pagesCrawledShort}</span>
                   <SegmentedBar segments={crawlSegs} />
@@ -304,7 +305,7 @@ export default function SiteOverviewMockup() {
                     <span className="som-vital-val">· 3.7 s</span>
                     <span className="som-vital-chip" style={{ background: '#fefce8', color: '#eab308' }}>{d.needsImprovement}</span>
                   </div>
-                  <SegmentedRatingBar activeIndex={1} fraction={0.8} weights={[41.7, 25, 33.3]} />
+                  <SegmentedRatingBar activeIndex={1} fraction={0.8} weights={[41.7, 25, 33.3]} labels={ratingLabels} />
                 </li>
                 {/* INP — Poor, fraction 1 */}
                 <li className="som-vital">
@@ -313,7 +314,7 @@ export default function SiteOverviewMockup() {
                     <span className="som-vital-val">· 818 ms</span>
                     <span className="som-vital-chip" style={{ background: '#fef2f2', color: '#ef4444' }}>{d.poor}</span>
                   </div>
-                  <SegmentedRatingBar activeIndex={2} fraction={1} weights={[26.7, 40, 33.3]} />
+                  <SegmentedRatingBar activeIndex={2} fraction={1} weights={[26.7, 40, 33.3]} labels={ratingLabels} />
                 </li>
                 {/* CLS — Good, fraction 0.4 */}
                 <li className="som-vital">
@@ -322,7 +323,7 @@ export default function SiteOverviewMockup() {
                     <span className="som-vital-val">· 0.040</span>
                     <span className="som-vital-chip" style={{ background: '#dcfce7', color: '#22c55e' }}>{d.good}</span>
                   </div>
-                  <SegmentedRatingBar activeIndex={0} fraction={0.4} weights={[26.7, 40, 33.3]} />
+                  <SegmentedRatingBar activeIndex={0} fraction={0.4} weights={[26.7, 40, 33.3]} labels={ratingLabels} />
                 </li>
               </ul>
               <a href="#" className="som-see-more">{d.seeMore} →</a>

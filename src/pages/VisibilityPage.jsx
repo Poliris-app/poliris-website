@@ -404,10 +404,10 @@ export default function VisibilityPage() {
             <div className="src-intel reveal">
               <div className="src-intel-hdr">
                 <div>
-                  <div className="src-intel-title">Source intelligence report</div>
+                  <div className="src-intel-title">{t('visibility.sourceIntel.title')}</div>
                   <div className="src-intel-meta">Running Shoes · nike.com · Updated 2 hours ago</div>
                 </div>
-                <span className="src-intel-engines">6 AI engines</span>
+                <span className="src-intel-engines">{t('visibility.sourceIntel.aiEngines')}</span>
               </div>
 
               <div className="sit-head">
@@ -422,18 +422,20 @@ export default function VisibilityPage() {
               </div>
 
               {[
-                { fav: 'R', bg: '#cc2200', domain: 'runrepeat.com',      type: 'Review',               da: 72, cite: 14, attr: 'both', vis: 38,   opp: 'strengthen', oppLabel: 'Strengthen'    },
-                { fav: 'T', bg: '#e8321c', domain: 'tomsguide.com',      type: 'Media',                da: 91, cite: 7,  attr: 'both', vis: 45,   opp: 'expand',     oppLabel: 'Expand reach'  },
-                { fav: 'O', bg: '#5b8c5a', domain: 'outdoorgearlab.com', type: 'Review',               da: 68, cite: 7,  attr: 'comp', vis: 0,    opp: 'featured',   oppLabel: 'Get featured'  },
-                { fav: 'W', bg: '#1c1c1c', domain: 'whowhatwear.com',    type: 'Media',                da: 82, cite: 6,  attr: 'both', vis: 41,   opp: 'strengthen', oppLabel: 'Strengthen'    },
-                { fav: 'R', bg: '#ff4500', domain: 'reddit.com',         type: 'Social',               da: 95, cite: 6,  attr: 'both', vis: 31,   opp: 'strengthen', oppLabel: 'Strengthen'    },
-                { fav: 'R', bg: '#111111', domain: 'rei.com',            type: 'Retail',               da: 84, cite: 5,  attr: 'you',  vis: 74,   opp: 'expand',     oppLabel: 'Expand reach'  },
-                { fav: 'A', bg: '#111111', domain: 'adidas.com',         type: 'Retail',               da: 92, cite: 4,  attr: 'comp', vis: 0,    opp: 'pitch',      oppLabel: 'Pitch content' },
-                { fav: 'C', bg: '#cc0000', domain: 'cnn.com',            type: 'News',                 da: 95, cite: 4,  attr: 'both', vis: 35,   opp: 'strengthen', oppLabel: 'Strengthen'    },
-                { fav: 'R', bg: '#e64c00', domain: 'runnersworld.com',   type: 'Media',                da: 84, cite: 4,  attr: 'both', vis: 48,   opp: 'expand',     oppLabel: 'Expand reach'  },
-                { fav: 'N', bg: '#e8243c', domain: 'newbalance.com',     type: 'Retail',               da: 88, cite: 4,  attr: 'comp', vis: 0,    opp: 'pitch',      oppLabel: 'Pitch content' },
+                { fav: 'R', bg: '#cc2200', domain: 'runrepeat.com',      typeKey: 'review', da: 72, cite: 14, attr: 'both', vis: 38, opp: 'strengthen' },
+                { fav: 'T', bg: '#e8321c', domain: 'tomsguide.com',      typeKey: 'media',  da: 91, cite: 7,  attr: 'both', vis: 45, opp: 'expand'     },
+                { fav: 'O', bg: '#5b8c5a', domain: 'outdoorgearlab.com', typeKey: 'review', da: 68, cite: 7,  attr: 'comp', vis: 0,  opp: 'featured'   },
+                { fav: 'W', bg: '#1c1c1c', domain: 'whowhatwear.com',    typeKey: 'media',  da: 82, cite: 6,  attr: 'both', vis: 41, opp: 'strengthen' },
+                { fav: 'R', bg: '#ff4500', domain: 'reddit.com',         typeKey: 'social', da: 95, cite: 6,  attr: 'both', vis: 31, opp: 'strengthen' },
+                { fav: 'R', bg: '#111111', domain: 'rei.com',            typeKey: 'retail', da: 84, cite: 5,  attr: 'you',  vis: 74, opp: 'expand'     },
+                { fav: 'A', bg: '#111111', domain: 'adidas.com',         typeKey: 'retail', da: 92, cite: 4,  attr: 'comp', vis: 0,  opp: 'pitch'      },
+                { fav: 'C', bg: '#cc0000', domain: 'cnn.com',            typeKey: 'news',   da: 95, cite: 4,  attr: 'both', vis: 35, opp: 'strengthen' },
+                { fav: 'R', bg: '#e64c00', domain: 'runnersworld.com',   typeKey: 'media',  da: 84, cite: 4,  attr: 'both', vis: 48, opp: 'expand'     },
+                { fav: 'N', bg: '#e8243c', domain: 'newbalance.com',     typeKey: 'retail', da: 88, cite: 4,  attr: 'comp', vis: 0,  opp: 'pitch'      },
               ].map(row => {
                 const attrLabels = t('visibility.sourceIntel.attrLabels');
+                const oppLabels  = t('visibility.sourceIntel.oppLabels');
+                const sourceTypes = t('visibility.sourceIntel.sourceTypes');
                 const visColor = row.attr === 'comp' ? '#ef4444' : row.attr === 'you' ? '#16a34a' : '#111827';
                 return (
                   <div key={row.domain} className="sit-row">
@@ -441,7 +443,7 @@ export default function VisibilityPage() {
                       <span className="fav" style={{ background: row.bg }}>{row.fav}</span>
                       <div>
                         <div className="sit-domain">{row.domain}</div>
-                        <div className="sit-type">{row.type}</div>
+                        <div className="sit-type">{sourceTypes[row.typeKey]}</div>
                       </div>
                     </div>
                     <div className="sit-c sit-c--da">
@@ -471,7 +473,7 @@ export default function VisibilityPage() {
                         {row.opp === 'strengthen' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>}
                         {row.opp === 'expand'     && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>}
                         {row.opp === 'pitch'      && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>}
-                        {row.oppLabel}
+                        {oppLabels[row.opp]}
                       </span>
                     </div>
                   </div>

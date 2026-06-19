@@ -257,7 +257,7 @@ hr {
   align-self: start;
   height: calc(100vh - var(--header-h));
   overflow-y: auto;
-  padding: var(--space-8) var(--space-4) var(--space-12) var(--space-6);
+  padding: 0rem var(--space-4) var(--space-6);
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
 }
@@ -328,7 +328,7 @@ hr {
 
 /* ---------- Main content ---------- */
 .content {
-  padding: var(--space-12) var(--space-16) 7.5rem;
+  padding: 0rem var(--space-6) var(--space-12);
   max-width: calc(var(--content-max) + var(--space-16) * 2);
   min-width: 0;
   background: var(--background);
@@ -1540,7 +1540,7 @@ tbody tr:hover { background: var(--sidebar-accent); }
   align-self: start;
   max-height: calc(100vh - var(--header-h));
   overflow-y: auto;
-  padding: var(--space-12) var(--space-6);
+  padding: 0rem var(--space-4) var(--space-6);
   font-size: 0.8125rem;
 }
 

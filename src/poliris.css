@@ -868,6 +868,7 @@ button { cursor: pointer; border: none; background: none; }
   border-radius: 8px;
   cursor: pointer;
   margin-bottom: 4px;
+  text-align: left;
 }
 
 /* Section label */
@@ -885,6 +886,7 @@ button { cursor: pointer; border: none; background: none; }
   letter-spacing: .08em;
   color: #9ca3af;
   text-transform: uppercase;
+  text-align: left;
 }
 
 /* Tree */
@@ -1169,6 +1171,7 @@ button { cursor: pointer; border: none; background: none; }
   font-size: 15px;
   color: #111827;
   line-height: 1.2;
+  text-align: left;
 }
 .hdash__v2-brand-sub {
   font-family: var(--chivo);
