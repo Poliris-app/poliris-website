@@ -1527,7 +1527,7 @@ export default {
       eyebrow: 'Obtenir une démo',
       title: 'Découvrez Poliris avec votre propre marque.',
       lead: 'Réservez une session en direct, lancez un audit GEO gratuit ou contactez-nous pour un partenariat. Nous répondons en moins de 4 heures les jours ouvrés.',
-      primaryCta: 'Réserver une démo de 30 min',
+      primaryCta: 'Réserver une démo d\'1 heure',
       secondaryCta: 'Démarrer l\'essai gratuit',
     },
     eyebrow: 'Envoyer un message',
@@ -1570,10 +1570,10 @@ export default {
     cards: [
       {
         eyebrow: 'Session en direct',
-        title: 'Réserver une démo de 30 min',
+        title: 'Réserver une démo d\'1 heure',
         desc: 'Découvrez Poliris en direct avec votre propre marque — scores GEO réels, citations IA et prochaines étapes personnalisées.',
         cta: 'Choisir un créneau',
-        href: 'https://cal.com/team/poliris/application-demo',
+        href: 'https://cal.com/team/poliris/discovery-call',
       },
       {
         eyebrow: 'Rapport instantané',

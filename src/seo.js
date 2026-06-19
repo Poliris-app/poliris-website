@@ -68,7 +68,7 @@ const META = {
     demo: {
       title: 'Get a Demo | Poliris',
       description:
-        'Book a 30-min live demo, run a free GEO audit, or reach out about agency partnership. We reply in under 4 hours.',
+        'Book a 1-hour live demo, run a free GEO audit, or reach out about agency partnership. We reply in under 4 hours.',
     },
     docs: {
       title: 'Documentation | Poliris',
@@ -119,7 +119,7 @@ const META = {
     demo: {
       title: 'Obtenir une démo | Poliris',
       description:
-        'Réservez une démo de 30 min, lancez un audit GEO gratuit ou contactez-nous pour un partenariat agence. Nous répondons en moins de 4 heures.',
+        "Réservez une démo d'1 heure, lancez un audit GEO gratuit ou contactez-nous pour un partenariat agence. Nous répondons en moins de 4 heures.",
     },
     docs: {
       title: 'Documentation | Poliris',

@@ -3,7 +3,7 @@ import HeroDashboard from './HeroDashboard';
 import { useLang } from '../contexts/LangContext';
 
 const TRIAL_URL = 'https://app.poliris.io';
-const DEMO_URL  = 'https://cal.com/team/poliris/application-demo';
+const DEMO_URL  = 'https://cal.com/team/poliris/discovery-call';
 const isTrialCta = (label) => typeof label === 'string' && /trial|essai/i.test(label);
 const isDemoCta  = (label) => typeof label === 'string' && /demo|démo/i.test(label);
 

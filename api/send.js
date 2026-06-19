@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   try {
     const { data, error } = await resend.emails.send({
       from: 'Poliris <no-reply@poliris.io>',
-      to: ['ronamay.balangat@poliris.io'],
+      to: ['florian.michel@polirisapp.com'],
       replyTo: email,
       subject: `[Poliris] ${topic} — ${firstName} ${lastName}`,
       html: buildEmailHtml({ firstName, lastName, email, company, role, size, message, topic }),

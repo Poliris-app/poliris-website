@@ -1532,7 +1532,7 @@ export default {
       eyebrow: 'Get a demo',
       title: 'See Poliris with your own brand.',
       lead: 'Book a live session, run a free GEO audit, or reach out about a partnership. We reply in under 4 hours on business days.',
-      primaryCta: 'Book a 30-min demo',
+      primaryCta: 'Book a 1-hour demo',
       secondaryCta: 'Start free trial',
     },
     eyebrow: 'Send a message',
@@ -1575,10 +1575,10 @@ export default {
     cards: [
       {
         eyebrow: 'Live session',
-        title: 'Book a 30-min demo',
+        title: 'Book a 1-hour demo',
         desc: 'See Poliris live with your own brand — real GEO scores, AI citations, and next steps tailored to you.',
         cta: 'Pick a time',
-        href: 'https://cal.com/team/poliris/application-demo',
+        href: 'https://cal.com/team/poliris/discovery-call',
       },
       {
         eyebrow: 'Instant report',
