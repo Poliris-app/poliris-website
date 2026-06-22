@@ -896,26 +896,31 @@ export default {
           } },
           { q: 'What action plans does Poliris provide after an audit?', a: {
             sections: [
-              { intro: "After a GEO audit, you receive a concrete, prioritized roadmap generated directly from your dashboard data across four areas." },
-              { label: 'Overview:', intro: "Poliris compiles your overall AI visibility score, tracking how often major engines mention or recommend your brand versus remaining silent, establishing a clear competitive benchmark." },
-              { label: 'Prompt and Model Mapping:', intro: "From the Visibility tab, you see your performance prompt by prompt and model by model, across ChatGPT, Gemini, Google AI Overview, and others. The action plan identifies which prompts you are losing and which AI engines are underperforming for your brand." },
-              { label: 'Topic-by-Topic Sentiment Alignment:', intro: "From the Sentiment tab, you get a breakdown of how each AI engine perceives your brand on your custom trust dimensions, your Topics and brand values. Action items are generated for the categories where sentiment is misaligned or where competitors are ahead." },
               {
-                label: 'Gap-Driven Recommendations:',
-                intro: "In the Recommendations tab, every action card is generated from a detected gap: a prompt where a competitor ranks above you, a topic where AI engines misrepresent your brand, or a page that blocks crawler access. Each card includes:",
+                intro: "After a GEO Analysis, you receive a concrete, prioritized roadmap, not just abstract scores. The action plan is generated directly from the deep-dive analysis across the four primary areas of your GEO dashboard:",
                 bullets: [
-                  { label: 'Root Cause', text: 'the specific prompt, topic, or technical issue driving the gap.' },
-                  { label: 'Content Fix', text: 'the exact paragraph, page, or structural change to make.' },
-                  { label: 'Interactive Guidance', text: 'a direct link to a Poli AI conversation to go deeper and draft content on the spot.' },
+                  { label: 'Overview:', text: 'We compile your overall AI visibility score, tracking how often major engines mention or recommend your brand versus remaining silent, establishing a clear competitive benchmark.' },
+                  { label: 'Prompt & Model Mapping (Visibility Data):', text: 'We break down your performance prompt by prompt and model by model across ChatGPT, Gemini, Google AI Overview, and others. The action plan identifies the exact forensic gaps, where you are cited but not recommended, and which high-value questions are ignoring your brand entirely.' },
+                  { label: 'Topic-by-Topic Sentiment Alignment:', text: 'The plan addresses how AI engines perceive your brand across the custom trust dimensions (Topics) and brand values you configured for your audit. If the data shows high visibility but weak recommendation rates, the plan targets the specific sentiment topics that need reinforcing to turn mentions into active recommendations.' },
+                  { label: 'Gap-Driven Recommendations:', text: 'Located in your Recommendations tab, every action card is generated directly from a detected gap, a prompt where you are silent, a topic where you are weak, or a competitor outranking you on a specific theme.' },
                 ],
               },
-              { intro: "Whether you are running a one-time audit or tracking AI visibility week over week, the platform surfaces what is broken, explains why, and tells you exactly what to do next." },
+              {
+                label: 'What Each Action Card Delivers:',
+                intro: 'Rather than generic best practices, each prioritized recommendation (High / Medium / Low priority) explicitly breaks down:',
+                bullets: [
+                  { label: 'The Root Cause:', text: 'Why the gap exists (the specific prompt, topic, or LLM model).' },
+                  { label: 'The Content Fix:', text: 'What to build, restructure, or optimize to match LLM training patterns and user intent.' },
+                  { label: 'Interactive Guidance:', text: 'Each card links directly to a Poli AI conversation for deeper, step-by-step guidance on how to execute the optimization.' },
+                ],
+              },
+              { label: 'Executive Deliverables:', intro: 'Full audits also deliver a comprehensive presentation report (PDF and/or slides), a hands-on feedback workshop with your teams, and options for ongoing monthly monitoring via your updated dashboard.' },
             ],
-            callout: 'Inside the platform, the PULSE Recommended Actions card shows a prioritized list (High / Medium / Low) generated from all audit data. Each action links to a Poli AI conversation for deeper guidance.',
+            callout: 'The net result is a complete, actionable blueprint grounded entirely in what the LLMs actually say about you, allowing you to systematically close your visibility gaps in the "AI answer layer."',
           } },
           { q: 'What markets and languages does Poliris cover?', a: {
-            intro: 'Poliris operates worldwide. The methodology adapts to the required language, priority markets, and the most relevant AI engines per region, defined with you.',
-            callout: 'During setup and in Workspace Settings, you select Trading Zones and the language the LLMs should answer in. Content drafts currently support 12 languages.',
+            intro: "Poliris operates worldwide, allowing you to track your brand's AI footprint across global markets. Currently, the platform supports English and French across all features, including your dashboard audits, workspace configurations, and content generation tools.",
+            callout: 'During setup in your Workspace Settings, you can choose your specific Trading Zones to monitor how the most popular AI engines in your target regions answer questions about your business. We are actively working on adding more international languages and markets soon to support your global growth.',
           } },
           { q: 'What is the recommended weekly workflow?', a: {
             intro: 'Poliris recommends a 4-step weekly workflow that takes 30–45 minutes:',
@@ -932,22 +937,22 @@ export default {
         label: 'Technical Audit',
         items: [
           { q: 'What does the Technical Audit check?', a: {
-            intro: 'The Technical Audit runs 102 tests (96 page-level, 6 site-level) across three site health stages:',
+            intro: 'The Technical Audit executes a comprehensive suite of site- and page-level tests across three core health stages, optimizing your site for both traditional search engine crawlers and modern AI engines:',
             bullets: [
-              { label: 'Page Access', text: 'can AI reach your pages: reachability, status codes, redirects, robots rules, page speed.' },
-              { label: 'Content Access', text: 'can AI read your content: metadata, schema, headings, alt text, hreflang, OG tags.' },
-              { label: 'Content Quality', text: 'is your content well-structured: word counts, readability, uniqueness, depth.' },
+              { label: 'Page Access (Can crawlers and AI reach your pages?):', text: 'Validates reachability, status codes, redirects, robots.txt rules, and load speeds to ensure search engines and AI bots can seamlessly crawl your site.' },
+              { label: 'Content Access (Can crawlers and AI read your content?):', text: 'Inspects metadata, schema markup, heading structures, image alt text, hreflang tags, and Open Graph tags so algorithms can properly parse and understand your data.' },
+              { label: 'Content Quality (Is your content well-structured?):', text: 'Analyzes word counts, readability metrics, unique content signals, and page depth logic to ensure your pages provide high-value, rankable substance for both SEO and generative answers.' },
             ],
-            callout: "Each test is tagged with a severity (Critical / Warning / Notice) and whether it's specifically AI-relevant.",
+            callout: 'Every test automatically calculates an Impact score based on its combined severity and priority levels, helping you focus on the most critical issues first. The Site Overview then synthesizes these results into a single Overall Health Score out of 100%.',
           } },
           { q: 'What is the difference between Critical, Warning, and Notice issues?', a: {
-            intro: 'Every Technical Audit issue is tagged with one of three severities:',
+            intro: 'Poliris categorizes issues into three Impact levels to help you prioritize your technical fixes based on how heavily they affect search engine crawlers and AI bots:',
             bullets: [
-              { label: 'Critical', text: 'blocks AI or search engines from reaching, reading, or trusting key pages. Fix these first.' },
-              { label: 'Warning', text: 'hurts performance or coverage without fully blocking it. Plan a fix soon.' },
-              { label: 'Notice', text: 'minor recommendations and polish items. Fix when you have time.' },
+              { label: 'Critical:', text: 'High-urgency issues that actively block or severely disrupt crawlers and AI from reaching, reading, or accurately processing your core pages (e.g., broken internal links, severe server errors, or misconfigured crawl directives). These should be fixed immediately.' },
+              { label: 'Warning:', text: 'Mid-tier issues that degrade performance, indexing efficiency, or content structure without completely blocking access (e.g., missing image alt text, suboptimal heading structures, or missing schema markup). These should be scheduled for remediation soon.' },
+              { label: 'Notice:', text: 'Minor technical recommendations, structural optimizations, and opportunities for polish (e.g., low word counts or slight readability adjustments). These do not harm your health score significantly but help perfect your site for ultimate visibility.' },
             ],
-            callout: 'There are 15 Critical-severity tests in Poliris, including broken internal links, Core Web Vitals failures, and pages set to noindex.',
+            callout: 'Behind the scenes, Poliris automatically determines these Impact levels by combining the technical severity of the underlying issue with its specific priority level within our testing framework. This ensures your action cards always reflect the true, absolute priority for your business without cluttering your dashboard with confusing backend metrics.',
           } },
           { q: 'What is the Page Explorer and how do I use it?', a: {
             intro: 'The Page Explorer lets you drill from site-level scores down to any individual URL.',

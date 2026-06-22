@@ -23,10 +23,12 @@ function FaqItem({ item, id, isOpen, onToggle }) {
 
   return (
     <div className={`faq2-item${isOpen ? ' open' : ''}`}>
-      <button className="faq2-btn" onClick={() => onToggle(id)} aria-expanded={isOpen}>
-        <span className="faq2-q">{item.q}</span>
-        <span className="faq2-icon">+</span>
-      </button>
+      <h3 className="faq2-q-h">
+        <button className="faq2-btn" onClick={() => onToggle(id)} aria-expanded={isOpen}>
+          <span className="faq2-q">{item.q}</span>
+          <span className="faq2-icon">+</span>
+        </button>
+      </h3>
       <div className="faq2-body" style={{ height }}>
         <div ref={contentRef} className="faq2-content">
           {sections ? (
@@ -61,14 +63,16 @@ function FaqItem({ item, id, isOpen, onToggle }) {
   );
 }
 
-function FaqGroup({ group, openId, onToggle }) {
+const MAX_OPEN_FAQS = 3;
+
+function FaqGroup({ group, openIds, onToggle }) {
   return (
     <div className="faqs-group">
       <h2 className="faqs-group-hdr">{group.label}</h2>
       {group.items.map((item, i) => {
         const id = `${group.label}-${i}`;
         return (
-          <FaqItem key={i} item={item} id={id} isOpen={openId === id} onToggle={onToggle} />
+          <FaqItem key={i} item={item} id={id} isOpen={openIds.includes(id)} onToggle={onToggle} />
         );
       })}
     </div>
@@ -80,7 +84,7 @@ export default function FaqsPage() {
   const { t } = useLang();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
-  const [openId, setOpenId] = useState(null);
+  const [openIds, setOpenIds] = useState([]);
   const inputRef = useRef(null);
 
   const fh   = t('faqs.hero');
@@ -102,7 +106,11 @@ export default function FaqsPage() {
   }, []);
 
   function toggle(id) {
-    setOpenId(prev => prev === id ? null : id);
+    setOpenIds(prev => {
+      if (prev.includes(id)) return prev.filter(openId => openId !== id);
+      const next = [...prev, id];
+      return next.length > MAX_OPEN_FAQS ? next.slice(1) : next;
+    });
   }
 
   const q = search.toLowerCase();
@@ -175,7 +183,7 @@ export default function FaqsPage() {
             {/* FAQ groups */}
             {filtered.length > 0 ? (
               filtered.map((group, i) => (
-                <FaqGroup key={i} group={group} openId={openId} onToggle={toggle} />
+                <FaqGroup key={i} group={group} openIds={openIds} onToggle={toggle} />
               ))
             ) : (
               <p className="faqs-empty">{t('faqs.noResults')} "{search}"</p>

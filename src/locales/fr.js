@@ -896,26 +896,31 @@ export default {
           } },
           { q: "Quels plans d'action Poliris fournit-il après un audit ?", a: {
             sections: [
-              { intro: "Après un audit GEO, vous recevez une feuille de route concrète et priorisée, générée directement depuis les données de votre tableau de bord sur quatre axes." },
-              { label: 'Vue d\'ensemble :', intro: "Poliris compile votre score global de visibilité IA, en mesurant la fréquence à laquelle les principaux moteurs mentionnent ou recommandent votre marque plutôt que de rester silencieux, établissant ainsi un benchmark concurrentiel clair." },
-              { label: 'Cartographie des requêtes et modèles :', intro: "Depuis l'onglet Visibilité, vous voyez vos performances requête par requête et modèle par modèle, sur ChatGPT, Gemini, Google AI Overview et d'autres. Le plan d'action identifie les requêtes où vous perdez du terrain et les moteurs IA qui sous-performent pour votre marque." },
-              { label: 'Alignement sentiment par sujet :', intro: "Depuis l'onglet Sentiment, vous obtenez une analyse détaillée de la perception de votre marque par chaque moteur IA sur vos dimensions de confiance personnalisées, vos Topics et valeurs de marque. Des actions sont générées pour les catégories où le sentiment est désaligné ou où vos concurrents sont en avance." },
               {
-                label: 'Recommandations basées sur les écarts :',
-                intro: "Dans l'onglet Recommandations, chaque fiche action est générée à partir d'un écart détecté : une requête où un concurrent vous devance, un sujet où les moteurs IA représentent mal votre marque, ou une page qui bloque l'accès des crawlers. Chaque fiche comprend :",
+                intro: "Après une Analyse GEO, vous recevez une feuille de route concrète et priorisée, pas seulement des scores abstraits. Le plan d'action est généré directement à partir de l'analyse approfondie des quatre axes principaux de votre tableau de bord GEO :",
                 bullets: [
-                  { label: 'Cause racine', text: "la requête, le sujet ou le problème technique spécifique à l'origine de l'écart." },
-                  { label: 'Correction de contenu', text: 'le paragraphe, la page ou la modification structurelle exacte à apporter.' },
-                  { label: 'Guidance interactive', text: 'un lien direct vers une conversation Poli AI pour approfondir et rédiger du contenu sur le moment.' },
+                  { label: 'Vue d\'ensemble :', text: "Nous compilons votre score global de visibilité IA, en mesurant la fréquence à laquelle les principaux moteurs mentionnent ou recommandent votre marque plutôt que de rester silencieux, établissant ainsi un benchmark concurrentiel clair." },
+                  { label: 'Cartographie des requêtes et modèles (données de visibilité) :', text: "Nous décomposons vos performances requête par requête et modèle par modèle sur ChatGPT, Gemini, Google AI Overview et d'autres. Le plan d'action identifie les écarts précis, là où vous êtes cité mais non recommandé, et les requêtes à forte valeur qui ignorent totalement votre marque." },
+                  { label: 'Alignement sentiment par sujet :', text: "Le plan traite de la façon dont les moteurs IA perçoivent votre marque sur les dimensions de confiance personnalisées (Topics) et les valeurs de marque configurées pour votre audit. Si les données montrent une forte visibilité mais des taux de recommandation faibles, le plan cible les sujets de sentiment spécifiques à renforcer pour transformer les mentions en recommandations actives." },
+                  { label: 'Recommandations basées sur les écarts :', text: "Situées dans votre onglet Recommandations, chaque fiche action est générée directement à partir d'un écart détecté : une requête où vous êtes silencieux, un sujet où vous êtes faible, ou un concurrent qui vous devance sur un thème précis." },
                 ],
               },
-              { intro: "Que vous réalisiez un audit ponctuel ou que vous suiviez votre visibilité IA semaine après semaine, la plateforme identifie ce qui est défaillant, explique pourquoi, et vous indique exactement quoi faire ensuite." },
+              {
+                label: 'Ce que contient chaque fiche action :',
+                intro: 'Plutôt que des bonnes pratiques génériques, chaque recommandation priorisée (priorité Haute / Moyenne / Faible) détaille explicitement :',
+                bullets: [
+                  { label: 'La cause racine :', text: "Pourquoi l'écart existe (la requête, le sujet ou le modèle LLM spécifique)." },
+                  { label: 'La correction de contenu :', text: 'Quoi construire, restructurer ou optimiser pour correspondre aux schémas d\'entraînement des LLM et à l\'intention de l\'utilisateur.' },
+                  { label: 'Guidance interactive :', text: 'Chaque fiche renvoie directement à une conversation Poli AI pour un accompagnement détaillé, étape par étape, sur la mise en œuvre de l\'optimisation.' },
+                ],
+              },
+              { label: 'Livrables exécutifs :', intro: "Les audits complets incluent également un rapport de présentation complet (PDF et/ou diapositives), un atelier de feedback en direct avec vos équipes, et des options de suivi mensuel continu via votre tableau de bord mis à jour." },
             ],
-            callout: "Dans la plateforme, la carte Actions Recommandées PULSE montre une liste priorisée (Haute / Moyenne / Faible) générée depuis toutes les données d'audit. Chaque action renvoie vers une conversation Poli AI pour aller plus loin.",
+            callout: "Le résultat net est un plan d'action complet et concret, entièrement fondé sur ce que les LLM disent réellement de vous, vous permettant de combler systématiquement vos écarts de visibilité dans la « couche de réponse IA ».",
           } },
           { q: "Quels marchés et langues Poliris couvre-t-il ?", a: {
-            intro: "Poliris opère dans le monde entier. La méthodologie s'adapte à la langue requise, aux marchés prioritaires, et aux moteurs IA les plus pertinents par région, définis avec vous.",
-            callout: "Lors de la configuration et dans les Paramètres du Workspace, vous sélectionnez les Zones commerciales et la langue dans laquelle les LLM doivent répondre. Les brouillons de contenu supportent actuellement 12 langues.",
+            intro: "Poliris opère dans le monde entier, vous permettant de suivre l'empreinte IA de votre marque sur les marchés mondiaux. Actuellement, la plateforme prend en charge l'anglais et le français pour l'ensemble de ses fonctionnalités, y compris les audits de votre tableau de bord, les configurations du workspace et les outils de génération de contenu.",
+            callout: "Lors de la configuration dans vos Paramètres du Workspace, vous pouvez choisir vos Zones Commerciales spécifiques pour suivre comment les moteurs IA les plus populaires dans vos régions cibles répondent aux questions sur votre activité. Nous travaillons activement à l'ajout d'autres langues et marchés internationaux pour accompagner votre croissance mondiale.",
           } },
           { q: "Quel est le flux de travail hebdomadaire recommandé ?", a: {
             intro: "Poliris recommande un flux de travail hebdomadaire en 4 étapes qui prend 30 à 45 minutes :",
@@ -932,22 +937,22 @@ export default {
         label: 'Audit Technique',
         items: [
           { q: "Que vérifie l'Audit Technique ?", a: {
-            intro: "L'Audit Technique exécute 102 tests (96 au niveau page, 6 au niveau site) sur trois étapes de santé du site :",
+            intro: "L'Audit Technique exécute une suite complète de tests au niveau du site et des pages, répartis sur trois étapes de santé essentielles, pour optimiser votre site à la fois pour les robots des moteurs de recherche traditionnels et pour les moteurs IA modernes :",
             bullets: [
-              { label: 'Accès aux pages', text: 'les IA peuvent-elles atteindre vos pages : accessibilité, codes de statut, redirections, règles robots, vitesse de page.' },
-              { label: 'Accès au contenu', text: 'les IA peuvent-elles lire votre contenu : métadonnées, schéma, titres, texte alternatif, hreflang, balises OG.' },
-              { label: 'Qualité du contenu', text: 'votre contenu est-il bien structuré : nombre de mots, lisibilité, unicité, profondeur.' },
+              { label: 'Accès aux pages (les robots et l\'IA peuvent-ils atteindre vos pages ?) :', text: "Valide l'accessibilité, les codes de statut, les redirections, les règles robots.txt et la vitesse de chargement pour garantir que les moteurs de recherche et les robots IA peuvent explorer votre site sans entrave." },
+              { label: "Accès au contenu (les robots et l'IA peuvent-ils lire votre contenu ?) :", text: 'Inspecte les métadonnées, le balisage schema, la structure des titres, le texte alternatif des images, les balises hreflang et Open Graph afin que les algorithmes puissent correctement analyser et comprendre vos données.' },
+              { label: 'Qualité du contenu (votre contenu est-il bien structuré ?) :', text: 'Analyse le nombre de mots, les métriques de lisibilité, les signaux de contenu unique et la logique de profondeur des pages pour garantir que vos pages offrent une substance de haute valeur, classable, pour le SEO comme pour les réponses génératives.' },
             ],
-            callout: "Chaque test est étiqueté avec une sévérité (Critique / Avertissement / Notice) et selon qu'il est spécifiquement pertinent pour l'IA.",
+            callout: "Chaque test calcule automatiquement un score d'Impact basé sur la combinaison de sa sévérité et de son niveau de priorité, vous aidant à vous concentrer d'abord sur les problèmes les plus critiques. La Vue d'ensemble du site synthétise ensuite ces résultats en un seul Score de Santé Global sur 100 %.",
           } },
           { q: "Quelle est la différence entre les problèmes Critique, Avertissement et Notice ?", a: {
-            intro: "Chaque problème de l'Audit Technique est étiqueté avec l'une de ces trois sévérités :",
+            intro: "Poliris classe les problèmes en trois niveaux d'Impact pour vous aider à prioriser vos corrections techniques selon leur effet sur les robots des moteurs de recherche et de l'IA :",
             bullets: [
-              { label: 'Critique', text: 'bloque les IA ou moteurs de recherche pour atteindre, lire ou faire confiance aux pages clés. Corrigez-les en premier.' },
-              { label: 'Avertissement', text: 'nuit aux performances ou à la couverture sans bloquer complètement. Planifiez une correction prochainement.' },
-              { label: 'Notice', text: 'recommandations mineures et éléments de polish. Corrigez quand vous avez du temps.' },
+              { label: 'Critique :', text: "Problèmes urgents qui bloquent ou perturbent gravement les robots et l'IA dans l'accès, la lecture ou le traitement correct de vos pages clés (ex. : liens internes cassés, erreurs serveur graves, ou directives de crawl mal configurées). À corriger immédiatement." },
+              { label: 'Avertissement :', text: "Problèmes de niveau intermédiaire qui dégradent la performance, l'efficacité d'indexation ou la structure du contenu sans bloquer complètement l'accès (ex. : texte alternatif d'image manquant, structure de titres non optimale, ou balisage schema manquant). À planifier prochainement." },
+              { label: 'Notice :', text: "Recommandations techniques mineures, optimisations structurelles et opportunités de polish (ex. : nombre de mots faible ou ajustements de lisibilité). Ces éléments n'affectent pas significativement votre score de santé mais aident à parfaire la visibilité de votre site." },
             ],
-            callout: "Il y a 15 tests de sévérité Critique dans Poliris, incluant les liens internes cassés, les échecs Core Web Vitals, et les pages définies en noindex.",
+            callout: "En coulisses, Poliris détermine automatiquement ces niveaux d'Impact en combinant la sévérité technique du problème sous-jacent avec son niveau de priorité spécifique dans notre cadre de test. Cela garantit que vos cartes d'action reflètent toujours la vraie priorité absolue pour votre activité, sans encombrer votre tableau de bord de métriques techniques confuses.",
           } },
           { q: "Qu'est-ce que l'Explorateur de pages et comment l'utiliser ?", a: {
             intro: "L'Explorateur de pages vous permet de descendre des scores au niveau site jusqu'à n'importe quelle URL individuelle.",
