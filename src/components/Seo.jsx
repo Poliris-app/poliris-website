@@ -3,7 +3,6 @@ import { useLang } from '../contexts/LangContext';
 import {
   getMeta,
   canonicalUrl,
-  DEFAULT_OG_IMAGE,
   SITE_NAME,
   LANGS,
 } from '../seo';
@@ -37,13 +36,11 @@ export default function Seo({ page }) {
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonical} />
-      <meta property="og:image" content={DEFAULT_OG_IMAGE} />
 
       {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:card" content="summary" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
     </Head>
   );
 }

@@ -664,12 +664,6 @@ export default {
         author: 'Équipe Poliris', date: '28 mai 2026',
       },
       {
-        id: 2, label: 'SEO → GEO', category: 'GEO',
-        title: "SEO vs GEO   ce qui change quand l'IA devient la une.",
-        desc: "Le même playbook qui gagnait des clics Google ne gagnera pas une citation IA. Un guide de terrain sur la nouvelle couche de visibilité.",
-        date: '24 mai 2026',
-      },
-      {
         id: 3, label: 'LLM SOV', category: 'VISIBILITÉ',
         title: "Comment mesurer la visibilité LLM, sans deviner.",
         desc: "Part de voix, taux de citation et fréquence des mentions de marque. Les trois chiffres que chaque marque moderne doit suivre sur les moteurs IA.",
@@ -716,6 +710,13 @@ export default {
         title: "Comment corriger un récit IA qui a mal tourné.",
         desc: "Statistiques obsolètes, contexte manquant, attribution erronée. Un guide pratique pour réparer la façon dont l'IA parle de vous.",
         date: '22 avr. 2026',
+      },
+      {
+        id: 11, label: 'SEO → GEO', category: 'GEO',
+        title: "Pourquoi le SEO est le socle du succès GEO.",
+        desc: "Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et quoi corriger en premier.",
+        date: '23 juin 2026',
+        slug: 'why-seo-is-the-cornerstone-of-geo-success',
       },
     ],
     cta: {

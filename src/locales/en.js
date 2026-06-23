@@ -664,12 +664,6 @@ export default {
         author: 'Poliris Team', date: 'May 28, 2026',
       },
       {
-        id: 2, label: 'SEO → GEO', category: 'GEO',
-        title: 'SEO vs GEO   what changes when AI becomes the front page.',
-        desc: "The same playbook that won Google clicks won't win an AI citation. A short field guide to the new visibility layer.",
-        date: 'May 24, 2026',
-      },
-      {
         id: 3, label: 'LLM SOV', category: 'VISIBILITY',
         title: 'How to measure LLM visibility, without guessing.',
         desc: "Share-of-voice, citation rate, and brand-mention frequency. The three numbers every modern brand should track across AI engines.",
@@ -716,6 +710,13 @@ export default {
         title: "How to correct an AI narrative that's gone wrong.",
         desc: "Outdated stats, missing context, mistaken attribution. A practical playbook for repairing how AI talks about you.",
         date: 'Apr 22, 2026',
+      },
+      {
+        id: 11, label: 'SEO → GEO', category: 'GEO',
+        title: "Why SEO is the cornerstone of GEO success.",
+        desc: "GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here's why and what to fix first.",
+        date: 'Jun 23, 2026',
+        slug: 'why-seo-is-the-cornerstone-of-geo-success',
       },
     ],
     cta: {

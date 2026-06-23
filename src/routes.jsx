@@ -6,6 +6,7 @@ import SentimentPage from './pages/SentimentPage';
 import ContentWritingPage from './pages/ContentWritingPage';
 import TechnicalAuditPage from './pages/TechnicalAuditPage';
 import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 import FaqsPage from './pages/FaqsPage';
 import GlossaryPage from './pages/GlossaryPage';
 import DocsPage from './pages/DocsPage';
@@ -25,6 +26,7 @@ export const routes = [
       { path: 'content-writing', element: <ContentWritingPage /> },
       { path: 'technical-audit', element: <TechnicalAuditPage /> },
       { path: 'blog', element: <BlogPage /> },
+      { path: 'blog/:slug', element: <BlogPostPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       { path: 'glossary', element: <GlossaryPage /> },
       { path: 'docs', element: <DocsPage /> },

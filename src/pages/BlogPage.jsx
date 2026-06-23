@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
@@ -19,6 +20,7 @@ const POST_GRADIENTS = [
   'radial-gradient(ellipse 60% 60% at 30% 62%, rgba(70,130,220,0.50) 0%, transparent 62%), radial-gradient(ellipse 48% 48% at 72% 30%, rgba(140,190,255,0.28) 0%, transparent 58%), #dceeff',
   'radial-gradient(ellipse 60% 60% at 60% 36%, rgba(170,100,220,0.50) 0%, transparent 62%), radial-gradient(ellipse 48% 48% at 26% 70%, rgba(210,160,245,0.28) 0%, transparent 58%), #f0e4fc',
   'radial-gradient(ellipse 60% 60% at 68% 28%, rgba(220,90,150,0.46) 0%, transparent 62%), radial-gradient(ellipse 48% 48% at 26% 72%, rgba(255,140,180,0.26) 0%, transparent 58%), #fce4f2',
+  'radial-gradient(ellipse 62% 62% at 30% 30%, rgba(34,81,212,0.48) 0%, transparent 62%), radial-gradient(ellipse 50% 50% at 72% 70%, rgba(100,140,255,0.28) 0%, transparent 58%), #dce6ff',
 ];
 
 function Thumb({ gradient, label, className }) {
@@ -31,7 +33,7 @@ function Thumb({ gradient, label, className }) {
 
 export default function BlogPage() {
   useReveal();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [search, setSearch] = useState('');
   const [filterIdx, setFilterIdx] = useState(0);
 
@@ -98,7 +100,7 @@ export default function BlogPage() {
 
             {/* Featured post */}
             {featured && (
-              <a href="#" className="blog-featured">
+              <Link to={featured.slug ? `/${lang}/blog/${featured.slug}` : '#'} className="blog-featured">
                 <Thumb gradient={featured.gradient} label={featured.label} className="blog-featured-thumb" />
                 <div className="blog-featured-body">
                   <h2 className="blog-featured-title">{featured.title}</h2>
@@ -106,21 +108,21 @@ export default function BlogPage() {
                   <p className="blog-featured-meta">By <span>{featured.author}</span> · {featured.date}</p>
                   <span className="blog-read">{t('blog.readArticle')}</span>
                 </div>
-              </a>
+              </Link>
             )}
 
             {/* Grid */}
             {grid.length > 0 ? (
               <div className="blog-grid">
                 {grid.map(post => (
-                  <a key={post.id} href="#" className="blog-card">
+                  <Link key={post.id} to={post.slug ? `/${lang}/blog/${post.slug}` : '#'} className="blog-card">
                     <Thumb gradient={post.gradient} label={post.label} className="blog-card-thumb" />
                     <div className="blog-card-body">
                       <h3 className="blog-card-title">{post.title}</h3>
                       <p className="blog-card-desc">{post.desc}</p>
                       <span className="blog-card-date">{post.date}</span>
                     </div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             ) : (
