@@ -334,6 +334,11 @@ button { cursor: pointer; border: none; background: none; }
   display: none;
   padding: 8px;
   border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1a1a1a;
+  line-height: 0;
 }
 .nav__toggle:hover { background: #f3f4f6; }
 .nav__mobile {
@@ -556,7 +561,7 @@ button { cursor: pointer; border: none; background: none; }
 
 @media (max-width: 768px) {
   .nav__links, .nav__actions { display: none; }
-  .nav__toggle { display: block; }
+  .nav__toggle { display: flex; align-items: center; justify-content: center; }
 }
 
 
@@ -2712,11 +2717,11 @@ button { cursor: pointer; border: none; background: none; }
   background: #fff;
 }
 .comparison__table-wrap {
+  overflow: hidden;
   overflow-x: auto;
   margin-top: 36px;
   border: 1px solid #e5e7eb;
   border-radius: 18px;
-  overflow: hidden;
   box-shadow:
     0 4px 6px -1px rgba(0,0,0,.07),
     0 10px 30px -5px rgba(0,0,0,.12),
@@ -4886,3 +4891,252 @@ button { cursor: pointer; border: none; background: none; }
 .btn:active { transform: translateY(0)    scale(0.975); }
 .btn--primary:hover  { box-shadow: 0 8px 26px rgba(30,56,147,.28); }
 .btn--secondary:hover { box-shadow: 0 6px 18px rgba(30,56,147,.14); }
+
+
+/* ================================================================
+   RESPONSIVE — LandingPage
+   1024px: small laptop · 768px: tablet · 480px: phone
+   ================================================================ */
+
+/* ─── Small laptop (≤1024px) ────────────────────────────────── */
+@media (max-width: 1024px) {
+  .container { padding: 0 28px; }
+
+  /* Hero */
+  .hero__inner { padding: 80px 28px 32px; }
+  .hero__dashboard { margin: 36px 28px 0; }
+
+  /* Value chain */
+  .vchain-frame  { padding: 20px 20px 28px; }
+  .vc-desc       { max-width: 140px; font-size: 11.5px; }
+
+  /* Agents */
+  .agents__panel { padding: 48px 40px; }
+}
+
+/* ─── Tablet (≤768px) ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Global */
+  .container { padding: 0 20px; }
+  .sec-head  { max-width: 100%; }
+
+  /* Section vertical rhythm */
+  .value-chain,
+  .agents,
+  .comparison,
+  .stakes { padding: 64px 0; }
+
+  /* Hero */
+  .hero { padding: 74px 0 28px; }
+  .hero__inner {
+    padding: 52px 20px 20px;
+  }
+  .hero__lead  { max-width: 100%; }
+  .hero__dashboard {
+    margin: 24px 20px 0;
+    overflow-x: auto;
+    border-radius: 8px;
+  }
+
+  /* Value chain — 3-col wrap, remove connector line */
+  .vc-track {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 28px;
+  }
+  .vc-track::before { display: none; }
+  .vc-name { font-size: 14px; }
+  .vc-desc { max-width: 100%; font-size: 11.5px; }
+
+  /* Agents — 2 columns */
+  .agents__panel { padding: 36px 28px; }
+  .agents__grid  { grid-template-columns: repeat(2, 1fr); }
+  .agents__head  { max-width: 100%; }
+
+  /* Comparison */
+  .comparison__table-wrap { margin-top: 24px; border-radius: 12px; }
+  .comparison__concl      { flex-direction: column; gap: 8px; }
+
+  /* Stakes — stays 3-col but tighter */
+  .stakes__grid { gap: 20px 12px; }
+}
+
+/* ─── Phone (≤480px) ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Global */
+  .container { padding: 0 16px; }
+
+  /* Section vertical rhythm */
+  .value-chain,
+  .agents,
+  .comparison,
+  .stakes { padding: 48px 0; }
+
+  /* Hero */
+  .hero { padding: 74px 0 20px; }
+  .hero__inner { padding: 44px 16px 16px; }
+  .hero__h1 {
+    font-size: clamp(30px, 9.5vw, 44px);
+    letter-spacing: -0.015em;
+  }
+  .hero__lead { font-size: 16px; margin-bottom: 24px; }
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .hero__actions .btn { text-align: center; justify-content: center; }
+  .hero__note { font-size: 12.5px; margin-top: 14px; }
+  .hero__dashboard { margin: 16px 16px 0; }
+
+  /* Eyebrow / sec typography */
+  .eyebrow { font-size: 11px; margin-bottom: 12px; }
+
+  /* Value chain — single column vertical list */
+  .vc-track { grid-template-columns: 1fr; row-gap: 0; }
+  .vc-node {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    padding: 14px 4px;
+    border-bottom: 1px solid #eceef4;
+  }
+  .vc-node:last-child { border-bottom: none; }
+  .vc-ic   { flex-shrink: 0; margin: 0; width: 44px; height: 44px; }
+  .vc-step { margin-bottom: 2px; }
+  .vc-name { margin-bottom: 3px; font-size: 15px; }
+  .vc-desc { max-width: none; margin: 0; text-align: left; }
+
+  /* Agents — single column */
+  .agents__panel { padding: 24px 16px; }
+  .agents__grid  { grid-template-columns: 1fr; gap: 12px; }
+  .agent-card    { padding: 18px 20px; }
+  .agent-card__name { font-size: 16px; }
+  .agents__foot  { font-size: 12.5px; }
+
+  /* Stakes — single column */
+  .stakes__grid { grid-template-columns: 1fr; gap: 28px; }
+  .stakes__card { padding: 0; }
+  .stakes__desc { max-width: 100%; }
+
+  /* CTA band */
+  .cta-band__inner { padding-left: 24px; padding-right: 24px; }
+  .cta-band__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .cta-band__actions .btn { text-align: center; justify-content: center; }
+
+  /* Value chain toggle */
+  .vcf-toggle-btn { padding: 5px 14px; font-size: 12px; }
+  .vchain-diagram { margin-top: 28px; }
+
+  /* Agents foot */
+  .agents__foot { flex-direction: column; gap: 6px; }
+}
+
+/* ─── Tablet: hero dashboard + product carousel ───────────────── */
+@media (max-width: 768px) {
+  /* Hero dashboard: hide sidebar, 2-column layout */
+  .hero__dashboard { overflow: visible; border-radius: 10px; }
+  .hdash__body {
+    grid-template-columns: 1fr 260px;
+    min-height: 460px;
+  }
+  .dash__sidebar { display: none; }
+
+  /* Product carousel tabs — scrollable row */
+  .products__tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+  }
+  .products__tabs::-webkit-scrollbar { display: none; }
+  .products__tab { flex: 0 0 auto; min-width: 120px; padding: 0 12px 16px; }
+  .products__tab-icon { width: 42px; height: 42px; }
+
+  /* Slide — stack copy above visual */
+  .slide__inner { grid-template-columns: 1fr; min-height: auto; }
+  .slide__copy { padding: 32px 28px 24px; }
+  .slide__visual { border-left: none; border-top: 1px solid var(--border); min-height: 260px; }
+}
+
+/* ─── Phone: hero dashboard — all 4 cards stacked vertically ─── */
+@media (max-width: 480px) {
+  .hdash__body {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .hdash__main {
+    padding: 14px 12px;
+    gap: 12px;
+    border-right: none;
+  }
+  .hdash__card { padding: 12px 14px; }
+  .hdash__chart-svg { height: 140px; }
+  .hdash__insight-bar { display: none; }
+  /* Right panel: stack both analysis cards */
+  .hdash__right {
+    flex-direction: column;
+    overflow-y: visible;
+    border-top: 1px solid var(--border);
+  }
+  .hdash__analysis-card {
+    flex: none;
+    border-right: none;
+  }
+
+  /* Carousel copy */
+  .slide__copy { padding: 24px 16px 20px; }
+  .slide__h3 { font-size: clamp(20px, 6vw, 26px); }
+
+  /* VisibilityDashboard v2: stack right panel below main */
+  .hdash__v2-body { flex-direction: column; min-height: auto; }
+  .hdash__v2-main { border-right: none; border-bottom: 1px solid #f0f1f4; }
+  .hdash__v2-right { width: 100%; }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Visibility Page — responsive overrides
+   (vis-page base rules live in poliris.css so breakpoints must
+    also live here, after the base, to win the cascade)
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .vis-page .tour      { grid-template-columns: 1fr 1fr; }
+  .vis-page .nora-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+@media (max-width: 768px) {
+  .vis-page { overflow-x: clip; }
+  .vis-page section { padding: 64px 0; }
+  .vis-page .wrap   { padding: 0 20px; }
+  .vis-page .tour   { grid-template-columns: 1fr; }
+  .vis-page .dark   { padding: 46px 26px; border-radius: 16px; }
+  .vis-page .pf-wrap { padding: 18px 14px; }
+  .vis-page .mkt-card { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .vis-page section  { padding: 48px 0; }
+  .vis-page .wrap    { padding: 0 16px; }
+  .vis-page .tour    { grid-template-columns: 1fr; }
+  .vis-page .tcard   { padding: 20px 18px 16px; }
+  .vis-page .dark    { padding: 28px 16px; }
+}
+
+@media (max-width: 480px) {
+  /* Pipeline — scale down header and logo icons */
+  .pipeline-title { font-size: 13px; }
+  .pipeline-sub   { font-size: 11.5px; }
+  .pipeline-logo  { width: 18px; height: 18px; border-radius: 5px; }
+  .pipeline-logo img { width: 12px; height: 12px; }
+  .pipeline-ring  { width: 46px; height: 46px; }
+  .pipeline-ring-val { font-size: 11px; }
+  .pipeline-score-lbl  { font-size: 10px; }
+  .pipeline-score-desc { font-size: 9.5px; }
+  .pipeline-pill { padding: 3px 7px; gap: 3px; }
+  .pipeline-pill-lbl,
+  .pipeline-pill-val { font-size: 10px; }
+}

@@ -410,6 +410,7 @@ export default function VisibilityPage() {
                 <span className="src-intel-engines">{t('visibility.sourceIntel.aiEngines')}</span>
               </div>
 
+              <div className="src-intel-scroll">
               <div className="sit-head">
                 {(() => { const h = t('visibility.sourceIntel.tableHeaders'); return (<>
                   <div className="sit-c">{h.source}</div>
@@ -479,6 +480,7 @@ export default function VisibilityPage() {
                   </div>
                 );
               })}
+              </div>{/* /src-intel-scroll */}
 
               <div className="src-intel-legend">
                 {t('visibility.sourceIntel.legend').map((l, i) => {

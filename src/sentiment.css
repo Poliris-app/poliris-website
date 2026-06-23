@@ -588,6 +588,7 @@
   border-radius: 12px;
   padding: 18px 20px;
   font-size: 14.5px; line-height: 1.75; color: var(--fg-2);
+  text-align: left;
 }
 .vis-page .evc-ans .ell { color: var(--fg-6); font-weight: 800; padding: 0 3px; letter-spacing: .06em; }
 .vis-page .hl-brand {
@@ -769,16 +770,18 @@
   .vis-page .app-body { grid-template-columns: 1fr; }
   .vis-page .app-side { display: none; }
   .vis-page .app-main { grid-template-columns: 1fr; }
+  .vis-page .cmpx { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .vis-page .cmpx::-webkit-scrollbar { display: none; }
   .vis-page .cmpx-head,
-  .vis-page .cmpx-row { grid-template-columns: 1.4fr 1fr 1fr; }
-  .vis-page .cmpx-head span:last-child,
-  .vis-page .cmpx-row .cell:last-child { display: none; }
+  .vis-page .cmpx-row { min-width: 780px; grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.8fr; }
+  .vis-page .cmpx .brand { flex-wrap: nowrap; white-space: nowrap; }
+  .vis-page .cmpx .pill-tag { white-space: nowrap; }
+  .vis-page .cmpx .cell { align-items: center; }
 }
 @media(max-width: 480px) {
   .vis-page.sent-page .tour { grid-template-columns: 1fr; }
-  .vis-page .cmpx-head,
-  .vis-page .cmpx-row { grid-template-columns: 1.3fr 1fr; }
-  .vis-page .cmpx-head span:nth-child(3),
-  .vis-page .cmpx-row .cell:nth-child(3) { display: none; }
+  .vis-page .evx-head { flex-wrap: wrap; padding: 16px 18px; gap: 8px; }
+  .vis-page .evx-q { flex: 1 1 100%; font-size: 14px; }
+  .vis-page .evx-right { width: 100%; justify-content: space-between; }
 }
 

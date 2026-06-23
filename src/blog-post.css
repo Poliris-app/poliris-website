@@ -42,6 +42,10 @@
 }
 .bp-back-link:hover { color: var(--poliris-blue); }
 .bp-back-link svg { flex-shrink: 0; }
+.bp-back-mobile { display: none; }
+@media (max-width: 860px) {
+  .bp-back-mobile { display: inline-flex; padding-top: 24px; margin-bottom: 20px; }
+}
 
 .bp-sidenav-label {
   font-size: 0.66rem;

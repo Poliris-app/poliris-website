@@ -202,6 +202,7 @@
   display: block;
   opacity: 0;
   transition: opacity 0.8s;
+  max-width: 100%;
 }
 
 /* Map SVG interactive classes */
@@ -446,6 +447,7 @@
 .vis-page .sit-row {
   display: grid;
   grid-template-columns: 2fr 0.9fr 0.9fr 1.3fr 1fr 1.2fr;
+  column-gap: 20px;
   align-items: center;
   padding: 0 24px;
 }
@@ -485,9 +487,9 @@
 .vis-page .sit-bar-track i { display: block; height: 100%; border-radius: 2px; }
 
 /* Citations cell */
-.vis-page .sit-c--cite { flex-direction: column; align-items: flex-start; gap: 1px; }
+.vis-page .sit-c--cite { flex-direction: row; align-items: baseline; gap: 5px; }
 .vis-page .sit-cite-n   { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; color: var(--fg-1); }
-.vis-page .sit-cite-sub { font-size: 11px; color: var(--fg-5); }
+.vis-page .sit-cite-sub { font-size: 11px; color: var(--fg-5); white-space: nowrap; }
 
 /* Brand attribution badges */
 .vis-page .sit-attr {
@@ -501,7 +503,7 @@
 .vis-page .sit-attr--none { background: #f8fafc; color: #94a3b8; }
 
 /* Visibility cell */
-.vis-page .sit-c--vis { flex-direction: column; align-items: flex-start; gap: 4px; }
+.vis-page .sit-c--vis { flex-direction: row; align-items: center; gap: 6px; }
 .vis-page .sit-vis-n  { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
 .vis-page .sit-vis-dash { font-size: 16px; color: var(--fg-5); }
 
@@ -522,6 +524,7 @@
   padding: 14px 24px; border-top: 1px solid var(--border);
   font-size: 12px; color: var(--fg-4);
   background: #fafbfc;
+  text-align: left;
 }
 .vis-page .sil-chip {
   display: inline-block; padding: 2px 8px;
@@ -675,6 +678,8 @@
   .vis-page .tour       { grid-template-columns: 1fr 1fr; }
   .vis-page .mkt        { grid-template-columns: 1fr; gap: 36px; }
   .vis-page .nora-grid  { grid-template-columns: 1fr; gap: 36px; }
+  /* Remove negative margin — only makes sense in 2-col layout */
+  .vis-page .mkt > .adv-head { margin-top: 0; }
 }
 @media(max-width: 900px) {
   .vis-page section { padding: 64px 0; }
@@ -691,12 +696,100 @@
   .vis-page .src-row .src-dom { grid-column: 1 / -1; }
   .vis-page .vstakes-grid { grid-template-columns: 1fr 1fr; }
   .vis-page .vstakes      { padding: 34px; }
-.vis-page .wrap         { padding: 0 20px; }
+  .vis-page .wrap         { padding: 0 20px; }
 }
 @media(max-width: 520px) {
   .vis-page .vstakes-grid { grid-template-columns: 1fr; }
   .vis-page .src-row      { grid-template-columns: 1fr; }
 }
+
+/* ── Tablet (≤768px) ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Globe: smaller on tablet */
+  .globe-wrap { height: 300px; }
+  /* Source pipeline: horizontally scrollable */
+  .vis-page .src-pipeline {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 20px;
+    gap: 0;
+  }
+  .vis-page .src-pipeline::-webkit-scrollbar { display: none; }
+  .vis-page .src-pipeline-item { flex: 0 0 auto; min-width: 155px; }
+
+  /* Source stats: 2×2 */
+  .vis-page .src-stats { grid-template-columns: 1fr 1fr; }
+  .vis-page .src-stat:nth-child(even) { border-right: 0; }
+  .vis-page .src-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+
+  /* Source intelligence table: only the grid rows scroll, not the header/footer */
+  .vis-page .src-intel-scroll { overflow-x: auto; scrollbar-width: none; }
+  .vis-page .src-intel-scroll::-webkit-scrollbar { display: none; }
+  .vis-page .sit-head,
+  .vis-page .sit-row   { min-width: 860px; }
+
+  /* Source intel header: stack on narrow */
+  .vis-page .src-intel-hdr { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+/* ── Phone (≤480px) ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .vis-page section { padding: 48px 0; }
+  .vis-page .wrap   { padding: 0 16px; }
+
+  /* Globe: compact on phone */
+  .globe-wrap { height: 200px; }
+
+  /* Scope ladder: compact pills so all 4 fit in one row */
+  .vis-page .scope-ladder { flex-wrap: nowrap; gap: 5px; justify-content: center; }
+  .vis-page .scope-ladder .sl { font-size: 11px; padding: 4px 9px; }
+
+  /* Scope controls: stack label above 2×2 button grid */
+  .vis-page .zoomctl { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .vis-page .scope-tog {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    border-radius: 12px;
+  }
+  .vis-page .scope-tog button {
+    flex: 1 0 calc(50% - 3px);
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Source pipeline: vertical list */
+  .vis-page .src-pipeline {
+    flex-direction: column;
+    padding: 0;
+    overflow-x: visible;
+  }
+  .vis-page .src-pipeline-item {
+    flex: none;
+    width: 100%;
+    padding: 14px 18px;
+    border-right: none;
+    margin-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .vis-page .src-pipeline-item:last-child { border-bottom: none; }
+  .vis-page .src-pipeline-item--sep { border-right: none; margin-right: 0; padding-right: 18px; }
+
+  /* Source stats: stay 2-col (fits at 390px) */
+  .vis-page .src-stat { padding: 16px 16px; }
+  .vis-page .src-stat-n { font-size: 28px; }
+
+  /* NORA dark card */
+  .vis-page .dark { padding: 28px 16px; }
+
+  /* vstakes */
+  .vis-page .vstakes { padding: 24px 16px; }
+
+  /* tour cards: single column (already done at 760px but ensure padding) */
+  .vis-page .tcard { padding: 20px 18px 16px; }
+}
+
 @media(prefers-reduced-motion: reduce) {
   .vis-page .reveal              { opacity: 1; transform: none; transition: none; }
   #mkt-zoom                      { transition: none; }

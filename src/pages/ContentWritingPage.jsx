@@ -357,14 +357,14 @@ const HUB_NODE_STYLES = [
   { left: '78%', top: '78%' },
   { left: '50%', top: '92%' },
   { left: '22%', top: '78%' },
-  { left: '12%', top: '50%' },
+  { left: '19%', top: '50%' },
   { left: '22%', top: '22%' },
 ];
 const HUB_NODE_TAGS = ['Visibility', 'Sentiment', 'Audit', null, null, null, null, null];
 
 // ---- SVG spoke endpoints (match hub node positions in %) ---
 const SPOKE_ENDS = [
-  [50,8],[78,22],[88,50],[78,78],[50,92],[22,78],[12,50],[22,22]
+  [50,8],[78,22],[88,50],[78,78],[50,92],[22,78],[19,50],[22,22]
 ];
 
 export default function ContentWritingPage() {

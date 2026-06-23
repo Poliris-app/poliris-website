@@ -124,6 +124,13 @@ export default function SeoGeoCornerstoneFrPage() {
         {/* ── Article ── */}
         <main className="bp-main">
 
+          <Link to={`/${lang}/blog`} className="bp-back-link bp-back-mobile">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Retour au blog
+          </Link>
+
           <header className="bp-hero">
             <div className="bp-meta">
               <span className="bp-category">GEO Insights</span>
