@@ -40,20 +40,6 @@ const FAQ_ITEMS = [
   },
 ];
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
-      </svg>
-      <div className="bp-img-hold-label">{label}</div>
-      {sub && <div className="bp-img-hold-sub">{sub}</div>}
-    </div>
-  );
-}
-
 export default function SeoGeoCornerstoneFrPage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState(null);
@@ -195,7 +181,7 @@ export default function SeoGeoCornerstoneFrPage() {
             </div>
             <p>L'optimisation des moteurs génératifs désigne la pratique consistant à structurer le contenu pour que les moteurs de recherche alimentés par l'IA puissent l'interpréter avec précision, le citer et le faire émerger dans les réponses générées. Contrairement au classement traditionnel, le GEO n'est pas une question de densité de mots-clés. Il s'agit de rendre votre contenu suffisamment fiable et lisible par les machines pour qu'un moteur IA le choisisse plutôt que celui d'un concurrent.</p>
             <p>Un responsable des achats cherchant des comparaisons de fournisseurs, ou un analyste financier cherchant des benchmarks de marché, ne défilera peut-être jamais au-delà d'un résumé généré par l'IA. Si votre contenu n'est pas cité dans ce résumé, vous n'existez pas pour cet utilisateur. C'est là que la portée de visibilité du GEO diverge de la logique SEO classique.</p>
-            <ImgHold label="Diagramme : flux de signaux SEO vers GEO" sub="Organigramme montrant comment les signaux SEO alimentent le crawler IA et les taux de citation GEO" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.png`} alt="Diagramme : flux de signaux SEO vers GEO" loading="lazy" />
             <p className="bp-img-caption">Fig. 1 — Comment les signaux SEO techniques se répercutent sur les résultats de citation IA</p>
             <div className="bp-note">
               <div className="bp-note-label">Note d'expert</div>
@@ -210,7 +196,7 @@ export default function SeoGeoCornerstoneFrPage() {
               <h2>Comment les crawlers IA analysent les sites web</h2>
             </div>
             <p>Les crawlers web IA ne lisent pas votre contenu comme un humain. Ils analysent la structure, suivent les directives et extraient le sens à partir de signaux que vous ne voyez peut-être même pas. Contrairement aux robots de recherche traditionnels, ils n'indexent pas seulement les mots-clés. Ils évaluent le contexte sémantique, la hiérarchie des titres et les balises lisibles par machine pour décider de ce que signifie réellement une page.</p>
-            <ImgHold label="Illustration : crawler IA analysant la structure d'une page" sub="Vue en écran partagé montrant le HTML brut vs. l'extraction structurée de l'IA" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-2.png`} alt="Illustration : crawler IA analysant la structure d'une page" loading="lazy" />
             <p className="bp-img-caption">Fig. 2 — Ce que voit un crawler IA vs. ce qu'un navigateur affiche</p>
             <h3>Comment cela affecte l'indexation et le classement GEO</h3>
             <p>Les moteurs IA ne stockent pas seulement une URL. Ils extraient des affirmations, des entités et des faits, puis les classent par crédibilité et clarté. Une page enfouie dans du JavaScript ou sans balises de titres propres est essentiellement invisible pour ces systèmes.</p>
@@ -233,7 +219,7 @@ export default function SeoGeoCornerstoneFrPage() {
             <div className="bp-pull-quote">
               <p>"Le GEO est la décoration intérieure. Le SEO technique, c'est le câblage, la plomberie et les murs porteurs."</p>
             </div>
-            <ImgHold label="Diagramme : SEO technique comme couche de fondation" sub="Architecture en couches — crawl, indexation, citation GEO" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-3.png`} alt="Diagramme : SEO technique comme couche de fondation" loading="lazy" />
             <p className="bp-img-caption">Fig. 3 — La pile de dépendances, de la santé du crawl à la visibilité IA</p>
           </section>
 
@@ -260,7 +246,7 @@ export default function SeoGeoCornerstoneFrPage() {
             </div>
             <p>Les moteurs IA ne lisent pas seulement vos mots. Ils lisent la forme de votre contenu. Une hiérarchie de titres appropriée (H1, H2, H3) est l'un des signaux les plus clairs qu'un crawler IA utilise pour comprendre de quoi parle une page et quelles sections ont le plus de poids.</p>
             <p>Une page avec un seul H1, des sections H2 logiques et des sous-sections H3 de support donne aux systèmes IA une carte claire. Une page où les titres sont utilisés pour le style visuel plutôt que pour la signification sémantique sera mal comprise ou ignorée.</p>
-            <ImgHold label="Exemple : hiérarchie de titres correcte vs. cassée" sub="Comparaison côte à côte d'un arbre de titres bien structuré vs. plat" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-4.png`} alt="Exemple : hiérarchie de titres correcte vs. cassée" loading="lazy" />
             <p className="bp-img-caption">Fig. 4 — Comment la hiérarchie des titres correspond à la compréhension du crawler IA</p>
           </section>
 
@@ -308,7 +294,7 @@ export default function SeoGeoCornerstoneFrPage() {
               <h2>Naviguer dans la visibilité de recherche moderne avec Poliris</h2>
             </div>
             <p>La plupart des plateformes vous forcent à choisir entre le suivi des classements traditionnels et la surveillance des performances de citation IA. Poliris supprime ce compromis entièrement avec une architecture d'audit à double couche : des crawls SEO techniques automatisés combinés avec un tableau de bord de surveillance GEO en direct.</p>
-            <ImgHold label="Capture d'écran : tableau de bord de surveillance GEO Poliris" sub="Interface Poliris affichant les taux de citation et la santé du crawl côte à côte" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-5.png`} alt="Capture d'écran : tableau de bord de surveillance GEO Poliris" loading="lazy" />
             <p className="bp-img-caption">Fig. 5 — Le tableau de bord Poliris : santé du crawl technique et métriques de citation IA côte à côte</p>
             <ul className="bp-prose-list">
               <li>Suit automatiquement les directives de crawl, les meta robots et les structures de titres.</li>

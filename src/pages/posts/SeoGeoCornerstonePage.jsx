@@ -40,20 +40,6 @@ const FAQ_ITEMS = [
   },
 ];
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
-      </svg>
-      <div className="bp-img-hold-label">{label}</div>
-      {sub && <div className="bp-img-hold-sub">{sub}</div>}
-    </div>
-  );
-}
-
 export default function SeoGeoCornerstonePage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState(null);
@@ -195,7 +181,7 @@ export default function SeoGeoCornerstonePage() {
             </div>
             <p>Generative engine optimization refers to the practice of structuring content so AI-powered search engines can accurately interpret, cite, and surface it in generated responses. Unlike traditional ranking, GEO is not about keyword density. It is about making your content trustworthy and machine-readable enough that an AI engine picks it over a competitor's.</p>
             <p>A procurement manager searching for vendor comparisons, or a financial analyst looking for market benchmarks, may never scroll past an AI-generated summary. If your content is not cited in that summary, you do not exist for that user. This is where GEO's visibility reach diverges from classic SEO logic.</p>
-            <ImgHold label="Diagram: SEO to GEO signal flow" sub="Flowchart showing how SEO signals feed AI crawler and GEO citation rates" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.png`} alt="Diagram: SEO to GEO signal flow" loading="lazy" />
             <p className="bp-img-caption">Fig. 1 — How technical SEO signals cascade into AI citation outcomes</p>
             <div className="bp-note">
               <div className="bp-note-label">Expert note</div>
@@ -210,7 +196,7 @@ export default function SeoGeoCornerstonePage() {
               <h2>How AI crawlers scrape websites</h2>
             </div>
             <p>AI web crawlers do not read your content the way a human does. They parse structure, follow directives, and extract meaning from signals you may not even see. Unlike traditional search bots, they do not just index keywords. They assess semantic context, heading hierarchy, and machine-readable markup to decide what a page actually means.</p>
-            <ImgHold label="Illustration: AI crawler parsing page structure" sub="Split-screen showing raw HTML vs. AI's structured extraction view" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-2.png`} alt="Illustration: AI crawler parsing page structure" loading="lazy" />
             <p className="bp-img-caption">Fig. 2 — What an AI crawler sees vs. what a browser renders</p>
             <h3>How this affects GEO indexing and ranking</h3>
             <p>AI engines do not just store a URL. They extract claims, entities, and facts, then rank them by credibility and clarity. A page buried in JavaScript or missing clean heading tags is essentially invisible to these systems.</p>
@@ -233,7 +219,7 @@ export default function SeoGeoCornerstonePage() {
             <div className="bp-pull-quote">
               <p>"GEO is the interior design. Technical SEO is the wiring, the plumbing, and the load-bearing walls."</p>
             </div>
-            <ImgHold label="Diagram: Technical SEO as the foundation layer" sub="Layered architecture — crawl, index, GEO citation" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-3.png`} alt="Diagram: Technical SEO as the foundation layer" loading="lazy" />
             <p className="bp-img-caption">Fig. 3 — The dependency stack from crawl health to AI visibility</p>
           </section>
 
@@ -260,7 +246,7 @@ export default function SeoGeoCornerstonePage() {
             </div>
             <p>AI engines do not just read your words. They read the shape of your content. Proper heading hierarchy (H1, H2, H3) is one of the clearest signals an AI crawler uses to understand what a page is about and which sections carry the most weight.</p>
             <p>A page with a single H1, logical H2 sections, and supporting H3 subsections gives AI systems a clear map. A page where headings are used for visual styling rather than semantic meaning will be misread or skipped.</p>
-            <ImgHold label="Example: good vs. broken heading hierarchy" sub="Side-by-side comparison of a well-structured vs. flat heading tree" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-4.png`} alt="Example: good vs. broken heading hierarchy" loading="lazy" />
             <p className="bp-img-caption">Fig. 4 — How heading hierarchy maps to AI crawler comprehension</p>
           </section>
 
@@ -308,7 +294,7 @@ export default function SeoGeoCornerstonePage() {
               <h2>Navigating modern search visibility with Poliris</h2>
             </div>
             <p>Most platforms force you to choose between tracking traditional rankings and monitoring AI citation performance. Poliris removes that trade-off entirely with a dual-layer auditing architecture: automated technical SEO crawls combined with a live GEO monitoring dashboard.</p>
-            <ImgHold label="Screenshot: Poliris GEO monitoring dashboard" sub="Poliris UI showing citation rates and crawl health side by side" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-5.png`} alt="Screenshot: Poliris GEO monitoring dashboard" loading="lazy" />
             <p className="bp-img-caption">Fig. 5 — The Poliris dashboard: technical crawl health alongside AI citation metrics</p>
             <ul className="bp-prose-list">
               <li>Tracks crawl directives, meta robots, and heading structures automatically.</li>

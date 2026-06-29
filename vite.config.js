@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import { LANGS, PAGE_SLUGS } from './src/seo.js'
+import { LANGS, PAGE_SLUGS, BLOG_POST_SLUGS } from './src/seo.js'
 
 function devApiPlugin(env) {
   return {
@@ -64,9 +64,10 @@ export default defineConfig(({ mode }) => {
     // Expand the dynamic "/:lang" route into the concrete paths to prerender.
     includedRoutes() {
       const slugs = Object.values(PAGE_SLUGS)
-      return LANGS.flatMap((lang) =>
-        slugs.map((slug) => (slug ? `/${lang}/${slug}` : `/${lang}/`)),
-      )
+      return LANGS.flatMap((lang) => [
+        ...slugs.map((slug) => (slug ? `/${lang}/${slug}` : `/${lang}/`)),
+        ...BLOG_POST_SLUGS.map((slug) => `/${lang}/blog/${slug}`),
+      ])
     },
   },
   };

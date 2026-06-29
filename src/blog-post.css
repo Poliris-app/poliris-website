@@ -291,6 +291,13 @@
   text-align: center;
   max-width: 340px;
 }
+.bp-img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  border: 1.5px solid #e4e8f2;
+  margin: 2rem 0 0.5rem;
+}
 .bp-img-caption {
   font-size: 0.72rem;
   color: #9aa0ab;

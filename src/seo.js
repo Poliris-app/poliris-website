@@ -23,6 +23,10 @@ export const PAGE_SLUGS = {
 
 export const LANGS = ['en', 'fr'];
 
+// Individual blog post slugs to prerender (relative to /:lang/blog/).
+// Keep in sync with the POST_MAP keys in src/pages/BlogPostPage.jsx.
+export const BLOG_POST_SLUGS = ['why-seo-is-the-cornerstone-of-geo-success'];
+
 const META = {
   en: {
     home: {
