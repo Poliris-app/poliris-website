@@ -170,9 +170,9 @@
 }
 
 /* ── Section structure ──────────────────────────────────── */
-.bp-section {
+/* .bp-section {
   padding: 2.5rem 0 0;
-}
+} */
 .bp-section-header {
   display: flex;
   align-items: baseline;
