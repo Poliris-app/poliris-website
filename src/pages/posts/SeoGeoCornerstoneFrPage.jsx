@@ -184,7 +184,7 @@ export default function SeoGeoCornerstoneFrPage() {
             <p className="bp-img-caption">Fig. 1 — Comment les signaux SEO techniques se répercutent sur les résultats de citation IA</p>
             <div className="bp-note">
               <div className="bp-note-label">Note d'expert</div>
-              <p>N'optimisez pas pour le GEO de manière isolée. Les taux de citation IA s'améliorent le plus rapidement lorsque vos fondamentaux SEO techniques sont déjà solides. Considérez le GEO comme le dernier étage d'un bâtiment, et le SEO technique comme les fondations sur lesquelles il repose.</p>
+              <p>N'optimisez pas pour le GEO de manière isolée. Les taux de citation IA s'améliorent le plus rapidement lorsque vos fondamentaux SEO techniques sont déjà solides. Considérez le GEO comme le dernier étage d'un bâtiment, et le SEO technique comme les fondations sur lesquelles il repose. La plateforme Poliris est conçue autour de cette relation. Son tableau de bord de surveillance GEO suit la visibilité de marque et les taux de citation IA sur ChatGPT, Gemini et Perplexity, tandis que sa couche d'audit technique surveille les signaux au niveau du crawl qui rendent ces citations possibles.</p>
             </div>
           </section>
 
@@ -200,11 +200,16 @@ export default function SeoGeoCornerstoneFrPage() {
             <h3>Comment cela affecte l'indexation et le classement GEO</h3>
             <p><strong>L'indexation GEO</strong> fonctionne différemment de l'indexation de recherche standard. Les moteurs IA ne stockent pas seulement une URL. Ils extraient des affirmations, des entités et des faits, puis les classent par crédibilité et clarté. <strong>L'impact sur le classement IA</strong> dépend fortement de la structure de votre page pour l'extraction. Une page enfouie dans du JavaScript ou sans balises de titres propres est essentiellement invisible pour ces systèmes. Considérez deux articles de blog concurrents sur le même sujet : celui avec des définitions H2 explicites et des balises schema est cité par Perplexity. Celui sans est complètement ignoré. En pratique, la crawlabilité est une condition préalable à la citation IA. C'est pourquoi le GEO a besoin du SEO comme fondation technique, et non comme une réflexion après coup.</p>
             <h3>Les trois signaux qui comptent le plus</h3>
+            <p>Trois signaux comptent le plus pour les crawlers IA aujourd'hui :</p>
             <ul className="bp-prose-list">
               <li><strong>Directives de crawl propres</strong> dans votre <code>robots.txt</code> et vos balises meta robots.</li>
               <li><strong>Structure de titres logique</strong> qui reflète la hiérarchie du contenu.</li>
               <li><strong>Données structurées</strong> qui identifient clairement vos sujets et entités clés.</li>
             </ul>
+            <div className="bp-note">
+              <div className="bp-note-label">Poliris surveille cela</div>
+              <p>Poliris suit automatiquement ces trois signaux, offrant aux équipes un seul tableau de bord pour auditer les directives de crawl, la structure des titres et les taux de citation GEO sur ChatGPT, Gemini et Perplexity simultanément.</p>
+            </div>
           </section>
 
           {/* 05 */}
@@ -255,15 +260,17 @@ export default function SeoGeoCornerstoneFrPage() {
               <span className="bp-num">07</span>
               <h2>Le GEO peut-il fonctionner sans le SEO ?</h2>
             </div>
-            <p>Les stratégies GEO ne peuvent pas remplacer le SEO traditionnel. Sans une base technique solide, les moteurs de recherche alimentés par l'IA n'ont pas de contenu fiable à citer. Considérez le GEO comme un moteur de recommandation pour un magasin sans système d'inventaire. Il peut essayer de faire émerger des produits, mais si le catalogue est désorganisé ou bloqué aux crawlers, rien n'est recommandé avec précision.</p>
+            <p><strong>Les stratégies GEO ne peuvent pas remplacer le SEO traditionnel.</strong> Sans une base technique solide, les moteurs de recherche alimentés par l'IA n'ont pas de contenu fiable à citer. La dépendance est profonde, et l'ignorer entraîne des coûts réels.</p>
             <h3>Ce qui se casse sans la fondation</h3>
+            <p>Considérez le <strong>GEO</strong> comme un moteur de recommandation pour un magasin sans système d'inventaire. Il peut essayer de faire émerger des produits, mais si le catalogue est désorganisé ou bloqué aux crawlers, rien n'est recommandé avec précision. Voici ce qui se casse généralement lorsque les équipes tentent le GEO sans <strong>fondamentaux SEO</strong> en place :</p>
             <ul className="bp-prose-list">
               <li><strong>La conversion du trafic</strong> chute parce que les citations IA pointent vers des pages qui chargent lentement ou retournent des erreurs de crawl.</li>
               <li><strong>Les métriques d'engagement</strong> baissent lorsque les utilisateurs atterrissent sur du contenu mal structuré non optimisé pour la lisibilité.</li>
               <li><strong>Les crawlers web IA</strong> ignorent ou mal-indexent les pages bloquées par des directives <code>robots.txt</code> mal configurées.</li>
             </ul>
+            <p>Un schéma d'échec courant implique des équipes de contenu qui investissent massivement dans la rédaction optimisée pour les réponses pendant que leur infrastructure technique bloque activement la <strong>visibilité dans la recherche IA</strong>. Les moteurs IA ne peuvent tout simplement pas atteindre le contenu.</p>
             <h3>Le coût à long terme d'une approche GEO uniquement</h3>
-            <p>Manquer la synergie GEO et SEO ne nuit pas seulement aux classements à court terme. Cela crée des lacunes de visibilité cumulatives. Avec le temps, les modèles IA s'entraînent sur du contenu accessible et bien structuré de concurrents, élargissant davantage l'écart. Les sites qui se concentrent sur le GEO sans traiter la crawlabilité et les données structurées maintiennent rarement leurs taux de citation.</p>
+            <p>Manquer la <strong>synergie GEO/SEO</strong> ne nuit pas seulement aux classements à court terme. Cela crée des lacunes de visibilité cumulatives. Avec le temps, les modèles IA s'entraînent sur du contenu accessible et bien structuré de concurrents, élargissant davantage l'écart. Les sites qui se concentrent sur le GEO sans traiter la crawlabilité et les <strong>données structurées</strong> maintiennent rarement leurs taux de citation. Les systèmes IA cessent de les faire émerger. Poliris suit exactement ces signaux. Les équipes devraient associer les résultats d'audit SEO technique à la surveillance des citations GEO pour voir où les deux stratégies se renforcent, ou se sabotent mutuellement.</p>
           </section>
 
           {/* 08 */}
@@ -272,7 +279,7 @@ export default function SeoGeoCornerstoneFrPage() {
               <span className="bp-num">08</span>
               <h2>Naviguer dans la visibilité de recherche moderne avec Poliris</h2>
             </div>
-            <p>La plupart des plateformes vous forcent à choisir entre le suivi des classements traditionnels et la surveillance des performances de citation IA. Poliris supprime ce compromis entièrement avec une architecture d'audit à double couche : des crawls SEO techniques automatisés combinés avec un tableau de bord de surveillance GEO en direct.</p>
+            <p>La plupart des plateformes vous forcent à choisir entre le suivi des classements traditionnels et la surveillance des performances de citation IA. Poliris supprime ce compromis entièrement. <strong>Les fonctionnalités de Poliris</strong> s'articulent autour d'une architecture d'audit à double couche. Elle combine des crawls <strong>SEO techniques</strong> automatisés avec un tableau de bord de surveillance GEO en direct. Cette combinaison est rare, et elle compte. Côté technique, Poliris suit automatiquement les directives de crawl comme robots.txt, les meta robots et les structures de titres HTML. Ce sont exactement les signaux que les <strong>moteurs de recherche IA</strong> utilisent pour décider quel contenu est indexé et cité. Corrigez-les, et votre visibilité s'améliore sur les résultats traditionnels et génératifs. Le tableau de bord GEO surveille les mentions de marque, les taux de citation IA et les scores de sentiment sur ChatGPT, Gemini et Perplexity. C'est une intelligence actionnable que la plupart des équipes n'ont pas aujourd'hui. Pour les décideurs, le cas est clair. Les <strong>outils d'optimisation GEO</strong> comme Poliris comblent le déficit de mesure que la plupart des plateformes d'audit laissent ouvert. Vous cessez de deviner quels changements techniques améliorent la visibilité IA, et commencez à voir des relations directes de cause à effet. En pratique, une entreprise de logiciels B2B utilisant Poliris pourrait identifier que des balises schema manquantes supprimaient son taux de citation IA. Corrigez le schema, puis observez la fréquence de citation augmenter en quelques semaines. Cette boucle de rétroaction est ce à quoi ressemble l'<strong>amélioration SEO</strong> lorsqu'elle est liée aux résultats GEO, pas seulement aux classements de mots-clés. Cette approche est exactement pourquoi le GEO a besoin du SEO comme fondation structurelle, et pourquoi mesurer les deux sur une seule plateforme change la donne pour les équipes d'entreprise.</p>
             <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-5.png`} alt="Capture d'écran : tableau de bord de surveillance GEO Poliris" loading="lazy" />
             <p className="bp-img-caption">Fig. 5 — Le tableau de bord Poliris : santé du crawl technique et métriques de citation IA côte à côte</p>
             <div className="bp-cta-box">
@@ -292,6 +299,7 @@ export default function SeoGeoCornerstoneFrPage() {
               <span className="bp-num">09</span>
               <h2>Questions fréquemment posées</h2>
             </div>
+            <p>Ces questions reviennent constamment parmi les professionnels qui évaluent le <strong>GEO a besoin du SEO</strong> comme stratégie de recherche principale. Voici des réponses directes.</p>
             <div className="bp-faq">
               {FAQ_ITEMS.map((item, i) => (
                 <div key={i} className="bp-faq-item">

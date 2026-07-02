@@ -647,7 +647,7 @@ export default {
   blog: {
     hero: {
       eyebrow: 'Blog',
-      title: "Notes de terrain sur la visibilité IA & le GEO.",
+      title: "Notes de terrain sur la visibilité IA & le GEO",
       lead: "Stratégie, frameworks et lectures courtes de l'équipe qui construit le système d'exploitation de la façon dont l'IA voit votre marque.",
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
@@ -657,6 +657,13 @@ export default {
     readArticle: "Lire l'article →",
     noResults: 'Aucun article ne correspond à votre recherche.',
     posts: [
+      {
+        id: 11, label: 'SEO → GEO', category: 'GEO',
+        title: "Pourquoi le SEO est le socle du succès GEO.",
+        desc: "Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et quoi corriger en premier.",
+        date: '23 juin 2026',
+        slug: 'why-seo-is-the-cornerstone-of-geo-success',
+      },
       {
         id: 1, featured: true, label: 'IA · RECHERCHE', category: 'GEO',
         title: "Pourquoi la recherche IA est la nouvelle page d'accueil.",
@@ -710,13 +717,6 @@ export default {
         title: "Comment corriger un récit IA qui a mal tourné.",
         desc: "Statistiques obsolètes, contexte manquant, attribution erronée. Un guide pratique pour réparer la façon dont l'IA parle de vous.",
         date: '22 avr. 2026',
-      },
-      {
-        id: 11, label: 'SEO → GEO', category: 'GEO',
-        title: "Pourquoi le SEO est le socle du succès GEO.",
-        desc: "Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et quoi corriger en premier.",
-        date: '23 juin 2026',
-        slug: 'why-seo-is-the-cornerstone-of-geo-success',
       },
     ],
     cta: {

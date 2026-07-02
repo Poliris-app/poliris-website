@@ -647,7 +647,7 @@ export default {
   blog: {
     hero: {
       eyebrow: 'Blog',
-      title: 'Field notes on AI visibility & GEO.',
+      title: 'Field notes on AI visibility & GEO',
       lead: 'Strategy, frameworks, and short reads from the team building the operating system for how AI sees your brand.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
@@ -657,6 +657,13 @@ export default {
     readArticle: 'Read article →',
     noResults: 'No articles match your search.',
     posts: [
+      {
+        id: 11, label: 'SEO → GEO', category: 'GEO',
+        title: "Why SEO is the cornerstone of GEO success.",
+        desc: "GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here's why and what to fix first.",
+        date: 'Jun 23, 2026',
+        slug: 'why-seo-is-the-cornerstone-of-geo-success',
+      },
       {
         id: 1, featured: true, label: 'AI · SEARCH', category: 'GEO',
         title: 'Why AI search is the new homepage.',
@@ -710,13 +717,6 @@ export default {
         title: "How to correct an AI narrative that's gone wrong.",
         desc: "Outdated stats, missing context, mistaken attribution. A practical playbook for repairing how AI talks about you.",
         date: 'Apr 22, 2026',
-      },
-      {
-        id: 11, label: 'SEO → GEO', category: 'GEO',
-        title: "Why SEO is the cornerstone of GEO success.",
-        desc: "GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here's why and what to fix first.",
-        date: 'Jun 23, 2026',
-        slug: 'why-seo-is-the-cornerstone-of-geo-success',
       },
     ],
     cta: {
