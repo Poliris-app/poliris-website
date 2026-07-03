@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.poliris.io/sitemap.xml
+Sitemap: https://poliris.io/sitemap.xml

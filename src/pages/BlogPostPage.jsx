@@ -4,13 +4,17 @@ import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import SeoGeoCornerstonePage from './posts/SeoGeoCornerstonePage';
 import SeoGeoCornerstoneFrPage from './posts/SeoGeoCornerstoneFrPage';
+import DeathOfTraditionalSearchPage from './posts/DeathOfTraditionalSearchPage';
+import DeathOfTraditionalSearchFrPage from './posts/DeathOfTraditionalSearchFrPage';
 
 const POST_MAP = {
   en: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstonePage,
+    'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchPage,
   },
   fr: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstoneFrPage,
+    'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchFrPage,
   },
 };
 

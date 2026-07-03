@@ -2,7 +2,7 @@
 // Copy is grounded in the product positioning used across the site
 // (see src/locales/*.js): "Brand intelligence for the AI era".
 
-export const SITE_URL = 'https://www.poliris.io';
+export const SITE_URL = 'https://poliris.io';
 export const SITE_NAME = 'Poliris';
 // TODO: replace with a dedicated 1200x630 social image once designed.
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/nike_landingpage.png`;
@@ -25,7 +25,10 @@ export const LANGS = ['en', 'fr'];
 
 // Individual blog post slugs to prerender (relative to /:lang/blog/).
 // Keep in sync with the POST_MAP keys in src/pages/BlogPostPage.jsx.
-export const BLOG_POST_SLUGS = ['why-seo-is-the-cornerstone-of-geo-success'];
+export const BLOG_POST_SLUGS = [
+  'why-seo-is-the-cornerstone-of-geo-success',
+  'death-of-traditional-search-geo-priority',
+];
 
 const META = {
   en: {

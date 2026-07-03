@@ -660,65 +660,18 @@ export default {
     noResults: 'No articles match your search.',
     posts: [
       {
+        id: 12, label: 'GEO PRIORITY', category: 'GEO',
+        title: 'The death of traditional search: why GEO is your new priority.',
+        desc: "Generative engine optimization is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority.",
+        date: 'Jun 30, 2026',
+        slug: 'death-of-traditional-search-geo-priority',
+      },
+      {
         id: 11, label: 'SEO → GEO', category: 'GEO',
         title: "Why SEO is the cornerstone of GEO success.",
         desc: "GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here's why and what to fix first.",
         date: 'Jun 23, 2026',
         slug: 'why-seo-is-the-cornerstone-of-geo-success',
-      },
-      {
-        id: 1, featured: true, label: 'AI · SEARCH', category: 'GEO',
-        title: 'Why AI search is the new homepage.',
-        desc: "Buyers now form an opinion about your brand inside ChatGPT, Perplexity, and Gemini long before they ever visit your site. Here's the new operating model and where to start.",
-        author: 'Poliris Team', date: 'May 28, 2026',
-      },
-      {
-        id: 3, label: 'LLM SOV', category: 'VISIBILITY',
-        title: 'How to measure LLM visibility, without guessing.',
-        desc: "Share-of-voice, citation rate, and brand-mention frequency. The three numbers every modern brand should track across AI engines.",
-        date: 'May 20, 2026',
-      },
-      {
-        id: 4, label: 'SENTIMENT', category: 'SENTIMENT',
-        title: 'The tone AI uses about your brand is now part of the funnel.',
-        desc: 'Why "how" you appear matters as much as "where" you appear, and how to track the qualifiers shaping buyer perception.',
-        date: 'May 17, 2026',
-      },
-      {
-        id: 5, label: 'AUDIT', category: 'AUDIT',
-        title: 'The technical audit, reimagined for the AI-readable web.',
-        desc: "Three pillars   Access, Structure, Content. What changes when your audience is no longer just a crawler.",
-        date: 'May 14, 2026',
-      },
-      {
-        id: 6, label: 'TRENDS', category: 'TRENDS',
-        title: 'AI search in 2026   five shifts every brand should plan for.',
-        desc: "From answer-first behavior to vertical AI engines. The shifts redrawing the search map this year.",
-        date: 'May 11, 2026',
-      },
-      {
-        id: 7, label: 'AEO', category: 'GEO',
-        title: "Answer engines reward structure. Here's the structure to ship.",
-        desc: "Definition blocks, direct answers, numbered lists, and the FAQ pattern that LLMs lift verbatim into responses.",
-        date: 'May 7, 2026',
-      },
-      {
-        id: 8, label: 'BRAND OS', category: 'VISIBILITY',
-        title: 'What an AI-driven brand intelligence platform actually does.',
-        desc: "From dashboards to direct implementation. A walkthrough of the layer that sits between your brand and every AI engine.",
-        date: 'May 3, 2026',
-      },
-      {
-        id: 9, label: 'AI · NATIVE', category: 'TRENDS',
-        title: 'AI-native optimization, in plain English.',
-        desc: "What it means to design a workflow where AI does the audit, picks the fix, and ships it in the same loop.",
-        date: 'Apr 28, 2026',
-      },
-      {
-        id: 10, label: 'NARRATIVE', category: 'SENTIMENT',
-        title: "How to correct an AI narrative that's gone wrong.",
-        desc: "Outdated stats, missing context, mistaken attribution. A practical playbook for repairing how AI talks about you.",
-        date: 'Apr 22, 2026',
       },
     ],
     cta: {

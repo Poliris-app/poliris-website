@@ -660,65 +660,18 @@ export default {
     noResults: 'Aucun article ne correspond à votre recherche.',
     posts: [
       {
+        id: 12, label: 'PRIORITÉ GEO', category: 'GEO',
+        title: 'La mort de la recherche traditionnelle : pourquoi le GEO est votre priorité.',
+        desc: "Le GEO consiste à structurer votre contenu pour que les moteurs de réponse IA puissent l'extraire et le citer directement. Voici pourquoi c'est votre nouvelle priorité.",
+        date: '30 juin 2026',
+        slug: 'death-of-traditional-search-geo-priority',
+      },
+      {
         id: 11, label: 'SEO → GEO', category: 'GEO',
         title: "Pourquoi le SEO est le socle du succès GEO.",
         desc: "Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et quoi corriger en premier.",
         date: '23 juin 2026',
         slug: 'why-seo-is-the-cornerstone-of-geo-success',
-      },
-      {
-        id: 1, featured: true, label: 'IA · RECHERCHE', category: 'GEO',
-        title: "Pourquoi la recherche IA est la nouvelle page d'accueil.",
-        desc: "Les acheteurs forment maintenant une opinion sur votre marque dans ChatGPT, Perplexity et Gemini bien avant de visiter votre site. Voici le nouveau modèle opérationnel et par où commencer.",
-        author: 'Équipe Poliris', date: '28 mai 2026',
-      },
-      {
-        id: 3, label: 'LLM SOV', category: 'VISIBILITÉ',
-        title: "Comment mesurer la visibilité LLM, sans deviner.",
-        desc: "Part de voix, taux de citation et fréquence des mentions de marque. Les trois chiffres que chaque marque moderne doit suivre sur les moteurs IA.",
-        date: '20 mai 2026',
-      },
-      {
-        id: 4, label: 'SENTIMENT', category: 'SENTIMENT',
-        title: "Le ton que l'IA utilise sur votre marque fait maintenant partie du funnel.",
-        desc: "Pourquoi \"comment\" vous apparaissez compte autant que \"où\" vous apparaissez, et comment suivre les qualificatifs qui façonnent la perception des acheteurs.",
-        date: '17 mai 2026',
-      },
-      {
-        id: 5, label: 'AUDIT', category: 'AUDIT',
-        title: "L'audit technique, réimaginé pour le web lisible par l'IA.",
-        desc: "Trois piliers   Accès, Structure, Contenu. Ce qui change quand votre audience n'est plus seulement un crawler.",
-        date: '14 mai 2026',
-      },
-      {
-        id: 6, label: 'TENDANCES', category: 'TENDANCES',
-        title: "La recherche IA en 2026   cinq changements que chaque marque doit anticiper.",
-        desc: "Du comportement axé sur les réponses aux moteurs IA verticaux. Les changements qui redessinent la carte de la recherche cette année.",
-        date: '11 mai 2026',
-      },
-      {
-        id: 7, label: 'AEO', category: 'GEO',
-        title: "Les moteurs de réponse récompensent la structure. Voici la structure à livrer.",
-        desc: "Blocs de définition, réponses directes, listes numérotées et le format FAQ que les LLM reprennent mot pour mot dans leurs réponses.",
-        date: '7 mai 2026',
-      },
-      {
-        id: 8, label: 'BRAND OS', category: 'VISIBILITÉ',
-        title: "Ce que fait réellement une plateforme d'intelligence de marque pilotée par l'IA.",
-        desc: "Des tableaux de bord à l'implémentation directe. Une présentation de la couche qui se situe entre votre marque et chaque moteur IA.",
-        date: '3 mai 2026',
-      },
-      {
-        id: 9, label: 'IA · NATIF', category: 'TENDANCES',
-        title: "L'optimisation native IA, en langage clair.",
-        desc: "Ce que signifie concevoir un workflow où l'IA réalise l'audit, choisit le correctif et le livre dans la même boucle.",
-        date: '28 avr. 2026',
-      },
-      {
-        id: 10, label: 'NARRATIF', category: 'SENTIMENT',
-        title: "Comment corriger un récit IA qui a mal tourné.",
-        desc: "Statistiques obsolètes, contexte manquant, attribution erronée. Un guide pratique pour réparer la façon dont l'IA parle de vous.",
-        date: '22 avr. 2026',
       },
     ],
     cta: {

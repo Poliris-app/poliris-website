@@ -221,6 +221,18 @@
   border-radius: 4px;
   white-space: nowrap;
 }
+.bp-section p a,
+.bp-note p a,
+.bp-faq-body-inner a {
+  color: var(--poliris-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.bp-section p a:hover,
+.bp-note p a:hover,
+.bp-faq-body-inner a:hover {
+  color: #0d1020;
+}
 
 /* ── Pull quote ─────────────────────────────────────────── */
 .bp-pull-quote {
