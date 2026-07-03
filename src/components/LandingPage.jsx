@@ -141,7 +141,6 @@ function WorkflowVs() {
    VALUE CHAIN
    ================================================================ */
 function ValueChain() {
-  const [mode, setMode] = useState('poliris');
   const { t } = useLang();
   const vcSteps = t('home.valueChain.steps');
   const STEP_ICONS = [
@@ -151,75 +150,52 @@ function ValueChain() {
     (<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>),
     (<><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></>),
   ];
-  const MONITOR_IDX = 1;
-  const steps = vcSteps.map((s, i) => ({ ...s, monitor: i === MONITOR_IDX, icon: STEP_ICONS[i] }));
+  const steps = vcSteps.map((s, i) => ({ ...s, icon: STEP_ICONS[i] }));
+  const vc = t('home.valueChain');
 
   return (
     <section className="value-chain" id="value-chain">
       <div className="container">
         <div className="sec-head reveal">
-          {(() => { const vc = t('home.valueChain'); return (<>
-            <Eyebrow>{vc.eyebrow}</Eyebrow>
-            <h2 className="sec-h2">{vc.h2Pre}<br />Poliris lets you <HL>{vc.h2Hl}</HL></h2>
-            <p className="sec-lead">{vc.lead}</p>
-          </>); })()}
+          <Eyebrow>{vc.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{vc.h2Pre}<br />Poliris lets you <HL>{vc.h2Hl}</HL></h2>
+          <p className="sec-lead">{vc.lead}</p>
         </div>
-        {/* <WorkflowVs /> */}
         <div className="vchain-diagram">
           <div className="vchain-frame reveal reveal--scale reveal--d1">
 
             {/* Header */}
             <div className="vcf-head">
-              <span className="vcf-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-                  <path d="M20 6 9 17l-5-5"/>
-                </svg>
-              </span>
-              <span className="vcf-title">Poliris</span>
+              <span className="vcf-pill">Poliris</span>
+              <p className="vcf-card-heading">{vc.cardHeading}</p>
             </div>
 
-            {/* Toggle */}
-            <div className="vcf-toggle-wrap">
-              <div className="vcf-toggle">
-                <button
-                  className={`vcf-toggle-btn${mode === 'poliris' ? ' vcf-toggle-btn--on' : ''}`}
-                  onClick={() => setMode('poliris')}
-                >
-                  Poliris
-                </button>
-                <button
-                  className={`vcf-toggle-btn${mode === 'other' ? ' vcf-toggle-btn--on vcf-toggle-btn--other' : ''}`}
-                  onClick={() => setMode('other')}
-                >
-                  Other Tools
-                </button>
-              </div>
-              <p className="vcf-toggle-sub">
-                {mode === 'poliris' ? t('home.valueChain.polirisSub') : t('home.valueChain.otherSub')}
-              </p>
-            </div>
-
-            <div className={`vc-track${mode === 'other' ? ' vc-track--other' : ''}`}>
-              {steps.map((step) => {
-                const isActive = mode === 'poliris' || step.monitor;
-                return (
-                  <div key={step.num} className={`vc-node${!isActive ? ' vc-node--dim' : ''}`}>
-                    <div className="vc-ic">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="23" height="23">
-                        {step.icon}
-                      </svg>
-                    </div>
-                    <div className="vc-step">{step.num}</div>
-                    <div className="vc-name">{step.name}</div>
-                    <div className="vc-desc">{step.desc}</div>
+            {/* Steps */}
+            <div className="vc-track">
+              {steps.map((step) => (
+                <div key={step.num} className="vc-node">
+                  <div className="vc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="23" height="23">
+                      {step.icon}
+                    </svg>
                   </div>
-                );
-              })}
-            </div>
+                  <div className="vc-name">{step.name}</div>
+                  <div className="vc-desc">{step.desc}</div>
+                </div>
+              ))}
 
-            {mode === 'other' && (
-              <p className="vcf-other-note">{t('home.valueChain.otherNote')}</p>
-            )}
+              {/* Dot → vertical line → X + pill annotation */}
+              <div className="vcf-stop-dot" />
+              <div className="vcf-stop-vline" />
+              <div className="vcf-stop-anchor">
+                <div className="vcf-stop-x">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                    <path d="M18 6 6 18M6 6l12 12"/>
+                  </svg>
+                </div>
+                <div className="vcf-stop-pill">{vc.stopNote}</div>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -261,7 +237,7 @@ function Agents() {
             ))}
           </div>
           <div className="agents__foot">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1e3893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="agents__foot-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="agents__foot-icon">
               <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
             </svg>
             <p>{t('home.agents.footNote')}</p>
@@ -298,15 +274,15 @@ function ComparisonTable() {
   const rows = cp.rows;
   const CheckIcon = () => (
     <span className="comparison__check-bg">
-      <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
-        <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg viewBox="0 0 12 12" fill="none" width="16" height="16">
+        <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </span>
   );
   const CrossIcon = () => (
     <span className="comparison__x-icon">
       <svg viewBox="0 0 14 14" fill="none" width="16" height="16">
-        <path d="M3 3l8 8M11 3l-8 8" stroke="#d1d5db" strokeWidth="1.8" strokeLinecap="round"/>
+        <path d="M3 3l8 8M11 3l-8 8" stroke="#B45353" strokeWidth="1.3" strokeLinecap="round"/>
       </svg>
     </span>
   );

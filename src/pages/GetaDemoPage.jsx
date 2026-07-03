@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { trackEvent } from '../lib/analytics';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
@@ -47,6 +48,8 @@ const CARD_ICONS = {
 export default function GetaDemoPage() {
   useReveal();
   const { t } = useLang();
+
+  useEffect(() => { trackEvent('demo_page_viewed'); }, []);
   const d = t('demo');
 
   const [topic, setTopic] = useState(null);

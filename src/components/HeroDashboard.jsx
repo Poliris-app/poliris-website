@@ -155,7 +155,6 @@ export default function HeroDashboard() {
 
       {/* Window chrome */}
       <div className="dash__appbar">
-        <span className="dash__dot" /><span className="dash__dot" /><span className="dash__dot" />
         <span className="dash__url">{d.appbar}</span>
       </div>
 

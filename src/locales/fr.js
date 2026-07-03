@@ -54,9 +54,11 @@ export default {
       polirisSub: 'gère toute la chaîne   de bout en bout',
       otherSub: 'Coupe la chaîne',
       otherNote: "Les autres outils s'arrêtent au monitoring   ils ne priorisent pas, ne recommandent pas et n'implémentent pas.",
+      cardHeading: 'Gère toute la chaîne de bout en bout',
+      stopNote: "Les autres outils s'arrêtent au monitoring",
       steps: [
-        { num: '01', name: 'Comprendre',  desc: 'Votre marque, offres et enjeux techniques.' },
-        { num: '02', name: 'Monitorer',   desc: 'Vos positions sur les moteurs IA.' },
+        { num: '01', name: 'Monitorer',   desc: 'Vos positions sur les moteurs IA.' },
+        { num: '02', name: 'Comprendre',  desc: 'Votre marque, offres et enjeux techniques.' },
         { num: '03', name: 'Prioriser',   desc: 'Les opportunités à fort impact.' },
         { num: '04', name: 'Recommander', desc: 'Correctifs et contenus concrets, dans votre ton de marque.' },
         { num: '05', name: 'Implémenter', desc: 'Contenu et correctifs techniques, livrés sur votre site.' },

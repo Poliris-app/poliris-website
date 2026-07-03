@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation, Outlet, Navigate } from 'react-router-dom';
+import { identifyUser, trackEvent } from '../lib/analytics';
 import en from '../locales/en';
 import fr from '../locales/fr';
 
@@ -21,14 +22,16 @@ export function LangWrapper() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Reset scroll on navigation (was a top-level <ScrollToTop /> in App.jsx).
+  // Identify visitor from ph_id param (runs once on first mount)
+  useEffect(() => {
+    identifyUser();
+  }, []);
+
+  // Reset scroll + capture SPA pageview on every route change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
+    trackEvent('$pageview');
   }, [location.pathname]);
-
-  if (!VALID_LANGS.includes(lang)) {
-    return <Navigate to={`/en${location.pathname.replace(/^\/[^/]*/, '')}`} replace />;
-  }
 
   function t(key) {
     const locale = LOCALES[lang] ?? LOCALES.en;
@@ -44,6 +47,10 @@ export function LangWrapper() {
   }
 
   const value = useMemo(() => ({ lang, t, switchLang }), [lang, location.pathname]);
+
+  if (!VALID_LANGS.includes(lang)) {
+    return <Navigate to={`/en${location.pathname}${location.search}`} replace />;
+  }
 
   return (
     <LangContext.Provider value={value}>

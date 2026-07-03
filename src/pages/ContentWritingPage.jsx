@@ -306,6 +306,19 @@ function PipelineTrack() {
     setTimeout(() => { setCur(i); setFading(false); }, 150);
   }
 
+  /* Auto-advance through the steps; restarts whenever cur changes,
+     whether from the timer or a manual click. */
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setCur(c => (c + 1) % N);
+        setFading(false);
+      }, 150);
+    }, 2500);
+    return () => clearInterval(id);
+  }, [cur, N]);
+
   const d = steps[cur];
   return (
     <div className="cw-pipe cw-reveal">

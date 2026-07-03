@@ -194,6 +194,9 @@
 }
 .ta-agent-card .eyebrow {
   color: var(--blue-bright);
+  background: none;
+  padding: 0;
+  border-radius: 0;
 }
 @media (max-width: 620px) {
   .ta-agent-card { padding: 36px 24px; }

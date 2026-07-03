@@ -404,7 +404,6 @@ function SentimentVis() {
 export function AuditVis() {
   const { t } = useLang();
   const av = t('productCarousel.auditVis');
-  const [activeKey, setActiveKey] = useState(null);
   const [vals, setVals] = useState([81, 80, 36]);
 
   const STAGE_META = av.stages.map(s => ({ ...s }));
@@ -460,8 +459,6 @@ export function AuditVis() {
   const minVal = Math.min(...vals);
   const bnIdx  = minVal < BN_THRESH ? vals.indexOf(minVal) : -1;
 
-  const toggle = key => setActiveKey(k => k === key ? null : key);
-
   const AI_LOGOS = [
     { src: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,    alt: 'Mistral',    left: '1.5%', top: '27%' },
     { src: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   alt: 'ChatGPT',    left: '6.5%', top: '40%' },
@@ -469,8 +466,6 @@ export function AuditVis() {
     { src: `${import.meta.env.BASE_URL}perplexity-ai-logo.png`, alt: 'Perplexity', left: '2%',   top: '65%' },
     { src: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,     alt: 'Gemini',     left: '7.5%', top: '76%' },
   ];
-
-  const activeStage = STAGES.find(s => s.key === activeKey);
 
   return (
     <div className="vis-card">
@@ -521,24 +516,20 @@ export function AuditVis() {
           {STAGES.map((s, i) => (
             <path key={`halo-${s.key}`} d={mp}
               fill="none" stroke={s.color}
-              strokeOpacity={activeKey && activeKey !== s.key ? '0.08' : '0.22'}
-              strokeWidth="26" filter="url(#pipe-glow)" clipPath={`url(#pcl-${i})`}
-              style={{ transition: 'stroke-opacity .25s' }}/>
+              strokeOpacity="0.22"
+              strokeWidth="26" filter="url(#pipe-glow)" clipPath={`url(#pcl-${i})`}/>
           ))}
           {/* Lighter ring */}
           {STAGES.map((s, i) => (
             <path key={`ring-${s.key}`} d={mp}
               fill="none" stroke={s.color}
-              strokeOpacity={activeKey && activeKey !== s.key ? '0.12' : '0.32'}
-              strokeWidth="12" clipPath={`url(#pcl-${i})`}
-              style={{ transition: 'stroke-opacity .25s' }}/>
+              strokeOpacity="0.32"
+              strokeWidth="12" clipPath={`url(#pcl-${i})`}/>
           ))}
           {/* Core fill */}
           {STAGES.map((s, i) => (
             <path key={`fill-${s.key}`} d={mp} fill={s.color}
-              fillOpacity={activeKey && activeKey !== s.key ? '0.4' : '1'}
-              clipPath={`url(#pcl-${i})`}
-              style={{ transition: 'fill-opacity .25s' }}/>
+              clipPath={`url(#pcl-${i})`}/>
           ))}
 
           {/* Dotted flow lines */}
@@ -546,14 +537,6 @@ export function AuditVis() {
             strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
           <path d={edgePath('bottom', 12)} fill="none" stroke="#fff" strokeOpacity="0.6"
             strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
-
-          {/* Clickable stage overlays */}
-          {STAGES.map((s, i) => (
-            <rect key={`click-${s.key}`}
-              x={SW * i} y={0} width={SW} height={H}
-              fill="transparent" style={{ cursor: 'pointer' }}
-              onClick={() => toggle(s.key)}/>
-          ))}
         </svg>
 
         {/* AI model logos */}
@@ -596,18 +579,13 @@ export function AuditVis() {
         {/* Score pills */}
         {STAGES.map((s, i) => (
           <div key={`pill-${s.key}`}
-            className={`pipeline-pill${activeKey === s.key ? ' pipeline-pill--active' : ''}`}
+            className="pipeline-pill"
             style={{
               ...svgPct(stageCX(i), CY),
               transform: 'translate(-50%,-50%)',
-              cursor: 'pointer',
-              borderColor: activeKey === s.key ? s.color : undefined,
-            }}
-            onClick={() => toggle(s.key)}>
+            }}>
             <span className="pipeline-pill-lbl">{s.label}</span>
-            <span className="pipeline-pill-val" style={{ color: activeKey === s.key ? s.color : undefined }}>
-              {s.value}%
-            </span>
+            <span className="pipeline-pill-val">{s.value}%</span>
           </div>
         ))}
       </div>
@@ -615,38 +593,11 @@ export function AuditVis() {
       {/* ── Stage tabs ─────────────────────────────────────── */}
       <div className="pipeline-questions">
         {STAGES.map((s) => (
-          <div key={`q-${s.key}`}
-            className={`pipeline-question${activeKey === s.key ? ' pipeline-question--on' : ''}`}
-            style={{ borderTopColor: activeKey === s.key ? s.color : undefined }}
-            onClick={() => toggle(s.key)}>
+          <div key={`q-${s.key}`} className="pipeline-question">
             {s.question}
           </div>
         ))}
       </div>
-
-      {/* ── Detail panel ───────────────────────────────────── */}
-      {activeStage && (
-        <div className="pipeline-detail-panel" key={activeKey}
-          style={{ borderLeftColor: activeStage.color }}>
-          <div className="pipeline-detail-hdr">
-            <span className="pipeline-detail-name" style={{ color: activeStage.color }}>
-              {activeStage.label}
-            </span>
-            <span className="pipeline-detail-score">{activeStage.value}%</span>
-            {activeStage.value < BN_THRESH && (
-              <span className="pipeline-detail-tag pipeline-detail-tag--bottleneck">{av.bottleneck}</span>
-            )}
-          </div>
-          <div className="pipeline-detail-checks">
-            {activeStage.checks.map((c, i) => (
-              <div key={i} className={`pipeline-detail-check pipeline-detail-check--${c.ok ? 'ok' : 'fail'}`}>
-                <span className="pipeline-detail-ic">{c.ok ? '✓' : '✗'}</span>
-                {c.text}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
     </div>
   );
@@ -787,7 +738,7 @@ function ContentVis() {
         ))}
       </div>
 
-      <button className="cstudio-more-btn" onClick={() => setIdeaSet(s => (s + 1) % IDEA_SETS.length)}>
+      <button className="cstudio-more-btn" onClick={() => setIdeaSet(s => (s + 1) % cv.ideaSets.length)}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
           <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
         </svg>
@@ -823,7 +774,7 @@ const SLIDE_META = [
         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     ),
-    ctaHref: '#',
+    ctaHref: '/technical-audit',
     visual: <AuditVis />,
   },
   {
@@ -832,7 +783,7 @@ const SLIDE_META = [
         <circle cx="12" cy="12" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><path d="M12 6v4M12 14l-6.5 2.5M12 14l6.5 2.5"/>
       </svg>
     ),
-    ctaHref: '#',
+    ctaHref: '/content-writing',
     visual: <ContentVis />,
   },
 ];
