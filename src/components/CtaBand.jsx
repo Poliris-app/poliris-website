@@ -1,3 +1,5 @@
+import { trackEvent } from '../lib/analytics';
+
 const MODELS = ['ChatGPT', 'Gemini', 'Perplexity', 'Claude', 'Mistral', 'DeepSeek', 'Grok', 'Copilot'];
 const tripled = [...MODELS, ...MODELS, ...MODELS];
 
@@ -35,6 +37,7 @@ export default function CtaBand({
             href={primaryHref}
             className="btn btn--primary"
             {...(primaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            onClick={() => { if (primaryTrial) trackEvent('trial_cta_clicked'); else if (primaryDemo) trackEvent('demo_cta_clicked'); }}
           >
             {primaryCta}
           </a>
@@ -42,6 +45,7 @@ export default function CtaBand({
             href={secondaryHref}
             className="btn btn--secondary"
             {...(secondaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            onClick={() => { if (secondaryTrial) trackEvent('trial_cta_clicked'); else if (secondaryDemo) trackEvent('demo_cta_clicked'); }}
           >
             {secondaryCta}
           </a>

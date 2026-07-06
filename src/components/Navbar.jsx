@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
+import { trackEvent } from '../lib/analytics';
 
 const PRODUCT_HREFS = ['/visibility', '/sentiment', '/technical-audit', '/content-writing'];
 const RESOURCE_HREFS = ['/blog', '/faqs', '/glossary', '/docs'];
@@ -159,7 +160,7 @@ export default function Navbar() {
             )}
           </div>
           <a className="nav__login" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">{t('nav.logIn')}</a>
-          <a className="nav__cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">{t('nav.freeTrial')}</a>
+          <a className="nav__cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('trial_cta_clicked')}>{t('nav.freeTrial')}</a>
         </div>
 
         <button
@@ -241,7 +242,7 @@ export default function Navbar() {
 
           <div className="nav__mobile-bottom">
             <a className="nav__mobile-link" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t('nav.logIn')}</a>
-            <a className="nav__mobile-cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t('nav.freeTrial')}</a>
+            <a className="nav__mobile-cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => { setOpen(false); trackEvent('trial_cta_clicked'); }}>{t('nav.freeTrial')}</a>
           </div>
         </div>
       )}

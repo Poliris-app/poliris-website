@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
+import { trackEvent } from '../../lib/analytics';
 import '../../blog-post.css';
 
 const SECTIONS = [
@@ -287,7 +288,7 @@ export default function SeoGeoCornerstoneFrPage() {
                 <p className="bp-cta-heading">Mesurez le GEO et le SEO en un seul endroit</p>
                 <p>Poliris suit les taux de citation sur tous les principaux LLMs avec votre santé de crawl technique.</p>
               </div>
-              <a href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" className="bp-cta-btn">
+              <a href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" className="bp-cta-btn" onClick={() => trackEvent('trial_cta_clicked')}>
                 Essayer Poliris →
               </a>
             </div>

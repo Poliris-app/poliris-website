@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import { useLang } from '../contexts/LangContext';
+import { trackEvent } from '../lib/analytics';
 import { AuditVis } from '../components/ProductCarousel';
 import SiteOverviewMockup from '../components/SiteOverviewMockup';
 
@@ -369,7 +370,7 @@ export default function TechnicalAuditPage() {
                       <li key={i}><i>›</i> {pt}</li>
                     ))}
                   </ul>
-                  <a className="ta-btn-blue" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">
+                  <a className="ta-btn-blue" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('trial_cta_clicked')}>
                     {p4.meetTom}
                   </a>
                 </div>

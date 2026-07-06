@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import HeroDashboard from './HeroDashboard';
 import { useLang } from '../contexts/LangContext';
+import { trackEvent } from '../lib/analytics';
 
 const TRIAL_URL = 'https://app.poliris.io';
 const DEMO_URL  = 'https://cal.com/team/poliris/discovery-call';
@@ -83,6 +84,7 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
               href={primaryHref}
               className="btn btn--primary"
               {...(primaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              onClick={() => { if (primaryTrial) trackEvent('trial_cta_clicked'); else if (primaryDemo) trackEvent('demo_cta_clicked'); }}
             >
               {primaryCta}
               {!dark && (
@@ -97,6 +99,7 @@ export default function Hero({ eyebrow, title, lead, primaryCta, secondaryCta, n
               href={secondaryHref}
               className="btn btn--secondary"
               {...(secondaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              onClick={() => { if (secondaryTrial) trackEvent('trial_cta_clicked'); else if (secondaryDemo) trackEvent('demo_cta_clicked'); }}
             >
               {secondaryCta}
             </a>

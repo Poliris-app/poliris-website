@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
+import { trackEvent } from '../../lib/analytics';
 import '../../blog-post.css';
 
 const SECTIONS = [
@@ -287,7 +288,7 @@ export default function SeoGeoCornerstonePage() {
                 <p className="bp-cta-heading">Measure GEO and SEO in one place</p>
                 <p>Poliris tracks citation rates across all major LLMs alongside your technical crawl health.</p>
               </div>
-              <a href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" className="bp-cta-btn">
+              <a href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" className="bp-cta-btn" onClick={() => trackEvent('trial_cta_clicked')}>
                 Try Poliris →
               </a>
             </div>
