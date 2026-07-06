@@ -165,9 +165,6 @@ export default function SiteOverviewMockup() {
     <div className="som">
 
       {/* Browser chrome */}
-      <div className="som-chrome">
-        <span className="som-chrome-label">Poliris · {d.tabTechnical}</span>
-      </div>
 
       <div className="som-body">
 

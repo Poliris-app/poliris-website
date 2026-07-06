@@ -287,9 +287,6 @@ export default function SentimentPage() {
             </div>
 
             <div className="app reveal">
-              <div className="app-bar">
-                <span className="url">app.poliris.io . Sentiment</span>
-              </div>
               <div className="hdash__v2-body">
                 {/* sidebar */}
                 <aside className="dash__sidebar">

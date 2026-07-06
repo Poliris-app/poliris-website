@@ -158,11 +158,6 @@ export default function VisibilityDashboard() {
 
   return (
     <div className="hero__dashboard">
-
-      <div className="dash__appbar">
-        <span className="dash__url">{vd.appbar}</span>
-      </div>
-
       <div className="hdash__v2-body">
 
         {/* ── Sidebar ── */}

@@ -200,7 +200,7 @@ function SentimentVis() {
     Object.fromEntries(BRANDS.map(b => [b.name, true]))
   );
   const [tooltip, setTooltip] = useState({
-    visible: false, x: 0, y: 0, segIdx: -1,
+    visible: false, x: 0, y: 0, flip: false, segIdx: -1,
     axisLabel: '', singleBrand: null, multiBrands: null,
   });
 
@@ -262,6 +262,7 @@ function SentimentVis() {
     const svgY = (e.clientY - svgRect.top) * (330 / svgRect.height);
     const tx = e.clientX - wrapRect.left;
     const ty = e.clientY - wrapRect.top;
+    const flip = tx > wrapRect.width * 0.6;
 
     const segIdx = getSegIdx(svgX, svgY);
     if (segIdx === null) { setTooltip(p => ({ ...p, visible: false })); return; }
@@ -270,10 +271,10 @@ function SentimentVis() {
     const visibleBrands = BRANDS.filter(b => visibility[b.name]);
 
     if (visibleBrands.length === 1) {
-      setTooltip({ visible: true, x: tx, y: ty, segIdx, axisLabel, singleBrand: visibleBrands[0], multiBrands: null });
+      setTooltip({ visible: true, x: tx, y: ty, flip, segIdx, axisLabel, singleBrand: visibleBrands[0], multiBrands: null });
     } else {
       const sorted = [...visibleBrands].sort((a, b) => b.scores[axisLabel] - a.scores[axisLabel]);
-      setTooltip({ visible: true, x: tx, y: ty, segIdx, axisLabel, singleBrand: null, multiBrands: sorted });
+      setTooltip({ visible: true, x: tx, y: ty, flip, segIdx, axisLabel, singleBrand: null, multiBrands: sorted });
     }
   }
 
@@ -351,7 +352,7 @@ function SentimentVis() {
           <div className="srad__radar-tip" style={{
             left: tooltip.x + 14,
             top: Math.max(0, tooltip.y - 60),
-            transform: tooltip.x > 240 ? 'translateX(-110%)' : 'translateX(0)',
+            transform: tooltip.flip ? 'translateX(-110%)' : 'translateX(0)',
           }}>
             {tooltip.singleBrand ? (
               <>

@@ -154,9 +154,9 @@ export default function HeroDashboard() {
     <div className="hero__dashboard">
 
       {/* Window chrome */}
-      <div className="dash__appbar">
+      {/* <div className="dash__appbar">
         <span className="dash__url">{d.appbar}</span>
-      </div>
+      </div> */}
 
       {/* Body: sidebar | main | right panel */}
       <div className="hdash__body">

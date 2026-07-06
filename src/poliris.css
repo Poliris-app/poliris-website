@@ -583,10 +583,10 @@ button { cursor: pointer; border: none; background: none; }
   pointer-events: none;
   position: absolute;
   left: 50%;
-  top: -140px;
+  top: 30px;
   transform: translateX(-50%);
   width: 1120px;
-  height: 900px;
+  height: 800px;
   max-width: none;
   z-index: 0;
   opacity: 0.92;
@@ -778,7 +778,7 @@ button { cursor: pointer; border: none; background: none; }
 /* Dashboard mockup */
 .hero__dashboard {
   max-width: 1120px;
-  margin: 50px auto 0;
+  margin: 25px auto 0;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: #fff;
@@ -2498,7 +2498,7 @@ button { cursor: pointer; border: none; background: none; }
   bottom: 28px;
   left: calc(19% - 1px);
   width: 2px;
-  background: #d1d5db;
+  background: #dce6f7;
   z-index: 1;
 }
 /* X + pill — anchored so X center aligns with dot center */
@@ -2550,7 +2550,15 @@ button { cursor: pointer; border: none; background: none; }
   position: relative;
   overflow: hidden;
 }
-.agents__head { margin-bottom: 6px; max-width: 660px; }
+.agents__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+  margin-bottom: 6px;
+  max-width: none;
+}
+.agents__head-copy { flex: 1 1 auto; max-width: 550px; }
 .agents__h2 {
   font-family: var(--manrope);
   font-weight: 800;
@@ -2558,15 +2566,19 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.05;
   letter-spacing: -0.01em;
   color: #000;
-  margin: 0 0 16px;
+  margin: 0;
 }
 .agents__h2-blue { color: var(--blue); display: block; }
 .agents__lead {
+  flex: 0 0 340px;
+  max-width: 340px;
   font-family: var(--chivo);
-  font-size: clamp(16px, 1.3vw, 18px);
+  font-size: clamp(15px, 1.1vw, 17px);
   line-height: 1.66;
   color: var(--fg3);
-  /* max-width: 620px; */
+  margin: 0;
+  padding-left: 32px;
+  border-left: 1px solid var(--border);
 }
 .agents__grid {
   display: grid;
@@ -2614,8 +2626,8 @@ button { cursor: pointer; border: none; background: none; }
   margin-bottom: 14px;
 }
 .agent-card__av {
-  width: 52px;
-  height: 52px;
+  width: 65px;
+  height: 65px;
   border-radius: 99px;
   padding: 2.5px;
   flex-shrink: 0;
@@ -2783,7 +2795,7 @@ button { cursor: pointer; border: none; background: none; }
   text-align: center;
   border-radius: 13px;
   background: var(--White, #FFF);
-  padding: 10px;
+  padding: 30px;
   box-shadow: 0 3px 20px 0 rgba(212, 212, 212, 0.25);
 }
 .stakes__iconbox {
@@ -3039,13 +3051,15 @@ button { cursor: pointer; border: none; background: none; }
   border-radius: 28px;
   overflow: hidden;
   box-shadow: 0px 3px 20px 5px rgb(212 212 212 / 34%);
-  min-height: 430px;
+  height: 500px;
 }
 .slide__copy {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
   padding: 48px 44px;
+  min-height: 0;
+  overflow: hidden;
 }
 .slide__eyebrow {
   font-size: 11px;
@@ -3126,6 +3140,8 @@ button { cursor: pointer; border: none; background: none; }
   /* background: linear-gradient(160deg, #f3f5fb 0%, #eef1fa 100%); */
   /* border-left: 1px solid var(--border); */
   /* box-shadow: inset 8px 0 16px -14px rgba(0,0,0,.25); */
+  min-height: 0;
+  overflow: hidden;
 }
 .slide__visual-inner { width: 100%; max-width: 600px; }
 
@@ -4116,7 +4132,7 @@ button { cursor: pointer; border: none; background: none; }
   padding: 1px 5px;
   border-radius: 999px;
 }
-.srad__chart-wrap { position: relative; overflow: visible; }
+.srad__chart-wrap { position: relative; overflow: visible; max-width: 420px; margin: 0 auto; }
 .srad__svg { width: 100%; height: auto; display: block; border-radius: 10px; }
 .srad__radar-tip {
   position: absolute;
@@ -4860,7 +4876,9 @@ button { cursor: pointer; border: none; background: none; }
   /* Agents — 2 columns */
   .agents__panel { padding: 36px 28px; }
   .agents__grid  { grid-template-columns: repeat(2, 1fr); }
-  .agents__head  { max-width: 100%; }
+  .agents__head  { flex-direction: column; align-items: flex-start; gap: 16px; max-width: 100%; }
+  .agents__head-copy { max-width: 100%; }
+  .agents__lead  { flex: 0 0 auto; max-width: 100%; padding-left: 0; border-left: none; }
 
   /* Comparison */
   .comparison__table-wrap { margin-top: 24px; border-radius: 12px; }
@@ -4979,7 +4997,7 @@ button { cursor: pointer; border: none; background: none; }
   .products__tab-icon { width: 42px; height: 42px; }
 
   /* Slide — stack copy above visual */
-  .slide__inner { grid-template-columns: 1fr; min-height: auto; }
+  .slide__inner { grid-template-columns: 1fr; height: auto; min-height: auto; }
   .slide__copy { padding: 32px 28px 24px; }
   .slide__visual { border-left: none; border-top: 1px solid var(--border); min-height: 260px; }
 }

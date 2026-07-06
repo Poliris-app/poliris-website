@@ -217,18 +217,21 @@ function Agents() {
     'linear-gradient(140deg,#2f9e63,#1c7a49)',
     'linear-gradient(140deg,#8b62d6,#6b40bf)',
   ];
-  const agents = t('home.agents.list').map((a, i) => ({ ...a, gradient: AGENT_GRADIENTS[i] }));
+  const AGENT_COLORS = ['#2f8f56', '#e6a700', '#2a93ad', '#d23a73', '#1c7a49', '#6b40bf'];
+  const agents = t('home.agents.list').map((a, i) => ({ ...a, gradient: AGENT_GRADIENTS[i], color: AGENT_COLORS[i] }));
   return (
     <section id="team" className="agents">
       <div className="container">
         <div className="agents__panel">
           {(() => { const ag = t('home.agents'); return (
           <div className="agents__head reveal">
-            <Eyebrow>{ag.eyebrow}</Eyebrow>
-            <h2 className="agents__h2">
-              {ag.h2}
-              <span className="agents__h2-blue">{ag.h2Blue}</span>
-            </h2>
+            <div className="agents__head-copy">
+              <Eyebrow>{ag.eyebrow}</Eyebrow>
+              <h2 className="agents__h2">
+                {ag.h2}
+                <span className="agents__h2-blue">{ag.h2Blue}</span>
+              </h2>
+            </div>
             <p className="agents__lead">{ag.lead}</p>
           </div>); })()}
           <div className="agents__grid">
@@ -257,7 +260,7 @@ function AgentCard({ agent }) {
         </div>
         <div>
           <div className="agent-card__name">{agent.name}</div>
-          <div className="agent-card__role">{agent.role}</div>
+          <div className="agent-card__role" style={{ color: agent.color }}>{agent.role}</div>
         </div>
       </div>
       <p className="agent-card__desc">{agent.desc}</p>
