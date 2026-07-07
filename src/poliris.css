@@ -1245,6 +1245,7 @@ button { cursor: pointer; border: none; background: none; }
   font-size: 12px;
   font-weight: 700;
   color: #6b7280;
+  margin-top: 20px;
   margin-bottom: 8px;
 }
 .hdash__v2-legend {
@@ -4391,7 +4392,7 @@ button { cursor: pointer; border: none; background: none; }
 /* ============================================================
    SECTION HEADING VARIANT
    ============================================================ */
-.vis-page .adv-head       { max-width: 760px; }
+/* .vis-page .adv-head       { max-width: 760px; } */
 .vis-page .adv-head.mid   { margin: 0 auto; text-align: center; }
 .vis-page .adv-head h2 {
   font-family: var(--manrope);
@@ -4408,50 +4409,8 @@ button { cursor: pointer; border: none; background: none; }
 }
 .vis-page .adv-head .eyebrow { margin-bottom: 0; }
 
-/* ============================================================
-   01 · PRODUCT FOCUS
-   ============================================================ */
-.vis-page .pf-wrap {
-  margin-top: 46px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow-lg);
-  padding: 32px 30px 26px;
-}
-.vis-page .pf-svg  { display: block; width: 100%; height: auto; }
-
-@keyframes pf-draw {
-  from { stroke-dashoffset: 400; }
-  to   { stroke-dashoffset: 0; }
-}
-.vis-page .pf-line {
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-}
-.reveal.in .pf-line--1 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 0.2s  forwards; }
-.reveal.in .pf-line--2 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 0.45s forwards; }
-.reveal.in .pf-line--3 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 0.7s  forwards; }
-.reveal.in .pf-line--4 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 0.95s forwards; }
-.reveal.in .pf-line--5 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 1.2s  forwards; }
-.reveal.in .pf-line--6 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 1.45s forwards; }
-.reveal.in .pf-line--7  { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 1.7s  forwards; }
-.reveal.in .pf-line--8  { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 1.95s forwards; }
-.reveal.in .pf-line--9  { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.2s  forwards; }
-.reveal.in .pf-line--10 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.45s forwards; }
-.reveal.in .pf-line--11 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.7s  forwards; }
-.reveal.in .pf-line--12 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 2.95s forwards; }
-.reveal.in .pf-line--13 { animation: pf-draw 1.4s cubic-bezier(0.4,0,0.2,1) 3.2s  forwards; }
-.vis-page .pf-foot { text-align: center; font-size: 13.5px; color: var(--fg-5); margin-top: 16px; line-height: 1.55; }
-.vis-page .pf-foot b { color: var(--fg-2); font-weight: 600; }
-
-/* SVG text styles (applied via className on SVG text elements) */
-.vis-page .pf-collbl { font-family: var(--font-display); font-size: 12px; font-weight: 800; letter-spacing: .09em; fill: var(--fg-6); }
-.vis-page .pf-q      { font-family: var(--font-body); font-size: 13.5px; fill: var(--fg-2); }
-.vis-page .pf-tname  { font-family: var(--font-display); font-size: 16px; font-weight: 800; fill: #0d111a; }
-.vis-page .pf-tsub   { font-family: var(--font-body); font-size: 12px; fill: var(--fg-5); }
-.vis-page .pf-tscore { font-family: var(--font-display); font-size: 28px; font-weight: 800; fill: #0d111a; }
-.vis-page .pf-tlab   { font-family: var(--font-display); font-size: 11px; font-weight: 700; }
+/* Product Focus diagram styles now live in src/visibility.css,
+   next to the rest of this page's page-specific CSS. */
 
 
 /* ============================================================
@@ -4551,9 +4510,11 @@ button { cursor: pointer; border: none; background: none; }
   box-shadow: var(--shadow-blue);
 }
 .vis-page .chat {
-  background: #fff; border-radius: var(--r-lg);
+  background: #fff; border-radius: 50px;
   padding: 18px; box-shadow: 0 34px 70px -24px rgba(0,0,0,.55);
   text-align: left;
+  width: 430px;
+  margin-left: auto;
 }
 .vis-page .chat-id {
   display: flex;
@@ -4590,7 +4551,9 @@ button { cursor: pointer; border: none; background: none; }
 .vis-page .bub.bot  { 
   background: var(--surface-2); 
   color: var(--fg-2); 
-  border-radius: 0px 14px 14px 14px;}
+  border-radius: 0px 14px 14px 14px;
+  font-size: 11px;
+}
 .vis-page .bub.bot b { color: var(--poliris-blue); }
 
 .vis-page .plan {
@@ -5053,8 +5016,12 @@ button { cursor: pointer; border: none; background: none; }
   .vis-page .wrap   { padding: 0 20px; }
   .vis-page .tour   { grid-template-columns: 1fr; }
   .vis-page .dark   { padding: 46px 26px; border-radius: 16px; }
-  .vis-page .pf-wrap { padding: 18px 14px; }
   .vis-page .mkt-card { width: 100%; }
+  /* The chat mock has a hardcoded 430px width for desktop; below that,
+     let it shrink with the viewport instead of forcing a horizontal
+     overflow that .vis-page's overflow-x: clip then silently chops off. */
+  .vis-page .shot { width: 100%; min-width: 0; }
+  .vis-page .chat { width: 100%; max-width: 430px; margin: 0 auto; }
 }
 
 @media (max-width: 480px) {

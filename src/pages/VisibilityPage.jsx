@@ -11,51 +11,70 @@ import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
+/* ---- Product Focus: topic coverage cards + the real buyer
+   questions rolling up into each one ------------------------ */
+const PF_TOPICS = [
+  {
+    name: 'Performance', prompts: 22, pct: 67, status: 'On par',
+    questions: [
+      { text: 'Which lightweight gym shoes maximise stability?' },
+      { text: 'Professional advice on cross-training shoe selection?' },
+    ],
+  },
+  {
+    name: 'Durability', prompts: 15, pct: 13, status: 'Behind',
+    questions: [
+      // Also rolls up into Performance — a hiking boot is bought for both.
+      { text: 'Top-rated waterproof hiking boots for mountain terrain?', sharedWith: 'Performance' },
+      { text: 'Best durable footwear for long-distance walking?' },
+    ],
+  },
+  {
+    name: 'Design', prompts: 20, pct: 42, status: 'Behind',
+    questions: [
+      { text: 'Where to find affordable, reliable everyday sneakers?' },
+      { text: 'Top footwear collections for a minimalist aesthetic?' },
+    ],
+  },
+  {
+    name: 'Brand awareness', prompts: 18, pct: 75, status: 'On par',
+    questions: [
+      // Also rolls up into Design — style is a design signal too.
+      { text: 'Which trendy sneakers lead casual street style?', sharedWith: 'Design' },
+    ],
+  },
+];
+
+/* Splits a question into two lines balanced by character length (not
+   word count), at the word boundary closest to the halfway point —
+   since SVG <text> doesn't wrap on its own, and splitting by word
+   count alone can leave one line much longer than the other when a
+   few long words land on the same side. */
+function wrapQuestion(text) {
+  const words = text.split(' ');
+  let bestSplit = 1, bestDiff = Infinity, acc = 0;
+  for (let i = 0; i < words.length - 1; i++) {
+    acc += words[i].length + 1;
+    const diff = Math.abs(acc - text.length / 2);
+    if (diff < bestDiff) { bestDiff = diff; bestSplit = i + 1; }
+  }
+  return [words.slice(0, bestSplit).join(' '), words.slice(bestSplit).join(' ')];
+}
+
+/* Exclusive prefix sum of question counts, so each topic's connector
+   lines get a unique, stable pf-line--N (drives the staggered draw-in). */
+const PF_LINE_OFFSET = PF_TOPICS.reduce((acc, topic) => {
+  const prev = acc.length ? acc[acc.length - 1] : 0;
+  acc.push(prev + topic.questions.length);
+  return acc;
+}, []);
+
 /* ---- Scope data for the Real Market section -------------- */
 const SCOPE_DATA = {
-  worldwide: {
-    loc: 'World · global',
-    verdict: "Against the global giants you're invisible   and that's fine. They're not who your buyers compare you to.",
-    comps: [
-      { nm: 'Adidas', v: 96 },
-      { nm: 'New Balance', v: 88 },
-      { nm: 'Puma', v: 82 },
-      { nm: 'ASICS', v: 75 },
-      { nm: 'Under Armour', v: 68 },
-      { nm: 'Nike (you)', v: 9, me: true },
-    ],
-  },
-  country: {
-    loc: 'France · national',
-    verdict: 'At national level you rank <b>#6</b>   behind names you rarely meet in a real deal.',
-    comps: [
-      { nm: 'Adidas', v: 91 },
-      { nm: 'New Balance', v: 78 },
-      { nm: 'Salomon', v: 70 },
-      { nm: 'Hoka', v: 62 },
-      { nm: 'On Running', v: 55 },
-      { nm: 'Nike (you)', v: 44, me: true },
-    ],
-  },
-  region: {
-    loc: 'Auvergne-Rhône-Alpes',
-    verdict: 'Across your region you climb to <b>#3</b>   the global names fade out.',
-    comps: [
-      { nm: 'Salomon', v: 79 },
-      { nm: 'Hoka', v: 71 },
-      { nm: 'Nike (you)', v: 66, me: true },
-      { nm: 'On Running', v: 54 },
-    ],
-  },
-  local: {
-    loc: 'Lyon · 69001–69009',
-    verdict: "In your real market you're <b>#2</b>   a fight you can actually win.",
-    comps: [
-      { nm: 'Salomon', v: 72 },
-      { nm: 'Nike (you)', v: 68, me: true },
-      { nm: 'On Running', v: 51 },
-    ],
-  },
+  worldwide: { loc: 'World · global' },
+  country:   { loc: 'France · national' },
+  region:    { loc: 'Auvergne-Rhône-Alpes' },
+  local:     { loc: 'Lyon · 69001–69009' },
 };
 
 const SCOPES = ['worldwide', 'country', 'region', 'local'];
@@ -108,7 +127,6 @@ export default function VisibilityPage() {
   }, []);
 
   const scopeData = SCOPE_DATA[scope];
-  const sortedComps = [...scopeData.comps].sort((a, b) => b.v - a.v);
 
   return (
     <div className="vis-page">
@@ -179,111 +197,103 @@ export default function VisibilityPage() {
               </>); })()}
             </div>
             <div className="pf-wrap reveal">
-              <svg viewBox="0 0 980 920" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Real buyer questions mapped to topic coverage" className="pf-svg">
-                <defs>
-                  <linearGradient id="bar-pd" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="50%" stopColor="#1e3893"/>
-                    <stop offset="50%" stopColor="#0d7963"/>
-                  </linearGradient>
-                  <linearGradient id="bar-db" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="50%" stopColor="#d98a2b"/>
-                    <stop offset="50%" stopColor="#7c5cbf"/>
-                  </linearGradient>
-                </defs>
-                <text x="36" y="46" className="pf-collbl">REAL BUYER QUESTIONS</text>
-                <text x="950" y="46" textAnchor="end" className="pf-collbl">PERCENTAGE COVERAGE</text>
-                {/* Connector curves   Performance (Slots 0–1) */}
-                <path className="pf-line pf-line--1"  d="M 440 96  C 526 96  524 129 610 129" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--2"  d="M 440 174 C 526 174 524 129 610 129" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Connector curves   Performance+Durability (Slots 2–3, each connects to both) */}
-                <path className="pf-line pf-line--3"  d="M 440 252 C 526 252 524 129 610 129" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--4"  d="M 440 252 C 526 252 524 408 610 408" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--5"  d="M 440 330 C 526 330 524 129 610 129" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--6"  d="M 440 330 C 526 330 524 408 610 408" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Connector curves   Durability (Slot 4) */}
-                <path className="pf-line pf-line--7"  d="M 440 408 C 526 408 524 408 610 408" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Connector curves   Design (Slots 5–8) */}
-                <path className="pf-line pf-line--8"  d="M 440 486 C 526 486 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--9"  d="M 440 564 C 526 564 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--10" d="M 440 642 C 526 642 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--11" d="M 440 720 C 526 720 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Connector curves   Design+Brand awareness (Slot 9, connects to both) */}
-                <path className="pf-line pf-line--12" d="M 440 798 C 526 798 524 603 610 603" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                <path className="pf-line pf-line--13" d="M 440 798 C 526 798 524 798 610 798" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Question boxes   Slot 0: Performance */}
-                <rect x="30" y="70"  width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="80"  width="5" height="32" rx="2.5" fill="#1e3893"/>
-                <text x="54" y="101" className="pf-q">"Which lightweight gym shoes maximise stability?"</text>
-                {/* Slot 1: Performance */}
-                <rect x="30" y="148" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="158" width="5" height="32" rx="2.5" fill="#1e3893"/>
-                <text x="54" y="179" className="pf-q">"Professional advice on cross-training shoe selection?"</text>
-                {/* Slot 2: Performance + Durability */}
-                <rect x="30" y="226" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="236" width="5" height="32" rx="2.5" fill="url(#bar-pd)"/>
-                <text x="54" y="257" className="pf-q">"Top-rated waterproof hiking boots for mountain terrain?"</text>
-                {/* Slot 3: Performance + Durability */}
-                <rect x="30" y="304" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="314" width="5" height="32" rx="2.5" fill="url(#bar-pd)"/>
-                <text x="54" y="335" className="pf-q">"High-performance running shoes for trail conditions?"</text>
-                {/* Slot 4: Durability */}
-                <rect x="30" y="382" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="392" width="5" height="32" rx="2.5" fill="#0d7963"/>
-                <text x="54" y="413" className="pf-q">"Best durable footwear for long-distance walking?"</text>
-                {/* Slot 5: Design */}
-                <rect x="30" y="460" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="470" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="491" className="pf-q">"Where to find affordable, reliable everyday sneakers?"</text>
-                {/* Slot 6: Design */}
-                <rect x="30" y="538" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="548" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="569" className="pf-q">"Top footwear collections for a minimalist aesthetic?"</text>
-                {/* Slot 7: Design */}
-                <rect x="30" y="616" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="626" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="647" className="pf-q">"Best value-for-money sneakers for daily commuting?"</text>
-                {/* Slot 8: Design */}
-                <rect x="30" y="694" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="704" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="725" className="pf-q">"Most comfortable everyday shoes with arch support?"</text>
-                {/* Slot 9: Design + Brand awareness */}
-                <rect x="30" y="772" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="782" width="5" height="32" rx="2.5" fill="url(#bar-db)"/>
-                <text x="54" y="803" className="pf-q">"Which trendy sneakers lead casual street style?"</text>
-                {/* Topic boxes   Performance */}
-                <rect x="610" y="70"  width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
-                <rect x="610" y="84"  width="5" height="90" rx="2.5" fill="#1e3893"/>
-                <text x="636" y="118" className="pf-tname">Performance</text>
-                <text x="636" y="144" className="pf-tsub">from 22 prompts</text>
-                <text x="926" y="124" textAnchor="end" className="pf-tscore">67%</text>
-                <rect x="856" y="140" width="70" height="24" rx="12" fill="#fbf2e3"/>
-                <text x="891" y="156" textAnchor="middle" className="pf-tlab" fill="#d98a2b">On par</text>
-                {/* Durability */}
-                <rect x="610" y="349" width="340" height="118" rx="13" fill="#e6f7f3" stroke="#0d7963" strokeOpacity=".30"/>
-                <rect x="610" y="363" width="5" height="90" rx="2.5" fill="#0d7963"/>
-                <text x="636" y="397" className="pf-tname">Durability</text>
-                <text x="636" y="423" className="pf-tsub">from 15 prompts</text>
-                <text x="926" y="403" textAnchor="end" className="pf-tscore">13%</text>
-                <rect x="856" y="419" width="70" height="24" rx="12" fill="#fbeae8"/>
-                <text x="891" y="435" textAnchor="middle" className="pf-tlab" fill="#d2453a">Behind</text>
-                {/* Design */}
-                <rect x="610" y="544" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
-                <rect x="610" y="558" width="5" height="90" rx="2.5" fill="#d98a2b"/>
-                <text x="636" y="592" className="pf-tname">Design</text>
-                <text x="636" y="618" className="pf-tsub">from 20 prompts</text>
-                <text x="926" y="598" textAnchor="end" className="pf-tscore">42%</text>
-                <rect x="856" y="614" width="70" height="24" rx="12" fill="#fbeae8"/>
-                <text x="891" y="630" textAnchor="middle" className="pf-tlab" fill="#d2453a">Behind</text>
-                {/* Brand awareness */}
-                <rect x="610" y="739" width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
-                <rect x="610" y="753" width="5" height="90" rx="2.5" fill="#7c5cbf"/>
-                <text x="636" y="787" className="pf-tname">Brand awareness</text>
-                <text x="636" y="813" className="pf-tsub">from 18 prompts</text>
-                <text x="926" y="793" textAnchor="end" className="pf-tscore">75%</text>
-                <rect x="856" y="809" width="70" height="24" rx="12" fill="#fbf2e3"/>
-                <text x="891" y="825" textAnchor="middle" className="pf-tlab" fill="#d98a2b">On par</text>
+              <svg viewBox="0 0 1120 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topic coverage cards with the real buyer questions rolling up into each one" className="pf-svg">
+                {(() => {
+                  const CARD_W = 252, CARD_X = [0, 290, 580, 870], CARD_Y = 24, CARD_H = 180, CARD_BOTTOM = CARD_Y + CARD_H;
+                  const PILL_W = 222, PILL_H = 56, ROW_TOP0 = CARD_BOTTOM + 60, ROW_PITCH = 76;
+                  const CONTENT_H = 103, CY = CARD_Y + (CARD_H - CONTENT_H) / 2 - 19;
+                  const topicIndexByName = Object.fromEntries(PF_TOPICS.map((tp, idx) => [tp.name, idx]));
+
+                  /* Cards + lines render first, then every node circle
+                     renders in a second pass on top — a cross-topic line
+                     can start exactly at another card's anchor point, and
+                     if that other card's group comes earlier in the DOM
+                     its node would otherwise get painted over. */
+                  const bodies = PF_TOPICS.map((topic, t) => {
+                    const cardX = CARD_X[t];
+                    const anchorX = cardX + CARD_W / 2;
+                    const lineBase = t === 0 ? 0 : PF_LINE_OFFSET[t - 1];
+                    const slug = topic.name.toLowerCase().replace(/\s+/g, '-');
+                    return (
+                      <g key={topic.name} className={`pf-topic pf-topic--${slug}`}>
+                        <rect className="pf-card" x={cardX} y={CARD_Y} width={CARD_W} height={CARD_H}/>
+                        <text x={cardX + 24} y={CY + 30} className="pf-tname">{topic.name}</text>
+                        <text x={cardX + 24} y={CY + 53} className="pf-tsub">from {topic.prompts} prompts</text>
+                        <line className="pf-divider" x1={cardX + 24} y1={CY + 72} x2={cardX + CARD_W - 24} y2={CY + 72}/>
+                        <text x={cardX + 24} y={CY + 122} className="pf-tscore">{topic.pct} %</text>
+                        <rect className="pf-status" x={cardX + CARD_W - 94} y={CY + 98} width="70" height="24"/>
+                        <text x={cardX + CARD_W - 59} y={CY + 114} textAnchor="middle" className="pf-tlab">{topic.status}</text>
+                        {topic.questions.map((q, i) => {
+                          const lineNum = lineBase + i + 1;
+                          const rowTop = ROW_TOP0 + i * ROW_PITCH;
+                          const centerY = rowTop + PILL_H / 2;
+                          const railX = cardX + 6;
+                          const railTurnY = CARD_BOTTOM + 30;
+                          const pillX = cardX + 20;
+                          const [line1, line2] = wrapQuestion(q.text);
+                          const sharedIdx = q.sharedWith ? topicIndexByName[q.sharedWith] : undefined;
+                          const sharedAnchorX = sharedIdx !== undefined ? CARD_X[sharedIdx] + CARD_W / 2 : null;
+                          const sharedBusY = CARD_BOTTOM + 14;
+                          const sharedSlug = q.sharedWith ? q.sharedWith.toLowerCase().replace(/\s+/g, '-') : null;
+                          return (
+                            <g key={i}>
+                              <path
+                                className={`pf-line pf-line--${lineNum}`}
+                                d={`M ${anchorX} ${CARD_BOTTOM} L ${anchorX} ${railTurnY} L ${railX} ${railTurnY} L ${railX} ${centerY} L ${pillX} ${centerY}`}
+                              />
+                              {sharedAnchorX !== null && (
+                                <path
+                                  className={`pf-line pf-cross-line pf-line--${lineNum}`}
+                                  style={{ stroke: `var(--pf-color-${sharedSlug})` }}
+                                  d={`M ${sharedAnchorX} ${CARD_BOTTOM} L ${sharedAnchorX} ${sharedBusY} L ${pillX} ${sharedBusY} L ${pillX} ${centerY}`}
+                                />
+                              )}
+                              <rect className="pf-pill" x={pillX} y={rowTop} width={PILL_W} height={PILL_H}/>
+                              <text x={pillX + 22} y={rowTop + 24} className="pf-q">"{line1}</text>
+                              <text x={pillX + 22} y={rowTop + 41} className="pf-q">{line2}"</text>
+                            </g>
+                          );
+                        })}
+                      </g>
+                    );
+                  });
+
+                  const nodes = PF_TOPICS.map((topic, t) => {
+                    const cardX = CARD_X[t];
+                    const anchorX = cardX + CARD_W / 2;
+                    const slug = topic.name.toLowerCase().replace(/\s+/g, '-');
+                    return (
+                      <g key={`${topic.name}-nodes`} className={`pf-topic--${slug}`}>
+                        <circle className="pf-node" cx={anchorX} cy={CARD_BOTTOM}/>
+                        {topic.questions.map((q, i) => {
+                          const rowTop = ROW_TOP0 + i * ROW_PITCH;
+                          const centerY = rowTop + PILL_H / 2;
+                          const pillX = cardX + 20;
+                          const sharedSlug = q.sharedWith ? q.sharedWith.toLowerCase().replace(/\s+/g, '-') : null;
+                          return sharedSlug ? (
+                            <g key={i}>
+                              <circle cx={pillX} cy={centerY} r="5" fill="#fff"/>
+                              <path
+                                d={`M ${pillX} ${centerY - 5} A 5 5 0 0 0 ${pillX} ${centerY + 5}`}
+                                fill="none" stroke="var(--pf-accent)" strokeWidth="3"
+                              />
+                              <path
+                                d={`M ${pillX} ${centerY - 5} A 5 5 0 0 1 ${pillX} ${centerY + 5}`}
+                                fill="none" stroke={`var(--pf-color-${sharedSlug})`} strokeWidth="3"
+                              />
+                            </g>
+                          ) : (
+                            <circle key={i} className="pf-node" cx={pillX} cy={centerY}/>
+                          );
+                        })}
+                      </g>
+                    );
+                  });
+
+                  return <>{bodies}{nodes}</>;
+                })()}
               </svg>
-              <div className="pf-foot" dangerouslySetInnerHTML={{ __html: t('visibility.productFocus.foot') }} />
+              {/* <div className="pf-foot" dangerouslySetInnerHTML={{ __html: t('visibility.productFocus.foot') }} /> */}
             </div>
           </div>
         </section>
@@ -335,7 +345,6 @@ export default function VisibilityPage() {
                 </div>
                 <div className="mkt-card">
                   <div className="mkt-bar">
-                    <span className="d" /><span className="d" /><span className="d" />
                     <span className={`loc${fading ? ' fading' : ''}`}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
@@ -346,19 +355,6 @@ export default function VisibilityPage() {
                   <div className="mkt-map">
                     <GlobeMap scope={scope} />
                   </div>
-                  <div className={`mkt-rivals${fading ? ' fading' : ''}`}>
-                    <div
-                      className="mkt-verdict"
-                      dangerouslySetInnerHTML={{ __html: scopeData.verdict }}
-                    />
-                    {sortedComps.map((r) => (
-                      <div key={r.nm} className={`rival${r.me ? ' me' : ''}`}>
-                        <span className="nm">{r.nm}</span>
-                        <span className="track"><i style={{ width: `${r.v}%` }} /></span>
-                        <span className="v">{r.v}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
@@ -368,10 +364,12 @@ export default function VisibilityPage() {
         {/* ======================== 03 · SOURCE INTELLIGENCE ======================== */}
         <section id="sources">
           <div className="wrap">
-            <div className="adv-head mid reveal">
+            <div className="adv-head si-head reveal">
               {(() => { const si = t('visibility.sourceIntel'); return (<>
-                <div className="eyebrow">{si.eyebrow}</div>
-                <h2>{si.h2Pre} <span className="hl">{si.h2Hl}</span></h2>
+                <div className="si-head-copy">
+                  <div className="eyebrow">{si.eyebrow}</div>
+                  <h2>{si.h2Pre} <span className="hl">{si.h2Hl}</span></h2>
+                </div>
                 <p className="lead">{si.lead}</p>
               </>); })()}
             </div>
@@ -390,7 +388,7 @@ export default function VisibilityPage() {
             </div>
 
             {/* Stats row */}
-            <div className="src-stats reveal">
+            {/* <div className="src-stats reveal">
               {t('visibility.sourceIntel.stats').map(s => (
                 <div key={s.n} className="src-stat">
                   <div className="src-stat-n">{s.n}</div>
@@ -398,97 +396,76 @@ export default function VisibilityPage() {
                   <div className="src-stat-sub">{s.sub}</div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Source intelligence report */}
             <div className="src-intel reveal">
               <div className="src-intel-hdr">
                 <div>
                   <div className="src-intel-title">{t('visibility.sourceIntel.title')}</div>
-                  <div className="src-intel-meta">Running Shoes · nike.com · Updated 2 hours ago</div>
+                  <div className="src-intel-meta">{t('visibility.sourceIntel.meta')}</div>
                 </div>
-                <span className="src-intel-engines">{t('visibility.sourceIntel.aiEngines')}</span>
               </div>
 
               <div className="src-intel-scroll">
               <div className="sit-head">
                 {(() => { const h = t('visibility.sourceIntel.tableHeaders'); return (<>
-                  <div className="sit-c">{h.source}</div>
+                  <div className="sit-c">{h.url}</div>
+                  <div className="sit-c">{h.domain}</div>
+                  <div className="sit-c">{h.category}</div>
                   <div className="sit-c">{h.authority}</div>
-                  <div className="sit-c">{h.citations}</div>
-                  <div className="sit-c">{h.brandAttr}</div>
-                  <div className="sit-c">{h.visibility}</div>
-                  <div className="sit-c">{h.opportunity}</div>
+                  <div className="sit-c">{h.comp}</div>
+                  <div className="sit-c">{h.link}</div>
                 </>); })()}
               </div>
 
               {[
-                { fav: 'R', bg: '#cc2200', domain: 'runrepeat.com',      typeKey: 'review', da: 72, cite: 14, attr: 'both', vis: 38, opp: 'strengthen' },
-                { fav: 'T', bg: '#e8321c', domain: 'tomsguide.com',      typeKey: 'media',  da: 91, cite: 7,  attr: 'both', vis: 45, opp: 'expand'     },
-                { fav: 'O', bg: '#5b8c5a', domain: 'outdoorgearlab.com', typeKey: 'review', da: 68, cite: 7,  attr: 'comp', vis: 0,  opp: 'featured'   },
-                { fav: 'W', bg: '#1c1c1c', domain: 'whowhatwear.com',    typeKey: 'media',  da: 82, cite: 6,  attr: 'both', vis: 41, opp: 'strengthen' },
-                { fav: 'R', bg: '#ff4500', domain: 'reddit.com',         typeKey: 'social', da: 95, cite: 6,  attr: 'both', vis: 31, opp: 'strengthen' },
-                { fav: 'R', bg: '#111111', domain: 'rei.com',            typeKey: 'retail', da: 84, cite: 5,  attr: 'you',  vis: 74, opp: 'expand'     },
-                { fav: 'A', bg: '#111111', domain: 'adidas.com',         typeKey: 'retail', da: 92, cite: 4,  attr: 'comp', vis: 0,  opp: 'pitch'      },
-                { fav: 'C', bg: '#cc0000', domain: 'cnn.com',            typeKey: 'news',   da: 95, cite: 4,  attr: 'both', vis: 35, opp: 'strengthen' },
-                { fav: 'R', bg: '#e64c00', domain: 'runnersworld.com',   typeKey: 'media',  da: 84, cite: 4,  attr: 'both', vis: 48, opp: 'expand'     },
-                { fav: 'N', bg: '#e8243c', domain: 'newbalance.com',     typeKey: 'retail', da: 88, cite: 4,  attr: 'comp', vis: 0,  opp: 'pitch'      },
+                { url: 'https://www.youtube.com/watch?v=y9UN1T-olHY', fav: '▶', bg: '#FF0000', domain: 'youtube.com', typeKey: 'social',      authority: 'high', comp: false, link: 'broken' },
+                { url: 'https://www.yahoo.com/lifestyle/articles/editors-trainers-tested-dozens-cross-152500350.html?utm_source=chatgpt.com', fav: '!', bg: '#6001D2', domain: 'yahoo.com', typeKey: 'news', authority: 'high', comp: false, link: false },
+                { url: 'https://www.whowhatwear.com/fashion/shopping/best-sneakers-under-250-spring-2026', fav: 'W', bg: '#111111', domain: 'whowhatwear.com', typeKey: 'news', authority: 'high', comp: false, link: 'broken' },
+                { url: 'https://www.walmart.com/ip/No-Boundaries-Womens-Classic-Lace-Up-Casual-Sneakers-Wide-Width-Available/407365252?utm_source=openai', fav: '✦', bg: '#FFC220', domain: 'walmart.com', typeKey: 'marketplace', authority: 'high', comp: false, link: false },
+                { url: 'https://www.vogue.com/article/the-row-shoes?utm_source=chatgpt.com', fav: 'V', bg: '#000000', domain: 'vogue.com', typeKey: 'media', authority: 'high', comp: 'warning', link: false },
               ].map(row => {
-                const attrLabels = t('visibility.sourceIntel.attrLabels');
-                const oppLabels  = t('visibility.sourceIntel.oppLabels');
                 const sourceTypes = t('visibility.sourceIntel.sourceTypes');
-                const visColor = row.attr === 'comp' ? '#ef4444' : row.attr === 'you' ? '#16a34a' : '#111827';
                 return (
                   <div key={row.domain} className="sit-row">
+                    <div className="sit-c sit-c--url">
+                      <a className="sit-url-link" href={row.url} target="_blank" rel="noopener noreferrer">
+                        {row.url}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                      </a>
+                    </div>
                     <div className="sit-c sit-c--source">
                       <span className="fav" style={{ background: row.bg }}>{row.fav}</span>
-                      <div>
-                        <div className="sit-domain">{row.domain}</div>
-                        <div className="sit-type">{sourceTypes[row.typeKey]}</div>
-                      </div>
-                    </div>
-                    <div className="sit-c sit-c--da">
-                      <span className="sit-da-n">{row.da}</span>
-                      <span className="sit-bar-track"><i style={{ width: `${row.da}%`, background: '#2563eb' }} /></span>
-                    </div>
-                    <div className="sit-c sit-c--cite">
-                      <div className="sit-cite-n">{row.cite}</div>
-                      <div className="sit-cite-sub">{t('visibility.sourceIntel.thisMonth')}</div>
+                      <div className="sit-domain">{row.domain}</div>
                     </div>
                     <div className="sit-c">
-                      <span className={`sit-attr sit-attr--${row.attr}`}>{attrLabels[row.attr]}</span>
+                      <span className="sit-cat">{sourceTypes[row.typeKey]}</span>
                     </div>
-                    <div className="sit-c sit-c--vis">
-                      {row.vis !== null ? (
-                        <>
-                          <span className="sit-vis-n" style={{ color: visColor }}>{row.vis}%</span>
-                          <span className="sit-bar-track"><i style={{ width: `${Math.max(row.vis, 4)}%`, background: visColor }} /></span>
-                        </>
+                    <div className="sit-c">
+                      <span className={`sit-authority sit-authority--${row.authority}`}>
+                        {row.authority.charAt(0).toUpperCase() + row.authority.slice(1)}
+                      </span>
+                    </div>
+                    <div className="sit-c">
+                      {row.comp === 'warning' ? (
+                        <svg className="sit-icon sit-icon--warn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                       ) : (
-                        <span className="sit-vis-dash"> </span>
+                        <span className="sit-dash">–</span>
                       )}
                     </div>
                     <div className="sit-c">
-                      <span className={`sit-opp sit-opp--${row.opp}`}>
-                        {row.opp === 'featured'   && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>}
-                        {row.opp === 'strengthen' && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>}
-                        {row.opp === 'expand'     && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>}
-                        {row.opp === 'pitch'      && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>}
-                        {oppLabels[row.opp]}
-                      </span>
+                      {row.link === 'broken' ? (
+                        <svg className="sit-icon sit-icon--broken" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                      ) : (
+                        <span className="sit-dash">–</span>
+                      )}
                     </div>
                   </div>
                 );
               })}
               </div>{/* /src-intel-scroll */}
 
-              <div className="src-intel-legend">
-                {t('visibility.sourceIntel.legend').map((l, i) => {
-                  const cls = ['you','comp','both'][i];
-                  const lbl = Object.values(t('visibility.sourceIntel.attrLabels'))[i < 2 ? i === 0 ? 2 : 0 : 1];
-                  return <span key={i}><span className={`sil-chip sil-chip--${cls}`}>{lbl}</span> {l}</span>;
-                })}
-              </div>
               <div className="src-intel-count">{t('visibility.sourceIntel.showingOf')}</div>
             </div>
           </div>

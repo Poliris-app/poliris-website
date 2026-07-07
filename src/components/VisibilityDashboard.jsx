@@ -231,14 +231,14 @@ export default function VisibilityDashboard() {
             </div>
           </div>
 
-          <div className="hdash__v2-nora">
+          {/* <div className="hdash__v2-nora">
             <span className="hdash__v2-nora-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.8" strokeLinecap="round" width="12" height="12">
                 <path d="M12 5v14M5 12h14"/>
               </svg>
             </span>
             <p><b>Nora:</b> {vd.noraNote}</p>
-          </div>
+          </div> */}
 
           <div className="hdash__v2-section-label">{vd.overTime}</div>
 

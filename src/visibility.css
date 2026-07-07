@@ -154,6 +154,98 @@
 
 
 /* ============================================================
+   01 · PRODUCT FOCUS
+   Topic-coverage cards + the real buyer questions rolling up
+   into each one (rendered from PF_TOPICS in VisibilityPage.jsx).
+   Colors/sizes here are the easy knobs — geometry (x/y/width/
+   height, path routing) is computed in the JSX since it depends
+   on layout math, but every visual style lives here.
+   ============================================================ */
+.vis-page .pf-wrap {
+  /* margin-top: 46px;
+  background: #fff;
+  border: 1px solid var(--border); */
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 25px;
+}
+.vis-page .pf-svg  {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Global aliases so a cross-topic link (a question that rolls up
+     into two axes) can be colored for whichever axis it's pointing
+     at, not just the one it's physically nested under. */
+  --pf-color-performance: #1e3893;
+  --pf-color-durability: #1B806C;
+  --pf-color-design: #d98a2b;
+  --pf-color-brand-awareness: #7c5cbf;
+}
+.vis-page .pf-foot { text-align: center; font-size: 13.5px; color: var(--fg-5); margin-top: 16px; line-height: 1.55; }
+.vis-page .pf-foot b { color: var(--fg-2); font-weight: 600; }
+
+/* ---- Per-topic accent colors — edit these to restyle a topic.
+   Sets CSS variables that the card/node/line/status pill below
+   all read from, so one edit recolors the whole column. ------ */
+.vis-page .pf-topic--performance     { --pf-accent: var(--pf-color-performance); --pf-card-bg: #eef1fb; }
+.vis-page .pf-topic--durability      { --pf-accent: var(--pf-color-durability); --pf-card-bg: #E1ECEA; }
+.vis-page .pf-topic--design          { --pf-accent: var(--pf-color-design); --pf-card-bg: #fbf3e6; }
+.vis-page .pf-topic--brand-awareness { --pf-accent: var(--pf-color-brand-awareness); --pf-card-bg: #f3eefb; }
+
+/* ---- Topic card ------------------------------------------- */
+.vis-page .pf-card    { rx: 7; fill: var(--pf-card-bg); }
+.vis-page .pf-divider { stroke: var(--pf-accent); stroke-opacity: .35; }
+.vis-page .pf-status  { rx: 12; fill: var(--pf-accent); }
+
+/* ---- Connector: node circles + elbow lines ----------------- */
+.vis-page .pf-node {
+  r: 5;
+  fill: #fff;
+  stroke: var(--pf-accent);
+  stroke-width: 3;
+}
+.vis-page .pf-line {
+  fill: none;
+  stroke: var(--pf-accent);
+  stroke-width: 0.5;
+  stroke-linecap: round;
+  /* Draw-in-on-scroll effect — see @keyframes pf-draw below */
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+}
+@keyframes pf-draw {
+  from { stroke-dashoffset: 400; }
+  to   { stroke-dashoffset: 0; }
+}
+.reveal.in .pf-line--1  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 0.25s forwards; }
+.reveal.in .pf-line--2  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 0.58s forwards; }
+.reveal.in .pf-line--3  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 0.91s forwards; }
+.reveal.in .pf-line--4  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 1.24s forwards; }
+.reveal.in .pf-line--5  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 1.57s forwards; }
+.reveal.in .pf-line--6  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 1.9s  forwards; }
+.reveal.in .pf-line--7  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 2.23s forwards; }
+.reveal.in .pf-line--8  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 2.56s forwards; }
+.reveal.in .pf-line--9  { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 2.89s forwards; }
+.reveal.in .pf-line--10 { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 3.22s forwards; }
+.reveal.in .pf-line--11 { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 3.55s forwards; }
+.reveal.in .pf-line--12 { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 3.88s forwards; }
+.reveal.in .pf-line--13 { animation: pf-draw 1.8s cubic-bezier(0.4,0,0.2,1) 4.21s forwards; }
+
+/* ---- Question pill ------------------------------------------ */
+.vis-page .pf-pill {
+  rx: 28;
+  fill: #ffffff;
+  filter: drop-shadow(10px 3px 16px rgba(212, 212, 212, 0.34));
+}
+
+/* ---- SVG text styles (applied via className on <text>) ------ */
+.vis-page .pf-q      { font-family: var(--font-body); font-size: 13.5px; fill: var(--fg-2); }
+.vis-page .pf-tname  { font-family: var(--font-display); font-size: 21px; font-weight: 800; fill: #0d111a; }
+.vis-page .pf-tsub   { font-family: var(--font-body); font-size: 14px; fill: var(--fg-5); }
+.vis-page .pf-tscore { font-family: var(--font-display); font-size: 28px; font-weight: 800; fill: #0d111a; }
+.vis-page .pf-tlab   { font-family: var(--font-display); font-size: 13px; font-weight: 500; fill: #fff; }
+
+/* ============================================================
    02 · REAL MARKET
    ============================================================ */
 .vis-page .mkt         { display: grid; grid-template-columns: minmax(270px, 420px) 1fr; gap: 46px; align-items: center; }
@@ -181,7 +273,7 @@
 .vis-page .mkt-card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl); box-shadow: var(--shadow-lg); overflow: hidden; }
 .vis-page .mkt-bar  { display: flex; align-items: center; gap: 7px; padding: 13px 18px; border-bottom: 1px solid var(--border); background: #fbfcfe; }
 .vis-page .mkt-bar .d { width: 11px; height: 11px; border-radius: 50%; background: #dcdfe8; }
-.vis-page .mkt-bar .loc { margin-left: 12px; font-family: var(--font-body); font-size: 12.5px; color: var(--fg-4); display: flex; align-items: center; gap: 7px; }
+.vis-page .mkt-bar .loc { font-family: var(--font-body); font-size: 12.5px; color: var(--fg-4); display: flex; align-items: center; gap: 7px; }
 .vis-page .mkt-bar .loc svg { width: 13px; height: 13px; color: var(--poliris-blue); }
 
 .vis-page .mkt-map     { position: relative; overflow: hidden; background: #020816; }
@@ -225,34 +317,32 @@
   paint-order: stroke; stroke: rgba(15,25,70,.55); stroke-width: 3px; stroke-linejoin: round;
 }
 
-.vis-page .mkt-rivals  { border-top: 1px solid var(--border); padding: 20px 24px; background: #fcfdff; transition: opacity 0.2s ease; }
-.vis-page .mkt-rivals.fading { opacity: 0; }
 .vis-page .mkt-bar .loc { transition: opacity 0.2s ease; }
 .vis-page .mkt-bar .loc.fading { opacity: 0; }
-.vis-page .mkt-verdict { 
-  font-family: var(--font-body); 
-  font-size: 14px; 
-  color: var(--fg-2); 
-  margin: 0 0 14px; 
-  line-height: 1.55;
-  text-align: left; 
-}
-.vis-page .mkt-verdict b { color: var(--poliris-blue); font-weight: 700; }
-.vis-page .rival        { display: flex; align-items: center; gap: 12px; font-size: 14px; padding: 6px 0; }
-.vis-page .rival .nm    { 
-  min-width: 150px; 
-  color: var(--fg-2);
-  text-align: left; 
-}
-.vis-page .rival.me .nm { color: var(--poliris-blue); font-weight: 700; }
-.vis-page .rival .track   { flex: 1; height: 7px; border-radius: var(--r-pill); background: var(--surface-2); overflow: hidden; }
-.vis-page .rival .track i { display: block; height: 100%; border-radius: var(--r-pill); background: var(--poliris-blue-300); transition: width var(--dur) var(--ease-out); }
-.vis-page .rival.me .track i { background: var(--poliris-blue); }
-.vis-page .rival .v   { width: 26px; text-align: right; font-family: var(--font-display); font-weight: 700; font-size: 12px; color: var(--fg-2); }
 
 /* ============================================================
    03 · SOURCE INTELLIGENCE
    ============================================================ */
+.vis-page .si-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+  max-width: none;
+  text-align: left;
+  margin: 0 auto 20px;
+}
+.vis-page .si-head-copy { flex: 1 1 auto; max-width: 560px; text-align: left; }
+.vis-page .si-head .lead {
+  flex: 0 0 340px;
+  max-width: 340px;
+  margin: 0;
+  padding-left: 32px;
+  border-left: 1px solid var(--border);
+  color: var(--fg-4);
+  text-align: left;
+}
+
 .vis-page .src-primer {
   display: grid;
   grid-template-columns: 1fr auto 1.2fr;
@@ -299,7 +389,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 20px 28px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   gap: 0;
 }
 .vis-page .src-pipeline-item {
@@ -436,17 +526,12 @@
   text-align: left; 
 }
 .vis-page .src-intel-meta  { font-size: 12.5px; color: var(--fg-4); }
-.vis-page .src-intel-engines {
-  font-family: var(--font-display); font-size: 11.5px; font-weight: 700;
-  padding: 5px 13px; border-radius: var(--r-pill);
-  background: #eff6ff; color: var(--poliris-blue); border: 1px solid #bfdbfe;
-}
 
 /* Table grid — 6 columns shared by header + rows */
 .vis-page .sit-head,
 .vis-page .sit-row {
   display: grid;
-  grid-template-columns: 2fr 0.9fr 0.9fr 1.3fr 1fr 1.2fr;
+  grid-template-columns: 2.6fr 1.1fr 0.9fr 0.8fr 0.6fr 0.6fr;
   column-gap: 20px;
   align-items: center;
   padding: 0 24px;
@@ -464,76 +549,42 @@
 .vis-page .sit-row:hover { background: #fafbff; }
 .vis-page .sit-c { display: flex; align-items: center; gap: 8px; }
 
-/* Source cell */
+/* Example URL cell */
+.vis-page .sit-c--url { align-items: flex-start; }
+.vis-page .sit-url-link {
+  display: inline-flex; align-items: flex-start; gap: 5px;
+  font-size: 12.5px; color: var(--poliris-blue);
+  text-decoration: underline; text-underline-offset: 2px;
+  word-break: break-all; line-height: 1.5;
+  text-align: left;
+}
+.vis-page .sit-url-link:hover { color: #1d4ed8; }
+.vis-page .sit-url-link svg { flex: 0 0 auto; margin-top: 3px; }
+
+/* Source/domain cell */
 .vis-page .sit-c--source { gap: 10px; }
 .vis-page .sit-domain { font-size: 13px; font-weight: 600; color: var(--fg-1); }
-.vis-page .sit-type   { 
-  font-size: 11px; 
-  color: var(--fg-5); 
-  margin-top: 1px;
-  text-align: left; 
+
+/* Category pill */
+.vis-page .sit-cat {
+  font-size: 11.5px; font-weight: 600;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  background: #e7f4ee; color: var(--positive);
+  white-space: nowrap;
 }
 
 /* Authority cell */
-.vis-page .sit-c--da { gap: 6px; }
-.vis-page .sit-da-n {
-  font-family: var(--font-display); font-weight: 700; font-size: 13.5px;
-  color: var(--fg-1); min-width: 22px;
-}
-.vis-page .sit-bar-track {
-  flex: 1; height: 3px; border-radius: 2px;
-  background: #e2e8f0; overflow: hidden; min-width: 30px; max-width: 52px;
-}
-.vis-page .sit-bar-track i { display: block; height: 100%; border-radius: 2px; }
+.vis-page .sit-authority { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+.vis-page .sit-authority--high   { color: var(--positive); }
+.vis-page .sit-authority--medium { color: var(--warning); }
+.vis-page .sit-authority--low    { color: var(--negative); }
 
-/* Citations cell */
-.vis-page .sit-c--cite { flex-direction: row; align-items: baseline; gap: 5px; }
-.vis-page .sit-cite-n   { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; color: var(--fg-1); }
-.vis-page .sit-cite-sub { font-size: 11px; color: var(--fg-5); white-space: nowrap; }
+/* Comp. / Link icon cells */
+.vis-page .sit-icon         { flex: 0 0 auto; }
+.vis-page .sit-icon--warn   { color: var(--warning); }
+.vis-page .sit-icon--broken { color: #f59e0b; }
+.vis-page .sit-dash         { color: var(--fg-5); }
 
-/* Brand attribution badges */
-.vis-page .sit-attr {
-  font-size: 11.5px; font-weight: 500;
-  padding: 4px 10px; border-radius: var(--r-pill);
-  white-space: nowrap;
-}
-.vis-page .sit-attr--comp { background: #fff7ed; color: #ea580c; }
-.vis-page .sit-attr--both { background: #f1f5f9; color: #475569; }
-.vis-page .sit-attr--you  { background: #f0fdf4; color: #16a34a; }
-.vis-page .sit-attr--none { background: #f8fafc; color: #94a3b8; }
-
-/* Visibility cell */
-.vis-page .sit-c--vis { flex-direction: row; align-items: center; gap: 6px; }
-.vis-page .sit-vis-n  { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
-.vis-page .sit-vis-dash { font-size: 16px; color: var(--fg-5); }
-
-/* Opportunity badges */
-.vis-page .sit-opp {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 12px; font-weight: 500;
-  padding: 5px 11px; border-radius: var(--r-pill);
-  background: #f1f5f9; color: var(--fg-2);
-  border: 1px solid var(--border); cursor: default;
-  white-space: nowrap;
-}
-.vis-page .sit-opp svg { width: 12px; height: 12px; flex: 0 0 auto; }
-
-/* Legend */
-.vis-page .src-intel-legend {
-  display: flex; flex-wrap: wrap; gap: 12px 24px;
-  padding: 14px 24px; border-top: 1px solid var(--border);
-  font-size: 12px; color: var(--fg-4);
-  background: #fafbfc;
-  text-align: left;
-}
-.vis-page .sil-chip {
-  display: inline-block; padding: 2px 8px;
-  border-radius: var(--r-pill); font-size: 11px; font-weight: 600;
-  margin-right: 2px;
-}
-.vis-page .sil-chip--you  { background: #f0fdf4; color: #16a34a; }
-.vis-page .sil-chip--comp { background: #fff7ed; color: #ea580c; }
-.vis-page .sil-chip--both { background: #f1f5f9; color: #475569; }
 .vis-page .src-intel-count {
   padding: 11px 24px; border-top: 1px solid var(--border);
   font-size: 12.5px; color: var(--fg-4);
@@ -595,7 +646,10 @@
 .vis-page .chat-msg--user { flex-direction: row; }
 .vis-page .chat-msg--bot  { flex-direction: row; }
 .vis-page .chat-msg .bub  { margin-bottom: 0; max-width: 82%; }
-.vis-page .chat-msg .bub.user { margin-left: auto; }
+.vis-page .chat-msg .bub.user { 
+  margin-left: auto;
+  font-size: 11px;
+}
 
 /* plan v2 — nested inside chat */
 .vis-page .plan--v2 {
@@ -613,7 +667,7 @@
   letter-spacing: .06em; text-transform: uppercase; color: var(--poliris-blue);
 }
 .vis-page .plan--v2 .plan-item { padding: 9px; }
-.vis-page .plan--v2 .plan-item .t { font-size: 12px; }
+.vis-page .plan--v2 .plan-item .t { font-size: 10px; }
 .vis-page .plan--v2 .impact { font-size: 10px; padding: 3px 9px; }
 
 /* action buttons */
@@ -623,14 +677,17 @@
   border-top: 1px solid var(--border);
 }
 .vis-page .chat-btn {
-  font-family: var(--font-body); font-size: 12.5px; font-weight: 500;
+  font-family: var(--font-body); font-size: 10px; font-weight: 500;
   border: 1px solid var(--border); border-radius: var(--r-pill);
   background: #fff; color: var(--fg-2);
   padding: 6px 14px; cursor: pointer; transition: background .15s, border-color .15s;
 }
 .vis-page .chat-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
 .vis-page .chat-btn--primary {
-  background: var(--poliris-blue); color: #fff; border-color: var(--poliris-blue);
+  background: var(--poliris-blue); 
+  color: #fff; 
+  border-color: var(--poliris-blue);
+  font-size: 11px;
 }
 .vis-page .chat-btn--primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
 
@@ -687,7 +744,6 @@
 }
 @media(max-width: 760px) {
   .vis-page .tour         { grid-template-columns: 1fr; }
-  .vis-page .pf-wrap      { padding: 18px 14px; }
   .vis-page .app-canvas   { padding: 18px 16px; }
   .vis-page .src-primer   { grid-template-columns: 1fr; }
   .vis-page .src-arrow    { transform: rotate(90deg); padding: 14px 0; }
@@ -707,6 +763,15 @@
 @media (max-width: 768px) {
   /* Globe: smaller on tablet */
   .globe-wrap { height: 300px; }
+  /* Product Focus: the diagram is wide (4 columns) — scroll it
+     horizontally at a fixed readable size instead of shrinking
+     the text to illegibility. */
+  .vis-page .pf-wrap { padding: 18px 14px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .vis-page .pf-svg  { width: 1120px; max-width: none; }
+  /* Source Intelligence header: stack the two columns */
+  .vis-page .si-head { flex-direction: column; align-items: flex-start; gap: 16px; max-width: 100%; }
+  .vis-page .si-head-copy { max-width: 100%; }
+  .vis-page .si-head .lead { flex: 0 0 auto; max-width: 100%; padding-left: 0; border-left: none; }
   /* Source pipeline: horizontally scrollable */
   .vis-page .src-pipeline {
     overflow-x: auto;
@@ -727,7 +792,7 @@
   .vis-page .src-intel-scroll { overflow-x: auto; scrollbar-width: none; }
   .vis-page .src-intel-scroll::-webkit-scrollbar { display: none; }
   .vis-page .sit-head,
-  .vis-page .sit-row   { min-width: 860px; }
+  .vis-page .sit-row   { min-width: 1100px; }
 
   /* Source intel header: stack on narrow */
   .vis-page .src-intel-hdr { flex-direction: column; align-items: flex-start; gap: 10px; }

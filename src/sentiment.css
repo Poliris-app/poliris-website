@@ -193,25 +193,30 @@
 }
 .vis-page .slens .ic {
   width: 32px; height: 32px; flex-shrink: 0;
-  border-radius: 9px;
+  border-radius: 50px;
   background: rgba(30,56,147,.08);
   display: flex; align-items: center; justify-content: center;
 }
 .vis-page .slens .ic svg { width: 15px; height: 15px; color: var(--poliris-blue); }
 .vis-page .slens-hdr-text { flex: 1; min-width: 0; }
 .vis-page .slens h3 { 
-  font-size: 14px; 
-  font-weight: 700; 
-  margin: 0 0 3px; 
-  color: var(--fg-1); 
-  line-height: 1.2;
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Manrope;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 36px;
   text-align: left;
 }
 .vis-page .slens-hdr-text p { 
-  font-size: 11px; 
-  color: var(--fg-5); 
-  line-height: 1.4; 
-  margin: 0;
+  color: #000;
+  font-family: Manrope;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
   text-align: left;
 }
 .vis-page .srow { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
@@ -361,8 +366,7 @@
 }
 .vis-page .st-foot {
   font-size: 12.5px;
-  color: var(--fg-5);
-  text-align: center;
+  text-align: left;
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--border);
@@ -641,107 +645,42 @@
 }
 
 /* ============================================================
-   01 PER-AXIS DIAGRAM — HTML layout with bezier curves
+   01 PER-AXIS DIAGRAM — legend header above the shared comb-card
+   diagram (see visibility.css for the .pf-card/.pf-line/.pf-pill
+   geometry/shadow styles the diagram itself reuses — same stroke
+   width as the Visibility page's Product Focus diagram). Per-tier
+   --pf-accent/--pf-card-bg are set inline in SentimentPage.jsx
+   (TIER_ACCENT), since each axis's color depends on its sentiment
+   tier, not a fixed identity. Question text is a touch smaller
+   here than on Visibility's pills — these rows also reserve a
+   sentiment marker on the right, which the wider Visibility text
+   doesn't need to make room for.
    ============================================================ */
-
-/* pf-wrap has no padding on sentiment page — handled inside */
-.sent-page .pf-wrap { padding: 0; overflow: hidden; }
+.sent-page .pf-q { font-size: 12.5px; }
+.sent-page .pf-divider { stroke-opacity: 1; }
 
 .vis-page .pf-legend-hdr {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 4px 12px;
+  gap: 8px 12px;
   font-size: 13px;
   color: var(--fg-4);
-  padding: 14px 24px 16px;
+  padding: 0 0 16px;
+  margin-bottom: 16px;
   border-bottom: 1px solid var(--border);
 }
-.vis-page .pf-legend-hdr .tg {
-  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+.vis-page .pf-legend-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-display); font-weight: 700; font-size: 12.5px;
+  padding: 6px 14px;
+  border-radius: 99px;
 }
-.vis-page .pf-legend-hdr .tg.pos { color: var(--positive); }
-.vis-page .pf-legend-hdr .tg.neu { color: #ca8a04; }
-.vis-page .pf-legend-hdr .tg.neg { color: var(--negative); }
-.vis-page .tg-stacked {
-  display: inline-flex; flex-direction: column;
-  align-items: center; line-height: 0.85;
-  font-size: 8px; gap: 0; vertical-align: middle;
-  margin-right: 2px;
-}
-.vis-page .pf-diagram { padding: 20px 24px 0; }
-.vis-page .pf-col-hdrs {
-  display: grid;
-  grid-template-columns: 1fr 80px 1fr;
-  margin-bottom: 14px;
-}
-.vis-page .pf-col-hdrs .lbl {
-  font-family: var(--font-display);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--fg-6);
-}
-.vis-page .pf-col-hdrs .r { text-align: right; }
-.vis-page .pf-row {
-  display: grid;
-  grid-template-columns: 1fr 80px 1fr;
-  height: 116px;
-  margin-bottom: 12px;
-}
-.vis-page .pf-group {
-  border-left: 3px solid;
-  padding: 0 12px 0 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-}
-.vis-page .pf-prompt {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 12.5px;
-  color: var(--fg-2);
-  font-family: var(--font-body);
-  font-weight: 500;
-  gap: 10px;
-}
-.vis-page .pf-prompt .tri { flex: 0 0 auto; font-size: 11px; }
-.vis-page .pf-curve-col { position: relative; }
-.vis-page .pf-curve-col svg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  overflow: visible;
-}
-.vis-page .pf-axis-card {
-  border-radius: var(--r-xl);
-  border: 1.5px solid transparent;
-  padding: 14px 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.vis-page .pf-axis-card h3 {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 800;
-  margin: 0 0 2px;
-  color: var(--fg-1);
-}
-.vis-page .pf-axis-card .from-ct {
-  font-size: 11.5px;
-  color: var(--fg-5);
-  margin: 0 0 9px;
-}
-.sent-page .pf-foot { padding: 14px 24px 22px; }
+.vis-page .pf-legend-badge svg { width: 13px; height: 13px; flex: 0 0 auto; }
+.vis-page .pf-legend-badge--pos { background: #e7f4ee; color: var(--positive); }
+.vis-page .pf-legend-badge--neu { background: #fbf2e3; color: var(--warning); }
+.vis-page .pf-legend-badge--neg { background: #fbeae8; color: var(--negative); }
 
 /* ============================================================
    SENTIMENT TOUR — 5-column override

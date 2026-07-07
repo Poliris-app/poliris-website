@@ -42,6 +42,73 @@ const TIER_STYLE = {
   'Weak':        { color: '#f97316', bg: '#fff7ed', bar: '#f97316' },
   'Very Weak':   { color: '#ef4444', bg: '#fef2f2', bar: '#ef4444' },
 };
+
+/* Per-tier accent used by the per-axis diagram's card/line/pill —
+   tied to sentiment strength, not per-axis identity. */
+const TIER_ACCENT = {
+  'Very Strong': { accent: '#1B806C',       cardBg: '#E1ECEA' },
+  'Strong':      { accent: 'var(--positive)', cardBg: '#e7f4ee' },
+  'Moderate':    { accent: 'var(--warning)',  cardBg: '#fbf2e3' },
+  'Weak':        { accent: 'var(--negative)', cardBg: '#fbeae8' },
+  'Very Weak':   { accent: 'var(--negative)', cardBg: '#fbeae8' },
+};
+
+/* ── Per-axis sentiment diagram: axis cards + the real buyer
+   questions rolling up into each one (same layout as Visibility's
+   Product Focus diagram) ───────────────────────────────────── */
+const PF_AXES = [
+  {
+    name: 'Performance', prompts: 22, tier: 'Strong',
+    questions: [
+      { text: 'Lightweight gym shoes for maximum stability?', sentiment: 'pos' },
+      { text: 'Best cross-training shoes for intense workouts?', sentiment: 'pos' },
+    ],
+  },
+  {
+    name: 'Durability', prompts: 15, tier: 'Weak',
+    questions: [
+      // Also rolls up into Performance — a trail shoe is judged on both.
+      { text: 'High-performance running shoes for trails?', sentiment: 'neutral', sharedWith: 'Performance' },
+    ],
+  },
+  {
+    name: 'Design', prompts: 20, tier: 'Strong',
+    questions: [
+      { text: 'Best affordable and reliable everyday sneakers?', sentiment: 'pos' },
+      { text: 'Best value-for-money sneakers for commuting?', sentiment: 'neutral' },
+      { text: 'Most comfortable shoes with arch support?', sentiment: 'pos' },
+    ],
+  },
+  {
+    name: 'Brand awareness', prompts: 18, tier: 'Very Strong',
+    questions: [
+      // Also rolls up into Design — style is a design signal too.
+      { text: 'Which trendy sneakers dominate street style?', sentiment: 'pos', sharedWith: 'Design' },
+    ],
+  },
+];
+
+/* Splits a question into two lines balanced by character length (not
+   word count), at the word boundary closest to the halfway point. */
+function wrapQuestion(text) {
+  const words = text.split(' ');
+  let bestSplit = 1, bestDiff = Infinity, acc = 0;
+  for (let i = 0; i < words.length - 1; i++) {
+    acc += words[i].length + 1;
+    const diff = Math.abs(acc - text.length / 2);
+    if (diff < bestDiff) { bestDiff = diff; bestSplit = i + 1; }
+  }
+  return [words.slice(0, bestSplit).join(' '), words.slice(bestSplit).join(' ')];
+}
+
+/* Exclusive prefix sum of question counts, so each axis's connector
+   lines get a unique, stable pf-line--N (drives the staggered draw-in). */
+const PF_LINE_OFFSET = PF_AXES.reduce((acc, axis) => {
+  const prev = acc.length ? acc[acc.length - 1] : 0;
+  acc.push(prev + axis.questions.length);
+  return acc;
+}, []);
+
 const SENT_AXES = [
   { id: 'brand-awareness', name: 'Brand awareness', score: 92, tier: 'Very Strong' },
   { id: 'performance',     name: 'Performance',     score: 76, tier: 'Strong' },
@@ -477,125 +544,134 @@ export default function SentimentPage() {
               {/* legend header */}
               <div className="pf-legend-hdr">
                 <span>{t('sentiment.perAxis.legendLabel')}</span>
-                <span className="tg pos">▲ {t('sentiment.perAxis.legendItems')[0]}</span>
-                <span className="tg neu"><span className="tg-stacked"><span>▲</span><span>▼</span></span> {t('sentiment.perAxis.legendItems')[1]}</span>
-                <span className="tg neg">▼ {t('sentiment.perAxis.legendItems')[2]}</span>
-                <span>  {t('sentiment.perAxis.legendSuffix')}</span>
+                <span className="pf-legend-badge pf-legend-badge--pos">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l9 16H3z"/></svg>
+                  {t('sentiment.perAxis.legendItems')[0]}
+                </span>
+                <span className="pf-legend-badge pf-legend-badge--neu">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3l6 8H6z"/><path d="M12 21l6-8H6z"/>
+                  </svg>
+                  {t('sentiment.perAxis.legendItems')[1]}
+                </span>
+                <span className="pf-legend-badge pf-legend-badge--neg">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20l9-16H3z"/></svg>
+                  {t('sentiment.perAxis.legendItems')[2]}
+                </span>
+                <span>{t('sentiment.perAxis.legendSuffix')}</span>
               </div>
 
-              <svg viewBox="0 0 980 670" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI answers mapped to sentiment per axis" className="pf-svg">
-                <defs>
-                  {/* Shared Q1: Brand awareness (purple) + Design (orange) */}
-                  <linearGradient id="bar-ba-d" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="50%" stopColor="#7c5cbf"/>
-                    <stop offset="50%" stopColor="#d98a2b"/>
-                  </linearGradient>
-                  {/* Shared Q5: Durability (teal) + Performance (navy) */}
-                  <linearGradient id="bar-dp" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="50%" stopColor="#0d7963"/>
-                    <stop offset="50%" stopColor="#1e3893"/>
-                  </linearGradient>
-                </defs>
+              <svg viewBox="0 0 1120 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topic coverage cards with the real buyer questions rolling up into each sentiment axis" className="pf-svg">
+                {(() => {
+                  const CARD_W = 252, CARD_X = [0, 290, 580, 870], CARD_Y = 24, CARD_H = 180, CARD_BOTTOM = CARD_Y + CARD_H;
+                  const PILL_W = 222, PILL_H = 56, ROW_TOP0 = CARD_BOTTOM + 60, ROW_PITCH = 76;
+                  const CONTENT_H = 103, CY = CARD_Y + (CARD_H - CONTENT_H) / 2 - 19;
+                  const axisIndexByName = Object.fromEntries(PF_AXES.map((ax, idx) => [ax.name, idx]));
 
-                {/* Column headers */}
-                <text x="36" y="46" className="pf-collbl">{t('sentiment.perAxis.hundredsLabel')}</text>
-                <text x="950" y="46" textAnchor="end" className="pf-collbl">{t('sentiment.perAxis.onePerAxis')}</text>
+                  /* Cards + lines render first, then every node circle
+                     renders in a second pass on top — a cross-axis line
+                     can start exactly at another card's anchor point, and
+                     if that other card's group comes earlier in the DOM
+                     its node would otherwise get painted over. */
+                  const bodies = PF_AXES.map((axis, ai) => {
+                    const cardX = CARD_X[ai];
+                    const anchorX = cardX + CARD_W / 2;
+                    const lineBase = ai === 0 ? 0 : PF_LINE_OFFSET[ai - 1];
+                    const ta = TIER_ACCENT[axis.tier];
+                    return (
+                      <g key={axis.name} className="pf-topic" style={{ '--pf-accent': ta.accent, '--pf-card-bg': ta.cardBg }}>
+                        <rect className="pf-card" x={cardX} y={CARD_Y} width={CARD_W} height={CARD_H}/>
+                        <text x={cardX + 24} y={CY + 30} className="pf-tname">{axis.name}</text>
+                        <text x={cardX + 24} y={CY + 53} className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', axis.prompts)}</text>
+                        <line className="pf-divider" x1={cardX + 24} y1={CY + 72} x2={cardX + CARD_W - 24} y2={CY + 72}/>
+                        <rect className="pf-status" x={cardX + 24} y={CY + 98} width="100" height="30" style={{ fill: '#fff' }}/>
+                        <text x={cardX + 74} y={CY + 116} textAnchor="middle" className="pf-tlab" style={{ fill: ta.accent }}>{md.tiers[axis.tier]}</text>
+                        {axis.questions.map((q, i) => {
+                          const lineNum = lineBase + i + 1;
+                          const rowTop = ROW_TOP0 + i * ROW_PITCH;
+                          const centerY = rowTop + PILL_H / 2;
+                          const railX = cardX + 6;
+                          const railTurnY = CARD_BOTTOM + 30;
+                          const pillX = cardX + 20;
+                          const [line1, line2] = wrapQuestion(q.text);
+                          const sharedIdx = q.sharedWith ? axisIndexByName[q.sharedWith] : undefined;
+                          const sharedAnchorX = sharedIdx !== undefined ? CARD_X[sharedIdx] + CARD_W / 2 : null;
+                          const sharedBusY = CARD_BOTTOM + 14;
+                          const sharedAccent = q.sharedWith ? TIER_ACCENT[PF_AXES[sharedIdx].tier].accent : null;
+                          const markX = pillX + PILL_W - 16;
+                          return (
+                            <g key={i}>
+                              <path
+                                className={`pf-line pf-line--${lineNum}`}
+                                d={`M ${anchorX} ${CARD_BOTTOM} L ${anchorX} ${railTurnY} L ${railX} ${railTurnY} L ${railX} ${centerY} L ${pillX} ${centerY}`}
+                              />
+                              {sharedAnchorX !== null && (
+                                <path
+                                  className={`pf-line pf-cross-line pf-line--${lineNum}`}
+                                  style={{ stroke: sharedAccent }}
+                                  d={`M ${sharedAnchorX} ${CARD_BOTTOM} L ${sharedAnchorX} ${sharedBusY} L ${pillX} ${sharedBusY} L ${pillX} ${centerY}`}
+                                />
+                              )}
+                              <rect className="pf-pill" x={pillX} y={rowTop} width={PILL_W} height={PILL_H}/>
+                              <text x={pillX + 22} y={rowTop + 24} className="pf-q">"{line1}</text>
+                              <text x={pillX + 22} y={rowTop + 41} className="pf-q">{line2}"</text>
+                              {q.sentiment === 'pos' && (
+                                <text x={markX} y={centerY + 4} textAnchor="middle" fontSize="11" style={{ fill: 'var(--positive)' }}>▲</text>
+                              )}
+                              {q.sentiment === 'neg' && (
+                                <text x={markX} y={centerY + 4} textAnchor="middle" fontSize="11" style={{ fill: 'var(--negative)' }}>▼</text>
+                              )}
+                              {q.sentiment === 'neutral' && (
+                                <>
+                                  <text x={markX} y={centerY - 2} textAnchor="middle" fontSize="7.5" style={{ fill: 'var(--warning)' }}>▲</text>
+                                  <text x={markX} y={centerY + 9} textAnchor="middle" fontSize="7.5" style={{ fill: 'var(--warning)' }}>▼</text>
+                                </>
+                              )}
+                            </g>
+                          );
+                        })}
+                      </g>
+                    );
+                  });
 
-                {/* Q1 → Brand awareness */}
-                <path className="pf-line pf-line--1" d="M 440 96  C 526 96  524 129 610 129" fill="none" stroke="#7c5cbf" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q1 → Design (shared) */}
-                <path className="pf-line pf-line--2" d="M 440 96  C 526 96  524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q2 → Design */}
-                <path className="pf-line pf-line--3" d="M 440 174 C 526 174 524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q3 → Design */}
-                <path className="pf-line pf-line--4" d="M 440 252 C 526 252 524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q4 → Design */}
-                <path className="pf-line pf-line--5" d="M 440 330 C 526 330 524 259 610 259" fill="none" stroke="#d98a2b" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q5 → Durability (shared) */}
-                <path className="pf-line pf-line--6" d="M 440 408 C 526 408 524 439 610 439" fill="none" stroke="#0d7963" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q5 → Performance (shared) */}
-                <path className="pf-line pf-line--7" d="M 440 408 C 526 408 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q6 → Performance */}
-                <path className="pf-line pf-line--8" d="M 440 486 C 526 486 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
-                {/* Q7 → Performance */}
-                <path className="pf-line pf-line--9" d="M 440 564 C 526 564 524 569 610 569" fill="none" stroke="#1e3893" strokeWidth="2.4" strokeOpacity=".8" strokeLinecap="round"/>
+                  const nodes = PF_AXES.map((axis, ai) => {
+                    const cardX = CARD_X[ai];
+                    const anchorX = cardX + CARD_W / 2;
+                    const ta = TIER_ACCENT[axis.tier];
+                    return (
+                      <g key={`${axis.name}-nodes`} style={{ '--pf-accent': ta.accent }}>
+                        <circle className="pf-node" cx={anchorX} cy={CARD_BOTTOM}/>
+                        {axis.questions.map((q, i) => {
+                          const rowTop = ROW_TOP0 + i * ROW_PITCH;
+                          const centerY = rowTop + PILL_H / 2;
+                          const pillX = cardX + 20;
+                          const sharedIdx = q.sharedWith ? axisIndexByName[q.sharedWith] : undefined;
+                          const sharedAccent = sharedIdx !== undefined ? TIER_ACCENT[PF_AXES[sharedIdx].tier].accent : null;
+                          return sharedAccent ? (
+                            <g key={i}>
+                              <circle cx={pillX} cy={centerY} r="5" fill="#fff"/>
+                              <path
+                                d={`M ${pillX} ${centerY - 5} A 5 5 0 0 0 ${pillX} ${centerY + 5}`}
+                                fill="none" stroke="var(--pf-accent)" strokeWidth="3"
+                              />
+                              <path
+                                d={`M ${pillX} ${centerY - 5} A 5 5 0 0 1 ${pillX} ${centerY + 5}`}
+                                fill="none" stroke={sharedAccent} strokeWidth="3"
+                              />
+                            </g>
+                          ) : (
+                            <circle key={i} className="pf-node" cx={pillX} cy={centerY}/>
+                          );
+                        })}
+                      </g>
+                    );
+                  });
 
-                {/* Q1: Brand awareness + Design (shared   gradient accent bar) */}
-                <rect x="30" y="70"  width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="80"  width="5" height="32" rx="2.5" fill="url(#bar-ba-d)"/>
-                <text x="54" y="101" className="pf-q">"Which trendy sneakers dominate street style?"</text>
-                <rect x="412" y="80" width="26" height="30" fill="#fff"/>
-                <text x="428" y="101" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
-                {/* Q2: Design */}
-                <rect x="30" y="148" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="158" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="179" className="pf-q">"Best affordable and reliable everyday sneakers?"</text>
-                <rect x="412" y="158" width="26" height="30" fill="#fff"/>
-                <text x="428" y="179" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
-                {/* Q3: Design */}
-                <rect x="30" y="226" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="236" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="257" className="pf-q">"Best value-for-money sneakers for commuting?"</text>
-                <rect x="412" y="236" width="26" height="30" fill="#fff"/>
-                <text x="428" y="250" textAnchor="end" fontSize="7.5" fill="#ca8a04">▲</text>
-                <text x="428" y="259" textAnchor="end" fontSize="7.5" fill="#ca8a04">▼</text>
-                {/* Q4: Design */}
-                <rect x="30" y="304" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="314" width="5" height="32" rx="2.5" fill="#d98a2b"/>
-                <text x="54" y="335" className="pf-q">"Most comfortable shoes with arch support?"</text>
-                <rect x="412" y="314" width="26" height="30" fill="#fff"/>
-                <text x="428" y="335" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
-                {/* Q5: Durability + Performance (shared   gradient accent bar) */}
-                <rect x="30" y="382" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="392" width="5" height="32" rx="2.5" fill="url(#bar-dp)"/>
-                <text x="54" y="413" className="pf-q">"High-performance running shoes for trails?"</text>
-                <rect x="412" y="392" width="26" height="30" fill="#fff"/>
-                <text x="428" y="406" textAnchor="end" fontSize="7.5" fill="#ca8a04">▲</text>
-                <text x="428" y="415" textAnchor="end" fontSize="7.5" fill="#ca8a04">▼</text>
-                {/* Q6: Performance */}
-                <rect x="30" y="460" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="470" width="5" height="32" rx="2.5" fill="#1e3893"/>
-                <text x="54" y="491" className="pf-q">"Lightweight gym shoes for maximum stability?"</text>
-                <rect x="412" y="470" width="26" height="30" fill="#fff"/>
-                <text x="428" y="491" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
-                {/* Q7: Performance */}
-                <rect x="30" y="538" width="410" height="52" rx="10" fill="#ffffff" stroke="#e6e9f2"/>
-                <rect x="30" y="548" width="5" height="32" rx="2.5" fill="#1e3893"/>
-                <text x="54" y="569" className="pf-q">"Best cross-training shoes for intense workouts?"</text>
-                <rect x="412" y="548" width="26" height="30" fill="#fff"/>
-                <text x="428" y="569" textAnchor="end" fontSize="11" fill="#16a34a">▲</text>
-
-                {/* Axis card: Brand awareness (purple)   y=70, center=129 */}
-                <rect x="610" y="70"  width="340" height="118" rx="13" fill="#f3eefb" stroke="#7c5cbf" strokeOpacity=".30"/>
-                <rect x="610" y="84"  width="5" height="90" rx="2.5" fill="#7c5cbf"/>
-                <text x="636" y="118" className="pf-tname">Brand awareness</text>
-                <text x="636" y="144" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 18)}</text>
-                <rect x="836" y="140" width="94" height="24" rx="12" fill="#dcfce7"/>
-                <text x="883" y="156" textAnchor="middle" className="pf-tlab" fill="#16a34a">{md.tiers['Very Strong']}</text>
-                {/* Axis card: Design (orange)   y=200, center=259 */}
-                <rect x="610" y="200" width="340" height="118" rx="13" fill="#fbf3e6" stroke="#d98a2b" strokeOpacity=".30"/>
-                <rect x="610" y="214" width="5" height="90" rx="2.5" fill="#d98a2b"/>
-                <text x="636" y="248" className="pf-tname">Design</text>
-                <text x="636" y="274" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 20)}</text>
-                <rect x="856" y="270" width="70" height="24" rx="12" fill="#dcfce7"/>
-                <text x="891" y="286" textAnchor="middle" className="pf-tlab" fill="#16a34a">{md.tiers['Strong']}</text>
-                {/* Axis card: Durability (teal)   y=380, center=439 */}
-                <rect x="610" y="380" width="340" height="118" rx="13" fill="#e6f7f3" stroke="#0d7963" strokeOpacity=".30"/>
-                <rect x="610" y="394" width="5" height="90" rx="2.5" fill="#0d7963"/>
-                <text x="636" y="428" className="pf-tname">Durability</text>
-                <text x="636" y="454" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 15)}</text>
-                <rect x="856" y="450" width="70" height="24" rx="12" fill="#fee2e2"/>
-                <text x="891" y="466" textAnchor="middle" className="pf-tlab" fill="#dc2626">{md.tiers['Weak']}</text>
-                {/* Axis card: Performance (navy)   y=510, center=569 */}
-                <rect x="610" y="510" width="340" height="118" rx="13" fill="#eef1fb" stroke="#1e3893" strokeOpacity=".30"/>
-                <rect x="610" y="524" width="5" height="90" rx="2.5" fill="#1e3893"/>
-                <text x="636" y="558" className="pf-tname">Performance</text>
-                <text x="636" y="584" className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', 22)}</text>
-                <rect x="856" y="580" width="70" height="24" rx="12" fill="#dcfce7"/>
-                <text x="891" y="596" textAnchor="middle" className="pf-tlab" fill="#16a34a">{md.tiers['Strong']}</text>
+                  return <>{bodies}{nodes}</>;
+                })()}
               </svg>
 
-              <p className="pf-foot">{t('sentiment.perAxis.foot')}</p>
+              {/* <p className="pf-foot">{t('sentiment.perAxis.foot')}</p> */}
             </div>
           </div>
         </section>
@@ -617,7 +693,13 @@ export default function SentimentPage() {
                 <div className="slens-hdr">
                   <div className="ic">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+                      <circle cx="12" cy="5" r="2"/>
+                      <circle cx="12" cy="12" r="2"/>
+                      <circle cx="6" cy="19" r="2"/>
+                      <circle cx="18" cy="19" r="2"/>
+                      <line x1="12" y1="7" x2="12" y2="10"/>
+                      <line x1="10.6" y1="13.3" x2="7.4" y2="17.2"/>
+                      <line x1="13.4" y1="13.3" x2="16.6" y2="17.2"/>
                     </svg>
                   </div>
                   <div className="slens-hdr-text">
@@ -789,6 +871,17 @@ export default function SentimentPage() {
                 ))}
               </div>
 
+              <div className="st-models">
+                <div className="st-model-tags">
+                  {t('sentiment.fullBreakdown.trend.legend').map((lbl, i) => (
+                    <span key={i} className={`st-mtag${i === 1 ? ' st-mtag--hi' : ''}`}>
+                      <span className="st-mdot" style={{ background: i === 0 ? '#16a34a' : '#2563eb' }}/>{lbl}
+                    </span>
+                  ))}
+                </div>
+                <span className="st-mon-note">{t('sentiment.fullBreakdown.trend.monNote')}</span>
+              </div>
+
               <div className="st-chart-wrap">
                 <svg viewBox="0 0 830 270" className="st-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -875,17 +968,6 @@ export default function SentimentPage() {
                   <rect x="770" y="157" width="45" height="17" rx="8.5" fill="rgb(255, 247, 237)"/>
                   <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Weak']}</text>
                 </svg>
-              </div>
-
-              <div className="st-models">
-                <div className="st-model-tags">
-                  {t('sentiment.fullBreakdown.trend.legend').map((lbl, i) => (
-                    <span key={i} className={`st-mtag${i === 1 ? ' st-mtag--hi' : ''}`}>
-                      <span className="st-mdot" style={{ background: i === 0 ? '#16a34a' : '#2563eb' }}/>{lbl}
-                    </span>
-                  ))}
-                </div>
-                <span className="st-mon-note">{t('sentiment.fullBreakdown.trend.monNote')}</span>
               </div>
 
               <div className="st-foot" dangerouslySetInnerHTML={{ __html: t('sentiment.fullBreakdown.trend.foot') }} />
