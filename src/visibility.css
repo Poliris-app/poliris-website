@@ -603,91 +603,91 @@
 /* chat header */
 .vis-page .chat-hdr-v2 {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 17px 16px; border-bottom: 1px solid var(--border);
+  padding: 13px 0px; border-bottom: 1px solid var(--border);
 }
-.vis-page .chat-hdr-left  { display: flex; align-items: center; gap: 10px; }
-.vis-page .chat-hdr-right { display: flex; align-items: center; gap: 8px; }
+.vis-page .chat-hdr-left  { display: flex; align-items: center; gap: 8px; }
+.vis-page .chat-hdr-right { display: flex; align-items: center; gap: 6px; }
 .vis-page .chat-hdr-info  { display: flex; flex-direction: column; gap: 2px; }
-.vis-page .chat-hdr-name  { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; color: var(--fg-1); line-height: 1; }
-.vis-page .chat-hdr-sub   { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--fg-5); }
-.vis-page .chat-hdr-date  { 
-  font-size: 11px; 
-  color: var(--fg-5); 
-  padding: 10px;
+.vis-page .chat-hdr-name  { font-family: var(--font-display); font-weight: 700; font-size: 12px; color: var(--fg-1); line-height: 1; }
+.vis-page .chat-hdr-sub   { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--fg-5); }
+.vis-page .chat-hdr-date  {
+  font-size: 9.5px;
+  color: var(--fg-5);
+  padding: 8px;
   border-radius: var(--r-pill);
   background: #f1f5f9;
 }
 .vis-page .chat-online-dot {
-  width: 7px; height: 7px; border-radius: 50%; background: #16a34a; flex: 0 0 auto;
+  width: 6px; height: 6px; border-radius: 50%; background: #16a34a; flex: 0 0 auto;
 }
 
 /* avatars */
 .vis-page .av--nora-v2 {
-  width: 30px; height: 30px; border-radius: var(--r-pill);
+  width: 26px; height: 26px; border-radius: var(--r-pill);
   background: linear-gradient(135deg, #2a4bd0, #1a317f);
   display: flex; align-items: center; justify-content: center;
   color: #fff; flex: 0 0 auto;
 }
 .vis-page .av--j {
-  width: 30px; height: 30px; border-radius: var(--r-pill);
+  width: 26px; height: 26px; border-radius: var(--r-pill);
   background: #64748b;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-weight: 800; color: #fff; font-size: 13px;
+  font-family: var(--font-display); font-weight: 800; color: #fff; font-size: 11px;
   flex: 0 0 auto;
 }
-.vis-page .av--sm { width: 24px; height: 24px; font-size: 10px; }
+.vis-page .av--sm { width: 21px; height: 21px; font-size: 9px; }
 
 /* messages */
-.vis-page .chat-msgs { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-.vis-page .chat-msg  { 
-  display: flex; 
-  gap: 7px; 
+.vis-page .chat-msgs { padding: 12px 13px; display: flex; flex-direction: column; gap: 8px; }
+.vis-page .chat-msg  {
+  display: flex;
+  gap: 6px;
 }
 .vis-page .chat-msg--user { flex-direction: row; }
 .vis-page .chat-msg--bot  { flex-direction: row; }
 .vis-page .chat-msg .bub  { margin-bottom: 0; max-width: 82%; }
-.vis-page .chat-msg .bub.user { 
+.vis-page .chat-msg .bub.user {
   margin-left: auto;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 /* plan v2 — nested inside chat */
 .vis-page .plan--v2 {
-  margin: 0 16px 14px;
+  margin: 0 13px 12px;
   background: #f8faff;
   border: 1px solid #dbeafe;
   border-radius: var(--r-md);
-  padding: 14px;
+  padding: 12px;
   box-shadow: none;
 }
 .vis-page .plan-h--v2 {
-  display: flex; align-items: center; gap: 7px;
-  margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #dbeafe;
-  font-family: var(--font-display); font-size: 10.5px; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 9px; padding-bottom: 9px; border-bottom: 1px solid #dbeafe;
+  font-family: var(--font-display); font-size: 9.5px; font-weight: 700;
   letter-spacing: .06em; text-transform: uppercase; color: var(--poliris-blue);
 }
-.vis-page .plan--v2 .plan-item { padding: 9px; }
-.vis-page .plan--v2 .plan-item .t { font-size: 10px; }
-.vis-page .plan--v2 .impact { font-size: 10px; padding: 3px 9px; }
+.vis-page .plan--v2 .plan-item { padding: 7px; }
+.vis-page .plan--v2 .plan-item .t { font-size: 9px; }
+.vis-page .plan--v2 .impact { font-size: 9px; padding: 3px 8px; }
 
 /* action buttons */
 .vis-page .chat-btns {
-  display: flex; flex-wrap: wrap; gap: 7px;
-  padding: 12px 16px 16px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 10px 13px 13px;
   border-top: 1px solid var(--border);
 }
 .vis-page .chat-btn {
-  font-family: var(--font-body); font-size: 10px; font-weight: 500;
+  font-family: var(--font-body); font-size: 9px; font-weight: 500;
   border: 1px solid var(--border); border-radius: var(--r-pill);
   background: #fff; color: var(--fg-2);
-  padding: 6px 14px; cursor: pointer; transition: background .15s, border-color .15s;
+  padding: 5px 12px; cursor: pointer; transition: background .15s, border-color .15s;
 }
 .vis-page .chat-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
 .vis-page .chat-btn--primary {
-  background: var(--poliris-blue); 
-  color: #fff; 
+  background: var(--poliris-blue);
+  color: #fff;
   border-color: var(--poliris-blue);
-  font-size: 11px;
+  font-size: 10px;
 }
 .vis-page .chat-btn--primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
 

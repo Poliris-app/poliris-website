@@ -25,9 +25,10 @@ const SCOPE_FOCUS = {
 };
 
 const SCOPE_MARKERS = {
-  country: [{ lon: 2.21,  lat: 46.23, label: 'France'                }],
-  region:  [{ lon: 4.39,  lat: 45.44, label: 'Auvergne-Rhône-Alpes' }],
-  local:   [{ lon: 4.84,  lat: 45.76, label: 'Lyon'                  }],
+  worldwide: [{ lon: 121.77, lat: 12.88, label: 'Philippines'         }],
+  country:   [{ lon: 2.21,   lat: 46.23, label: 'France'               }],
+  region:    [{ lon: 4.39,   lat: 45.44, label: 'Auvergne-Rhône-Alpes' }],
+  local:     [{ lon: 4.84,   lat: 45.76, label: 'Lyon'                 }],
 };
 
 function drawMarker(ctx, proj, viewCenter, m, t) {
@@ -72,7 +73,7 @@ function drawMarker(ctx, proj, viewCenter, m, t) {
   ctx.fillText(label, tx, ty);
 }
 
-export default function GlobeMap({ scope }) {
+export default function GlobeMap({ scope, onRotationComplete }) {
   const wrapRef    = useRef(null);
   const canvasRef  = useRef(null);
   const lambdaRef  = useRef(0);
@@ -83,6 +84,10 @@ export default function GlobeMap({ scope }) {
   const scopeRef   = useRef(scope);
   const isDragging = useRef(false);
   const lastXY     = useRef({ x: 0, y: 0 });
+  const rotationAccumRef = useRef(0);
+  const rotationFiredRef = useRef(false);
+  const onRotationCompleteRef = useRef(onRotationComplete);
+  onRotationCompleteRef.current = onRotationComplete;
 
   useEffect(() => {
     const focus = SCOPE_FOCUS[scope] || SCOPE_FOCUS.worldwide;
@@ -96,6 +101,10 @@ export default function GlobeMap({ scope }) {
       scale:  baseScaleRef.current * zoom,
     };
     scopeRef.current = scope;
+    if (scope === 'worldwide') {
+      rotationAccumRef.current = 0;
+      rotationFiredRef.current = false;
+    }
   }, [scope]);
 
   useEffect(() => {
@@ -231,6 +240,11 @@ export default function GlobeMap({ scope }) {
       if (s === 'worldwide' && !isDragging.current) {
         lambdaRef.current -= 0.16;
         tgt.lambda = lambdaRef.current;
+        rotationAccumRef.current += 0.16;
+        if (rotationAccumRef.current >= 360 && !rotationFiredRef.current) {
+          rotationFiredRef.current = true;
+          onRotationCompleteRef.current?.();
+        }
       } else {
         lambdaRef.current += (tgt.lambda - lambdaRef.current) * 0.04;
         phiRef.current    += (tgt.phi    - phiRef.current)    * 0.04;

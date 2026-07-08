@@ -4502,18 +4502,18 @@ button { cursor: pointer; border: none; background: none; }
 
 .vis-page .shot     { position: relative; }
 .vis-page .shot .tab {
-  position: absolute; top: -15px; right: 18px; z-index: 2;
-  font-family: var(--font-display); font-size: 10.5px; font-weight: 700;
+  position: absolute; top: -13px; right: 16px; z-index: 2;
+  font-family: var(--font-display); font-size: 9.5px; font-weight: 700;
   letter-spacing: .05em; text-transform: uppercase;
   color: #fff; background: var(--poliris-blue);
-  border-radius: var(--r-pill); padding: 6px 13px;
+  border-radius: var(--r-pill); padding: 5px 11px;
   box-shadow: var(--shadow-blue);
 }
 .vis-page .chat {
-  background: #fff; border-radius: 50px;
-  padding: 18px; box-shadow: 0 34px 70px -24px rgba(0,0,0,.55);
+  background: #fff; border-radius: 32px;
+  padding: 14px; box-shadow: 0 34px 70px -24px rgba(0,0,0,.55);
   text-align: left;
-  width: 430px;
+  width: 340px;
   margin-left: auto;
 }
 .vis-page .chat-id {
@@ -4528,17 +4528,17 @@ button { cursor: pointer; border: none; background: none; }
   color: var(--fg-5);
 }
 .vis-page .av {
-  width: 30px; height: 30px; border-radius: var(--r-pill);
+  width: 26px; height: 26px; border-radius: var(--r-pill);
   background: var(--poliris-blue);
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-weight: 800; color: #fff; font-size: 14px;
+  font-family: var(--font-display); font-weight: 800; color: #fff; font-size: 12.5px;
   flex: 0 0 auto;
 }
 .vis-page .bub {
   display: table;
-  border-radius: 14px 0px 14px 14px; background: #fff; color: var(--fg-2);
-  padding: 11px 14px;
-  font-size: 14px; margin-bottom: 10px;
+  border-radius: 12px 0px 12px 12px; background: #fff; color: var(--fg-2);
+  padding: 9px 12px;
+  font-size: 12.5px; margin-bottom: 8px;
   max-width: 70%;
   line-height: 1.5;
 }
@@ -4548,34 +4548,34 @@ button { cursor: pointer; border: none; background: none; }
   margin-left: auto;
   text-align: left;
 }
-.vis-page .bub.bot  { 
-  background: var(--surface-2); 
-  color: var(--fg-2); 
-  border-radius: 0px 14px 14px 14px;
-  font-size: 11px;
+.vis-page .bub.bot  {
+  background: var(--surface-2);
+  color: var(--fg-2);
+  border-radius: 0px 12px 12px 12px;
+  font-size: 10px;
 }
 .vis-page .bub.bot b { color: var(--poliris-blue); }
 
 .vis-page .plan {
-  margin-top: 16px; background: #fff; border-radius: var(--r-lg);
-  padding: 18px; box-shadow: 0 34px 70px -24px rgba(0,0,0,.55);
+  margin-top: 13px; background: #fff; border-radius: var(--r-lg);
+  padding: 14px; box-shadow: 0 34px 70px -24px rgba(0,0,0,.55);
 }
 .vis-page .plan-h {
-  display: flex; align-items: center; gap: 9px;
-  margin-bottom: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
-  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 11px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
   letter-spacing: .05em; text-transform: uppercase; color: var(--fg-5);
 }
-.vis-page .plan-items { 
-  display: flex; 
-  gap: 8px;
+.vis-page .plan-items {
+  display: flex;
+  gap: 7px;
   flex-direction: column;
 }
-.vis-page .plan-item { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-  padding: 12px; 
+.vis-page .plan-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
   /* border-bottom: 1px solid var(--border); */
   background: #fff;
   border-radius: var(--r-md);
@@ -4583,18 +4583,18 @@ button { cursor: pointer; border: none; background: none; }
 }
 .vis-page .plan-item:last-child { border-bottom: 0; }
 .vis-page .plan-item .rk {
-  width: 20px; height: 20px; border-radius: var(--r-pill);
+  width: 18px; height: 18px; border-radius: var(--r-pill);
   background: var(--poliris-blue); color: #fff;
-  font-family: var(--font-display); font-weight: 800; font-size: 11px;
+  font-family: var(--font-display); font-weight: 800; font-size: 10px;
   display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
 }
-.vis-page .plan-item .t { 
-  flex: 1; 
-  font-size: 14px; 
+.vis-page .plan-item .t {
+  flex: 1;
+  font-size: 12.5px;
   color: var(--fg-2);
-  text-align: left; 
+  text-align: left;
 }
-.vis-page .impact    { font-family: var(--font-display); font-size: 10.5px; font-weight: 700; padding: 4px 11px; border-radius: var(--r-pill); }
+.vis-page .impact    { font-family: var(--font-display); font-size: 9.5px; font-weight: 700; padding: 3px 10px; border-radius: var(--r-pill); }
 .vis-page .impact.hi { background: #e7f4ee; color: var(--positive); }
 .vis-page .impact.md { background: #fbf2e3; color: var(--warning); }
 
@@ -5021,7 +5021,7 @@ button { cursor: pointer; border: none; background: none; }
      let it shrink with the viewport instead of forcing a horizontal
      overflow that .vis-page's overflow-x: clip then silently chops off. */
   .vis-page .shot { width: 100%; min-width: 0; }
-  .vis-page .chat { width: 100%; max-width: 430px; margin: 0 auto; }
+  .vis-page .chat { width: 100%; max-width: 340px; margin: 0 auto; }
 }
 
 @media (max-width: 480px) {

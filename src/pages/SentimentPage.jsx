@@ -257,7 +257,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Moderate',    cls: 'pt-warn' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80, overallLabel: 'Strong',
+    overall: 78, overallLabel: 'Strong',
   },
   {
     name: 'Nike',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,
@@ -265,7 +265,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Weak',        cls: 'pt-neg' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80, overallLabel: 'Strong',
+    overall: 55, overallLabel: 'Moderate',
   },
   {
     name: 'On',       you: false, bd: '#16a34a', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
@@ -273,7 +273,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80, overallLabel: 'Strong',
+    overall: 78, overallLabel: 'Strong',
   },
   {
     name: 'Hoka',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,
@@ -281,7 +281,7 @@ const COMPETITORS = [
     design:    { label: 'Moderate',    cls: 'pt-warn' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80, overallLabel: 'Strong',
+    overall: 55, overallLabel: 'Moderate',
   },
   {
     name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
@@ -289,7 +289,7 @@ const COMPETITORS = [
     design:    { label: ' ',           cls: 'pt-neu' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 80, overallLabel: 'Strong',
+    overall: 92, overallLabel: 'Very Strong',
   },
   {
     name: 'New Balance',   you: false, bd: 'rgb(28, 229, 206)', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
@@ -297,7 +297,7 @@ const COMPETITORS = [
     design:    { label: 'Strong',           cls: 'pt-neu' },
     durability:{ label: 'Strong', cls: 'pt-pos' },
     performance:{ label: 'Moderate',     cls: 'pt-pos' },
-    overall: 80, overallLabel: 'Strong',
+    overall: 78, overallLabel: 'Strong',
   },
 ];
 
@@ -862,20 +862,37 @@ export default function SentimentPage() {
               </div>
 
               <div className="st-stats">
-                {t('sentiment.fullBreakdown.trend.stats').map((s, i) => (
-                  <div key={i} className="st-stat">
-                    <div className="st-stat-lbl">{s.lbl}</div>
-                    <div className="st-stat-val">{s.val}</div>
-                    <div className={`st-stat-sub${i === 0 ? ' st-sub-pos' : i === 2 ? ' st-sub-warn' : ''}`}>{s.sub}</div>
-                  </div>
-                ))}
+                {t('sentiment.fullBreakdown.trend.stats').map((s, i) => {
+                  const tone = i === 2 ? 'warn' : 'pos';
+                  const isNumeric = !isNaN(Number(s.val));
+                  return (
+                    <div key={i} className="st-stat">
+                      <div className="st-stat-top">
+                        <span className="st-stat-lbl2">{s.lbl}</span>
+                        {isNumeric ? (
+                          <span className={`st-stat-ring st-stat-ring--${tone}`}>{s.val}</span>
+                        ) : (
+                          <span className={`st-stat-pill st-stat-pill--${tone}`}>{s.val}</span>
+                        )}
+                      </div>
+                      <div className="st-stat-bottom">
+                        <span className={`st-stat-icon st-stat-icon--${tone}`}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+                            {i === 0 ? <path d="M12 19V5M5 12l7-7 7 7"/> : <path d="M5 12h14M12 5l7 7-7 7"/>}
+                          </svg>
+                        </span>
+                        <span className={`st-stat-sub${i === 0 ? ' st-sub-pos' : i === 2 ? ' st-sub-warn' : ''}`}>{s.sub}</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="st-models">
                 <div className="st-model-tags">
                   {t('sentiment.fullBreakdown.trend.legend').map((lbl, i) => (
                     <span key={i} className={`st-mtag${i === 1 ? ' st-mtag--hi' : ''}`}>
-                      <span className="st-mdot" style={{ background: i === 0 ? '#16a34a' : '#2563eb' }}/>{lbl}
+                      <span className="st-mdot" style={{ borderColor: i === 0 ? '#16a34a' : '#2563eb' }}/>{lbl}
                     </span>
                   ))}
                 </div>
@@ -937,13 +954,13 @@ export default function SentimentPage() {
                   {/* Slipping axis   smooth S-curve Strong → Moderate → Weak */}
                   <path
                     d="M110,68 C200,68 260,116 380,116 C480,116 560,164 686,164 C710,164 735,164 760,164"
-                    stroke="#2563eb" strokeWidth="1.5" strokeDasharray="6,3" strokeLinecap="round"
+                    stroke="#2563eb" strokeWidth="1.2" strokeDasharray="6,3" strokeLinecap="round"
                   />
 
                   {/* Overall sentiment   [75,100,75,100,75,75] Strong→VStrong→Strong→VStrong→Strong→Strong */}
                   <path
                     d="M110,68 C175,68 175,20 240,20 C305,20 305,68 370,68 C435,68 435,20 500,20 C565,20 565,68 630,68 C695,68 695,68 760,68"
-                    stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"
+                    stroke="#16a34a" strokeWidth="1.2" strokeLinecap="round"
                   />
 
                   {/* Flagged open-ring on slipping line */}
@@ -959,8 +976,8 @@ export default function SentimentPage() {
                   <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">{t('sentiment.fullBreakdown.trend.flaggedEarly')}</text>
 
                   {/* End dots   green ends at Strong (y=68), blue ends at Weak (y=164) */}
-                  <circle cx="760" cy="68"  r="5" fill="#16a34a" stroke="#fff" strokeWidth="2"/>
-                  <circle cx="760" cy="164" r="5" fill="#2563eb" stroke="#fff" strokeWidth="2"/>
+                  <circle cx="760" cy="68"  r="5" fill="#fff" stroke="#16a34a" strokeWidth="2.5"/>
+                  <circle cx="760" cy="164" r="5" fill="#fff" stroke="#2563eb" strokeWidth="2.5"/>
 
                   {/* End score badges */}
                   <rect x="770" y="61"  width="45" height="17" rx="8.5" fill="rgb(209, 250, 229)"/>
@@ -1015,9 +1032,9 @@ export default function SentimentPage() {
                   })}
                   <div className="cell cmpx-overall">
                     <div className="cmpx-bar-track">
-                      <div className="cmpx-bar-fill" style={{ width: `${c.overall}%` }} />
+                      <div className="cmpx-bar-fill" style={{ width: `${c.overall}%`, background: TIER_STYLE[c.overallLabel]?.bar }} />
                     </div>
-                    <span className="cmpx-overall-label">{md.tiers[c.overallLabel]}</span>
+                    <span className="cmpx-overall-label" style={{ color: TIER_STYLE[c.overallLabel]?.color }}>{md.tiers[c.overallLabel]}</span>
                   </div>
                 </div>
               ))}

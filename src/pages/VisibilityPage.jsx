@@ -83,7 +83,6 @@ export default function VisibilityPage() {
   const { t } = useLang();
   const [scope, setScope]   = useState('worldwide');
   const [fading, setFading] = useState(false);
-  const timerRef  = useRef(null);
   const fadeTimer = useRef(null);
 
   /* Fade out → swap scope → fade in */
@@ -96,18 +95,21 @@ export default function VisibilityPage() {
     }, 200);
   }, []);
 
-  /* Auto-cycle scope: Worldwide → Country → Region → Local → … */
-  const startCycle = useCallback(() => {
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      changeScope(prev => SCOPES[(SCOPES.indexOf(prev) + 1) % SCOPES.length]);
-    }, 3000);
+  const advanceScope = useCallback(() => {
+    changeScope(prev => SCOPES[(SCOPES.indexOf(prev) + 1) % SCOPES.length]);
   }, [changeScope]);
 
+  /* Auto-cycle scope: Worldwide → Country → Region → Local → …
+     Worldwide holds until the globe completes a full rotation
+     (GlobeMap calls onRotationComplete) so the pinned markers get
+     a chance to spin into view. Other scopes advance on a timer. */
   useEffect(() => {
-    startCycle();
-    return () => { clearInterval(timerRef.current); clearTimeout(fadeTimer.current); };
-  }, [startCycle]);
+    if (scope === 'worldwide') return;
+    const id = setInterval(advanceScope, 3000);
+    return () => clearInterval(id);
+  }, [scope, advanceScope]);
+
+  useEffect(() => () => clearTimeout(fadeTimer.current), []);
 
   /* Reveal-on-scroll: adds .in to every .reveal element */
   useEffect(() => {
@@ -336,7 +338,7 @@ export default function VisibilityPage() {
                       <button
                         key={s}
                         className={scope === s ? 'on' : ''}
-                        onClick={() => { changeScope(s); startCycle(); }}
+                        onClick={() => changeScope(s)}
                       >
                         {s.charAt(0).toUpperCase() + s.slice(1)}
                       </button>
@@ -353,7 +355,10 @@ export default function VisibilityPage() {
                     </span>
                   </div>
                   <div className="mkt-map">
-                    <GlobeMap scope={scope} />
+                    <GlobeMap
+                      scope={scope}
+                      onRotationComplete={scope === 'worldwide' ? advanceScope : undefined}
+                    />
                   </div>
                 </div>
               </div>
@@ -524,7 +529,7 @@ export default function VisibilityPage() {
                           </span>
                           <div className="chat-hdr-info">
                             <span className="chat-hdr-name">Nora</span>
-                            <span className="chat-hdr-sub"><span className="chat-online-dot" />Online · Nike · Pricing focus</span>
+                            <span className="chat-hdr-sub"><span className="chat-online-dot" />Online</span>
                           </div>
                         </div>
                         <div className="chat-hdr-right">
