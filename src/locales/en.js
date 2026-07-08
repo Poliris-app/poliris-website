@@ -651,14 +651,14 @@ export default {
     posts: [
       {
         id: 12, label: 'GEO PRIORITY', category: 'GEO',
-        title: 'The death of traditional search: why GEO is your new priority.',
+        title: 'The Death of Traditional Search: Why GEO Is Your New Priority.',
         desc: "Generative engine optimization is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority.",
         date: 'Jun 30, 2026',
         slug: 'death-of-traditional-search-geo-priority',
       },
       {
         id: 11, label: 'SEO → GEO', category: 'GEO',
-        title: "Why SEO is the cornerstone of GEO success.",
+        title: "Why SEO Is the Cornerstone of GEO Success.",
         desc: "GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here's why and what to fix first.",
         date: 'Jun 23, 2026',
         slug: 'why-seo-is-the-cornerstone-of-geo-success',

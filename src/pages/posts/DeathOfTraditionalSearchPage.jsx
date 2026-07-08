@@ -84,6 +84,9 @@ export default function DeathOfTraditionalSearchPage() {
       <Head>
         <title>The Death of Traditional Search: Why GEO Is Your New Priority | Poliris</title>
         <meta name="description" content="Generative engine optimization (GEO) is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority." />
+        <link rel="canonical" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
+        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
+        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
       </Head>
       <Navbar />
 
@@ -141,7 +144,7 @@ export default function DeathOfTraditionalSearchPage() {
             </div>
             <h1 className="bp-title">The Death of Traditional Search: Why Generative Engine Optimization (GEO) Is Your New Priority</h1>
             <p className="bp-deck">Generative engine optimization (GEO) is the practice of structuring content so AI answer engines extract and cite it directly. These engines include ChatGPT, Claude, and Gemini. Traditional SEO optimizes for ranked lists on Google. GEO targets the answer layer above the search results page.</p>
-            <p className="bp-deck">Search behavior has already changed. <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.gartner.com/en/newsroom/press-releases/2024-02-19-gartner-predicts-search-engine-volume-will-drop-25-percent-by-2026-due-to-ai-chatbots-and-other-virtual-agents">Gartner projects that traditional search volume will decline 25% by 2026</a>. Queries are shifting heavily to conversational AI interfaces. If your content lacks the right structure for this environment, it will likely be overlooked. Your Google rank will not matter. This guide is your digital strategy reset. You will learn exactly how GEO works, why it demands a different content architecture than classic SEO, and how generative AI SEO principles help you adapt today.</p>
+            <p className="bp-deck">Search behavior has already changed. <a target="_blank" rel="noopener" href="https://www.gartner.com/en/newsroom/press-releases/2024-02-19-gartner-predicts-search-engine-volume-will-drop-25-percent-by-2026-due-to-ai-chatbots-and-other-virtual-agents">Gartner projects that traditional search volume will decline 25% by 2026</a>. Queries are shifting heavily to conversational AI interfaces. If your content lacks the right structure for this environment, it will likely be overlooked. Your Google rank will not matter. This guide is your digital strategy reset. You will learn exactly how GEO works, why it demands a different content architecture than classic SEO, and how generative AI SEO principles help you adapt today.</p>
             <div className="bp-tags">GEO · SEO · AI Search Visibility</div>
           </header>
 
@@ -153,10 +156,10 @@ export default function DeathOfTraditionalSearchPage() {
             </div>
             <p>Adapting to GEO means moving beyond ranking for clicks. The new goal is to become the trusted source an AI quotes. Search did not change suddenly. For decades, SEO rewarded pages that matched keywords and earned backlinks. Then large language models arrived, and the retrieval logic flipped. AI engines now synthesize an answer from the sources they trust most instead of returning a list of links. If your content lacks the proper structure for that synthesis, it remains invisible.</p>
             <p>In practice, GEO looks like this. A founder asks Gemini how to reduce customer churn. Gemini does not show ten blue links. It composes a paragraph and attributes ideas to two or three credible sources. One of those sources wins the conversation. Generative search optimization is the discipline that puts your content in that winning seat.</p>
-            <p>Entity authority earns that placement. AI engines do not just scan keywords. They assess whether your brand, your authors, and your claims form a coherent and trustworthy entity across the web. This discipline matters most for content strategists, SEO professionals, and founders. Their buyers already use AI tools to research decisions. In fact, <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.prnewswire.com/news-releases/73-of-b2b-buyers-use-ai-tools-in-purchase-research-multi-source-analysis-finds-302733319.html#:~:text=B2B%20buyers%20use%20AI%20search,tools%20into%20their%20research%20process.">73% of B2B buyers use AI tools like ChatGPT or Perplexity in vendor research</a>. If your audience asks questions in ChatGPT before they visit a search engine, GEO is your priority today. Sound SEO integration remains the foundation. You can explore how those two disciplines connect in our guide, <Link to={`/${lang}/blog/why-seo-is-the-cornerstone-of-geo-success`}>Why SEO is the Cornerstone of GEO Success</Link>.</p>
+            <p>Entity authority earns that placement. AI engines do not just scan keywords. They assess whether your brand, your authors, and your claims form a coherent and trustworthy entity across the web. This discipline matters most for content strategists, SEO professionals, and founders. Their buyers already use AI tools to research decisions. In fact, <a target="_blank" rel="noopener" href="https://www.prnewswire.com/news-releases/73-of-b2b-buyers-use-ai-tools-in-purchase-research-multi-source-analysis-finds-302733319.html#:~:text=B2B%20buyers%20use%20AI%20search,tools%20into%20their%20research%20process.">73% of B2B buyers use AI tools like ChatGPT or Perplexity in vendor research</a>. If your audience asks questions in ChatGPT before they visit a search engine, GEO is your priority today. Sound SEO integration remains the foundation. You can explore how those two disciplines connect in our guide, <Link to={`/${lang}/blog/why-seo-is-the-cornerstone-of-geo-success`}>Why SEO is the Cornerstone of GEO Success</Link>.</p>
             <ImgHold label="Figure 1" sub="The retrieval shift: from ranked links to a single synthesized answer" />
             <div className="bp-note">
-              <div className="bp-note-label">Expert tip</div>
+              <div className="bp-note-label">Expert Tip</div>
               <p>Write every key claim as a single, declarative sentence under 50 words. That is the exact format AI engines extract verbatim when composing answers.</p>
             </div>
           </section>
@@ -178,7 +181,7 @@ export default function DeathOfTraditionalSearchPage() {
               <li>They ignore whether AI engines can attribute a claim back to them specifically.</li>
             </ul>
             <div className="bp-note">
-              <div className="bp-note-label">Expert tip</div>
+              <div className="bp-note-label">Expert Tip</div>
               <p>If an AI engine cannot summarize your content in two sentences without guessing, your entity authority is too weak. Rewrite your core pages with declarative, fact-dense prose that stands alone without surrounding context.</p>
             </div>
           </section>
@@ -202,7 +205,7 @@ export default function DeathOfTraditionalSearchPage() {
             </ol>
             <ImgHold label="Figure 2" sub="The five-step framework for aligning content with AI search standards" />
             <div className="bp-note">
-              <div className="bp-note-label">Expert tip</div>
+              <div className="bp-note-label">Expert Tip</div>
               <p>Run your draft through a Flesch reading-level checker before publishing. If your content scores above a 10th-grade reading level, rewrite the densest paragraphs first. Simpler sentence structures dramatically improve AI citation rates.</p>
             </div>
             <p>In practice, a financial services brand restructured its FAQ pages around declarative, answer-first sentences. AI engines began to surface its definitions as direct answers shortly after publication. The substance of the content did not change. Only the delivery changed. Backlinks alone no longer signal authority. Clean reading, direct parsing, and repetition now signal authority.</p>

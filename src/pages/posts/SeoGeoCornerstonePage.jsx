@@ -71,6 +71,9 @@ export default function SeoGeoCornerstonePage() {
       <Head>
         <title>Why SEO is the Cornerstone of GEO Success | Poliris</title>
         <meta name="description" content="GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here is why and what to fix first." />
+        <link rel="canonical" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
+        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
+        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
       </Head>
       <Navbar />
 
@@ -184,7 +187,7 @@ export default function SeoGeoCornerstonePage() {
             <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.png`} alt="Diagram: SEO to GEO signal flow" loading="lazy" />
             <p className="bp-img-caption">Fig. 1 — How technical SEO signals cascade into AI citation outcomes</p>
             <div className="bp-note">
-              <div className="bp-note-label">Expert note</div>
+              <div className="bp-note-label">Expert Tip</div>
               <p>Don't optimize for GEO in isolation. AI citation rates improve fastest when your technical SEO fundamentals are already sound. Think of GEO as the top floor of a building, and technical SEO as the foundation it stands on. The Poliris platform is built around this relationship. Its GEO monitoring dashboard tracks brand visibility and AI citation rates across ChatGPT, Gemini, and Perplexity, while its technical auditing layer monitors the crawl-level signals that make those citations possible.</p>
             </div>
           </section>
@@ -229,7 +232,7 @@ export default function SeoGeoCornerstonePage() {
             <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-3.png`} alt="Diagram: Technical SEO as the foundation layer" loading="lazy" />
             <p className="bp-img-caption">Fig. 3 — The dependency stack from crawl health to AI visibility</p>
             <div className="bp-note">
-              <div className="bp-note-label">Expert note</div>
+              <div className="bp-note-label">Expert Tip</div>
               <p>Most organizations discover their biggest GEO gaps stem from technical oversights, not content quality. A thorough technical audit often unlocks AI visibility faster than any content refresh. Platforms like Poliris automate this entire audit process, tracking crawl directives, heading structures, and performance metrics in one dashboard. That's the kind of infrastructure monitoring that bridges technical health with measurable GEO outcomes.</p>
             </div>
           </section>
