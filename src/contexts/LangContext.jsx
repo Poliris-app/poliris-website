@@ -27,11 +27,18 @@ export function LangWrapper() {
     identifyUser();
   }, []);
 
-  // Reset scroll + capture SPA pageview on every route change
+  // Reset scroll + capture SPA pageview on every route change.
+  // Skip the reset when the URL carries a hash (e.g. footer links into
+  // homepage sections like /en/#products) so it can scroll to that
+  // section instead of snapping back to the top.
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (location.hash) {
+      document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
     trackEvent('$pageview');
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   function t(key) {
     const locale = LOCALES[lang] ?? LOCALES.en;

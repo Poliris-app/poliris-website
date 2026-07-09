@@ -124,7 +124,7 @@ export default function GetaDemoPage() {
               ))}
             </div>
 
-            <form className="demo-form" onSubmit={handleSubmit} noValidate>
+            <form className="demo-form" onSubmit={handleSubmit}>
                 <div className="demo-row">
                   <div className="demo-field">
                     <label className="demo-label">{d.fields.firstName}<span>*</span></label>

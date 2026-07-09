@@ -9,6 +9,22 @@ import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
+/* Trend delta shown next to a bar-card's track — reuses the same
+   up/down-arrow convention as the at-a-glance stat cards above. */
+function DeltaTag({ value }) {
+  const pos = value >= 0;
+  return (
+    <span className={`hdash__sb-bar-delta${pos ? ' hdash__sb-bar-delta--pos' : ' hdash__sb-bar-delta--warn'}`}>
+      <span className="hdash__sb-bar-delta-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10">
+          {pos ? <path d="M12 19V5M5 12l7-7 7 7"/> : <path d="M12 5v14M19 12l-7 7-7-7"/>}
+        </svg>
+      </span>
+      {pos ? `+${value}` : value} pts
+    </span>
+  );
+}
+
 /* ── Sentiment chart data ───────────────────────────────────── */
 const SENT_DATA     = [75, 100, 75, 100, 75, 75];
 const SENT_X_LABELS = ['Apr 27', 'May 4', 'May 11', 'May 18', 'May 25', 'Jun 1'];
@@ -716,8 +732,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>{md.tiers['Very Strong']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '100%', background: '#16a34a' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '100%', background: '#16a34a' }} />
+                      </div>
+                      <DeltaTag value={3} />
                     </div>
                   </div>
                   <div className="hdash__sb-bar-card">
@@ -727,8 +746,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                      </div>
+                      <DeltaTag value={2} />
                     </div>
                   </div>
                   <div className="hdash__sb-bar-card">
@@ -738,8 +760,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                      </div>
+                      <DeltaTag value={1} />
                     </div>
                   </div>
                   <div className="hdash__sb-bar-card">
@@ -750,8 +775,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>{md.tiers['Weak']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
+                      </div>
+                      <DeltaTag value={-6} />
                     </div>
                   </div>
                 </div>
@@ -788,8 +816,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#dcfce7' }}>{md.tiers['Very Strong']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '100%', background: '#16a34a' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '100%', background: '#16a34a' }} />
+                      </div>
+                      <DeltaTag value={4} />
                     </div>
                   </div>
                   <div className="hdash__sb-bar-card">
@@ -805,8 +836,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                      </div>
+                      <DeltaTag value={2} />
                     </div>
                   </div>
                   <div className="hdash__sb-bar-card">
@@ -822,8 +856,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#16a34a', background: '#d1fae5' }}>{md.tiers['Strong']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '80%', background: '#22c55e' }} />
+                      </div>
+                      <DeltaTag value={1} />
                     </div>
                   </div>
                   <div className="hdash__sb-bar-card">
@@ -840,8 +877,11 @@ export default function SentimentPage() {
                         <span className="hdash__sb-bar-tag" style={{ color: '#dc2626', background: '#fee2e2' }}>{md.tiers['Weak']}</span>
                       </span>
                     </div>
-                    <div className="hdash__sb-bar-track2">
-                      <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
+                    <div className="hdash__sb-bar-row">
+                      <div className="hdash__sb-bar-track2">
+                        <div className="hdash__sb-bar-fill" style={{ width: '40%', background: '#f97316' }} />
+                      </div>
+                      <DeltaTag value={-6} />
                     </div>
                   </div>
                 </div>

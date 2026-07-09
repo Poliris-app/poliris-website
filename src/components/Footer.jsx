@@ -1,10 +1,19 @@
 import { useLang } from '../contexts/LangContext';
 
-const FOOTER_HREFS = ['#products', '#team', '#how', '#', '#'];
+// Products/For teams/How-it-works are anchors into homepage sections, so
+// they need the /{lang}/ prefix to work from any page, not just Home.
+const FOOTER_HREFS = (lang) => [
+  `/${lang}/#products`,
+  `/${lang}/#team`,
+  `/${lang}/docs`,
+  `/${lang}/demo`,
+  `/${lang}/blog`,
+];
 
 export default function Footer() {
   const { lang, t } = useLang();
   const links = t('footer.links');
+  const hrefs = FOOTER_HREFS(lang);
 
   return (
     <footer className="footer">
@@ -14,7 +23,7 @@ export default function Footer() {
         </a>
         <nav className="footer__nav">
           {links.map((label, i) => (
-            <a key={i} href={FOOTER_HREFS[i]} className="footer__link">
+            <a key={i} href={hrefs[i]} className="footer__link">
               {label}
             </a>
           ))}

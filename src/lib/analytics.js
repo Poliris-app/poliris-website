@@ -2,7 +2,7 @@ import posthog from 'posthog-js';
 
 export function initAnalytics() {
   const key = import.meta.env.VITE_POSTHOG_KEY;
-  const host = import.meta.env.VITE_POSTHOG_HOST || 'https://eu.i.posthog.com';
+  const host = import.meta.env.VITE_POSTHOG_HOST || 'https://us.i.posthog.com';
 
   if (!key) {
     console.warn('[analytics] VITE_POSTHOG_KEY is not set — PostHog disabled.');
@@ -13,6 +13,8 @@ export function initAnalytics() {
     api_host: host,
     capture_pageview: false, // we capture manually on every route change in LangWrapper
     capture_pageleave: true,
+    capture_dead_clicks: true,
+    enable_heatmaps: true,
   });
 }
 
