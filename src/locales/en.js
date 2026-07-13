@@ -1527,16 +1527,14 @@ export default {
       {
         eyebrow: 'Live session',
         title: 'Book a 1-hour demo',
-        desc: 'See Poliris live with your own brand — real GEO scores, AI citations, and next steps tailored to you.',
+        desc: 'See Poliris live with your own brand. Real GEO scores, AI citations, and next steps tailored to you.',
         cta: 'Pick a time',
         href: 'https://cal.com/team/poliris/discovery-call',
       },
       {
         eyebrow: 'Instant report',
         title: 'Free GEO audit',
-        desc: 'Find out how ChatGPT, Gemini, and Perplexity mention your brand today — no card required.',
-        cta: 'Start free trial',
-        href: 'https://app.poliris.io',
+        desc: 'Find out how ChatGPT, Gemini, and Perplexity mention your brand today. No card required.',
       },
       {
         eyebrow: 'Partners',

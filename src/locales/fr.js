@@ -1522,16 +1522,14 @@ export default {
       {
         eyebrow: 'Session en direct',
         title: 'Réserver une démo d\'1 heure',
-        desc: 'Découvrez Poliris en direct avec votre propre marque — scores GEO réels, citations IA et prochaines étapes personnalisées.',
+        desc: 'Découvrez Poliris en direct avec votre propre marque. Scores GEO réels, citations IA et prochaines étapes personnalisées.',
         cta: 'Choisir un créneau',
         href: 'https://cal.com/team/poliris/discovery-call',
       },
       {
         eyebrow: 'Rapport instantané',
         title: 'Audit GEO gratuit',
-        desc: 'Découvrez comment ChatGPT, Gemini et Perplexity mentionnent votre marque aujourd\'hui — sans carte bancaire.',
-        cta: 'Démarrer l\'essai gratuit',
-        href: 'https://app.poliris.io',
+        desc: 'Découvrez comment ChatGPT, Gemini et Perplexity mentionnent votre marque aujourd\'hui. Sans carte bancaire.',
       },
       {
         eyebrow: 'Partenaires',

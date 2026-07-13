@@ -10,6 +10,14 @@ const FOOTER_HREFS = (lang) => [
   `/${lang}/blog`,
 ];
 
+// "For teams" (1) is hidden for now — no section to point it at yet.
+// Indices match footer.links in locales/*.js.
+const HIDDEN_INDICES = new Set([1]);
+
+// "Pricing" (3) has no page yet, so it's relabeled to Get a demo until
+// one exists — reuses the same copy as the navbar's CTA.
+const PRICING_INDEX = 3;
+
 export default function Footer() {
   const { lang, t } = useLang();
   const links = t('footer.links');
@@ -23,9 +31,11 @@ export default function Footer() {
         </a>
         <nav className="footer__nav">
           {links.map((label, i) => (
-            <a key={i} href={hrefs[i]} className="footer__link">
-              {label}
-            </a>
+            !HIDDEN_INDICES.has(i) && (
+              <a key={i} href={hrefs[i]} className="footer__link">
+                {i === PRICING_INDEX ? t('nav.getDemo') : label}
+              </a>
+            )
           ))}
         </nav>
         <p className="footer__copy">{t('footer.copy')}</p>

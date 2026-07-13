@@ -1,3 +1,4 @@
+import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 
 const MODELS = ['ChatGPT', 'Gemini', 'Perplexity', 'Claude', 'Mistral', 'DeepSeek', 'Grok', 'Copilot'];
@@ -6,7 +7,8 @@ const tripled = [...MODELS, ...MODELS, ...MODELS];
 const TRIAL_URL = 'https://app.poliris.io';
 const DEMO_URL  = 'https://cal.com/team/poliris/discovery-call';
 const isTrialCta = (label) => typeof label === 'string' && /trial|essai/i.test(label);
-const isDemoCta  = (label) => typeof label === 'string' && /demo|démo/i.test(label);
+const isDemoCta  = (label) => typeof label === 'string' && /demo|démo|expert/i.test(label);
+const isAuditCta = (label) => typeof label === 'string' && /audit/i.test(label);
 
 export default function CtaBand({
   heading = 'See how AI describes your brand.',
@@ -15,13 +17,16 @@ export default function CtaBand({
   secondaryCta = 'Book a demo',
   note = '14 days free · No credit card required',
 }) {
+  const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
+  const primaryAudit = isAuditCta(primaryCta);
   const secondaryTrial = isTrialCta(secondaryCta);
   const secondaryDemo  = isDemoCta(secondaryCta);
+  const secondaryAudit = isAuditCta(secondaryCta);
 
-  const primaryHref  = primaryTrial ? TRIAL_URL : primaryDemo ? DEMO_URL : '#';
-  const secondaryHref = secondaryTrial ? TRIAL_URL : secondaryDemo ? DEMO_URL : '#';
+  const primaryHref  = primaryTrial ? TRIAL_URL : primaryDemo ? DEMO_URL : primaryAudit ? `/${lang}/demo` : '#';
+  const secondaryHref = secondaryTrial ? TRIAL_URL : secondaryDemo ? DEMO_URL : secondaryAudit ? `/${lang}/demo` : '#';
   const primaryExternal  = primaryTrial || primaryDemo;
   const secondaryExternal = secondaryTrial || secondaryDemo;
 
@@ -37,7 +42,7 @@ export default function CtaBand({
             href={primaryHref}
             className="btn btn--primary"
             {...(primaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            onClick={() => { if (primaryTrial) trackEvent('trial_cta_clicked'); else if (primaryDemo) trackEvent('demo_cta_clicked'); }}
+            onClick={() => { if (primaryTrial) trackEvent('trial_cta_clicked'); else if (primaryDemo) trackEvent('demo_cta_clicked'); else if (primaryAudit) trackEvent('audit_cta_clicked'); }}
           >
             {primaryCta}
           </a>
@@ -45,7 +50,7 @@ export default function CtaBand({
             href={secondaryHref}
             className="btn btn--secondary"
             {...(secondaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            onClick={() => { if (secondaryTrial) trackEvent('trial_cta_clicked'); else if (secondaryDemo) trackEvent('demo_cta_clicked'); }}
+            onClick={() => { if (secondaryTrial) trackEvent('trial_cta_clicked'); else if (secondaryDemo) trackEvent('demo_cta_clicked'); else if (secondaryAudit) trackEvent('audit_cta_clicked'); }}
           >
             {secondaryCta}
           </a>

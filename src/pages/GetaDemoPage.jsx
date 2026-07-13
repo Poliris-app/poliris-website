@@ -217,9 +217,11 @@ export default function GetaDemoPage() {
                   <p className="demo-card-eyebrow">{card.eyebrow}</p>
                   <p className="demo-card-title">{card.title}</p>
                   <p className="demo-card-desc">{card.desc}</p>
-                  <a href={card.href} className="demo-card-link" target="_blank" rel="noopener noreferrer">
-                    {card.cta} {ARROW_ICON}
-                  </a>
+                  {card.cta && (
+                    <a href={card.href} className="demo-card-link" target="_blank" rel="noopener noreferrer">
+                      {card.cta} {ARROW_ICON}
+                    </a>
+                  )}
                 </div>
               );
             })}
