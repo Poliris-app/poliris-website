@@ -70,10 +70,10 @@ export default function SeoGeoCornerstonePage() {
     <div className="bp-page">
       <Head>
         <title>Why SEO is the Cornerstone of GEO Success | Poliris</title>
-        <meta name="description" content="GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here is why and what to fix first." />
         <link rel="canonical" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
         <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
         <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
+        <meta name="description" content="GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here is why and what to fix first." />
       </Head>
       <Navbar />
 

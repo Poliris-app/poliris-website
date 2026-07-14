@@ -83,10 +83,10 @@ export default function DeathOfTraditionalSearchPage() {
     <div className="bp-page">
       <Head>
         <title>The Death of Traditional Search: Why GEO Is Your New Priority | Poliris</title>
-        <meta name="description" content="Generative engine optimization (GEO) is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority." />
         <link rel="canonical" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
         <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
         <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
+        <meta name="description" content="Generative engine optimization (GEO) is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority." />
       </Head>
       <Navbar />
 

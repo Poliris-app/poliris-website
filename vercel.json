@@ -1,5 +1,15 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/en/", "permanent": false }
+    { "source": "/", "destination": "/en/", "permanent": false },
+    { "source": "/visibility", "destination": "/en/visibility", "permanent": false },
+    { "source": "/sentiment", "destination": "/en/sentiment", "permanent": false },
+    { "source": "/technical-audit", "destination": "/en/technical-audit", "permanent": false },
+    { "source": "/content-writing", "destination": "/en/content-writing", "permanent": false },
+    { "source": "/faqs", "destination": "/en/faqs", "permanent": false },
+    { "source": "/glossary", "destination": "/en/glossary", "permanent": false },
+    { "source": "/demo", "destination": "/en/demo", "permanent": false },
+    { "source": "/docs", "destination": "/en/docs", "permanent": false },
+    { "source": "/blog", "destination": "/en/blog", "permanent": false },
+    { "source": "/blog/:slug", "destination": "/en/blog/:slug", "permanent": false }
   ]
 }
