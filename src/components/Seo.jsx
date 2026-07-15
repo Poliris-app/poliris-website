@@ -5,6 +5,9 @@ import {
   canonicalUrl,
   SITE_NAME,
   LANGS,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OG_IMAGE_WIDTH,
+  DEFAULT_OG_IMAGE_HEIGHT,
 } from '../seo';
 
 // Per-page <head>: title, description, canonical, hreflang alternates,
@@ -30,12 +33,15 @@ export default function Seo({ page }) {
       <link rel="alternate" hrefLang="x-default" href={canonicalUrl('en', page)} />
 
       {/* Open Graph */}
-      <meta property="og:type" content="website" />
       <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:locale" content={ogLocale} />
+      <meta property="og:type" content="website" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonical} />
+      <meta property="og:locale" content={ogLocale} />
+      <meta property="og:image" content={DEFAULT_OG_IMAGE} />
+      <meta property="og:image:width" content={String(DEFAULT_OG_IMAGE_WIDTH)} />
+      <meta property="og:image:height" content={String(DEFAULT_OG_IMAGE_HEIGHT)} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary" />

@@ -259,7 +259,7 @@ export default {
       { title: 'IVY agent',          desc: 'AI that reads your scores, finds the gaps, and builds the fix plan.' },
       { title: 'Evidence',           desc: 'See the exact AI words behind every score   annotated and traceable.' },
     ],
-    seeIt: 'See it',
+    seeIt: 'See it below',
     perAxis: {
       eyebrow: '01 · Product focus',
       h2Pre: 'We grade',
@@ -357,7 +357,7 @@ export default {
       cap: 'The dashboard   your whole site read through the Poliris pipeline: Page Access, Content Access, Content Quality.',
       barTitle: 'Poliris · Technical audit',
     },
-    seeIt: 'See it',
+    seeIt: 'See it below',
     toc: {
       eyebrow: 'In this audit',
       h2Pre: 'What the audit does,',
@@ -495,7 +495,7 @@ export default {
         { no: '02', title: 'Score it, then lift the weak parts',        desc: 'New article or existing URL. Kate grades it across the signals that matter, then rewrites only what needs fixing to raise the score.' },
         { no: '03', title: 'Publish it straight to your site',          desc: 'Approve the draft and Kate deploys it to your website in one click. No copy-paste, no developer, no extra steps.' },
       ],
-      seeIt: 'See it',
+      seeIt: 'See it below',
     },
     write: {
       tag: '01 · Write',

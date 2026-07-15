@@ -62,11 +62,11 @@ const TIER_STYLE = {
 /* Per-tier accent used by the per-axis diagram's card/line/pill —
    tied to sentiment strength, not per-axis identity. */
 const TIER_ACCENT = {
-  'Very Strong': { accent: '#1B806C',       cardBg: '#E1ECEA' },
-  'Strong':      { accent: 'var(--positive)', cardBg: '#e7f4ee' },
-  'Moderate':    { accent: 'var(--warning)',  cardBg: '#fbf2e3' },
-  'Weak':        { accent: 'var(--negative)', cardBg: '#fbeae8' },
-  'Very Weak':   { accent: 'var(--negative)', cardBg: '#fbeae8' },
+  'Very Strong': { accent: '#15803d', cardBg: '#d1fae5' },
+  'Strong':      { accent: '#22c55e', cardBg: '#dcfce7' },
+  'Moderate':    { accent: '#eab308', cardBg: '#fefce8' },
+  'Weak':        { accent: '#f97316', cardBg: '#fff7ed' },
+  'Very Weak':   { accent: '#ef4444', cardBg: '#fef2f2' },
 };
 
 /* ── Per-axis sentiment diagram: axis cards + the real buyer
@@ -76,45 +76,54 @@ const PF_AXES = [
   {
     name: 'Performance', prompts: 22, tier: 'Strong',
     questions: [
-      { text: 'Lightweight gym shoes for maximum stability?', sentiment: 'pos' },
-      { text: 'Best cross-training shoes for intense workouts?', sentiment: 'pos' },
+      { text: 'Looking for lightweight gym training shoes that provide maximum stability?', sentiment: 'pos' },
+      { text: 'Professional advice on choosing the best cross-training shoes for intense workouts?', sentiment: 'pos' },
     ],
   },
   {
     name: 'Durability', prompts: 15, tier: 'Weak',
     questions: [
-      // Also rolls up into Performance — a trail shoe is judged on both.
-      { text: 'High-performance running shoes for trails?', sentiment: 'neutral', sharedWith: 'Performance' },
+      { text: 'Best high-performance running shoes for trail conditions available?', sentiment: 'neutral' },
+      { text: 'What are the best durable footwear brands for long-distance walking?', sentiment: 'neg' },
     ],
   },
   {
     name: 'Design', prompts: 20, tier: 'Strong',
     questions: [
-      { text: 'Best affordable and reliable everyday sneakers?', sentiment: 'pos' },
-      { text: 'Best value-for-money sneakers for commuting?', sentiment: 'neutral' },
-      { text: 'Most comfortable shoes with arch support?', sentiment: 'pos' },
+      { text: 'Where can I find affordable and reliable everyday sneakers?', sentiment: 'pos' },
+      { text: 'What are the most comfortable everyday walking shoes with arch support?', sentiment: 'pos' },
     ],
   },
   {
     name: 'Brand awareness', prompts: 18, tier: 'Very Strong',
     questions: [
-      // Also rolls up into Design — style is a design signal too.
-      { text: 'Which trendy sneakers dominate street style?', sentiment: 'pos', sharedWith: 'Design' },
+      { text: 'Which trendy sneakers are currently popular for casual street style?', sentiment: 'pos' },
+      { text: 'What sneaker brands do people trust most?', sentiment: 'pos' },
     ],
   },
 ];
 
-/* Splits a question into two lines balanced by character length (not
-   word count), at the word boundary closest to the halfway point. */
-function wrapQuestion(text) {
+/* Splits a question into 3 lines balanced by character length (not
+   word count), each split falling at the word boundary closest to the
+   remaining text's own midpoint. */
+function wrapQuestion(text, lineCount = 3) {
   const words = text.split(' ');
-  let bestSplit = 1, bestDiff = Infinity, acc = 0;
-  for (let i = 0; i < words.length - 1; i++) {
-    acc += words[i].length + 1;
-    const diff = Math.abs(acc - text.length / 2);
-    if (diff < bestDiff) { bestDiff = diff; bestSplit = i + 1; }
+  const lines = [];
+  let start = 0;
+  for (let li = 0; li < lineCount - 1; li++) {
+    const remainingLines = lineCount - li;
+    const target = words.slice(start).join(' ').length / remainingLines;
+    let acc = 0, bestIdx = start + 1, bestDiff = Infinity;
+    for (let i = start; i < words.length - (remainingLines - 1); i++) {
+      acc += words[i].length + 1;
+      const diff = Math.abs(acc - target);
+      if (diff < bestDiff) { bestDiff = diff; bestIdx = i + 1; }
+    }
+    lines.push(words.slice(start, bestIdx).join(' '));
+    start = bestIdx;
   }
-  return [words.slice(0, bestSplit).join(' '), words.slice(bestSplit).join(' ')];
+  lines.push(words.slice(start).join(' '));
+  return lines;
 }
 
 /* Exclusive prefix sum of question counts, so each axis's connector
@@ -535,7 +544,7 @@ export default function SentimentPage() {
                     {t('sentiment.seeIt')}
                     <span className="arr">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                        <path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>
                       </svg>
                     </span>
                   </div>
@@ -577,18 +586,12 @@ export default function SentimentPage() {
                 <span>{t('sentiment.perAxis.legendSuffix')}</span>
               </div>
 
-              <svg viewBox="0 0 1120 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topic coverage cards with the real buyer questions rolling up into each sentiment axis" className="pf-svg">
+              <svg viewBox="0 0 1120 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topic coverage cards with the real buyer questions rolling up into each sentiment axis" className="pf-svg">
                 {(() => {
                   const CARD_W = 252, CARD_X = [0, 290, 580, 870], CARD_Y = 24, CARD_H = 180, CARD_BOTTOM = CARD_Y + CARD_H;
-                  const PILL_W = 222, PILL_H = 56, ROW_TOP0 = CARD_BOTTOM + 60, ROW_PITCH = 76;
+                  const PILL_W = 222, PILL_H = 78, ROW_TOP0 = CARD_BOTTOM + 60, ROW_PITCH = 98;
                   const CONTENT_H = 103, CY = CARD_Y + (CARD_H - CONTENT_H) / 2 - 19;
-                  const axisIndexByName = Object.fromEntries(PF_AXES.map((ax, idx) => [ax.name, idx]));
 
-                  /* Cards + lines render first, then every node circle
-                     renders in a second pass on top — a cross-axis line
-                     can start exactly at another card's anchor point, and
-                     if that other card's group comes earlier in the DOM
-                     its node would otherwise get painted over. */
                   const bodies = PF_AXES.map((axis, ai) => {
                     const cardX = CARD_X[ai];
                     const anchorX = cardX + CARD_W / 2;
@@ -609,11 +612,7 @@ export default function SentimentPage() {
                           const railX = cardX + 6;
                           const railTurnY = CARD_BOTTOM + 30;
                           const pillX = cardX + 20;
-                          const [line1, line2] = wrapQuestion(q.text);
-                          const sharedIdx = q.sharedWith ? axisIndexByName[q.sharedWith] : undefined;
-                          const sharedAnchorX = sharedIdx !== undefined ? CARD_X[sharedIdx] + CARD_W / 2 : null;
-                          const sharedBusY = CARD_BOTTOM + 14;
-                          const sharedAccent = q.sharedWith ? TIER_ACCENT[PF_AXES[sharedIdx].tier].accent : null;
+                          const lines = wrapQuestion(q.text);
                           const markX = pillX + PILL_W - 16;
                           return (
                             <g key={i}>
@@ -621,16 +620,12 @@ export default function SentimentPage() {
                                 className={`pf-line pf-line--${lineNum}`}
                                 d={`M ${anchorX} ${CARD_BOTTOM} L ${anchorX} ${railTurnY} L ${railX} ${railTurnY} L ${railX} ${centerY} L ${pillX} ${centerY}`}
                               />
-                              {sharedAnchorX !== null && (
-                                <path
-                                  className={`pf-line pf-cross-line pf-line--${lineNum}`}
-                                  style={{ stroke: sharedAccent }}
-                                  d={`M ${sharedAnchorX} ${CARD_BOTTOM} L ${sharedAnchorX} ${sharedBusY} L ${pillX} ${sharedBusY} L ${pillX} ${centerY}`}
-                                />
-                              )}
                               <rect className="pf-pill" x={pillX} y={rowTop} width={PILL_W} height={PILL_H}/>
-                              <text x={pillX + 22} y={rowTop + 24} className="pf-q">"{line1}</text>
-                              <text x={pillX + 22} y={rowTop + 41} className="pf-q">{line2}"</text>
+                              {lines.map((line, li) => (
+                                <text key={li} x={pillX + 22} y={rowTop + 22 + li * 17} className="pf-q">
+                                  {li === 0 ? '"' : ''}{line}{li === lines.length - 1 ? '"' : ''}
+                                </text>
+                              ))}
                               {q.sentiment === 'pos' && (
                                 <text x={markX} y={centerY + 4} textAnchor="middle" fontSize="11" style={{ fill: 'var(--positive)' }}>▲</text>
                               )}
@@ -661,23 +656,7 @@ export default function SentimentPage() {
                           const rowTop = ROW_TOP0 + i * ROW_PITCH;
                           const centerY = rowTop + PILL_H / 2;
                           const pillX = cardX + 20;
-                          const sharedIdx = q.sharedWith ? axisIndexByName[q.sharedWith] : undefined;
-                          const sharedAccent = sharedIdx !== undefined ? TIER_ACCENT[PF_AXES[sharedIdx].tier].accent : null;
-                          return sharedAccent ? (
-                            <g key={i}>
-                              <circle cx={pillX} cy={centerY} r="5" fill="#fff"/>
-                              <path
-                                d={`M ${pillX} ${centerY - 5} A 5 5 0 0 0 ${pillX} ${centerY + 5}`}
-                                fill="none" stroke="var(--pf-accent)" strokeWidth="3"
-                              />
-                              <path
-                                d={`M ${pillX} ${centerY - 5} A 5 5 0 0 1 ${pillX} ${centerY + 5}`}
-                                fill="none" stroke={sharedAccent} strokeWidth="3"
-                              />
-                            </g>
-                          ) : (
-                            <circle key={i} className="pf-node" cx={pillX} cy={centerY}/>
-                          );
+                          return <circle key={i} className="pf-node" cx={pillX} cy={centerY}/>;
                         })}
                       </g>
                     );

@@ -43,6 +43,24 @@ const SCRIPT_RE      = /<script\b[^>]*>[\s\S]*?<\/script>/;
 const STYLESHEET_RE  = /<link\b(?=[^>]*\brel="stylesheet")[^>]*>/;
 const COMMENT_RE     = /<!--[\s\S]*?-->/;
 
+// Open Graph / Twitter tags — only present on pages using the shared
+// <Seo> component (home, visibility, sentiment, etc.), not the blog
+// posts' hand-written <Head>. react-helmet leaves data-rh in its
+// natural (first) position for these; only the group's own order and
+// its position relative to the rest of <head> needs fixing.
+const OG_SITE_NAME_RE    = /<meta\b(?=[^>]*\bproperty="og:site_name")[^>]*>/;
+const OG_TYPE_RE         = /<meta\b(?=[^>]*\bproperty="og:type")[^>]*>/;
+const OG_TITLE_RE        = /<meta\b(?=[^>]*\bproperty="og:title")[^>]*>/;
+const OG_DESCRIPTION_RE  = /<meta\b(?=[^>]*\bproperty="og:description")[^>]*>/;
+const OG_URL_RE          = /<meta\b(?=[^>]*\bproperty="og:url")[^>]*>/;
+const OG_LOCALE_RE       = /<meta\b(?=[^>]*\bproperty="og:locale")[^>]*>/;
+const OG_IMAGE_RE        = /<meta\b(?=[^>]*\bproperty="og:image")[^>]*>/;
+const OG_IMAGE_WIDTH_RE  = /<meta\b(?=[^>]*\bproperty="og:image:width")[^>]*>/;
+const OG_IMAGE_HEIGHT_RE = /<meta\b(?=[^>]*\bproperty="og:image:height")[^>]*>/;
+const TWITTER_CARD_RE        = /<meta\b(?=[^>]*\bname="twitter:card")[^>]*>/;
+const TWITTER_TITLE_RE       = /<meta\b(?=[^>]*\bname="twitter:title")[^>]*>/;
+const TWITTER_DESCRIPTION_RE = /<meta\b(?=[^>]*\bname="twitter:description")[^>]*>/;
+
 function reorderHead(head) {
   let rest = head;
   const pull = (re) => {
@@ -76,17 +94,44 @@ function reorderHead(head) {
   const script = pull(SCRIPT_RE);
   const stylesheet = pull(STYLESHEET_RE);
 
-  const groups = [
-    [charset, title, viewport],
-    [canonical, ...orderedHreflangs],
-    [description],
-    [icon],
-    [script, stylesheet],
-  ]
+  const ogSiteName = pull(OG_SITE_NAME_RE);
+  const ogType = pull(OG_TYPE_RE);
+  const ogTitle = pull(OG_TITLE_RE);
+  const ogDescription = pull(OG_DESCRIPTION_RE);
+  const ogUrl = pull(OG_URL_RE);
+  const ogLocale = pull(OG_LOCALE_RE);
+  const ogImage = pull(OG_IMAGE_RE);
+  const ogImageWidth = pull(OG_IMAGE_WIDTH_RE);
+  const ogImageHeight = pull(OG_IMAGE_HEIGHT_RE);
+  const twitterCard = pull(TWITTER_CARD_RE);
+  const twitterTitle = pull(TWITTER_TITLE_RE);
+  const twitterDescription = pull(TWITTER_DESCRIPTION_RE);
+
+  // Pages built from the shared <Seo> component (home, visibility, etc.)
+  // carry Open Graph tags and want a different group order than the
+  // blog posts' hand-written <Head>, which has neither OG tags nor a
+  // bundled stylesheet/script pulled into <head> the same way.
+  const groups = ogSiteName
+    ? [
+        [charset, viewport, title],
+        [stylesheet],
+        [script],
+        [icon, canonical, ...orderedHreflangs, description],
+        [ogSiteName, ogType, ogTitle, ogDescription, ogUrl, ogLocale, ogImage, ogImageWidth, ogImageHeight, twitterCard, twitterTitle, twitterDescription],
+      ]
+    : [
+        [charset, title, viewport],
+        [canonical, ...orderedHreflangs],
+        [description],
+        [icon],
+        [script, stylesheet],
+      ];
+
+  const finalGroups = groups
     .map((group) => group.filter(Boolean).join('\n'))
     .filter(Boolean);
 
-  return groups.join('\n\n') + rest;
+  return finalGroups.join('\n\n') + rest;
 }
 
 // Cosmetic normalization to match the ticket's literal HTML5 style:

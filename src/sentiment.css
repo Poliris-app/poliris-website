@@ -721,7 +721,7 @@
    sentiment marker on the right, which the wider Visibility text
    doesn't need to make room for.
    ============================================================ */
-.sent-page .pf-q { font-size: 12.5px; }
+.sent-page .pf-q { font-size: 11px; }
 .sent-page .pf-divider { stroke-opacity: 1; }
 
 .vis-page .pf-legend-hdr {

@@ -4,8 +4,9 @@
 
 export const SITE_URL = 'https://poliris.io';
 export const SITE_NAME = 'Poliris';
-// TODO: replace with a dedicated 1200x630 social image once designed.
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/nike_landingpage.png`;
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+export const DEFAULT_OG_IMAGE_WIDTH = 1200;
+export const DEFAULT_OG_IMAGE_HEIGHT = 630;
 
 // Maps a page key to its URL slug (relative to /:lang/).
 export const PAGE_SLUGS = {

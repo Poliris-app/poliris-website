@@ -259,7 +259,7 @@ export default {
       { title: 'Agent IVY',          desc: "L'IA qui lit vos scores, trouve les lacunes et construit le plan correctif." },
       { title: 'Preuves',            desc: "Voyez les mots exacts de l'IA derrière chaque score   annotés et traçables." },
     ],
-    seeIt: 'Voir',
+    seeIt: 'Voir ci-dessous',
     perAxis: {
       eyebrow: '01 · Focus produit',
       h2Pre: 'Nous notons des',
@@ -357,7 +357,7 @@ export default {
       cap: 'Le tableau de bord   votre site entier lu à travers le pipeline Poliris : Accès aux pages, Accès au contenu, Qualité du contenu.',
       barTitle: 'Poliris · Audit technique',
     },
-    seeIt: 'Voir',
+    seeIt: 'Voir ci-dessous',
     toc: {
       eyebrow: 'Dans cet audit',
       h2Pre: 'Ce que fait l\'audit,',
@@ -495,7 +495,7 @@ export default {
         { no: '02', title: 'Notez-le, puis améliorez les parties faibles', desc: "Nouvel article ou URL existante. Kate le note sur les signaux qui comptent, puis réécrit uniquement ce qui doit être amélioré pour augmenter le score." },
         { no: '03', title: 'Publiez-le directement sur votre site',    desc: "Approuvez le brouillon et Kate le déploie sur votre site en un clic. Pas de copier-coller, pas de développeur, pas d'étapes supplémentaires." },
       ],
-      seeIt: 'Voir',
+      seeIt: 'Voir ci-dessous',
     },
     write: {
       tag: '01 · Rédiger',
