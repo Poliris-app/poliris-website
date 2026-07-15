@@ -54,9 +54,6 @@ const OG_TITLE_RE        = /<meta\b(?=[^>]*\bproperty="og:title")[^>]*>/;
 const OG_DESCRIPTION_RE  = /<meta\b(?=[^>]*\bproperty="og:description")[^>]*>/;
 const OG_URL_RE          = /<meta\b(?=[^>]*\bproperty="og:url")[^>]*>/;
 const OG_LOCALE_RE       = /<meta\b(?=[^>]*\bproperty="og:locale")[^>]*>/;
-const OG_IMAGE_RE        = /<meta\b(?=[^>]*\bproperty="og:image")[^>]*>/;
-const OG_IMAGE_WIDTH_RE  = /<meta\b(?=[^>]*\bproperty="og:image:width")[^>]*>/;
-const OG_IMAGE_HEIGHT_RE = /<meta\b(?=[^>]*\bproperty="og:image:height")[^>]*>/;
 const TWITTER_CARD_RE        = /<meta\b(?=[^>]*\bname="twitter:card")[^>]*>/;
 const TWITTER_TITLE_RE       = /<meta\b(?=[^>]*\bname="twitter:title")[^>]*>/;
 const TWITTER_DESCRIPTION_RE = /<meta\b(?=[^>]*\bname="twitter:description")[^>]*>/;
@@ -100,9 +97,6 @@ function reorderHead(head) {
   const ogDescription = pull(OG_DESCRIPTION_RE);
   const ogUrl = pull(OG_URL_RE);
   const ogLocale = pull(OG_LOCALE_RE);
-  const ogImage = pull(OG_IMAGE_RE);
-  const ogImageWidth = pull(OG_IMAGE_WIDTH_RE);
-  const ogImageHeight = pull(OG_IMAGE_HEIGHT_RE);
   const twitterCard = pull(TWITTER_CARD_RE);
   const twitterTitle = pull(TWITTER_TITLE_RE);
   const twitterDescription = pull(TWITTER_DESCRIPTION_RE);
@@ -117,7 +111,7 @@ function reorderHead(head) {
         [stylesheet],
         [script],
         [icon, canonical, ...orderedHreflangs, description],
-        [ogSiteName, ogType, ogTitle, ogDescription, ogUrl, ogLocale, ogImage, ogImageWidth, ogImageHeight, twitterCard, twitterTitle, twitterDescription],
+        [ogSiteName, ogType, ogTitle, ogDescription, ogUrl, ogLocale, twitterCard, twitterTitle, twitterDescription],
       ]
     : [
         [charset, title, viewport],

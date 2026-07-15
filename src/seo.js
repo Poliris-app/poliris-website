@@ -4,9 +4,6 @@
 
 export const SITE_URL = 'https://poliris.io';
 export const SITE_NAME = 'Poliris';
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
-export const DEFAULT_OG_IMAGE_WIDTH = 1200;
-export const DEFAULT_OG_IMAGE_HEIGHT = 630;
 
 // Maps a page key to its URL slug (relative to /:lang/).
 export const PAGE_SLUGS = {
