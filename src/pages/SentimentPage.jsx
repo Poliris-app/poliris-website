@@ -258,20 +258,6 @@ const TOUR_CARDS = [
     titleKey: 'title',
     descKey: 'desc',
   },
-  {
-    num: '05',
-    href: '#evidence',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="9" y1="13" x2="15" y2="13"/>
-        <line x1="9" y1="17" x2="12" y2="17"/>
-      </svg>
-    ),
-    titleKey: 'title',
-    descKey: 'desc',
-  },
 ];
 
 /* ── competitor data ─────────────────────────────────────────── */
@@ -293,7 +279,7 @@ const COMPETITORS = [
     overall: 55, overallLabel: 'Moderate',
   },
   {
-    name: 'On',       you: false, bd: '#16a34a', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
+    name: 'On',       you: false, bd: '#db2777', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
     awareness: { label: 'Strong',      cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
@@ -310,14 +296,14 @@ const COMPETITORS = [
   },
   {
     name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
-    awareness: { label: ' ',           cls: 'pt-neu' },
-    design:    { label: ' ',           cls: 'pt-neu' },
-    durability:{ label: 'Very Strong', cls: 'pt-pos' },
+    awareness: { label: 'Strong',      cls: 'pt-pos' },
+    design:    { label: 'Strong',      cls: 'pt-pos' },
+    durability:{ label: 'Strong',      cls: 'pt-pos' },
     performance:{ label: 'Strong',     cls: 'pt-pos' },
-    overall: 92, overallLabel: 'Very Strong',
+    overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'New Balance',   you: false, bd: 'rgb(28, 229, 206)', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
+    name: 'New Balance',   you: false, bd: '#475569', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
     awareness: { label: 'Very Strong',           cls: 'pt-neu' },
     design:    { label: 'Strong',           cls: 'pt-neu' },
     durability:{ label: 'Strong', cls: 'pt-pos' },
@@ -329,7 +315,6 @@ const COMPETITORS = [
 export default function SentimentPage() {
   const { t } = useLang();
   const md = t('sentiment.mockDash');
-  const [evxOpen, setEvxOpen] = useState(true);
   const [sentHov, setSentHov] = useState(null);
 
   function handleSentMove(e) {
@@ -1141,91 +1126,6 @@ export default function SentimentPage() {
                           <span className="t">Get cited on 2 running-gear review sites</span>
                           <span className="impact md">+3 pts</span>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== 05   EVIDENCE ===== */}
-        <section id="evidence" style={{ background: 'var(--surface-2)' }}>
-          <div className="wrap">
-            <div className="adv-head mid reveal">
-              {(() => { const ev = t('sentiment.evidence'); return (<>
-                <span className="eyebrow">{ev.eyebrow}</span>
-                <h2>{ev.h2Pre} <HL>{ev.h2Hl}</HL></h2>
-                <p className="lead">{ev.lead}</p>
-              </>); })()}
-            </div>
-
-            <div className="ev reveal">
-              <div className={`evx${evxOpen ? ' open' : ''}`}>
-                <button
-                  className="evx-head"
-                  type="button"
-                  aria-expanded={evxOpen}
-                  onClick={() => setEvxOpen((v) => !v)}
-                >
-                  <span className="evx-q">
-                    <span className="evc-asklab">
-                      <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="" style={{ width: '13px', height: '13px', objectFit: 'contain' }} />
-                      Claude
-                    </span>
-                    "Where can I find affordable and reliable everyday sneakers?"
-                  </span>
-                  <span className="evx-right">
-                    <span className="sig pos">+2 pts Brand awareness</span>
-                    <span className="chev">›</span>
-                  </span>
-                </button>
-
-                <div className="evx-body">
-                  <div className="evx-bin">
-                    <div className="evc-anslab">
-                      {t('sentiment.evidence.aiAnswer')}
-                      <span className="ln" />
-                      <span className="evc-srcchip">
-                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="" style={{ width: '13px', height: '13px', objectFit: 'contain' }} />
-                        Claude
-                      </span>
-                    </div>
-
-                    <div className="evc-ans">
-                      <span className="ell">…</span>
-                      {' '}For everyday sneakers, <span className="hl-brand">Nike</span> is a go-to for{' '}
-                      <span className="hl-pos">iconic style and wide availability</span>, with the Air Force 1 remaining{' '}
-                      <span className="hl-pos">consistently popular across budgets</span>. That said, some reviewers note{' '}
-                      <span className="hl-neg">recent models show reduced sole durability</span> versus older releases. Overall,{' '}
-                      <span className="hl-pos">Nike offers solid value in the $70–$120 range</span>.{' '}
-                      <span className="ell">…</span>
-                    </div>
-
-                    <div className="evx-map">
-                      <div className="evx-maplab">{t('sentiment.evidence.howWeScored')}</div>
-                      <div className="evx-words">
-                        <span className="sig pos">Brand awareness ↑</span>
-                        <span className="sig pos">Design ↑</span>
-                        <span className="sig neg">Durability ↓</span>
-                        <span className="sig pos">Value ↑</span>
-                      </div>
-                      <div className="evx-flow">
-                        <div className="dims">
-                          <span className="dim">Brand awareness</span>
-                          <span className="dim">Design</span>
-                          <span className="dim">Value</span>
-                        </div>
-                        <span className="evx-eq">→</span>
-                        <span className="sig pos">+positive signals</span>
-                        <span className="evx-eq">+</span>
-                        <div className="dims">
-                          <span className="dim">Durability</span>
-                        </div>
-                        <span className="evx-eq">→</span>
-                        <span className="sig neg">−negative signal</span>
-                        <span className="evx-on">= net score for this answer</span>
                       </div>
                     </div>
                   </div>

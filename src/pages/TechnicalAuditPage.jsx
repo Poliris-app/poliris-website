@@ -100,13 +100,24 @@ const AUDIT_HUB_STYLES = [
   { left: '16%', top: '25%' },
 ];
 const AUDIT_SPOKE_ENDS = [[50,7],[84,25],[84,75],[50,93],[16,75],[16,25]];
+// Where each spoke crosses the inner ring — this is where the small dot
+// marker sits, not at the satellite itself (that's hidden behind the icon).
+const AUDIT_SPOKE_DOTS = [[50,21],[73.4,32.8],[73.4,67.2],[50,79],[26.6,67.2],[26.6,32.8]];
 
 const TESTS = [
-  'robots.txt','HTTP status','canonical','redirects','indexability','sitemap','hreflang',
-  'meta title','meta description','og tags','JS rendering','structured data','schema.org',
-  'H1','H2 / H3','word count','text ratio','alt text','internal links','broken links',
-  'Core Web Vitals','LCP','CLS','mobile','HTTPS','response time',
+  'robots.txt', 'HTTP status', 'canonical', 'indexability', 'sitemap', 'hreflang', 'meta title',
 ];
+
+// Cycled across the test tags (and reused for the pipeline's stage dots
+// below) so the grid reads as colorful/varied rather than one monochrome tone.
+const TAG_COLORS = ['#716BEB', '#6BC591', '#F2B5A5', '#1E3893', '#E2935E'];
+function tagTint(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},.12)`;
+}
+// 3 rows of the same 7 tags, colored by absolute position so the tint
+// shifts down each column rather than repeating identically per row.
+const TESTS_GRID = [...TESTS, ...TESTS, ...TESTS].map((tag, i) => ({ tag, color: TAG_COLORS[i % TAG_COLORS.length] }));
 
 export default function TechnicalAuditPage() {
   const { t } = useLang();
@@ -121,12 +132,12 @@ export default function TechnicalAuditPage() {
   const p3      = ta.p3;
 
   const AUDIT_HUB_TOOLS = [
-    { abbr: 'GS', name: 'Search Console',  sub: 'google.com',           dashed: false },
-    { abbr: 'GA', name: 'Analytics',       sub: 'google.com',           dashed: false },
-    { abbr: 'Mt', name: 'Matomo',          sub: p2.toolSubs.analytics,  dashed: false },
-    { abbr: '+',  name: p2.addTool,        sub: null,                   dashed: true  },
-    { abbr: 'SF', name: 'Screaming Frog',  sub: p2.toolSubs.crawler,    dashed: false },
-    { abbr: 'SA', name: 'SearchAtlas',     sub: p2.toolSubs.seoPlatform,dashed: false },
+    { name: 'Search Console', logo: 'logo_search_console.svg' },
+    { name: 'Analytics',      logo: 'google-analytics-logo-png_seeklogo-463929.png' },
+    { name: 'Matomo',         logo: 'Matomo_Logo.svg' },
+    { name: p2.addTool,       add: true },
+    { name: 'Screaming Frog', logo: 'screaming-frog-seeklogo-2.svg' },
+    { name: 'WordPress',      logo: 'wordpress.png' },
   ];
   const p4      = ta.p4;
   const cta     = ta.cta;
@@ -210,42 +221,33 @@ export default function TechnicalAuditPage() {
               <p>{p1.p}</p>
             </div>
 
-            <div className="ta-cx2simple reveal">
-              <div className="ta-tests-card">
-                <div className="ta-tests-header">
-                  <span className="ta-tests-label">{p1.testsLabel}</span>
-                  <span className="ta-tests-badge">140 tests</span>
-                </div>
-                <div className="ta-tests-pills">
-                  {TESTS.map(tag => <span key={tag}>{tag}</span>)}
-                </div>
-                <div className="ta-tests-more">{p1.testsMore}</div>
+            <div className="ta-audit-card reveal">
+              <div className="ta-tests-header">
+                <span className="ta-tests-label">
+                  {(() => {
+                    const [bold, ...rest] = p1.testsLabel.split(' · ');
+                    return <><strong>{bold}</strong>{rest.length ? ` · ${rest.join(' · ')}` : ''}</>;
+                  })()}
+                </span>
+                <span className="ta-tests-badge">140 tests</span>
               </div>
+              <div className="ta-tests-pills">
+                {TESTS_GRID.map(({ tag, color }, i) => (
+                  <span key={i} style={{ color, background: tagTint(color) }}>{tag}</span>
+                ))}
+              </div>
+              <div className="ta-tests-more">{p1.testsMore}</div>
+
               <div className="ta-cx-arrow">
                 <span>{p1.simplify}</span>
-                <div className="ar">↓</div>
-              </div>
-            </div>
-
-            <div className="ta-cx2simple reveal" style={{ marginTop: 28 }}>
-              <AuditVis />
-            </div>
-
-            <div className="ta-gates reveal">
-              {p1.gates.map((gate, i) => (
-                <div key={i} className="ta-gate">
-                  <div className="n">{gate.n}</div>
-                  <h4>{gate.h4}</h4>
-                  <p>{gate.p}</p>
-                  {i < p1.gates.length - 1 && (
-                    <div className="ta-gate-arrow">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                      </svg>
-                    </div>
-                  )}
+                <div className="ar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>
+                  </svg>
                 </div>
-              ))}
+              </div>
+
+              <AuditVis />
             </div>
           </div>
         </section>
@@ -253,47 +255,56 @@ export default function TechnicalAuditPage() {
         {/* ── P2 · EVERY TOOL, ONE PLACE ───────────── */}
         <section className="ta-sec" id="p2">
           <div className="wrap">
-            <div className="ta-adv-head center reveal">
-              <span className="eyebrow">{p2.tag}</span>
-              <h2 className="sec-h2">{p2.h3Pre} <HL>{p2.h3Hl}</HL> {p2.h3Post}</h2>
-              <p>{p2.p}</p>
-            </div>
-
-            <div className="ta-hub-stage reveal">
-              <svg className="ta-hub-svg" viewBox="0 0 100 100" aria-hidden="true">
-                <circle className="ta-orbit ta-hub-spin" cx="50" cy="50" r="43"/>
-                <circle className="ta-orbit" cx="50" cy="50" r="29"/>
-                <g className="ta-links">
-                  {AUDIT_SPOKE_ENDS.map(([x, y], i) => (
-                    <line key={i} x1="50" y1="50" x2={x} y2={y}/>
-                  ))}
-                </g>
-                <g className="ta-ends">
-                  {AUDIT_SPOKE_ENDS.map(([x, y], i) => (
-                    <circle key={i} cx={x} cy={y} r="1.1"/>
-                  ))}
-                </g>
-              </svg>
-
-              <div className="ta-hcenter">
-                <span className="ta-pav">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0.5 L13.7 9.1 C13.9 10 14 10.1 14.9 10.3 L23.5 12 L14.9 13.7 C14 13.9 13.9 14 13.7 14.9 L12 23.5 L10.3 14.9 C10.1 14 10 13.9 9.1 13.7 L0.5 12 L9.1 10.3 C10 10.1 10.1 10 10.3 9.1 Z"/>
-                  </svg>
-                </span>
-                <div className="ta-hc-n">Poliris</div>
-                <div className="ta-hc-s">{p2.hubSub}</div>
+            <div className="ta-hub-section">
+              <div className="ta-hub-text ta-adv-head reveal">
+                <span className="eyebrow">{p2.tag}</span>
+                <h2 className="sec-h2">{p2.h3Pre} <HL>{p2.h3Hl}</HL> {p2.h3Post}</h2>
+                <p>{p2.p}</p>
+                <p>{p2.constellationCap}</p>
               </div>
 
-              {AUDIT_HUB_TOOLS.map((tool, i) => (
-                <div key={i} className={`ta-hsrc${tool.dashed ? ' ta-hsrc--add' : ''}`} style={AUDIT_HUB_STYLES[i]}>
-                  <b>{tool.name}</b>
-                  {tool.sub && <i>{tool.sub}</i>}
-                </div>
-              ))}
-            </div>
+              <div className="ta-hub-stage reveal">
+                <svg className="ta-hub-svg" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle className="ta-orbit ta-orbit-cut ta-hub-spin" cx="50" cy="50" r="43"/>
+                  <circle className="ta-orbit" cx="50" cy="50" r="29"/>
+                  <g className="ta-links">
+                    {AUDIT_SPOKE_ENDS.map(([x, y], i) => (
+                      <line key={i} x1="50" y1="50" x2={x} y2={y}/>
+                    ))}
+                  </g>
+                  <g className="ta-ends">
+                    {AUDIT_SPOKE_DOTS.map(([x, y], i) => (
+                      <circle key={i} cx={x} cy={y} r="1.6"/>
+                    ))}
+                  </g>
+                </svg>
 
-            <p className="ta-hub-cap reveal">{p2.constellationCap}</p>
+                <div className="ta-hcenter">
+                  <span className="ta-pav">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0.5 L13.7 9.1 C13.9 10 14 10.1 14.9 10.3 L23.5 12 L14.9 13.7 C14 13.9 13.9 14 13.7 14.9 L12 23.5 L10.3 14.9 C10.1 14 10 13.9 9.1 13.7 L0.5 12 L9.1 10.3 C10 10.1 10.1 10 10.3 9.1 Z"/>
+                    </svg>
+                  </span>
+                  <div className="ta-hc-n">Poliris</div>
+                  <div className="ta-hc-s">{p2.hubSub}</div>
+                </div>
+
+                {AUDIT_HUB_TOOLS.map((tool, i) => (
+                  <div key={i} className={`ta-hsrc${tool.add ? ' ta-hsrc--add' : ''}`} style={AUDIT_HUB_STYLES[i]} title={tool.name}>
+                    {tool.add ? (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 5v14"/><path d="M5 12h14"/>
+                      </svg>
+                    ) : (
+                      <img
+                        src={`${import.meta.env.BASE_URL}${tool.logo}`}
+                        alt={tool.name}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 

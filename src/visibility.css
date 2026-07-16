@@ -820,7 +820,12 @@
   margin: 0 auto;
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
-  box-shadow: var(--shadow-lg);
+  /* var(--shadow-lg) is a near-white shadow (rgba(236,236,236,.55)),
+     tuned for a card sitting on a pure white page — this section's
+     backdrop is var(--surface-2), close enough in color that the shadow
+     was disappearing into it. A darker, two-layer shadow (soft ambient
+     + tighter contact) instead, so the card actually lifts off the page. */
+  box-shadow: 0 10px 34px rgba(20, 30, 60, .14), 0 2px 8px rgba(20, 30, 60, .08);
   overflow: hidden;
 }
 .vis-page .rm2 {
@@ -828,19 +833,21 @@
   aspect-ratio: 1000 / 520;
   border-radius: var(--r-xl);
   overflow: hidden;
-  background: #050914;
+  background: var(--surface-2);
 }
 .vis-page .rm2-mapbox {
   position: absolute;
   inset: 0;
 }
-/* Mapbox's own compact attribution control — keep it legible but quiet. */
+/* Mapbox's own compact attribution control — keep it legible but quiet.
+   Light glass to sit on the colorful streets-v12 map (was dark, to match
+   the old dark-v11 map). */
 .vis-page .rm2-mapbox .mapboxgl-ctrl-bottom-right { z-index: 1; }
 .vis-page .rm2-mapbox .mapboxgl-ctrl-attrib {
-  background: rgba(5, 8, 18, .55);
+  background: rgba(255, 255, 255, .7);
   font-size: 9px;
 }
-.vis-page .rm2-mapbox .mapboxgl-ctrl-attrib a { color: rgba(220, 226, 255, .7); }
+.vis-page .rm2-mapbox .mapboxgl-ctrl-attrib a { color: rgba(50, 60, 90, .8); }
 .vis-page .rm2-kicker {
   position: absolute;
   top: 22px; left: 26px;
@@ -849,7 +856,7 @@
   font-weight: 700;
   font-size: 10px;
   letter-spacing: .14em;
-  color: rgba(160, 180, 255, .55);
+  color: rgba(30, 56, 147, .6);
   pointer-events: none;
 }
 
@@ -865,11 +872,12 @@
    */
   bottom: 20px; left: 20px;
   z-index: 4;
-  background: rgba(6, 10, 24, .68);
-  border: 1px solid rgba(255, 255, 255, .09);
+  background: rgba(255, 255, 255, .82);
+  border: 1px solid rgba(0, 0, 0, .08);
   border-radius: var(--r-md);
   padding: 11px 13px;
   backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(20, 30, 60, .1);
 }
 .vis-page .rm2-legend-title {
   font-family: var(--font-display);
@@ -877,7 +885,7 @@
   font-size: 8.5px;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(180, 192, 235, .5);
+  color: var(--fg-5);
   margin-bottom: 8px;
 }
 .vis-page .rm2-legend-row {
@@ -885,7 +893,7 @@
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 11px;
-  color: #eef1ff;
+  color: var(--fg-2);
   margin-bottom: 6px;
 }
 .vis-page .rm2-legend-row:last-child { margin-bottom: 0; }
@@ -893,7 +901,7 @@
   width: 18px; height: 18px;
   object-fit: cover;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, .2);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .1);
   flex: none;
 }
 
@@ -914,6 +922,7 @@
   opacity: 0;
   animation: rm2-marker-in .5s var(--ease-out) both;
   animation-delay: var(--pd, 0ms);
+  transition: transform .15s var(--ease-out);
 }
 @keyframes rm2-marker-in {
   from { opacity: 0; transform: translateY(-8px); }
@@ -940,9 +949,23 @@
   width: 20px; height: 20px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 0 0 2px #fff;
+  background: #fff;
+  /* A white ring made sense against the old dark/colored pin fill; the
+     pin itself is white now, so the ring needs to be dark to still read
+     as a distinct badge circle rather than disappearing into the pin. */
+  box-shadow: 0 0 0 2px rgba(30, 56, 147, .25);
 }
 .vis-page .rm2-marker-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Click-to-drill pins (Worldwide continents, and country/region depth
+   while exploring one — see EXPLORE/getCurrentView in RealMarketMapV2.jsx).
+   No badge or persistent hint by design — cursor + a small hover lift is
+   the only affordance, so it stays invisible until a user actually
+   reaches for it. */
+.vis-page .rm2-marker--clickable,
+.vis-page .rm2-callout-marker--clickable { cursor: pointer; }
+.vis-page .rm2-marker--clickable:hover .rm2-marker-inner { transform: translateY(-3px); }
+.vis-page .rm2-callout-marker--clickable:hover .rm2-callout { border-color: rgba(30, 56, 147, .35); }
 
 /*
  * The callout is its own top-level Marker now (see createCalloutEl),
@@ -954,8 +977,8 @@
  * text-driven width; Mapbox's anchor centering doesn't).
  */
 .vis-page .rm2-callout {
-  background: rgba(5, 8, 18, .95);
-  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, .97);
+  border: 1px solid rgba(0, 0, 0, .1);
   border-radius: 7px;
   padding: 5px 9px;
   white-space: nowrap;
@@ -963,6 +986,11 @@
   opacity: 0;
   animation: rm2-callout-in .5s var(--ease-out) both;
   animation-delay: var(--pd, 0ms);
+  transition: border-color .15s var(--ease-out);
+  /* A dark callout popped visibly off the old dark map on its own; a
+     light one needs its own shadow to lift off busy streets-v12 detail
+     (light land/water, roads, labels) directly behind it. */
+  box-shadow: 0 3px 10px rgba(20, 30, 60, .18);
 }
 @keyframes rm2-callout-in {
   from { opacity: 0; transform: translateY(4px); }
@@ -982,30 +1010,14 @@
   text-rendering: optimizeLegibility;
   font-weight: 700;
   font-size: 10px;
-  color: #f2f5ff;
-}
-/*
- * Worldwide-level only: each pin there stands in for a whole continent,
- * so the zone name alone ("Asia") doesn't say which real point the data
- * is measured from — this names the actual city, in a smaller, muted
- * line so it reads as supporting detail rather than competing with the
- * zone title.
- */
-.vis-page .rm2-callout-city {
-  display: block;
-  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-  text-rendering: optimizeLegibility;
-  font-size: 8.5px;
-  font-weight: 600;
-  color: rgba(180, 192, 235, .6);
-  margin-top: 1px;
+  color: var(--fg-1);
 }
 /*
  * The stat line used to be colored directly with the brand's accent
- * (`color: brand.accent`) — illegible for brands like Nike whose accent
- * is near-black (#111827), since it landed on the same near-black
- * callout background. A small color swatch now carries the brand color;
- * the text itself stays a fixed, always-legible light gray.
+ * (`color: brand.accent`) — illegible for brands whose accent is close
+ * to the callout's own background color. A small color swatch carries
+ * the brand color instead; the text itself stays a fixed, always-legible
+ * color regardless of which brand's callout it is.
  */
 .vis-page .rm2-callout-stat {
   display: flex;
@@ -1017,13 +1029,13 @@
   font-size: 9.5px;
   margin-top: 2px;
   font-weight: 600;
-  color: rgba(223, 229, 255, .82);
+  color: var(--fg-3);
 }
 .vis-page .rm2-callout-swatch {
   width: 7px; height: 7px;
   border-radius: 50%;
   flex: none;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, .3);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
 }
 
 .vis-page .rm2-bar {
@@ -1032,18 +1044,19 @@
   transform: translateX(-50%);
   z-index: 5;
   display: flex; align-items: center; gap: 12px;
-  background: rgba(6, 10, 24, .7);
-  border: 1px solid rgba(255, 255, 255, .09);
+  background: rgba(255, 255, 255, .82);
+  border: 1px solid rgba(0, 0, 0, .08);
   border-radius: var(--r-pill);
   padding: 6px 8px 6px 14px;
   backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(20, 30, 60, .12);
 }
 .vis-page .rm2-tabs { display: flex; gap: 2px; }
 .vis-page .rm2-tab {
   font-family: var(--font-display);
   font-size: 11px;
   font-weight: 600;
-  color: rgba(220, 226, 255, .5);
+  color: var(--fg-5);
   background: transparent;
   border: none;
   padding: 6px 10px;
@@ -1053,21 +1066,21 @@
   transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
 }
 .vis-page .rm2-tab b { font-weight: 800; opacity: .55; margin-right: 4px; }
-.vis-page .rm2-tab.on { color: #fff; background: rgba(255, 255, 255, .1); }
+.vis-page .rm2-tab.on { color: var(--poliris-blue); background: rgba(30, 56, 147, .08); }
 .vis-page .rm2-tab.on b { opacity: 1; }
-.vis-page .rm2-sep { width: 1px; height: 13px; background: rgba(255, 255, 255, .14); }
+.vis-page .rm2-sep { width: 1px; height: 13px; background: rgba(0, 0, 0, .1); }
 .vis-page .rm2-play {
   flex: none;
   width: 26px; height: 26px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, .18);
-  background: rgba(255, 255, 255, .07);
-  color: #eaf0ff;
+  border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(0, 0, 0, .04);
+  color: var(--fg-2);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   transition: background var(--dur) var(--ease-out);
 }
-.vis-page .rm2-play:hover { background: rgba(255, 255, 255, .15); }
+.vis-page .rm2-play:hover { background: rgba(0, 0, 0, .08); }
 .vis-page .rm2-play svg { width: 10px; height: 10px; }
 
 @media (max-width: 700px) {

@@ -12,9 +12,12 @@ import GlossaryPage from './pages/GlossaryPage';
 import DocsPage from './pages/DocsPage';
 import GetaDemoPage from './pages/GetaDemoPage';
 import LegalPage from './pages/LegalPage';
-import privacyPolicyMd from './content/legal/privacy-policy.md?raw';
-import termsOfServiceMd from './content/legal/terms-of-service.md?raw';
-import mentionsLegalesMd from './content/legal/mentions-legales.md?raw';
+import privacyPolicyEnMd from './content/legal/privacy-policy.md?raw';
+import privacyPolicyFrMd from './content/legal/privacy-policy.fr.md?raw';
+import termsOfServiceEnMd from './content/legal/terms-of-service.md?raw';
+import termsOfServiceFrMd from './content/legal/terms-of-service.fr.md?raw';
+import mentionsLegalesFrMd from './content/legal/mentions-legales.md?raw';
+import mentionsLegalesEnMd from './content/legal/mentions-legales.en.md?raw';
 
 export const routes = [
   // Bare root: client-side redirect to the default locale.
@@ -35,9 +38,9 @@ export const routes = [
       { path: 'glossary', element: <GlossaryPage /> },
       { path: 'docs', element: <DocsPage /> },
       { path: 'demo', element: <GetaDemoPage /> },
-      { path: 'privacy', element: <LegalPage page="privacy" content={privacyPolicyMd} /> },
-      { path: 'terms', element: <LegalPage page="terms" content={termsOfServiceMd} /> },
-      { path: 'mentions-legales', element: <LegalPage page="mentions-legales" content={mentionsLegalesMd} /> },
+      { path: 'privacy', element: <LegalPage page="privacy" content={{ en: privacyPolicyEnMd, fr: privacyPolicyFrMd }} /> },
+      { path: 'terms', element: <LegalPage page="terms" content={{ en: termsOfServiceEnMd, fr: termsOfServiceFrMd }} /> },
+      { path: 'mentions-legales', element: <LegalPage page="mentions-legales" content={{ en: mentionsLegalesEnMd, fr: mentionsLegalesFrMd }} /> },
     ],
   },
 ];

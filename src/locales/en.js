@@ -255,7 +255,6 @@ export default {
       { title: 'Full breakdown',     desc: 'Drill into sentiment by axis and by model, with over-time tracking.' },
       { title: 'Competitive',        desc: 'See how AI ranks your brand against every competitor, axis by axis.' },
       { title: 'IVY agent',          desc: 'AI that reads your scores, finds the gaps, and builds the fix plan.' },
-      { title: 'Evidence',           desc: 'See the exact AI words behind every score   annotated and traceable.' },
     ],
     seeIt: 'See it below',
     perAxis: {
@@ -320,14 +319,6 @@ export default {
       chatId: 'IVY · Sentiment analyst',
       planTitle: "IVY's action plan",
     },
-    evidence: {
-      eyebrow: '05 · Evidence',
-      h2Pre: 'Open the',
-      h2Hl: 'black box.',
-      lead: 'Every score is built from the actual words AI uses about you   here\'s how we read one answer.',
-      aiAnswer: 'AI answer',
-      howWeScored: 'How we scored it',
-    },
     cta: {
       heading: 'See how AI talks about you   free.',
       lead: 'Run a sentiment scan on your brand and your competitors   axis by axis, model by model   and find out exactly where you\'re slipping.',
@@ -374,7 +365,7 @@ export default {
       h3Hl: 'simple screen.',
       p: 'We run 140 tests on every page   then turn all of it into the three things AI has to clear. Complex under the hood, readable by anyone on screen.',
       testsLabel: 'What we run · 140 tests on every page',
-      testsMore: '…and 114 more, on every URL we crawl',
+      testsMore: '…and more, on every URL we crawl',
       simplify: 'we simplify',
       pipelineLabel: 'What you read · one Site Health Pipeline',
       gates: [
@@ -1306,8 +1297,9 @@ export default {
       status: { healthy: 'Healthy', attention: 'Needs attention', improvement: 'Needs improvement' },
       stages: [
         {
-          key: 'page', label: 'Page Access', color: '#3B6FF5',
+          key: 'page', label: 'Page Access', color: '#716BEB',
           question: 'Can AI reach your pages?',
+          desc: "Crawlers and AI bots have to get into your pages first. If they're blocked, nothing else matters.",
           checks: [
             { ok: true,  text: 'Robots.txt allows AI crawlers' },
             { ok: true,  text: 'XML sitemap is present and valid' },
@@ -1317,8 +1309,9 @@ export default {
           ],
         },
         {
-          key: 'content', label: 'Content Access', color: '#F97316',
+          key: 'content', label: 'Content Access', color: '#F2B5A5',
           question: 'Can AI read your content?',
+          desc: 'Once inside, your content has to be readable and parseable, not buried, broken, or hidden.',
           checks: [
             { ok: true,  text: 'Core content loads without JavaScript' },
             { ok: true,  text: 'Structured data (JSON-LD) present' },
@@ -1328,8 +1321,9 @@ export default {
           ],
         },
         {
-          key: 'quality', label: 'Content Quality', color: '#EF4444',
+          key: 'quality', label: 'Content Quality', color: '#6BC591',
           question: 'Is your content good quality?',
+          desc: 'Only well-structured content gets understood, and only understood content gets recommended.',
           checks: [
             { ok: true,  text: 'Content is original (no duplicate pages)' },
             { ok: false, text: 'Answers buried in long unstructured paragraphs' },

@@ -90,9 +90,13 @@ const META = {
       title: 'Terms of Service | Poliris',
       description: 'The terms governing access to and use of the Poliris platform and WordPress plugin.',
     },
-    // No 'mentions-legales' entry here: it's a French legal notice (LCEN)
-    // that isn't meant to be translated (see src/content/legal/mentions-legales.md)
-    // — CONTENT_LANG below routes /en/mentions-legales to the fr entry.
+    // English translation of the French legal notice — the French version
+    // at /fr/mentions-legales remains the legally operative one (LCEN is a
+    // French-language disclosure requirement); this is informational.
+    'mentions-legales': {
+      title: 'Legal Notice | Poliris',
+      description: "Legal notice for poliris.io, published by FCFD.",
+    },
   },
   fr: {
     home: {
@@ -144,32 +148,20 @@ const META = {
       title: 'Documentation | Poliris',
       description: 'Documentation de la plateforme Poliris — guides, références et tutoriels.',
     },
-    // No fr privacy/terms/mentions-legales entries: those pages don't have
-    // a translated variant yet, so CONTENT_LANG below routes /fr/privacy
-    // and /fr/terms to the "en" entries, and /en/mentions-legales to this
-    // block's own 'mentions-legales' entry.
+    privacy: {
+      title: 'Politique de confidentialité | Poliris',
+      description: 'Comment Poliris collecte, utilise, et protège les données personnelles sur le site, la plateforme, et le plugin WordPress.',
+    },
+    terms: {
+      title: "Conditions Générales d'Utilisation | Poliris",
+      description: "Les conditions régissant l'accès à la plateforme Poliris et au plugin WordPress.",
+    },
     'mentions-legales': {
       title: 'Mentions légales | Poliris',
       description: "Mentions légales du site poliris.io, édité par FCFD.",
     },
   },
 };
-
-// Pages whose content is identical across languages (no translation exists
-// yet) — the secondary URL still exists (so a footer/nav link works from
-// either language), but its <head> should report the language the content
-// is actually written in, not the URL's /:lang/ segment. Keyed "lang:page".
-const CONTENT_LANG = {
-  'fr:privacy': 'en',
-  'fr:terms': 'en',
-  'en:mentions-legales': 'fr',
-};
-
-// The language a page's content is actually written in — usually the URL's
-// own lang, except for the untranslated pages above.
-export function contentLang(lang, pageKey) {
-  return CONTENT_LANG[`${lang}:${pageKey}`] ?? lang;
-}
 
 export function getMeta(lang, pageKey) {
   const l = META[lang] ? lang : 'en';

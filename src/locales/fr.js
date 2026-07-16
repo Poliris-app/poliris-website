@@ -255,7 +255,6 @@ export default {
       { title: 'Décomposition complète', desc: 'Analysez le sentiment par axe et par modèle, avec un suivi dans le temps.' },
       { title: 'Concurrentiel',      desc: "Voyez comment l'IA classe votre marque face à chaque concurrent, axe par axe." },
       { title: 'Agent IVY',          desc: "L'IA qui lit vos scores, trouve les lacunes et construit le plan correctif." },
-      { title: 'Preuves',            desc: "Voyez les mots exacts de l'IA derrière chaque score   annotés et traçables." },
     ],
     seeIt: 'Voir ci-dessous',
     perAxis: {
@@ -320,14 +319,6 @@ export default {
       chatId: 'IVY · Analyste Sentiment',
       planTitle: "Plan d'action d'IVY",
     },
-    evidence: {
-      eyebrow: '05 · Preuves',
-      h2Pre: 'Ouvrez la',
-      h2Hl: 'boîte noire.',
-      lead: "Chaque score est construit à partir des mots réels que l'IA utilise à votre sujet   voici comment nous lisons une réponse.",
-      aiAnswer: "Réponse de l'IA",
-      howWeScored: 'Comment nous l\'avons noté',
-    },
     cta: {
       heading: "Voyez comment l'IA parle de vous   gratuitement.",
       lead: "Lancez un scan de sentiment sur votre marque et vos concurrents   axe par axe, modèle par modèle   et découvrez exactement où vous glissez.",
@@ -374,7 +365,7 @@ export default {
       h3Hl: 'écran simple.',
       p: 'Nous exécutons 140 tests sur chaque page   puis transformons tout cela en trois éléments clés que l\'IA doit franchir. Complexe en coulisses, lisible par tous à l\'écran.',
       testsLabel: 'Ce que nous exécutons · 140 tests par page',
-      testsMore: '…et 114 de plus, sur chaque URL analysée',
+      testsMore: '…et plus, sur chaque URL analysée',
       simplify: 'nous simplifions',
       pipelineLabel: 'Ce que vous lisez · un pipeline de santé du site',
       gates: [
@@ -1301,8 +1292,9 @@ export default {
       status: { healthy: 'En bonne santé', attention: 'Nécessite attention', improvement: 'À améliorer' },
       stages: [
         {
-          key: 'page', label: 'Accès aux pages', color: '#3B6FF5',
+          key: 'page', label: 'Accès aux pages', color: '#716BEB',
           question: "L'IA peut-elle accéder à vos pages ?",
+          desc: "Les robots et les IA doivent d'abord pouvoir accéder à vos pages. S'ils en sont bloqués, rien d'autre ne compte.",
           checks: [
             { ok: true,  text: "Robots.txt autorise les explorateurs IA" },
             { ok: true,  text: 'Le sitemap XML est présent et valide' },
@@ -1312,8 +1304,9 @@ export default {
           ],
         },
         {
-          key: 'content', label: 'Accès au contenu', color: '#F97316',
+          key: 'content', label: 'Accès au contenu', color: '#F2B5A5',
           question: "L'IA peut-elle lire votre contenu ?",
+          desc: "Une fois entré, votre contenu doit être lisible et analysable   ni enfoui, ni cassé, ni caché.",
           checks: [
             { ok: true,  text: 'Le contenu principal se charge sans JavaScript' },
             { ok: true,  text: 'Les données structurées (JSON-LD) sont présentes' },
@@ -1323,8 +1316,9 @@ export default {
           ],
         },
         {
-          key: 'quality', label: 'Qualité du contenu', color: '#EF4444',
+          key: 'quality', label: 'Qualité du contenu', color: '#6BC591',
           question: 'Votre contenu est-il de bonne qualité ?',
+          desc: 'Seul un contenu bien structuré est compris   et seul un contenu compris est recommandé.',
           checks: [
             { ok: true,  text: 'Le contenu est original (pas de pages dupliquées)' },
             { ok: false, text: 'Les réponses sont enfouies dans de longs paragraphes non structurés' },

@@ -405,11 +405,15 @@ function SentimentVis() {
 export function AuditVis() {
   const { t } = useLang();
   const av = t('productCarousel.auditVis');
-  const [vals, setVals] = useState([81, 80, 36]);
+  const [vals] = useState([81, 80, 36]);
 
   const STAGE_META = av.stages.map(s => ({ ...s }));
-
   const STAGES = STAGE_META.map((m, i) => ({ ...m, value: vals[i] }));
+
+  // One color for the flow itself — the stage colors (s.color, set in the
+  // locale data) are reserved for the small identity dots next to each
+  // column header and each numbered question on the left, not the wave.
+  const WAVE_COLOR = '#2563eb';
 
   const W = 1200, H = 420, CY = 210, SW = 400, MIN_H = 15, MAX_H = 180, BN_THRESH = 75;
 
@@ -422,12 +426,10 @@ export function AuditVis() {
   })();
 
   const health = Math.round(STAGES.reduce((a, s) => a + s.value, 0) / STAGES.length);
-  const reach  = Math.round(vals.reduce((a, v) => a * v / 100, 100));
-  const status = health >= 80 ? 'Healthy' : health >= 60 ? 'Needs attention' : 'Needs improvement';
   const ringColor = health >= 70 ? '#16A34A' : health >= 50 ? '#D97706' : '#DC2626';
   const ringR = 26, ringC = 2 * Math.PI * ringR;
 
-  /* Full pipe outline   single path, clipped per stage for colour */
+  /* Full pipe outline   single path spanning all 3 stages, one fill color */
   function masterPath() {
     const [h0, h1, h2, h3] = halves;
     const x = [0, SW, SW * 2, SW * 3];
@@ -454,19 +456,10 @@ export function AuditVis() {
   const mp = masterPath();
   const svgPct = (sx, sy) => ({ left: `${(sx / W) * 100}%`, top: `${(sy / H) * 100}%` });
   const stageCX = i => SW * i + SW / 2;
-  const stageAY = i => CY - (halves[i] + halves[i + 1]) / 2 - 18;
 
   /* Primary bottleneck = single stage with the minimum value, if below threshold */
   const minVal = Math.min(...vals);
   const bnIdx  = minVal < BN_THRESH ? vals.indexOf(minVal) : -1;
-
-  const AI_LOGOS = [
-    { src: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,    alt: 'Mistral',    left: '1.5%', top: '27%' },
-    { src: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   alt: 'ChatGPT',    left: '6.5%', top: '40%' },
-    { src: `${import.meta.env.BASE_URL}claudeai-com-logo.png`,  alt: 'Claude',     left: '12%',  top: '27%' },
-    { src: `${import.meta.env.BASE_URL}perplexity-ai-logo.png`, alt: 'Perplexity', left: '2%',   top: '65%' },
-    { src: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,     alt: 'Gemini',     left: '7.5%', top: '76%' },
-  ];
 
   return (
     <div className="vis-card">
@@ -482,7 +475,7 @@ export function AuditVis() {
             <span className="pipeline-score-desc">{av.basedOn}</span>
           </div>
           <div className="pipeline-ring">
-            <svg viewBox="0 0 64 64" width="52" height="52"
+            <svg viewBox="0 0 64 64" width="64" height="64"
               style={{ transform: 'rotate(-90deg)' }}>
               <circle cx="32" cy="32" r={ringR} fill="none" stroke="#E2E8F0" strokeWidth="5"/>
               <circle cx="32" cy="32" r={ringR} fill="none" stroke={ringColor} strokeWidth="5"
@@ -495,111 +488,84 @@ export function AuditVis() {
         </div>
       </div>
 
-      {/* ── Full-bleed funnel ──────────────────────────────── */}
-      <div className="pipeline-funnel">
-        <svg viewBox={`0 0 ${W} ${H}`} className="pipeline-svg">
-          <defs>
-            {STAGES.map((s, i) => (
-              <clipPath key={s.key} id={`pcl-${i}`}>
-                <rect x={SW * i} y={0} width={SW} height={H}/>
-              </clipPath>
-            ))}
-            <filter id="pipe-glow" x="-25%" y="-25%" width="150%" height="150%">
-              <feGaussianBlur stdDeviation="10"/>
-            </filter>
-          </defs>
-
-          {/* Stage dividers */}
-          <line x1={SW}   y1={20} x2={SW}   y2={H - 20} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6"/>
-          <line x1={SW*2} y1={20} x2={SW*2} y2={H - 20} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6"/>
-
-          {/* Outer halo */}
+      <div className="pipeline-body">
+        {/* ── LEFT: numbered question + explanation per stage ─── */}
+        <div className="pipeline-stages">
           {STAGES.map((s, i) => (
-            <path key={`halo-${s.key}`} d={mp}
-              fill="none" stroke={s.color}
-              strokeOpacity="0.22"
-              strokeWidth="26" filter="url(#pipe-glow)" clipPath={`url(#pcl-${i})`}/>
-          ))}
-          {/* Lighter ring */}
-          {STAGES.map((s, i) => (
-            <path key={`ring-${s.key}`} d={mp}
-              fill="none" stroke={s.color}
-              strokeOpacity="0.32"
-              strokeWidth="12" clipPath={`url(#pcl-${i})`}/>
-          ))}
-          {/* Core fill */}
-          {STAGES.map((s, i) => (
-            <path key={`fill-${s.key}`} d={mp} fill={s.color}
-              clipPath={`url(#pcl-${i})`}/>
-          ))}
-
-          {/* Dotted flow lines */}
-          <path d={edgePath('top', 12)}    fill="none" stroke="#fff" strokeOpacity="0.6"
-            strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
-          <path d={edgePath('bottom', 12)} fill="none" stroke="#fff" strokeOpacity="0.6"
-            strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
-        </svg>
-
-        {/* AI model logos */}
-        {AI_LOGOS.map((l) => (
-          <div key={l.alt} className="pipeline-logo"
-            style={{ left: l.left, top: l.top, pointerEvents: 'none' }}>
-            <img src={l.src} alt={l.alt}/>
-          </div>
-        ))}
-
-        {/* Bottleneck badge   only on the single primary bottleneck */}
-        {bnIdx >= 0 && (
-          <div className="pipeline-bottleneck-badge"
-            style={{ ...svgPct(stageCX(bnIdx), stageAY(bnIdx)), transform: 'translate(-50%,-100%)', pointerEvents: 'none' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-              strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            {av.bottleneck}
-          </div>
-        )}
-
-        {/* "Capped by" badges   only on stages downstream of the primary bottleneck */}
-        {bnIdx >= 0 && STAGES.map((s, i) => {
-          if (i <= bnIdx) return null;
-          return (
-            <div key={`cap-${s.key}`} className="pipeline-capped-badge"
-              style={{ ...svgPct(stageCX(i), stageAY(i)), transform: 'translate(-50%,-100%)', pointerEvents: 'none' }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
-              {av.cappedBy} {STAGES[bnIdx].label}
+            <div className="pipeline-stage-item" key={s.key}>
+              <span className="pipeline-stage-num" style={{ background: s.color }}>{i + 1}</span>
+              <div className="pipeline-stage-copy">
+                <h4>{s.question}</h4>
+                <p>{s.desc}</p>
+              </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
 
-        {/* Score pills */}
-        {STAGES.map((s, i) => (
-          <div key={`pill-${s.key}`}
-            className="pipeline-pill"
-            style={{
-              ...svgPct(stageCX(i), CY),
-              transform: 'translate(-50%,-50%)',
-            }}>
-            <span className="pipeline-pill-lbl">{s.label}</span>
-            <span className="pipeline-pill-val">{s.value}%</span>
+        {/* ── RIGHT: column headers + single-color flow ───────── */}
+        <div className="pipeline-chart">
+          <div className="pipeline-chart-headers">
+            {STAGES.map((s) => (
+              <div className="pipeline-chart-header" key={s.key}>
+                <span className="pipeline-chart-lbl">{s.label}</span>
+                <span className="pipeline-chart-val">{s.value}%</span>
+                <span className="pipeline-chart-dot" style={{ background: s.color }}/>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* ── Stage tabs ─────────────────────────────────────── */}
-      <div className="pipeline-questions">
-        {STAGES.map((s) => (
-          <div key={`q-${s.key}`} className="pipeline-question">
-            {s.question}
+          <div className="pipeline-funnel">
+            <svg viewBox={`0 0 ${W} ${H}`} className="pipeline-svg" preserveAspectRatio="none">
+              <defs>
+                <clipPath id="pcl-0">
+                  <rect x={0} y={0} width={SW} height={H}/>
+                </clipPath>
+                <clipPath id="pcl-tail">
+                  <rect x={SW} y={0} width={SW * 2} height={H}/>
+                </clipPath>
+                <linearGradient id="pgrad-tail" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset={`${(SW / W) * 100}%`} stopColor={WAVE_COLOR} stopOpacity={STAGES[1].value / 100}/>
+                  <stop offset="100%" stopColor={WAVE_COLOR} stopOpacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d={mp} fill={WAVE_COLOR} fillOpacity={STAGES[0].value / 100} clipPath="url(#pcl-0)"/>
+              <path d={mp} fill="url(#pgrad-tail)" clipPath="url(#pcl-tail)"/>
+              <path d={edgePath('top', 10)}    fill="none" stroke="#fff" strokeOpacity="0.55"
+                strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
+              <path d={edgePath('bottom', 10)} fill="none" stroke="#fff" strokeOpacity="0.55"
+                strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round"/>
+              <line x1={SW}   y1={8} x2={SW}   y2={H - 8} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6"/>
+              <line x1={SW*2} y1={8} x2={SW*2} y2={H - 8} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6"/>
+            </svg>
+
+            {/* Transition arrows at each divider */}
+            {[1, 2].map(i => (
+              <div key={`arrow-${i}`} className="pipeline-arrow" style={{ ...svgPct(SW * i, CY), pointerEvents: 'none' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"
+                  strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </div>
+            ))}
+
+            {/* Bottleneck badge   only on the single primary bottleneck */}
+            {bnIdx >= 0 && (
+              <div className="pipeline-bottleneck-badge"
+                style={{ ...svgPct(stageCX(bnIdx), 20), transform: 'translate(-50%,0)', pointerEvents: 'none' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                  strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                {av.bottleneck}
+              </div>
+            )}
           </div>
-        ))}
+          <div className="pipeline-baseline">
+            {STAGES.map(s => <span key={`base-${s.key}`} style={{ background: s.color }}/>)}
+          </div>
+        </div>
       </div>
-
     </div>
   );
 }
