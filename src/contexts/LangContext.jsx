@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation, Outlet, Navigate } from 'react-router-dom';
-import { identifyUser, trackEvent } from '../lib/analytics';
+import { identifyUser, trackPageview } from '../lib/analytics';
 import en from '../locales/en';
 import fr from '../locales/fr';
 
@@ -37,7 +37,7 @@ export function LangWrapper() {
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
-    trackEvent('$pageview');
+    trackPageview();
   }, [location.pathname, location.hash]);
 
   function t(key) {

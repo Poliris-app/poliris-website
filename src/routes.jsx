@@ -11,6 +11,10 @@ import FaqsPage from './pages/FaqsPage';
 import GlossaryPage from './pages/GlossaryPage';
 import DocsPage from './pages/DocsPage';
 import GetaDemoPage from './pages/GetaDemoPage';
+import LegalPage from './pages/LegalPage';
+import privacyPolicyMd from './content/legal/privacy-policy.md?raw';
+import termsOfServiceMd from './content/legal/terms-of-service.md?raw';
+import mentionsLegalesMd from './content/legal/mentions-legales.md?raw';
 
 export const routes = [
   // Bare root: client-side redirect to the default locale.
@@ -31,6 +35,9 @@ export const routes = [
       { path: 'glossary', element: <GlossaryPage /> },
       { path: 'docs', element: <DocsPage /> },
       { path: 'demo', element: <GetaDemoPage /> },
+      { path: 'privacy', element: <LegalPage page="privacy" content={privacyPolicyMd} /> },
+      { path: 'terms', element: <LegalPage page="terms" content={termsOfServiceMd} /> },
+      { path: 'mentions-legales', element: <LegalPage page="mentions-legales" content={mentionsLegalesMd} /> },
     ],
   },
 ];

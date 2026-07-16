@@ -43,3 +43,22 @@ export function trackEvent(name, props = {}) {
     // never let analytics crash the app
   }
 }
+
+// Called once per route change (see LangContext's LangWrapper). Both
+// PostHog and GA have their automatic pageview capture disabled in their
+// init snippets, since this is a client-side-routed SPA — the automatic
+// capture only ever fires once, on initial script load, and misses every
+// in-app navigation after that.
+export function trackPageview() {
+  trackEvent('$pageview');
+
+  try {
+    window.gtag?.('event', 'page_view', {
+      page_path: window.location.pathname + window.location.search,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  } catch {
+    // never let analytics crash the app
+  }
+}

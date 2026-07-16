@@ -85,6 +85,27 @@
     <lastmod>2026-07-03</lastmod>
   </url>
   <url>
+    <loc>https://poliris.io/en/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/privacy"/>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://poliris.io/en/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/terms"/>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://poliris.io/en/mentions-legales</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/mentions-legales"/>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
     <loc>https://poliris.io/fr/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/"/>
@@ -167,5 +188,26 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/demo"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/demo"/>
     <lastmod>2026-07-03</lastmod>
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/privacy"/>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/terms"/>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/mentions-legales</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/mentions-legales"/>
+    <lastmod>2026-07-16</lastmod>
   </url>
 </urlset>

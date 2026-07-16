@@ -18,6 +18,15 @@ const HIDDEN_INDICES = new Set([1]);
 // one exists — reuses the same copy as the navbar's CTA.
 const PRICING_INDEX = 3;
 
+// Contractual URLs for the WordPress plugin's readme.txt — do not add a
+// /{lang}/ prefix here. They 301 to their real (lang-prefixed) page via
+// vercel.json regardless of which language the visitor is currently on.
+const LEGAL_LINKS = [
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms of Service' },
+  { href: '/mentions-legales', label: 'Mentions légales' },
+];
+
 export default function Footer() {
   const { lang, t } = useLang();
   const links = t('footer.links');
@@ -38,7 +47,14 @@ export default function Footer() {
             )
           ))}
         </nav>
+      </div>
+      <div className="footer__legal">
         <p className="footer__copy">{t('footer.copy')}</p>
+        <nav className="footer__legal-nav">
+          {LEGAL_LINKS.map(({ href, label }) => (
+            <a key={href} href={href} className="footer__link">{label}</a>
+          ))}
+        </nav>
       </div>
     </footer>
   );

@@ -151,9 +151,7 @@ export default {
       h2Pre: 'Votre marché réel,',
       h2Hl: 'pas le monde entier.',
       lead: "Affinez du mondial jusqu'à votre ville. Zoomez et les géants mondiaux s'effacent   laissant les concurrents que vous rencontrez réellement.",
-      ladder: ['Mondial', 'National', 'Régional', 'Local'],
       hint: "Chaque niveau a ses propres concurrents   choisissez une portée et regardez les noms changer.",
-      scopeLabel: 'Portée',
     },
     sourceIntel: {
       eyebrow: '03 · Intelligence des sources',

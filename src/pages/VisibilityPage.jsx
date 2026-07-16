@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useEffect } from 'react';
 import '../visibility.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
-import GlobeMap from '../components/GlobeMap';
+import RealMarketMapV2 from '../components/RealMarketMapV2';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import VisibilityDashboard from '../components/VisibilityDashboard';
@@ -77,47 +77,8 @@ const PF_LINE_OFFSET = PF_TOPICS.reduce((acc, topic) => {
   return acc;
 }, []);
 
-/* ---- Scope data for the Real Market section -------------- */
-const SCOPE_DATA = {
-  worldwide: { loc: 'World · global' },
-  country:   { loc: 'France · national' },
-  region:    { loc: 'Auvergne-Rhône-Alpes' },
-  local:     { loc: 'Lyon · 69001–69009' },
-};
-
-const SCOPES = ['worldwide', 'country', 'region', 'local'];
-
 export default function VisibilityPage() {
   const { t } = useLang();
-  const [scope, setScope]   = useState('worldwide');
-  const [fading, setFading] = useState(false);
-  const fadeTimer = useRef(null);
-
-  /* Fade out → swap scope → fade in */
-  const changeScope = useCallback((nextOrFn) => {
-    clearTimeout(fadeTimer.current);
-    setFading(true);
-    fadeTimer.current = setTimeout(() => {
-      setScope(nextOrFn);
-      setFading(false);
-    }, 200);
-  }, []);
-
-  const advanceScope = useCallback(() => {
-    changeScope(prev => SCOPES[(SCOPES.indexOf(prev) + 1) % SCOPES.length]);
-  }, [changeScope]);
-
-  /* Auto-cycle scope: Worldwide → Country → Region → Local → …
-     Worldwide holds until the globe completes a full rotation
-     (GlobeMap calls onRotationComplete) so the pinned markers get
-     a chance to spin into view. Other scopes advance on a timer. */
-  useEffect(() => {
-    if (scope === 'worldwide') return;
-    const id = setInterval(advanceScope, 3000);
-    return () => clearInterval(id);
-  }, [scope, advanceScope]);
-
-  useEffect(() => () => clearTimeout(fadeTimer.current), []);
 
   /* Reveal-on-scroll: adds .in to every .reveal element */
   useEffect(() => {
@@ -135,8 +96,6 @@ export default function VisibilityPage() {
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
-
-  const scopeData = SCOPE_DATA[scope];
 
   return (
     <div className="vis-page">
@@ -283,63 +242,26 @@ export default function VisibilityPage() {
         <section id="market" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <div className="mkt">
-              {/* Left: text */}
-              <div className="adv-head reveal">
+              {/* Heading */}
+              <div className="adv-head si-head reveal">
                 {(() => { const rm = t('visibility.realMarket'); return (<>
-                  <div className="eyebrow">{rm.eyebrow}</div>
-                  <h2>{rm.h2Pre} <span className="hl">{rm.h2Post}</span></h2>
+                  <div className="si-head-copy">
+                    <div className="eyebrow">{rm.eyebrow}</div>
+                    <h2>{rm.h2Pre} <span className="hl">{rm.h2Post}</span></h2>
+                    <div className="mkt-hint">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                      </svg>
+                      {t('visibility.realMarket.hint')}
+                    </div>
+                  </div>
                   <p className="lead">{rm.lead}</p>
                 </>); })()}
-                <div className="scope-ladder">
-                  {t('visibility.realMarket.ladder').map((l, i, arr) => (
-                    <span key={i}><span className="sl">{l}</span>{i < arr.length - 1 && <span className="sep">›</span>}</span>
-                  ))}
-                </div>
-                <div className="mkt-hint">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-                  </svg>
-                  {t('visibility.realMarket.hint')}
-                </div>
               </div>
 
-              {/* Right: map card */}
-              <div className="reveal">
-                <div className="zoomctl">
-                  <span className="zl">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-                    </svg>
-                    {t('visibility.realMarket.scopeLabel')}
-                  </span>
-                  <div className="scope-tog">
-                    {SCOPES.map((s) => (
-                      <button
-                        key={s}
-                        className={scope === s ? 'on' : ''}
-                        onClick={() => changeScope(s)}
-                      >
-                        {s.charAt(0).toUpperCase() + s.slice(1)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="mkt-card">
-                  <div className="mkt-bar">
-                    <span className={`loc${fading ? ' fading' : ''}`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-                      </svg>
-                      {scopeData.loc}
-                    </span>
-                  </div>
-                  <div className="mkt-map">
-                    <GlobeMap
-                      scope={scope}
-                      onRotationComplete={scope === 'worldwide' ? advanceScope : undefined}
-                    />
-                  </div>
-                </div>
+              {/* Map: full width, below the heading */}
+              <div className="rm2-wrap reveal">
+                <RealMarketMapV2 />
               </div>
             </div>
           </div>

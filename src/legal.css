@@ -1,0 +1,114 @@
+/* ============================================================
+   LEGAL PAGES — Privacy Policy, Terms of Service, Mentions légales
+   Plain, readable rendering of Markdown sourced from src/content/legal/.
+   ============================================================ */
+.legal-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 100px 32px 96px;
+}
+
+.legal-doc h1 {
+  font-family: var(--manrope);
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.15;
+  color: var(--fg-1);
+  margin: 0 0 8px;
+}
+
+/* The "Last updated" line is the first paragraph right after the h1 in
+   every source document (as *italic* text) — style it as page metadata. */
+.legal-doc h1 + p em {
+  font-style: normal;
+  font-size: 14px;
+  color: var(--fg-6);
+}
+
+.legal-doc h2 {
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--fg-1);
+  margin: 44px 0 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.legal-doc h2:first-of-type { border-top: none; padding-top: 0; }
+
+.legal-doc h3 {
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--fg-2);
+  margin: 28px 0 12px;
+}
+
+.legal-doc p,
+.legal-doc li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--fg-3);
+}
+
+.legal-doc p { margin: 0 0 16px; }
+
+.legal-doc ul,
+.legal-doc ol {
+  margin: 0 0 16px;
+  padding-left: 22px;
+}
+.legal-doc ul { list-style: disc; }
+.legal-doc ol { list-style: decimal; }
+.legal-doc li { margin-bottom: 8px; }
+.legal-doc li::marker { color: var(--fg-6); }
+
+.legal-doc a {
+  color: var(--poliris-blue);
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 2px;
+}
+.legal-doc a:hover { text-decoration-color: var(--poliris-blue); }
+
+.legal-doc strong { color: var(--fg-2); font-weight: 700; }
+
+.legal-doc hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+
+.legal-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 24px;
+  font-size: 13.5px;
+}
+.legal-doc th,
+.legal-doc td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.legal-doc th {
+  font-family: var(--font-display);
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--fg-2);
+}
+.legal-doc td { color: var(--fg-4); }
+
+/* Long table cells (URLs, sub-processor names) shouldn't force the page
+   to scroll horizontally — let the table itself scroll instead. */
+.legal-doc .table-scroll,
+.legal-doc table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 600px) {
+  .legal-wrap { padding: 40px 20px 72px; }
+}

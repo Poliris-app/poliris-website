@@ -5,9 +5,6 @@
 
 /* ---- Left-align overrides (reset cascade from .reveal.in) - */
 .vis-page .vis-agent-body  { text-align: left; }
-.vis-page .mkt > .adv-head { text-align: left; }
-.vis-page .mkt .scope-ladder,
-.vis-page .mkt .mkt-hint   { text-align: left; }
 
 /* ============================================================
    HERO
@@ -248,36 +245,10 @@
 /* ============================================================
    02 · REAL MARKET
    ============================================================ */
-.vis-page .mkt         { display: grid; grid-template-columns: minmax(270px, 420px) 1fr; gap: 46px; align-items: center; }
-.vis-page .mkt > .adv-head { margin-top: -110px; }
+.vis-page .mkt          { display: flex; flex-direction: column; align-items: stretch; }
 
-.vis-page .scope-ladder        { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-top: 22px; }
-.vis-page .scope-ladder .sl    { font-family: var(--font-display); font-size: 12.5px; font-weight: 600; background: #fff; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 7px 15px; color: var(--fg-3); }
-.vis-page .scope-ladder .sep   { color: var(--fg-6); }
-.vis-page .mkt-hint            { font-size: 14px; color: var(--fg-6); margin-top: 20px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
+.vis-page .mkt-hint            { font-size: 14px; color: var(--fg-6); margin-top: 16px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
 .vis-page .mkt-hint svg        { flex: 0 0 auto; color: var(--poliris-blue); }
-
-.vis-page .zoomctl     { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
-.vis-page .zoomctl .zl { display: flex; align-items: center; gap: 7px; font-family: var(--font-display); font-weight: 800; font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--fg-5); }
-.vis-page .zoomctl .zl svg { width: 15px; height: 15px; color: var(--poliris-blue); }
-.vis-page .scope-tog { display: inline-flex; background: #fff; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 5px; gap: 3px; box-shadow: var(--shadow-sm); flex-wrap: wrap; }
-.vis-page .scope-tog button {
-  font-family: var(--font-body); font-weight: 500; font-size: 13.5px;
-  border: 0; background: transparent; color: var(--fg-4);
-  padding: 8px 15px; border-radius: var(--r-pill);
-  cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
-}
-.vis-page .scope-tog button.on { background: var(--poliris-blue); color: #fff; }
-
-.vis-page .mkt-card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl); box-shadow: var(--shadow-lg); overflow: hidden; }
-.vis-page .mkt-bar  { display: flex; align-items: center; gap: 7px; padding: 13px 18px; border-bottom: 1px solid var(--border); background: #fbfcfe; }
-.vis-page .mkt-bar .d { width: 11px; height: 11px; border-radius: 50%; background: #dcdfe8; }
-.vis-page .mkt-bar .loc { font-family: var(--font-body); font-size: 12.5px; color: var(--fg-4); display: flex; align-items: center; gap: 7px; }
-.vis-page .mkt-bar .loc svg { width: 13px; height: 13px; color: var(--poliris-blue); }
-
-.vis-page .mkt-map     { position: relative; overflow: hidden; background: #020816; }
-.vis-page .mkt-map svg { display: block; width: 100%; height: auto; }
 
 /* ── D3 Globe ────────────────────────────────────────────────── */
 .globe-wrap {
@@ -316,9 +287,6 @@
   font-family: var(--font-display); font-weight: 700; font-size: 12px; fill: #fff;
   paint-order: stroke; stroke: rgba(15,25,70,.55); stroke-width: 3px; stroke-linejoin: round;
 }
-
-.vis-page .mkt-bar .loc { transition: opacity 0.2s ease; }
-.vis-page .mkt-bar .loc.fading { opacity: 0; }
 
 /* ============================================================
    03 · SOURCE INTELLIGENCE
@@ -733,10 +701,8 @@
    ============================================================ */
 @media(max-width: 980px) {
   .vis-page .tour       { grid-template-columns: 1fr 1fr; }
-  .vis-page .mkt        { grid-template-columns: 1fr; gap: 36px; }
+  .vis-page .mkt        { gap: 32px; }
   .vis-page .nora-grid  { grid-template-columns: 1fr; gap: 36px; }
-  /* Remove negative margin — only makes sense in 2-col layout */
-  .vis-page .mkt > .adv-head { margin-top: 0; }
 }
 @media(max-width: 900px) {
   .vis-page section { padding: 64px 0; }
@@ -806,24 +772,6 @@
   /* Globe: compact on phone */
   .globe-wrap { height: 200px; }
 
-  /* Scope ladder: compact pills so all 4 fit in one row */
-  .vis-page .scope-ladder { flex-wrap: nowrap; gap: 5px; justify-content: center; }
-  .vis-page .scope-ladder .sl { font-size: 11px; padding: 4px 9px; }
-
-  /* Scope controls: stack label above 2×2 button grid */
-  .vis-page .zoomctl { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .vis-page .scope-tog {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    border-radius: 12px;
-  }
-  .vis-page .scope-tog button {
-    flex: 1 0 calc(50% - 3px);
-    text-align: center;
-    justify-content: center;
-  }
-
   /* Source pipeline: vertical list */
   .vis-page .src-pipeline {
     flex-direction: column;
@@ -861,5 +809,273 @@
   .reg                           { transition: none; }
   .mkt-focus                     { transition: none; }
   .mkt-focus .fring              { animation: none; }
+}
+
+/* ============================================================
+   REAL MARKET V2 — real d3-geo/world-atlas map, brand-logo pins
+   ============================================================ */
+.vis-page .rm2-wrap {
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.vis-page .rm2 {
+  position: relative;
+  aspect-ratio: 1000 / 520;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: #050914;
+}
+.vis-page .rm2-mapbox {
+  position: absolute;
+  inset: 0;
+}
+/* Mapbox's own compact attribution control — keep it legible but quiet. */
+.vis-page .rm2-mapbox .mapboxgl-ctrl-bottom-right { z-index: 1; }
+.vis-page .rm2-mapbox .mapboxgl-ctrl-attrib {
+  background: rgba(5, 8, 18, .55);
+  font-size: 9px;
+}
+.vis-page .rm2-mapbox .mapboxgl-ctrl-attrib a { color: rgba(220, 226, 255, .7); }
+.vis-page .rm2-kicker {
+  position: absolute;
+  top: 22px; left: 26px;
+  z-index: 3;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: rgba(160, 180, 255, .55);
+  pointer-events: none;
+}
+
+.vis-page .rm2-legend {
+  position: absolute;
+  /*
+   * Bottom-left, not top-right: several pins (Asia/Oceania at Worldwide,
+   * various country/region labels at closer zooms) land near the right
+   * edge of the map, and their centered callouts extend past them in both
+   * directions — a top-right legend panel sits right in that collision
+   * zone. Bottom-left is clear of the tab bar (bottom-center) and kicker
+   * (top-left) at every zoom level.
+   */
+  bottom: 20px; left: 20px;
+  z-index: 4;
+  background: rgba(6, 10, 24, .68);
+  border: 1px solid rgba(255, 255, 255, .09);
+  border-radius: var(--r-md);
+  padding: 11px 13px;
+  backdrop-filter: blur(6px);
+}
+.vis-page .rm2-legend-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(180, 192, 235, .5);
+  margin-bottom: 8px;
+}
+.vis-page .rm2-legend-row {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 11px;
+  color: #eef1ff;
+  margin-bottom: 6px;
+}
+.vis-page .rm2-legend-row:last-child { margin-bottom: 0; }
+.vis-page .rm2-legend-logo {
+  width: 18px; height: 18px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .2);
+  flex: none;
+}
+
+/*
+ * Mapbox positions `.rm2-marker` (the root element handed to
+ * mapboxgl.Marker) itself by setting its own `transform` directly, every
+ * frame, to keep it pinned to its lng/lat as the map pans/zooms. Marker
+ * DOM elements are NOT affected by map zoom the way the old CSS-scaled
+ * SVG stage was — they always render at their natural CSS size — so
+ * there's no counter-scale to compose here at all, unlike the previous
+ * d3-geo implementation. Anything WE want to animate (pop-in, position
+ * within the marker) has to live on `.rm2-marker-inner`, a child, so it
+ * never touches the `transform` property Mapbox owns on the root.
+ */
+.vis-page .rm2-marker-inner {
+  position: relative;
+  width: 34px; height: 44px;
+  opacity: 0;
+  animation: rm2-marker-in .5s var(--ease-out) both;
+  animation-delay: var(--pd, 0ms);
+}
+@keyframes rm2-marker-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/*
+ * The drop-shadow lives on the pin SVG specifically, not on
+ * `.rm2-marker-inner` (its parent). A CSS `filter` forces the browser to
+ * rasterize its entire subtree into an offscreen buffer to compute the
+ * effect — if it sat on the parent, that subtree would include
+ * `.rm2-callout`'s text too, and text that gets swept into a filter's
+ * raster pass reliably comes out softer than text composited normally.
+ * This is what was causing the callout text (but not the map's own
+ * WebGL-rendered labels, a completely separate pipeline) to look blurry.
+ */
+.vis-page .rm2-marker-pin {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .4));
+}
+.vis-page .rm2-marker-logo {
+  position: absolute;
+  left: 50%; top: 34%;
+  transform: translate(-50%, -50%);
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px #fff;
+}
+.vis-page .rm2-marker-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+/*
+ * The callout is its own top-level Marker now (see createCalloutEl),
+ * positioned entirely by Mapbox's anchor:'bottom' + offset — so unlike
+ * before, `.rm2-callout` needs no position/left/transform of its own for
+ * PLACEMENT, only for its pop-in animation. This also sidesteps the
+ * sub-pixel centering issue a manual `left:50%; transform:translateX
+ * (-50%)` had (that math depends on this element's own, often-fractional
+ * text-driven width; Mapbox's anchor centering doesn't).
+ */
+.vis-page .rm2-callout {
+  background: rgba(5, 8, 18, .95);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 7px;
+  padding: 5px 9px;
+  white-space: nowrap;
+  text-align: center;
+  opacity: 0;
+  animation: rm2-callout-in .5s var(--ease-out) both;
+  animation-delay: var(--pd, 0ms);
+}
+@keyframes rm2-callout-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/*
+ * Deliberately NOT var(--font-display) (Manrope, a custom web font) here.
+ * At 10px/bold, small custom-font glyphs are more prone to looking soft
+ * on Windows ClearType than the OS's own hinted UI font — "Segoe UI" on
+ * Windows, system-ui elsewhere — so this stack is a targeted test for
+ * that specific complaint, isolated to just this map's callouts rather
+ * than changing the site's typography everywhere.
+ */
+.vis-page .rm2-callout-zone {
+  display: block;
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  font-weight: 700;
+  font-size: 10px;
+  color: #f2f5ff;
+}
+/*
+ * Worldwide-level only: each pin there stands in for a whole continent,
+ * so the zone name alone ("Asia") doesn't say which real point the data
+ * is measured from — this names the actual city, in a smaller, muted
+ * line so it reads as supporting detail rather than competing with the
+ * zone title.
+ */
+.vis-page .rm2-callout-city {
+  display: block;
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: 8.5px;
+  font-weight: 600;
+  color: rgba(180, 192, 235, .6);
+  margin-top: 1px;
+}
+/*
+ * The stat line used to be colored directly with the brand's accent
+ * (`color: brand.accent`) — illegible for brands like Nike whose accent
+ * is near-black (#111827), since it landed on the same near-black
+ * callout background. A small color swatch now carries the brand color;
+ * the text itself stays a fixed, always-legible light gray.
+ */
+.vis-page .rm2-callout-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: 9.5px;
+  margin-top: 2px;
+  font-weight: 600;
+  color: rgba(223, 229, 255, .82);
+}
+.vis-page .rm2-callout-swatch {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .3);
+}
+
+.vis-page .rm2-bar {
+  position: absolute;
+  left: 50%; bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(6, 10, 24, .7);
+  border: 1px solid rgba(255, 255, 255, .09);
+  border-radius: var(--r-pill);
+  padding: 6px 8px 6px 14px;
+  backdrop-filter: blur(6px);
+}
+.vis-page .rm2-tabs { display: flex; gap: 2px; }
+.vis-page .rm2-tab {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(220, 226, 255, .5);
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+.vis-page .rm2-tab b { font-weight: 800; opacity: .55; margin-right: 4px; }
+.vis-page .rm2-tab.on { color: #fff; background: rgba(255, 255, 255, .1); }
+.vis-page .rm2-tab.on b { opacity: 1; }
+.vis-page .rm2-sep { width: 1px; height: 13px; background: rgba(255, 255, 255, .14); }
+.vis-page .rm2-play {
+  flex: none;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .07);
+  color: #eaf0ff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease-out);
+}
+.vis-page .rm2-play:hover { background: rgba(255, 255, 255, .15); }
+.vis-page .rm2-play svg { width: 10px; height: 10px; }
+
+@media (max-width: 700px) {
+  .vis-page .rm2 { aspect-ratio: 4 / 5; }
+  .vis-page .rm2-legend { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vis-page .rm2-marker-inner { animation: none; opacity: 1; }
+  .vis-page .rm2-callout { animation: none; opacity: 1; }
 }
 

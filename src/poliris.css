@@ -4185,7 +4185,7 @@ button { cursor: pointer; border: none; background: none; }
 .footer__inner {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 30px 32px;
+  padding: 18px 32px;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -4198,9 +4198,25 @@ button { cursor: pointer; border: none; background: none; }
 .footer__link:hover { color: var(--blue); }
 .footer__copy { font-size: 13px; color: var(--fg6); flex-shrink: 0; }
 
+.footer__legal {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 32px 26px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer__legal-nav { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+.footer__legal-nav .footer__link { font-size: 13px; }
+
 @media (max-width: 640px) {
   .footer__inner { flex-direction: column; text-align: center; }
   .footer__nav { justify-content: center; }
+  .footer__legal { flex-direction: column; text-align: center; padding: 16px 20px 24px; }
+  .footer__legal-nav { justify-content: center; }
 }
 /* ============================================================
    SHARED PAGE BASE — used by both VisibilityPage & SentimentPage

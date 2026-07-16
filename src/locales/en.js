@@ -151,9 +151,7 @@ export default {
       h2Pre: 'Your real market,',
       h2Hl: 'not the whole world.',
       lead: 'Scope from worldwide down to your city. Zoom in and the global giants fall away   leaving the competitors you actually meet.',
-      ladder: ['Worldwide', 'Country', 'Region', 'Local'],
       hint: 'Each level has its own competitors   pick a scope and watch the names change.',
-      scopeLabel: 'Scope',
     },
     sourceIntel: {
       eyebrow: '03 · Source intelligence',
