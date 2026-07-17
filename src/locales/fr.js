@@ -263,7 +263,7 @@ export default {
       h2Hl: 'axes.',
       h2Post: 'Pas juste des prompts.',
       lead: "Nous partons de votre produit, pas d'une liste de prompts   en notant chaque réponse IA sur les axes que vos acheteurs jugent réellement, puis en les agrégeant en un sentiment par axe.",
-      fromPrompts: 'sur {n} requêtes',
+      fromPrompts: '{shown} sur {n} requêtes',
       legendLabel: 'Chaque réponse est notée :',
       legendItems: ['Positif', 'Neutre', 'Négatif'],
       legendSuffix: 'puis agrégée en un sentiment par axe.',

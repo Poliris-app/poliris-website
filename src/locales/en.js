@@ -263,7 +263,7 @@ export default {
       h2Hl: 'axes.',
       h2Post: 'Not just prompts.',
       lead: 'We start from your product, not a prompt list   scoring every AI answer on the axes your buyers actually judge, then rolling them into one sentiment per axis.',
-      fromPrompts: 'from {n} prompts',
+      fromPrompts: '{shown} of {n} prompts',
       legendLabel: 'Each answer is scored:',
       legendItems: ['Positive', 'Neutral', 'Negative'],
       legendSuffix: 'then rolled into one sentiment per axis.',
@@ -533,7 +533,7 @@ export default {
       h3Hl: 'Kate publishes it for you.',
       p: 'No copy-paste, no handover to a developer. The moment you approve, Kate pushes it live   formatted, linked and ready to be indexed.',
       mockup: {
-        live: '✓ Live',
+        live: 'Live',
         category: 'Lifestyle · Sport',
         meta: 'Blog · 6 min read · Just published',
         h6: 'Lifestyle footwear that flexes with modern aesthetics',

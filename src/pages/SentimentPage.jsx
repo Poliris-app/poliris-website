@@ -74,28 +74,28 @@ const TIER_ACCENT = {
    Product Focus diagram) ───────────────────────────────────── */
 const PF_AXES = [
   {
-    name: 'Performance', prompts: 22, tier: 'Strong',
+    name: 'Performance', prompts: 3, tier: 'Strong',
     questions: [
       { text: 'Looking for lightweight gym training shoes that provide maximum stability?', sentiment: 'pos' },
       { text: 'Professional advice on choosing the best cross-training shoes for intense workouts?', sentiment: 'pos' },
     ],
   },
   {
-    name: 'Durability', prompts: 15, tier: 'Weak',
+    name: 'Durability', prompts: 2, tier: 'Weak',
     questions: [
       { text: 'Best high-performance running shoes for trail conditions available?', sentiment: 'neutral' },
       { text: 'What are the best durable footwear brands for long-distance walking?', sentiment: 'neg' },
     ],
   },
   {
-    name: 'Design', prompts: 20, tier: 'Strong',
+    name: 'Design', prompts: 4, tier: 'Strong',
     questions: [
       { text: 'Where can I find affordable and reliable everyday sneakers?', sentiment: 'pos' },
       { text: 'What are the most comfortable everyday walking shoes with arch support?', sentiment: 'pos' },
     ],
   },
   {
-    name: 'Brand awareness', prompts: 18, tier: 'Very Strong',
+    name: 'Brand awareness', prompts: 4, tier: 'Very Strong',
     questions: [
       { text: 'Which trendy sneakers are currently popular for casual street style?', sentiment: 'pos' },
       { text: 'What sneaker brands do people trust most?', sentiment: 'pos' },
@@ -582,11 +582,12 @@ export default function SentimentPage() {
                     const anchorX = cardX + CARD_W / 2;
                     const lineBase = ai === 0 ? 0 : PF_LINE_OFFSET[ai - 1];
                     const ta = TIER_ACCENT[axis.tier];
+                    const slug = axis.name.toLowerCase().replace(/\s+/g, '-');
                     return (
-                      <g key={axis.name} className="pf-topic" style={{ '--pf-accent': ta.accent, '--pf-card-bg': ta.cardBg }}>
+                      <g key={axis.name} className={`pf-topic pf-topic--${slug}`} style={{ '--pf-accent': ta.accent, '--pf-card-bg': ta.cardBg }}>
                         <rect className="pf-card" x={cardX} y={CARD_Y} width={CARD_W} height={CARD_H}/>
                         <text x={cardX + 24} y={CY + 30} className="pf-tname">{axis.name}</text>
-                        <text x={cardX + 24} y={CY + 53} className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{n}', axis.prompts)}</text>
+                        <text x={cardX + 24} y={CY + 53} className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{shown}', axis.questions.length).replace('{n}', axis.prompts)}</text>
                         <line className="pf-divider" x1={cardX + 24} y1={CY + 72} x2={cardX + CARD_W - 24} y2={CY + 72}/>
                         <rect className="pf-status" x={cardX + 24} y={CY + 98} width="100" height="30" style={{ fill: '#fff' }}/>
                         <text x={cardX + 74} y={CY + 116} textAnchor="middle" className="pf-tlab" style={{ fill: ta.accent }}>{md.tiers[axis.tier]}</text>
@@ -771,9 +772,9 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
                         <img src={`${import.meta.env.BASE_URL}gemini-ai-logo.png`} alt="Gemini" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
-                        <span>
-                          <span style={{ display: 'block', lineHeight: '1.3' }}>Gemini</span>
-                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gemini-3.1-pro-preview</span>
+                        <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                          <span style={{ lineHeight: '1.3' }}>Gemini</span>
+                          <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gemini-3.1-pro-preview</span>
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
@@ -791,9 +792,9 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
                         <img src={`${import.meta.env.BASE_URL}chatgpt-com-logo.png`} alt="ChatGPT" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
-                        <span>
-                          <span style={{ display: 'block', lineHeight: '1.3' }}>ChatGPT</span>
-                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gpt-4o-mini</span>
+                        <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                          <span style={{ lineHeight: '1.3' }}>ChatGPT</span>
+                          <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gpt-4o-mini</span>
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
@@ -811,9 +812,9 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
                         <img src={`${import.meta.env.BASE_URL}mistral-ai-logo.png`} alt="Mistral" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
-                        <span>
-                          <span style={{ display: 'block', lineHeight: '1.3' }}>Mistral</span>
-                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>mistral-7b-instruct-v0.2</span>
+                        <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                          <span style={{ lineHeight: '1.3' }}>Mistral</span>
+                          <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>mistral-7b-instruct-v0.2</span>
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">
@@ -831,9 +832,9 @@ export default function SentimentPage() {
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
                         <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="Claude" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
-                        <span>
-                          <span style={{ display: 'block', lineHeight: '1.3' }}>Claude</span>
-                          <span style={{ display: 'block', fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>claude-haiku-4-5-20251001</span>
+                        <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                          <span style={{ lineHeight: '1.3' }}>Claude</span>
+                          <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>claude-haiku-4-5-20251001</span>
                         </span>
                       </span>
                       <span className="hdash__sb-bar-card-right">

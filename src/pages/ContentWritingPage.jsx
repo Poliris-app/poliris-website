@@ -14,17 +14,17 @@ function CK({ type }) {
   return (
     <span className={`cw-ck ${type}`}>
       {type === 'yes' && (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20 6 9 17l-5-5"/>
         </svg>
       )}
       {type === 'no' && (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M18 6 6 18M6 6l12 12"/>
         </svg>
       )}
       {type === 'part' && (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round">
           <path d="M5 12h14"/>
         </svg>
       )}
@@ -34,11 +34,11 @@ function CK({ type }) {
 
 // ---- data --------------------------------------------------
 const BEFORE_SCORES_DATA = [
-  { pct: 30, cls: 'bad',  val: '3/10' },
-  { pct: 40, cls: 'bad',  val: '4/10' },
-  { pct: 50, cls: 'warn', val: '5/10' },
-  { pct: 10, cls: 'bad',  val: '1/10' },
-  { pct: 50, cls: 'warn', val: '5/10' },
+  { pct: 30,  cls: 'bad',  val: '3/10'  },
+  { pct: 100, cls: '',     val: '10/10' },
+  { pct: 50,  cls: 'warn', val: '5/10'  },
+  { pct: 10,  cls: 'bad',  val: '1/10'  },
+  { pct: 50,  cls: 'warn', val: '5/10'  },
 ];
 
 const AFTER_SCORES_DATA = [
@@ -207,7 +207,7 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
   const afterActive  = phase === 'after';
   const arrowActive  = phase === 'arrow' || phase === 'after';
 
-  const beforeNum = useCountUp(38, beforeActive, 700, 0);
+  const beforeNum = useCountUp(50, beforeActive, 700, 0);
   const afterNum  = useCountUp(82, afterActive,  800, 0);
 
   return (
@@ -228,7 +228,7 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
         </div>
         <div className="cs-track-wrap">
           <div className="cs-track">
-            <i style={{ width: beforeActive ? '38%' : '0%' }} />
+            <i style={{ width: beforeActive ? '50%' : '0%' }} />
           </div>
           <div className="cs-verdict">{beforeVerdict}</div>
         </div>
@@ -323,61 +323,73 @@ function PipelineTrack() {
   return (
     <div className="cw-pipe cw-reveal">
       <div className="cw-pipe-track">
-        {steps.map((_, i) => [
-          <button key={`dot-${i}`} className={`cw-pipe-dot${i === cur ? ' active' : i < cur ? ' done' : ''}`} onClick={() => go(i)} aria-label={steps[i].label} />,
+        {steps.map((s, i) => [
+          <div key={`step-${i}`} className="cw-pipe-step-wrap">
+            <button className={`cw-pipe-step${i === cur ? ' active' : ''}${i < cur ? ' done' : ''}`} onClick={() => go(i)} aria-label={s.label}>
+              <span className="cw-pipe-step-ic"><PipeIcon index={i} /></span>
+            </button>
+            <div className="cw-pipe-step-label">{s.label}</div>
+          </div>,
           i < N - 1 && <div key={`line-${i}`} className="cw-pipe-line"><div className="cw-pipe-line-fill" style={{ width: i < cur ? '100%' : '0%' }} /></div>,
         ])}
       </div>
-      <div className="cw-pipe-cards">
-        {steps.map((s, i) => (
-          <button key={i} className={`cw-pipe-card${i === cur ? ' active' : ''}`} onClick={() => go(i)}>
-            <div className="cw-pipe-card-num">{s.num}</div>
-            <div className="cw-pipe-card-ic"><PipeIcon index={i} /></div>
-            <div className="cw-pipe-card-label">{s.label}</div>
-          </button>
-        ))}
-      </div>
       <div className={`cw-pipe-detail${fading ? ' fading' : ''}`}>
-        <div className="cw-pipe-detail-left">
-          <div className="cw-pipe-ghost">{d.num}</div>
-          <div className="cw-pipe-dlabel">{d.label}</div>
-          <div className="cw-pipe-dtext">{d.text}</div>
+        <div className="cw-pipe-detail-top">
+          <div className="cw-pipe-dhead">
+            <span className={`cw-pipe-dic${cur === N - 1 ? ' last' : ''}`}><PipeIcon index={cur} /></span>
+            <div className="cw-pipe-dlabel">{d.label}</div>
+          </div>
+          <div className="cw-pipe-count"><strong>{cur + 1}</strong> / {N}</div>
         </div>
-        <div className="cw-pipe-detail-right">
-          <div className="cw-pipe-pills">
-            {d.tags.map(tag => <span key={tag} className="cw-pipe-pill">{tag}</span>)}
+        <div className="cw-pipe-ddivider" />
+        <div className="cw-pipe-detail-bottom">
+          <div className="cw-pipe-detail-left">
+            <div className="cw-pipe-dtext">{d.text}</div>
           </div>
-          <div className="cw-pipe-nav">
-            <button className="cw-pipe-nav-btn" onClick={() => go(cur - 1)} disabled={cur === 0}>
-              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <button className="cw-pipe-nav-btn" onClick={() => go(cur + 1)} disabled={cur === N - 1}>
-              <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-            </button>
+          <div className="cw-pipe-detail-right">
+            <div className="cw-pipe-pills">
+              {d.tags.map(tag => <span key={tag} className="cw-pipe-pill">{tag}</span>)}
+            </div>
+            <div className="cw-pipe-nav">
+              <button className="cw-pipe-nav-btn" onClick={() => go(cur - 1)} disabled={cur === 0}>
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button className="cw-pipe-nav-btn" onClick={() => go(cur + 1)} disabled={cur === N - 1}>
+                <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+              </button>
+            </div>
           </div>
-          <div className="cw-pipe-count"><strong>{cur + 1}</strong> {wr.ofSteps} {N} {wr.steps2}</div>
         </div>
       </div>
     </div>
   );
 }
 
-// ---- hub node positions ------------------------------------
+// ---- hub node positions (hexagon: top pair / mid pair / bottom pair) ----
+// Index order: GEO gaps (TL), Sentiment (TR), Technical audit (ML), Brand & voice (MR), Products (BL), Audiences (BR)
 const HUB_NODE_STYLES = [
-  { left: '50%', top: '8%'  },
-  { left: '78%', top: '22%' },
-  { left: '88%', top: '50%' },
-  { left: '78%', top: '78%' },
-  { left: '50%', top: '92%' },
-  { left: '22%', top: '78%' },
-  { left: '19%', top: '50%' },
-  { left: '22%', top: '22%' },
+  { left: '5%',  top: '-3%'  },
+  { left: '95%',  top: '-3%'  },
+  { left: '-20%', top: '49%'  },
+  { left: '120%', top: '49%'  },
+  { left: '5%',  top: '104%' },
+  { left: '95%',  top: '104%' },
 ];
-const HUB_NODE_TAGS = ['Visibility', 'Sentiment', 'Audit', null, null, null, null, null];
+// Icons sit exactly on the outer ring (r=43, hexagon vertices)
+const HUB_ICON_STYLES = [
+  { left: '28.5%', top: '12.8%' },
+  { left: '71.5%', top: '12.8%' },
+  { left: '7%',    top: '50%'   },
+  { left: '93%',   top: '50%'   },
+  { left: '28.5%', top: '87.2%' },
+  { left: '71.5%', top: '87.2%' },
+];
+const HUB_NODE_TAGS = ['Visibility', 'Sentiment', 'Audit', null, null, null];
+const HUB_NODE_INDICES = [0, 1, 2, 7, 4, 5];
 
-// ---- SVG spoke endpoints (match hub node positions in %) ---
-const SPOKE_ENDS = [
-  [50,8],[78,22],[88,50],[78,78],[50,92],[22,78],[19,50],[22,22]
+// ---- inner ring crossing points (r=29) — small dot markers ----
+const SPOKE_STARTS = [
+  [35.5,24.9],[64.5,24.9],[21,50],[79,50],[35.5,75.1],[64.5,75.1]
 ];
 
 export default function ContentWritingPage() {
@@ -394,12 +406,15 @@ export default function ContentWritingPage() {
   const cwScore = t('contentWriting.contentScore');
   const BEFORE_SCORES = BEFORE_SCORES_DATA.map((d, i) => ({ ...d, label: scoreLabels[i] }));
   const AFTER_SCORES  = AFTER_SCORES_DATA.map((d, i) => ({ ...d, label: scoreLabels[i] }));
-  const HUB_NODES = t('contentWriting.dataSynergy.hubNodes').map((n, i) => ({
+  const allHubNodes = t('contentWriting.dataSynergy.hubNodes');
+  const HUB_NODES = HUB_NODE_INDICES.map((srcIdx, i) => ({
     style: HUB_NODE_STYLES[i],
-    title: n.title,
-    sub: n.sub,
+    iconStyle: HUB_ICON_STYLES[i],
+    title: allHubNodes[srcIdx].title,
+    sub: allHubNodes[srcIdx].sub,
     tag: HUB_NODE_TAGS[i],
   }));
+  const connectNode = allHubNodes[8];
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -435,46 +450,53 @@ export default function ContentWritingPage() {
         {/* ── DATA SYNERGY   orbital hub ────────────────────── */}
         <section className="cw-sec">
           <div className="cw-wrap">
-            <div className="cw-head cw-center cw-reveal">
-              {(() => { const ds = t('contentWriting.dataSynergy'); return (<>
-                <div className="eyebrow">{ds.eyebrow}</div>
-                <h2>{ds.h2Pre} <HL>{ds.h2Hl}</HL></h2>
-                <p className="cw-lede">{ds.lead}</p>
-              </>); })()}
-            </div>
-
-            <div className="hub-stage cw-reveal">
-              <svg className="hub-svg" viewBox="0 0 100 100" aria-hidden="true">
-                <circle className="orbit hub-spin" cx="50" cy="50" r="43"/>
-                <circle className="orbit" cx="50" cy="50" r="29"/>
-                <g className="links">
-                  {SPOKE_ENDS.map(([x, y], i) => (
-                    <line key={i} x1="50" y1="50" x2={x} y2={y}/>
-                  ))}
-                </g>
-                <g className="ends">
-                  {SPOKE_ENDS.map(([x, y], i) => (
-                    <circle key={i} cx={x} cy={y} r="1.1"/>
-                  ))}
-                </g>
-              </svg>
-
-              <div className="hcenter">
-                <span className="kw-av">K</span>
-                <div className="hc-n">Kate</div>
-                <div className="hc-s">{t('contentWriting.dataSynergy.kateSub')}</div>
+            <div className="cw-hub-section">
+              <div className="cw-hub-text cw-adv-head cw-reveal">
+                {(() => { const ds = t('contentWriting.dataSynergy'); return (<>
+                  <div className="eyebrow">{ds.eyebrow}</div>
+                  <h2>{ds.h2Pre} <HL>{ds.h2Hl}</HL></h2>
+                  <p className="cw-lede">{ds.lead}</p>
+                  <p className="cw-lede">{ds.cap}</p>
+                </>); })()}
               </div>
 
-              {HUB_NODES.map((node, i) => (
-                <div key={i} className="hsrc" style={node.style}>
-                  <b>{node.title}</b>
-                  <i>{node.sub}</i>
-                  {node.tag && <em>{node.tag}</em>}
-                </div>
-              ))}
-            </div>
+              <div className="hub-stage cw-reveal">
+                <div className="hub-inner">
+                  <svg className="hub-svg" viewBox="0 0 100 100" aria-hidden="true">
+                    <circle className="orbit orbit-cut hub-spin" cx="50" cy="50" r="43"/>
+                    <circle className="orbit" cx="50" cy="50" r="29"/>
+                    <g className="ends">
+                      {SPOKE_STARTS.map(([x, y], i) => (
+                        <circle key={i} cx={x} cy={y} r="0.6"/>
+                      ))}
+                    </g>
+                  </svg>
 
-            <p className="hub-cap cw-reveal">{t('contentWriting.dataSynergy.cap')}</p>
+                  <div className="hcenter">
+                    <span className="kw-av">K</span>
+                    <div className="hc-n">Kate</div>
+                    <div className="hc-s">{t('contentWriting.dataSynergy.kateSub')}</div>
+                    <span className="hc-connect">{connectNode.title} · {connectNode.sub}</span>
+                  </div>
+
+                  {HUB_NODES.map((node, i) => (
+                    <div key={i} className="hicon" style={node.iconStyle}>
+                      <img src={`${import.meta.env.BASE_URL}Groupe%20477.svg`} alt="" />
+                    </div>
+                  ))}
+
+                  {HUB_NODES.map((node, i) => (
+                    <div key={i} className="hsrc" style={node.style}>
+                      {node.tag
+                        ? <em>{node.tag}</em>
+                        : <em className="hsrc-blank" aria-hidden="true" />}
+                      <b>{node.title}</b>
+                      <i>{node.sub}</i>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -521,11 +543,13 @@ export default function ContentWritingPage() {
         {/* ── WRITE   7 STEPS ───────────────────────────────── */}
         <section id="write" className="cw-sec">
           <div className="cw-wrap">
-            <div className="cw-adv-head cw-center cw-reveal">
+            <div className="cw-adv-head cw-adv-head--split cw-reveal">
               {(() => { const wr = t('contentWriting.write'); return (<>
-                <span className="cw-adv-tag">{wr.tag}</span>
-                <h3>{wr.h3Pre} <HL>{wr.h3Hl}</HL> {wr.h3Post}</h3>
-                <p>{wr.p}</p>
+                <div className="cw-adv-head-left">
+                  <span className="cw-adv-tag cw-adv-tag--pill">{wr.tag}</span>
+                  <h3>{wr.h3Pre} <HL>{wr.h3Hl}</HL> {wr.h3Post}</h3>
+                </div>
+                <p className="cw-adv-head-side">{wr.p}</p>
               </>); })()}
             </div>
 
@@ -553,11 +577,11 @@ export default function ContentWritingPage() {
                     <div className="cs-ttl"><IconStar /> {cwScore}</div>
                   </div>
                   <div className="cs-bubble">
-                    <div className="cs-num">38<em>/100</em></div>
+                    <div className="cs-num">50<em>/100</em></div>
                   </div>
                 </div>
                 <div className="cs-track-wrap">
-                  <div className="cs-track"><i style={{ width: '38%' }}/></div>
+                  <div className="cs-track"><i style={{ width: '50%' }}/></div>
                   <div className="cs-verdict">{t('contentWriting.optimize.beforeVerdict')}</div>
                 </div>
                 <div className="cs-rows">
@@ -625,20 +649,29 @@ export default function ContentWritingPage() {
             <div className="impl2 cw-reveal">
               <div className="mbw">
                 <div className="mbw-bar">
-                  <span className="mbw-dot red"/><span className="mbw-dot yellow"/><span className="mbw-dot green"/>
                   <div className="mbw-url">
                     <svg className="mbw-lock" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
                     </svg>
                     nike.com/blog/lifestyle-footwear
                   </div>
-                  <span className="mbw-live">{cwImpl.mockup.live}</span>
+                  <span className="mbw-live-wrap">
+                    <span className="mbw-live">{cwImpl.mockup.live}</span>
+                    <span className="mbw-live-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="var(--cw-ok)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                    </span>
+                  </span>
                 </div>
                 <div className="mbw-hero">
                   <span className="mbw-hero-cat">{cwImpl.mockup.category}</span>
                 </div>
                 <div className="mbw-body">
-                  <div className="mbw-meta"><span className="mbw-pin"/>{cwImpl.mockup.meta}</div>
+                  <div className="mbw-toprow">
+                    <div className="mbw-meta"><span className="mbw-pin"/>{cwImpl.mockup.meta}</div>
+                    <span className="mbw-cat-pill">{cwImpl.mockup.category}</span>
+                  </div>
                   <h6>{cwImpl.mockup.h6}</h6>
                   <p className="mbw-p">
                     {cwImpl.mockup.p}{' '}
@@ -650,9 +683,15 @@ export default function ContentWritingPage() {
                 </div>
               </div>
 
+              <div className="mbw-cms">
+                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}wordpress.png`} alt="WordPress" /></span>
+                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}wix.png`} alt="Wix" /></span>
+                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}shopify.png`} alt="Shopify" /></span>
+              </div>
+
               <div className="impl-toast">
                 <span className="impl-chk">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5"/>
                   </svg>
                 </span>
@@ -850,15 +889,16 @@ export default function ContentWritingPage() {
                   <div key={i} className={`cw-cell${i === 0 ? ' cw-cap' : ''}`}>{h}</div>
                 ))}
                 <div className="cw-cell cw-us">
-                  ✦ Kate · Poliris
-                  <span className="cw-rec">{cwCmp.recommended}</span>
+                  <span className="cw-us-pill">Kate - Poliris</span>
                 </div>
               </div>
               {CMP_ROWS.map((row, i) => {
                 const note = cwCmp.rowNotes[i] || {};
                 return (
                   <div key={i} className="cw-row">
-                    <div className="cw-cell cw-cap">{cwCmp.rows[i] || row.cap}</div>
+                    <div className="cw-cell cw-cap">
+                      {cwCmp.rows[i] || row.cap}
+                    </div>
                     <div className="cw-cell">
                       <CK type={row.gen[0]}/>
                       {note.gen && <span className="cw-cmini">{note.gen}</span>}

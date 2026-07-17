@@ -620,7 +620,22 @@
    doesn't need to make room for.
    ============================================================ */
 .sent-page .pf-q { font-size: 11px; }
-.sent-page .pf-divider { stroke-opacity: 1; }
+.sent-page .pf-divider { stroke-opacity: 1; stroke-width: 1; }
+
+/* Axis divider line uses the same fixed per-topic identity color as the
+   Visibility page (--pf-color-* vars from visibility.css), independent of
+   --pf-accent, which stays tier-driven here for the pill/node/connector. */
+.sent-page .pf-topic--performance .pf-divider     { stroke: var(--pf-color-performance); }
+.sent-page .pf-topic--durability .pf-divider      { stroke: var(--pf-color-durability); }
+.sent-page .pf-topic--design .pf-divider          { stroke: var(--pf-color-design); }
+.sent-page .pf-topic--brand-awareness .pf-divider { stroke: var(--pf-color-brand-awareness); }
+
+/* Card background also follows the fixed per-topic identity, not the
+   sentiment tier (--pf-card-bg stays tier-driven for other consumers). */
+.sent-page .pf-topic--performance .pf-card     { fill: #eef1fb; }
+.sent-page .pf-topic--durability .pf-card      { fill: #E1ECEA; }
+.sent-page .pf-topic--design .pf-card          { fill: #fbf3e6; }
+.sent-page .pf-topic--brand-awareness .pf-card { fill: #f3eefb; }
 
 .vis-page .pf-legend-hdr {
   display: flex;
