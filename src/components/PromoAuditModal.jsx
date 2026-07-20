@@ -60,7 +60,7 @@ export default function PromoAuditModal() {
     try {
       const res = await fetch(`/api/audit?code=${encodeURIComponent(trimmed)}`);
       if (!res.ok) {
-        setError('Code not found — double-check and try again.');
+        setError('Code not found. Please double-check the code and try again.');
         return;
       }
       trackEvent('promo_audit_code_valid');
