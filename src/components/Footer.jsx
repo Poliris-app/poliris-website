@@ -24,7 +24,6 @@ const PRICING_INDEX = 3;
 const LEGAL_LINKS = [
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Service' },
-  { href: '/mentions-legales', label: 'Mentions légales' },
 ];
 
 export default function Footer() {
@@ -54,6 +53,10 @@ export default function Footer() {
           {LEGAL_LINKS.map(({ href, label }) => (
             <a key={href} href={href} className="footer__link">{label}</a>
           ))}
+          {/* Locale-prefixed directly (unlike the links above) so it
+              navigates straight to the active language's page instead of
+              round-tripping through the /mentions-legales redirect. */}
+          <a href={`/${lang}/mentions-legales`} className="footer__link">Mentions légales</a>
         </nav>
       </div>
     </footer>
