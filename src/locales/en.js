@@ -45,9 +45,9 @@ export default {
     },
     valueChain: {
       eyebrow: 'The full value chain',
-      h2Pre: 'Most tools tell you what\'s happening.',
-      h2Post: 'Poliris lets you',
-      h2Hl: 'take control.',
+      h2Pre: 'Most tools just show you the problem.',
+      h2Post: '',
+      h2Hl: 'Poliris solves it.',
       lead: 'Other tools stop at monitoring. Poliris runs the whole chain   technical audit, content, and the fixes shipped live on your site.',
       polirisBtnLabel: 'Poliris',
       otherToolsBtnLabel: 'Other Tools',
@@ -83,7 +83,7 @@ export default {
       eyebrow: 'One platform, not a stack',
       h2: 'Replace your whole toolstack.',
       lead: 'AI visibility, sentiment, technical SEO and content   usually four separate tools. With Poliris, it\'s one.',
-      headers: { capability: 'Capability', otherTools: 'Other GEO tools', poliris: 'Poliris' },
+      headers: { capability: 'Capability', otherTools: 'Other AI tracking tools', poliris: 'Poliris' },
       rows: [
         { need: 'AI visibility tracking',      other: 'standalone tool', pol: 'per product & trading zone' },
         { need: 'AI sentiment tracking',       other: 'x',               pol: '' },

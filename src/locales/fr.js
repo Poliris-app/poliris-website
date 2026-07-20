@@ -45,9 +45,9 @@ export default {
     },
     valueChain: {
       eyebrow: 'La chaîne de valeur complète',
-      h2Pre: 'La plupart des outils vous disent ce qui se passe.',
-      h2Post: 'Poliris vous laisse',
-      h2Hl: 'prendre le contrôle.',
+      h2Pre: 'La plupart des outils vous montrent juste le problème.',
+      h2Post: '',
+      h2Hl: 'Poliris le résout.',
       lead: "Les autres outils s'arrêtent au monitoring. Poliris gère toute la chaîne   audit technique, contenu, et correctifs publiés directement sur votre site.",
       polirisBtnLabel: 'Poliris',
       otherToolsBtnLabel: 'Autres Outils',
@@ -83,7 +83,7 @@ export default {
       eyebrow: 'Une plateforme, pas une pile d\'outils',
       h2: 'Remplacez toute votre pile d\'outils.',
       lead: "Visibilité IA, sentiment, SEO technique et contenu   habituellement quatre outils séparés. Avec Poliris, c'est un seul.",
-      headers: { capability: 'Capacité', otherTools: 'Autres outils GEO', poliris: 'Poliris' },
+      headers: { capability: 'Capacité', otherTools: 'Autres outils de suivi IA', poliris: 'Poliris' },
       rows: [
         { need: 'Suivi de visibilité IA',            other: 'outil séparé',      pol: 'par produit et zone de commerce' },
         { need: 'Suivi du sentiment IA',              other: 'x',                 pol: '' },

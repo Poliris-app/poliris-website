@@ -1,5 +1,11 @@
 {
   "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept-language", "value": ".*fr.*" }],
+      "destination": "/fr/",
+      "permanent": false
+    },
     { "source": "/", "destination": "/en/", "permanent": false },
     { "source": "/visibility", "destination": "/en/visibility", "permanent": false },
     { "source": "/sentiment", "destination": "/en/sentiment", "permanent": false },
@@ -11,9 +17,26 @@
     { "source": "/docs", "destination": "/en/docs", "permanent": false },
     { "source": "/blog", "destination": "/en/blog", "permanent": false },
     { "source": "/blog/:slug", "destination": "/en/blog/:slug", "permanent": false },
+    { "source": "/audit/:slug", "destination": "/en/audit/:slug", "permanent": false },
 
     { "source": "/privacy", "destination": "/en/privacy", "permanent": true },
     { "source": "/terms", "destination": "/en/terms", "permanent": true },
-    { "source": "/mentions-legales", "destination": "/fr/mentions-legales", "permanent": true }
+    { "source": "/mentions-legales", "destination": "/fr/mentions-legales", "permanent": true },
+    { "source": "/en/a-propos", "destination": "/en/docs", "permanent": true },
+    { "source": "/en/author/florian", "destination": "/en/blog", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/en/:path*", "destination": "/en/index.html" },
+    { "source": "/fr/:path*", "destination": "/fr/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    },
+    {
+      "source": "/(en|fr)/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    }
   ]
 }

@@ -36,7 +36,7 @@ const META = {
     home: {
       title: 'Poliris',
       description:
-        'Understand and manage how AI sees your brand. Track your visibility across AI engines, audit your site, and ship the fixes — product by product.',
+        "Track your brand's visibility across AI search engines, perform technical AI SEO & GEO audits, and fix issues fast. The complete AI search platform.",
     },
     visibility: {
       title: 'AI Visibility | Poliris',

@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { LangWrapper } from './contexts/LangContext';
+import NotFoundRedirect from './components/NotFoundRedirect';
 import HomePage from './components/HomePage';
 import VisibilityPage from './pages/VisibilityPage';
 import SentimentPage from './pages/SentimentPage';
@@ -10,6 +11,7 @@ import BlogPostPage from './pages/BlogPostPage';
 import FaqsPage from './pages/FaqsPage';
 import GlossaryPage from './pages/GlossaryPage';
 import DocsPage from './pages/DocsPage';
+import AuditPage from './pages/AuditPage';
 import GetaDemoPage from './pages/GetaDemoPage';
 import LegalPage from './pages/LegalPage';
 import privacyPolicyEnMd from './content/legal/privacy-policy.md?raw';
@@ -37,10 +39,14 @@ export const routes = [
       { path: 'faqs', element: <FaqsPage /> },
       { path: 'glossary', element: <GlossaryPage /> },
       { path: 'docs', element: <DocsPage /> },
+      { path: 'audit/:slug', element: <AuditPage /> },
       { path: 'demo', element: <GetaDemoPage /> },
       { path: 'privacy', element: <LegalPage page="privacy" content={{ en: privacyPolicyEnMd, fr: privacyPolicyFrMd }} /> },
       { path: 'terms', element: <LegalPage page="terms" content={{ en: termsOfServiceEnMd, fr: termsOfServiceFrMd }} /> },
       { path: 'mentions-legales', element: <LegalPage page="mentions-legales" content={{ en: mentionsLegalesEnMd, fr: mentionsLegalesFrMd }} /> },
+      { path: '*', element: <NotFoundRedirect /> },
     ],
   },
+  // Anything outside "/" and "/:lang/*" (e.g. no lang segment at all).
+  { path: '*', element: <Navigate to="/en/" replace /> },
 ];

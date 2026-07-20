@@ -48,6 +48,37 @@ function devApiPlugin(env) {
           }
         });
       });
+
+      server.middlewares.use('/api/audit', async (req, res) => {
+        if (req.method !== 'GET') {
+          res.writeHead(405, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ error: 'Method not allowed' }));
+        }
+
+        const url = new URL(req.url, 'http://localhost');
+        const code = url.searchParams.get('code');
+        if (!code || !/^[A-Za-z0-9]{6}$/.test(code)) {
+          res.writeHead(404);
+          return res.end();
+        }
+
+        try {
+          const r = await fetch(
+            `${env.POLIRIS_BACKEND_URL}/api/v2/audit/public/${encodeURIComponent(code)}`
+          );
+          if (!r.ok) {
+            res.writeHead(404);
+            return res.end();
+          }
+          const data = await r.json();
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ companyName: data.company_name, pdfUrl: data.pdf_url }));
+        } catch (err) {
+          console.error('Audit lookup error:', err);
+          res.writeHead(404);
+          res.end();
+        }
+      });
     },
   };
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ProductCarousel from './ProductCarousel';
 import Hero from './Hero';
 import CtaBand from './CtaBand';
+import PromoAuditModal from './PromoAuditModal';
 import { useLang } from '../contexts/LangContext';
 
 /* ── Agent avatar illustrations (see public/Illustrations/) ──── */
@@ -41,6 +42,7 @@ export default function LandingPage() {
 
   return (
     <div className="landing">
+      <PromoAuditModal />
       <Hero
         eyebrow={h.eyebrow}
         title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
@@ -158,7 +160,7 @@ function ValueChain() {
       <div className="container">
         <div className="sec-head reveal">
           <Eyebrow>{vc.eyebrow}</Eyebrow>
-          <h2 className="sec-h2">{vc.h2Pre}<br />Poliris lets you <HL>{vc.h2Hl}</HL></h2>
+          <h2 className="sec-h2">{vc.h2Pre}<br /><HL>{vc.h2Hl}</HL></h2>
           <p className="sec-lead">{vc.lead}</p>
         </div>
         <div className="vchain-diagram">
