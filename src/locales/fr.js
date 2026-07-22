@@ -1469,8 +1469,8 @@ export default {
     hero: {
       eyebrow: 'Obtenir une démo',
       title: 'Découvrez Poliris avec votre propre marque.',
-      lead: 'Réservez une session en direct, lancez un audit GEO gratuit ou contactez-nous pour un partenariat. Nous répondons en moins de 4 heures les jours ouvrés.',
-      primaryCta: 'Réserver une démo d\'1 heure',
+      lead: 'Réservez une session en direct, lancez un audit GEO gratuit ou contactez-nous pour un partenariat. Nous répondons rapidement les jours ouvrés.',
+      primaryCta: 'Réserver une démo',
       secondaryCta: 'Démarrer l\'essai gratuit',
     },
     eyebrow: 'Envoyer un message',
@@ -1508,12 +1508,12 @@ export default {
     privacyPost: ' de Poliris et consens à être contacté. Nous ne partageons jamais vos données.',
     submit: 'Envoyer le message',
     security: 'Chiffré · Jamais vendu',
-    successMsg: 'Merci ! Nous avons bien reçu votre message et vous répondrons dans les 4 heures les jours ouvrés.',
-    replyTime: 'Répond généralement en moins de 4 h les jours ouvrés',
+    successMsg: 'Merci ! Nous avons bien reçu votre message et vous répondrons les jours ouvrés.',
+    replyTime: 'Répond rapidement les jours ouvrés',
     cards: [
       {
         eyebrow: 'Session en direct',
-        title: 'Réserver une démo d\'1 heure',
+        title: 'Réserver une démo',
         desc: 'Découvrez Poliris en direct avec votre propre marque. Scores GEO réels, citations IA et prochaines étapes personnalisées.',
         cta: 'Choisir un créneau',
         href: 'https://cal.com/team/poliris/discovery-call',

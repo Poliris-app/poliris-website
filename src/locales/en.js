@@ -1474,8 +1474,8 @@ export default {
     hero: {
       eyebrow: 'Get a demo',
       title: 'See Poliris with your own brand.',
-      lead: 'Book a live session, run a free GEO audit, or reach out about a partnership. We reply in under 4 hours on business days.',
-      primaryCta: 'Book a 1-hour demo',
+      lead: 'Book a live session, run a free GEO audit, or reach out about a partnership. We reply fast on business days.',
+      primaryCta: 'Book a demo',
       secondaryCta: 'Start free trial',
     },
     eyebrow: 'Send a message',
@@ -1513,12 +1513,12 @@ export default {
     privacyPost: ' and consent to being contacted. We never share your data.',
     submit: 'Send message',
     security: 'Encrypted · Never sold',
-    successMsg: 'Thanks! We received your message and will get back to you within 4 hours on business days.',
-    replyTime: 'Typically replies in under 4 hours on business days',
+    successMsg: 'Thanks! We received your message and will get back to you on business days.',
+    replyTime: 'Typically replies fast on business days',
     cards: [
       {
         eyebrow: 'Live session',
-        title: 'Book a 1-hour demo',
+        title: 'Book a demo',
         desc: 'See Poliris live with your own brand. Real GEO scores, AI citations, and next steps tailored to you.',
         cta: 'Pick a time',
         href: 'https://cal.com/team/poliris/discovery-call',
@@ -1538,7 +1538,7 @@ export default {
     ],
     cta: {
       heading: 'See how AI describes your brand.',
-      lead: 'Start a 14-day free trial. No setup, no expertise needed — just the picture of how AI sees you today.',
+      lead: 'Start a 14-day free trial. No setup, no expertise needed, just the picture of how AI sees you today.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
       note: '14 days free · No credit card required',
