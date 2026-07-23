@@ -90,6 +90,159 @@ button { cursor: pointer; border: none; background: none; }
 }
 .animate-marquee { animation: marquee 5s linear infinite; }
 
+:root { --code-banner-h: 56px; }
+
+.audit-banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  height: var(--code-banner-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background:
+    radial-gradient(ellipse 900px 260px at 82% -60%, rgba(120,170,255,0.35), transparent 60%),
+    radial-gradient(ellipse 700px 220px at 100% 160%, rgba(70,110,210,0.35), transparent 55%),
+    linear-gradient(120deg, #0c1530 0%, #10214a 45%, #1b3a75 100%);
+  overflow: hidden;
+  cursor: pointer;
+}
+.audit-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(160,190,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160,190,255,0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(115deg, transparent 0%, rgba(0,0,0,0.9) 35%, transparent 75%);
+  mask-image: linear-gradient(115deg, transparent 0%, rgba(0,0,0,0.9) 35%, transparent 75%);
+  pointer-events: none;
+}
+.audit-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, transparent 55%, rgba(180,205,255,0.14) 63%, transparent 70%),
+    linear-gradient(100deg, transparent 70%, rgba(180,205,255,0.10) 76%, transparent 84%);
+  pointer-events: none;
+}
+.audit-banner__row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.audit-banner__content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.audit-banner__star {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 8px rgba(120,180,255,0.85));
+}
+.audit-banner__star svg { width: 100%; height: 100%; }
+.audit-banner__text-short {
+  display: none;
+  font-family: var(--manrope);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+.audit-banner__line {
+  font-family: var(--manrope);
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.02em;
+  word-spacing: 0.08em;
+  white-space: nowrap;
+}
+.audit-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  background: #fff;
+  color: #0d111a;
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 4px 4px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-strong);
+  white-space: nowrap;
+  transition: border-color 0.25s;
+}
+.audit-banner:hover .audit-banner__cta {
+  border-color: #000;
+}
+.audit-banner .btn__icon--black svg {
+  transition: transform 0.25s;
+}
+.audit-banner:hover .btn__icon--black svg {
+  transform: translateX(2px);
+}
+
+body.has-code-banner .nav { top: var(--code-banner-h); }
+body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
+@media (max-width: 768px) {
+  :root { --code-banner-h: 50px; }
+  body.has-code-banner .hero { padding-top: calc(74px + var(--code-banner-h)); }
+  .audit-banner { padding: 0 12px; }
+  .audit-banner__row { gap: 8px; }
+  .audit-banner__content { gap: 8px; }
+  .audit-banner__star { width: 16px; height: 16px; }
+  .audit-banner__line { display: none; }
+  .audit-banner__text-short { display: inline-block; }
+  .audit-banner__cta { padding: 7px; }
+  .audit-banner__cta-label { display: none; }
+}
+@media (max-width: 380px) {
+  .audit-banner__text-short { font-size: 10.5px; }
+}
+
+/* ── Audit modal "I have a code" tab (see AuditModal.jsx) ────────── */
+.code-modal-input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: var(--manrope);
+  border: 1.5px solid var(--border-strong, #d5d9e4);
+  border-radius: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.code-modal-input:focus {
+  outline: none;
+  border-color: var(--blue, #1e3893);
+  box-shadow: 0 0 0 3px rgba(30, 56, 147, 0.1);
+}
+.btn.code-modal-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 13px;
+  padding: 10px 18px;
+}
+.code-modal-error {
+  color: var(--negative);
+  font-size: 12.5px;
+  margin-top: 8px;
+  text-align: center;
+  font-family: var(--manrope);
+}
+
+/* ── Free audit request modal (opened from the banner's second CTA) ─── */
 @keyframes promo-modal-backdrop-in {
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -120,7 +273,6 @@ button { cursor: pointer; border: none; background: none; }
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(11, 15, 35, 0.35);
 }
-
 .promo-modal-glow {
   position: absolute;
   top: -140px;
@@ -135,7 +287,6 @@ button { cursor: pointer; border: none; background: none; }
   pointer-events: none;
   z-index: 0;
 }
-
 .promo-modal-close {
   position: absolute;
   top: 16px;
@@ -160,9 +311,7 @@ button { cursor: pointer; border: none; background: none; }
   color: #fff;
   transform: scale(1.08);
 }
-
 .promo-modal-body { position: relative; z-index: 1; }
-
 .promo-modal-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -178,7 +327,6 @@ button { cursor: pointer; border: none; background: none; }
   border-radius: 24px;
   margin: 0 auto 16px;
 }
-
 .promo-modal-title {
   font-family: var(--manrope);
   font-size: 26px;
@@ -189,7 +337,6 @@ button { cursor: pointer; border: none; background: none; }
   text-align: center;
   margin: 0 0 12px;
 }
-
 .promo-modal-lead {
   font-family: var(--chivo);
   font-size: 14.5px;
@@ -198,7 +345,6 @@ button { cursor: pointer; border: none; background: none; }
   text-align: center;
   margin: 0 0 26px;
 }
-
 .promo-modal-tracked-label {
   font-family: var(--manrope);
   font-size: 10.5px;
@@ -209,12 +355,39 @@ button { cursor: pointer; border: none; background: none; }
   text-align: center;
   margin: 0 0 14px;
 }
-
 .promo-modal-logos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-bottom: 28px;
+}
+
+.audit-modal-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--surface2);
+  border-radius: 999px;
+  padding: 3px;
+  margin-bottom: 14px;
+}
+.audit-modal-tab {
+  flex: 1;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--fg4);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.audit-modal-tab--active {
+  background: #fff;
+  color: #0d111a;
+  box-shadow: var(--shadow-sm);
 }
 .promo-modal-logo-chip {
   display: flex;
@@ -237,78 +410,45 @@ button { cursor: pointer; border: none; background: none; }
   width: auto;
   object-fit: contain;
 }
-
-.promo-modal-cta {
+.btn.promo-modal-cta {
   width: 100%;
   justify-content: center;
-  font-size: 15.5px;
-  padding: 15px 24px;
+  font-size: 13.5px;
+  padding: 12px 20px;
 }
-
 .promo-modal-trust {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   font-family: var(--manrope);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--fg6);
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
-.promo-modal-divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 18px 0 12px;
-}
-.promo-modal-divider-line { flex: 1; height: 1px; background: var(--border); }
-.promo-modal-divider-text {
-  font-family: var(--manrope);
-  font-size: 11px;
-  color: var(--fg6);
-}
-
-.promo-modal-code-label {
-  font-family: var(--manrope);
-  font-size: 11.5px;
-  color: var(--fg4);
-  text-align: center;
-  margin: 0 0 8px;
-}
-
-.promo-modal-code-row {
-  display: flex;
-  gap: 6px;
-}
-.promo-modal-code-input {
-  flex: 1;
-  min-width: 0;
-  padding: 8px 12px;
-  font-size: 12.5px;
+.free-audit-form { display: flex; flex-direction: column; gap: 8px; }
+.free-audit-form__input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 13px;
   font-family: var(--manrope);
   border: 1.5px solid var(--border-strong, #d5d9e4);
-  border-radius: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  border-radius: 9px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.promo-modal-code-input:focus {
+.free-audit-form__input:focus {
   outline: none;
   border-color: var(--blue, #1e3893);
   box-shadow: 0 0 0 3px rgba(30, 56, 147, 0.1);
 }
-.promo-modal-code-submit {
-  padding: 8px 16px;
-  font-size: 12.5px;
-  white-space: nowrap;
-}
-.promo-modal-error {
-  color: var(--negative);
-  font-size: 12.5px;
-  margin-top: 8px;
-  font-family: var(--manrope);
+.free-audit-form__turnstile {
+  display: flex;
+  justify-content: center;
+  margin: -4px 0 -2px;
+  transform: scale(0.85);
+  transform-origin: center;
 }
 
 .reveal {
@@ -959,6 +1099,7 @@ button { cursor: pointer; border: none; background: none; }
 }
 .btn__icon--dark { background: #fff; }
 .btn__icon--blue { background: var(--blue); }
+.btn__icon--black { background: #000; }
 
 /* ── Dark hero variant ─────────────────────────────────── */
 .hero--dark {

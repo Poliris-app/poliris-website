@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ProductCarousel from './ProductCarousel';
 import Hero from './Hero';
 import CtaBand from './CtaBand';
-import PromoAuditModal from './PromoAuditModal';
+import AuditCodeBanner from './AuditCodeBanner';
 import { useLang } from '../contexts/LangContext';
 
 /* ── Agent avatar illustrations (see public/Illustrations/) ──── */
@@ -42,7 +42,7 @@ export default function LandingPage() {
 
   return (
     <div className="landing">
-      <PromoAuditModal />
+      <AuditCodeBanner />
       <Hero
         eyebrow={h.eyebrow}
         title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}

@@ -123,6 +123,7 @@ export default function Navbar() {
             </div>
           </div>
 
+          <Link to={`/${lang}/pricing`} className="nav__link">{t('nav.pricing')}</Link>
           <Link to={`/${lang}/demo`} className="nav__link">{t('nav.getDemo')}</Link>
 
         </div>
@@ -221,6 +222,7 @@ export default function Navbar() {
             )}
           </div>
 
+          <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
           <Link to={`/${lang}/demo`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
 
           <div className="nav__mobile-lang">

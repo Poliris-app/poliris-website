@@ -6,15 +6,19 @@ import SeoGeoCornerstonePage from './posts/SeoGeoCornerstonePage';
 import SeoGeoCornerstoneFrPage from './posts/SeoGeoCornerstoneFrPage';
 import DeathOfTraditionalSearchPage from './posts/DeathOfTraditionalSearchPage';
 import DeathOfTraditionalSearchFrPage from './posts/DeathOfTraditionalSearchFrPage';
+import EntityBasedSeoPage from './posts/EntityBasedSeoPage';
+import EntityBasedSeoFrPage from './posts/EntityBasedSeoFrPage';
 
 const POST_MAP = {
   en: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstonePage,
     'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchPage,
+    'entity-based-seo': EntityBasedSeoPage,
   },
   fr: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstoneFrPage,
     'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchFrPage,
+    'entity-based-seo': EntityBasedSeoFrPage,
   },
 };
 

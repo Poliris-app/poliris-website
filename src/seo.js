@@ -16,6 +16,7 @@ export const PAGE_SLUGS = {
   faqs: 'faqs',
   glossary: 'glossary',
   demo: 'demo',
+  pricing: 'pricing',
   docs: 'docs',
   privacy: 'privacy',
   terms: 'terms',
@@ -29,6 +30,7 @@ export const LANGS = ['en', 'fr'];
 export const BLOG_POST_SLUGS = [
   'why-seo-is-the-cornerstone-of-geo-success',
   'death-of-traditional-search-geo-priority',
+  'entity-based-seo',
 ];
 
 const META = {
@@ -77,6 +79,11 @@ const META = {
       title: 'Get a Demo | Poliris',
       description:
         'Book a 1-hour live demo, run a free GEO audit, or reach out about agency partnership. We reply in under 4 hours.',
+    },
+    pricing: {
+      title: 'Pricing | Poliris',
+      description:
+        'Choose how much AI visibility coverage you need. Every plan includes sentiment tracking, competitor benchmarking, and real-time GEO scoring.',
     },
     docs: {
       title: 'Documentation | Poliris',
@@ -143,6 +150,11 @@ const META = {
       title: 'Obtenir une démo | Poliris',
       description:
         "Réservez une démo d'1 heure, lancez un audit GEO gratuit ou contactez-nous pour un partenariat agence. Nous répondons en moins de 4 heures.",
+    },
+    pricing: {
+      title: 'Tarifs | Poliris',
+      description:
+        'Choisissez le niveau de couverture de visibilité IA dont vous avez besoin. Chaque forfait inclut le suivi de sentiment, le benchmark concurrentiel et le score GEO en temps réel.',
     },
     docs: {
       title: 'Documentation | Poliris',

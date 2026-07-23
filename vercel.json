@@ -14,6 +14,7 @@
     { "source": "/faqs", "destination": "/en/faqs", "permanent": false },
     { "source": "/glossary", "destination": "/en/glossary", "permanent": false },
     { "source": "/demo", "destination": "/en/demo", "permanent": false },
+    { "source": "/pricing", "destination": "/en/pricing", "permanent": false },
     { "source": "/docs", "destination": "/en/docs", "permanent": false },
     { "source": "/blog", "destination": "/en/blog", "permanent": false },
     { "source": "/blog/:slug", "destination": "/en/blog/:slug", "permanent": false },
@@ -22,8 +23,8 @@
     { "source": "/privacy", "destination": "/en/privacy", "permanent": true },
     { "source": "/terms", "destination": "/en/terms", "permanent": true },
     { "source": "/mentions-legales", "destination": "/en/mentions-legales", "permanent": true },
-    { "source": "/en/a-propos", "destination": "/en/docs", "permanent": true },
-    { "source": "/en/author/florian", "destination": "/en/blog", "permanent": true }
+    { "source": "/en/a-propos/?", "destination": "/en/docs", "permanent": true },
+    { "source": "/en/author/florian/?", "destination": "/en/blog", "permanent": true }
   ],
   "rewrites": [
     { "source": "/en/:path*", "destination": "/en/index.html" },

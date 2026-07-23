@@ -79,6 +79,41 @@ function devApiPlugin(env) {
           res.end();
         }
       });
+
+      server.middlewares.use('/api/free-audit-request', async (req, res) => {
+        if (req.method !== 'POST') {
+          res.writeHead(405, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ detail: 'Method not allowed' }));
+        }
+
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', async () => {
+          try {
+            const { email, website, turnstile_token } = JSON.parse(body);
+            if (!email || !website || !turnstile_token) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              return res.end(JSON.stringify({ detail: 'email, website, and turnstile_token are required' }));
+            }
+
+            const r = await fetch(`${env.POLIRIS_BACKEND_URL}/api/v2/freemium/public-request`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Forwarded-For': req.headers['x-forwarded-for'] || '',
+              },
+              body: JSON.stringify({ email, website, turnstile_token }),
+            });
+            const data = await r.json().catch(() => ({}));
+            res.writeHead(r.status, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(data));
+          } catch (err) {
+            console.error('Free audit request error:', err);
+            res.writeHead(502, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ detail: 'Could not reach the backend — please try again.' }));
+          }
+        });
+      });
     },
   };
 }
