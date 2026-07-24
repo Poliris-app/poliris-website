@@ -698,3 +698,7 @@
   .vis-page.sent-page .tour { grid-template-columns: 1fr; }
 }
 
+/* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
+   top of the section (eyebrow label) after "See it below" jumps. */
+#axes, #angles, #compare, #ivy { scroll-margin-top: 90px; }
+

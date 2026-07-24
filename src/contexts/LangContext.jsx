@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useEffect } from 'react';
+import { createContext, useContext, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation, Outlet, Navigate } from 'react-router-dom';
 import { identifyUser, trackPageview } from '../lib/analytics';
 import en from '../locales/en';
@@ -31,9 +31,17 @@ export function LangWrapper() {
   // Skip the reset when the URL carries a hash (e.g. footer links into
   // homepage sections like /en/#products) so it can scroll to that
   // section instead of snapping back to the top.
+  const prevPathname = useRef(location.pathname);
   useEffect(() => {
+    // Anchor clicked while already on this page (e.g. "See it below" tour
+    // cards) gets a smooth scroll; arriving fresh at a page with a hash
+    // already in the URL (e.g. a footer link from another page) jumps
+    // instantly so it doesn't scroll the whole page on load.
+    const samePage = prevPathname.current === location.pathname;
+    prevPathname.current = location.pathname;
+
     if (location.hash) {
-      document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: samePage ? 'smooth' : 'instant', block: 'start' });
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }

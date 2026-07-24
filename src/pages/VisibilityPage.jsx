@@ -106,7 +106,7 @@ export default function VisibilityPage() {
         {/* ======================== HERO ======================== */}
         <Hero
           eyebrow={t('visibility.hero.eyebrow')}
-          title={<>{t('visibility.hero.titlePre')}<br />inside <HL>{t('visibility.hero.titleHl')}</HL></>}
+          title={<>{t('visibility.hero.titlePre')}<br /><HL>{t('visibility.hero.titleHl')}</HL></>}
           lead={t('visibility.hero.lead')}
           primaryCta={t('visibility.hero.primaryCta')}
           secondaryCta={t('visibility.hero.secondaryCta')}
@@ -247,15 +247,14 @@ export default function VisibilityPage() {
                 {(() => { const rm = t('visibility.realMarket'); return (<>
                   <div className="si-head-copy">
                     <div className="eyebrow">{rm.eyebrow}</div>
-                    <h2>{rm.h2Pre} <span className="hl">{rm.h2Post}</span></h2>
-                    <div className="mkt-hint">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-                      </svg>
-                      {t('visibility.realMarket.hint')}
-                    </div>
+                    <h2>{rm.h2Pre} <span className="hl">{rm.h2Hl}</span></h2>
                   </div>
-                  <p className="lead">{rm.lead}</p>
+                  <p className="lead">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                    </svg>
+                    {rm.lead}
+                  </p>
                 </>); })()}
               </div>
 

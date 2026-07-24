@@ -984,3 +984,7 @@
 @media (max-width: 880px) {
   .ta-sec { padding: 64px 0; }
 }
+
+/* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
+   top of the section (eyebrow label) after "See it below" jumps. */
+#p1, #p2, #p3, #p4 { scroll-margin-top: 90px; }

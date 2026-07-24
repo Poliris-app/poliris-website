@@ -4818,7 +4818,6 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
 }
 .vis-page .adv-head .lead { 
   color: var(--fg-4); 
-  margin-bottom: 20px; 
 }
 .vis-page .adv-head .eyebrow { margin-bottom: 0; }
 

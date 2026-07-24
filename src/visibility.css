@@ -247,8 +247,6 @@
    ============================================================ */
 .vis-page .mkt          { display: flex; flex-direction: column; align-items: stretch; }
 
-.vis-page .mkt-hint            { font-size: 14px; color: var(--fg-6); margin-top: 16px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
-.vis-page .mkt-hint svg        { flex: 0 0 auto; color: var(--poliris-blue); }
 
 /* ── D3 Globe ────────────────────────────────────────────────── */
 .globe-wrap {
@@ -300,7 +298,7 @@
   text-align: left;
   margin: 0 auto 20px;
 }
-.vis-page .si-head-copy { flex: 1 1 auto; max-width: 560px; text-align: left; }
+.vis-page .si-head-copy { flex: 1 1 auto; max-width: 620px; text-align: left; }
 .vis-page .si-head .lead {
   flex: 0 0 340px;
   max-width: 340px;
@@ -309,7 +307,11 @@
   border-left: 1px solid var(--border);
   color: var(--fg-4);
   text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
 }
+.vis-page .si-head .lead svg { flex: 0 0 auto; margin-top: 3px; color: var(--poliris-blue); }
 
 .vis-page .src-primer {
   display: grid;
@@ -1091,4 +1093,8 @@
   .vis-page .rm2-marker-inner { animation: none; opacity: 1; }
   .vis-page .rm2-callout { animation: none; opacity: 1; }
 }
+
+/* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
+   top of the section (eyebrow label) after "See it below" jumps. */
+#focus, #market, #sources, #nora { scroll-margin-top: 90px; }
 
