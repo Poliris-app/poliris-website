@@ -23,8 +23,8 @@
     { "source": "/privacy", "destination": "/en/privacy", "permanent": true },
     { "source": "/terms", "destination": "/en/terms", "permanent": true },
     { "source": "/mentions-legales", "destination": "/en/mentions-legales", "permanent": true },
-    { "source": "/en/a-propos/?", "destination": "/en/docs", "permanent": true },
-    { "source": "/en/author/florian/?", "destination": "/en/blog", "permanent": true }
+    { "source": "/en/a-propos(/)?", "destination": "/en/docs", "permanent": true },
+    { "source": "/en/author/florian(/)?", "destination": "/en/blog", "permanent": true }
   ],
   "rewrites": [
     { "source": "/en/:path*", "destination": "/en/index.html" },
