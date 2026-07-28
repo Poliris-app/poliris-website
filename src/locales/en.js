@@ -252,9 +252,9 @@ export default {
     },
     tourCards: [
       { title: 'Per-topic sentiment', desc: 'Score every topic your buyers judge   not just one blended number.' },
-      { title: 'See the competition', desc: 'See how AI ranks your brand against every competitor, topic by topic.' },
+      { title: 'Full breakdown',      desc: 'Drill into sentiment by axis and by model, with over-time tracking.' },
       { title: 'Meet IVY',            desc: 'AI that reads your scores, finds the gaps, and builds the fix plan.' },
-      { title: 'See the evidence',    desc: 'See the exact AI answers and sources behind every score.' },
+      { title: 'See the competition', desc: 'See how AI ranks your brand against every competitor, topic by topic.' },
     ],
     seeIt: 'See it below',
     perAxis: {
@@ -299,7 +299,7 @@ export default {
       },
     },
     competitive: {
-      eyebrow: '03 · Your competitors',
+      eyebrow: '04 · Your competitors',
       h2Pre: 'See how AI',
       h2Hl: 'ranks the field.',
       lead: 'These are your real competitors   scored on the same axes. See where AI is handing them wins you should own.',

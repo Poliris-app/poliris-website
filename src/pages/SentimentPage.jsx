@@ -77,7 +77,7 @@ const PF_AXES = [
     name: 'Performance', prompts: 3, tier: 'Strong',
     questions: [
       { text: 'Looking for lightweight gym training shoes that provide maximum stability?', sentiment: 'pos' },
-      { text: 'Professional advice on choosing the best cross-training shoes for intense workouts?', sentiment: 'pos' },
+      { text: 'Best cross-training shoes for intense workouts?', sentiment: 'pos' },
     ],
   },
   {
@@ -91,7 +91,7 @@ const PF_AXES = [
     name: 'Design', prompts: 4, tier: 'Strong',
     questions: [
       { text: 'Where can I find affordable and reliable everyday sneakers?', sentiment: 'pos' },
-      { text: 'What are the most comfortable everyday walking shoes with arch support?', sentiment: 'pos' },
+      { text: 'Most comfortable walking shoes with arch support?', sentiment: 'pos' },
     ],
   },
   {
@@ -235,13 +235,10 @@ const TOUR_CARDS = [
   },
   {
     num: '03',
-    href: '#compare',
+    href: '#ivy',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     ),
     titleKey: 'title',
@@ -249,10 +246,13 @@ const TOUR_CARDS = [
   },
   {
     num: '04',
-    href: '#ivy',
+    href: '#compare',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg>
     ),
     titleKey: 'title',
@@ -997,7 +997,91 @@ export default function SentimentPage() {
           </div>
         </section>
 
-        {/* ===== 03   COMPETITIVE ===== */}
+        {/* ===== 03   IVY AGENT — full-width band, same treatment as the CtaBand below ===== */}
+        <section id="ivy" className="ivy-band">
+          <div className="dark reveal">
+            <div className="wrap">
+              <div className="inner">
+                <div className="nora-grid">
+                  {/* left: copy */}
+                  <div className="copy">
+                    <div className="agent-pill">
+                      <span className="sp" style={{ background: '#F0F2FA', borderColor: '#6B83D0' }}>
+                        <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                      </span>
+                      {t('sentiment.ivy.agentPill')}
+                    </div>
+                    <h2>{t('sentiment.ivy.h2')}</h2>
+                    <p className="lead" style={{ color: 'rgba(255,255,255,.75)', margin: '18px 0 28px' }}>
+                      {t('sentiment.ivy.lead')}
+                    </p>
+                    <ul className="agent-pts">
+                      {t('sentiment.ivy.points').map((pt, i) => (
+                        <li key={i}>
+                          <span className="ic">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              {i === 0 && <><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></>}
+                              {i === 1 && <path d="M13 2 3 14h9l-1 8 10-12h-9z"/>}
+                              {i === 2 && <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>}
+                            </svg>
+                          </span>
+                          <span>
+                            <span className="tt">{pt.tt}</span>
+                            <span className="dd">{pt.dd}</span>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* right: chat mock */}
+                  <div className="shot">
+                    <span className="tab">{t('sentiment.ivy.chatId').split('·')[0].trim()}</span>
+                    <div className="chat">
+                      <div className="chat-id">
+                        <span className="av av--ivy">
+                          <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                        </span> {t('sentiment.ivy.chatId')}
+                      </div>
+                      <div className="bub user">Why is my Durability sentiment slipping?</div>
+                      <div className="bub bot">
+                        On durability questions, <b>Gemini</b> now puts Hoka and Brooks first and mentions Nike later   dragging Durability down <span style={{ color: '#f87171', fontWeight: 700 }}>11 points in 30 days</span>. Every other axis is stable.
+                      </div>
+                      <div className="bub user">What do I do?</div>
+                    </div>
+                    <div className="plan">
+                      <div className="plan-h">
+                        <span className="av av--ivy" style={{ width: '20px', height: '20px' }}>
+                          <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                        </span>
+                        {t('sentiment.ivy.planTitle')}
+                      </div>
+                      <div className="plan-body">
+                        <div className="plan-item">
+                          <span className="rk">1</span>
+                          <span className="t">Publish durability test results and materials data</span>
+                          <span className="impact hi">+9 pts</span>
+                        </div>
+                        <div className="plan-item">
+                          <span className="rk">2</span>
+                          <span className="t">Add a long-term wear FAQ with athlete testimonials</span>
+                          <span className="impact hi">+5 pts</span>
+                        </div>
+                        <div className="plan-item">
+                          <span className="rk">3</span>
+                          <span className="t">Get cited on 2 running-gear review sites</span>
+                          <span className="impact md">+3 pts</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== 04   COMPETITIVE ===== */}
         <section id="compare">
           <div className="wrap">
             <div className="adv-head mid reveal">
@@ -1050,88 +1134,6 @@ export default function SentimentPage() {
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
               <span dangerouslySetInnerHTML={{ __html: t('sentiment.competitive.disclaimer') }} />
-            </div>
-          </div>
-        </section>
-
-        {/* ===== 04   IVY AGENT ===== */}
-        <section id="ivy">
-          <div className="wrap">
-            <div className="dark reveal">
-              <div className="inner">
-                <div className="nora-grid">
-                  {/* left: copy */}
-                  <div className="copy">
-                    <div className="agent-pill">
-                      <span className="sp">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
-                        </svg>
-                      </span>
-                      {t('sentiment.ivy.agentPill')}
-                    </div>
-                    <h2>{t('sentiment.ivy.h2')}</h2>
-                    <p className="lead" style={{ color: 'rgba(255,255,255,.75)', margin: '18px 0 28px' }}>
-                      {t('sentiment.ivy.lead')}
-                    </p>
-                    <ul className="agent-pts">
-                      {t('sentiment.ivy.points').map((pt, i) => (
-                        <li key={i}>
-                          <span className="ic">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                              {i === 0 && <><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></>}
-                              {i === 1 && <path d="M13 2 3 14h9l-1 8 10-12h-9z"/>}
-                              {i === 2 && <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>}
-                            </svg>
-                          </span>
-                          <span>
-                            <span className="tt">{pt.tt}</span>
-                            <span className="dd">{pt.dd}</span>
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* right: chat mock */}
-                  <div className="shot">
-                    <span className="tab">{t('sentiment.ivy.chatId').split('·')[0].trim()}</span>
-                    <div className="chat">
-                      <div className="chat-id">
-                        <span className="av">I</span> {t('sentiment.ivy.chatId')}
-                      </div>
-                      <div className="bub user">Why is my Durability sentiment slipping?</div>
-                      <div className="bub bot">
-                        On durability questions, <b>Gemini</b> now puts Hoka and Brooks first and mentions Nike later   dragging Durability down <span style={{ color: '#f87171', fontWeight: 700 }}>11 points in 30 days</span>. Every other axis is stable.
-                      </div>
-                      <div className="bub user">What do I do?</div>
-                    </div>
-                    <div className="plan">
-                      <div className="plan-h">
-                        <span className="av" style={{ width: '20px', height: '20px', fontSize: '11px' }}>I</span>
-                        {t('sentiment.ivy.planTitle')}
-                      </div>
-                      <div className="plan-body">
-                        <div className="plan-item">
-                          <span className="rk">1</span>
-                          <span className="t">Publish durability test results and materials data</span>
-                          <span className="impact hi">+9 pts</span>
-                        </div>
-                        <div className="plan-item">
-                          <span className="rk">2</span>
-                          <span className="t">Add a long-term wear FAQ with athlete testimonials</span>
-                          <span className="impact hi">+5 pts</span>
-                        </div>
-                        <div className="plan-item">
-                          <span className="rk">3</span>
-                          <span className="t">Get cited on 2 running-gear review sites</span>
-                          <span className="impact md">+3 pts</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

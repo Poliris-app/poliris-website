@@ -592,12 +592,16 @@
 }
 
 /* avatars */
-.vis-page .av--nora-v2 {
+.vis-page .av.av--nora-v2 {
   width: 26px; height: 26px; border-radius: var(--r-pill);
-  background: linear-gradient(135deg, #2a4bd0, #1a317f);
+  background: #EFEFF7;
+  border: 2px solid #716BEB;
   display: flex; align-items: center; justify-content: center;
   color: #fff; flex: 0 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
 }
+.vis-page .av--nora-v2 img { width: 88%; height: 88%; object-fit: contain; }
 .vis-page .av--j {
   width: 26px; height: 26px; border-radius: var(--r-pill);
   background: #64748b;
@@ -1097,4 +1101,5 @@
 /* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
    top of the section (eyebrow label) after "See it below" jumps. */
 #focus, #market, #sources, #nora { scroll-margin-top: 90px; }
+
 

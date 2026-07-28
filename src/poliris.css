@@ -3973,6 +3973,9 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
   align-items: start;
   margin-top: 18px;
 }
+.pipeline-body--chart-only {
+  grid-template-columns: 1fr;
+}
 .pipeline-stages {
   display: flex;
   flex-direction: column;
@@ -4888,10 +4891,14 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
 }
 .vis-page .agent-pill .sp {
   width: 30px; height: 30px; border-radius: var(--r-pill);
-  background: linear-gradient(135deg, #2a4bd0, #1a317f);
+  background: #EFEFF7;
+  border: 2px solid #716BEB;
   display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .vis-page .agent-pill .sp svg { width: 15px; height: 15px; color: #fff; }
+.vis-page .agent-pill .sp img { width: 88%; height: 88%; object-fit: contain; }
 .vis-page .nora-eyebrow {
   display: block;
   background: none;

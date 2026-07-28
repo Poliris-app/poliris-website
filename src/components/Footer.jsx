@@ -18,12 +18,11 @@ const HIDDEN_INDICES = new Set([1]);
 // one exists — reuses the same copy as the navbar's CTA.
 const PRICING_INDEX = 3;
 
-// Contractual URLs for the WordPress plugin's readme.txt — do not add a
-// /{lang}/ prefix here. They 301 to their real (lang-prefixed) page via
-// vercel.json regardless of which language the visitor is currently on.
-const LEGAL_LINKS = [
-  { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/terms', label: 'Terms of Service' },
+// Labels for the locale-prefixed legal links below (see LEGAL_LINKS in
+// the render — hrefs are built per-lang there, same as Mentions légales).
+const LEGAL_LINK_ITEMS = [
+  { slug: 'privacy', label: 'Privacy Policy' },
+  { slug: 'terms', label: 'Terms of Service' },
 ];
 
 export default function Footer() {
@@ -50,12 +49,12 @@ export default function Footer() {
       <div className="footer__legal">
         <p className="footer__copy">{t('footer.copy')}</p>
         <nav className="footer__legal-nav">
-          {LEGAL_LINKS.map(({ href, label }) => (
-            <a key={href} href={href} className="footer__link">{label}</a>
+          {/* Locale-prefixed directly so it navigates straight to the
+              active language's page instead of round-tripping through
+              the bare-URL redirects in vercel.json. */}
+          {LEGAL_LINK_ITEMS.map(({ slug, label }) => (
+            <a key={slug} href={`/${lang}/${slug}`} className="footer__link">{label}</a>
           ))}
-          {/* Locale-prefixed directly (unlike the links above) so it
-              navigates straight to the active language's page instead of
-              round-tripping through the /mentions-legales redirect. */}
           <a href={`/${lang}/mentions-legales`} className="footer__link">Mentions légales</a>
         </nav>
       </div>

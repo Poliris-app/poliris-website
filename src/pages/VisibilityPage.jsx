@@ -18,7 +18,7 @@ const PF_TOPICS = [
     name: 'Performance', prompts: 4, pct: 67, status: 'On par',
     questions: [
       { text: 'Looking for lightweight gym training shoes that provide maximum stability?' },
-      { text: 'Professional advice on choosing the best cross-training shoes for intense workouts?' },
+      { text: 'Best cross-training shoes for intense workouts?' },
     ],
   },
   {
@@ -32,7 +32,7 @@ const PF_TOPICS = [
     name: 'Design', prompts: 5, pct: 42, status: 'Behind',
     questions: [
       { text: 'Where can I find affordable and reliable everyday sneakers?' },
-      { text: 'What are the most comfortable everyday walking shoes with arch support?' },
+      { text: 'Most comfortable walking shoes with arch support?' },
     ],
   },
   {
@@ -386,9 +386,7 @@ export default function VisibilityPage() {
                   <div className="vis-agent-body">
                     <div className="agent-pill">
                       <span className="sp">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
-                        </svg>
+                        <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
                       </span>
                       {t('visibility.nora.agentPill')}
                     </div>
@@ -423,9 +421,7 @@ export default function VisibilityPage() {
                       <div className="chat-hdr-v2">
                         <div className="chat-hdr-left">
                           <span className="av av--nora-v2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
-                              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
-                            </svg>
+                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
                           </span>
                           <div className="chat-hdr-info">
                             <span className="chat-hdr-name">Nora</span>
@@ -445,9 +441,7 @@ export default function VisibilityPage() {
                         </div>
                         <div className="chat-msg chat-msg--bot">
                           <span className="av av--nora-v2 av--sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
-                              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
-                            </svg>
+                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
                           </span>
                           <div className="bub bot">Good question. <b>Two root causes:</b> First, your pricing page is blocked by robots.txt   AI engines can't read it. Second, Competitor A has two detailed pricing comparison articles on forbes.com and techradar.com that dominate results for value-related queries. You appear in neither.</div>
                         </div>
@@ -457,9 +451,7 @@ export default function VisibilityPage() {
                         </div>
                         <div className="chat-msg chat-msg--bot">
                           <span className="av av--nora-v2 av--sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11">
-                              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
-                            </svg>
+                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
                           </span>
                           <div className="bub bot">I've built your action plan. Start here   these three changes move the needle fastest:</div>
                         </div>

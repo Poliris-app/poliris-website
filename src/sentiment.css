@@ -619,7 +619,7 @@
    sentiment marker on the right, which the wider Visibility text
    doesn't need to make room for.
    ============================================================ */
-.sent-page .pf-q { font-size: 11px; }
+.sent-page .pf-q { font-size: 13.5px; }
 .sent-page .pf-divider { stroke-opacity: 1; stroke-width: 1; }
 
 /* Axis divider line uses the same fixed per-topic identity color as the
@@ -701,4 +701,22 @@
 /* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
    top of the section (eyebrow label) after "See it below" jumps. */
 #axes, #angles, #compare, #ivy { scroll-margin-top: 90px; }
+
+/* IVY section: full-bleed dark band, same edge-to-edge treatment as
+   CtaBand, instead of the contained rounded card .dark normally is
+   (see visibility.css's Nora section for that default usage). */
+.vis-page .ivy-band .dark {
+  border-radius: 0;
+  padding: 84px 0;
+}
+
+/* IVY's chat avatars — same ringed-face treatment as Nora's, using
+   IVY's own brand color (see AGENT_COLORS in LandingPage.jsx). */
+.vis-page .av.av--ivy {
+  background: #F0F2FA;
+  border: 2px solid #6B83D0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.vis-page .av--ivy img { width: 88%; height: 88%; object-fit: contain; }
 

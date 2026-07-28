@@ -36,7 +36,7 @@ export const BLOG_POST_SLUGS = [
 const META = {
   en: {
     home: {
-      title: 'Poliris',
+      title: 'AI Search Visibility, GEO & AI SEO Tool | Poliris',
       description:
         "Track your brand's visibility across AI search engines, perform technical AI SEO & GEO audits, and fix issues fast. The complete AI search platform.",
     },

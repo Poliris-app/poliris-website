@@ -402,7 +402,7 @@ function SentimentVis() {
   );
 }
 
-export function AuditVis() {
+export function AuditVis({ showStages = true } = {}) {
   const { t } = useLang();
   const av = t('productCarousel.auditVis');
   const [vals] = useState([81, 80, 36]);
@@ -488,21 +488,20 @@ export function AuditVis() {
         </div>
       </div>
 
-      <div className="pipeline-body">
-        {/* ── LEFT: numbered question + explanation per stage ─── */}
-        <div className="pipeline-stages">
-          {STAGES.map((s, i) => (
-            <div className="pipeline-stage-item" key={s.key}>
-              <span className="pipeline-stage-num" style={{ background: s.color }}>{i + 1}</span>
-              <div className="pipeline-stage-copy">
-                <h4>{s.question}</h4>
-                <p>{s.desc}</p>
+      <div className={`pipeline-body${showStages ? '' : ' pipeline-body--chart-only'}`}>
+        {showStages && (
+          <div className="pipeline-stages">
+            {STAGES.map((s, i) => (
+              <div className="pipeline-stage-item" key={s.key}>
+                <span className="pipeline-stage-num" style={{ background: s.color }}>{i + 1}</span>
+                <div className="pipeline-stage-copy">
+                  <h4>{s.question}</h4>
+                  <p>{s.desc}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ── RIGHT: column headers + single-color flow ───────── */}
+            ))}
+          </div>
+        )}
         <div className="pipeline-chart">
           <div className="pipeline-chart-headers">
             {STAGES.map((s) => (
@@ -742,7 +741,7 @@ const SLIDE_META = [
       </svg>
     ),
     ctaHref: '/technical-audit',
-    visual: <AuditVis />,
+    visual: <AuditVis showStages={false} />,
   },
   {
     tabIcon: (

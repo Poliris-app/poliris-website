@@ -251,10 +251,10 @@ export default {
       lead: "La plupart des outils s'arrêtent à un chiffre. Chacun des éléments ci-dessous est une force de l'analyse   et ce qui transforme le sentiment IA en quelque chose d'actionnable.",
     },
     tourCards: [
-      { title: 'Sentiment par sujet', desc: "Notez chaque sujet que vos acheteurs jugent   pas juste un chiffre global." },
-      { title: 'Voyez la concurrence', desc: "Voyez comment l'IA classe votre marque face à chaque concurrent, sujet par sujet." },
-      { title: "Découvrez IVY",       desc: "L'IA qui lit vos scores, trouve les lacunes et construit le plan correctif." },
-      { title: 'Voyez les preuves',   desc: "Voyez les réponses IA exactes et les sources derrière chaque score." },
+      { title: 'Sentiment par sujet',   desc: "Notez chaque sujet que vos acheteurs jugent   pas juste un chiffre global." },
+      { title: 'Décomposition complète', desc: 'Analysez le sentiment par axe et par modèle, avec un suivi dans le temps.' },
+      { title: "Découvrez IVY",         desc: "L'IA qui lit vos scores, trouve les lacunes et construit le plan correctif." },
+      { title: 'Voyez la concurrence',  desc: "Voyez comment l'IA classe votre marque face à chaque concurrent, sujet par sujet." },
     ],
     seeIt: 'Voir ci-dessous',
     perAxis: {
@@ -299,7 +299,7 @@ export default {
       },
     },
     competitive: {
-      eyebrow: '03 · Vos concurrents',
+      eyebrow: '04 · Vos concurrents',
       h2Pre: "Voyez comment l'IA",
       h2Hl: 'classe le terrain.',
       lead: "Ce sont vos vrais concurrents   notés sur les mêmes axes. Voyez où l'IA leur donne des victoires que vous devriez remporter.",
