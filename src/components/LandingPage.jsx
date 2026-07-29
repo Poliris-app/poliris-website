@@ -288,26 +288,28 @@ function ComparisonTable() {
   const rows = cp.rows;
   const CheckIcon = () => (
     <span className="comparison__check-bg">
-      <svg viewBox="0 0 12 12" fill="none" width="16" height="16">
-        <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 6 9 17l-5-5"/>
       </svg>
     </span>
   );
   const CrossIcon = () => (
     <span className="comparison__x-icon">
-      <svg viewBox="0 0 14 14" fill="none" width="16" height="16">
-        <path d="M3 3l8 8M11 3l-8 8" stroke="#B45353" strokeWidth="1.3" strokeLinecap="round"/>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 6 6 18M6 6l12 12"/>
       </svg>
     </span>
   );
   return (
     <section className="comparison">
       <div className="container">
-        <div className="sec-head reveal">
+        <div className="comparison__head reveal">
           {(() => { const cp = t('home.comparison'); return (<>
-            <Eyebrow>{cp.eyebrow}</Eyebrow>
-            <h2 className="sec-h2">{cp.h2}</h2>
-            <p className="sec-lead">{cp.lead}</p>
+            <div className="comparison__head-copy">
+              <Eyebrow>{cp.eyebrow}</Eyebrow>
+              <h2 className="comparison__h2">{cp.h2}</h2>
+            </div>
+            <p className="comparison__lead">{cp.lead}</p>
           </>); })()}
         </div>
         <div className="comparison__table-wrap reveal reveal--scale reveal--d1">
@@ -315,8 +317,10 @@ function ComparisonTable() {
             <thead>
               <tr>
                 <th className="comparison__th">{cp.headers.capability}</th>
-                <th className="comparison__th">{cp.headers.otherTools}</th>
-                <th className="comparison__th comparison__th--pol">{cp.headers.poliris}</th>
+                <th className="comparison__th comparison__th--other">{cp.headers.otherTools}</th>
+                <th className="comparison__th comparison__th--pol">
+                  <span className="comparison__th-pill">{cp.headers.poliris}</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -341,8 +345,8 @@ function ComparisonTable() {
         </div>
         <div className="comparison__concl">
           <span className="comparison__check-bg" style={{flexShrink:0}}>
-            <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
-              <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
             </svg>
           </span>
           <span className="comparison__concl-text">{cp.concl}</span>

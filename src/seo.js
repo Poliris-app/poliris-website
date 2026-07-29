@@ -41,9 +41,9 @@ const META = {
         "Track your brand's visibility across AI search engines, perform technical AI SEO & GEO audits, and fix issues fast. The complete AI search platform.",
     },
     visibility: {
-      title: 'AI Visibility | Poliris',
+      title: 'AI Share of Voice & GEO Visibility Analytics | Poliris',
       description:
-        "Track where your brand shows up in AI answers across ChatGPT, Gemini, Perplexity and more — and see where you're losing ground.",
+        "Track your brand's share of voice across ChatGPT, Claude, Perplexity, and Gemini. Analyze sources shaping AI answers, benchmark competitors, and win citations.",
     },
     sentiment: {
       title: 'AI Sentiment | Poliris',
@@ -61,9 +61,9 @@ const META = {
         'Generate AI-optimised pages and structured data that get your brand recommended by AI engines.',
     },
     blog: {
-      title: 'Blog | Poliris',
+      title: 'AI Visibility & GEO Insights, AI SEO Blog | Poliris',
       description:
-        'Insights, guides and strategy on AI visibility and Generative Engine Optimisation (GEO).',
+        'Explore field notes, frameworks, and strategies on AI visibility, GEO, and AI SEO. Learn how to optimize your brand for ChatGPT, Perplexity, and Gemini.',
     },
     faqs: {
       title: 'FAQs | Poliris',

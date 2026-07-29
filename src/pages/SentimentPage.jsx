@@ -69,40 +69,6 @@ const TIER_ACCENT = {
   'Very Weak':   { accent: '#ef4444', cardBg: '#fef2f2' },
 };
 
-/* ── Per-axis sentiment diagram: axis cards + the real buyer
-   questions rolling up into each one (same layout as Visibility's
-   Product Focus diagram) ───────────────────────────────────── */
-const PF_AXES = [
-  {
-    name: 'Performance', prompts: 3, tier: 'Strong',
-    questions: [
-      { text: 'Looking for lightweight gym training shoes that provide maximum stability?', sentiment: 'pos' },
-      { text: 'Best cross-training shoes for intense workouts?', sentiment: 'pos' },
-    ],
-  },
-  {
-    name: 'Durability', prompts: 2, tier: 'Weak',
-    questions: [
-      { text: 'Best high-performance running shoes for trail conditions available?', sentiment: 'neutral' },
-      { text: 'What are the best durable footwear brands for long-distance walking?', sentiment: 'neg' },
-    ],
-  },
-  {
-    name: 'Design', prompts: 4, tier: 'Strong',
-    questions: [
-      { text: 'Where can I find affordable and reliable everyday sneakers?', sentiment: 'pos' },
-      { text: 'Most comfortable walking shoes with arch support?', sentiment: 'pos' },
-    ],
-  },
-  {
-    name: 'Brand awareness', prompts: 4, tier: 'Very Strong',
-    questions: [
-      { text: 'Which trendy sneakers are currently popular for casual street style?', sentiment: 'pos' },
-      { text: 'What sneaker brands do people trust most?', sentiment: 'pos' },
-    ],
-  },
-];
-
 /* Splits a question into 3 lines balanced by character length (not
    word count), each split falling at the word boundary closest to the
    remaining text's own midpoint. */
@@ -125,14 +91,6 @@ function wrapQuestion(text, lineCount = 3) {
   lines.push(words.slice(start).join(' '));
   return lines;
 }
-
-/* Exclusive prefix sum of question counts, so each axis's connector
-   lines get a unique, stable pf-line--N (drives the staggered draw-in). */
-const PF_LINE_OFFSET = PF_AXES.reduce((acc, axis) => {
-  const prev = acc.length ? acc[acc.length - 1] : 0;
-  acc.push(prev + axis.questions.length);
-  return acc;
-}, []);
 
 const SENT_AXES = [
   { id: 'brand-awareness', name: 'Brand awareness', score: 92, tier: 'Very Strong' },
@@ -315,6 +273,14 @@ const COMPETITORS = [
 export default function SentimentPage() {
   const { t } = useLang();
   const md = t('sentiment.mockDash');
+  const PF_AXES = t('sentiment.perAxis.axes');
+  /* Exclusive prefix sum of question counts, so each axis's connector
+     lines get a unique, stable pf-line--N (drives the staggered draw-in). */
+  const PF_LINE_OFFSET = PF_AXES.reduce((acc, axis) => {
+    const prev = acc.length ? acc[acc.length - 1] : 0;
+    acc.push(prev + axis.questions.length);
+    return acc;
+  }, []);
   const [sentHov, setSentHov] = useState(null);
 
   function handleSentMove(e) {
@@ -582,9 +548,9 @@ export default function SentimentPage() {
                     const anchorX = cardX + CARD_W / 2;
                     const lineBase = ai === 0 ? 0 : PF_LINE_OFFSET[ai - 1];
                     const ta = TIER_ACCENT[axis.tier];
-                    const slug = axis.name.toLowerCase().replace(/\s+/g, '-');
+                    const slug = axis.key;
                     return (
-                      <g key={axis.name} className={`pf-topic pf-topic--${slug}`} style={{ '--pf-accent': ta.accent, '--pf-card-bg': ta.cardBg }}>
+                      <g key={axis.key} className={`pf-topic pf-topic--${slug}`} style={{ '--pf-accent': ta.accent, '--pf-card-bg': ta.cardBg }}>
                         <rect className="pf-card" x={cardX} y={CARD_Y} width={CARD_W} height={CARD_H}/>
                         <text x={cardX + 24} y={CY + 30} className="pf-tname">{axis.name}</text>
                         <text x={cardX + 24} y={CY + 53} className="pf-tsub">{t('sentiment.perAxis.fromPrompts').replace('{shown}', axis.questions.length).replace('{n}', axis.prompts)}</text>
@@ -636,7 +602,7 @@ export default function SentimentPage() {
                     const anchorX = cardX + CARD_W / 2;
                     const ta = TIER_ACCENT[axis.tier];
                     return (
-                      <g key={`${axis.name}-nodes`} style={{ '--pf-accent': ta.accent }}>
+                      <g key={`${axis.key}-nodes`} style={{ '--pf-accent': ta.accent }}>
                         <circle className="pf-node" cx={anchorX} cy={CARD_BOTTOM}/>
                         {axis.questions.map((q, i) => {
                           const rowTop = ROW_TOP0 + i * ROW_PITCH;
@@ -1004,17 +970,16 @@ export default function SentimentPage() {
               <div className="inner">
                 <div className="nora-grid">
                   {/* left: copy */}
-                  <div className="copy">
+                  <div className="vis-agent-body">
                     <div className="agent-pill">
                       <span className="sp" style={{ background: '#F0F2FA', borderColor: '#6B83D0' }}>
                         <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
                       </span>
                       {t('sentiment.ivy.agentPill')}
                     </div>
+                    <div className="eyebrow nora-eyebrow">{t('sentiment.ivy.eyebrow')}</div>
                     <h2>{t('sentiment.ivy.h2')}</h2>
-                    <p className="lead" style={{ color: 'rgba(255,255,255,.75)', margin: '18px 0 28px' }}>
-                      {t('sentiment.ivy.lead')}
-                    </p>
+                    <p className="lead">{t('sentiment.ivy.lead')}</p>
                     <ul className="agent-pts">
                       {t('sentiment.ivy.points').map((pt, i) => (
                         <li key={i}>
@@ -1036,43 +1001,65 @@ export default function SentimentPage() {
 
                   {/* right: chat mock */}
                   <div className="shot">
-                    <span className="tab">{t('sentiment.ivy.chatId').split('·')[0].trim()}</span>
-                    <div className="chat">
-                      <div className="chat-id">
-                        <span className="av av--ivy">
-                          <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
-                        </span> {t('sentiment.ivy.chatId')}
-                      </div>
-                      <div className="bub user">Why is my Durability sentiment slipping?</div>
-                      <div className="bub bot">
-                        On durability questions, <b>Gemini</b> now puts Hoka and Brooks first and mentions Nike later   dragging Durability down <span style={{ color: '#f87171', fontWeight: 700 }}>11 points in 30 days</span>. Every other axis is stable.
-                      </div>
-                      <div className="bub user">What do I do?</div>
-                    </div>
-                    <div className="plan">
-                      <div className="plan-h">
-                        <span className="av av--ivy" style={{ width: '20px', height: '20px' }}>
-                          <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
-                        </span>
-                        {t('sentiment.ivy.planTitle')}
-                      </div>
-                      <div className="plan-body">
-                        <div className="plan-item">
-                          <span className="rk">1</span>
-                          <span className="t">Publish durability test results and materials data</span>
-                          <span className="impact hi">+9 pts</span>
+                    <span className="tab tab--live">{t('sentiment.ivy.liveSession')}</span>
+                    <div className="chat chat--v2">
+
+                      {/* Chat header */}
+                      <div className="chat-hdr-v2">
+                        <div className="chat-hdr-left">
+                          <span className="av av--ivy">
+                            <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                          </span>
+                          <div className="chat-hdr-info">
+                            <span className="chat-hdr-name">IVY</span>
+                            <span className="chat-hdr-sub"><span className="chat-online-dot" />{t('sentiment.ivy.online')}</span>
+                          </div>
                         </div>
-                        <div className="plan-item">
-                          <span className="rk">2</span>
-                          <span className="t">Add a long-term wear FAQ with athlete testimonials</span>
-                          <span className="impact hi">+5 pts</span>
-                        </div>
-                        <div className="plan-item">
-                          <span className="rk">3</span>
-                          <span className="t">Get cited on 2 running-gear review sites</span>
-                          <span className="impact md">+3 pts</span>
+                        <div className="chat-hdr-right">
+                          <span className="chat-hdr-date">{t('sentiment.ivy.chatDate')}</span>
                         </div>
                       </div>
+
+                      {/* Messages */}
+                      <div className="chat-msgs">
+                        {t('sentiment.ivy.bubbles').map((bub, i) => (
+                          <div key={i} className={`chat-msg chat-msg--${bub.from === 'user' ? 'user' : 'bot'}`}>
+                            {bub.from === 'user' ? (
+                              <>
+                                <div className="bub user" dangerouslySetInnerHTML={{ __html: bub.text }} />
+                                <span className="av av--j av--sm">J</span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="av av--ivy av--sm">
+                                  <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                                </span>
+                                <div className="bub bot" dangerouslySetInnerHTML={{ __html: bub.text }} />
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Nested action plan */}
+                      <div className="plan plan--v2">
+                        <div className="plan-h plan-h--v2">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                          </svg>
+                          {t('sentiment.ivy.planTitle')}
+                        </div>
+                        <div className="plan-items">
+                          {t('sentiment.ivy.planItems').map((item, i) => (
+                            <div key={i} className="plan-item">
+                              <span className="rk">{i + 1}</span>
+                              <span className="t">{item.t}</span>
+                              <span className={`impact ${item.impact}`}>{item.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>

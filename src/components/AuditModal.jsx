@@ -228,49 +228,51 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                 </button>
               </div>
 
-              {tab === 'free' ? (
-                <form onSubmit={handleFreeSubmit} className="free-audit-form">
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => { setEmail(e.target.value); setFreeError(''); }}
-                    placeholder="Your work email"
-                    className="free-audit-form__input"
-                  />
-                  <input
-                    type="text"
-                    required
-                    value={website}
-                    onChange={(e) => { setWebsite(e.target.value); setFreeError(''); }}
-                    placeholder="yourbrand.com"
-                    className="free-audit-form__input"
-                  />
-                  {TURNSTILE_SITE_KEY && (
-                    <div ref={widgetRef} className="free-audit-form__turnstile" />
-                  )}
-                  <button type="submit" className="btn btn--primary promo-modal-cta" disabled={submitting}>
-                    {submitting ? 'Submitting…' : 'Get My Free Audit →'}
-                  </button>
-                  {freeError && <p className="code-modal-error">{freeError}</p>}
-                </form>
-              ) : (
-                <form onSubmit={handleCodeSubmit}>
-                  <input
-                    type="text"
-                    value={code}
-                    onChange={(e) => { setCode(e.target.value); setCodeError(''); }}
-                    placeholder="Enter your 6-character code"
-                    maxLength={6}
-                    autoFocus
-                    className="code-modal-input"
-                  />
-                  <button type="submit" className="btn btn--primary code-modal-submit" disabled={checking}>
-                    {checking ? 'Checking…' : 'View My Audit'}
-                  </button>
-                  {codeError && <p className="code-modal-error">{codeError}</p>}
-                </form>
-              )}
+              <div className="audit-modal-form-slot">
+                {tab === 'free' ? (
+                  <form onSubmit={handleFreeSubmit} className="free-audit-form">
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setFreeError(''); }}
+                      placeholder="Your work email"
+                      className="free-audit-form__input"
+                    />
+                    <input
+                      type="text"
+                      required
+                      value={website}
+                      onChange={(e) => { setWebsite(e.target.value); setFreeError(''); }}
+                      placeholder="yourbrand.com"
+                      className="free-audit-form__input"
+                    />
+                    {TURNSTILE_SITE_KEY && (
+                      <div ref={widgetRef} className="free-audit-form__turnstile" />
+                    )}
+                    <button type="submit" className="btn btn--primary promo-modal-cta" disabled={submitting}>
+                      {submitting ? 'Submitting…' : 'Get My Free Audit →'}
+                    </button>
+                    {freeError && <p className="code-modal-error">{freeError}</p>}
+                  </form>
+                ) : (
+                  <form onSubmit={handleCodeSubmit} className="code-audit-form">
+                    <input
+                      type="text"
+                      value={code}
+                      onChange={(e) => { setCode(e.target.value); setCodeError(''); }}
+                      placeholder="Enter your 6-character code"
+                      maxLength={6}
+                      autoFocus
+                      className="code-modal-input"
+                    />
+                    <button type="submit" className="btn btn--primary code-modal-submit" disabled={checking}>
+                      {checking ? 'Checking…' : 'View My Audit'}
+                    </button>
+                    {codeError && <p className="code-modal-error">{codeError}</p>}
+                  </form>
+                )}
+              </div>
 
               <p className="promo-modal-trust">🔒 No credit card required</p>
             </>

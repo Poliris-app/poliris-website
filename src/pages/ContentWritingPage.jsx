@@ -215,9 +215,11 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
 
       {/* ── Before card ── */}
       <div className={`cscore before${beforeActive ? ' cs-active' : ''}`}>
+        <div className="cs-pill-wrap">
+          <span className="cs-pill bad">{beforeLabel}</span>
+        </div>
         <div className="cs-header">
           <div className="cs-header-left">
-            <div className="cs-tag">{beforeLabel}</div>
             <div className="cs-ttl">
               <IconStar /> Content Score
             </div>
@@ -253,14 +255,15 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
             <path d="M5 12h14M13 6l6 6-6 6"/>
           </svg>
         </div>
-        <span className="ba-lab">+44</span>
       </div>
 
       {/* ── After card ── */}
       <div className={`cscore after${afterActive ? ' cs-active' : ''}`}>
+        <div className="cs-pill-wrap">
+          <span className="cs-pill ok">{afterLabel}</span>
+        </div>
         <div className="cs-header">
           <div className="cs-header-left">
-            <div className="cs-tag">{afterLabel}</div>
             <div className="cs-ttl">
               <IconStar /> Content Score
             </div>
@@ -288,6 +291,248 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
         </div>
       </div>
 
+    </div>
+  );
+}
+
+const ILNK_CATEGORIES = ['footwear', 'apparel', 'gear'];
+const ILNK_CARDS = [
+  { link: 'footwear', url: 'yoursite.com/footwear' },
+  { link: 'apparel',  url: 'yoursite.com/apparel' },
+  { link: 'gear',     url: 'yoursite.com/gear' },
+];
+
+function InternalLinkingBoard({ cwLink }) {
+  const boardRef = useRef(null);
+  const svgRef = useRef(null);
+
+  useEffect(() => {
+    const board = boardRef.current;
+    const svg = svgRef.current;
+    if (!board || !svg) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function rectOf(el) {
+      const r = el.getBoundingClientRect();
+      const b = board.getBoundingClientRect();
+      return { x: r.left - b.left, y: r.top - b.top, w: r.width, h: r.height };
+    }
+
+    function roundedElbow(x1, y1, x2, y2, midX, radius) {
+      const dy = y2 - y1;
+      if (Math.abs(dy) < 1) return `M ${x1} ${y1} L ${x2} ${y2}`;
+      const vSign = dy > 0 ? 1 : -1;
+      let r = Math.min(radius, Math.abs(midX - x1) * 0.9, Math.abs(x2 - midX) * 0.9, Math.abs(dy) / 2);
+      if (r < 1) r = 1;
+      return [
+        `M ${x1} ${y1}`,
+        `L ${midX - r} ${y1}`,
+        `Q ${midX} ${y1} ${midX} ${y1 + r * vSign}`,
+        `L ${midX} ${y2 - r * vSign}`,
+        `Q ${midX} ${y2} ${midX + r} ${y2}`,
+        `L ${x2} ${y2}`,
+      ].join(' ');
+    }
+
+    function build() {
+      svg.innerHTML = '';
+      if (window.innerWidth <= 820) return;
+
+      const boardRect = board.getBoundingClientRect();
+      const articlePanel = board.querySelector('.ilnk-article-panel').getBoundingClientRect();
+      const midX = (articlePanel.right - boardRect.left) + 4;
+
+      ILNK_CATEGORIES.forEach((cat, i) => {
+        const handle = board.querySelector(`.ilnk-handle[data-link="${cat}"]`);
+        const cardHandle = board.querySelector(`.ilnk-card[data-link="${cat}"] .ilnk-handle-in`);
+        if (!handle || !cardHandle) return;
+
+        const a = rectOf(handle);
+        const b = rectOf(cardHandle);
+        // End the wire just inside each dot's rim (not dead-center, not the
+        // outer edge) so it visibly touches/overlaps the dot without its
+        // round line-cap punching all the way through past the middle.
+        const aCx = a.x + a.w / 2, aCy = a.y + a.h / 2;
+        const bCx = b.x + b.w / 2, bCy = b.y + b.h / 2;
+        const x1 = aCx + (a.w / 2) * 0.55, y1 = aCy;
+        const x2 = bCx - (b.w / 2) * 0.9, y2 = bCy;
+        const d = roundedElbow(x1, y1, x2, y2, midX, 14);
+
+        const ns = 'http://www.w3.org/2000/svg';
+        const wire = document.createElementNS(ns, 'path');
+        wire.setAttribute('d', d);
+        wire.setAttribute('class', `ilnk-wire ilnk-wire-${cat}`);
+        wire.dataset.link = cat;
+        svg.appendChild(wire);
+
+        const pulse = document.createElementNS(ns, 'path');
+        pulse.setAttribute('d', d);
+        pulse.setAttribute('class', 'ilnk-pulse');
+        pulse.style.stroke = getComputedStyle(board).getPropertyValue(
+          cat === 'footwear' ? '--ilnk-blue' : cat === 'apparel' ? '--ilnk-rust' : '--ilnk-moss'
+        );
+        pulse.dataset.link = cat;
+        svg.appendChild(pulse);
+
+        const len = wire.getTotalLength();
+
+        if (!reduceMotion) {
+          wire.style.strokeDasharray = String(len);
+          wire.style.strokeDashoffset = String(len);
+          wire.animate(
+            [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+            { duration: 900, delay: i * 140, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }
+          );
+
+          const dash = Math.max(10, len * 0.14);
+          pulse.style.strokeDasharray = `${dash} ${len}`;
+          pulse.animate(
+            [{ strokeDashoffset: 0 }, { strokeDashoffset: -len }],
+            { duration: 2600, delay: 900, iterations: Infinity, easing: 'linear' }
+          );
+        } else {
+          wire.style.strokeDasharray = 'none';
+          pulse.style.display = 'none';
+        }
+      });
+    }
+
+    function setActive(cat) {
+      board.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
+      if (!cat) {
+        board.classList.remove('dim-others');
+        return;
+      }
+      board.classList.add('dim-others');
+      board.querySelectorAll(`[data-link="${cat}"]`).forEach((el) => el.classList.add('active'));
+    }
+
+    const interactiveEls = Array.from(board.querySelectorAll('[data-link]'));
+    const onEnter = (e) => setActive(e.currentTarget.dataset.link);
+    const onLeave = () => setActive(null);
+    interactiveEls.forEach((el) => {
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('focus', onEnter);
+    });
+    board.addEventListener('mouseleave', onLeave);
+
+    function onFocusOut(e) {
+      if (!board.contains(e.relatedTarget)) setActive(null);
+    }
+    document.addEventListener('focusout', onFocusOut);
+
+    let raf;
+    function onResize() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(build);
+    }
+    window.addEventListener('resize', onResize);
+
+    build();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(build);
+    }
+
+    return () => {
+      interactiveEls.forEach((el) => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('focus', onEnter);
+      });
+      board.removeEventListener('mouseleave', onLeave);
+      document.removeEventListener('focusout', onFocusOut);
+      window.removeEventListener('resize', onResize);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div className="ilnk-board" ref={boardRef}>
+      <section className="ilnk-panel ilnk-article-panel">
+        <div className="ilnk-panel-head">
+          <h2>{cwLink.yourArticle}</h2>
+          <div className="ilnk-attribution">
+            <span className="ilnk-avatar">
+              <img src={`${import.meta.env.BASE_URL}Illustrations/kate.png`} alt="Kate" />
+            </span>
+            {cwLink.linkedByKate}
+          </div>
+        </div>
+
+        <div className="ilnk-hero-block" />
+        <p className="ilnk-headline">{cwLink.articleHeadline}</p>
+
+        <div className="ilnk-para-group">
+          <span className="ilnk-skel ilnk-w-100" />
+          <span className="ilnk-skel ilnk-w-92" />
+          <div className="ilnk-inline-row">
+            <span className="ilnk-skel ilnk-w-30" />
+            <button className="ilnk-pill ilnk-pill-footwear" data-link="footwear">Footwear</button>
+            <span className="ilnk-handle ilnk-handle-footwear" data-link="footwear" />
+            <span className="ilnk-skel ilnk-fill" />
+          </div>
+          <span className="ilnk-skel ilnk-w-95" style={{ marginTop: '2px' }} />
+          <span className="ilnk-skel ilnk-w-46" />
+        </div>
+
+        <div className="ilnk-para-group">
+          <span className="ilnk-skel ilnk-w-100" />
+          <span className="ilnk-skel ilnk-w-88" />
+          <span className="ilnk-skel ilnk-w-70" />
+        </div>
+        <div className="ilnk-handle-row">
+          <button className="ilnk-pill ilnk-pill-apparel" data-link="apparel">Apparel</button>
+          <span className="ilnk-handle ilnk-handle-apparel" data-link="apparel" />
+          <span className="ilnk-skel ilnk-fill" />
+        </div>
+        <span className="ilnk-skel ilnk-w-92" style={{ marginTop: '2px' }} />
+        <span className="ilnk-skel ilnk-w-60" />
+
+        <div className="ilnk-para-group">
+          <span className="ilnk-skel ilnk-w-100" />
+          <span className="ilnk-skel ilnk-w-95" />
+        </div>
+        <div className="ilnk-handle-row">
+          <span className="ilnk-skel ilnk-w-36" />
+          <button className="ilnk-pill ilnk-pill-gear" data-link="gear">Gear &amp; Accessories</button>
+          <span className="ilnk-handle ilnk-handle-gear" data-link="gear" />
+        </div>
+        <span className="ilnk-skel ilnk-w-88" style={{ marginTop: '2px' }} />
+        <span className="ilnk-skel ilnk-w-46" />
+
+        <span className="ilnk-skel ilnk-w-80" />
+      </section>
+
+      <section className="ilnk-panel ilnk-pages-panel">
+        <div className="ilnk-panel-head">
+          <div className="ilnk-panel-head-text">
+            <h2>{cwLink.pagesOnSite}</h2>
+            <p>Matched from your sitemap</p>
+          </div>
+        </div>
+
+        <div className="ilnk-cards">
+          {ILNK_CARDS.map((c) => (
+            <article key={c.link} className="ilnk-card" data-link={c.link}>
+              <div className="ilnk-card-top">
+                <span className={`ilnk-dot ilnk-dot-${c.link}`} />
+                <span className="ilnk-url-chip">{c.url}</span>
+              </div>
+              <div className="ilnk-card-body">
+                <div className={`ilnk-thumb ilnk-thumb-${c.link}`} />
+                <div className="ilnk-meta">
+                  <span className="ilnk-skel ilnk-w-95" />
+                  <span className="ilnk-skel ilnk-w-90" />
+                  <span className="ilnk-skel ilnk-w-46" />
+                </div>
+              </div>
+              <span className="ilnk-handle-in" />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <svg className="ilnk-connectors" ref={svgRef} aria-hidden="true" />
     </div>
   );
 }
@@ -347,9 +592,6 @@ function PipelineTrack() {
             <div className="cw-pipe-dtext">{d.text}</div>
           </div>
           <div className="cw-pipe-detail-right">
-            <div className="cw-pipe-pills">
-              {d.tags.map(tag => <span key={tag} className="cw-pipe-pill">{tag}</span>)}
-            </div>
             <div className="cw-pipe-nav">
               <button className="cw-pipe-nav-btn" onClick={() => go(cur - 1)} disabled={cur === 0}>
                 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
@@ -364,6 +606,31 @@ function PipelineTrack() {
     </div>
   );
 }
+
+// Real icons for the 3 nodes that map to an existing product (same paths as
+// the Navbar's product dropdown). The other 3 (Brand & voice, Products,
+// Audiences) got their own new icons, matching the same stroke style.
+const HUB_MATCHED_ICONS = [
+  <svg key="vis" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="21" height="21">
+    <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
+  </svg>,
+  <svg key="sent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="21" height="21">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>,
+  <svg key="audit" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="21" height="21">
+    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+  </svg>,
+  <svg key="brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="21" height="21">
+    <path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+  </svg>,
+  <svg key="products" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="21" height="21">
+    <path d="M21 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8"/><path d="M1 4h22v4H1z"/><path d="M10 12h4"/>
+  </svg>,
+  <svg key="audiences" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="21" height="21">
+    <circle cx="9" cy="8" r="3.5"/><path d="M2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1"/>
+    <circle cx="17.5" cy="8.5" r="2.8"/><path d="M15.7 14.4A5.6 5.6 0 0 1 21 20v1"/>
+  </svg>,
+];
 
 // ---- hub node positions (hexagon: top pair / mid pair / bottom pair) ----
 // Index order: GEO gaps (TL), Sentiment (TR), Technical audit (ML), Brand & voice (MR), Products (BL), Audiences (BR)
@@ -451,12 +718,15 @@ export default function ContentWritingPage() {
         <section className="cw-sec">
           <div className="cw-wrap">
             <div className="cw-hub-section">
-              <div className="cw-hub-text cw-adv-head cw-reveal">
+              <div className="cw-hub-head cw-reveal">
                 {(() => { const ds = t('contentWriting.dataSynergy'); return (<>
-                  <div className="eyebrow">{ds.eyebrow}</div>
-                  <h2>{ds.h2Pre} <HL>{ds.h2Hl}</HL></h2>
-                  <p className="cw-lede">{ds.lead}</p>
-                  <p className="cw-lede">{ds.cap}</p>
+                  <div className="cw-hub-head-copy">
+                    <div className="eyebrow">{ds.eyebrow}</div>
+                    <h2>{ds.h2Pre} <HL>{ds.h2Hl}</HL></h2>
+                  </div>
+                  <div className="cw-hub-lead">
+                    <p>{ds.lead}</p>
+                  </div>
                 </>); })()}
               </div>
 
@@ -473,7 +743,9 @@ export default function ContentWritingPage() {
                   </svg>
 
                   <div className="hcenter">
-                    <span className="kw-av">K</span>
+                    <span className="kw-av">
+                      <img src={`${import.meta.env.BASE_URL}Illustrations/kate.png`} alt="Kate" />
+                    </span>
                     <div className="hc-n">Kate</div>
                     <div className="hc-s">{t('contentWriting.dataSynergy.kateSub')}</div>
                     <span className="hc-connect">{connectNode.title} · {connectNode.sub}</span>
@@ -481,7 +753,11 @@ export default function ContentWritingPage() {
 
                   {HUB_NODES.map((node, i) => (
                     <div key={i} className="hicon" style={node.iconStyle}>
-                      <img src={`${import.meta.env.BASE_URL}Groupe%20477.svg`} alt="" />
+                      {HUB_MATCHED_ICONS[i] ? (
+                        <div className="hicon-badge">{HUB_MATCHED_ICONS[i]}</div>
+                      ) : (
+                        <img src={`${import.meta.env.BASE_URL}Groupe%20477.svg`} alt="" />
+                      )}
                     </div>
                   ))}
 
@@ -571,9 +847,11 @@ export default function ContentWritingPage() {
             <div className="ba cw-reveal">
               {/* Before */}
               <div className="cscore before">
+                <div className="cs-pill-wrap">
+                  <span className="cs-pill bad">{t('contentWriting.optimize.beforeLabel')}</span>
+                </div>
                 <div className="cs-header">
                   <div className="cs-header-left">
-                    <div className="cs-tag">{t('contentWriting.optimize.beforeLabel')}</div>
                     <div className="cs-ttl"><IconStar /> {cwScore}</div>
                   </div>
                   <div className="cs-bubble">
@@ -603,14 +881,15 @@ export default function ContentWritingPage() {
                     <path d="M5 12h14M13 6l6 6-6 6"/>
                   </svg>
                 </div>
-                <span className="ba-lab">+44</span>
               </div>
 
               {/* After */}
               <div className="cscore after">
+                <div className="cs-pill-wrap">
+                  <span className="cs-pill ok">{t('contentWriting.optimize.afterLabel')}</span>
+                </div>
                 <div className="cs-header">
                   <div className="cs-header-left">
-                    <div className="cs-tag">{t('contentWriting.optimize.afterLabel')}</div>
                     <div className="cs-ttl"><IconStar /> {cwScore}</div>
                   </div>
                   <div className="cs-bubble">
@@ -704,114 +983,18 @@ export default function ContentWritingPage() {
         {/* ── INTERNAL LINKING ──────────────────────────────── */}
         <section className="cw-sec" style={{ background: 'var(--surface-2)' }}>
           <div className="cw-wrap">
-            <div className="cw-head cw-center cw-reveal">
-              <div className="eyebrow">{cwLink.eyebrow}</div>
-              <h2>{cwLink.h2Pre}<br /><HL>{cwLink.h2Hl}</HL></h2>
-              <p className="cw-lede">{cwLink.lead}</p>
+            <div className="cw-hub-head cw-reveal">
+              <div className="cw-hub-head-copy">
+                <div className="eyebrow ilnk-plain-eyebrow">{cwLink.eyebrow}</div>
+                <h2>{cwLink.h2Pre} <HL>{cwLink.h2Hl}</HL></h2>
+              </div>
+              <div className="cw-hub-lead">
+                <p>{cwLink.lead}</p>
+              </div>
             </div>
 
-            <div className="lk3 cw-reveal">
-              <svg viewBox="0 0 860 490" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Article keywords linking to Nike site pages">
-                <defs>
-                  <marker id="lk-arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
-                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#1e3893"/>
-                  </marker>
-                  <marker id="lk-arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
-                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#3d52b8"/>
-                  </marker>
-                  <marker id="lk-arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
-                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#5b7bfb"/>
-                  </marker>
-                </defs>
-
-                {/* Column labels */}
-                <text x="157" y="19" fontSize="9" fill="#9AA0AB" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">{cwLink.yourArticle}</text>
-                <text x="632" y="19" fontSize="9" fill="#1e3893" fontFamily="sans-serif" fontWeight="700" letterSpacing="1.1" textAnchor="middle">{cwLink.pagesOnSite}</text>
-
-                {/* Left: Article card */}
-                <rect x="30" y="28" width="255" height="444" rx="12" fill="#fff" stroke="#e8ecf5" strokeWidth="1.5"/>
-                <rect x="48" y="48" width="220" height="52" rx="6" fill="#EEF2FB"/>
-                <rect x="48" y="114" width="185" height="9" rx="4.5" fill="#E8ECFB"/>
-                <rect x="48" y="129" width="155" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="142" width="170" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="155" width="125" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Keyword pill 1   Footwear */}
-                <rect x="48" y="176" width="130" height="26" rx="5" fill="#1e3893"/>
-                <text x="113" y="193" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Footwear</text>
-                <rect x="48" y="215" width="160" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="228" width="135" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="241" width="150" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Keyword pill 2   Apparel */}
-                <rect x="48" y="262" width="125" height="26" rx="5" fill="#3d52b8"/>
-                <text x="110" y="279" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Apparel</text>
-                <rect x="48" y="300" width="145" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="313" width="120" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="326" width="165" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Keyword pill 3   Gear & Accessories */}
-                <rect x="48" y="348" width="165" height="26" rx="5" fill="#5b7bfb"/>
-                <text x="130" y="365" fontSize="11" fill="#fff" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">Gear &amp; Accessories</text>
-                <rect x="48" y="386" width="140" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="399" width="115" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="412" width="155" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="48" y="425" width="100" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Kate badge */}
-                <rect x="92" y="450" width="100" height="22" rx="11" fill="#EEF2FB"/>
-                <text x="142" y="465" fontSize="9.5" fill="#1E3893" fontFamily="sans-serif" fontWeight="700" textAnchor="middle">{cwLink.linkedByKate}</text>
-
-                {/* Right: Dashed pages container */}
-                <rect x="425" y="28" width="410" height="444" rx="12" fill="rgba(238,242,251,.35)" stroke="#c5cce8" strokeWidth="1.5" strokeDasharray="6 4"/>
-
-                {/* Card 1   nike.com/footwear */}
-                <rect x="438" y="46" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
-                <rect x="438" y="46" width="5" height="118" rx="2" fill="#1e3893"/>
-                <circle cx="455" cy="64" r="3" fill="#e8ecf5"/>
-                <circle cx="465" cy="64" r="3" fill="#e8ecf5"/>
-                <circle cx="475" cy="64" r="3" fill="#e8ecf5"/>
-                <text x="488" y="68" fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">nike.com/footwear</text>
-                <rect x="450" y="80" width="70" height="60" rx="5" fill="#EEF2FB"/>
-                <rect x="530" y="83" width="115" height="8" rx="4" fill="#e8ecf5"/>
-                <rect x="530" y="97" width="88" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="110" width="100" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="123" width="75" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="137" width="58" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Card 2   nike.com/apparel */}
-                <rect x="438" y="186" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
-                <rect x="438" y="186" width="5" height="118" rx="2" fill="#3d52b8"/>
-                <circle cx="455" cy="204" r="3" fill="#e8ecf5"/>
-                <circle cx="465" cy="204" r="3" fill="#e8ecf5"/>
-                <circle cx="475" cy="204" r="3" fill="#e8ecf5"/>
-                <text x="488" y="208" fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">nike.com/apparel</text>
-                <rect x="450" y="220" width="70" height="60" rx="5" fill="#EEF2FB"/>
-                <rect x="530" y="223" width="108" height="8" rx="4" fill="#e8ecf5"/>
-                <rect x="530" y="237" width="82" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="250" width="95" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="263" width="70" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="277" width="55" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Card 3   nike.com/gear */}
-                <rect x="438" y="326" width="384" height="118" rx="8" fill="#fff" stroke="#e8ecf5" strokeWidth="1"/>
-                <rect x="438" y="326" width="5" height="118" rx="2" fill="#5b7bfb"/>
-                <circle cx="455" cy="344" r="3" fill="#e8ecf5"/>
-                <circle cx="465" cy="344" r="3" fill="#e8ecf5"/>
-                <circle cx="475" cy="344" r="3" fill="#e8ecf5"/>
-                <text x="488" y="348" fontSize="9" fill="#9AA0AB" fontFamily="ui-monospace,monospace">nike.com/gear</text>
-                <rect x="450" y="360" width="70" height="60" rx="5" fill="#EEF2FB"/>
-                <rect x="530" y="363" width="112" height="8" rx="4" fill="#e8ecf5"/>
-                <rect x="530" y="377" width="86" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="390" width="98" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="403" width="68" height="7" rx="3.5" fill="#F4F4F4"/>
-                <rect x="530" y="417" width="52" height="7" rx="3.5" fill="#F4F4F4"/>
-
-                {/* Curved arrows: pill right-edge → card left-edge */}
-                <path d="M 178 189 C 290 189, 355 105, 438 105" fill="none" stroke="#1e3893" strokeWidth="2" markerEnd="url(#lk-arr1)"/>
-                <path d="M 173 275 C 285 275, 350 245, 438 245" fill="none" stroke="#3d52b8" strokeWidth="2" markerEnd="url(#lk-arr2)"/>
-                <path d="M 213 361 C 310 361, 370 385, 438 385" fill="none" stroke="#5b7bfb" strokeWidth="2" markerEnd="url(#lk-arr3)"/>
-              </svg>
+            <div className="cw-reveal">
+              <InternalLinkingBoard cwLink={cwLink} />
             </div>
 
             <div className="lk2-foot cw-reveal">

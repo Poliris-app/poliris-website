@@ -70,6 +70,16 @@ function IconH() {
 
 const ISSUE_ICONS = [<IconDoc key="doc" />, <IconLink key="link" />, <IconH key="h" />];
 
+// issue.span holds "Status   rest of the sentence" (the multi-space run is a
+// sanitized em-dash). Split it so the status word can render as its own pill.
+function splitIssueStatus(span) {
+  const match = span.match(/^(\S+)\s{2,}(.*)$/);
+  if (!match) return { status: '', desc: span, done: false };
+  const done = /✓\s*done\s*$/i.test(match[2]);
+  const desc = done ? match[2].replace(/✓\s*done\s*$/i, '').trim() : match[2];
+  return { status: match[1], desc, done };
+}
+
 const TOC_ICONS = [
   /* 01 — Complex, made simple */
   <svg key="toc1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -256,11 +266,12 @@ export default function TechnicalAuditPage() {
         <section className="ta-sec" id="p2">
           <div className="wrap">
             <div className="ta-hub-section">
-              <div className="ta-hub-text ta-adv-head reveal">
-                <span className="eyebrow">{p2.tag}</span>
-                <h2 className="sec-h2">{p2.h3Pre} <HL>{p2.h3Hl}</HL> {p2.h3Post}</h2>
-                <p>{p2.p}</p>
-                <p>{p2.constellationCap}</p>
+              <div className="ta-hub-head reveal">
+                <div className="ta-hub-head-copy">
+                  <span className="eyebrow">{p2.tag}</span>
+                  <h2 className="sec-h2">{p2.h3Pre} <HL>{p2.h3Hl}</HL> {p2.h3Post}</h2>
+                </div>
+                <p className="ta-hub-lead">{p2.p}</p>
               </div>
 
               <div className="ta-hub-stage reveal">
@@ -320,43 +331,72 @@ export default function TechnicalAuditPage() {
             <div className="ta-bana">
               {/* Before */}
               <div className="reveal reveal--left">
-                <div className="ta-ba-tag">{p3.beforeLabel}</div>
                 <div className="ta-ba-card ta-ba-before">
+                  <div className="ta-ba-pill-wrap">
+                    <span className="ta-ba-pill bad">{p3.beforeLabel}</span>
+                  </div>
                   <div className="ta-ba-page">
                     <span className="ta-ba-url">{p3.url}</span>
                   </div>
-                  {p3.issues.before.map((issue, i) => (
-                    <div key={i} className="ta-ba-issue">
-                      <span className="ta-ba-ic bad">{ISSUE_ICONS[i]}</span>
-                      <div><b>{issue.b}</b><span>{issue.span}</span></div>
-                    </div>
-                  ))}
+                  {p3.issues.before.map((issue, i) => {
+                    const { status, desc } = splitIssueStatus(issue.span);
+                    return (
+                      <div key={i} className="ta-ba-issue">
+                        <span className="ta-ba-ic bad">{ISSUE_ICONS[i]}</span>
+                        <div>
+                          <div className="ta-ba-issue-head">
+                            <b>{issue.b}</b>
+                            {status && <span className="ta-ba-status bad">{status}</span>}
+                          </div>
+                          <span>{desc}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Action */}
               <div className="ta-ba-act reveal reveal--d3">
                 <div className="ta-ba-rec">
-                  <span className="ta-ba-rav">P</span>{p3.fixesReady}
+                  {p3.fixesReady}
                 </div>
-                <button className="ta-ba-apply">{p3.applyBtn}</button>
+                <button className="ta-ba-apply">
+                  {p3.applyBtn}
+                  <span className="ta-ba-apply-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </span>
+                </button>
                 <div className="ta-ba-flow">{p3.flowLabel}</div>
               </div>
 
               {/* After */}
               <div className="reveal reveal--right reveal--d5">
-                <div className="ta-ba-tag ok">{p3.afterLabel}</div>
                 <div className="ta-ba-card ta-ba-after">
+                  <div className="ta-ba-pill-wrap">
+                    <span className="ta-ba-pill ok">{p3.afterLabel}</span>
+                  </div>
                   <div className="ta-ba-page">
                     <span className="ta-ba-url">{p3.url}</span>
-                    <span className="ta-ba-live">{p3.liveLabel}</span>
+                    <span className="ta-ba-live-dot" />
                   </div>
-                  {p3.issues.after.map((issue, i) => (
-                    <div key={i} className="ta-ba-issue" style={{ transitionDelay: `${0.5 + i * 0.12}s` }}>
-                      <span className="ta-ba-ic ok">{ISSUE_ICONS[i]}</span>
-                      <div><b>{issue.b}</b><span>{issue.span}</span></div>
-                    </div>
-                  ))}
+                  {p3.issues.after.map((issue, i) => {
+                    const { status, desc, done } = splitIssueStatus(issue.span);
+                    return (
+                      <div key={i} className="ta-ba-issue" style={{ transitionDelay: `${0.5 + i * 0.12}s` }}>
+                        <span className="ta-ba-ic ok">{ISSUE_ICONS[i]}</span>
+                        <div>
+                          <div className="ta-ba-issue-head">
+                            <b>{issue.b}</b>
+                            {status && <span className="ta-ba-status ok">{status}</span>}
+                          </div>
+                          <span>{desc}{done && <i> ✓ done</i>}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -373,6 +413,12 @@ export default function TechnicalAuditPage() {
 
                 {/* Left: text */}
                 <div>
+                  <div className="ta-agent-pill">
+                    <span className="ta-av ta-av--tom">
+                      <img src={`${import.meta.env.BASE_URL}Illustrations/tom.png`} alt="Tom" />
+                    </span>
+                    {p4.agentPill}
+                  </div>
                   <div className="eyebrow">{p4.eyebrow}</div>
                   <h2>{p4.h2Pre}<br /><HL>{p4.h2Hl}</HL> {p4.h2Post}</h2>
                   <p className="lead ta-agent-lead">{p4.lead}</p>
@@ -388,31 +434,65 @@ export default function TechnicalAuditPage() {
 
                 {/* Right: chat UI */}
                 <div className="ta-agent-shot">
-                  <span className="ta-agent-tab">{p4.chatAgentLabel.split('·')[0].trim()}</span>
+                  <span className="ta-agent-tab">{p4.liveSession}</span>
                   <div className="ta-chat">
-                    <div className="ta-tom-id">
-                      <span className="ta-tom-av">T</span>
-                      {p4.chatAgentLabel}
-                    </div>
-                    {p4.bubbles.map((bub, i) => (
-                      <div
-                        key={i}
-                        className={`ta-bub ${bub.from}`}
-                        dangerouslySetInnerHTML={{ __html: bub.text }}
-                      />
-                    ))}
-                  </div>
-                  <div className="ta-plan">
-                    <div className="ta-plan-h">
-                      <span className="ta-tom-av">T</span>
-                      {p4.planTitle}
-                    </div>
-                    {p4.planItems.map((item, i) => (
-                      <div key={i} className="ta-plan-item">
-                        <span className="t">{item.t}</span>
-                        <span className={`ta-impact ${item.impact}`}>{item.label}</span>
+
+                    {/* Chat header */}
+                    <div className="ta-chat-hdr">
+                      <div className="ta-chat-hdr-left">
+                        <span className="ta-av ta-av--tom">
+                          <img src={`${import.meta.env.BASE_URL}Illustrations/tom.png`} alt="Tom" />
+                        </span>
+                        <div className="ta-chat-hdr-info">
+                          <span className="ta-chat-hdr-name">Tom</span>
+                          <span className="ta-chat-hdr-sub"><span className="ta-chat-online-dot" />Online</span>
+                        </div>
                       </div>
-                    ))}
+                      <div className="ta-chat-hdr-right">
+                        <span className="ta-chat-hdr-date">Technical audit report · 2 Jun 2026</span>
+                      </div>
+                    </div>
+
+                    {/* Messages */}
+                    <div className="ta-chat-msgs">
+                      {p4.bubbles.map((bub, i) => (
+                        <div key={i} className={`ta-chat-msg ta-chat-msg--${bub.from === 'user' ? 'user' : 'bot'}`}>
+                          {bub.from === 'user' ? (
+                            <>
+                              <div className="ta-bub user" dangerouslySetInnerHTML={{ __html: bub.text }} />
+                              <span className="ta-av ta-av--j ta-av--sm">J</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="ta-av ta-av--tom ta-av--sm">
+                                <img src={`${import.meta.env.BASE_URL}Illustrations/tom.png`} alt="Tom" />
+                              </span>
+                              <div className="ta-bub tom" dangerouslySetInnerHTML={{ __html: bub.text }} />
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Nested fix plan */}
+                    <div className="ta-plan">
+                      <div className="ta-plan-h">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                        {p4.planTitle}
+                      </div>
+                      <div className="ta-plan-items">
+                        {p4.planItems.map((item, i) => (
+                          <div key={i} className="ta-plan-item">
+                            <span className="rk">{i + 1}</span>
+                            <span className="t">{item.t}</span>
+                            <span className={`ta-impact ${item.impact}`}>{item.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 

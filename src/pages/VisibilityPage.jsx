@@ -11,39 +11,6 @@ import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
-/* ---- Product Focus: topic coverage cards + the real buyer
-   questions rolling up into each one ------------------------ */
-const PF_TOPICS = [
-  {
-    name: 'Performance', prompts: 4, pct: 67, status: 'On par',
-    questions: [
-      { text: 'Looking for lightweight gym training shoes that provide maximum stability?' },
-      { text: 'Best cross-training shoes for intense workouts?' },
-    ],
-  },
-  {
-    name: 'Durability', prompts: 3, pct: 13, status: 'Behind',
-    questions: [
-      { text: 'Best high-performance running shoes for trail conditions available?' },
-      { text: 'What are the best durable footwear brands for long-distance walking?' },
-    ],
-  },
-  {
-    name: 'Design', prompts: 5, pct: 42, status: 'Behind',
-    questions: [
-      { text: 'Where can I find affordable and reliable everyday sneakers?' },
-      { text: 'Most comfortable walking shoes with arch support?' },
-    ],
-  },
-  {
-    name: 'Brand awareness', prompts: 2, pct: 75, status: 'On par',
-    questions: [
-      { text: 'Which trendy sneakers are currently popular for casual street style?' },
-      { text: 'What sneaker brands do people trust most?' },
-    ],
-  },
-];
-
 /* Splits a question into 3 lines balanced by character length (not
    word count), each split falling at the word boundary closest to the
    remaining text's own midpoint — since SVG <text> doesn't wrap on its
@@ -69,16 +36,16 @@ function wrapQuestion(text, lineCount = 3) {
   return lines;
 }
 
-/* Exclusive prefix sum of question counts, so each topic's connector
-   lines get a unique, stable pf-line--N (drives the staggered draw-in). */
-const PF_LINE_OFFSET = PF_TOPICS.reduce((acc, topic) => {
-  const prev = acc.length ? acc[acc.length - 1] : 0;
-  acc.push(prev + topic.questions.length);
-  return acc;
-}, []);
-
 export default function VisibilityPage() {
   const { t } = useLang();
+  const PF_TOPICS = t('visibility.productFocus.topics');
+  /* Exclusive prefix sum of question counts, so each topic's connector
+     lines get a unique, stable pf-line--N (drives the staggered draw-in). */
+  const PF_LINE_OFFSET = PF_TOPICS.reduce((acc, topic) => {
+    const prev = acc.length ? acc[acc.length - 1] : 0;
+    acc.push(prev + topic.questions.length);
+    return acc;
+  }, []);
 
   /* Reveal-on-scroll: adds .in to every .reveal element */
   useEffect(() => {
@@ -171,17 +138,18 @@ export default function VisibilityPage() {
                   const CARD_W = 252, CARD_X = [0, 290, 580, 870], CARD_Y = 24, CARD_H = 180, CARD_BOTTOM = CARD_Y + CARD_H;
                   const PILL_W = 222, PILL_H = 78, ROW_TOP0 = CARD_BOTTOM + 60, ROW_PITCH = 98;
                   const CONTENT_H = 103, CY = CARD_Y + (CARD_H - CONTENT_H) / 2 - 19;
+                  const fromPromptsTemplate = t('visibility.productFocus.fromPrompts');
 
-                  const bodies = PF_TOPICS.map((topic, t) => {
-                    const cardX = CARD_X[t];
+                  const bodies = PF_TOPICS.map((topic, ti) => {
+                    const cardX = CARD_X[ti];
                     const anchorX = cardX + CARD_W / 2;
-                    const lineBase = t === 0 ? 0 : PF_LINE_OFFSET[t - 1];
-                    const slug = topic.name.toLowerCase().replace(/\s+/g, '-');
+                    const lineBase = ti === 0 ? 0 : PF_LINE_OFFSET[ti - 1];
+                    const slug = topic.key;
                     return (
-                      <g key={topic.name} className={`pf-topic pf-topic--${slug}`}>
+                      <g key={topic.key} className={`pf-topic pf-topic--${slug}`}>
                         <rect className="pf-card" x={cardX} y={CARD_Y} width={CARD_W} height={CARD_H}/>
                         <text x={cardX + 24} y={CY + 30} className="pf-tname">{topic.name}</text>
-                        <text x={cardX + 24} y={CY + 53} className="pf-tsub">{topic.questions.length} of {topic.prompts} prompts</text>
+                        <text x={cardX + 24} y={CY + 53} className="pf-tsub">{fromPromptsTemplate.replace('{shown}', topic.questions.length).replace('{n}', topic.prompts)}</text>
                         <line className="pf-divider" x1={cardX + 24} y1={CY + 72} x2={cardX + CARD_W - 24} y2={CY + 72}/>
                         <text x={cardX + 24} y={CY + 122} className="pf-tscore">{topic.pct} %</text>
                         <rect className="pf-status" x={cardX + CARD_W - 94} y={CY + 98} width="70" height="24"/>
@@ -213,12 +181,12 @@ export default function VisibilityPage() {
                     );
                   });
 
-                  const nodes = PF_TOPICS.map((topic, t) => {
-                    const cardX = CARD_X[t];
+                  const nodes = PF_TOPICS.map((topic, ti) => {
+                    const cardX = CARD_X[ti];
                     const anchorX = cardX + CARD_W / 2;
-                    const slug = topic.name.toLowerCase().replace(/\s+/g, '-');
+                    const slug = topic.key;
                     return (
-                      <g key={`${topic.name}-nodes`} className={`pf-topic--${slug}`}>
+                      <g key={`${topic.key}-nodes`} className={`pf-topic--${slug}`}>
                         <circle className="pf-node" cx={anchorX} cy={CARD_BOTTOM}/>
                         {topic.questions.map((q, i) => {
                           const rowTop = ROW_TOP0 + i * ROW_PITCH;
@@ -325,11 +293,11 @@ export default function VisibilityPage() {
               </div>
 
               {[
-                { url: 'https://www.youtube.com/watch?v=y9UN1T-olHY', fav: '▶', bg: '#FF0000', domain: 'youtube.com', typeKey: 'social',      authority: 'high', comp: false, link: 'broken' },
-                { url: 'https://www.yahoo.com/lifestyle/articles/editors-trainers-tested-dozens-cross-152500350.html?utm_source=chatgpt.com', fav: '!', bg: '#6001D2', domain: 'yahoo.com', typeKey: 'news', authority: 'high', comp: false, link: false },
-                { url: 'https://www.whowhatwear.com/fashion/shopping/best-sneakers-under-250-spring-2026', fav: 'W', bg: '#111111', domain: 'whowhatwear.com', typeKey: 'news', authority: 'high', comp: false, link: 'broken' },
-                { url: 'https://www.walmart.com/ip/No-Boundaries-Womens-Classic-Lace-Up-Casual-Sneakers-Wide-Width-Available/407365252?utm_source=openai', fav: '✦', bg: '#FFC220', domain: 'walmart.com', typeKey: 'marketplace', authority: 'high', comp: false, link: false },
-                { url: 'https://www.vogue.com/article/the-row-shoes?utm_source=chatgpt.com', fav: 'V', bg: '#000000', domain: 'vogue.com', typeKey: 'media', authority: 'high', comp: 'warning', link: false },
+                { url: 'https://www.youtube.com/watch?v=y9UN1T-olHY', logo: 'youtube-com-logo.png', domain: 'youtube.com', typeKey: 'social',      authority: 'high', comp: false, link: 'broken' },
+                { url: 'https://www.yahoo.com/lifestyle/articles/editors-trainers-tested-dozens-cross-152500350.html?utm_source=chatgpt.com', logo: 'yahoo-com-logo.png', domain: 'yahoo.com', typeKey: 'news', authority: 'high', comp: false, link: false },
+                { url: 'https://www.whowhatwear.com/fashion/shopping/best-sneakers-under-250-spring-2026', logo: 'whowhatwear-com-logo.png', domain: 'whowhatwear.com', typeKey: 'news', authority: 'high', comp: false, link: 'broken' },
+                { url: 'https://www.walmart.com/ip/No-Boundaries-Womens-Classic-Lace-Up-Casual-Sneakers-Wide-Width-Available/407365252?utm_source=openai', logo: 'walmart-com-logo.png', domain: 'walmart.com', typeKey: 'marketplace', authority: 'high', comp: false, link: false },
+                { url: 'https://www.vogue.com/article/the-row-shoes?utm_source=chatgpt.com', logo: 'vogue-com-logo.png', domain: 'vogue.com', typeKey: 'media', authority: 'high', comp: 'warning', link: false },
               ].map(row => {
                 const sourceTypes = t('visibility.sourceIntel.sourceTypes');
                 return (
@@ -341,7 +309,9 @@ export default function VisibilityPage() {
                       </a>
                     </div>
                     <div className="sit-c sit-c--source">
-                      <span className="fav" style={{ background: row.bg }}>{row.fav}</span>
+                      <span className="fav">
+                        <img src={`${import.meta.env.BASE_URL}Source%20Intelligence/${row.logo}`} alt="" />
+                      </span>
                       <div className="sit-domain">{row.domain}</div>
                     </div>
                     <div className="sit-c">
@@ -425,36 +395,33 @@ export default function VisibilityPage() {
                           </span>
                           <div className="chat-hdr-info">
                             <span className="chat-hdr-name">Nora</span>
-                            <span className="chat-hdr-sub"><span className="chat-online-dot" />Online</span>
+                            <span className="chat-hdr-sub"><span className="chat-online-dot" />{t('visibility.nora.online')}</span>
                           </div>
                         </div>
                         <div className="chat-hdr-right">
-                          <span className="chat-hdr-date">Visibility report · 2 Jun 2026</span>
+                          <span className="chat-hdr-date">{t('visibility.nora.chatDate')}</span>
                         </div>
                       </div>
 
                       {/* Messages */}
                       <div className="chat-msgs">
-                        <div className="chat-msg chat-msg--user">
-                          <div className="bub user">Why is our Pricing score only 54% when Reliability is at 88%?</div>
-                          <span className="av av--j av--sm">J</span>
-                        </div>
-                        <div className="chat-msg chat-msg--bot">
-                          <span className="av av--nora-v2 av--sm">
-                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
-                          </span>
-                          <div className="bub bot">Good question. <b>Two root causes:</b> First, your pricing page is blocked by robots.txt   AI engines can't read it. Second, Competitor A has two detailed pricing comparison articles on forbes.com and techradar.com that dominate results for value-related queries. You appear in neither.</div>
-                        </div>
-                        <div className="chat-msg chat-msg--user">
-                          <div className="bub user">What should we fix first?</div>
-                          <span className="av av--j av--sm">J</span>
-                        </div>
-                        <div className="chat-msg chat-msg--bot">
-                          <span className="av av--nora-v2 av--sm">
-                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
-                          </span>
-                          <div className="bub bot">I've built your action plan. Start here   these three changes move the needle fastest:</div>
-                        </div>
+                        {t('visibility.nora.bubbles').map((bub, i) => (
+                          <div key={i} className={`chat-msg chat-msg--${bub.from === 'user' ? 'user' : 'bot'}`}>
+                            {bub.from === 'user' ? (
+                              <>
+                                <div className="bub user" dangerouslySetInnerHTML={{ __html: bub.text }} />
+                                <span className="av av--j av--sm">J</span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="av av--nora-v2 av--sm">
+                                  <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
+                                </span>
+                                <div className="bub bot" dangerouslySetInnerHTML={{ __html: bub.text }} />
+                              </>
+                            )}
+                          </div>
+                        ))}
                       </div>
 
                       {/* Nested action plan */}
@@ -466,29 +433,14 @@ export default function VisibilityPage() {
                           {t('visibility.nora.planTitle')}
                         </div>
                         <div className="plan-items">
-                          <div className="plan-item">
-                            <span className="rk">1</span>
-                            <span className="t">Fix robots.txt   allow AI crawlers to index /pricing</span>
-                            <span className="impact hi">High impact</span>
-                          </div>
-                          <div className="plan-item">
-                            <span className="rk">2</span>
-                            <span className="t">Add FAQ schema to pricing page with 6 value-question answers</span>
-                            <span className="impact hi">High impact</span>
-                          </div>
-                          <div className="plan-item">
-                            <span className="rk">3</span>
-                            <span className="t">Pitch a pricing comparison article to techradar.com</span>
-                            <span className="impact md">Medium impact</span>
-                          </div>
+                          {t('visibility.nora.planItems').map((item, i) => (
+                            <div key={i} className="plan-item">
+                              <span className="rk">{i + 1}</span>
+                              <span className="t">{item.t}</span>
+                              <span className={`impact ${item.impact}`}>{item.label}</span>
+                            </div>
+                          ))}
                         </div>
-                      </div>
-
-                      {/* Action buttons */}
-                      <div className="chat-btns">
-                        {t('visibility.nora.chatBtns').map((btn, i) => (
-                          <button key={i} className={`chat-btn${i === 0 ? ' chat-btn--primary' : ''}`}>{btn}</button>
-                        ))}
                       </div>
 
                     </div>

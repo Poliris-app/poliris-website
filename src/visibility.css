@@ -307,9 +307,10 @@
   border-left: 1px solid var(--border);
   color: var(--fg-4);
   text-align: left;
+  line-height: 1.6;
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 14px;
 }
 .vis-page .si-head .lead svg { flex: 0 0 auto; margin-top: 3px; color: var(--poliris-blue); }
 
@@ -435,8 +436,9 @@
   width: 22px; height: 22px;
   border-radius: 6px; flex: 0 0 auto;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-weight: 800; font-size: 11px; color: #fff;
+  overflow: hidden; box-sizing: border-box;
 }
+.vis-page .fav img { width: 100%; height: 100%; object-fit: cover; }
 .vis-page .src-da    { display: flex; align-items: center; gap: 10px; }
 .vis-page .src-da .n { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--fg-3); width: 22px; }
 .vis-page .src-da .t { flex: 1; height: 6px; border-radius: var(--r-pill); background: var(--surface-2); overflow: hidden; min-width: 40px; }
@@ -602,9 +604,9 @@
   box-sizing: border-box;
 }
 .vis-page .av--nora-v2 img { width: 88%; height: 88%; object-fit: contain; }
-.vis-page .av--j {
+.vis-page .av.av--j {
   width: 26px; height: 26px; border-radius: var(--r-pill);
-  background: #64748b;
+  background: var(--poliris-blue);
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display); font-weight: 800; color: #fff; font-size: 11px;
   flex: 0 0 auto;
@@ -622,7 +624,6 @@
 .vis-page .chat-msg .bub  { margin-bottom: 0; max-width: 82%; }
 .vis-page .chat-msg .bub.user {
   margin-left: auto;
-  font-size: 10px;
 }
 
 /* plan v2 — nested inside chat */
@@ -641,29 +642,8 @@
   letter-spacing: .06em; text-transform: uppercase; color: var(--poliris-blue);
 }
 .vis-page .plan--v2 .plan-item { padding: 7px; }
-.vis-page .plan--v2 .plan-item .t { font-size: 9px; }
+.vis-page .plan--v2 .plan-item .t { font-size: 12.5px; }
 .vis-page .plan--v2 .impact { font-size: 9px; padding: 3px 8px; }
-
-/* action buttons */
-.vis-page .chat-btns {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  padding: 10px 13px 13px;
-  border-top: 1px solid var(--border);
-}
-.vis-page .chat-btn {
-  font-family: var(--font-body); font-size: 9px; font-weight: 500;
-  border: 1px solid var(--border); border-radius: var(--r-pill);
-  background: #fff; color: var(--fg-2);
-  padding: 5px 12px; cursor: pointer; transition: background .15s, border-color .15s;
-}
-.vis-page .chat-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
-.vis-page .chat-btn--primary {
-  background: var(--poliris-blue);
-  color: #fff;
-  border-color: var(--poliris-blue);
-  font-size: 10px;
-}
-.vis-page .chat-btn--primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
 
 /* ============================================================
    STAKES
@@ -743,7 +723,7 @@
   /* Source Intelligence header: stack the two columns */
   .vis-page .si-head { flex-direction: column; align-items: flex-start; gap: 16px; max-width: 100%; }
   .vis-page .si-head-copy { max-width: 100%; }
-  .vis-page .si-head .lead { flex: 0 0 auto; max-width: 100%; padding-left: 0; border-left: none; }
+  .vis-page .si-head .lead { flex: 0 0 auto; max-width: 100%; padding-left: 16px; }
   /* Source pipeline: horizontally scrollable */
   .vis-page .src-pipeline {
     overflow-x: auto;
