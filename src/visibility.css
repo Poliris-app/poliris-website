@@ -651,7 +651,7 @@
 .vis-page .vstakes {
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: var(--r-xl);
+  border-radius: 20px;
   box-shadow: var(--shadow-lg);
   padding: 54px;
 }
@@ -1081,5 +1081,12 @@
 /* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
    top of the section (eyebrow label) after "See it below" jumps. */
 #focus, #market, #sources, #nora { scroll-margin-top: 90px; }
+
+/* Nora section: full-bleed dark band, same edge-to-edge treatment as
+   IVY's band and the CtaBand — .dark owns the vertical spacing
+   directly so it doesn't stack with the generic section padding,
+   and drops the horizontal padding now that .wrap handles that. */
+#nora { padding: 0; }
+#nora .dark { padding: 84px 0; }
 
 

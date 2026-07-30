@@ -525,6 +525,17 @@ export default {
         { t: 'Compress 9 oversized images',              impact: 'md', label: 'Medium' },
       ],
     },
+    stakes: {
+      eyebrow: 'The stakes',
+      h2Pre: 'Every broken signal is a missed',
+      h2Hl: 'AI recommendation.',
+      stats: [
+        { n: '140+',   d: 'automated tests run behind every audit score' },
+        { n: '4',      d: "severity levels tracked, so nothing critical gets buried" },
+        { n: '1 click', d: 'to approve a fix and ship it straight to your live site' },
+        { n: '0',      d: 'dev tickets, no copy-paste required' },
+      ],
+    },
     cta: {
       heading: 'Run a free technical audit on your site.',
       lead: 'See exactly where AI is winning, losing, and what to fix first page by page.',
@@ -1288,14 +1299,14 @@ export default {
       tipVisibility: 'Visibility:',
       tipSentiment: 'Sentiment:',
     },
-    insight: "Adidas leads at 76% visibility. Nike holds #2 at 45% with Very Strong sentiment closing the gap is a content and source authority play. On’s drop opens a window.",
+    insight: "Adidas leads at 95% visibility. Nike holds #2 at 90% with Very Strong sentiment closing the gap is a content and source authority play. On’s drop opens a window.",
     visPanel: {
       title: 'Visibility Analysis',
       sub: 'How often your product appears in AI answers',
       avgScore: 'Avg. Score',
       avgPosition: 'Avg. Position',
       trend: 'Trend',
-      declining: '↓ Declining',
+      rising: '↑ Rising',
       scorePlatform: 'Score by platform',
       percent: 'Percent',
       claudeNote: 'Claude coverage is weakest, highest opportunity to improve mention rate.',
@@ -1316,7 +1327,7 @@ export default {
     appbar: 'app.poliris.io · Visibility',
     brandSub: 'AI Visibility · Updated today',
     overallScore: 'Overall score',
-    scoreBadge: '↑ 45 / 100',
+    scoreBadge: '↑ 90 / 100',
     noraNote: 'Strong overall but your Value coverage is slipping. Worth a look before it spreads.',
     overTime: 'Over time',
     scoreBreakdown: {

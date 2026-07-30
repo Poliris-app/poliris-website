@@ -407,8 +407,8 @@ export default function TechnicalAuditPage() {
 
         {/* ── P4 · TOM AGENT ────────────────────────── */}
         <section className="ta-sec" id="p4">
-          <div className="wrap">
-            <div className="ta-agent-card reveal">
+          <div className="ta-agent-card reveal">
+            <div className="wrap">
               <div className="ta-agent-grid">
 
                 {/* Left: text */}
@@ -496,6 +496,25 @@ export default function TechnicalAuditPage() {
                   </div>
                 </div>
 
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── STAKES ───────────────────────────────── */}
+        <section style={{ background: 'var(--surface-2)', paddingTop: 60, paddingBottom: 60 }}>
+          <div className="wrap">
+            <div className="sec-head mid reveal" style={{ marginBottom: 42 }}>
+              <h2>{ta.stakes.h2Pre} <span className="hl">{ta.stakes.h2Hl}</span></h2>
+            </div>
+            <div className="ta-stakes reveal">
+              <div className="ta-stakes-grid">
+                {ta.stakes.stats.map((s, i) => (
+                  <div key={i}>
+                    <div className="n">{s.n}</div>
+                    <div className="d">{s.d}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

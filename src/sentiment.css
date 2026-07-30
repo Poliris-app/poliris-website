@@ -704,7 +704,10 @@
 
 /* IVY section: full-bleed dark band, same edge-to-edge treatment as
    CtaBand, instead of the contained rounded card .dark normally is
-   (see visibility.css's Nora section for that default usage). */
+   (see visibility.css's Nora section for that default usage).
+   #ivy zeroes the generic .vis-page section padding so it doesn't
+   stack with .dark's own — same fix applied to Nora and Tom. */
+#ivy { padding: 0; }
 .vis-page .ivy-band .dark {
   border-radius: 0;
   padding: 84px 0;

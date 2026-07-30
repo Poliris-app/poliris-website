@@ -2424,6 +2424,7 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
   color: #0f0f0f;
 }
 .hdash__kpi--down { color: #d2453a; font-size: 11px; }
+.hdash__kpi--up { color: var(--positive); font-size: 11px; }
 .hdash__kpi--strong { color: var(--positive); }
 
 /* Sentiment tier badge base */
@@ -4883,7 +4884,6 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
 .vis-page .dark {
   background: var(--surface-ink);
   color: #fff;
-  border-radius: 20px;
   position: relative;
   overflow: hidden;
   padding: 30px 64px;

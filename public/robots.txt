@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+Disallow: /wp-content/
+Disallow: /wp-includes/
+Disallow: /wp-admin/
+Disallow: /_next/
+
 Sitemap: https://poliris.io/sitemap.xml

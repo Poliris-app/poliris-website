@@ -347,9 +347,9 @@ export default function VisibilityPage() {
         </section>
 
         {/* ======================== 04 · NORA ======================== */}
-        <section>
-          <div className="wrap">
-            <div className="dark reveal" id="nora">
+        <section id="nora">
+          <div className="dark reveal">
+            <div className="wrap">
               <div className="inner">
                 <div className="nora-grid">
                   {/* LEFT */}

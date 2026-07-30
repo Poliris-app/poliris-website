@@ -52,8 +52,37 @@
   margin: 0 auto;
   text-align: center;
 }
+.ta-page .sec-head h2 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(28px, 3.5vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #000;
+  margin: 20px 0 20px 0px;
+}
 .ta-page .sec-head.mid .lead {
   margin: 0 auto;
+}
+
+/* ── Stakes (proof-point strip before the CTA band) ── */
+.ta-page .ta-stakes {
+  background: #fff;
+  border: 1px solid var(--border, #e6e9f2);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg, 0 24px 60px -20px rgba(20,30,80,.14));
+  padding: 54px;
+}
+.ta-page .ta-stakes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+.ta-page .ta-stakes .n { font-family: var(--display); font-weight: 800; font-size: 42px; color: var(--blue); line-height: 1; }
+.ta-page .ta-stakes .d { font-size: 14px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+@media (max-width: 860px) {
+  .ta-page .ta-stakes-grid { grid-template-columns: 1fr 1fr; }
+  .ta-page .ta-stakes { padding: 34px; }
+}
+@media (max-width: 480px) {
+  .ta-page .ta-stakes-grid { grid-template-columns: 1fr; }
+  .ta-page .ta-stakes { padding: 24px 16px; }
 }
 
 /* ── LLM band (chip style) ── */
@@ -165,7 +194,6 @@
 .ta-agent-card {
   background: var(--surface-ink, #0d1630);
   color: #fff;
-  border-radius: 20px;
   position: relative;
   overflow: hidden;
   padding: 48px 56px;
@@ -975,11 +1003,11 @@
 /* nested fix plan */
 .ta-plan {
   margin: 0 20px 16px;
-  background: var(--blue-soft);
+  background: #fff;
   border: 1px solid #dbeafe;
   border-radius: 8px;
   padding: 14px;
-  box-shadow: none;
+  box-shadow: 0 34px 70px -24px rgba(0,0,0,.55);
 }
 .ta-plan-h {
   display: flex; align-items: center; gap: 7px;
@@ -1048,3 +1076,9 @@
 /* Offsets anchor-scroll targets so the fixed navbar doesn't cover the
    top of the section (eyebrow label) after "See it below" jumps. */
 #p1, #p2, #p3, #p4 { scroll-margin-top: 90px; }
+
+/* Tom section: full-bleed dark band, same edge-to-edge treatment as
+   IVY's band and the CtaBand — .ta-agent-card owns the vertical
+   spacing directly so it doesn't stack with .ta-sec's own padding. */
+#p4.ta-sec { padding: 0; }
+#p4 .ta-agent-card { padding: 84px 0; }

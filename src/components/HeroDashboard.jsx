@@ -11,11 +11,11 @@ const BRANDS = [
 ];
 
 const VIS_DATA = {
-  nike:       [88, 90, 83, 78, 67, 45],
+  nike:       [45, 47, 52, 62, 78, 90],
   newbalance: [84, 72, 56, 48, 42, 38],
   brooks:     [58, 64, 56, 48, 42, 36],
   on:         [20, 38, 54, 65, 72, 40],
-  adidas:     [92, 88, 94, 88, 84, 76],
+  adidas:     [92, 88, 94, 88, 90, 95],
   hoka:       [22, 40, 52, 58, 56, 38],
 };
 // Sentiment lines snap to tier gridline values: Very Strong=100, Strong=75, Moderate=50, Weak=25, Very Weak=0
@@ -30,11 +30,11 @@ const SENT_DATA = {
 };
 
 const QUAD_POS = {
-  nike:       { x: 45, y: 80 },
+  nike:       { x: 90, y: 80 },
   newbalance: { x: 38, y: 75 },
   brooks:     { x: 36, y: 50 },
   on:         { x: 40, y: 50 },
-  adidas:      { x: 76, y: 91 },
+  adidas:      { x: 95, y: 91 },
   hoka:       { x: 38, y: 62 },
 };
 
@@ -489,7 +489,7 @@ export default function HeroDashboard() {
             <div className="hdash__kpi-row">
               <div className="hdash__kpi">
                 <span className="hdash__kpi-label">{d.visPanel.avgScore}</span>
-                <span className="hdash__kpi-val-vis">45%</span>
+                <span className="hdash__kpi-val-vis">90%</span>
               </div>
               <div className="hdash__kpi">
                 <span className="hdash__kpi-label">{d.visPanel.avgPosition}</span>
@@ -497,7 +497,7 @@ export default function HeroDashboard() {
               </div>
               <div className="hdash__kpi">
                 <span className="hdash__kpi-label">{d.visPanel.trend}</span>
-                <span className="hdash__kpi-val hdash__kpi--down">{d.visPanel.declining}</span>
+                <span className="hdash__kpi-val hdash__kpi--up">{d.visPanel.rising}</span>
               </div>
             </div>
 
@@ -506,10 +506,10 @@ export default function HeroDashboard() {
             </div>
             <div className="hdash__plat-scroll">
             {[
-              { name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,      pct: 60, color: 'rgb(59, 130, 246)' },
-              { name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   pct: 50, color: 'rgb(59, 130, 246)' },
-              { name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,     pct: 50, color: 'rgb(59, 130, 246)' },
-              { name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`,   pct: 20, color: 'rgb(59, 130, 246)' },
+              { name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,      pct: 97, color: 'rgb(59, 130, 246)' },
+              { name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   pct: 92, color: 'rgb(59, 130, 246)' },
+              { name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,     pct: 89, color: 'rgb(59, 130, 246)' },
+              { name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`,   pct: 82, color: 'rgb(59, 130, 246)' },
             ].map(p => (
               <div key={p.name} className="hdash__plat-row">
                 <div className="hdash__plat-header">

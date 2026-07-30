@@ -46,14 +46,14 @@ const META = {
         "Track your brand's share of voice across ChatGPT, Claude, Perplexity, and Gemini. Analyze sources shaping AI answers, benchmark competitors, and win citations.",
     },
     sentiment: {
-      title: 'AI Sentiment | Poliris',
+      title: 'AI Brand Sentiment & Reputation Analytics | Poliris',
       description:
-        'Monitor how AI engines talk about your brand and catch anything wrong, cautious or harmful before it spreads.',
+        'Analyze how AI describes your brand across ChatGPT, Perplexity, Gemini, & DeepSeek. Track AI brand sentiment, monitor reputation, and fix perception gaps.',
     },
     'technical-audit': {
-      title: 'Technical Audit | Poliris',
+      title: 'AI Technical SEO Audit & Automated Site Fixes | Poliris',
       description:
-        'Identify and fix the technical issues that stop AI engines from reading, understanding and recommending your site.',
+        'Run technical SEO tests for search engines & AI bots like ChatGPT and Perplexity. Turn complex site audit data into automated, 1-click live fixes.',
     },
     'content-writing': {
       title: 'Content Writing | Poliris',

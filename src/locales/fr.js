@@ -525,6 +525,17 @@ export default {
         { t: 'Compresser 9 images surdimensionnées',         impact: 'md', label: 'Moyen' },
       ],
     },
+    stakes: {
+      eyebrow: 'Ce qui est en jeu',
+      h2Pre: 'Chaque signal cassé est une',
+      h2Hl: 'recommandation IA manquée.',
+      stats: [
+        { n: '140+',  d: "tests automatisés derrière chaque score d'audit" },
+        { n: '4',     d: 'niveaux de gravité suivis, pour que rien de critique ne passe inaperçu' },
+        { n: '1 clic', d: 'pour approuver un correctif et le publier directement sur votre site' },
+        { n: '0',     d: 'ticket dev, aucun copier-coller nécessaire' },
+      ],
+    },
     cta: {
       heading: 'Lancez un audit technique gratuit sur votre site.',
       lead: 'Découvrez exactement où l\'IA gagne, perd et ce qu\'il faut corriger en premier page par page.',
@@ -1283,14 +1294,14 @@ export default {
       tipVisibility: 'Visibilité:',
       tipSentiment: 'Sentiment:',
     },
-    insight: "Adidas mène avec 76% de visibilité. Nike occupe la 2e place à 45% avec un sentiment Très fort combler l'écart passe par le contenu et l'autorité de source. La baisse de On ouvre une fenêtre d'opportunité.",
+    insight: "Adidas mène avec 95% de visibilité. Nike occupe la 2e place à 90% avec un sentiment Très fort combler l'écart passe par le contenu et l'autorité de source. La baisse de On ouvre une fenêtre d'opportunité.",
     visPanel: {
       title: 'Analyse de visibilité',
       sub: 'À quelle fréquence votre produit apparaît dans les réponses IA',
       avgScore: 'Score moy.',
       avgPosition: 'Position moy.',
       trend: 'Tendance',
-      declining: '↓ En baisse',
+      rising: '↑ En hausse',
       scorePlatform: 'Score par plateforme',
       percent: 'Pourcentage',
       claudeNote: "La couverture Claude est la plus faible meilleure opportunité d'améliorer le taux de mention.",
@@ -1311,7 +1322,7 @@ export default {
     appbar: 'app.poliris.io · Visibilité',
     brandSub: "Visibilité IA · Mis à jour aujourd'hui",
     overallScore: 'Score global',
-    scoreBadge: '↑ 45 / 100',
+    scoreBadge: '↑ 90 / 100',
     noraNote: "Globalement fort mais votre couverture Valeur est en baisse. Vaut le coup d'y jeter un œil avant que ça s'étende.",
     overTime: 'Dans le temps',
     scoreBreakdown: {

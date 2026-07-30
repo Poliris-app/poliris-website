@@ -2,19 +2,19 @@ import { useState, useMemo } from 'react';
 import { useLang } from '../contexts/LangContext';
 
 /* ── Single-brand chart data ─────────────────────────────────────── */
-const NIKE_DATA = [88, 90, 83, 78, 67, 45];
+const NIKE_DATA = [45, 47, 52, 62, 78, 90];
 const X_LABELS  = ['Apr 27', 'May 4', 'May 11', 'May 18', 'May 25', 'Jun 1'];
 
 /* ── Score Breakdown data ────────────────────────────────────────── */
-const SB_SCORE = 45;
+const SB_SCORE = 90;
 
 const RAW_AXES_PCT = [75, 67, 42, 13];
 const RAW_AXES_IDS = ['brand-awareness', 'performance', 'design', 'durability'];
 const RAW_MODELS = [
-  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  pct: 50 },
-  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   pct: 50 },
-  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    pct: 60 },
-  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, pct: 20 },
+  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  pct: 92 },
+  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   pct: 89 },
+  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    pct: 97 },
+  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, pct: 82 },
 ];
 
 function getScoreLabel(score) {
