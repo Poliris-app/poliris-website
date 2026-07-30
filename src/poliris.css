@@ -3693,6 +3693,7 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
   font-weight: 700;
   color: #dc2626;
 }
+.vheat__stat-delta--up { color: #16a34a; }
 .vheat__stat-divider {
   width: 1px;
   background: #e5e7eb;

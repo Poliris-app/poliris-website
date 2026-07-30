@@ -51,8 +51,8 @@ function VisibilityVis() {
     { label: 'Gemini Web',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png` },
   ];
   const BRANDS = [
-    { name: 'Adidas',      logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,  scores: [72, 76, 62, 84, 66] },
-    { name: 'Nike',        logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,          scores: [45, 50, 20, 50, 60], isYou: true },
+    { name: 'Adidas',      logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,  scores: [95, 97, 90, 96, 97] },
+    { name: 'Nike',        logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,          scores: [90, 92, 82, 89, 97], isYou: true },
     { name: 'On',          logo: `${import.meta.env.BASE_URL}on-com-logo.png`,            scores: [40, 42, 35, 45, 38] },
     { name: 'Hoka',        logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,          scores: [38, 40, 32, 42, 38] },
     { name: 'Brooks',      logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`, scores: [36, 40, 28, 40, 36] },
@@ -65,13 +65,13 @@ function VisibilityVis() {
       <div className="vheat__top">
         <div className="vheat__top-row">
           <span className="vheat__top-label">{vv.label}</span>
-          <span className="vheat__moderate">{vv.moderate}</span>
+          <span className="vheat__excellent">{vv.excellent}</span>
         </div>
         <div className="vheat__score-row">
-          <span className="vheat__score-num">45</span>
+          <span className="vheat__score-num">90</span>
           <span className="vheat__score-denom">/100</span>
           <div className="vheat__bar-track">
-            <div className="vheat__bar-fill" style={{ width: '45%' }} />
+            <div className="vheat__bar-fill" style={{ width: '90%' }} />
           </div>
         </div>
       </div>
@@ -87,8 +87,8 @@ function VisibilityVis() {
           <div className="vheat__stat">
             <span className="vheat__stat-label">{vv.visibilityScore}</span>
             <div className="vheat__stat-row">
-              <span className="vheat__stat-val">45%</span>
-              <span className="vheat__stat-delta">↓19%</span>
+              <span className="vheat__stat-val">90%</span>
+              <span className="vheat__stat-delta vheat__stat-delta--up">↑19%</span>
             </div>
           </div>
         </div>

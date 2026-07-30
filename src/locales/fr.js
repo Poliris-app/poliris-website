@@ -8,6 +8,7 @@ export default {
     pricing: 'Tarifs',
     logIn: 'Se connecter',
     freeTrial: 'Essai gratuit',
+    dashboard: 'Tableau de bord',
     getDemo: 'Demander une démo',
     productsMenu: [
       { label: 'Visibilité IA',    description: 'Suivez votre part de voix sur tous les moteurs IA' },
@@ -1376,6 +1377,7 @@ export default {
     visibilityVis: {
       label: 'Visibilité IA',
       moderate: 'Modéré',
+      excellent: 'Excellent',
       visibilityRank: 'Classement visibilité',
       visibilityScore: 'Score de visibilité',
       low: 'Faible',

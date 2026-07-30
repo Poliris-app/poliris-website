@@ -8,6 +8,7 @@ export default {
     pricing: 'Pricing',
     logIn: 'Log in',
     freeTrial: 'Get your free trial',
+    dashboard: 'Dashboard',
     getDemo: 'Get a demo',
     productsMenu: [
       { label: 'AI Visibility',   description: 'Track share of voice across all AI engines' },
@@ -1381,6 +1382,7 @@ export default {
     visibilityVis: {
       label: 'AI Visibility',
       moderate: 'Moderate',
+      excellent: 'Excellent',
       visibilityRank: 'Visibility Rank',
       visibilityScore: 'Visibility Score',
       low: 'Low',
@@ -1590,7 +1592,7 @@ export default {
     billing: { monthly: 'Monthly', annual: 'Annual', save: 'Save 20%' },
     coverage: 'Coverage',
     mostPopular: 'Most popular',
-    firstMonthPromo: '{credits} Credits in month 1',
+    firstMonthPromo: '{credits} credits in month 1',
     plans: [
       {
         name: 'Free',
