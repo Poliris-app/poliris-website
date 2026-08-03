@@ -5516,6 +5516,38 @@ body.has-code-banner .hero { padding-top: calc(84px + var(--code-banner-h)); }
   .pipeline-sub { max-width: none; }
 }
 
+/* Checkout success page — status icon circle, shared across the
+   pending/timeout/error states so each just swaps icon + copy. */
+.status-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+}
+.status-icon-circle--pending {
+  background: #E6EDFA;
+  border: 3px solid #E6EDFA;
+  border-top-color: var(--blue);
+  animation: status-icon-spin 0.9s linear infinite;
+}
+.status-icon-circle--info {
+  background: #E6EDFA;
+  color: var(--blue);
+}
+.status-icon-circle--success {
+  background: #E7F7EE;
+  color: #1E9E5A;
+}
+@keyframes status-icon-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-icon-circle--pending { animation: none; }
+}
+
 @media (max-width: 480px) {
   /* Pipeline — scale down header */
   .pipeline-title { font-size: 13px; }

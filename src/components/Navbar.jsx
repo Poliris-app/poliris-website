@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
+import { hasAccountCookie } from '../lib/hasAccountCookie';
+import { APP_URL } from '../lib/appUrl';
 
 const PRODUCT_HREFS = ['/visibility', '/sentiment', '/technical-audit', '/content-writing'];
 const RESOURCE_HREFS = ['/blog', '/faqs', '/glossary', '/docs'];
@@ -40,7 +42,18 @@ export default function Navbar() {
   const [mobileProducts, setMobileProducts] = useState(false);
   const [mobileResources, setMobileResources] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [hasAccount, setHasAccount] = useState(false);
   const langRef = useRef(null);
+
+  // Deliberately read post-hydration, not as a lazy useState initializer:
+  // this is pre-rendered at build time with no `document`, so seeding real
+  // state during the initial render would mismatch the static HTML. Only
+  // known post-checkout, in this browser — not full cross-domain SSO
+  // detection (see the plan notes on poliris_has_account).
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHasAccount(hasAccountCookie());
+  }, []);
 
   const productsMenu  = t('nav.productsMenu');
   const resourcesMenu = t('nav.resourcesMenu');
@@ -123,7 +136,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* <Link to={`/${lang}/pricing`} className="nav__link">{t('nav.pricing')}</Link> disabled until Stripe integration is ready */}
+          <Link to={`/${lang}/pricing`} className="nav__link">{t('nav.pricing')}</Link>
           <Link to={`/${lang}/demo`} className="nav__link">{t('nav.getDemo')}</Link>
 
         </div>
@@ -160,8 +173,14 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <a className="nav__login" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer">{t('nav.logIn')}</a>
-          <a className="nav__cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('trial_cta_clicked')}>{t('nav.freeTrial')}</a>
+          {hasAccount ? (
+            <a className="nav__cta" href={APP_URL}>{t('nav.dashboard')}</a>
+          ) : (
+            <>
+              <a className="nav__login" href={APP_URL}>{t('nav.logIn')}</a>
+              <a className="nav__cta" href={APP_URL} onClick={() => trackEvent('trial_cta_clicked')}>{t('nav.freeTrial')}</a>
+            </>
+          )}
         </div>
 
         <button
@@ -222,7 +241,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link> disabled until Stripe integration is ready */}
+          <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
           <Link to={`/${lang}/demo`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
 
           <div className="nav__mobile-lang">
@@ -243,8 +262,14 @@ export default function Navbar() {
           </div>
 
           <div className="nav__mobile-bottom">
-            <a className="nav__mobile-link" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t('nav.logIn')}</a>
-            <a className="nav__mobile-cta" href="https://app.poliris.io" target="_blank" rel="noopener noreferrer" onClick={() => { setOpen(false); trackEvent('trial_cta_clicked'); }}>{t('nav.freeTrial')}</a>
+            {hasAccount ? (
+              <a className="nav__mobile-cta" href={APP_URL} onClick={() => setOpen(false)}>{t('nav.dashboard')}</a>
+            ) : (
+              <>
+                <a className="nav__mobile-link" href={APP_URL} onClick={() => setOpen(false)}>{t('nav.logIn')}</a>
+                <a className="nav__mobile-cta" href={APP_URL} onClick={() => { setOpen(false); trackEvent('trial_cta_clicked'); }}>{t('nav.freeTrial')}</a>
+              </>
+            )}
           </div>
         </div>
       )}

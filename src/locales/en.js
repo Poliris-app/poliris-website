@@ -1592,6 +1592,8 @@ export default {
     billing: { monthly: 'Monthly', annual: 'Annual', save: 'Save 20%' },
     coverage: 'Coverage',
     mostPopular: 'Most popular',
+    currentPlan: 'Current plan',
+    currentPlanCta: 'Manage plan',
     firstMonthPromo: '{credits} credits in month 1',
     plans: [
       {

@@ -13,7 +13,8 @@ import GlossaryPage from './pages/GlossaryPage';
 import DocsPage from './pages/DocsPage';
 import AuditPage from './pages/AuditPage';
 import GetaDemoPage from './pages/GetaDemoPage';
-// import PricingPage from './pages/PricingPage'; // disabled until Stripe integration is ready — see PricingPage.jsx / pricing.css
+import PricingPage from './pages/PricingPage';
+import CheckoutSuccessPage from './pages/CheckoutSuccessPage';
 import LegalPage from './pages/LegalPage';
 import privacyPolicyEnMd from './content/legal/privacy-policy.md?raw';
 import privacyPolicyFrMd from './content/legal/privacy-policy.fr.md?raw';
@@ -42,7 +43,8 @@ export const routes = [
       { path: 'docs', element: <DocsPage /> },
       { path: 'audit/:slug', element: <AuditPage /> },
       { path: 'demo', element: <GetaDemoPage /> },
-      // { path: 'pricing', element: <PricingPage /> }, // disabled until Stripe integration is ready
+      { path: 'pricing', element: <PricingPage /> },
+      { path: 'checkout/success', element: <CheckoutSuccessPage /> },
       { path: 'privacy', element: <LegalPage page="privacy" content={{ en: privacyPolicyEnMd, fr: privacyPolicyFrMd }} /> },
       { path: 'terms', element: <LegalPage page="terms" content={{ en: termsOfServiceEnMd, fr: termsOfServiceFrMd }} /> },
       { path: 'mentions-legales', element: <LegalPage page="mentions-legales" content={{ en: mentionsLegalesEnMd, fr: mentionsLegalesFrMd }} /> },
