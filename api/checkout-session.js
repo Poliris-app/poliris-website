@@ -14,12 +14,19 @@ export default async function handler(req, res) {
   // free-audit-request.js.
   const forwardedFor = req.headers['x-forwarded-for'] || '';
 
+  // The backend builds Stripe's success/cancel redirect URLs from this —
+  // without it, every checkout (whether started from poliris.io or a
+  // preview deployment) would redirect back to the same fixed
+  // MARKETING_SITE_URL instead of wherever the visitor actually is.
+  const siteOrigin = req.headers.origin || `https://${req.headers.host}`;
+
   try {
     const r = await fetch(`${process.env.POLIRIS_BACKEND_URL}/api/v2/public/checkout/session`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Forwarded-For': forwardedFor,
+        'X-Site-Origin': siteOrigin,
       },
       body: JSON.stringify({
         email,
