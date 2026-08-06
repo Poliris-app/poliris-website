@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ detail: 'Method not allowed' });
   }
 
-  const { email, plan_tier, turnstile_token, locale } = req.body || {};
+  const { email, plan_tier, turnstile_token, locale, currency, billing_interval } = req.body || {};
   if (!email || !plan_tier || !turnstile_token) {
     return res.status(400).json({ detail: 'email, plan_tier, and turnstile_token are required' });
   }
@@ -33,6 +33,8 @@ export default async function handler(req, res) {
         plan_tier,
         turnstile_token,
         locale: locale || 'en',
+        currency: currency || 'USD',
+        billing_interval: billing_interval || 'month',
       }),
     });
     const data = await r.json().catch(() => ({}));
