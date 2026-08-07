@@ -7,6 +7,8 @@
       "permanent": false
     },
     { "source": "/", "destination": "/en/", "permanent": false },
+    { "source": "/en", "destination": "/en/", "permanent": false },
+    { "source": "/fr", "destination": "/fr/", "permanent": false },
     { "source": "/visibility", "destination": "/en/visibility", "permanent": false },
     { "source": "/sentiment", "destination": "/en/sentiment", "permanent": false },
     { "source": "/technical-audit", "destination": "/en/technical-audit", "permanent": false },

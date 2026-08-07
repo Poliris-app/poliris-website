@@ -56,9 +56,9 @@ const META = {
         'Run technical SEO tests for search engines & AI bots like ChatGPT and Perplexity. Turn complex site audit data into automated, 1-click live fixes.',
     },
     'content-writing': {
-      title: 'Content Writing | Poliris',
+      title: 'AI Content Writer for GEO, SEO & Answer Engines | Poliris',
       description:
-        'Generate AI-optimised pages and structured data that get your brand recommended by AI engines.',
+        'Generate, score, and publish brand-aware content built for GEO and SEO. Close AI visibility gaps and earn citations in ChatGPT, Perplexity, & Claude.',
     },
     blog: {
       title: 'AI Visibility & GEO Insights, AI SEO Blog | Poliris',
