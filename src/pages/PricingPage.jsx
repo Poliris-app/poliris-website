@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
@@ -44,7 +44,7 @@ const MODELS = [
   { logo: 'mistral-ai-logo.png', label: 'Mistral' },
   { logo: 'grok-com-logo.png', label: 'Grok' },
 ];
-const FREE_MODELS = [MODELS[0], MODELS[5]];
+const FREE_MODELS = [MODELS[0], MODELS[3], MODELS[4], MODELS[5]];
 
 function ModelBadge({ model }) {
   return (
@@ -55,16 +55,46 @@ function ModelBadge({ model }) {
   );
 }
 
+// Same measured-height accordion technique as FaqItem in FaqsPage.jsx —
+// always renders the answer and animates the wrapper's real pixel height
+// (via scrollHeight), instead of a CSS-only trick that can silently fail
+// to collapse (grid-template-rows: 0fr needs the child's automatic min
+// size to hit 0, which doesn't happen reliably) or animate proportionally
+// to a size the content never actually reaches (a fixed max-height cap).
+function PricingFaqItem({ item, isOpen, onToggle }) {
+  const contentRef = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    setHeight(isOpen ? contentRef.current.scrollHeight : 0);
+  }, [isOpen]);
+
+  return (
+    <div className={`pricing-faq-item${isOpen ? ' open' : ''}`}>
+      <button type="button" className="pricing-faq-q" aria-expanded={isOpen} onClick={onToggle}>
+        <span>{item.q}</span>
+        <span className="pricing-faq-icon">{isOpen ? '−' : '+'}</span>
+      </button>
+      <div className="pricing-faq-a-wrap" style={{ height }}>
+        <p ref={contentRef} className="pricing-faq-a">{item.a}</p>
+      </div>
+    </div>
+  );
+}
+
 // Numeric/structural plan data — not translatable, paired by index with
 // the copy in locales/*.js `pricing.plans`. `tier` is the backend's
 // billing_pricing_catalog.plan_tier slug — the free tier isn't purchasable
 // through Stripe checkout (see app/api/v2/public_checkout.py), so its CTA
 // routes straight to the app instead of opening the checkout modal.
+// firstMonthCredits is always double monthlyCredits (a one-time welcome
+// bonus matching the base allocation) — kept as separate fields so the
+// badge can spell out "300 + 300 = 600" instead of just the total.
 const PLAN_META = [
   { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,   coveragePct: 5,   popular: false },
-  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,  coveragePct: 10,  popular: false, firstMonthCredits: '600' },
-  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,  coveragePct: 50,  popular: true,  firstMonthCredits: '3,000' },
-  { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, coveragePct: 100, popular: false, firstMonthCredits: '6,000' },
+  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,  coveragePct: 10,  popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
+  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,  coveragePct: 50,  popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
+  { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, coveragePct: 100, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
 ];
 
 // currency/annual now flow through to checkout (see PlanCheckoutModal) —
@@ -78,6 +108,7 @@ export default function PricingPage() {
   const [currency, setCurrency] = useState('usd');
   const [checkoutPlan, setCheckoutPlan] = useState(null);
   const [currentTier, setCurrentTier] = useState(null);
+  const [openFaq, setOpenFaq] = useState(null);
   const p = t('pricing');
 
   // Read post-hydration, not as a lazy useState initializer — this page is
@@ -132,6 +163,7 @@ export default function PricingPage() {
         primaryCta={p.hero.primaryCta}
         secondaryCta={p.hero.secondaryCta}
         note={p.hero.note}
+        bottom={<p className="pricing-trial-detail">{p.hero.trialDetail}</p>}
         showDashboard={false}
         showAiBand={false}
       />
@@ -162,6 +194,8 @@ export default function PricingPage() {
           </div>
         </div>
 
+        <p className="pricing-flexibility-note">{p.flexibilityNote}</p>
+
         <div className="pricing-grid">
           {plans.map((plan) => {
             const isCurrentPlan = plan.tier === currentTier;
@@ -185,8 +219,11 @@ export default function PricingPage() {
               )}
               {plan.firstMonthCredits ? (
                 <span className="pricing-first-month-badge">
-                  <span className="pricing-first-month-dot" />
-                  {p.firstMonthPromo.replace('{credits}', plan.firstMonthCredits)}
+                  <span className="pricing-first-month-x2">×2</span>
+                  <span className="pricing-first-month-text">
+                    <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>
+                    <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
+                  </span>
                 </span>
               ) : (
                 <div className="pricing-price-annual-note">&nbsp;</div>
@@ -223,6 +260,7 @@ export default function PricingPage() {
               <div className="pricing-agency-eyebrow">{p.agency.eyebrow}</div>
               <h3 className="pricing-agency-title">{p.agency.title}</h3>
               <p className="pricing-agency-desc">{p.agency.desc}</p>
+              <p className="pricing-agency-price">{p.agency.priceAnchor}</p>
               <a href={`/${lang}/demo`} className="pricing-agency-cta">{p.agency.cta} {ARROW_ICON}</a>
             </div>
             <div className="pricing-agency-right">
@@ -360,11 +398,26 @@ export default function PricingPage() {
                   className={`pricing-plan-btn${plan.popular ? ' popular' : ''}`}
                   onClick={() => handleSelectPlan(plan)}
                 >
-                  {plan.tier === currentTier ? p.currentPlanCta : plan.cta} {ARROW_ICON}
+                  {plan.tier === currentTier ? p.currentPlanCta : plan.tableCta} {ARROW_ICON}
                 </button>
               ))}
             </div>
 
+          </div>
+        </div>
+
+        {/* ============ FAQ ============ */}
+        <div className="pricing-faq-wrap">
+          <h2 className="pricing-faq-title">{p.faqTitle}</h2>
+          <div className="pricing-faq-list">
+            {p.faq.map((item, i) => (
+              <PricingFaqItem
+                key={i}
+                item={item}
+                isOpen={openFaq === i}
+                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+              />
+            ))}
           </div>
         </div>
 
