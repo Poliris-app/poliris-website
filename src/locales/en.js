@@ -740,6 +740,13 @@ export default {
     noResults: 'No articles match your search.',
     posts: [
       {
+        id: 14, label: 'AI CONTENT', category: 'GEO',
+        title: 'Beyond Keywords: Generating Content Optimized for AI and Answer Engines.',
+        desc: 'Keyword density no longer earns citations. Learn the AI content generation framework B2B teams use to get surfaced by ChatGPT, Perplexity, and Google AI Overviews.',
+        date: 'Aug 4, 2026',
+        slug: 'beyond-keywords-ai-content-generation',
+      },
+      {
         id: 13, label: 'ENTITY SEO', category: 'GEO',
         title: 'The Rise of Entity-Based SEO: Moving from Strings to Things in the AI Era.',
         desc: "Semantic SEO shifts optimization from keyword strings to verified entities and relationships. Here's how to build entity-based SEO that Knowledge Graphs and LLMs can trust and cite.",

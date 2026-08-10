@@ -8,12 +8,14 @@ import DeathOfTraditionalSearchPage from './posts/DeathOfTraditionalSearchPage';
 import DeathOfTraditionalSearchFrPage from './posts/DeathOfTraditionalSearchFrPage';
 import EntityBasedSeoPage from './posts/EntityBasedSeoPage';
 import EntityBasedSeoFrPage from './posts/EntityBasedSeoFrPage';
+import BeyondKeywordsPage from './posts/BeyondKeywordsPage';
 
 const POST_MAP = {
   en: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstonePage,
     'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchPage,
     'entity-based-seo': EntityBasedSeoPage,
+    'beyond-keywords-ai-content-generation': BeyondKeywordsPage,
   },
   fr: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstoneFrPage,

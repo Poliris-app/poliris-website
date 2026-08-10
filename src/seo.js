@@ -31,6 +31,7 @@ export const BLOG_POST_SLUGS = [
   'why-seo-is-the-cornerstone-of-geo-success',
   'death-of-traditional-search-geo-priority',
   'entity-based-seo',
+  'beyond-keywords-ai-content-generation',
 ];
 
 const META = {
