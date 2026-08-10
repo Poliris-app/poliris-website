@@ -31,6 +31,7 @@ export default {
   footer: {
     copy: '© 2026 Poliris · Brand intelligence for the AI era',
     links: ['Products', 'For teams', 'How it works', 'Pricing', 'Blog'],
+    legalNotice: 'Legal Notice',
   },
 
   home: {

@@ -55,7 +55,7 @@ export default function Footer() {
           {LEGAL_LINK_ITEMS.map(({ slug, label }) => (
             <a key={slug} href={`/${lang}/${slug}`} className="footer__link">{label}</a>
           ))}
-          <a href={`/${lang}/mentions-legales`} className="footer__link">Mentions légales</a>
+          <a href={`/${lang}/mentions-legales`} className="footer__link">{t('footer.legalNotice')}</a>
         </nav>
       </div>
     </footer>
