@@ -741,6 +741,13 @@ export default {
     noResults: 'Aucun article ne correspond à votre recherche.',
     posts: [
       {
+        id: 14, label: 'CONTENU IA', category: 'GEO',
+        title: "Au-delà des mots-clés : générer du contenu optimisé pour l'IA et les moteurs de réponse.",
+        desc: "La densité de mots-clés ne suffit plus à gagner des citations. Découvrez le cadre de génération de contenu par IA que les équipes B2B utilisent pour apparaître dans ChatGPT, Perplexity et les AI Overviews de Google.",
+        date: '4 août 2026',
+        slug: 'beyond-keywords-ai-content-generation',
+      },
+      {
         id: 13, label: 'SEO ENTITÉS', category: 'GEO',
         title: "L'essor du SEO orienté entités : des chaînes de caractères aux choses à l'ère de l'IA.",
         desc: "Le SEO sémantique déplace l'optimisation des mots-clés vers des entités et relations vérifiées. Voici comment construire un SEO orienté entités que les Knowledge Graphs et les LLM peuvent citer en confiance.",
