@@ -286,7 +286,7 @@
 .pricing-plan-col-head:nth-child(4) b { color: var(--pr-blue); }
 
 .pricing-compare-heading-row {
-  display: grid; grid-template-columns: 220px repeat(4,1fr); gap: 20px;
+  display: grid; grid-template-columns: 200px repeat(5,1fr); gap: 20px;
   padding: 16px 20px 14px; border-bottom: 1px solid var(--pr-border);
   background: #fafbfc;
 }
@@ -296,14 +296,22 @@
 .pricing-plan-col-head .pricing-dot { color: var(--pr-text-faint); margin: 0 4px; }
 
 .pricing-compare-section-title {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
   font-size: 12.5px; font-weight: 700; color: var(--pr-text-faint); text-transform: uppercase; letter-spacing: .04em;
   padding: 18px 20px 8px; background: #fafbfc; border-bottom: 1px solid var(--pr-border);
   font-family: var(--manrope);
 }
 .pricing-compare-section-title:not(:first-child) { border-top: 1px solid var(--pr-border); }
 
+button.pricing-compare-section-title {
+  border: none; cursor: pointer; text-align: left; padding: 18px 20px 14px;
+}
+.pricing-compare-chevron { display: inline-flex; flex-shrink: 0; color: var(--pr-text-faint); transition: transform .2s ease; }
+.pricing-compare-chevron svg { width: 14px; height: 14px; }
+.pricing-compare-chevron.closed { transform: rotate(-90deg); }
+
 .pricing-compare-row {
-  display: grid; grid-template-columns: 220px repeat(4,1fr); gap: 20px;
+  display: grid; grid-template-columns: 200px repeat(5,1fr); gap: 20px;
   padding: 16px 20px; border-bottom: 1px solid var(--pr-border);
   font-size: 13.5px; color: var(--pr-text);
 }
@@ -334,7 +342,7 @@
 .pricing-check-no { background: #fdecec; color: #e0463c; }
 .pricing-check-yes svg, .pricing-check-no svg { width: 11px; height: 11px; }
 
-.pricing-compare-buttons-row { display: grid; grid-template-columns: 220px repeat(4,1fr); gap: 20px; padding: 20px; }
+.pricing-compare-buttons-row { display: grid; grid-template-columns: 200px repeat(5,1fr); gap: 20px; padding: 20px; }
 .pricing-plan-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700;

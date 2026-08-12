@@ -25,6 +25,10 @@ const X_ICON = (
   <svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5 5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
 );
 
+const CHEVRON_ICON = (
+  <svg viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+
 // One distinct icon per agency feature — order matches p.agency.features.
 const AGENCY_ICONS = [
   <svg key="layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>,
@@ -52,6 +56,43 @@ function ModelBadge({ model }) {
       <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt="" />
       {model.label}
     </span>
+  );
+}
+
+// Shared renderer for the many "label + 5 checkmarks" comparison rows —
+// `values` is a 5-length boolean array (Free, Starter, Growth, Pro, Agency).
+function CheckRow({ label, values }) {
+  return (
+    <div className="pricing-compare-row">
+      <div className="pricing-row-label">{label}</div>
+      {values.map((yes, i) => (
+        <div key={i} className="pricing-cell">
+          {yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Collapsible comparison-table section — clicking the uppercase title bar
+// toggles its rows, chevron rotates to point right when closed. Rendered
+// as a Fragment (no wrapping div) so the rows stay flat siblings within
+// .pricing-compare-table and keep their existing border-bottom sequencing.
+function CompareSection({ title, children }) {
+  const [open, setOpen] = useState(true);
+  return (
+    <>
+      <button
+        type="button"
+        className="pricing-compare-section-title"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span>{title}</span>
+        <span className={`pricing-compare-chevron${open ? '' : ' closed'}`}>{CHEVRON_ICON}</span>
+      </button>
+      {open && children}
+    </>
   );
 }
 
@@ -288,13 +329,21 @@ export default function PricingPage() {
               {plans.map((plan) => (
                 <div key={plan.name} className="pricing-plan-col-head">{plan.name} <span className="pricing-dot">•</span> <b>{symbol}{priceFor(plan, false)}</b>/mo</div>
               ))}
+              <div className="pricing-plan-col-head">{p.compare.agencyLabel} <span className="pricing-dot">•</span> <b>{p.compare.agencyPrice}</b></div>
             </div>
 
             <div className="pricing-compare-row">
               <div className="pricing-row-label">{p.compare.modelsLabel}<small>{p.compare.modelsSub}</small></div>
               <div className="pricing-cell models">{FREE_MODELS.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
-              {[1, 2, 3].map((i) => (
+              {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="pricing-cell models">{MODELS.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
+              ))}
+            </div>
+
+            <div className="pricing-compare-row">
+              <div className="pricing-row-label">{p.compare.promptsTrackedLabel}<small>{p.compare.promptsTrackedSub}</small></div>
+              {['10', '100', '500', '1,000', p.compare.custom].map((v, i) => (
+                <div key={i} className="pricing-cell">{v}</div>
               ))}
             </div>
 
@@ -305,89 +354,134 @@ export default function PricingPage() {
                   {i === 0 ? <span className="pricing-check-no">{X_ICON}</span> : <span className="pricing-check-yes">{CHECK_ICON}</span>}
                 </div>
               ))}
+              <div className="pricing-cell"><span className="pricing-check-yes">{CHECK_ICON}</span></div>
             </div>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.creditsLabel}</div>
-              {['—', '300', '1,500', '3,000'].map((v, i) => (
-                <div key={i} className="pricing-cell">
-                  {v === '—' ? <span className="pricing-check-dash">—</span> : v}
-                </div>
-              ))}
-            </div>
+            <CompareSection title={p.compare.volumeTitle}>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.creditsLabel}</div>
+                {['—', '300', '1,500', '3,000', p.compare.custom].map((v, i) => (
+                  <div key={i} className="pricing-cell">
+                    {v === '—' ? <span className="pricing-check-dash">—</span> : v}
+                  </div>
+                ))}
+              </div>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.modelsCountLabel}</div>
-              <div className="pricing-cell">2</div>
-              {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCombination}</div>)}
-            </div>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.modelsCountLabel}</div>
+                <div className="pricing-cell">2</div>
+                {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCombination}</div>)}
+              </div>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.projectsLabel}</div>
-              <div className="pricing-cell">1</div>
-              {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
-            </div>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.projectsLabel}</div>
+                <div className="pricing-cell">1</div>
+                {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
+                <div className="pricing-cell">{p.compare.unlimited}</div>
+              </div>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.zonesLabel}</div>
-              <div className="pricing-cell">1</div>
-              {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
-            </div>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.zonesLabel}</div>
+                <div className="pricing-cell">1</div>
+                {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
+                <div className="pricing-cell">{p.compare.unlimited}</div>
+              </div>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.cadenceLabel}</div>
-              <div className="pricing-cell">{p.compare.daily}</div>
-              {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCadence}</div>)}
-            </div>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.cadenceLabel}</div>
+                <div className="pricing-cell">{p.compare.daily}</div>
+                {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCadence}</div>)}
+              </div>
+              <CheckRow label={p.compare.boostLabel} values={[false, true, true, true, true]} />
+              <CheckRow label={p.compare.premiumModelLabel} values={[false, true, true, true, true]} />
+            </CompareSection>
 
-            <div className="pricing-compare-section-title">{p.compare.integrationsTitle}</div>
+            <CompareSection title={p.compare.platformTitle}>
+              <CheckRow label={p.compare.enginesLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.countriesLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.languagesLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.teamMembersLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.exportsLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.shareLinksLabel} values={[true, true, true, true, true]} />
+            </CompareSection>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.lookerLabel}</div>
-              {[false, false, true, true].map((yes, i) => (
-                <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-              ))}
-            </div>
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.apiLabel}</div>
-              {[false, false, false, true].map((yes, i) => (
-                <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-              ))}
-            </div>
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.mcpLabel}</div>
-              {[false, true, true, true].map((yes, i) => (
-                <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-              ))}
-            </div>
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.ssoLabel}</div>
-              {[false, false, false, true].map((yes, i) => (
-                <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-              ))}
-            </div>
+            <CompareSection title={p.compare.dashboardTitle}>
+              <CheckRow label={p.compare.overviewLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.geoMatrixLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.benchmarkingLabel} values={[true, true, true, true, true]} />
+            </CompareSection>
 
-            <div className="pricing-compare-section-title">{p.compare.supportTitle}</div>
+            <CompareSection title={p.compare.monitorTitle}>
+              <CheckRow label={p.compare.promptTrackingLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.responseAnalysisLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.mentionsLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.sourceExplorerLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.insightsLabel} values={[true, true, true, true, true]} />
+            </CompareSection>
 
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.supportChannelsLabel}</div>
-              <div className="pricing-cell">{p.compare.chatsOnly}</div>
-              <div className="pricing-cell">{p.compare.chatsEmail}</div>
-              <div className="pricing-cell">{p.compare.chatsEmail}</div>
-              <div className="pricing-cell">{p.compare.dedicated}</div>
-            </div>
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.slackLabel}</div>
-              {[false, true, true, true].map((yes, i) => (
-                <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-              ))}
-            </div>
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.onboardingLabel}</div>
-              {[false, false, true, true].map((yes, i) => (
-                <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-              ))}
-            </div>
+            <CompareSection title={p.compare.analyzeTitle}>
+              <CheckRow label={p.compare.sentimentScoreLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.perceptionLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.factCheckLabel} values={[false, true, true, true, true]} />
+            </CompareSection>
+
+            <CompareSection title={p.compare.actTitle}>
+              <CheckRow label={p.compare.actionCenterLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.contentOppsLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.backlinkOppsLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.contentStudioLabel} values={[true, true, true, true, true]} />
+            </CompareSection>
+
+            <CompareSection title={p.compare.auditTitle}>
+              <CheckRow label={p.compare.siteReadinessLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.siteDiagnosticsLabel} values={[true, true, true, true, true]} />
+            </CompareSection>
+
+            <CompareSection title={p.compare.measureTitle}>
+              <CheckRow label={p.compare.gscLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.bingLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.referrerLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.pagePerfLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.crawlerAnalyticsLabel} values={[false, false, true, true, true]} />
+              <CheckRow label={p.compare.aiRevenueLabel} values={[true, true, true, true, true]} />
+            </CompareSection>
+
+            <CompareSection title={p.compare.integrationsTitle}>
+              <CheckRow label={p.compare.lookerLabel} values={[false, false, true, true, true]} />
+              <CheckRow label={p.compare.apiLabel} values={[false, false, false, true, true]} />
+              <CheckRow label={p.compare.mcpLabel} values={[false, true, true, true, true]} />
+              <CheckRow label={p.compare.alertsLabel} values={[false, false, true, true, true]} />
+              <CheckRow label={p.compare.virtualTeamsLabel} values={[false, false, true, true, true]} />
+            </CompareSection>
+
+            <CompareSection title={p.compare.securityTitle}>
+              <CheckRow label={p.compare.ssoLabel} values={[false, false, false, true, true]} />
+              <CheckRow label={p.compare.whiteLabelLabel} values={[false, false, false, true, true]} />
+              <CheckRow label={p.compare.customDomainLabel} values={[false, false, false, true, true]} />
+            </CompareSection>
+
+            <CompareSection title={p.compare.supportTitle}>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.supportChannelsLabel}</div>
+                <div className="pricing-cell">{p.compare.chatsOnly}</div>
+                <div className="pricing-cell">{p.compare.chatsEmail}</div>
+                <div className="pricing-cell">{p.compare.chatsEmail}</div>
+                <div className="pricing-cell">{p.compare.dedicated}</div>
+                <div className="pricing-cell">{p.compare.dedicatedManager}</div>
+              </div>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.slackLabel}</div>
+                {[false, true, true, true, true].map((yes, i) => (
+                  <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
+                ))}
+              </div>
+              <div className="pricing-compare-row">
+                <div className="pricing-row-label">{p.compare.onboardingLabel}</div>
+                {[false, false, true, true, true].map((yes, i) => (
+                  <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
+                ))}
+              </div>
+            </CompareSection>
 
             <div className="pricing-compare-buttons-row">
               <div />
@@ -401,6 +495,9 @@ export default function PricingPage() {
                   {plan.tier === currentTier ? p.currentPlanCta : plan.tableCta} {ARROW_ICON}
                 </button>
               ))}
+              <a href={`/${lang}/demo`} className="pricing-plan-btn">
+                {p.compare.agencyCta} {ARROW_ICON}
+              </a>
             </div>
 
           </div>
