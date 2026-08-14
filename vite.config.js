@@ -125,19 +125,29 @@ function devApiPlugin(env) {
         req.on('data', chunk => { body += chunk; });
         req.on('end', async () => {
           try {
-            const { email, plan_tier, turnstile_token, locale } = JSON.parse(body);
+            const { email, plan_tier, turnstile_token, locale, currency, billing_interval } = JSON.parse(body);
             if (!email || !plan_tier || !turnstile_token) {
               res.writeHead(400, { 'Content-Type': 'application/json' });
               return res.end(JSON.stringify({ detail: 'email, plan_tier, and turnstile_token are required' }));
             }
+
+            const siteOrigin = req.headers.origin || `http://${req.headers.host}`;
 
             const r = await fetch(`${env.POLIRIS_BACKEND_URL}/api/v2/public/checkout/session`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
                 'X-Forwarded-For': req.headers['x-forwarded-for'] || '',
+                'X-Site-Origin': siteOrigin,
               },
-              body: JSON.stringify({ email, plan_tier, turnstile_token, locale: locale || 'en' }),
+              body: JSON.stringify({
+                email,
+                plan_tier,
+                turnstile_token,
+                locale: locale || 'en',
+                currency: currency || 'USD',
+                billing_interval: billing_interval || 'month',
+              }),
             });
             const data = await r.json().catch(() => ({}));
             res.writeHead(r.status, { 'Content-Type': 'application/json' });

@@ -136,9 +136,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Temporarily hidden from nav — page stays live/crawlable at /pricing,
-              backend for the new checkout flow isn't deployed to production yet. */}
-          {/* <Link to={`/${lang}/pricing`} className="nav__link">{t('nav.pricing')}</Link> */}
+          <Link to={`/${lang}/pricing`} className="nav__link">{t('nav.pricing')}</Link>
           <Link to={`/${lang}/demo`} className="nav__link">{t('nav.getDemo')}</Link>
 
         </div>
@@ -243,8 +241,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Temporarily hidden — see desktop nav comment above */}
-          {/* <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link> */}
+          <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
           <Link to={`/${lang}/demo`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
 
           <div className="nav__mobile-lang">

@@ -37,7 +37,16 @@ function extractErrorMessage(data) {
   return 'Something went wrong. Please try again.';
 }
 
-export default function PlanCheckoutModal({ open, onClose, plan }) {
+export default function PlanCheckoutModal({
+  open,
+  onClose,
+  plan,
+  currency = 'USD',
+  billingInterval = 'month',
+  displayPrice,
+  displayAnnualTotal,
+  symbol = '$',
+}) {
   const { lang } = useLang();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -102,6 +111,8 @@ export default function PlanCheckoutModal({ open, onClose, plan }) {
           plan_tier: plan.tier,
           turnstile_token: turnstileToken,
           locale: lang,
+          currency,
+          billing_interval: billingInterval,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -130,8 +141,11 @@ export default function PlanCheckoutModal({ open, onClose, plan }) {
         <div className="promo-modal-body">
           <div className="promo-modal-eyebrow">✦ {plan.name}</div>
           <h2 className="promo-modal-title">
-            ${plan.monthly}<span style={{ fontSize: '0.5em', fontWeight: 500 }}>/mo</span>
+            {symbol}{displayPrice}<span style={{ fontSize: '0.5em', fontWeight: 500 }}>/mo</span>
           </h2>
+          {billingInterval === 'year' && (
+            <p className="promo-modal-billed-annually">Billed {symbol}{displayAnnualTotal} annually</p>
+          )}
           <p className="promo-modal-lead">{plan.desc}</p>
 
           <ul className="pricing-features">

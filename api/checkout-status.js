@@ -16,14 +16,26 @@ export default async function handler(req, res) {
     );
     const data = await r.json().catch(() => ({}));
     if (r.ok && data.status === 'ready') {
-      // Plain, non-sensitive markers (no auth data) scoped to the parent
-      // domain so the marketing site can show "Dashboard" instead of "Login"
-      // and label this visitor's current plan on the pricing page — the
-      // real session lives in app.poliris.io's own (host-only) Supabase
-      // cookies, set separately when the browser lands on the login_url.
-      const cookies = ['poliris_has_account=1; Domain=.poliris.io; Path=/; Max-Age=31536000; SameSite=Lax; Secure'];
+      // Plain, non-sensitive markers (no auth data) so the marketing site can
+      // show "Dashboard" instead of "Login" and label this visitor's current
+      // plan on the pricing page — the real session lives in app.poliris.io's
+      // own (host-only) Supabase cookies, set separately when the browser
+      // lands on the login_url.
+      //
+      // Domain=.poliris.io only gets attached when actually serving from a
+      // poliris.io (sub)domain — browsers silently reject a Domain= that
+      // doesn't match the real serving host, so on preview deployments (e.g.
+      // *.vercel.app) this falls back to a host-only cookie instead of
+      // failing to set anything at all.
+      const host = req.headers.host || '';
+      const domainAttr = host.endsWith('poliris.io') ? '; Domain=.poliris.io' : '';
+      const cookies = [
+        `poliris_has_account=1${domainAttr}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`,
+      ];
       if (data.plan_tier && /^[a-z_]+$/.test(data.plan_tier)) {
-        cookies.push(`poliris_plan_tier=${data.plan_tier}; Domain=.poliris.io; Path=/; Max-Age=31536000; SameSite=Lax; Secure`);
+        cookies.push(
+          `poliris_plan_tier=${data.plan_tier}${domainAttr}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`
+        );
       }
       res.setHeader('Set-Cookie', cookies);
     }

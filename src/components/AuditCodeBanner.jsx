@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import AuditModal from './AuditModal';
 import { trackEvent } from '../lib/analytics';
+import { useLang } from '../contexts/LangContext';
 
 export default function AuditCodeBanner() {
+  const { t } = useLang();
   const [modalOpen, setModalOpen] = useState(false);
 
   // Shifts the fixed navbar (and this page's hero padding) down by the
@@ -28,12 +30,12 @@ export default function AuditCodeBanner() {
               </svg>
             </span>
             <span className="audit-banner__text">
-              <span className="audit-banner__line">Already have a code from our team? Or want your free AI Visibility Audit?</span>
-              <span className="audit-banner__text-short">Have a code, or want a free audit?</span>
+              <span className="audit-banner__line">{t('auditBanner.line')}</span>
+              <span className="audit-banner__text-short">{t('auditBanner.lineShort')}</span>
             </span>
           </span>
           <span className="audit-banner__cta">
-            <span className="audit-banner__cta-label">Get your free audit</span>
+            <span className="audit-banner__cta-label">{t('auditBanner.cta')}</span>
             <span className="btn__icon btn__icon--black">
               <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
                 <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>

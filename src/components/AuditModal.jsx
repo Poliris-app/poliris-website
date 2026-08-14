@@ -44,18 +44,19 @@ function normalizeWebsite(value) {
 // FastAPI validation errors return `detail` as an array of
 // {type, loc, msg, input} objects, not a string — never render that shape
 // directly as a React child.
-function extractErrorMessage(data) {
+function extractErrorMessage(data, fallback) {
   const detail = data?.detail;
   if (typeof detail === 'string') return detail;
   if (Array.isArray(detail)) {
     const messages = detail.map((d) => d?.msg).filter(Boolean);
     if (messages.length) return messages.join(' ');
   }
-  return 'Something went wrong — please try again.';
+  return fallback;
 }
 
 export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
-  const { lang } = useLang();
+  const { lang, t } = useLang();
+  const am = t('auditModal');
   const navigate = useNavigate();
   const [tab, setTab] = useState(defaultTab);
 
@@ -113,7 +114,7 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
     e.preventDefault();
     const trimmed = code.trim().toUpperCase();
     if (!CODE_RE.test(trimmed)) {
-      setCodeError('That code doesn’t look right — it should be 6 characters.');
+      setCodeError(am.errors.codeInvalid);
       return;
     }
     setChecking(true);
@@ -121,13 +122,13 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
     try {
       const res = await fetch(`/api/audit?code=${encodeURIComponent(trimmed)}`);
       if (!res.ok) {
-        setCodeError('Code not found. Please double-check the code and try again.');
+        setCodeError(am.errors.codeNotFound);
         return;
       }
       trackEvent('audit_code_modal_valid');
       navigate(`/${lang}/audit/${trimmed}`);
     } catch {
-      setCodeError('Something went wrong — please try again.');
+      setCodeError(am.errors.generic);
     } finally {
       setChecking(false);
     }
@@ -136,7 +137,7 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
   const handleFreeSubmit = async (e) => {
     e.preventDefault();
     if (!turnstileToken) {
-      setFreeError('Please complete the verification below.');
+      setFreeError(am.errors.verifyRequired);
       return;
     }
     setSubmitting(true);
@@ -153,14 +154,14 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setFreeError(extractErrorMessage(data));
+        setFreeError(extractErrorMessage(data, am.errors.generic));
         return;
       }
       const data = await res.json();
       trackEvent('free_audit_requested');
       setDone(data.status === 'ready' ? 'ready' : 'queued');
     } catch {
-      setFreeError('Something went wrong — please try again.');
+      setFreeError(am.errors.generic);
     } finally {
       setSubmitting(false);
     }
@@ -171,34 +172,32 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
       <div onClick={(e) => e.stopPropagation()} className="promo-modal-card">
         <div className="promo-modal-glow" aria-hidden="true" />
 
-        <button onClick={close} aria-label="Close" className="promo-modal-close">
+        <button onClick={close} aria-label={am.close} className="promo-modal-close">
           &times;
         </button>
 
         <div className="promo-modal-body">
           {done ? (
             <>
-              <div className="promo-modal-eyebrow">✦ You&rsquo;re all set</div>
+              <div className="promo-modal-eyebrow">✦ {am.done.allSet}</div>
               <h2 className="promo-modal-title">
-                {done === 'ready' ? 'Check your inbox now' : 'Your audit is on its way'}
+                {done === 'ready' ? am.done.readyTitle : am.done.queuedTitle}
               </h2>
               <p className="promo-modal-lead">
-                {done === 'ready'
-                  ? 'Your AI Visibility Audit is ready and on its way to your inbox.'
-                  : "Auditing a new website takes about 10 minutes. You'll receive your AI Visibility Audit by email as soon as it's done. Feel free to close this and check back later."}
+                {done === 'ready' ? am.done.readyLead : am.done.queuedLead}
               </p>
             </>
           ) : (
             <>
-              <div className="promo-modal-eyebrow">✦ Free · 2-minute setup</div>
+              <div className="promo-modal-eyebrow">✦ {am.freeSetup}</div>
               <h2 className="promo-modal-title">
-                Does your brand show up<br />when people ask <span className="hl">AI</span>?
+                {am.titlePre}<br />{am.titlePost} <span className="hl">{am.titleHl}</span>?
               </h2>
               <p className="promo-modal-lead">
-                Get a free AI Visibility Audit and see exactly how ChatGPT, Gemini, and Perplexity describe (or ignore) your brand.
+                {am.lead}
               </p>
 
-              <p className="promo-modal-tracked-label">Tracked across every AI that matters</p>
+              <p className="promo-modal-tracked-label">{am.trackedLabel}</p>
               <div className="promo-modal-logos">
                 {AI_LOGOS.map((logo) => (
                   <div key={logo.alt} className="promo-modal-logo-chip">
@@ -215,7 +214,7 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                   className={`audit-modal-tab${tab === 'free' ? ' audit-modal-tab--active' : ''}`}
                   onClick={() => setTab('free')}
                 >
-                  Get a free audit
+                  {am.tabFree}
                 </button>
                 <button
                   type="button"
@@ -224,7 +223,7 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                   className={`audit-modal-tab${tab === 'code' ? ' audit-modal-tab--active' : ''}`}
                   onClick={() => setTab('code')}
                 >
-                  I have a code
+                  {am.tabCode}
                 </button>
               </div>
 
@@ -236,7 +235,7 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                       required
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); setFreeError(''); }}
-                      placeholder="Your work email"
+                      placeholder={am.emailPlaceholder}
                       className="free-audit-form__input"
                     />
                     <input
@@ -244,14 +243,14 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                       required
                       value={website}
                       onChange={(e) => { setWebsite(e.target.value); setFreeError(''); }}
-                      placeholder="yourbrand.com"
+                      placeholder={am.websitePlaceholder}
                       className="free-audit-form__input"
                     />
                     {TURNSTILE_SITE_KEY && (
                       <div ref={widgetRef} className="free-audit-form__turnstile" />
                     )}
                     <button type="submit" className="btn btn--primary promo-modal-cta" disabled={submitting}>
-                      {submitting ? 'Submitting…' : 'Get My Free Audit →'}
+                      {submitting ? am.submitting : am.getMyFreeAudit}
                     </button>
                     {freeError && <p className="code-modal-error">{freeError}</p>}
                   </form>
@@ -261,20 +260,20 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                       type="text"
                       value={code}
                       onChange={(e) => { setCode(e.target.value); setCodeError(''); }}
-                      placeholder="Enter your 6-character code"
+                      placeholder={am.codePlaceholder}
                       maxLength={6}
                       autoFocus
                       className="code-modal-input"
                     />
                     <button type="submit" className="btn btn--primary code-modal-submit" disabled={checking}>
-                      {checking ? 'Checking…' : 'View My Audit'}
+                      {checking ? am.checking : am.viewMyAudit}
                     </button>
                     {codeError && <p className="code-modal-error">{codeError}</p>}
                   </form>
                 )}
               </div>
 
-              <p className="promo-modal-trust">🔒 No credit card required</p>
+              <p className="promo-modal-trust">{am.trust}</p>
             </>
           )}
         </div>
