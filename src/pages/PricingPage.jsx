@@ -29,6 +29,14 @@ const CHEVRON_ICON = (
   <svg viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
 );
 
+const CALCULATOR_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="4" y="2" width="16" height="20" rx="2.5"/>
+    <path d="M8 6h8"/>
+    <path d="M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h.01M12 19h.01M16 19h.01"/>
+  </svg>
+);
+
 // One distinct icon per agency feature — order matches p.agency.features.
 const AGENCY_ICONS = [
   <svg key="layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>,
@@ -70,6 +78,274 @@ function CheckRow({ label, values }) {
           {yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}
         </div>
       ))}
+    </div>
+  );
+}
+
+// Calculator formula mirrors the site's own credit definition (see
+// pricing.faq: "A credit represents one AI model query. A standard
+// 10-prompt audit run across 3 AI models uses 30 credits") — estimated
+// credits/month = prompts tracked × brands/workspaces tracked × models
+// tracked × checks per month. Each brand is its own project, so its
+// prompts run independently at every check (see the "Projects" row).
+const CALC_CADENCE_RUNS = { daily: 30, weekly: 4 };
+const CALC_METER_MAX = 3000; // Pro's monthly allotment — the meter's right edge
+
+const CALC_ICON_SOLO = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+);
+const CALC_ICON_TEAM = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9" r="2.6"/><path d="M3 20c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8"/><path d="M15.5 14.6c2.6.4 4.5 2.5 4.5 5.4"/></svg>
+);
+const CALC_ICON_AGENCY = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="10" width="7" height="11"/><rect x="12" y="4" width="9" height="17"/><path d="M6 14h1M6 17h1M15 8h3M15 11h3M15 14h3"/></svg>
+);
+
+// Quick-start presets — clicking one seeds every field at once. `c` (the
+// calculator's locale slice) is passed in so labels stay translatable;
+// the numbers themselves are the same across languages.
+const calcPresets = (c) => [
+  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, desc: c.presetSoloDesc, prompts: 10, sites: 1, modelIds: [0, 5], cadence: 'weekly' },
+  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, desc: c.presetTeamDesc, prompts: 20, sites: 3, modelIds: [0, 1, 2, 5], cadence: 'weekly' },
+  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, desc: c.presetAgencyDesc, prompts: 35, sites: 8, modelIds: [0, 1, 2, 3, 4, 5], cadence: 'weekly' },
+];
+
+// Not a keypad — a live, preset-and-slider estimator. Starts from the
+// "Solo brand" preset, lets you jump to a different typical setup or
+// fine-tune every field by hand, and turns the result into a
+// credits/month figure using the same formula the FAQ already teaches,
+// then recommends the cheapest plan that comfortably covers it.
+function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
+  const presets = calcPresets(c);
+  const [prompts, setPrompts] = useState(presets[0].prompts);
+  const [sites, setSites] = useState(presets[0].sites);
+  const [modelIds, setModelIds] = useState(presets[0].modelIds);
+  const [cadence, setCadence] = useState(presets[0].cadence);
+  const [customRuns, setCustomRuns] = useState(8);
+  const [activePreset, setActivePreset] = useState(presets[0].id);
+
+  const runsPerMonth = cadence === 'custom' ? customRuns : CALC_CADENCE_RUNS[cadence];
+  const modelsCount = modelIds.length;
+  const estimated = Math.round(prompts * sites * modelsCount * runsPerMonth);
+
+  let recommendedTier = 'agency';
+  if (estimated <= 300) recommendedTier = 'starter';
+  else if (estimated <= 1500) recommendedTier = 'growth';
+  else if (estimated <= 3000) recommendedTier = 'pro';
+  const recommendedPlan = plans.find((pl) => pl.tier === recommendedTier);
+
+  const applyPreset = (preset) => {
+    setPrompts(preset.prompts);
+    setSites(preset.sites);
+    setModelIds(preset.modelIds);
+    setCadence(preset.cadence);
+    setActivePreset(preset.id);
+  };
+
+  // Any manual tweak breaks away from whichever preset was selected —
+  // these wrap the raw setters so the presets grid stops claiming credit
+  // for a configuration the user has since changed.
+  const setPromptsManual = (v) => { setPrompts(v); setActivePreset(null); };
+  const setSitesManual = (v) => { setSites(Math.max(1, Math.min(10, v))); setActivePreset(null); };
+  const setCadenceManual = (v) => { setCadence(v); setActivePreset(null); };
+  const setCustomRunsManual = (v) => { setCustomRuns(v); setActivePreset(null); };
+  const toggleModel = (id) => {
+    setModelIds((ids) => (
+      ids.includes(id)
+        ? (ids.length > 1 ? ids.filter((x) => x !== id) : ids)
+        : [...ids, id]
+    ));
+    setActivePreset(null);
+  };
+
+  return (
+    <div className="pricing-calc-wrap">
+      <div className="pricing-calc-head">
+        <span className="pricing-calc-eyebrow">{c.eyebrow}</span>
+        <h2>{c.title}</h2>
+        <p>{c.subtitle}</p>
+      </div>
+
+      <div className="pricing-calc-card">
+        <div className="pricing-calc-inputs">
+
+          <div className="pricing-calc-presets">
+            <p className="pricing-calc-presets-label">{c.presetsLabel}</p>
+            <div className="pricing-calc-presets-grid">
+              {presets.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className={`pricing-calc-preset-card${activePreset === preset.id ? ' active' : ''}`}
+                  aria-pressed={activePreset === preset.id}
+                  onClick={() => applyPreset(preset)}
+                >
+                  <span className="pricing-calc-preset-icon">{preset.icon}</span>
+                  <span className="pricing-calc-preset-title">{preset.label}</span>
+                  <span className="pricing-calc-preset-desc">{preset.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="pricing-calc-field">
+            <div className="pricing-calc-field-head">
+              <label htmlFor="calc-prompts">{c.promptsLabel}</label>
+              <span className="pricing-calc-value">{prompts}</span>
+            </div>
+            <input
+              id="calc-prompts"
+              type="range"
+              min="5"
+              max="50"
+              step="5"
+              value={prompts}
+              onChange={(e) => setPromptsManual(Number(e.target.value))}
+              className="pricing-calc-slider"
+            />
+            <p className="pricing-calc-hint">{c.promptsHint}</p>
+          </div>
+
+          <div className="pricing-calc-field pricing-calc-field-stepper">
+            <div className="pricing-calc-stepper-text">
+              <label>{c.sitesLabel}</label>
+              <p className="pricing-calc-hint">{c.sitesHint}</p>
+            </div>
+            <div className="pricing-calc-stepper">
+              <button type="button" className="pricing-calc-stepper-btn" aria-label="Decrease" onClick={() => setSitesManual(sites - 1)}>−</button>
+              <span className="pricing-calc-stepper-value">{sites}</span>
+              <button type="button" className="pricing-calc-stepper-btn" aria-label="Increase" onClick={() => setSitesManual(sites + 1)}>+</button>
+            </div>
+          </div>
+
+          <div className="pricing-calc-field">
+            <div className="pricing-calc-field-head">
+              <label>{c.modelsLabel}</label>
+              <span className="pricing-calc-value">{modelsCount}</span>
+            </div>
+            <div className="pricing-calc-model-grid">
+              {MODELS.map((m, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={`pricing-calc-model-chip${modelIds.includes(i) ? ' active' : ''}`}
+                  aria-pressed={modelIds.includes(i)}
+                  onClick={() => toggleModel(i)}
+                >
+                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
+                  {m.label}
+                </button>
+              ))}
+            </div>
+            <p className="pricing-calc-hint">{c.modelsHint}</p>
+          </div>
+
+          <div className="pricing-calc-field">
+            <div className="pricing-calc-field-head">
+              <label>{c.cadenceLabel}</label>
+            </div>
+            <div className="pricing-calc-cadence">
+              <button type="button" className={`pricing-calc-cadence-btn${cadence === 'daily' ? ' active' : ''}`} onClick={() => setCadenceManual('daily')}>{c.cadenceDaily}</button>
+              <button type="button" className={`pricing-calc-cadence-btn${cadence === 'weekly' ? ' active' : ''}`} onClick={() => setCadenceManual('weekly')}>{c.cadenceWeekly}</button>
+              <button type="button" className={`pricing-calc-cadence-btn${cadence === 'custom' ? ' active' : ''}`} onClick={() => setCadenceManual('custom')}>{c.cadenceCustom}</button>
+            </div>
+            {cadence === 'custom' && (
+              <div className="pricing-calc-custom-runs">
+                <div className="pricing-calc-field-head">
+                  <label htmlFor="calc-runs">{c.cadenceCustomLabel}</label>
+                  <span className="pricing-calc-value">{customRuns}</span>
+                </div>
+                <input
+                  id="calc-runs"
+                  type="range"
+                  min="1"
+                  max="30"
+                  value={customRuns}
+                  onChange={(e) => setCustomRunsManual(Number(e.target.value))}
+                  className="pricing-calc-slider"
+                />
+              </div>
+            )}
+          </div>
+
+        </div>
+
+        <div className="pricing-calc-result">
+          <span className="pricing-calc-result-eyebrow">{c.resultEyebrow}</span>
+          <div className="pricing-calc-result-number">
+            {estimated.toLocaleString()}
+            <span>{c.resultUnit}</span>
+          </div>
+          <p className="pricing-calc-formula">
+            {c.formula
+              .replace('{prompts}', prompts)
+              .replace('{sites}', sites)
+              .replace('{models}', modelsCount)
+              .replace('{runs}', runsPerMonth)}
+          </p>
+
+          <div className="pricing-calc-meter-track">
+            <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
+            {[300, 1500].map((mark) => (
+              <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
+            ))}
+          </div>
+          <div className="pricing-calc-meter-labels">
+            <span>{plans[1].name}</span>
+            <span>{plans[2].name}</span>
+            <span>{plans[3].name}</span>
+          </div>
+
+          <div className="pricing-calc-divider" />
+
+          <ul className="pricing-calc-facts">
+            {c.facts.map((f, i) => <li key={i}>{CHECK_ICON}{f}</li>)}
+          </ul>
+
+          <div className="pricing-calc-recommend-group">
+            <div className="pricing-calc-recommend">
+              <span className="pricing-calc-recommend-pre">{c.recommendedPre}</span>
+              <span className="pricing-calc-recommend-plan">{recommendedTier === 'agency' ? agencyLabel : recommendedPlan.name}</span>
+              <span className="pricing-calc-recommend-post">{c.recommendedPost}</span>
+              <button type="button" className="pricing-calc-cta" onClick={() => onRecommend(recommendedTier)}>
+                {recommendedTier === 'agency' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
+              </button>
+            </div>
+
+            <p className="pricing-calc-note">{c.firstMonthNote}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// The calculator starts collapsed behind a one-line teaser banner — click
+// it to reveal the full CreditCalculator in place (same conditional-render
+// accordion pattern as CompareSection above, just gating a much bigger
+// block so the pricing page isn't dominated by it by default).
+function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="pricing-calc-panel">
+      <button
+        type="button"
+        className={`pricing-calc-banner${open ? ' open' : ''}`}
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span className="pricing-calc-banner-icon">{CALCULATOR_ICON}</span>
+        <span className="pricing-calc-banner-text">
+          <span className="pricing-calc-banner-title">{c.bannerTitle}</span>
+          <span className="pricing-calc-banner-sub">{c.bannerSub}</span>
+        </span>
+        <span className="pricing-calc-banner-cta">
+          {open ? c.bannerCtaClose : c.bannerCtaOpen} {ARROW_ICON}
+        </span>
+      </button>
+      {open && (
+        <CreditCalculator c={c} plans={plans} agencyLabel={agencyLabel} onRecommend={onRecommend} />
+      )}
     </div>
   );
 }
@@ -150,7 +426,21 @@ export default function PricingPage() {
   const [checkoutPlan, setCheckoutPlan] = useState(null);
   const [currentTier, setCurrentTier] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
+  const [highlightTier, setHighlightTier] = useState(null);
+  const highlightTimeoutRef = useRef(null);
   const p = t('pricing');
+
+  // Scrolls to and briefly pulses the matching plan card (or the Agency
+  // banner) — used by the calculator's "Get {plan}" CTA so the
+  // recommendation is a click, not just a label.
+  const scrollToPlan = (tier) => {
+    const el = document.getElementById(tier === 'agency' ? 'pricing-agency-banner' : `pricing-card-${tier}`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setHighlightTier(tier);
+    window.clearTimeout(highlightTimeoutRef.current);
+    highlightTimeoutRef.current = window.setTimeout(() => setHighlightTier(null), 2000);
+  };
 
   // Read post-hydration, not as a lazy useState initializer — this page is
   // pre-rendered at build time with no `document`, so seeding real state
@@ -241,7 +531,11 @@ export default function PricingPage() {
           {plans.map((plan) => {
             const isCurrentPlan = plan.tier === currentTier;
             return (
-            <div key={plan.name} className={`pricing-card${plan.popular ? ' popular' : ''}`}>
+            <div
+              key={plan.name}
+              id={`pricing-card-${plan.tier}`}
+              className={`pricing-card${plan.popular ? ' popular' : ''}${highlightTier === plan.tier ? ' calc-highlight' : ''}`}
+            >
               {isCurrentPlan ? (
                 <span className="pricing-badge-popular">{p.currentPlan}</span>
               ) : (
@@ -293,10 +587,18 @@ export default function PricingPage() {
           </span>
         </div>
 
+        {/* ============ CREDIT CALCULATOR ============ */}
+        <CreditCalculatorPanel
+          c={p.calculator}
+          plans={plans}
+          agencyLabel={p.compare.agencyLabel}
+          onRecommend={scrollToPlan}
+        />
+
         {/* ============ COMPARISON TABLE ============ */}
         <div className="pricing-compare-wrap">
 
-          <div className="pricing-agency-banner">
+          <div id="pricing-agency-banner" className={`pricing-agency-banner${highlightTier === 'agency' ? ' calc-highlight' : ''}`}>
             <div className="pricing-agency-left">
               <div className="pricing-agency-eyebrow">{p.agency.eyebrow}</div>
               <h3 className="pricing-agency-title">{p.agency.title}</h3>
@@ -382,7 +684,7 @@ export default function PricingPage() {
 
               <div className="pricing-compare-row">
                 <div className="pricing-row-label">{p.compare.zonesLabel}</div>
-                <div className="pricing-cell">1</div>
+                <div className="pricing-cell">{p.compare.zonesFree}</div>
                 {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
                 <div className="pricing-cell">{p.compare.unlimited}</div>
               </div>
