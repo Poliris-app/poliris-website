@@ -319,12 +319,18 @@
   border: 3px solid #fff; box-shadow: 0 0 0 1px var(--pr-border), 0 2px 6px rgba(0,0,0,0.15); cursor: pointer;
 }
 
+.pricing-calc-model-group-label {
+  font-family: var(--manrope); font-size: 10.5px; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--pr-text-faint); margin: 14px 0 8px;
+}
+.pricing-calc-model-group-label:first-of-type { margin-top: 4px; }
 .pricing-calc-model-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .pricing-calc-model-chip {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   padding: 10px 6px; border: 1px solid var(--pr-border); border-radius: 10px;
   background: var(--pr-bg); cursor: pointer; transition: border-color .15s ease, background .15s ease, transform .1s ease;
   font-family: var(--chivo); font-size: 11px; font-weight: 600; color: var(--pr-text-faint);
+  position: relative;
 }
 .pricing-calc-model-chip img { width: 20px; height: 20px; border-radius: 5px; object-fit: contain; }
 .pricing-calc-model-chip:hover { border-color: #c7d3f2; }
@@ -332,6 +338,11 @@
   border-color: var(--pr-blue); background: rgba(30,56,147,0.06); color: var(--pr-navy);
 }
 .pricing-calc-model-chip:active { transform: scale(0.97); }
+.pricing-calc-model-weight {
+  position: absolute; top: 6px; right: 6px; font-size: 9px; font-weight: 700;
+  color: var(--pr-text-faint); background: #eef0f7; border-radius: 5px; padding: 1px 4px;
+}
+.pricing-calc-model-chip.active .pricing-calc-model-weight { background: rgba(30,56,147,0.12); color: var(--pr-blue); }
 
 .pricing-calc-cadence { display: flex; gap: 8px; }
 .pricing-calc-cadence-btn {
@@ -524,6 +535,12 @@ button.pricing-compare-section-title {
 .pricing-row-label small { flex-basis: 100%; font-weight: 400; color: var(--pr-text-faint); font-size: 11.5px; margin-top: 2px; }
 .pricing-cell { display: flex; align-items: flex-start; }
 .pricing-cell.models { flex-direction: column; gap: 9px; }
+.pricing-cell.models-grouped { flex-direction: column; gap: 14px; }
+.pricing-cell-model-group { display: flex; flex-direction: column; gap: 8px; }
+.pricing-cell-model-group-label {
+  font-family: var(--manrope); font-size: 10px; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--pr-text-faint);
+}
 
 .pricing-model-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--pr-text); }
 .pricing-model-img { width: 17px; height: 17px; border-radius: 5px; flex-shrink: 0; object-fit: contain; }

@@ -45,7 +45,9 @@ const AGENCY_ICONS = [
   <svg key="manager" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 11 2 2 4-4"/></svg>,
 ];
 
-// Square icon-only marks (see public/*-logo.png).
+// Square icon-only marks (see public/*-logo.png). Used by the comparison
+// table below (generic per-provider badges — unrelated to the calculator's
+// own model list, see CALC_MODELS).
 const MODELS = [
   { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
   { logo: 'gemini-logo.png', label: 'Gemini' },
@@ -57,6 +59,49 @@ const MODELS = [
   { logo: 'grok-com-logo.png', label: 'Grok' },
 ];
 const FREE_MODELS = [MODELS[0], MODELS[3], MODELS[4], MODELS[5]];
+// Same generic badges, split by tracking method (see the `modelspecs.web_ui`
+// column) — ChatGPT and Gemini are tracked both ways, so they appear in
+// both groups; Claude/Mistral/Grok are API-only, AI Mode/AI Overviews/
+// Perplexity are web-only.
+const WEB_INTERFACE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
+const API_INTEGRATION_MODELS = [MODELS[0], MODELS[1], MODELS[2], MODELS[6], MODELS[7]];
+
+// Calculator-only model list — the real, currently-active models, not
+// generic per-provider badges. Pulled live from the `modelspecs` table
+// (generic/version/web_ui) and poliris-frontend/lib/llm-model-credits.ts's
+// AVG_CREDITS_PER_REQUEST, checked 2026-08-14. Labels follow the same
+// humanizeModelVersion() convention the product itself uses
+// (poliris-frontend/lib/utils/visibility.ts) so a visitor sees the same
+// names they'll see after signing up. Split into `web` (flat-rate,
+// browser-based tracking) and `api` (token-metered, cost scales with the
+// specific model) — same distinction the product draws between web_ui
+// models and versioned API integrations.
+const CALC_MODELS = [
+  // Web interface — flat rate, 1 credit per request regardless of provider.
+  { id: 'chatgpt-web', group: 'web', logo: 'chatgpt-com-logo.png', label: 'ChatGPT Web', weight: 1 },
+  { id: 'gemini-web', group: 'web', logo: 'gemini-logo.png', label: 'Gemini Web', weight: 1 },
+  { id: 'google-ai-mode', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Mode', weight: 1 },
+  { id: 'google-ai-overview', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Overview', weight: 1 },
+  { id: 'perplexity', group: 'web', logo: 'perplexity-ai-logo.png', label: 'Perplexity', weight: 1 },
+  // API integration — versioned, credit cost scales with the model.
+  { id: 'gpt-4o-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-4o Mini', weight: 1 },
+  { id: 'gpt-5.4-nano', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Nano', weight: 3 },
+  { id: 'gpt-5.4-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Mini', weight: 5 },
+  { id: 'gpt-5.4', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4', weight: 10 },
+  { id: 'gpt-5.5', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.5', weight: 15 },
+  { id: 'gemini-3.1-flash-lite', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.1 Flash Lite', weight: 3 },
+  { id: 'gemini-3-flash-preview', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3 Flash Preview', weight: 4 },
+  { id: 'gemini-3.5-flash', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.5 Flash', weight: 7 },
+  { id: 'gemini-3.1-pro-preview', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.1 Pro Preview', weight: 12 },
+  { id: 'claude-haiku-4-5', group: 'api', logo: 'claudeai-com-logo.png', label: 'Claude Haiku 4.5', weight: 2 },
+  { id: 'grok-4.3', group: 'api', logo: 'grok-com-logo.png', label: 'Grok 4.3', weight: 2 },
+  { id: 'mistral-small', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Small', weight: 1 },
+  { id: 'mistral-medium', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Medium', weight: 2 },
+  { id: 'mistral-large', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Large', weight: 2 },
+];
+const CALC_MODEL_BY_ID = Object.fromEntries(CALC_MODELS.map((m) => [m.id, m]));
+const CALC_WEB_MODELS = CALC_MODELS.filter((m) => m.group === 'web');
+const CALC_API_MODELS = CALC_MODELS.filter((m) => m.group === 'api');
 
 function ModelBadge({ model }) {
   return (
@@ -64,6 +109,26 @@ function ModelBadge({ model }) {
       <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt="" />
       {model.label}
     </span>
+  );
+}
+
+// One "Available models" cell, split into its two tracking-method groups
+// (web interface vs API integration) rather than a flat badge list — a
+// provider can appear in both (see WEB_INTERFACE_MODELS/API_INTEGRATION_MODELS).
+function ModelCell({ webModels, apiModels, c }) {
+  return (
+    <div className="pricing-cell models-grouped">
+      <div className="pricing-cell-model-group">
+        <span className="pricing-cell-model-group-label">{c.modelsWebLabel}</span>
+        <div className="pricing-cell models">{webModels.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
+      </div>
+      <div className="pricing-cell-model-group">
+        <span className="pricing-cell-model-group-label">{c.modelsApiLabel}</span>
+        {apiModels.length
+          ? <div className="pricing-cell models">{apiModels.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
+          : <span className="pricing-check-dash">—</span>}
+      </div>
+    </div>
   );
 }
 
@@ -82,13 +147,19 @@ function CheckRow({ label, values }) {
   );
 }
 
-// Calculator formula mirrors the site's own credit definition (see
-// pricing.faq: "A credit represents one AI model query. A standard
-// 10-prompt audit run across 3 AI models uses 30 credits") — estimated
-// credits/month = prompts tracked × brands/workspaces tracked × models
-// tracked × checks per month. Each brand is its own project, so its
-// prompts run independently at every check (see the "Projects" row).
-const CALC_CADENCE_RUNS = { daily: 30, weekly: 4 };
+// Calculator formula mirrors the app's real credit estimate (see
+// poliris-frontend/lib/llm-model-credits.ts + ProductSettingsPanel.tsx) —
+// estimated credits/month = prompts tracked × brands/workspaces tracked ×
+// Σ(each selected model's own credit weight, from CALC_MODELS above) ×
+// checks per month. Each model is picked individually now (not a per-
+// provider approximation), so this is exact for whatever's selected — no
+// floor/ceiling guess needed. Each brand is its own project, so its prompts
+// run independently at every check (see the "Projects" row).
+
+// Runs/month derived the same way the app converts a refresh interval to a
+// monthly cadence (30-day month ÷ refresh_interval_days — see
+// REFRESH_OPTIONS in product-settings/constants.ts: Daily=1, Weekly=7).
+const CALC_CADENCE_DAYS = { daily: 1, weekly: 7 };
 const CALC_METER_MAX = 3000; // Pro's monthly allotment — the meter's right edge
 
 const CALC_ICON_SOLO = (
@@ -105,9 +176,9 @@ const CALC_ICON_AGENCY = (
 // calculator's locale slice) is passed in so labels stay translatable;
 // the numbers themselves are the same across languages.
 const calcPresets = (c) => [
-  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, desc: c.presetSoloDesc, prompts: 10, sites: 1, modelIds: [0, 5], cadence: 'weekly' },
-  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, desc: c.presetTeamDesc, prompts: 20, sites: 3, modelIds: [0, 1, 2, 5], cadence: 'weekly' },
-  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, desc: c.presetAgencyDesc, prompts: 35, sites: 8, modelIds: [0, 1, 2, 3, 4, 5], cadence: 'weekly' },
+  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, desc: c.presetSoloDesc, prompts: 10, sites: 1, modelIds: ['chatgpt-web', 'perplexity'], cadence: 'weekly' },
+  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, desc: c.presetTeamDesc, prompts: 20, sites: 3, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'perplexity'], cadence: 'weekly' },
+  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, desc: c.presetAgencyDesc, prompts: 35, sites: 8, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'google-ai-mode', 'google-ai-overview', 'perplexity'], cadence: 'weekly' },
 ];
 
 // Not a keypad — a live, preset-and-slider estimator. Starts from the
@@ -124,9 +195,10 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   const [customRuns, setCustomRuns] = useState(8);
   const [activePreset, setActivePreset] = useState(presets[0].id);
 
-  const runsPerMonth = cadence === 'custom' ? customRuns : CALC_CADENCE_RUNS[cadence];
+  const runsPerMonth = cadence === 'custom' ? customRuns : 30 / CALC_CADENCE_DAYS[cadence];
   const modelsCount = modelIds.length;
-  const estimated = Math.round(prompts * sites * modelsCount * runsPerMonth);
+  const modelCreditWeight = modelIds.reduce((sum, id) => sum + (CALC_MODEL_BY_ID[id]?.weight ?? 1), 0);
+  const estimated = Math.round(prompts * sites * modelCreditWeight * runsPerMonth);
 
   let recommendedTier = 'agency';
   if (estimated <= 300) recommendedTier = 'starter';
@@ -223,20 +295,39 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
               <label>{c.modelsLabel}</label>
               <span className="pricing-calc-value">{modelsCount}</span>
             </div>
+
+            <p className="pricing-calc-model-group-label">{c.modelsWebLabel}</p>
             <div className="pricing-calc-model-grid">
-              {MODELS.map((m, i) => (
+              {CALC_WEB_MODELS.map((m) => (
                 <button
-                  key={i}
+                  key={m.id}
                   type="button"
-                  className={`pricing-calc-model-chip${modelIds.includes(i) ? ' active' : ''}`}
-                  aria-pressed={modelIds.includes(i)}
-                  onClick={() => toggleModel(i)}
+                  className={`pricing-calc-model-chip${modelIds.includes(m.id) ? ' active' : ''}`}
+                  aria-pressed={modelIds.includes(m.id)}
+                  onClick={() => toggleModel(m.id)}
                 >
                   <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
                   {m.label}
                 </button>
               ))}
             </div>
+
+            <p className="pricing-calc-model-group-label">{c.modelsApiLabel}</p>
+            <div className="pricing-calc-model-grid">
+              {CALC_API_MODELS.map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  className={`pricing-calc-model-chip${modelIds.includes(m.id) ? ' active' : ''}`}
+                  aria-pressed={modelIds.includes(m.id)}
+                  onClick={() => toggleModel(m.id)}
+                >
+                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
             <p className="pricing-calc-hint">{c.modelsHint}</p>
           </div>
 
@@ -280,8 +371,8 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
             {c.formula
               .replace('{prompts}', prompts)
               .replace('{sites}', sites)
-              .replace('{models}', modelsCount)
-              .replace('{runs}', runsPerMonth)}
+              .replace('{models}', modelCreditWeight)
+              .replace('{runs}', Number(runsPerMonth.toFixed(1)))}
           </p>
 
           <div className="pricing-calc-meter-track">
@@ -636,9 +727,9 @@ export default function PricingPage() {
 
             <div className="pricing-compare-row">
               <div className="pricing-row-label">{p.compare.modelsLabel}<small>{p.compare.modelsSub}</small></div>
-              <div className="pricing-cell models">{FREE_MODELS.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
+              <ModelCell webModels={FREE_MODELS} apiModels={[]} c={p.compare} />
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="pricing-cell models">{MODELS.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
+                <ModelCell key={i} webModels={WEB_INTERFACE_MODELS} apiModels={API_INTEGRATION_MODELS} c={p.compare} />
               ))}
             </div>
 
@@ -647,16 +738,6 @@ export default function PricingPage() {
               {['10', '100', '500', '1,000', p.compare.custom].map((v, i) => (
                 <div key={i} className="pricing-cell">{v}</div>
               ))}
-            </div>
-
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.aiShoppingLabel} <span className="pricing-tag-chip">{p.compare.aiShoppingTag}</span></div>
-              {plans.map((plan, i) => (
-                <div key={i} className="pricing-cell">
-                  {i === 0 ? <span className="pricing-check-no">{X_ICON}</span> : <span className="pricing-check-yes">{CHECK_ICON}</span>}
-                </div>
-              ))}
-              <div className="pricing-cell"><span className="pricing-check-yes">{CHECK_ICON}</span></div>
             </div>
 
             <CompareSection title={p.compare.volumeTitle}>
@@ -694,17 +775,14 @@ export default function PricingPage() {
                 <div className="pricing-cell">{p.compare.daily}</div>
                 {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCadence}</div>)}
               </div>
-              <CheckRow label={p.compare.boostLabel} values={[false, true, true, true, true]} />
               <CheckRow label={p.compare.premiumModelLabel} values={[false, true, true, true, true]} />
             </CompareSection>
 
             <CompareSection title={p.compare.platformTitle}>
               <CheckRow label={p.compare.enginesLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.countriesLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.languagesLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.teamMembersLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.exportsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.shareLinksLabel} values={[true, true, true, true, true]} />
             </CompareSection>
 
             <CompareSection title={p.compare.dashboardTitle}>
@@ -724,11 +802,9 @@ export default function PricingPage() {
             <CompareSection title={p.compare.analyzeTitle}>
               <CheckRow label={p.compare.sentimentScoreLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.perceptionLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.factCheckLabel} values={[false, true, true, true, true]} />
             </CompareSection>
 
             <CompareSection title={p.compare.actTitle}>
-              <CheckRow label={p.compare.actionCenterLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.contentOppsLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.backlinkOppsLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.contentStudioLabel} values={[true, true, true, true, true]} />
@@ -741,25 +817,12 @@ export default function PricingPage() {
 
             <CompareSection title={p.compare.measureTitle}>
               <CheckRow label={p.compare.gscLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.bingLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.referrerLabel} values={[true, true, true, true, true]} />
               <CheckRow label={p.compare.pagePerfLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.crawlerAnalyticsLabel} values={[false, false, true, true, true]} />
-              <CheckRow label={p.compare.aiRevenueLabel} values={[true, true, true, true, true]} />
+              <CheckRow label={p.compare.crawlerAnalyticsLabel} values={[true, true, true, true, true]} />
             </CompareSection>
 
             <CompareSection title={p.compare.integrationsTitle}>
-              <CheckRow label={p.compare.lookerLabel} values={[false, false, true, true, true]} />
-              <CheckRow label={p.compare.apiLabel} values={[false, false, false, true, true]} />
-              <CheckRow label={p.compare.mcpLabel} values={[false, true, true, true, true]} />
-              <CheckRow label={p.compare.alertsLabel} values={[false, false, true, true, true]} />
-              <CheckRow label={p.compare.virtualTeamsLabel} values={[false, false, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.securityTitle}>
-              <CheckRow label={p.compare.ssoLabel} values={[false, false, false, true, true]} />
-              <CheckRow label={p.compare.whiteLabelLabel} values={[false, false, false, true, true]} />
-              <CheckRow label={p.compare.customDomainLabel} values={[false, false, false, true, true]} />
+              <CheckRow label={p.compare.virtualTeamsLabel} values={[false, true, true, true, true]} />
             </CompareSection>
 
             <CompareSection title={p.compare.supportTitle}>
@@ -774,12 +837,6 @@ export default function PricingPage() {
               <div className="pricing-compare-row">
                 <div className="pricing-row-label">{p.compare.slackLabel}</div>
                 {[false, true, true, true, true].map((yes, i) => (
-                  <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-                ))}
-              </div>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.onboardingLabel}</div>
-                {[false, false, true, true, true].map((yes, i) => (
                   <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
                 ))}
               </div>
