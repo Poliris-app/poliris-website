@@ -2,14 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
-import Hero from '../components/Hero';
 import PlanCheckoutModal from '../components/PlanCheckoutModal';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
 import { APP_URL } from '../lib/appUrl';
 import '../pricing.css';
-
-const HL = ({ children }) => <span className="hl">{children}</span>;
 
 const CHECK_ICON = (
   <svg className="pricing-check" viewBox="0 0 20 20" fill="none">
@@ -270,7 +267,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
               type="range"
               min="5"
               max="50"
-              step="5"
+              step="1"
               value={prompts}
               onChange={(e) => setPromptsManual(Number(e.target.value))}
               className="pricing-calc-slider"
@@ -578,41 +575,48 @@ export default function PricingPage() {
       <Seo page="pricing" />
       <Navbar />
 
-      <Hero
-        eyebrow={p.hero.eyebrow}
-        title={<>{p.hero.titlePre}<br /><HL>{p.hero.titleHl}</HL></>}
-        lead={p.hero.lead}
-        primaryCta={p.hero.primaryCta}
-        secondaryCta={p.hero.secondaryCta}
-        note={p.hero.note}
-        bottom={<p className="pricing-trial-detail">{p.hero.trialDetail}</p>}
-        showDashboard={false}
-        showAiBand={false}
-      />
-
       <div className="pricing-wrap">
 
-        <div className="pricing-toggle-wrap">
-          <div className="pricing-currency-switch">
-            <button type="button" className={`pricing-currency-btn${!annual ? ' active' : ''}`} onClick={() => setAnnual(false)}>
-              {p.billing.monthly}
-            </button>
-            <button type="button" className={`pricing-currency-btn${annual ? ' active' : ''}`} onClick={() => setAnnual(true)}>
-              {p.billing.annual} <span className="pricing-save-badge">{p.billing.save}</span>
-            </button>
-          </div>
+        <div className="pricing-title-wrap">
+          <div className="eyebrow">{p.hero.eyebrow}</div>
+        </div>
 
-          <div className="pricing-currency-switch">
-            {Object.entries(CURRENCIES).map(([code, c]) => (
-              <button
-                key={code}
-                type="button"
-                className={`pricing-currency-btn${currency === code ? ' active' : ''}`}
-                onClick={() => setCurrency(code)}
-              >
-                {c.symbol} {c.label}
+        <div className="pricing-toggle-wrap">
+          <div className="pricing-switcher-card">
+            <div className="pricing-billing-switch">
+              <button type="button" className={`pricing-billing-label${!annual ? ' active' : ''}`} onClick={() => setAnnual(false)}>
+                {p.billing.monthly}
               </button>
-            ))}
+              <button
+                type="button"
+                role="switch"
+                aria-checked={annual}
+                aria-label={p.billing.annual}
+                className={`pricing-switch${annual ? ' on' : ''}`}
+                onClick={() => setAnnual(a => !a)}
+              >
+                <span className="pricing-switch__knob" />
+              </button>
+              <button type="button" className={`pricing-billing-label${annual ? ' active' : ''}`} onClick={() => setAnnual(true)}>
+                {p.billing.annual}
+              </button>
+              <span className="pricing-save-badge">{p.billing.save}</span>
+            </div>
+
+            <div className="pricing-switcher-divider" />
+
+            <div className="pricing-currency-switch">
+              {Object.entries(CURRENCIES).map(([code, c]) => (
+                <button
+                  key={code}
+                  type="button"
+                  className={`pricing-currency-btn${currency === code ? ' active' : ''}`}
+                  onClick={() => setCurrency(code)}
+                >
+                  {c.symbol} {c.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -634,23 +638,29 @@ export default function PricingPage() {
               )}
               <div className="pricing-plan-name">{plan.name}</div>
               <div className="pricing-plan-desc">{plan.desc}</div>
-              <div className="pricing-price-row">
+              <div className={`pricing-price-row${plan.firstMonthCredits ? ' has-first-month-tip' : ''}`} tabIndex={plan.firstMonthCredits ? 0 : undefined}>
                 <span className="pricing-price">{symbol}{priceFor(plan, annual)}</span>
                 <span className="pricing-price-period">/mo</span>
+                {plan.firstMonthCredits && (
+                  <span className="pricing-first-month-tip">
+                    <span className="pricing-first-month-x2">×2</span>
+                    <div className="pricing-first-month-tooltip" role="tooltip">
+                      <div className="pricing-first-month-tooltip-head">
+                        <span className="pricing-first-month-tooltip-x2">×2</span>
+                        <span className="pricing-first-month-tooltip-title">{p.firstMonthTitle}</span>
+                      </div>
+                      <p className="pricing-first-month-tooltip-body">
+                        <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>{' '}
+                        <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
+                      </p>
+                    </div>
+                  </span>
+                )}
               </div>
-              {annual && plan.tier !== 'free' && (
+              {annual && plan.tier !== 'free' ? (
                 <div className="pricing-billed-annually">
                   {p.billing.billedAnnually.replace('{amount}', `${symbol}${annualTotalFor(plan)}`)}
                 </div>
-              )}
-              {plan.firstMonthCredits ? (
-                <span className="pricing-first-month-badge">
-                  <span className="pricing-first-month-x2">×2</span>
-                  <span className="pricing-first-month-text">
-                    <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>
-                    <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
-                  </span>
-                </span>
               ) : (
                 <div className="pricing-price-annual-note">&nbsp;</div>
               )}
@@ -660,7 +670,29 @@ export default function PricingPage() {
               </div>
               <div className="pricing-divider" />
               <ul className="pricing-features">
-                {plan.features.map((f, j) => <li key={j}>{CHECK_ICON}{f}</li>)}
+                {plan.features.map((f, j) => (
+                  <li key={j}>
+                    {CHECK_ICON}
+                    <span>
+                      {f}
+                      {/* 3rd feature on Free ("2 AI models") and Starter ("Access to all API models")
+                          — see pricing.plans[0].features / pricing.plans[1].features */}
+                      {(plan.tier === 'free' || plan.tier === 'starter') && j === 2 && (
+                        <span className="pricing-feature-models">
+                          {MODELS.map((m) => (
+                            <img
+                              key={m.label}
+                              className="pricing-feature-model-icon"
+                              src={`${import.meta.env.BASE_URL}${m.logo}`}
+                              alt={m.label}
+                              title={m.label}
+                            />
+                          ))}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
               </ul>
               <button type="button" className="pricing-cta" onClick={() => handleSelectPlan(plan)}>{isCurrentPlan ? p.currentPlanCta : plan.cta} {ARROW_ICON}</button>
             </div>
