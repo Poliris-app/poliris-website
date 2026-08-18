@@ -55,7 +55,7 @@ const MODELS = [
   { logo: 'mistral-ai-logo.png', label: 'Mistral' },
   { logo: 'grok-com-logo.png', label: 'Grok' },
 ];
-const FREE_MODELS = [MODELS[0], MODELS[3], MODELS[4], MODELS[5]];
+const FREE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
 // Same generic badges, split by tracking method (see the `modelspecs.web_ui`
 // column) — ChatGPT and Gemini are tracked both ways, so they appear in
 // both groups; Claude/Mistral/Grok are API-only, AI Mode/AI Overviews/
@@ -676,10 +676,11 @@ export default function PricingPage() {
                     <span>
                       {f}
                       {/* 3rd feature on Free ("2 AI models") and Starter ("Access to all API models")
-                          — see pricing.plans[0].features / pricing.plans[1].features */}
+                          — see pricing.plans[0].features / pricing.plans[1].features. Free only ever
+                          gets its own FREE_MODELS subset; Starter (and up) get every provider. */}
                       {(plan.tier === 'free' || plan.tier === 'starter') && j === 2 && (
                         <span className="pricing-feature-models">
-                          {MODELS.map((m) => (
+                          {(plan.tier === 'free' ? FREE_MODELS : MODELS).map((m) => (
                             <img
                               key={m.label}
                               className="pricing-feature-model-icon"
