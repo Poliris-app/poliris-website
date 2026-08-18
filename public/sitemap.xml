@@ -1,213 +1,277 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- ==================== HOME PAGE ==================== -->
   <url>
     <loc>https://poliris.io/en/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/"/>
     <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/visibility</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/visibility"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/visibility"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/visibility"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/sentiment</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/sentiment"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/sentiment"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/sentiment"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/technical-audit</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/technical-audit"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/technical-audit"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/technical-audit"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/content-writing</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/content-writing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/content-writing"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/content-writing"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/blog</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success"/>
-    <lastmod>2026-06-23</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/blog/death-of-traditional-search-geo-priority</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority"/>
-    <lastmod>2026-06-30</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/faqs</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/faqs"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/faqs"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/faqs"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/glossary</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/glossary"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/glossary"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/glossary"/>
-    <lastmod>2026-06-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/docs</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/docs"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/docs"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs"/>
-    <lastmod>2026-07-03</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/demo</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/demo"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/demo"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/demo"/>
-    <lastmod>2026-07-03</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/privacy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/privacy"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/privacy"/>
-    <lastmod>2026-07-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/terms"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/terms"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/terms"/>
-    <lastmod>2026-07-16</lastmod>
-  </url>
-  <url>
-    <loc>https://poliris.io/en/mentions-legales</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/mentions-legales"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/mentions-legales"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/mentions-legales"/>
-    <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/" />
   </url>
   <url>
     <loc>https://poliris.io/fr/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/" />
+  </url>
+
+  <!-- ==================== VISIBILITY ==================== -->
+  <url>
+    <loc>https://poliris.io/en/visibility</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/visibility" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/visibility" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/visibility" />
   </url>
   <url>
     <loc>https://poliris.io/fr/visibility</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/visibility"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/visibility"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/visibility"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/visibility" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/visibility" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/visibility" />
+  </url>
+
+  <!-- ==================== SENTIMENT ==================== -->
+  <url>
+    <loc>https://poliris.io/en/sentiment</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/sentiment" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/sentiment" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/sentiment" />
   </url>
   <url>
     <loc>https://poliris.io/fr/sentiment</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/sentiment"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/sentiment"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/sentiment"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/sentiment" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/sentiment" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/sentiment" />
+  </url>
+
+  <!-- ==================== TECHNICAL AUDIT ==================== -->
+  <url>
+    <loc>https://poliris.io/en/technical-audit</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/technical-audit" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/technical-audit" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/technical-audit" />
   </url>
   <url>
     <loc>https://poliris.io/fr/technical-audit</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/technical-audit"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/technical-audit"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/technical-audit"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/technical-audit" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/technical-audit" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/technical-audit" />
+  </url>
+
+  <!-- ==================== CONTENT WRITING ==================== -->
+  <url>
+    <loc>https://poliris.io/en/content-writing</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/content-writing" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/content-writing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/content-writing" />
   </url>
   <url>
     <loc>https://poliris.io/fr/content-writing</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/content-writing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/content-writing"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/content-writing"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/content-writing" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/content-writing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/content-writing" />
+  </url>
+
+  <!-- ==================== BLOG INDEX ==================== -->
+  <url>
+    <loc>https://poliris.io/en/blog</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog" />
   </url>
   <url>
     <loc>https://poliris.io/fr/blog</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog" />
+  </url>
+
+  <!-- ==================== BLOG POST 1 ==================== -->
+  <url>
+    <loc>https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success</loc>
+    <lastmod>2026-06-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
   </url>
   <url>
     <loc>https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success"/>
     <lastmod>2026-06-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
+  </url>
+
+  <!-- ==================== BLOG POST 2 ==================== -->
+  <url>
+    <loc>https://poliris.io/en/blog/death-of-traditional-search-geo-priority</loc>
+    <lastmod>2026-06-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
   </url>
   <url>
     <loc>https://poliris.io/fr/blog/death-of-traditional-search-geo-priority</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority"/>
     <lastmod>2026-06-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
+  </url>
+
+<!-- ==================== BLOG POST 3 ==================== -->
+  <url>
+    <loc>https://poliris.io/en/blog/entity-based-seo</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/entity-based-seo" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/entity-based-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/entity-based-seo" />
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/blog/entity-based-seo</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/entity-based-seo" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/entity-based-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/entity-based-seo" />
+  </url>
+
+<!-- ==================== BLOG POST 4 ==================== -->
+  <url>
+    <loc>https://poliris.io/en/blog/beyond-keywords-ai-content-generation</loc>
+    <lastmod>2026-08-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/beyond-keywords-ai-content-generation" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/blog/beyond-keywords-ai-content-generation</loc>
+    <lastmod>2026-08-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/beyond-keywords-ai-content-generation" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
+  </url>
+
+  <!-- ==================== FAQS ==================== -->
+  <url>
+    <loc>https://poliris.io/en/faqs</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/faqs" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/faqs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/faqs" />
   </url>
   <url>
     <loc>https://poliris.io/fr/faqs</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/faqs"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/faqs"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/faqs"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/faqs" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/faqs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/faqs" />
+  </url>
+
+  <!-- ==================== GLOSSARY ==================== -->
+  <url>
+    <loc>https://poliris.io/en/glossary</loc>
+    <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/glossary" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/glossary" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/glossary" />
   </url>
   <url>
     <loc>https://poliris.io/fr/glossary</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/glossary"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/glossary"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/glossary"/>
     <lastmod>2026-06-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/glossary" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/glossary" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/glossary" />
+  </url>
+
+  <!-- ==================== DOCS ==================== -->
+  <url>
+    <loc>https://poliris.io/en/docs</loc>
+    <lastmod>2026-07-03</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/docs" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/docs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs" />
   </url>
   <url>
     <loc>https://poliris.io/fr/docs</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/docs"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/docs"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs"/>
     <lastmod>2026-07-03</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/docs" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/docs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs" />
+  </url>
+
+  <!-- ==================== DEMO ==================== -->
+  <url>
+    <loc>https://poliris.io/en/demo</loc>
+    <lastmod>2026-07-03</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/demo" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/demo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/demo" />
   </url>
   <url>
     <loc>https://poliris.io/fr/demo</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/demo"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/demo"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/demo"/>
     <lastmod>2026-07-03</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/demo" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/demo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/demo" />
+  </url>
+
+  <!-- ==================== PRIVACY ==================== -->
+  <url>
+    <loc>https://poliris.io/en/privacy</loc>
+    <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/privacy" />
   </url>
   <url>
     <loc>https://poliris.io/fr/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/privacy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/privacy"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/privacy"/>
     <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/privacy" />
+  </url>
+
+  <!-- ==================== TERMS ==================== -->
+  <url>
+    <loc>https://poliris.io/en/terms</loc>
+    <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/terms" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/terms" />
   </url>
   <url>
     <loc>https://poliris.io/fr/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/terms"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/terms"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/terms"/>
     <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/terms" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/terms" />
+  </url>
+
+  <!-- ==================== MENTIONS LEGALES ==================== -->
+  <url>
+    <loc>https://poliris.io/en/mentions-legales</loc>
+    <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/mentions-legales" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/mentions-legales" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/mentions-legales" />
   </url>
   <url>
     <loc>https://poliris.io/fr/mentions-legales</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/mentions-legales"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/mentions-legales"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/mentions-legales"/>
     <lastmod>2026-07-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/mentions-legales" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/mentions-legales" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/mentions-legales" />
   </url>
+
 </urlset>
