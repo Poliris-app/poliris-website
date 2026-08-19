@@ -54,8 +54,17 @@ const MODELS = [
   { logo: 'perplexity-ai-logo.png', label: 'Perplexity' },
   { logo: 'mistral-ai-logo.png', label: 'Mistral' },
   { logo: 'grok-com-logo.png', label: 'Grok' },
+  { logo: 'deepseek.png', label: 'DeepSeek' },
 ];
 const FREE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
+// Teaser icon set for the Free plan's "10 providers" bullet — a marketing
+// preview of the full provider lineup (not FREE_MODELS' actual Free-tier
+// access list), so the duplicate Google entry is swapped for Claude and
+// the rest are collapsed into a "+5" chip instead of wrapping.
+const FREE_FEATURE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[2], MODELS[5]];
+// Whatever's in MODELS but not already shown as an icon above — named in
+// the "+N" chip's tooltip so the count and the list can't drift apart.
+const FREE_FEATURE_MODELS_REST = MODELS.filter((m) => !FREE_FEATURE_MODELS.includes(m));
 // Same generic badges, split by tracking method (see the `modelspecs.web_ui`
 // column) — ChatGPT and Gemini are tracked both ways, so they appear in
 // both groups; Claude/Mistral/Grok are API-only, AI Mode/AI Overviews/
@@ -95,10 +104,27 @@ const CALC_MODELS = [
   { id: 'mistral-small', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Small', weight: 1 },
   { id: 'mistral-medium', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Medium', weight: 2 },
   { id: 'mistral-large', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Large', weight: 2 },
+  { id: 'deepseek-v3', group: 'api', logo: 'deepseek.png', label: 'DeepSeek V3', weight: 2 },
 ];
 const CALC_MODEL_BY_ID = Object.fromEntries(CALC_MODELS.map((m) => [m.id, m]));
 const CALC_WEB_MODELS = CALC_MODELS.filter((m) => m.group === 'web');
 const CALC_API_MODELS = CALC_MODELS.filter((m) => m.group === 'api');
+// The API-integration picker shows one chip per provider instead of every
+// version — each still points at a real CALC_MODELS id/weight (its
+// flagship tier), so toggling it drives the same credit math as before;
+// only the label is simplified to the provider name. CALC_API_MODELS
+// itself stays the full versioned list for anything needing that detail.
+const CALC_API_MODELS_UI = [
+  { ...CALC_MODEL_BY_ID['gpt-5.5'], label: 'ChatGPT' },
+  { ...CALC_MODEL_BY_ID['gemini-3.1-pro-preview'], label: 'Gemini' },
+  { ...CALC_MODEL_BY_ID['claude-haiku-4-5'], label: 'Claude' },
+  { ...CALC_MODEL_BY_ID['mistral-large'], label: 'Mistral' },
+  { ...CALC_MODEL_BY_ID['deepseek-v3'], label: 'DeepSeek' },
+  { ...CALC_MODEL_BY_ID['grok-4.3'], label: 'Grok' },
+];
+// Every id the picker can show — "Select all" toggles between this and a
+// single fallback so at least one model always stays selected.
+const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) => m.id);
 
 function ModelBadge({ model }) {
   return (
@@ -173,9 +199,9 @@ const CALC_ICON_AGENCY = (
 // calculator's locale slice) is passed in so labels stay translatable;
 // the numbers themselves are the same across languages.
 const calcPresets = (c) => [
-  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, desc: c.presetSoloDesc, prompts: 10, sites: 1, modelIds: ['chatgpt-web', 'perplexity'], cadence: 'weekly' },
-  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, desc: c.presetTeamDesc, prompts: 20, sites: 3, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'perplexity'], cadence: 'weekly' },
-  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, desc: c.presetAgencyDesc, prompts: 35, sites: 8, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'google-ai-mode', 'google-ai-overview', 'perplexity'], cadence: 'weekly' },
+  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, desc: c.presetSoloDesc, sites: 1, modelIds: ['chatgpt-web', 'perplexity'], cadence: 'weekly' },
+  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, desc: c.presetTeamDesc, sites: 3, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'perplexity'], cadence: 'weekly' },
+  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, desc: c.presetAgencyDesc, sites: 8, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'google-ai-mode', 'google-ai-overview', 'perplexity'], cadence: 'weekly' },
 ];
 
 // Not a keypad — a live, preset-and-slider estimator. Starts from the
@@ -185,15 +211,20 @@ const calcPresets = (c) => [
 // then recommends the cheapest plan that comfortably covers it.
 function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   const presets = calcPresets(c);
-  const [prompts, setPrompts] = useState(presets[0].prompts);
+  const [prompts, setPrompts] = useState(10);
   const [sites, setSites] = useState(presets[0].sites);
   const [modelIds, setModelIds] = useState(presets[0].modelIds);
   const [cadence, setCadence] = useState(presets[0].cadence);
   const [customRuns, setCustomRuns] = useState(8);
   const [activePreset, setActivePreset] = useState(presets[0].id);
 
-  const runsPerMonth = cadence === 'custom' ? customRuns : 30 / CALC_CADENCE_DAYS[cadence];
-  const modelsCount = modelIds.length;
+  // Rounded once, here — daily/weekly cadence is really a repeating rate
+  // (30/7 checks a month for "weekly"), but showing that full-precision
+  // number both feeds the total AND is what the formula line displays.
+  // Round it to the same one decimal a human would use by hand, so
+  // multiplying out the formula text always reproduces the shown total —
+  // no separate rounded-for-display vs exact-for-math copies to drift apart.
+  const runsPerMonth = cadence === 'custom' ? customRuns : Number((30 / CALC_CADENCE_DAYS[cadence]).toFixed(1));
   const modelCreditWeight = modelIds.reduce((sum, id) => sum + (CALC_MODEL_BY_ID[id]?.weight ?? 1), 0);
   const estimated = Math.round(prompts * sites * modelCreditWeight * runsPerMonth);
 
@@ -202,20 +233,32 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   else if (estimated <= 1500) recommendedTier = 'growth';
   else if (estimated <= 3000) recommendedTier = 'pro';
   const recommendedPlan = plans.find((pl) => pl.tier === recommendedTier);
+  // Agency has no fixed monthly allotment (custom/unlimited), so there's
+  // nothing to subtract the estimate from — spareCredits stays null.
+  const planCredits = recommendedPlan?.monthlyCredits ? Number(recommendedPlan.monthlyCredits.replace(/,/g, '')) : null;
+  const spareCredits = planCredits !== null ? Math.max(0, planCredits - estimated) : null;
 
+  const allModelsSelected = ALL_CALC_MODEL_IDS.every((id) => modelIds.includes(id));
+
+  // Presets seed the AI models + check frequency — the actual "shape" of a
+  // Solo/Team/Agency setup — plus a starting product count. They deliberately
+  // don't touch prompts: how many prompts you track per product is a
+  // personal-preference dial, not something that defines which preset
+  // you're in, so it always starts at 10 and only moves when you drag it.
   const applyPreset = (preset) => {
-    setPrompts(preset.prompts);
     setSites(preset.sites);
     setModelIds(preset.modelIds);
     setCadence(preset.cadence);
     setActivePreset(preset.id);
   };
 
-  // Any manual tweak breaks away from whichever preset was selected —
-  // these wrap the raw setters so the presets grid stops claiming credit
-  // for a configuration the user has since changed.
-  const setPromptsManual = (v) => { setPrompts(v); setActivePreset(null); };
-  const setSitesManual = (v) => { setSites(Math.max(1, Math.min(10, v))); setActivePreset(null); };
+  // Products and prompts are just numbers layered on top of a preset, not
+  // part of what makes it "Solo" vs "Team" vs "Agency" — adjusting either
+  // keeps the preset pill selected. Only changing the AI models or check
+  // frequency actually breaks from the preset, since those are what the
+  // preset itself defines.
+  const setPromptsManual = (v) => { setPrompts(v); };
+  const setSitesManual = (v) => { setSites(Math.max(1, Math.min(10, v))); };
   const setCadenceManual = (v) => { setCadence(v); setActivePreset(null); };
   const setCustomRunsManual = (v) => { setCustomRuns(v); setActivePreset(null); };
   const toggleModel = (id) => {
@@ -226,71 +269,78 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
     ));
     setActivePreset(null);
   };
+  const toggleAllModels = () => {
+    setModelIds(allModelsSelected ? [ALL_CALC_MODEL_IDS[0]] : ALL_CALC_MODEL_IDS);
+    setActivePreset(null);
+  };
 
   return (
     <div className="pricing-calc-wrap">
-      <div className="pricing-calc-head">
-        <span className="pricing-calc-eyebrow">{c.eyebrow}</span>
-        <h2>{c.title}</h2>
-        <p>{c.subtitle}</p>
-      </div>
-
       <div className="pricing-calc-card">
+
+        <div className="pricing-calc-head">
+          <div className="pricing-calc-head-copy">
+            <h2>{c.title}</h2>
+            <p>{c.subtitle}</p>
+          </div>
+          <div className="pricing-calc-presets">
+            {presets.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                className={`pricing-calc-preset-pill${activePreset === preset.id ? ' active' : ''}`}
+                aria-pressed={activePreset === preset.id}
+                onClick={() => applyPreset(preset)}
+              >
+                <span className="pricing-calc-preset-pill-icon">{preset.icon}</span>
+                {preset.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="pricing-calc-inputs">
 
-          <div className="pricing-calc-presets">
-            <p className="pricing-calc-presets-label">{c.presetsLabel}</p>
-            <div className="pricing-calc-presets-grid">
-              {presets.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  className={`pricing-calc-preset-card${activePreset === preset.id ? ' active' : ''}`}
-                  aria-pressed={activePreset === preset.id}
-                  onClick={() => applyPreset(preset)}
-                >
-                  <span className="pricing-calc-preset-icon">{preset.icon}</span>
-                  <span className="pricing-calc-preset-title">{preset.label}</span>
-                  <span className="pricing-calc-preset-desc">{preset.desc}</span>
-                </button>
-              ))}
+          <div className="pricing-calc-field-outline">
+            <div className="pricing-calc-field pricing-calc-field-stepper">
+              <div className="pricing-calc-field-copy">
+                <label>{c.sitesLabel}</label>
+                <p className="pricing-calc-field-sub">{c.sitesSub}</p>
+              </div>
+              <div className="pricing-calc-stepper">
+                <button type="button" className="pricing-calc-stepper-btn" aria-label="Decrease" onClick={() => setSitesManual(sites - 1)}>−</button>
+                <span className="pricing-calc-stepper-value">{sites}</span>
+                <button type="button" className="pricing-calc-stepper-btn pricing-calc-stepper-btn--fill" aria-label="Increase" onClick={() => setSitesManual(sites + 1)}>+</button>
+              </div>
             </div>
-          </div>
-
-          <div className="pricing-calc-field">
-            <div className="pricing-calc-field-head">
-              <label htmlFor="calc-prompts">{c.promptsLabel}</label>
-              <span className="pricing-calc-value">{prompts}</span>
-            </div>
-            <input
-              id="calc-prompts"
-              type="range"
-              min="5"
-              max="50"
-              step="1"
-              value={prompts}
-              onChange={(e) => setPromptsManual(Number(e.target.value))}
-              className="pricing-calc-slider"
-            />
-            <p className="pricing-calc-hint">{c.promptsHint}</p>
-          </div>
-
-          <div className="pricing-calc-field pricing-calc-field-stepper">
-            <div className="pricing-calc-stepper-text">
-              <label>{c.sitesLabel}</label>
-              <p className="pricing-calc-hint">{c.sitesHint}</p>
-            </div>
-            <div className="pricing-calc-stepper">
-              <button type="button" className="pricing-calc-stepper-btn" aria-label="Decrease" onClick={() => setSitesManual(sites - 1)}>−</button>
-              <span className="pricing-calc-stepper-value">{sites}</span>
-              <button type="button" className="pricing-calc-stepper-btn" aria-label="Increase" onClick={() => setSitesManual(sites + 1)}>+</button>
+            
+            <div className="pricing-calc-field">
+              <div className="pricing-calc-field-head">
+                <div className="pricing-calc-field-copy">
+                  <label htmlFor="calc-prompts">{c.promptsLabel}</label>
+                  <p className="pricing-calc-field-sub">{c.promptsSub}</p>
+                </div>
+                <span className="pricing-calc-value">{prompts}</span>
+              </div>
+              <input
+                id="calc-prompts"
+                type="range"
+                min="5"
+                max="50"
+                step="1"
+                value={prompts}
+                onChange={(e) => setPromptsManual(Number(e.target.value))}
+                className="pricing-calc-slider"
+              />
             </div>
           </div>
 
           <div className="pricing-calc-field">
             <div className="pricing-calc-field-head">
               <label>{c.modelsLabel}</label>
-              <span className="pricing-calc-value">{modelsCount}</span>
+              <button type="button" className="pricing-calc-select-all" onClick={toggleAllModels}>
+                {allModelsSelected ? c.modelsDeselectAll : c.modelsSelectAll}
+              </button>
             </div>
 
             <p className="pricing-calc-model-group-label">{c.modelsWebLabel}</p>
@@ -311,7 +361,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
 
             <p className="pricing-calc-model-group-label">{c.modelsApiLabel}</p>
             <div className="pricing-calc-model-grid">
-              {CALC_API_MODELS.map((m) => (
+              {CALC_API_MODELS_UI.map((m) => (
                 <button
                   key={m.id}
                   type="button"
@@ -324,13 +374,12 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                 </button>
               ))}
             </div>
-
-            <p className="pricing-calc-hint">{c.modelsHint}</p>
           </div>
 
           <div className="pricing-calc-field">
-            <div className="pricing-calc-field-head">
+            <div className="pricing-calc-field-copy">
               <label>{c.cadenceLabel}</label>
+              <p className="pricing-calc-field-sub">{c.cadenceSub.replace('{runs}', Math.round(runsPerMonth))}</p>
             </div>
             <div className="pricing-calc-cadence">
               <button type="button" className={`pricing-calc-cadence-btn${cadence === 'daily' ? ' active' : ''}`} onClick={() => setCadenceManual('daily')}>{c.cadenceDaily}</button>
@@ -358,51 +407,45 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
 
         </div>
 
-        <div className="pricing-calc-result">
-          <span className="pricing-calc-result-eyebrow">{c.resultEyebrow}</span>
-          <div className="pricing-calc-result-number">
-            {estimated.toLocaleString()}
-            <span>{c.resultUnit}</span>
-          </div>
-          <p className="pricing-calc-formula">
-            {c.formula
-              .replace('{prompts}', prompts)
-              .replace('{sites}', sites)
-              .replace('{models}', modelCreditWeight)
-              .replace('{runs}', Number(runsPerMonth.toFixed(1)))}
-          </p>
-
-          <div className="pricing-calc-meter-track">
-            <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
-            {[300, 1500].map((mark) => (
-              <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
-            ))}
-          </div>
-          <div className="pricing-calc-meter-labels">
-            <span>{plans[1].name}</span>
-            <span>{plans[2].name}</span>
-            <span>{plans[3].name}</span>
-          </div>
-
-          <div className="pricing-calc-divider" />
-
-          <ul className="pricing-calc-facts">
-            {c.facts.map((f, i) => <li key={i}>{CHECK_ICON}{f}</li>)}
-          </ul>
-
-          <div className="pricing-calc-recommend-group">
-            <div className="pricing-calc-recommend">
-              <span className="pricing-calc-recommend-pre">{c.recommendedPre}</span>
-              <span className="pricing-calc-recommend-plan">{recommendedTier === 'agency' ? agencyLabel : recommendedPlan.name}</span>
-              <span className="pricing-calc-recommend-post">{c.recommendedPost}</span>
-              <button type="button" className="pricing-calc-cta" onClick={() => onRecommend(recommendedTier)}>
-                {recommendedTier === 'agency' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
-              </button>
+        <div className="pricing-calc-summary">
+          <div className="pricing-calc-summary-stats">
+            <div className="pricing-calc-summary-number">
+              {estimated.toLocaleString()}<span>{c.resultUnit}</span>
             </div>
-
-            <p className="pricing-calc-note">{c.firstMonthNote}</p>
+            <p className="pricing-calc-summary-formula">
+              {c.formula
+                .replace('{prompts}', prompts)
+                .replace('{sites}', sites)
+                .replace('{sitesWord}', sites === 1 ? c.brandWord : c.brandsWord)
+                .replace('{models}', modelCreditWeight)
+                .replace('{modelsWord}', modelCreditWeight === 1 ? c.modelWord : c.modelsWord)
+                .replace('{runs}', runsPerMonth)}
+            </p>
           </div>
+
+          <div className="pricing-calc-summary-fit">
+            <div className="pricing-calc-summary-fit-head">
+              <span className="pricing-calc-summary-fit-label">
+                {c.fitsPre} {recommendedTier === 'agency' ? agencyLabel : recommendedPlan.name}
+              </span>
+              {spareCredits !== null && (
+                <span className="pricing-calc-summary-spare">{c.spareCredits.replace('{n}', spareCredits.toLocaleString())}</span>
+              )}
+            </div>
+            <div className="pricing-calc-meter-track">
+              <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
+              {[300, 1500].map((mark) => (
+                <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
+              ))}
+            </div>
+          </div>
+
+          <button type="button" className="pricing-calc-cta" onClick={() => onRecommend(recommendedTier)}>
+            {recommendedTier === 'agency' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
+            {ARROW_ICON}
+          </button>
         </div>
+
       </div>
     </div>
   );
@@ -640,22 +683,27 @@ export default function PricingPage() {
               <div className="pricing-plan-desc">{plan.desc}</div>
               <div className={`pricing-price-row${plan.firstMonthCredits ? ' has-first-month-tip' : ''}`} tabIndex={plan.firstMonthCredits ? 0 : undefined}>
                 <span className="pricing-price">{symbol}{priceFor(plan, annual)}</span>
-                <span className="pricing-price-period">/mo</span>
-                {plan.firstMonthCredits && (
-                  <span className="pricing-first-month-tip">
-                    <span className="pricing-first-month-x2">×2</span>
-                    <div className="pricing-first-month-tooltip" role="tooltip">
-                      <div className="pricing-first-month-tooltip-head">
-                        <span className="pricing-first-month-tooltip-x2">×2</span>
-                        <span className="pricing-first-month-tooltip-title">{p.firstMonthTitle}</span>
+                <div className="pricing-price-meta">
+                  <span className="pricing-price-period">/mo</span>
+                  {plan.firstMonthCredits && (
+                    <div className="pricing-first-month-tip">
+                      <span className="pricing-first-month-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8"/><path d="M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8"/></svg>
+                        {p.bonusCredits}
+                      </span>
+                      <div className="pricing-first-month-tooltip" role="tooltip">
+                        <div className="pricing-first-month-tooltip-head">
+                          <span className="pricing-first-month-tooltip-x2">×2</span>
+                          <span className="pricing-first-month-tooltip-title">{p.firstMonthTitle}</span>
+                        </div>
+                        <p className="pricing-first-month-tooltip-body">
+                          <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>{' '}
+                          <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
+                        </p>
                       </div>
-                      <p className="pricing-first-month-tooltip-body">
-                        <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>{' '}
-                        <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
-                      </p>
                     </div>
-                  </span>
-                )}
+                  )}
+                </div>
               </div>
               {annual && plan.tier !== 'free' ? (
                 <div className="pricing-billed-annually">
@@ -675,12 +723,32 @@ export default function PricingPage() {
                     {CHECK_ICON}
                     <span>
                       {f}
-                      {/* 3rd feature on Free ("2 AI models") and Starter ("Access to all API models")
-                          — see pricing.plans[0].features / pricing.plans[1].features. Free only ever
-                          gets its own FREE_MODELS subset; Starter (and up) get every provider. */}
-                      {(plan.tier === 'free' || plan.tier === 'starter') && j === 2 && (
+                      {/* 3rd feature on Free ("10 providers") and Starter ("Access to all API models")
+                          — see pricing.plans[0].features / pricing.plans[1].features. Free shows a
+                          5-icon teaser (FREE_FEATURE_MODELS) plus a "+N" chip (N = FREE_FEATURE_MODELS_REST.length)
+                          instead of its real FREE_MODELS access list; Starter (and up) get every provider. */}
+                      {plan.tier === 'free' && j === 2 && (
                         <span className="pricing-feature-models">
-                          {(plan.tier === 'free' ? FREE_MODELS : MODELS).map((m) => (
+                          {FREE_FEATURE_MODELS.map((m) => (
+                            <img
+                              key={m.label}
+                              className="pricing-feature-model-icon"
+                              src={`${import.meta.env.BASE_URL}${m.logo}`}
+                              alt={m.label}
+                              title={m.label}
+                            />
+                          ))}
+                          <span className="pricing-feature-model-more-wrap" tabIndex={0}>
+                            <span className="pricing-feature-model-more">+{FREE_FEATURE_MODELS_REST.length}</span>
+                            <div className="pricing-feature-model-tooltip" role="tooltip">
+                              {FREE_FEATURE_MODELS_REST.map((m) => m.label).join(', ')}
+                            </div>
+                          </span>
+                        </span>
+                      )}
+                      {plan.tier === 'starter' && j === 2 && (
+                        <span className="pricing-feature-models">
+                          {MODELS.map((m) => (
                             <img
                               key={m.label}
                               className="pricing-feature-model-icon"
