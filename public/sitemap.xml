@@ -210,6 +210,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs" />
   </url>
 
+  <!-- ==================== PRICING ==================== -->
+  <url>
+    <loc>https://poliris.io/en/pricing</loc>
+    <lastmod>2026-08-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/pricing" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/pricing" />
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/pricing</loc>
+    <lastmod>2026-08-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/pricing" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/pricing" />
+  </url>
+
   <!-- ==================== DEMO ==================== -->
   <url>
     <loc>https://poliris.io/en/demo</loc>

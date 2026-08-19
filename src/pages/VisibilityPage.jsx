@@ -11,6 +11,69 @@ import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
+/* ── Source intelligence table (03 · SOURCE INTELLIGENCE) ─────────────── */
+const SortIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+);
+const ChevronIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><path d="m6 9 6 6 6-6"/></svg>
+);
+
+/* Favicon marks for source domains we don't have a saved logo file for. */
+const TomsGuideIcon = () => (
+  <svg viewBox="0 0 22 22" width="22" height="22"><rect width="22" height="22" rx="6" fill="#1f6fe5"/><path d="M8 6h6M11 6v10" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/></svg>
+);
+const GoogleGIcon = () => (
+  <svg viewBox="0 0 48 48" width="16" height="16">
+    <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+    <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.11-7.45 2.11-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+    <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/>
+    <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+  </svg>
+);
+const ShopeeIcon = () => (
+  <svg viewBox="0 0 22 22" width="22" height="22">
+    <rect width="22" height="22" rx="6" fill="#ee4d2d"/>
+    <path d="M8 9.5c0-1.93 1.34-3.5 3-3.5s3 1.57 3 3.5" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
+    <path d="M6.7 9h8.6l-.72 7.13c-.1.96-.91 1.7-1.88 1.7H9.3c-.97 0-1.78-.74-1.88-1.7L6.7 9z" fill="#fff"/>
+  </svg>
+);
+const SOURCE_FAVICONS = { tomsguide: TomsGuideIcon, google: GoogleGIcon, shopee: ShopeeIcon };
+
+/* Competitor pill color is keyed by brand, not row position — the same
+   brand always reads the same color wherever it's cited. */
+const COMPETITOR_COLORS = ['teal', 'purple', 'pink', 'blue'];
+const COMPETITOR_COLOR_MAP = {
+  'Adidas': 'teal', 'HOKA': 'teal',
+  'New Balance': 'purple', 'ASICS': 'purple', 'Brooks': 'purple',
+  'Puma': 'pink', 'Saucony': 'pink', 'Under Armour': 'pink', 'World Balance': 'pink',
+  'On': 'blue',
+};
+function competitorColor(name) {
+  if (COMPETITOR_COLOR_MAP[name]) return COMPETITOR_COLOR_MAP[name];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  return COMPETITOR_COLORS[hash % COMPETITOR_COLORS.length];
+}
+
+const SOURCE_ROWS = [
+  { domain: 'youtube.com', logo: 'youtube-com-logo.png', typeKey: 'social', authority: 'high', citation: 'mention',
+    url: 'https://www.youtube.com/watch?v=pJmxeHjZYcs',
+    competitors: ['Adidas', 'New Balance', 'ASICS', 'Puma', 'On', 'HOKA', 'Brooks'] },
+  { domain: 'whowhatwear.com', logo: 'whowhatwear-com-logo.png', typeKey: 'news', authority: 'high', citation: 'uncited',
+    url: 'https://www.whowhatwear.com/fashion/shoes/best-minimal-trainers-for-women',
+    competitors: ['Adidas', 'Puma', 'On'] },
+  { domain: 'tomsguide.com', icon: 'tomsguide', typeKey: 'news', authority: 'high', citation: 'mention',
+    url: 'https://www.tomsguide.com/wellness/running/we-asked-toms-guide-readers-what-brand-of-running-shoes-they-wear-and-there-was-a-clear-winner?utm_source=chatgpt.com',
+    competitors: ['Adidas', 'New Balance', 'ASICS', 'HOKA', 'Brooks', 'Saucony', 'Puma', 'On'] },
+  { domain: 'sites.google.com', icon: 'google', iconBordered: true, typeKey: 'industry', authority: 'high', citation: 'mention',
+    url: 'https://sites.google.com/view/quantitative-insights-lab/home/insights-lab/top-smart-running-shoes-companies-how-to-compare-them-2026',
+    competitors: ['Adidas', 'New Balance', 'ASICS', 'HOKA', 'Under Armour', 'On'] },
+  { domain: 'shopee.ph', icon: 'shopee', typeKey: 'marketplace', authority: 'high', citation: 'mention',
+    url: 'https://shopee.ph/blog/affordable-shoe-brands-philippines/',
+    competitors: ['World Balance', 'Puma', 'On', 'Adidas', 'New Balance', 'ASICS'] },
+];
+
 /* Splits a question into 3 lines balanced by character length (not
    word count), each split falling at the word boundary closest to the
    remaining text's own midpoint — since SVG <text> doesn't wrap on its
@@ -278,67 +341,85 @@ export default function VisibilityPage() {
                   <div className="src-intel-title">{t('visibility.sourceIntel.title')}</div>
                   <div className="src-intel-meta">{t('visibility.sourceIntel.meta')}</div>
                 </div>
+                <button type="button" className="src-intel-x" tabIndex={-1} aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+              </div>
+
+              <div className="src-intel-toolbar">
+                <span className="src-intel-toolbar-label">{t('visibility.sourceIntel.categoryLabel')}</span>
+                <span className="src-intel-select">
+                  {t('visibility.sourceIntel.allCategories')}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><path d="m6 9 6 6 6-6"/></svg>
+                </span>
               </div>
 
               <div className="src-intel-scroll">
-              <div className="sit-head">
+              <div className="sit-head sit-head--v2">
                 {(() => { const h = t('visibility.sourceIntel.tableHeaders'); return (<>
-                  <div className="sit-c">{h.url}</div>
-                  <div className="sit-c">{h.domain}</div>
-                  <div className="sit-c">{h.category}</div>
-                  <div className="sit-c">{h.authority}</div>
-                  <div className="sit-c">{h.comp}</div>
-                  <div className="sit-c">{h.link}</div>
+                  <div className="sit-c">{h.source}</div>
+                  <div className="sit-c sit-c--sortable sit-c--center">{h.category} <SortIcon /></div>
+                  <div className="sit-c sit-c--sortable sit-c--center">{h.authority} <ChevronIcon /></div>
+                  <div className="sit-c sit-c--sortable sit-c--center">{h.yourCitation} <SortIcon /></div>
+                  <div className="sit-c sit-c--sortable">{h.competitorCitations} <SortIcon /></div>
                 </>); })()}
               </div>
 
-              {[
-                { url: 'https://www.youtube.com/watch?v=y9UN1T-olHY', logo: 'youtube-com-logo.png', domain: 'youtube.com', typeKey: 'social',      authority: 'high', comp: false, link: 'broken' },
-                { url: 'https://www.yahoo.com/lifestyle/articles/editors-trainers-tested-dozens-cross-152500350.html?utm_source=chatgpt.com', logo: 'yahoo-com-logo.png', domain: 'yahoo.com', typeKey: 'news', authority: 'high', comp: false, link: false },
-                { url: 'https://www.whowhatwear.com/fashion/shopping/best-sneakers-under-250-spring-2026', logo: 'whowhatwear-com-logo.png', domain: 'whowhatwear.com', typeKey: 'news', authority: 'high', comp: false, link: 'broken' },
-                { url: 'https://www.walmart.com/ip/No-Boundaries-Womens-Classic-Lace-Up-Casual-Sneakers-Wide-Width-Available/407365252?utm_source=openai', logo: 'walmart-com-logo.png', domain: 'walmart.com', typeKey: 'marketplace', authority: 'high', comp: false, link: false },
-                { url: 'https://www.vogue.com/article/the-row-shoes?utm_source=chatgpt.com', logo: 'vogue-com-logo.png', domain: 'vogue.com', typeKey: 'media', authority: 'high', comp: 'warning', link: false },
-              ].map(row => {
+              <div className="sit-body">
+              {SOURCE_ROWS.map(row => {
                 const sourceTypes = t('visibility.sourceIntel.sourceTypes');
+                const citation = t('visibility.sourceIntel.citation');
                 return (
-                  <div key={row.domain} className="sit-row">
-                    <div className="sit-c sit-c--url">
-                      <a className="sit-url-link" href={row.url} target="_blank" rel="noopener noreferrer">
-                        {row.url}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
-                      </a>
-                    </div>
+                  <div key={row.domain} className="sit-row sit-row--v2">
                     <div className="sit-c sit-c--source">
-                      <span className="fav">
-                        <img src={`${import.meta.env.BASE_URL}Source%20Intelligence/${row.logo}`} alt="" />
-                      </span>
-                      <div className="sit-domain">{row.domain}</div>
+                      <div className="sit-source-stack">
+                        <div className="sit-source-top">
+                          {row.logo ? (
+                            <span className="fav">
+                              <img src={`${import.meta.env.BASE_URL}Source%20Intelligence/${row.logo}`} alt="" />
+                            </span>
+                          ) : SOURCE_FAVICONS[row.icon] ? (() => {
+                            const Icon = SOURCE_FAVICONS[row.icon];
+                            return (
+                              <span className={`fav${row.iconBordered ? ' fav--bordered' : ''}`}>
+                                <Icon />
+                              </span>
+                            );
+                          })() : (
+                            <span className="fav fav--letter" style={{ background: row.letterBg || '#6c6c7c' }}>
+                              {row.domain.charAt(0).toUpperCase()}
+                            </span>
+                          )}
+                          <div className="sit-domain">{row.domain}</div>
+                        </div>
+                        <a className="sit-url-link" href={row.url} target="_blank" rel="noopener noreferrer">
+                          {row.url}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                        </a>
+                      </div>
                     </div>
-                    <div className="sit-c">
+                    <div className="sit-c sit-c--center">
                       <span className="sit-cat">{sourceTypes[row.typeKey]}</span>
                     </div>
-                    <div className="sit-c">
+                    <div className="sit-c sit-c--center">
                       <span className={`sit-authority sit-authority--${row.authority}`}>
                         {row.authority.charAt(0).toUpperCase() + row.authority.slice(1)}
                       </span>
                     </div>
-                    <div className="sit-c">
-                      {row.comp === 'warning' ? (
-                        <svg className="sit-icon sit-icon--warn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                      ) : (
-                        <span className="sit-dash">–</span>
-                      )}
+                    <div className="sit-c sit-c--center">
+                      <span className={`sit-citation sit-citation--${row.citation}`}>
+                        {citation[row.citation]}
+                      </span>
                     </div>
-                    <div className="sit-c">
-                      {row.link === 'broken' ? (
-                        <svg className="sit-icon sit-icon--broken" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
-                      ) : (
-                        <span className="sit-dash">–</span>
-                      )}
+                    <div className="sit-c sit-c--pills">
+                      {row.competitors.map(name => (
+                        <span key={name} className={`sit-pill sit-pill--${competitorColor(name)}`}>{name}</span>
+                      ))}
                     </div>
                   </div>
                 );
               })}
+              </div>{/* /sit-body */}
               </div>{/* /src-intel-scroll */}
 
               <div className="src-intel-count">{t('visibility.sourceIntel.showingOf')}</div>
