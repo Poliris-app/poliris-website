@@ -303,6 +303,57 @@
   pointer-events: auto;
 }
 
+/* "For more information" — a small info icon on feature bullets that
+   reveals an explainer tooltip on hover/focus. */
+.pricing-feature-info-wrap {
+  position: relative; display: inline;
+  text-decoration: underline dotted; text-decoration-color: var(--pr-border);
+  text-underline-offset: 3px; cursor: help;
+  transition: text-decoration-color .15s ease;
+}
+.pricing-feature-info-wrap:hover,
+.pricing-feature-info-wrap:focus-within { text-decoration-color: var(--pr-blue); }
+.pricing-feature-info-tooltip {
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 200px;
+  background: #fff;
+  color: var(--pr-navy);
+  font-size: 12px; font-weight: 500; line-height: 1.5;
+  border: 1px solid var(--pr-border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  text-align: center;
+  box-shadow: 0 16px 32px -12px rgba(13,27,62,0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 20;
+}
+.pricing-feature-info-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  width: 10px; height: 10px;
+  margin-left: -5px; margin-top: -5px;
+  background: #fff;
+  border-right: 1px solid var(--pr-border);
+  border-bottom: 1px solid var(--pr-border);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+.pricing-feature-info-wrap:hover .pricing-feature-info-tooltip,
+.pricing-feature-info-wrap:focus-within .pricing-feature-info-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
 .pricing-cta {
   display: flex; align-items: center; justify-content: center; gap: 7px;
   width: fit-content; min-width: 190px; align-self: center;

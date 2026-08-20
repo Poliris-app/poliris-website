@@ -738,7 +738,7 @@
 }
 @media(max-width: 900px) {
   .vis-page section { padding: 64px 0; }
-  .vis-page .dark   { padding: 46px 26px; border-radius: var(--r-lg); }
+  .vis-page .dark   { padding: 46px 26px;}
 }
 @media(max-width: 760px) {
   .vis-page .tour         { grid-template-columns: 1fr; }
@@ -1074,6 +1074,9 @@
   position: absolute;
   left: 50%; bottom: 18px;
   transform: translateX(-50%);
+  /* Keeps a permanent side gap from the map's edges at any width, instead
+     of the pill's auto width potentially touching/overflowing them. */
+  max-width: calc(100% - 32px);
   z-index: 5;
   display: flex; align-items: center; gap: 12px;
   background: rgba(255, 255, 255, .82);
@@ -1083,7 +1086,7 @@
   backdrop-filter: blur(6px);
   box-shadow: 0 2px 10px rgba(20, 30, 60, .12);
 }
-.vis-page .rm2-tabs { display: flex; gap: 2px; }
+.vis-page .rm2-tabs { display: flex; gap: 2px; overflow-x: auto; }
 .vis-page .rm2-tab {
   font-family: var(--font-display);
   font-size: 11px;

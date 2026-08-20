@@ -722,7 +722,12 @@ export default function PricingPage() {
                   <li key={j}>
                     {CHECK_ICON}
                     <span>
-                      {f}
+                      {plan.featureTooltips?.[j] ? (
+                        <span className="pricing-feature-info-wrap" tabIndex={0}>
+                          {f}
+                          <div className="pricing-feature-info-tooltip" role="tooltip">{plan.featureTooltips[j]}</div>
+                        </span>
+                      ) : f}
                       {/* 3rd feature on Free ("10 providers") and Starter ("Access to all API models")
                           — see pricing.plans[0].features / pricing.plans[1].features. Free shows a
                           5-icon teaser (FREE_FEATURE_MODELS) plus a "+N" chip (N = FREE_FEATURE_MODELS_REST.length)

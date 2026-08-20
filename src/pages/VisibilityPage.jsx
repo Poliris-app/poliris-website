@@ -341,9 +341,6 @@ export default function VisibilityPage() {
                   <div className="src-intel-title">{t('visibility.sourceIntel.title')}</div>
                   <div className="src-intel-meta">{t('visibility.sourceIntel.meta')}</div>
                 </div>
-                <button type="button" className="src-intel-x" tabIndex={-1} aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                </button>
               </div>
 
               <div className="src-intel-toolbar">

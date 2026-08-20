@@ -1940,19 +1940,27 @@
   .cw-page .cw-pipe-step-wrap     { flex: 0 0 64px; }
   .cw-page .cw-pipe-line          { min-width: 24px; }
 }
-/* Same radial layout at every width — just scaled down further as the
-   viewport narrows, so the fixed-size cards never clip. */
+/* Same radial layout at every width. .hub-stage keeps its full
+   width:100% (up to 430px) — the fixed 170px-wide cards would overlap
+   on a narrow phone-width circle if left at full size, so .hsrc itself
+   shrinks a bit at each step (rather than one blanket transform doing
+   all the work), keeping the overall diagram much larger/more legible
+   than scaling the whole thing down to ~36% did before. */
 @media (max-width: 760px) {
-  .cw-page .hub-stage { max-width: 360px; }
-  .cw-page .hub-inner { transform: scale(.6); }
+  .cw-page .hub-inner { transform: scale(.78); }
+  .cw-page .hsrc { width: 132px; padding: 12px 14px; }
+  .cw-page .hsrc b { font-size: 13px; }
 }
 @media (max-width: 560px) {
-  .cw-page .hub-stage { max-width: 280px; }
-  .cw-page .hub-inner { transform: scale(.4); }
+  .cw-page .hub-inner { transform: scale(.68); }
+  .cw-page .hsrc { width: 116px; padding: 10px 12px; }
+  .cw-page .hsrc b { font-size: 12px; }
 }
 @media (max-width: 400px) {
-  .cw-page .hub-stage { max-width: 220px; }
-  .cw-page .hub-inner { transform: scale(.36); }
+  .cw-page .hub-inner { transform: scale(.6); }
+  .cw-page .hsrc { width: 100px; padding: 8px 10px; }
+  .cw-page .hsrc b { font-size: 11px; }
+  .cw-page .hsrc i { font-size: 10px; }
 }
 @media (max-width: 480px) {
   .cw-page .hcenter .hc-connect { font-size: 9px; padding: 6px 12px; white-space: normal; }

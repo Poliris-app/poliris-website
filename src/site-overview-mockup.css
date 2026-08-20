@@ -220,6 +220,11 @@
   flex-direction: column;
   gap: 12px;
   min-height: 220px;
+  /* Grid items default to min-width:auto, so a long unshrinkable child
+     (e.g. the "Needs Improvement" status chip) can stretch this 1fr
+     track wider than the card itself, bleeding past the right edge
+     while the left stays put. This is the standard fix. */
+  min-width: 0;
 }
 .som-col-1 { padding-right: 12px; }
 .som-col-2 {
@@ -582,6 +587,7 @@
     border-right: none;
     border-top: 1px solid #d1d5db;
     border-bottom: 1px solid #d1d5db;
+    margin-bottom: 16px;
   }
   .som-col-3 { padding-left: 0; }
   .som-thumb { display: none; }
