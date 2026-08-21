@@ -10,6 +10,8 @@ import EntityBasedSeoPage from './posts/EntityBasedSeoPage';
 import EntityBasedSeoFrPage from './posts/EntityBasedSeoFrPage';
 import BeyondKeywordsPage from './posts/BeyondKeywordsPage';
 import BeyondKeywordsFrPage from './posts/BeyondKeywordsFrPage';
+import HighVisibilityContentPage from './posts/HighVisibilityContentPage';
+import HighVisibilityContentFrPage from './posts/HighVisibilityContentFrPage';
 
 const POST_MAP = {
   en: {
@@ -17,12 +19,14 @@ const POST_MAP = {
     'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchPage,
     'entity-based-seo': EntityBasedSeoPage,
     'beyond-keywords-ai-content-generation': BeyondKeywordsPage,
+    'blueprint-for-high-visibility-content': HighVisibilityContentPage,
   },
   fr: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstoneFrPage,
     'death-of-traditional-search-geo-priority': DeathOfTraditionalSearchFrPage,
     'entity-based-seo': EntityBasedSeoFrPage,
     'beyond-keywords-ai-content-generation': BeyondKeywordsFrPage,
+    'blueprint-for-high-visibility-content': HighVisibilityContentFrPage,
   },
 };
 

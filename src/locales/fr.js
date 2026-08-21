@@ -514,7 +514,7 @@ export default {
         'N\'importe quel test expliqué sans SEO, sans développeur.',
         'Un plan de correction classé, appliqué directement dans l\'app.',
       ],
-      meetTom: 'Rencontrer Tom →',
+      meetTom: 'Rencontrer Tom',
       liveSession: 'SESSION EN DIRECT',
       chatAgentLabel: 'Tom · Agent d\'audit technique',
       bubbles: [
@@ -747,29 +747,40 @@ export default {
         id: 14, label: 'CONTENU IA', category: 'GEO',
         title: "Au-delà des mots-clés : générer du contenu optimisé pour l'IA et les moteurs de réponse.",
         desc: "La densité de mots-clés ne suffit plus à gagner des citations. Découvrez le cadre de génération de contenu par IA que les équipes B2B utilisent pour apparaître dans ChatGPT, Perplexity et les AI Overviews de Google.",
-        date: '4 août 2026',
+        date: '4 août 2026', dateValue: '2026-08-04',
         slug: 'beyond-keywords-ai-content-generation',
       },
       {
         id: 13, label: 'SEO ENTITÉS', category: 'GEO',
         title: "L'essor du SEO orienté entités : des chaînes de caractères aux choses à l'ère de l'IA.",
         desc: "Le SEO sémantique déplace l'optimisation des mots-clés vers des entités et relations vérifiées. Voici comment construire un SEO orienté entités que les Knowledge Graphs et les LLM peuvent citer en confiance.",
-        date: '7 juil. 2026',
+        date: '7 juil. 2026', dateValue: '2026-07-07',
         slug: 'entity-based-seo',
       },
       {
         id: 12, label: 'PRIORITÉ GEO', category: 'GEO',
         title: 'La mort de la recherche traditionnelle : pourquoi le GEO est votre priorité.',
         desc: "Le GEO consiste à structurer votre contenu pour que les moteurs de réponse IA puissent l'extraire et le citer directement. Voici pourquoi c'est votre nouvelle priorité.",
-        date: '30 juin 2026',
+        date: '30 juin 2026', dateValue: '2026-06-30',
         slug: 'death-of-traditional-search-geo-priority',
       },
       {
         id: 11, label: 'SEO → GEO', category: 'GEO',
         title: "Pourquoi le SEO est le socle du succès GEO.",
         desc: "Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et quoi corriger en premier.",
-        date: '23 juin 2026',
+        date: '23 juin 2026', dateValue: '2026-06-23',
         slug: 'why-seo-is-the-cornerstone-of-geo-success',
+      },
+      // NOTE: appended at the end — see the matching comment in
+      // src/locales/en.js. The Tolgee overlay merges this array by index,
+      // and Tolgee's cache only has entries for indices 0-3. Display order
+      // is driven by `dateValue` in BlogPage.jsx, not by this array's order.
+      {
+        id: 15, label: 'MISE EN FORME', category: 'GEO',
+        title: "Le plan directeur pour un contenu à forte visibilité : mise en forme, lisibilité et optimisation pour l'IA.",
+        desc: "Le principe fondamental pour l'emporter dans ce nouveau paysage : structurer chaque page avec une hiérarchie de titres HTML stricte, des paragraphes courts, et des citations explicites en ligne.",
+        date: '20 août 2026', dateValue: '2026-08-20',
+        slug: 'blueprint-for-high-visibility-content',
       },
     ],
     cta: {

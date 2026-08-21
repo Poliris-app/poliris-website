@@ -514,7 +514,7 @@ export default {
         'Any test explained no SEO, no developer.',
         'A ranked fix plan, applied inside the app.',
       ],
-      meetTom: 'Meet Tom →',
+      meetTom: 'Meet Tom',
       liveSession: 'LIVE SESSION',
       chatAgentLabel: 'Tom · Technical audit agent',
       bubbles: [
@@ -747,29 +747,45 @@ export default {
         id: 14, label: 'AI CONTENT', category: 'GEO',
         title: 'Beyond Keywords: Generating Content Optimized for AI and Answer Engines.',
         desc: 'Keyword density no longer earns citations. Learn the AI content generation framework B2B teams use to get surfaced by ChatGPT, Perplexity, and Google AI Overviews.',
-        date: 'Aug 4, 2026',
+        date: 'Aug 4, 2026', dateValue: '2026-08-04',
         slug: 'beyond-keywords-ai-content-generation',
       },
       {
         id: 13, label: 'ENTITY SEO', category: 'GEO',
         title: 'The Rise of Entity-Based SEO: Moving from Strings to Things in the AI Era.',
         desc: "Semantic SEO shifts optimization from keyword strings to verified entities and relationships. Here's how to build entity-based SEO that Knowledge Graphs and LLMs can trust and cite.",
-        date: 'Jul 7, 2026',
+        date: 'Jul 7, 2026', dateValue: '2026-07-07',
         slug: 'entity-based-seo',
       },
       {
         id: 12, label: 'GEO PRIORITY', category: 'GEO',
         title: 'The Death of Traditional Search: Why GEO Is Your New Priority.',
         desc: "Generative engine optimization is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority.",
-        date: 'Jun 30, 2026',
+        date: 'Jun 30, 2026', dateValue: '2026-06-30',
         slug: 'death-of-traditional-search-geo-priority',
       },
       {
         id: 11, label: 'SEO → GEO', category: 'GEO',
         title: "Why SEO Is the Cornerstone of GEO Success.",
         desc: "GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here's why and what to fix first.",
-        date: 'Jun 23, 2026',
+        date: 'Jun 23, 2026', dateValue: '2026-06-23',
         slug: 'why-seo-is-the-cornerstone-of-geo-success',
+      },
+      // NOTE: appended at the end, not prepended — the Tolgee live-translation
+      // overlay merges src/locales/*.js by array INDEX (see LangContext.jsx
+      // deepMerge), and Tolgee's cached copy of blog.posts only has entries
+      // for indices 0-3 (the four posts above). Inserting a new post earlier
+      // in this array shifts every later post's index and scrambles which
+      // title/desc/date pairs with which slug once Tolgee's overlay lands.
+      // Keep new posts appended here until Tolgee's project is re-synced.
+      // (Display order on /blog is driven by `dateValue` in BlogPage.jsx, not
+      // by this array's order, so appending here doesn't affect ordering.)
+      {
+        id: 15, label: 'CONTENT FORMATTING', category: 'GEO',
+        title: 'The Blueprint for High-Visibility Content: Formatting, Readability, and AI Optimization.',
+        desc: 'The core principle for winning in this new landscape is simple but rigorous: structure every page with strict HTML heading hierarchies, short paragraphs, and explicit inline citations.',
+        date: 'Aug 20, 2026', dateValue: '2026-08-20',
+        slug: 'blueprint-for-high-visibility-content',
       },
     ],
     cta: {

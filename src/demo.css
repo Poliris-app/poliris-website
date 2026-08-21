@@ -19,7 +19,6 @@
 }
 
 /* ── Left — form column ──────────────────────── */
-.demo-form-col {}
 
 .demo-eyebrow {
   font-family: var(--font-display);
@@ -27,7 +26,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--blue);
+  color: var(--poliris-blue);
   margin-bottom: 12px;
 }
 
@@ -72,13 +71,13 @@
 }
 
 .demo-chip:hover {
-  border-color: var(--blue);
-  color: var(--blue);
+  border-color: var(--poliris-blue);
+  color: var(--poliris-blue);
 }
 
 .demo-chip--active {
-  border-color: var(--blue);
-  background: var(--blue);
+  border-color: var(--poliris-blue);
+  background: var(--poliris-blue);
   color: #fff;
 }
 
@@ -109,7 +108,7 @@
 }
 
 .demo-label span {
-  color: var(--blue);
+  color: var(--poliris-blue);
   margin-left: 2px;
 }
 
@@ -138,8 +137,8 @@
 .demo-input:focus,
 .demo-select:focus,
 .demo-textarea:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(30, 56, 147, 0.1);
+  border-color: var(--poliris-blue);
+  box-shadow: 0 0 0 3px rgba(0, 98, 255, 0.1);
 }
 
 .demo-select {
@@ -169,7 +168,7 @@
   height: 16px;
   margin-top: 2px;
   flex-shrink: 0;
-  accent-color: var(--blue);
+  accent-color: var(--poliris-blue);
   cursor: pointer;
 }
 
@@ -181,7 +180,7 @@
 }
 
 .demo-privacy-label a {
-  color: var(--blue);
+  color: var(--poliris-blue);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -201,22 +200,35 @@
   font-weight: 700;
   padding: 13px 28px;
   border-radius: 8px;
-  background: var(--blue);
+  background: var(--poliris-blue);
   color: #fff;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.15s, transform 0.1s;
+  transition: background 0.15s, transform 0.15s ease, box-shadow 0.2s ease, filter 0.15s ease;
+}
+
+.demo-btn svg {
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
 }
 
 .demo-btn:hover {
-  background: var(--blue-dark);
+  background: var(--poliris-blue);
+  color: #fff;
+  transform: translateY(-2px);
+  filter: brightness(0.94);
+  box-shadow: 0 10px 24px -8px rgba(0,98,255,.55);
+}
+
+.demo-btn:hover svg {
+  transform: translateX(4px);
 }
 
 .demo-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.98) translateY(0);
+  filter: brightness(0.9);
 }
 
 .demo-btn:disabled {
@@ -334,7 +346,7 @@
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--blue);
+  color: var(--poliris-blue);
   text-decoration: none;
   display: inline-flex;
   align-items: center;

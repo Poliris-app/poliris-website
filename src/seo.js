@@ -32,6 +32,7 @@ export const BLOG_POST_SLUGS = [
   'death-of-traditional-search-geo-priority',
   'entity-based-seo',
   'beyond-keywords-ai-content-generation',
+  'blueprint-for-high-visibility-content',
 ];
 
 const META = {

@@ -525,8 +525,8 @@
 .vis-page .cmpx .brand .yt {
   font-family: var(--font-display);
   font-size: 9px; 
-  font-weight: 800;
-  color: #2563eb; 
+  font-weight: 500;
+  color: var(--poliris-blue); 
   background: #dbeafe;
   border-radius: 99px; 
   padding: 3px 7px; 

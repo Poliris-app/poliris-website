@@ -41,7 +41,14 @@ export default function BlogPage() {
   const bcta    = t('blog.cta');
   const cats    = t('blog.categories');
   const rawPosts = t('blog.posts');
-  const POSTS   = rawPosts.map((p, i) => ({ ...p, gradient: POST_GRADIENTS[i] }));
+  // Sort by dateValue (not array position): the array's own order has to stay
+  // stable for the Tolgee live-translation overlay, which merges blog.posts
+  // by index (see LangContext.jsx deepMerge) — so newly added posts get
+  // appended rather than inserted at the front. dateValue is a plain ISO
+  // string Tolgee doesn't manage, so sorting by it is what actually puts the
+  // newest post first on the page regardless of where it sits in the file.
+  const sortedPosts = [...rawPosts].sort((a, b) => (b.dateValue ?? '').localeCompare(a.dateValue ?? ''));
+  const POSTS = sortedPosts.map((p, i) => ({ ...p, gradient: POST_GRADIENTS[i] }));
 
   const filtered = POSTS.filter(p => {
     const matchCat = filterIdx === 0 || p.category === cats[filterIdx];
