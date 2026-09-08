@@ -1996,11 +1996,6 @@ export default {
     askPoli: 'Ask Poli AI',
   },
 
-  auditBanner: {
-    line: 'See how ChatGPT and Gemini describe your brand right now-  free audit, no card needed.',
-    lineShort: 'Have a code, or want a free audit?',
-    cta: 'Get your free audit',
-  },
   auditModal: {
     freeSetup: 'Free · 2-minute setup',
     titlePre: 'Does your brand show up',
@@ -2008,20 +2003,13 @@ export default {
     titleHl: 'AI',
     lead: 'Get a free AI Visibility Audit and see exactly how ChatGPT, Gemini, and Perplexity describe (or ignore) your brand.',
     trackedLabel: 'Tracked across every AI that matters',
-    tabFree: 'Get a free audit',
-    tabCode: 'I have a code',
     emailPlaceholder: 'Your work email',
     websitePlaceholder: 'your-website.com',
     submitting: 'Submitting…',
     getMyFreeAudit: 'Get My Free Audit →',
-    codePlaceholder: 'Enter your 6-character code',
-    checking: 'Checking…',
-    viewMyAudit: 'View My Audit',
     trust: '🔒 No credit card required',
     close: 'Close',
     errors: {
-      codeInvalid: 'That code doesn’t look right, it should be 6 characters.',
-      codeNotFound: 'Code not found. Please double-check the code and try again.',
       generic: 'Something went wrong, please try again.',
       verifyRequired: 'Please complete the verification below.',
     },

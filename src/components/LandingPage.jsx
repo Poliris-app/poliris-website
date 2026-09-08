@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import ProductCarousel from './ProductCarousel'; // hidden for now, see below
 import Hero from './Hero';
 import CtaBand from './CtaBand';
-import AuditCodeBanner from './AuditCodeBanner';
+// import AuditModal from './AuditModal'; // hidden for now, see below
 import { useLang } from '../contexts/LangContext';
 
 /* ── Agent avatar illustrations (see public/Illustrations/) ──── */
@@ -24,6 +24,9 @@ const Eyebrow = ({ children }) => <div className="eyebrow">{children}</div>;
 
 export default function LandingPage() {
   const { t } = useLang();
+  // "Get your free audit" button hidden for now — see below. State kept so
+  // it's a one-line restore once a real entry point is decided.
+  // const [auditModalOpen, setAuditModalOpen] = useState(false);
 
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -43,7 +46,21 @@ export default function LandingPage() {
 
   return (
     <div className="landing">
-      <AuditCodeBanner />
+      {/* "Get your free audit" button hidden for now — restore by uncommenting
+          this and the auditModalOpen state above. */}
+      {/* <button
+        type="button"
+        onClick={() => setAuditModalOpen(true)}
+        style={{
+          position: 'fixed', bottom: 20, right: 20, zIndex: 9999,
+          padding: '10px 16px', borderRadius: 999,
+          background: '#0062ff', color: '#fff', fontWeight: 700, fontSize: 13,
+          boxShadow: '0 8px 24px rgba(0,98,255,0.35)',
+        }}
+      >
+        Get your free audit
+      </button>
+      <AuditModal open={auditModalOpen} onClose={() => setAuditModalOpen(false)} /> */}
       <Hero
         eyebrow={h.eyebrow}
         title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}

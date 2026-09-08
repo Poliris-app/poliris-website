@@ -246,8 +246,17 @@
   color: var(--pr-text-faint); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px;
   font-family: var(--manrope);
 }
-.pricing-coverage-track { width: 100%; height: 6px; border-radius: 100px; background: #eef0f7; overflow: hidden; }
+/* The base credit count reads bold/dark against the lighter "+ N bonus"
+   that follows it (inherits the label row's own faint/600 styling) — the
+   text itself is the same reused "{base} + {base} bonus" string as the
+   first-month tooltip, just split so only the first number is emphasized. */
+.pricing-coverage-num { color: var(--pr-navy); font-weight: 800; }
+.pricing-coverage-track { width: 100%; height: 6px; border-radius: 100px; background: #eef0f7; overflow: hidden; display: flex; }
 .pricing-coverage-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--pr-blue) 0%, var(--pr-blue) 100%); }
+/* Two segments (base + bonus) sit flush against each other — square off the
+   touching edges so together they still read as one continuous pill. */
+.pricing-coverage-fill:has(+ .pricing-coverage-fill--bonus) { border-radius: 100px 0 0 100px; }
+.pricing-coverage-fill--bonus { background: #bcd4ff; border-radius: 0 100px 100px 0; }
 
 .pricing-divider { height: 1px; background: var(--pr-border); margin: 2px 0 18px; }
 

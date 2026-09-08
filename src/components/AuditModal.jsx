@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
+
+// Not currently mounted anywhere — the banner that opened this modal was
+// removed (the "I have a code" flow it also carried is gone for good, now
+// that the Lemlist audit email only sends the direct link). Kept here,
+// hidden, in case the free-audit request flow gets a new entry point later.
 
 const AI_LOGOS = [
   { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`, alt: 'ChatGPT' },
@@ -12,8 +16,6 @@ const AI_LOGOS = [
   { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`, alt: 'Mistral AI' },
   { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`, alt: 'Deepseek' },
 ];
-
-const CODE_RE = /^[A-Za-z0-9]{6}$/;
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
@@ -54,18 +56,10 @@ function extractErrorMessage(data, fallback) {
   return fallback;
 }
 
-export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
-  const { lang, t } = useLang();
+export default function AuditModal({ open, onClose }) {
+  const { t } = useLang();
   const am = t('auditModal');
-  const navigate = useNavigate();
-  const [tab, setTab] = useState(defaultTab);
 
-  // Code tab state
-  const [code, setCode] = useState('');
-  const [codeError, setCodeError] = useState('');
-  const [checking, setChecking] = useState(false);
-
-  // Free-audit tab state
   const [email, setEmail] = useState('');
   const [website, setWebsite] = useState('');
   const [turnstileToken, setTurnstileToken] = useState('');
@@ -76,7 +70,7 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
   const widgetIdRef = useRef(null);
 
   useEffect(() => {
-    if (!open || tab !== 'free' || !TURNSTILE_SITE_KEY) return;
+    if (!open || !TURNSTILE_SITE_KEY) return;
     let cancelled = false;
     loadTurnstileScript().then(() => {
       if (cancelled || !widgetRef.current || widgetIdRef.current || !window.turnstile) return;
@@ -94,44 +88,17 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
         widgetIdRef.current = null;
       }
     };
-  }, [open, tab]);
+  }, [open]);
 
   if (!open) return null;
 
   const close = () => {
     onClose();
-    setTab(defaultTab);
-    setCode('');
-    setCodeError('');
     setEmail('');
     setWebsite('');
     setTurnstileToken('');
     setFreeError('');
     setDone(null);
-  };
-
-  const handleCodeSubmit = async (e) => {
-    e.preventDefault();
-    const trimmed = code.trim().toUpperCase();
-    if (!CODE_RE.test(trimmed)) {
-      setCodeError(am.errors.codeInvalid);
-      return;
-    }
-    setChecking(true);
-    setCodeError('');
-    try {
-      const res = await fetch(`/api/audit?code=${encodeURIComponent(trimmed)}`);
-      if (!res.ok) {
-        setCodeError(am.errors.codeNotFound);
-        return;
-      }
-      trackEvent('audit_code_modal_valid');
-      navigate(`/${lang}/audit/${trimmed}`);
-    } catch {
-      setCodeError(am.errors.generic);
-    } finally {
-      setChecking(false);
-    }
   };
 
   const handleFreeSubmit = async (e) => {
@@ -206,72 +173,31 @@ export default function AuditModal({ open, onClose, defaultTab = 'free' }) {
                 ))}
               </div>
 
-              <div className="audit-modal-tabs" role="tablist">
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'free'}
-                  className={`audit-modal-tab${tab === 'free' ? ' audit-modal-tab--active' : ''}`}
-                  onClick={() => setTab('free')}
-                >
-                  {am.tabFree}
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'code'}
-                  className={`audit-modal-tab${tab === 'code' ? ' audit-modal-tab--active' : ''}`}
-                  onClick={() => setTab('code')}
-                >
-                  {am.tabCode}
-                </button>
-              </div>
-
-              <div className="audit-modal-form-slot">
-                {tab === 'free' ? (
-                  <form onSubmit={handleFreeSubmit} className="free-audit-form">
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => { setEmail(e.target.value); setFreeError(''); }}
-                      placeholder={am.emailPlaceholder}
-                      className="free-audit-form__input"
-                    />
-                    <input
-                      type="text"
-                      required
-                      value={website}
-                      onChange={(e) => { setWebsite(e.target.value); setFreeError(''); }}
-                      placeholder={am.websitePlaceholder}
-                      className="free-audit-form__input"
-                    />
-                    {TURNSTILE_SITE_KEY && (
-                      <div ref={widgetRef} className="free-audit-form__turnstile" />
-                    )}
-                    <button type="submit" className="btn btn--primary promo-modal-cta" disabled={submitting}>
-                      {submitting ? am.submitting : am.getMyFreeAudit}
-                    </button>
-                    {freeError && <p className="code-modal-error">{freeError}</p>}
-                  </form>
-                ) : (
-                  <form onSubmit={handleCodeSubmit} className="code-audit-form">
-                    <input
-                      type="text"
-                      value={code}
-                      onChange={(e) => { setCode(e.target.value); setCodeError(''); }}
-                      placeholder={am.codePlaceholder}
-                      maxLength={6}
-                      autoFocus
-                      className="code-modal-input"
-                    />
-                    <button type="submit" className="btn btn--primary code-modal-submit" disabled={checking}>
-                      {checking ? am.checking : am.viewMyAudit}
-                    </button>
-                    {codeError && <p className="code-modal-error">{codeError}</p>}
-                  </form>
+              <form onSubmit={handleFreeSubmit} className="free-audit-form">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setFreeError(''); }}
+                  placeholder={am.emailPlaceholder}
+                  className="free-audit-form__input"
+                />
+                <input
+                  type="text"
+                  required
+                  value={website}
+                  onChange={(e) => { setWebsite(e.target.value); setFreeError(''); }}
+                  placeholder={am.websitePlaceholder}
+                  className="free-audit-form__input"
+                />
+                {TURNSTILE_SITE_KEY && (
+                  <div ref={widgetRef} className="free-audit-form__turnstile" />
                 )}
-              </div>
+                <button type="submit" className="btn btn--primary promo-modal-cta" disabled={submitting}>
+                  {submitting ? am.submitting : am.getMyFreeAudit}
+                </button>
+                {freeError && <p className="code-modal-error">{freeError}</p>}
+              </form>
 
               <p className="promo-modal-trust">{am.trust}</p>
             </>

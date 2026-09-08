@@ -63,8 +63,10 @@ function devApiPlugin(env) {
         }
 
         try {
+          // Freemium audits stay on the develop backend/database — see
+          // api/audit.js for why this doesn't reuse POLIRIS_BACKEND_URL.
           const r = await fetch(
-            `${env.POLIRIS_BACKEND_URL}/api/v2/audit/public/${encodeURIComponent(code)}`
+            `${env.POLIRIS_AUDIT_BACKEND_URL}/api/v2/audit/public/${encodeURIComponent(code)}`
           );
           if (!r.ok) {
             res.writeHead(404);
@@ -96,7 +98,8 @@ function devApiPlugin(env) {
               return res.end(JSON.stringify({ detail: 'email, website, and turnstile_token are required' }));
             }
 
-            const r = await fetch(`${env.POLIRIS_BACKEND_URL}/api/v2/freemium/public-request`, {
+            // Same develop backend as the /api/audit middleware above.
+            const r = await fetch(`${env.POLIRIS_AUDIT_BACKEND_URL}/api/v2/freemium/public-request`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

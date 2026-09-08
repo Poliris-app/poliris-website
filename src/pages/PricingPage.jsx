@@ -713,8 +713,32 @@ export default function PricingPage() {
                 <div className="pricing-price-annual-note">&nbsp;</div>
               )}
               <div className="pricing-coverage">
-                <div className="pricing-coverage-label"><span>{p.coverage}</span><span>{plan.coverageLabel}</span></div>
-                <div className="pricing-coverage-track"><div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct}%` }} /></div>
+                <div className="pricing-coverage-label">
+                  <span>{p.coverage}</span>
+                  {plan.monthlyCredits ? (
+                    <span>
+                      <span className="pricing-coverage-num">{plan.monthlyCredits}</span>
+                      {/* Reuses the same "{base} + {base} bonus" string as the
+                          first-month tooltip (already translated) instead of
+                          a new key — only the first {base} renders bold. */}
+                      <span className="pricing-coverage-bonus">
+                        {p.firstMonthCalc.replace('{base}', '').replaceAll('{base}', plan.monthlyCredits)}
+                      </span>
+                    </span>
+                  ) : (
+                    <span>{plan.coverageLabel}</span>
+                  )}
+                </div>
+                <div className="pricing-coverage-track">
+                  {plan.monthlyCredits ? (
+                    <>
+                      <div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct / 2}%` }} />
+                      <div className="pricing-coverage-fill pricing-coverage-fill--bonus" style={{ width: `${plan.coveragePct / 2}%` }} />
+                    </>
+                  ) : (
+                    <div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct}%` }} />
+                  )}
+                </div>
               </div>
               <div className="pricing-divider" />
               <ul className="pricing-features">
