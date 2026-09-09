@@ -267,22 +267,28 @@ const PC_QUADRANTS = [
   { key: 'atRisk', top: 50, left: 0, bg: '#FEFBEA', label: 'At risk', edge: 'right' },
   { key: 'visibility', top: 50, left: 50, bg: '#F8FBFC', label: 'Strong visibility · Weak sentiment', edge: '' },
 ];
+// Same x/y story as HeroDashboard's own QUAD_POS (x = visibility%, used
+// directly as `left`; y here is already "distance from top", i.e. the
+// inverted sentiment value HeroDashboard computes via `100 - sentimentY`
+// before it ever reaches CSS) — converted 1:1 from QUAD_POS so this card
+// and the hero dashboard's quadrant plot agree on where every brand sits.
 const PC_BRANDS = [
-  // New Balance and On ship as square opaque logo tiles (no transparency),
-  // so they're cropped to fill the whole circle (cover) instead of floating
-  // inset on a padded background like the transparent-PNG logos below.
-  { id: 'nb', name: 'New Balance', x: 9, y: 20, initial: 'N', bg: '#12121a', logo: 'newbalance-com-logo.png', cover: true },
-  { id: 'hoka', name: 'Hoka', x: 44, y: 40, initial: 'H', bg: '#1e73e8', logo: 'hoka-com-logo.png' },
-  // Adidas' logo is a black mark on a transparent PNG — a black badge bg made
+  // Sony, Samsung, Bose, JBL and Anker all ship as square opaque logo tiles
+  // with their own brand-colored background baked in (no transparency), so
+  // they're cropped to fill the whole circle (cover) instead of floating
+  // inset on a badge background like Apple's transparent-PNG mark below.
+  { id: 'nb', name: 'Samsung', x: 38, y: 18, initial: 'S', bg: '#12121a', logo: 'samsung-com-logo.png', cover: true },
+  { id: 'hoka', name: 'Bose', x: 38, y: 44, initial: 'B', bg: '#1e1e1e', logo: 'bose-com-logo.png', cover: true },
+  // Apple's logo is a black mark on a transparent PNG — a black badge bg made
   // it invisible (looked like a plain black dot), so it gets a white badge
-  // like Asics instead of the dark treatment Nike/Hoka use.
-  { id: 'adidas', name: 'Adidas', x: 48, y: 32, initial: 'a', bg: '#ffffff', logo: 'adidas-group-com-logo.png' },
-  { id: 'asics', name: 'Asics', x: 53, y: 32, initial: 'a', bg: '#ffffff', logo: 'asics-com-logo.png' },
+  // instead of the cover treatment the opaque tiles above use.
+  { id: 'adidas', name: 'Apple', x: 95, y: 9, initial: 'a', bg: '#ffffff', logo: 'apple-com-logo.png' },
+  { id: 'asics', name: 'JBL', x: 36, y: 50, initial: 'j', bg: '#f03c02', logo: 'jbl-com-logo.png', cover: true },
   // y is deliberately not too close to the chart's top edge — the tooltip
   // opens upward above the dot and .pc-panel clips at 0, so too little
   // headroom here cuts the tooltip's own top edge off.
-  { id: 'nike', name: 'Nike', x: 59, y: 34, initial: 'N', bg: '#0d0d0d', logo: 'nike-com-logo.png', isTarget: true },
-  { id: 'on', name: 'On', x: 68, y: 63, initial: 'O', bg: '#0d0d0d', logo: 'on-com-logo.png', cover: true },
+  { id: 'nike', name: 'Sony', x: 90, y: 20, initial: 'S', bg: '#0d0d0d', logo: 'sony-com-logo.png', isTarget: true, cover: true },
+  { id: 'on', name: 'Anker', x: 40, y: 50, initial: 'A', bg: '#00b4f0', logo: 'anker-com-logo.png', cover: true },
 ];
 
 function PcDot({ brand }) {
@@ -305,7 +311,7 @@ function PcDot({ brand }) {
 /* ── "Analysis" tab — Visibility (left) + Sentiment (right), each a
    compact recreation of VisibilityAnalysis2.tsx / SentimentAnalysis2.tsx ── */
 // Same per-platform numbers as HeroDashboard's own Visibility Analysis
-// panel, so the two don't disagree about Nike's actual scores.
+// panel, so the two don't disagree about Sony's actual scores.
 const PC_VIS_ROWS = [
   { name: 'Gemini', icon: 'gemini-ai-logo.png', pct: 97 },
   { name: 'ChatGPT', icon: 'chatgpt-com-logo.png', pct: 92 },
@@ -402,7 +408,7 @@ function PositionChartDemo() {
   const nike = PC_BRANDS.find((b) => b.isTarget);
   return (
     <div className="pc-demo">
-      {/* Auto-playing loop, not a manual tab: cursor clicks Nike, the
+      {/* Auto-playing loop, not a manual tab: cursor clicks Sony, the
           tooltip opens, then the card scrolls itself down to the Analysis
           view before resetting — see .pc-scroll__track's animation and the
           .visible gate at the bottom of the stylesheet section for when it
@@ -452,7 +458,7 @@ function PositionChartDemo() {
 
             <div className="pc-insight">
               <span className="pc-insight__icon">✦</span>
-              <p><strong>Poli AI Insight:</strong> Nike holds #2 at 90% visibility with Strong sentiment, closing the gap on the leader is a content and source authority play.</p>
+              <p><strong>Poli AI Insight:</strong> Sony holds #2 at 90% visibility with Strong sentiment, closing the gap on the leader is a content and source authority play.</p>
             </div>
           </div>
 
@@ -647,7 +653,7 @@ const TH_ISSUE_TOP_ROWS = TH_ISSUE_SEVERITIES.filter((r) => r.cls !== 'notice');
 // developer, matching the real "Deploy" action in the app's Technical
 // Audit → Roadmap flow (deployCorrection, see
 // agent/projects/[planId]/initiative/[id]/page.tsx in poliris-frontend).
-const TH_FIX_ISSUE = { name: 'Missing Product schema markup', page: 'nike.com/t/air-max-1-shoes' };
+const TH_FIX_ISSUE = { name: 'Missing Product schema markup', page: 'sony.com/t/wf-1000xm5-earbuds' };
 
 function ThIssuesPanel() {
   const [count, setCount] = useState(0);
@@ -940,7 +946,7 @@ const RM_DRAGGED_CARD = { title: 'Resolve Canonical Conflict Between Running and
 const RM_CAL_STATIC_CARDS = {
   25: [{ title: 'Add Canonical Category Pages to XML Sitemap', type: 'fix' }],
   1: [
-    { title: 'Add ItemList Schema to Running Shoes Category Page', type: 'fix' },
+    { title: 'Add ItemList Schema to Wireless Earbuds Category Page', type: 'fix' },
     { title: 'Rewrite Page Titles and Meta Descriptions for Philippine Market', type: 'fix' },
   ],
 };
@@ -1043,24 +1049,24 @@ function RmCalendarPanel() {
 
 const RM_BOARD_WEEKS = [
   { label: 'Week 1', range: 'Aug 24 – Aug 30', cards: [
-    { title: 'Resolve Canonical Conflict Between Running and Pegasus Pages', type: 'fix' },
+    { title: 'Resolve Canonical Conflict Between Earbuds and Headphones Pages', type: 'fix' },
     { title: 'Add Canonical Category Pages to XML Sitemap', type: 'fix' },
   ] },
   { label: 'Week 2', range: 'Aug 31 – Sep 6', cards: [
-    { title: 'Add ItemList Schema to Running Shoes Category Page', type: 'fix' },
+    { title: 'Add ItemList Schema to Wireless Earbuds Category Page', type: 'fix' },
     { title: 'Rewrite Page Titles and Meta Descriptions for Philippine Market', type: 'fix' },
   ] },
   { label: 'Week 3', range: 'Sep 7 – Sep 13', cards: [
-    { title: 'Restructure Header Hierarchy on the Running Shoes Hub', type: 'fix' },
+    { title: 'Restructure Header Hierarchy on the Wireless Earbuds Hub', type: 'fix' },
     { title: 'Improve Core Web Vitals on High-Traffic Category Pages', type: 'fix' },
   ] },
   { label: 'Week 4', range: 'Sep 14 – Sep 20', cards: [
-    { title: 'Implement Product and FAQ Schema on the Pegasus Page', type: 'fix' },
-    { title: 'Secure a Nike Philippines Link on RunRepeat', type: 'backlink' },
+    { title: 'Implement Product and FAQ Schema on the WF-1000XM5 Page', type: 'fix' },
+    { title: 'Secure a Sony Philippines Link on SoundGuys', type: 'backlink' },
   ] },
 ];
 
-const RM_HOVER_TIP = "Ensure a single H1 names the product category and supporting H2s map to key performance axes (trail running, marathon training, weightlifting support) so crawlers and LLMs read a clear topical outline rather than product-image titles.";
+const RM_HOVER_TIP = "Ensure a single H1 names the product category and supporting H2s map to key performance axes (noise cancellation, call clarity, battery life) so crawlers and LLMs read a clear topical outline rather than product-image titles.";
 const RM_CURSOR_RISE = 44; // px the cursor starts below the icon before rising into it
 
 // Auto-plays once Board is open: cursor rises from below into the "?" on
@@ -1217,19 +1223,19 @@ function citCompetitorColor(name) {
   return CIT_COMPETITOR_PALETTE[h % CIT_COMPETITOR_PALETTE.length];
 }
 const CIT_ROWS = [
-  { domain: 'whatnotsell.com', url: 'https://www.whatnotsell.com/guides/best-sneakers-2026?utm_source=openai', cat: 'review', authority: false, citation: 'mention', competitors: ['Adidas', 'New Balance', 'Hoka', 'On'], buy: false },
-  { domain: 'treelinereview.com', url: 'https://www.treelinereview.com/gearreviews/best-walking-shoes', cat: 'review', authority: false, citation: 'mention', competitors: ['Altra', 'New Balance', 'Hoka', 'ASICS', 'On', 'Salomon', 'Brooks', 'Merrell'], buy: false },
-  { domain: 'trailspace.com', url: 'https://www.trailspace.com/gear/barefoot-mininimal-shoes/', cat: 'review', authority: false, citation: 'unverified', competitors: [], buy: false },
-  { domain: 'runrepeat.com', url: 'https://runrepeat.com/guides/best-walking-shoes', cat: 'review', authority: false, citation: 'mention', competitors: ['Adidas', 'New Balance', 'Hoka', 'ASICS', 'Brooks', 'Saucony', 'On', 'Skechers', 'Reebok', 'Altra'], buy: false },
-  { domain: 'outdoorgearlab.com', url: 'https://www.outdoorgearlab.com/topics/shoes-and-boots/best-walking-shoes', cat: 'review', authority: false, citation: 'mention', competitors: ['Altra', 'Adidas', 'New Balance', 'Under Armour', 'Hoka', 'ASICS', 'Brooks', 'On', 'Skechers', 'Saucony'], buy: false },
-  { domain: 'gearjunkie.com', url: 'https://gearjunkie.com/footwear/boots/best-hiking-boots', cat: 'review', authority: false, citation: 'uncited', competitors: ['Altra', 'Adidas', 'Hoka', 'On', 'Salomon', 'Merrell'], buy: true },
-  { domain: 'zappos.com', url: 'https://www.zappos.com/merrell/YgK3A-lCAQw.zso?utm_source=openai', cat: 'retail', authority: true, citation: 'mention', competitors: ['Altra', 'Adidas', 'New Balance', 'Under Armour', 'Hoka', 'ASICS', 'Brooks', 'Saucony', 'Puma', 'On'], buy: false },
-  { domain: 'worden.fr', url: 'https://www.worden.fr/salomon-aero-glide-4-grvl-vanila-noir-iron-p260979.html?utm_source=openai', cat: 'retail', authority: false, citation: 'uncited', competitors: ['Adidas', 'Hoka', 'Brooks', 'Saucony', 'On', 'Salomon', 'Merrell'], buy: false },
-  { domain: 'themintcompany.com', url: 'https://www.themintcompany.com/es/asics/48115-198264-asics-gel-kayano-14-1203a537-110.html?utm_source=openai', cat: 'retail', authority: false, citation: 'unverified', competitors: [], buy: false },
-  { domain: 'sweatpicks.com', url: 'https://sweatpicks.com/best-shoes-for-squats/?utm_source=openai', cat: 'retail', authority: false, citation: 'mention', competitors: ['Adidas', 'On', 'Reebok'], buy: false },
-  { domain: 'styleguru.org', url: 'https://styleguru.org/vetted/14-best-nike-lifestyle-sneakers-in-2026/', cat: 'retail', authority: false, citation: 'mention', competitors: ['On'], buy: false },
-  { domain: 'startfitness.co.uk', url: 'https://startfitness.co.uk/products/hoka-speedgoat-7-mens-trail-running-shoes-green-1?utm_source=openai', cat: 'retail', authority: false, citation: 'uncited', competitors: ['Hoka', 'On'], buy: false },
-  { domain: 'sportive.com.tr', url: 'https://www.sportive.com.tr/asics-gel-kayano-32-erkek-mavi-kosu-ayakkabisi-1011c', cat: 'retail', authority: false, citation: 'mention', competitors: ['Adidas', 'New Balance', 'Under Armour', 'ASICS', 'Puma', 'On'], buy: false },
+  { domain: 'whatnotsell.com', url: 'https://www.whatnotsell.com/guides/best-wireless-earbuds-2026?utm_source=openai', cat: 'review', authority: false, citation: 'mention', competitors: ['Apple', 'Samsung', 'Bose', 'Anker'], buy: false },
+  { domain: 'rtings.com', url: 'https://www.rtings.com/earbuds/reviews/best/wireless', cat: 'review', authority: false, citation: 'mention', competitors: ['Xiaomi', 'Samsung', 'Bose', 'JBL', 'Anker', 'Sennheiser', 'Beats', 'Skullcandy'], buy: false },
+  { domain: 'androidauthority.com', url: 'https://www.androidauthority.com/best-wireless-earbuds/', cat: 'review', authority: false, citation: 'unverified', competitors: [], buy: false },
+  { domain: 'soundguys.com', url: 'https://www.soundguys.com/best-wireless-earbuds-2026', cat: 'review', authority: false, citation: 'mention', competitors: ['Apple', 'Samsung', 'Bose', 'JBL', 'Sennheiser', 'Beats', 'Google', 'Xiaomi', 'Skullcandy', 'Anker'], buy: false },
+  { domain: 'techradar.com', url: 'https://www.techradar.com/audio/wireless-and-bluetooth-speakers/best-wireless-earbuds', cat: 'review', authority: false, citation: 'mention', competitors: ['Xiaomi', 'Apple', 'Samsung', 'Anker', 'Bose', 'JBL', 'Skullcandy', 'Beats', 'Sennheiser', 'Google'], buy: false },
+  { domain: 'gadgetreview.com', url: 'https://gadgetreview.com/audio/best-wireless-earbuds', cat: 'review', authority: false, citation: 'uncited', competitors: ['Xiaomi', 'Apple', 'Bose', 'Anker', 'Sennheiser', 'Google'], buy: true },
+  { domain: 'amazon.com', url: 'https://www.amazon.com/best-sellers-wireless-earbuds/s?k=wireless+earbuds', cat: 'retail', authority: true, citation: 'mention', competitors: ['Xiaomi', 'Apple', 'Samsung', 'Anker', 'Bose', 'JBL', 'Sennheiser', 'Beats', 'Skullcandy', 'Google'], buy: false },
+  { domain: 'fnac.com', url: 'https://www.fnac.com/Ecouteurs-sans-fil-Bluetooth/shi192557/w-4', cat: 'retail', authority: false, citation: 'uncited', competitors: ['Apple', 'Bose', 'JBL', 'Sennheiser', 'Anker', 'Beats', 'Google'], buy: false },
+  { domain: 'themintcompany.com', url: 'https://www.themintcompany.com/es/sony/48115-198264-sony-wf-1000xm5-negro.html?utm_source=openai', cat: 'retail', authority: false, citation: 'unverified', competitors: [], buy: false },
+  { domain: 'sweatpicks.com', url: 'https://sweatpicks.com/best-earbuds-for-the-gym/?utm_source=openai', cat: 'retail', authority: false, citation: 'mention', competitors: ['Apple', 'Anker', 'Beats'], buy: false },
+  { domain: 'styleguru.org', url: 'https://styleguru.org/vetted/14-best-wireless-earbuds-in-2026/', cat: 'retail', authority: false, citation: 'mention', competitors: ['Anker'], buy: false },
+  { domain: 'richersounds.com', url: 'https://www.richersounds.com/headphones/wireless-earbuds.html', cat: 'retail', authority: false, citation: 'uncited', competitors: ['Bose', 'Anker'], buy: false },
+  { domain: 'teknosa.com', url: 'https://www.teknosa.com/kablosuz-kulaklik-c-116', cat: 'retail', authority: false, citation: 'mention', competitors: ['Xiaomi', 'Samsung', 'Apple', 'JBL', 'Beats', 'Anker'], buy: false },
 ];
 
 function CitChip({ name }) {
@@ -1301,7 +1307,7 @@ function CitRow({ row, buyBtnRef, buyClicked, buyZoomed }) {
 }
 
 // The page Buy actually opens — ported from the real Acquire Citation
-// screen, trimmed to the one matched opportunity (gearjunkie.com) instead
+// screen, trimmed to the one matched opportunity (gadgetreview.com) instead
 // of a full paginated list, since that's the only row this card's demo ever
 // buys.
 function CitAcquirePanel() {
@@ -1311,7 +1317,7 @@ function CitAcquirePanel() {
         <div className="cit-acq__title">
           Acquire Citation
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          <span className="cit-acq__brand">Nike</span>
+          <span className="cit-acq__brand">Sony</span>
         </div>
         <div className="cit-acq__sub">Discover guest-post and link-placement opportunities matched to your site and target keyword.</div>
       </div>
@@ -1327,7 +1333,7 @@ function CitAcquirePanel() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="9" height="9"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
               Sync
             </span>
-            <span className="cit-acq__search">gearjunkie.com</span>
+            <span className="cit-acq__search">gadgetreview.com</span>
           </div>
         </div>
         <div className="cit-acq__status-row">
@@ -1343,7 +1349,7 @@ function CitAcquirePanel() {
           <div className="cit-acq__row">
             <span className="cit-acq__domain">
               <svg viewBox="0 0 24 24" fill="#16A34A" width="10" height="10"><circle cx="12" cy="12" r="10"/></svg>
-              gearjunkie.com
+              gadgetreview.com
             </span>
             <span className="cit-pill" style={{ color: CIT_CATEGORY.review, background: `${CIT_CATEGORY.review}1a` }}>Review</span>
             <span>77</span>
@@ -1367,7 +1373,7 @@ function CitLoadingPanel() {
     <div className="cg-loading">
       <span className="cg-spinner" />
       <div className="cg-loading-title">Finding citation opportunities…</div>
-      <div className="cg-loading-sub">Checking guest-post and link-placement availability for gearjunkie.com.</div>
+      <div className="cg-loading-sub">Checking guest-post and link-placement availability for gadgetreview.com.</div>
     </div>
   );
 }
@@ -1536,7 +1542,7 @@ function EngineCitationsCard() {
    AI rewriter. This demo leads with the actual differentiator instead: the
    article doesn't start from a blank page or pasted text, it starts from a
    gap Poliris's own GEO audit already found, reasoned in plain English
-   ("positions Nike as the pioneer…"), then goes all the way to a scored,
+   ("positions Sony as the pioneer…"), then goes all the way to a scored,
    schema-ready draft published live — the same "Write it → Implement it"
    loop poliris-frontend's Content Studio (studio-home.tsx) and this site's
    own /content-writing page already sell, condensed into one card. Screens
@@ -1545,18 +1551,18 @@ function EngineCitationsCard() {
 const CW_IDEAS = [
   {
     priority: 'HIGH',
-    title: 'Nike Air Max: 35 Years of Performance Innovation',
-    desc: 'Positions Nike as the pioneer of cushioning technology, from Air Max 1 to today: a gap AI answers currently give to no one.',
+    title: 'Sony WF-1000XM5: The Pinnacle of Noise-Cancelling Innovation',
+    desc: 'Positions Sony as the pioneer of noise-cancellation technology, from the WF-1000X to today: a gap AI answers currently give to no one.',
   },
   {
     priority: 'HIGH',
-    title: "Nike's Move to Zero: Reshaping Sustainable Footwear",
-    desc: "Nike's recycled materials and carbon commitments, framed to capture eco-conscious AI answers.",
+    title: "Sony's Road to Zero: Reshaping Sustainable Audio",
+    desc: "Sony's recycled materials and carbon commitments, framed to capture eco-conscious AI answers.",
   },
   {
     priority: 'MEDIUM',
-    title: 'Nike vs. Adidas: Who Leads the Future of Performance?',
-    desc: 'Pits Nike directly against its closest rival, positioned to displace Adidas in AI answers.',
+    title: 'Sony vs. Apple: Who Leads the Future of Wireless Audio?',
+    desc: 'Pits Sony directly against its closest rival, positioned to displace Apple in AI answers.',
   },
 ];
 // Which suggested idea the scripted demo picks — the center card, not the
@@ -1570,8 +1576,8 @@ const CW_PICKED_INDEX = 1;
 // real copy already written for ProductCarousel's ContentVis demo (en.js
 // contentVis.ideaSets[0][1].draft).
 const CW_DRAFT = {
-  intro: "Nike's Move to Zero initiative isn't just a marketing campaign; it's a measurable commitment. By 2025, the company aims to use 100% renewable energy across owned facilities, and the Space Hippie collection already proves recycled materials can outperform virgin ones.",
-  outline: ['What Is Move to Zero?', 'Space Hippie: Recycled Materials That Perform', 'Carbon Footprint by the Numbers', 'How to Shop More Sustainably with Nike'],
+  intro: "Sony's Road to Zero initiative isn't just a marketing campaign; it's a measurable commitment. By 2050, the company aims to achieve a zero environmental footprint across its value chain, and its recycled-plastic earbud casings already prove sustainable materials can perform without compromise.",
+  outline: ['What Is Road to Zero?', 'Recycled Materials That Perform', 'Carbon Footprint by the Numbers', 'How to Shop More Sustainably with Sony'],
   words: 680,
   read: '3 min',
   score: 88,

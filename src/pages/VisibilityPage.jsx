@@ -44,10 +44,10 @@ const SOURCE_FAVICONS = { tomsguide: TomsGuideIcon, google: GoogleGIcon, shopee:
    brand always reads the same color wherever it's cited. */
 const COMPETITOR_COLORS = ['teal', 'purple', 'pink', 'blue'];
 const COMPETITOR_COLOR_MAP = {
-  'Adidas': 'teal', 'HOKA': 'teal',
-  'New Balance': 'purple', 'ASICS': 'purple', 'Brooks': 'purple',
-  'Puma': 'pink', 'Saucony': 'pink', 'Under Armour': 'pink', 'World Balance': 'pink',
-  'On': 'blue',
+  'Apple': 'teal', 'Bose': 'teal',
+  'Samsung': 'purple', 'JBL': 'purple', 'Google': 'purple',
+  'Skullcandy': 'pink', 'Xiaomi': 'pink', 'Sennheiser': 'pink',
+  'Anker': 'blue',
 };
 function competitorColor(name) {
   if (COMPETITOR_COLOR_MAP[name]) return COMPETITOR_COLOR_MAP[name];
@@ -59,19 +59,19 @@ function competitorColor(name) {
 const SOURCE_ROWS = [
   { domain: 'youtube.com', logo: 'youtube-com-logo.png', typeKey: 'social', authority: 'high', citation: 'mention',
     url: 'https://www.youtube.com/watch?v=pJmxeHjZYcs',
-    competitors: ['Adidas', 'New Balance', 'ASICS', 'Puma', 'On', 'HOKA', 'Brooks'] },
-  { domain: 'whowhatwear.com', logo: 'whowhatwear-com-logo.png', typeKey: 'news', authority: 'high', citation: 'uncited',
-    url: 'https://www.whowhatwear.com/fashion/shoes/best-minimal-trainers-for-women',
-    competitors: ['Adidas', 'Puma', 'On'] },
+    competitors: ['Apple', 'Samsung', 'Google', 'Skullcandy', 'Anker', 'Bose', 'JBL'] },
+  { domain: 'soundguys.com', typeKey: 'media', authority: 'high', citation: 'uncited',
+    url: 'https://www.soundguys.com/best-wireless-earbuds-2026',
+    competitors: ['Apple', 'Skullcandy', 'Anker'] },
   { domain: 'tomsguide.com', icon: 'tomsguide', typeKey: 'news', authority: 'high', citation: 'mention',
-    url: 'https://www.tomsguide.com/wellness/running/we-asked-toms-guide-readers-what-brand-of-running-shoes-they-wear-and-there-was-a-clear-winner?utm_source=chatgpt.com',
-    competitors: ['Adidas', 'New Balance', 'ASICS', 'HOKA', 'Brooks', 'Saucony', 'Puma', 'On'] },
+    url: 'https://www.tomsguide.com/wellness/audio/we-asked-toms-guide-readers-what-brand-of-wireless-earbuds-they-wear-and-there-was-a-clear-winner?utm_source=chatgpt.com',
+    competitors: ['Apple', 'Samsung', 'Google', 'Bose', 'JBL', 'Sennheiser', 'Skullcandy', 'Anker'] },
   { domain: 'sites.google.com', icon: 'google', iconBordered: true, typeKey: 'industry', authority: 'high', citation: 'mention',
-    url: 'https://sites.google.com/view/quantitative-insights-lab/home/insights-lab/top-smart-running-shoes-companies-how-to-compare-them-2026',
-    competitors: ['Adidas', 'New Balance', 'ASICS', 'HOKA', 'Under Armour', 'On'] },
+    url: 'https://sites.google.com/view/quantitative-insights-lab/home/insights-lab/top-wireless-earbuds-companies-how-to-compare-them-2026',
+    competitors: ['Apple', 'Samsung', 'Google', 'Bose', 'Xiaomi', 'Anker'] },
   { domain: 'shopee.ph', icon: 'shopee', typeKey: 'marketplace', authority: 'high', citation: 'mention',
-    url: 'https://shopee.ph/blog/affordable-shoe-brands-philippines/',
-    competitors: ['World Balance', 'Puma', 'On', 'Adidas', 'New Balance', 'ASICS'] },
+    url: 'https://shopee.ph/blog/affordable-wireless-earbuds-philippines/',
+    competitors: ['Xiaomi', 'Skullcandy', 'Anker', 'Apple', 'Samsung', 'Google'] },
 ];
 
 /* Splits a question into 3 lines balanced by character length (not

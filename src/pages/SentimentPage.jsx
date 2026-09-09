@@ -221,7 +221,7 @@ const TOUR_CARDS = [
 /* ── competitor data ─────────────────────────────────────────── */
 const COMPETITORS = [
   {
-    name: 'Adidas',   you: false, bd: '#dc2626', logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,
+    name: 'Apple',    you: false, bd: '#dc2626', logo: `${import.meta.env.BASE_URL}apple-com-logo.png`,
     awareness: { label: 'Very Strong', cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Moderate',    cls: 'pt-warn' },
@@ -229,7 +229,7 @@ const COMPETITORS = [
     overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'Nike',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,
+    name: 'Sony',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}sony-com-logo.png`,
     awareness: { label: 'Very Strong', cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Weak',        cls: 'pt-neg' },
@@ -237,7 +237,7 @@ const COMPETITORS = [
     overall: 55, overallLabel: 'Moderate',
   },
   {
-    name: 'On',       you: false, bd: '#db2777', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
+    name: 'Anker',    you: false, bd: '#db2777', logo: `${import.meta.env.BASE_URL}anker-com-logo.png`,
     awareness: { label: 'Strong',      cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
@@ -245,7 +245,7 @@ const COMPETITORS = [
     overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'Hoka',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,
+    name: 'Bose',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}bose-com-logo.png`,
     awareness: { label: 'Moderate',    cls: 'pt-warn' },
     design:    { label: 'Moderate',    cls: 'pt-warn' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
@@ -253,7 +253,7 @@ const COMPETITORS = [
     overall: 55, overallLabel: 'Moderate',
   },
   {
-    name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
+    name: 'JBL',      you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}jbl-com-logo.png`,
     awareness: { label: 'Strong',      cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
@@ -261,7 +261,7 @@ const COMPETITORS = [
     overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'New Balance',   you: false, bd: '#475569', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
+    name: 'Samsung',   you: false, bd: '#475569', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png`,
     awareness: { label: 'Very Strong',           cls: 'pt-neu' },
     design:    { label: 'Strong',           cls: 'pt-neu' },
     durability:{ label: 'Strong', cls: 'pt-pos' },
@@ -335,10 +335,10 @@ export default function SentimentPage() {
                 <aside className="dash__sidebar">
                   <div className="dsb__brand">
                     <div className="dsb__brand-logo">
-                      <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                      <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
                     </div>
                     <div className="dsb__brand-info">
-                      <span className="dsb__brand-name">Nike</span>
+                      <span className="dsb__brand-name">Sony</span>
                       <span className="dsb__brand-meta">{md.activeProject}</span>
                     </div>
                   </div>
@@ -358,8 +358,8 @@ export default function SentimentPage() {
                       <span className="dsb__tree-chevron">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
                       </span>
-                      <span className="dsb__avatar dsb__avatar--n">N</span>
-                      <span className="dsb__tree-brand-name">nike</span>
+                      <span className="dsb__avatar dsb__avatar--n">S</span>
+                      <span className="dsb__tree-brand-name">sony</span>
                     </div>
                     <div className="dsb__tree-l1">
                       <div className="dsb__tree-category">
@@ -389,10 +389,10 @@ export default function SentimentPage() {
                   <div className="hdash__v2-brand-row">
                     <div className="hdash__v2-brand-left">
                       <div className="hdash__v2-brand-logo">
-                        <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                        <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
                       </div>
                       <div>
-                        <div className="hdash__v2-brand-name">Nike</div>
+                        <div className="hdash__v2-brand-name">Sony</div>
                         <div className="hdash__v2-brand-sub">{md.updatedToday}</div>
                       </div>
                     </div>
@@ -452,7 +452,7 @@ export default function SentimentPage() {
                           <div className="hdash__v2-tip-date">{SENT_X_LABELS[sentHov]}, 2026</div>
                           <div className="hdash__v2-tip-row">
                             <span className="hdash__v2-tip-dot" style={{ background: hovTier.color }} />
-                            <span className="hdash__v2-tip-name">Nike</span>
+                            <span className="hdash__v2-tip-name">Sony</span>
                             <span className="hdash__v2-tip-val" style={{ color: hovTier.color }}>{md.tiers[hovTier.label]}</span>
                           </div>
                         </div>

@@ -2,7 +2,7 @@
    POLIRIS — Vanilla CSS Design System
    ================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Chivo:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Chivo:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* ── Design Tokens ────────────────────────────────────────────── */
 :root {
@@ -1292,6 +1292,12 @@ button { cursor: pointer; border: none; background: none; }
   background: #fff;
   box-shadow: 0 40px 110px -30px rgba(20, 30, 80, .32);
   overflow: hidden;
+  /* Swaps the site's Manrope/Chivo pairing for Poppins inside the dashboard
+     mockup only — every font-family rule in this section reads one of
+     these two custom properties, so redefining them here is enough to
+     recolor the whole mockup without touching each rule individually. */
+  --manrope: 'Poppins', Arial, sans-serif;
+  --chivo:   'Poppins', system-ui, sans-serif;
 }
 .dash__appbar {
   display: flex;
@@ -1677,13 +1683,16 @@ button { cursor: pointer; border: none; background: none; }
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 6px;
   flex-shrink: 0;
 }
-.hdash__v2-brand-logo img { width: 100%; height: 100%; object-fit: contain; filter: invert(1); }
+/* Sony's logo is already a solid black tile with white wordmark (not a
+   transparent mark), so it fills the badge edge-to-edge like the sidebar's
+   .dsb__brand-logo treatment instead of sitting inset with an inverted
+   filter — inverting an already-black tile turned it white-on-white. */
+.hdash__v2-brand-logo img { width: 100%; height: 100%; object-fit: cover; }
 .hdash__v2-brand-name {
   font-family: var(--manrope);
-  font-weight: 700;
+  font-weight: 550;
   font-size: 15px;
   color: #111827;
   line-height: 1.2;
@@ -1752,7 +1761,7 @@ button { cursor: pointer; border: none; background: none; }
   text-align: left;
   font-family: var(--manrope);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 550;
   color: #6b7280;
   margin-top: 20px;
   margin-bottom: 8px;
@@ -1854,7 +1863,7 @@ button { cursor: pointer; border: none; background: none; }
 .hdash__sb-title2 {
   font-family: var(--manrope);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 550;
   color: #6b6e72;
   margin: 0 0 2px;
 }
@@ -2058,6 +2067,17 @@ button { cursor: pointer; border: none; background: none; }
   gap: 14px;
   border-right: 1px solid var(--border);
   overflow: hidden;
+  /* .hdash__main is a static (unpositioned) grid item, so a z-index
+     inside it (e.g. the hovered brand dot / its .hdash__qtip tooltip)
+     never actually competes in a stacking comparison against its
+     sibling .hdash__right column — z-index only ranks elements within
+     the same stacking context, and without this, .hdash__main never
+     forms one of its own. .hdash__right comes later in the DOM with no
+     z-index of its own, so it was winning ties and painting over the
+     tooltip whenever a dot near the right edge (e.g. Apple) opened one.
+     Promoting .hdash__main itself fixes that for every dot at once. */
+  position: relative;
+  z-index: 2;
 }
 
 /* ── Card shell ───────────────────────────────────────────────── */
@@ -2070,7 +2090,7 @@ button { cursor: pointer; border: none; background: none; }
 .hdash__card-title {
   text-align: left;
   font-family: var(--manrope);
-  font-weight: 700;
+  font-weight: 550;
   font-size: 12.5px;
   color: #0c1330;
   margin: 0 0 1px;
@@ -2215,7 +2235,7 @@ button { cursor: pointer; border: none; background: none; }
   display: inline-flex;
   align-items: center;
   padding: 1px 6px;
-  background: var(--blue);
+  background: var(--poliris-blue);
   color: #fff;
   border-radius: 999px;
   font-size: 9.5px;
@@ -2312,7 +2332,7 @@ button { cursor: pointer; border: none; background: none; }
   border-radius: 50%;
 }
 .hdash__brand-dot--dim { opacity: 0.12; pointer-events: none; }
-.hdash__brand-dot:hover { z-index: 30; }
+.hdash__brand-dot:hover { z-index: 50; }
 .hdash__brand-dot:hover .hdash__brand-av { transform: scale(1.18); }
 .hdash__brand-dot--you .hdash__brand-av {
   box-shadow: 0 0 0 2.5px #93c5fd, 0 2px 8px rgba(0,0,0,.25);
@@ -2404,7 +2424,7 @@ button { cursor: pointer; border: none; background: none; }
   box-shadow: 0 6px 24px rgba(0,0,0,.14);
   white-space: nowrap;
   pointer-events: none;
-  z-index: 20;
+  z-index: 99;
   min-width: 90px;
 }
 .hdash__qtip-your {
@@ -2502,7 +2522,7 @@ button { cursor: pointer; border: none; background: none; }
 .hdash__analysis-title {
   text-align: left;
   font-family: var(--manrope);
-  font-weight: 700;
+  font-weight: 550;
   font-size: 13px;
   color: #0c1330;
   margin: 0 0 3px;
@@ -2630,7 +2650,7 @@ button { cursor: pointer; border: none; background: none; }
   width: 28px;
   text-align: right;
   font-family: var(--manrope);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 11px;
   color: #0c1330;
 }
@@ -2688,7 +2708,7 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hdash__sent-label {
   font-family: var(--manrope);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 11.5px;
   color: #0c1330;
 }

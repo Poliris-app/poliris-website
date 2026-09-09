@@ -296,9 +296,9 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
 
 const ILNK_CATEGORIES = ['footwear', 'apparel', 'gear'];
 const ILNK_CARDS = [
-  { link: 'footwear', url: 'yoursite.com/footwear' },
-  { link: 'apparel',  url: 'yoursite.com/apparel' },
-  { link: 'gear',     url: 'yoursite.com/gear' },
+  { link: 'footwear', url: 'yoursite.com/earbuds' },
+  { link: 'apparel',  url: 'yoursite.com/headphones' },
+  { link: 'gear',     url: 'yoursite.com/speakers' },
 ];
 
 function InternalLinkingBoard({ cwLink }) {
@@ -466,7 +466,7 @@ function InternalLinkingBoard({ cwLink }) {
           <span className="ilnk-skel ilnk-w-92" />
           <div className="ilnk-inline-row">
             <span className="ilnk-skel ilnk-w-30" />
-            <button className="ilnk-pill ilnk-pill-footwear" data-link="footwear">Footwear</button>
+            <button className="ilnk-pill ilnk-pill-footwear" data-link="footwear">Earbuds</button>
             <span className="ilnk-handle ilnk-handle-footwear" data-link="footwear" />
             <span className="ilnk-skel ilnk-fill" />
           </div>
@@ -480,7 +480,7 @@ function InternalLinkingBoard({ cwLink }) {
           <span className="ilnk-skel ilnk-w-70" />
         </div>
         <div className="ilnk-handle-row">
-          <button className="ilnk-pill ilnk-pill-apparel" data-link="apparel">Apparel</button>
+          <button className="ilnk-pill ilnk-pill-apparel" data-link="apparel">Headphones</button>
           <span className="ilnk-handle ilnk-handle-apparel" data-link="apparel" />
           <span className="ilnk-skel ilnk-fill" />
         </div>
@@ -493,7 +493,7 @@ function InternalLinkingBoard({ cwLink }) {
         </div>
         <div className="ilnk-handle-row">
           <span className="ilnk-skel ilnk-w-36" />
-          <button className="ilnk-pill ilnk-pill-gear" data-link="gear">Gear &amp; Accessories</button>
+          <button className="ilnk-pill ilnk-pill-gear" data-link="gear">Speakers &amp; Accessories</button>
           <span className="ilnk-handle ilnk-handle-gear" data-link="gear" />
         </div>
         <span className="ilnk-skel ilnk-w-88" style={{ marginTop: '2px' }} />
@@ -934,7 +934,7 @@ export default function ContentWritingPage() {
                     <svg className="mbw-lock" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
                     </svg>
-                    nike.com/blog/lifestyle-footwear
+                    sony.com/blog/lifestyle-audio
                   </div>
                   <span className="mbw-live-wrap">
                     <span className="mbw-live">{cwImpl.mockup.live}</span>

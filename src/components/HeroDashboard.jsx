@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 
 const BRANDS = [
-  { id: 'nike',       name: 'Nike',        color: '#111827', isYou: true, abbr: 'NK', logo: `${import.meta.env.BASE_URL}nike-com-logo.png` },
-  { id: 'newbalance', name: 'New Balance', color: '#ea580c', abbr: 'NB', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png` },
-  { id: 'brooks',     name: 'Brooks',      color: '#7c3aed', abbr: 'BR', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png` },
-  { id: 'on',         name: 'On',          color: '#16a34a', abbr: 'ON', logo: `${import.meta.env.BASE_URL}on-com-logo.png` },
-  { id: 'adidas',      name: 'Adidas',       color: '#dc2626', abbr: 'AS', logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png` },
-  { id: 'hoka',       name: 'Hoka',        color: '#0891b2', abbr: 'HK', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png` },
+  { id: 'nike',       name: 'Sony',    color: '#111827', isYou: true, abbr: 'SN', logo: `${import.meta.env.BASE_URL}sony-com-logo.png` },
+  { id: 'newbalance', name: 'Samsung', color: '#ea580c', abbr: 'SM', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png` },
+  { id: 'brooks',     name: 'JBL',     color: '#7c3aed', abbr: 'JB', logo: `${import.meta.env.BASE_URL}jbl-com-logo.png` },
+  { id: 'on',         name: 'Anker',   color: '#16a34a', abbr: 'AN', logo: `${import.meta.env.BASE_URL}anker-com-logo.png` },
+  { id: 'adidas',     name: 'Apple',   color: '#dc2626', abbr: 'AP', logo: `${import.meta.env.BASE_URL}apple-com-logo.png` },
+  { id: 'hoka',       name: 'Bose',    color: '#0891b2', abbr: 'BS', logo: `${import.meta.env.BASE_URL}bose-com-logo.png` },
 ];
 
 const VIS_DATA = {
@@ -167,7 +167,7 @@ export default function HeroDashboard() {
           {/* Brand header */}
           <div className="dsb__brand">
             <div className="dsb__brand-logo">
-              <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+              <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
             </div>
             <div className="dsb__brand-info">
               <span className="dsb__brand-name">{d.sidebar.nike}</span>
@@ -196,8 +196,8 @@ export default function HeroDashboard() {
               <span className="dsb__tree-chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
               </span>
-              <span className="dsb__avatar dsb__avatar--n">N</span>
-              <span className="dsb__tree-brand-name">nike</span>
+              <span className="dsb__avatar dsb__avatar--n">S</span>
+              <span className="dsb__tree-brand-name">sony</span>
             </div>
 
             {/* Level 1 children   line from brand */}

@@ -139,7 +139,7 @@
 }
 .ta-app-cap {
   font-family: var(--display);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   color: var(--muted);
   max-width: 600px;

@@ -22,11 +22,6 @@ const IconInfo = () => (
     <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
   </svg>
 );
-const IconStar = () => (
-  <svg className="som-insight-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
-    <path d="M327.5 85.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L384 128l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L448 128l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L448 74.8 426.8 18.3C425.1 13.8 420.8 11 416 11s-9.1 3-10.8 7.5L384 74.8l-56.5 21.2zM205.1 73.3c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3L123.5 187.4 9.3 240c-5.7 2.6-9.3 8.3-9.3 14.5s3.6 11.9 9.3 14.5l114.1 52.6L176.1 435c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l52.6-114.1 114.1-52.6c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5L257.7 187.4 205.1 73.3zM384 374.8l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 438.8l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L448 438.8l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L448 374.8l-21.2-56.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L384 374.8z" />
-  </svg>
-);
 const IconList = () => (
   <svg width="14" height="14" viewBox="0 0 15 10" fill="none" stroke="currentColor" strokeWidth="1.17" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M4.375.875H13.708M4.375 4.958H13.708M4.375 9.041H13.708M.875.875h.006M.875 4.958h.006M.875 9.041h.006"/>
@@ -77,31 +72,6 @@ function SegmentedBar({ segments }) {
   );
 }
 
-/* ── PerformanceGauge (40×40 compact) ─────────────────────── */
-function PerformanceGauge({ score }) {
-  const size = 40, sw = 4, r = (size - sw) / 2;
-  const C = 2 * Math.PI * r;
-  const v = Math.max(0, Math.min(100, Math.round(score)));
-  const offset = C * (1 - v / 100);
-  const stroke = v >= 90 ? '#16A34A' : v >= 50 ? '#F59E0B' : '#EF4444';
-  const textColor = v >= 90 ? '#16A34A' : v >= 50 ? '#B45309' : '#DC2626';
-  return (
-    <div className="som-perf-gauge">
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#EEF0F3" strokeWidth={sw} />
-        <circle
-          cx={size / 2} cy={size / 2} r={r}
-          fill="none" stroke={stroke} strokeWidth={sw}
-          strokeLinecap="round"
-          strokeDasharray={C}
-          strokeDashoffset={offset}
-        />
-      </svg>
-      <span className="som-perf-num" style={{ color: textColor }}>{v}</span>
-    </div>
-  );
-}
-
 /* ── SegmentedRatingBar (vital bar) ───────────────────────── */
 const R_COLORS = ['#22c55e', '#eab308', '#ef4444'];
 
@@ -119,13 +89,13 @@ function SegmentedRatingBar({ activeIndex, fraction, weights, labels }) {
             <div
               key={i}
               className="som-rating-seg-active"
-              style={{ flexGrow: weights[i], flexBasis: 0, outline: `2px solid ${color}`, outlineOffset: '2px' }}
+              style={{ flexGrow: weights[i], flexBasis: 0, outline: `2px solid ${color}`, outlineOffset: '1px' }}
             >
-              <div style={{ flexGrow: fraction, flexBasis: 0, height: '100%', borderRadius: 99, background: color }} />
+              <div style={{ flexGrow: fraction, flexBasis: 0, height: '40%', borderRadius: 99, background: color }} />
               <span className="som-rating-pin-wrap" aria-hidden="true">
                 <span className="som-rating-pin" style={{ borderColor: color }} />
               </span>
-              <div style={{ flexGrow: Math.max(0, 1 - fraction), flexBasis: 0, height: '100%', borderRadius: 99, background: color }} />
+              <div style={{ flexGrow: Math.max(0, 1 - fraction), flexBasis: 0, height: '40%', borderRadius: 99, background: color }} />
             </div>
           );
         })}
@@ -152,14 +122,18 @@ export default function SiteOverviewMockup() {
 
   const crawlSegs = [
     { key: 'indexed',    value: 25, color: '#2563eb', label: d.indexed },
-    { key: 'notIndexed', value: 75, color: '#ef4444', label: d.notIndexed },
+    { key: 'notIndexed', value: 75, color: '#d1d5db', label: d.notIndexed },
   ];
   const statusSegs = [
-    { key: 'accessible', value: 32, color: '#1e3893', label: d.accessible, bg: '#dbeafe', fg: '#1e40af' },
-    { key: 'redirecting',value:  4, color: '#f97316', label: d.redirecting, bg: '#ffedd5', fg: '#9a3412' },
-    { key: 'blocked',    value:  0, color: '#fb923c', label: d.blocked,     bg: '#ffedd5', fg: '#9a3412' },
-    { key: 'error',      value: 64, color: '#ef4444', label: d.error,       bg: '#fee2e2', fg: '#991b1b' },
+    { key: 'accessible', value: 32, color: '#1e3893', label: d.accessible },
+    { key: 'redirecting',value:  4, color: '#f97316', label: d.redirecting },
+    { key: 'blocked',    value:  0, color: '#fb923c', label: d.blocked },
+    { key: 'error',      value: 64, color: '#ef4444', label: d.error },
+    { key: 'missing',    value:  0, color: '#9ca3af', label: d.missing },
   ];
+  // Displayed ranked by share (highest first), independent of the bar's
+  // own left-to-right stacking order above.
+  const statusList = [...statusSegs].sort((a, b) => b.value - a.value);
 
   return (
     <div className="som">
@@ -173,10 +147,10 @@ export default function SiteOverviewMockup() {
           <div className="som-head-left">
             <h2 className="som-h2">{d.siteOverview}</h2>
             <div className="som-url-row">
-              <a className="som-url" href="#">www.nike.com</a>
+              <a className="som-url" href="#">www.sony.com</a>
               <IconExternal />
               <span className="som-sep">·</span>
-              <span className="som-brand">Nike</span>
+              <span className="som-brand">Sony</span>
             </div>
             <div className="som-meta-row">
               <IconRefresh />
@@ -187,30 +161,16 @@ export default function SiteOverviewMockup() {
             </div>
           </div>
           <div className="som-thumb">
-            <img src="/nike_landingpage.png" alt="Nike landing page" className="som-thumb-img" />
+            <img src="/sony_landingpage.png" alt="Sony landing page" className="som-thumb-img" />
           </div>
         </div>
 
-        {/* ── Tabs ───────────────────────────────────────── */}
+        {/* ── Tabs + view toggle (same row) ────────────────── */}
         <div className="som-tab-row">
           <div className="som-tabs">
             <button className="som-tab som-tab-active">{d.tabOverview}</button>
             <button className="som-tab">{d.tabIssues}</button>
-            <button className="som-tab">{d.tabViz}</button>
           </div>
-        </div>
-
-        {/* ── AI Insight ─────────────────────────────────── */}
-        <div className="som-insight">
-          <IconStar />
-          <div className="som-insight-body">
-            <p className="som-insight-title">{d.poliAiInsight}</p>
-            <p className="som-insight-text">{d.insightText}</p>
-          </div>
-        </div>
-
-        {/* ── View toggle (above columns, right-aligned) ── */}
-        <div className="som-controls">
           <div className="som-view-toggle">
             <button className="som-vt-btn som-vt-active" aria-pressed="true"><IconList /></button>
             <button className="som-vt-btn" aria-pressed="false"><IconGraph /></button>
@@ -233,22 +193,19 @@ export default function SiteOverviewMockup() {
               <div className="som-crawl-row">
                 <IndexedDonut pct={25} label={d.indexed} />
                 <div className="som-crawl-aside">
-                  <span className="som-crawl-lbl">100 {d.pagesOf} 100 {d.pagesCrawledShort}</span>
-                  <SegmentedBar segments={crawlSegs} />
-                  <ul className="som-crawl-legend">
-                    {crawlSegs.map(s => (
-                      <li key={s.key}>
-                        <span className="som-legend-dot" style={{ background: s.color }} />
-                        {s.label}
-                      </li>
-                    ))}
-                  </ul>
+                  <span className="som-crawl-big-num">36<span className="som-crawl-big-denom"> / 100</span></span>
+                  <span className="som-crawl-big-sub">{d.pagesCrawledAndIndexed}</span>
                 </div>
               </div>
-              <div className="som-hint-box">
-                <p className="som-hint-text">{d.crawlDesc}</p>
-                <button className="som-ask-btn">{d.askPoli}</button>
-              </div>
+              <SegmentedBar segments={crawlSegs} />
+              <ul className="som-crawl-legend">
+                {crawlSegs.map(s => (
+                  <li key={s.key}>
+                    <span className="som-legend-dot" style={{ background: s.color }} />
+                    {s.label} {s.value}%
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -264,20 +221,16 @@ export default function SiteOverviewMockup() {
             <div className="som-col-body">
               <SegmentedBar segments={statusSegs} />
               <ul className="som-status-list">
-                {statusSegs.map(s => (
+                {statusList.map(s => (
                   <li key={s.key} className="som-status-row">
                     <div className="som-status-left">
                       <span className="som-status-dot" style={{ background: s.color }} />
                       <span className="som-status-lbl">{s.label}</span>
                     </div>
-                    <span className="som-pct-chip" style={{ background: s.bg, color: s.fg }}>{s.value}%</span>
+                    <span className="som-pct-plain" style={{ color: s.color }}>{s.value}%</span>
                   </li>
                 ))}
               </ul>
-              <div className="som-hint-box">
-                <p className="som-hint-text">{d.statusDesc}</p>
-                <button className="som-ask-btn">{d.askPoli}</button>
-              </div>
             </div>
           </div>
 
@@ -287,35 +240,53 @@ export default function SiteOverviewMockup() {
               <div className="som-col-head-text">
                 <h3 className="som-col-title">{d.speedTitle} <IconInfo /></h3>
                 <p className="som-col-sub">{d.speedSub}</p>
+                <p className="som-col-sub">{d.scoreCoverage.replace('{pct}', 33)}</p>
               </div>
-              <PerformanceGauge score={70} />
             </div>
             <div className="som-col-body">
               <ul className="som-vitals">
                 {/* LCP — Needs Improvement, fraction 0.8 */}
                 <li className="som-vital">
                   <div className="som-vital-head">
-                    <span className="som-vital-name">{d.lcp}</span>
-                    <span className="som-vital-val">· 3.7 s</span>
-                    <span className="som-vital-chip" style={{ background: '#fefce8', color: '#eab308' }}>{d.needsImprovement}</span>
+                    <span className="som-vital-name-group">
+                      <IconInfo />
+                      <span className="som-vital-name">{d.lcp}</span>
+                      <span className="som-vital-val">· 3.7 s</span>
+                    </span>
+                    <span className="som-vital-right">
+                      <span className="som-vital-fraction">{d.goodOf.replace('{n}', 8).replace('{total}', 36)}</span>
+                      <span className="som-vital-chip" style={{ background: '#fef2f2', color: '#ef4444' }}>{d.poor}</span>
+                    </span>
                   </div>
-                  <SegmentedRatingBar activeIndex={1} fraction={0.8} weights={[41.7, 25, 33.3]} labels={ratingLabels} />
+                  <SegmentedRatingBar activeIndex={2} fraction={0.8} weights={[41.7, 25, 33.3]} labels={ratingLabels} />
                 </li>
                 {/* INP — Poor, fraction 1 */}
                 <li className="som-vital">
                   <div className="som-vital-head">
-                    <span className="som-vital-name">{d.inp}</span>
-                    <span className="som-vital-val">· 818 ms</span>
-                    <span className="som-vital-chip" style={{ background: '#fef2f2', color: '#ef4444' }}>{d.poor}</span>
+                    <span className="som-vital-name-group">
+                      <IconInfo />
+                      <span className="som-vital-name">{d.inp}</span>
+                      <span className="som-vital-val">· 818 ms</span>
+                    </span>
+                    <span className="som-vital-right">
+                      <span className="som-vital-fraction">{d.goodOf.replace('{n}', 3).replace('{total}', 13)}</span>
+                      <span className="som-vital-chip" style={{ background: '#fef2f2', color: '#ef4444' }}>{d.poor}</span>
+                    </span>
                   </div>
                   <SegmentedRatingBar activeIndex={2} fraction={1} weights={[26.7, 40, 33.3]} labels={ratingLabels} />
                 </li>
                 {/* CLS — Good, fraction 0.4 */}
                 <li className="som-vital">
                   <div className="som-vital-head">
-                    <span className="som-vital-name">{d.cls}</span>
-                    <span className="som-vital-val">· 0.040</span>
-                    <span className="som-vital-chip" style={{ background: '#dcfce7', color: '#22c55e' }}>{d.good}</span>
+                    <span className="som-vital-name-group">
+                      <IconInfo />
+                      <span className="som-vital-name">{d.cls}</span>
+                      <span className="som-vital-val">· 0.040</span>
+                    </span>
+                    <span className="som-vital-right">
+                      <span className="som-vital-fraction">{d.goodOf.replace('{n}', 31).replace('{total}', 36)}</span>
+                      <span className="som-vital-chip" style={{ background: '#dcfce7', color: '#22c55e' }}>{d.good}</span>
+                    </span>
                   </div>
                   <SegmentedRatingBar activeIndex={0} fraction={0.4} weights={[26.7, 40, 33.3]} labels={ratingLabels} />
                 </li>

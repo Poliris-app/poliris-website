@@ -7,6 +7,17 @@
 /* ── surface-1 token (needed by evx-bin background) ─────── */
 :root { --surface-1: #fafbfd; }
 
+/* ── Dashboard mockup font override ───────────────────────
+   Swaps Manrope/Chivo for Poppins inside the embedded dashboard mockup
+   only (the .dsb__ and .hdash__ rules in poliris.css all read one of
+   these two custom properties) — matches the same override applied to
+   .hero__dashboard on the homepage/visibility page, without touching
+   the rest of this page's copy. */
+.app {
+  --manrope: 'Poppins', Arial, sans-serif;
+  --chivo:   'Poppins', system-ui, sans-serif;
+}
+
 /* ── pill tags ─────────────────────────────────────────── */
 .vis-page .pill-tag {
   font-family: var(--font-display);

@@ -51,12 +51,12 @@ function VisibilityVis() {
     { label: 'Gemini Web',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png` },
   ];
   const BRANDS = [
-    { name: 'Adidas',      logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,  scores: [95, 97, 90, 96, 97] },
-    { name: 'Nike',        logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,          scores: [90, 92, 82, 89, 97], isYou: true },
-    { name: 'On',          logo: `${import.meta.env.BASE_URL}on-com-logo.png`,            scores: [40, 42, 35, 45, 38] },
-    { name: 'Hoka',        logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,          scores: [38, 40, 32, 42, 38] },
-    { name: 'Brooks',      logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`, scores: [36, 40, 28, 40, 36] },
-    { name: 'New Balance', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,    scores: [34, 38, 28, 38, 32] },
+    { name: 'Apple',   logo: `${import.meta.env.BASE_URL}apple-com-logo.png`,   scores: [95, 97, 90, 96, 97] },
+    { name: 'Sony',    logo: `${import.meta.env.BASE_URL}sony-com-logo.png`,    scores: [90, 92, 82, 89, 97], isYou: true },
+    { name: 'Anker',   logo: `${import.meta.env.BASE_URL}anker-com-logo.png`,   scores: [40, 42, 35, 45, 38] },
+    { name: 'Bose',    logo: `${import.meta.env.BASE_URL}bose-com-logo.png`,    scores: [38, 40, 32, 42, 38] },
+    { name: 'JBL',     logo: `${import.meta.env.BASE_URL}jbl-com-logo.png`,     scores: [36, 40, 28, 40, 36] },
+    { name: 'Samsung', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png`, scores: [34, 38, 28, 38, 32] },
   ];
 
   return (
@@ -139,32 +139,32 @@ function SentimentVis() {
   const AXES = sv.axes;
   const BRANDS = [
     {
-      name: 'Nike',   logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,           color: '#0f172a', isYou: true,
+      name: 'Sony',   logo: `${import.meta.env.BASE_URL}sony-com-logo.png`,     color: '#0f172a', isYou: true,
       overall: 'Very Strong',
       scores: { Innovation: 92, Performance: 90, Range: 70, Quality: 85, Trust: 88 },
     },
     {
-      name: 'On',     logo: `${import.meta.env.BASE_URL}on-com-logo.png`,             color: '#e55a2b',
+      name: 'Anker',  logo: `${import.meta.env.BASE_URL}anker-com-logo.png`,    color: '#e55a2b',
       overall: 'Strong',
       scores: { Innovation: 75, Performance: 78, Range: 65, Quality: 68, Trust: 72 },
     },
     {
-      name: 'Hoka',   logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,           color: '#0ea5e9',
+      name: 'Bose',   logo: `${import.meta.env.BASE_URL}bose-com-logo.png`,     color: '#0ea5e9',
       overall: 'Strong',
       scores: { Innovation: 65, Performance: 73, Range: 58, Quality: 50, Trust: 65 },
     },
     {
-      name: 'Adidas',  logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,          color: '#7c3aed',
+      name: 'Apple',   logo: `${import.meta.env.BASE_URL}apple-com-logo.png`,   color: '#7c3aed',
       overall: 'Very Strong',
       scores: { Innovation: 95, Performance: 94, Range: 76, Quality: 90, Trust: 92 },
     },
     {
-      name: 'Brooks',      logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,   color: '#14b8a6',
+      name: 'JBL',     logo: `${import.meta.env.BASE_URL}jbl-com-logo.png`,     color: '#14b8a6',
       overall: 'Moderate',
       scores: { Innovation: 50, Performance: 62, Range: 48, Quality: 42, Trust: 58 },
     },
     {
-      name: 'New Balance', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,       color: '#ea580c',
+      name: 'Samsung', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png`, color: '#ea580c',
       overall: 'Strong',
       scores: { Innovation: 74, Performance: 80, Range: 68, Quality: 72, Trust: 76 },
     },
@@ -601,8 +601,8 @@ function ContentVis() {
     if (match) { openDraft(match); return; }
     setDraft({
       title: tVal,
-      intro: `Nike has long been a leader in athletic innovation. This article explores ${tVal.toLowerCase()} and positions Nike as the authority in this space   optimised for AI-powered search results.`,
-      outline: ['Introduction & Brand Context', 'Key Performance Differentiators', 'Consumer Benefits & Use Cases', "Nike's Competitive Edge"],
+      intro: `Sony has long been a leader in audio innovation. This article explores ${tVal.toLowerCase()} and positions Sony as the authority in this space   optimised for AI-powered search results.`,
+      outline: ['Introduction & Brand Context', 'Key Performance Differentiators', 'Consumer Benefits & Use Cases', "Sony's Competitive Edge"],
       words: '640', read: '3 min', score: 74,
     });
   };

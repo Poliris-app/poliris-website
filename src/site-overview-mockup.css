@@ -11,6 +11,12 @@
   font-family: var(--chivo, -apple-system, system-ui, sans-serif);
   font-size: 13px;
   color: #111827;
+  /* Swaps Manrope/Chivo for Poppins inside this mockup only — every
+     font-family rule below reads one of these two custom properties,
+     matching the same override applied to the other product dashboards
+     (.hero__dashboard, .app). */
+  --manrope: 'Poppins', Arial, sans-serif;
+  --chivo:   'Poppins', system-ui, sans-serif;
 }
 
 /* ── Browser chrome ─────────────────────────────────────────── */
@@ -111,6 +117,8 @@
 .som-tab-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   border-bottom: 1px solid #e5e7eb;
   margin-bottom: 14px;
 }
@@ -139,43 +147,6 @@
   font-weight: 600;
 }
 
-/* ── Insight banner ─────────────────────────────────────────── */
-.som-insight {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  background: #eff6ff;
-  border: 1px solid #dbeafe;
-  border-radius: 12px;
-  padding: 8px 16px;
-  margin-bottom: 14px;
-}
-.som-insight-icon {
-  width: 16px;
-  height: 16px;
-  color: #1e408a;
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-.som-insight-body {
-  flex: 1;
-  min-width: 0;
-}
-.som-insight-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1e408a;
-  margin: 0 0 2px;
-  text-align: left;
-}
-.som-insight-text {
-  font-size: 11px;
-  color: #6b6e72;
-  line-height: 1.6;
-  margin: 0;
-  text-align: left;
-}
-
 /* ── Controls row (view toggle) ─────────────────────────────── */
 .som-controls {
   display: flex;
@@ -190,6 +161,7 @@
   border-radius: 6px;
   background: #fff;
   padding: 2px;
+  margin-left: auto;
 }
 .som-vt-btn {
   border: none;
@@ -213,26 +185,31 @@
 .som-cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  /* Each card sizes to its own content instead of stretching to match
+     the tallest column (Page Speed Insights, with its warning banner
+     and 3 vital rows, is naturally taller than the other two). */
+  align-items: start;
 }
 
 .som-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   min-height: 220px;
   /* Grid items default to min-width:auto, so a long unshrinkable child
      (e.g. the "Needs Improvement" status chip) can stretch this 1fr
      track wider than the card itself, bleeding past the right edge
      while the left stays put. This is the standard fix. */
   min-width: 0;
+  /* Each column is its own card now, not a divider-separated third of
+     one shared strip. */
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
 }
-.som-col-1 { padding-right: 12px; }
-.som-col-2 {
-  padding: 0 16px;
-  border-left: 1px solid #d1d5db;
-  border-right: 1px solid #d1d5db;
-}
-.som-col-3 { padding-left: 12px; }
 
 /* Column head */
 .som-col-head {
@@ -280,7 +257,7 @@
 .som-col-body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   flex: 1;
 }
 
@@ -332,17 +309,29 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  margin: 27px 0px;
 }
 .som-crawl-aside {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
-.som-crawl-lbl {
-  font-size: 11.5px;
+.som-crawl-big-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  text-align: left;
+  line-height: 1.2;
+}
+.som-crawl-big-denom {
+  font-size: 15px;
   font-weight: 500;
+  color: #6B6E72;
+}
+.som-crawl-big-sub {
+  font-size: 11.5px;
   color: #6B6E72;
   text-align: left;
 }
@@ -369,42 +358,6 @@
   flex-shrink: 0;
 }
 
-/* ── Hint box (footer) ──────────────────────────────────────── */
-.som-hint-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-left: 4px solid #E1F3FE;
-  background: #FAFAFA;
-  padding: 10px 12px;
-  border-radius: 0 4px 4px 0;
-  margin-top: auto;
-}
-.som-hint-text {
-  flex: 1;
-  font-size: 11px;
-  line-height: 1.6;
-  color: #6b7280;
-  margin: 0;
-  text-align: left;
-}
-.som-ask-btn {
-  flex-shrink: 0;
-  background: #1E408A;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  padding: 7px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-.som-ask-btn:hover { background: #1a3575; }
-
 /* ── Status column body ─────────────────────────────────────── */
 .som-status-list {
   list-style: none;
@@ -412,7 +365,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 23px;
 }
 .som-status-row {
   display: flex;
@@ -441,30 +394,23 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.som-pct-chip {
-  border-radius: 99px;
-  padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 600;
+.som-pct-plain {
+  font-size: 12px;
+  font-weight: 700;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 /* ── Page Speed column body ─────────────────────────────────── */
-.som-perf-gauge {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-}
-.som-perf-num {
-  position: absolute;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
+.som-warn-banner {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  color: #92400E;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 10.5px;
+  line-height: 1.35;
+  text-align: left;
 }
 
 .som-vitals {
@@ -473,19 +419,28 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 6px;
 }
 .som-vital {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
 }
 .som-vital-head {
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  gap: 8px;
   flex-wrap: nowrap;
 }
+.som-vital-name-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex-shrink: 1;
+}
+.som-vital-name-group svg { flex-shrink: 0; }
 .som-vital-name {
   font-size: 11px;
   font-weight: 500;
@@ -502,6 +457,17 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
+.som-vital-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.som-vital-fraction {
+  font-size: 11px;
+  color: #6B6E72;
+  white-space: nowrap;
+}
 .som-vital-chip {
   border-radius: 99px;
   padding: 2px 8px;
@@ -509,24 +475,27 @@
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-left: auto;
 }
 
-/* ── SegmentedRatingBar ─────────────────────────────────────── */
+/* ── SegmentedRatingBar ─────────────────────────────────────────
+   Inactive segments are thin hairlines; the active one is a taller
+   pill with a halo (outline + offset) so it reads as "you are here"
+   against the two flat, uninvolved segments either side. */
 .som-rating-track {
   display: flex;
+  align-items: center;
   gap: 4px;
-  height: 10px;
+  height: 12px;
 }
 .som-rating-seg {
-  height: 100%;
+  height: 4px;
   border-radius: 99px;
 }
 .som-rating-seg-active {
   display: flex;
   align-items: center;
   gap: 3px;
-  height: 100%;
+  height: 8px;
   border-radius: 99px;
 }
 .som-rating-pin-wrap {
@@ -540,8 +509,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #fff;
   border: 2px solid;
@@ -551,7 +520,7 @@
 .som-rating-labels {
   display: flex;
   gap: 4px;
-  margin-top: 5px;
+  margin-top: 3px;
   font-size: 10px;
   line-height: 1;
   overflow: hidden;
@@ -570,7 +539,6 @@
   font-weight: 600;
   color: var(--poliris-blue, #1e3893);
   text-decoration: none;
-  margin-top: 10px;
   text-align: left;
 }
 .som-see-more:hover { text-decoration: underline; }
@@ -580,16 +548,6 @@
   .som-cols {
     grid-template-columns: 1fr;
   }
-  .som-col-1 { padding-right: 0; }
-  .som-col-2 {
-    padding: 16px 0;
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid #d1d5db;
-    border-bottom: 1px solid #d1d5db;
-    margin-bottom: 16px;
-  }
-  .som-col-3 { padding-left: 0; }
   .som-thumb { display: none; }
   .som-h2 { font-size: 22px; }
 }
