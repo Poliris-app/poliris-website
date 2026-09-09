@@ -2427,6 +2427,16 @@ button { cursor: pointer; border: none; background: none; }
   z-index: 99;
   min-width: 90px;
 }
+/* Edge-aware anchoring — see the qtipEdgeX/Y logic in HeroDashboard.jsx.
+   Anchors to the dot's own edge instead of centering on it, so a dot near
+   the chart's border (e.g. any high-visibility "Leader") doesn't push the
+   tooltip out past the card. */
+.hdash__qtip--right { left: auto; right: -8px; transform: none; }
+.hdash__qtip--left   { left: -8px; transform: none; }
+.hdash__qtip--below {
+  bottom: auto;
+  top: calc(100% + 5px);
+}
 .hdash__qtip-your {
   font-family: var(--manrope);
   font-size: 9.5px;
@@ -5959,7 +5969,11 @@ button { cursor: pointer; border: none; background: none; }
 /* ── Position vs Competitors — dashboard preview (card 01) ─────────── */
 .pc-demo { font-family: var(--manrope); }
 .pc-demo__title { font-size: 14px; font-weight: 700; color: #1f2430; margin: 0; }
-.pc-demo__sub { font-size: 12px; color: #6B6E72; margin: 3px 0 10px; }
+/* Bottom margin is larger than it looks like it needs to be — it's the
+   headroom .pc-tooltip needs to fully clear .pc-panel's overflow:hidden
+   edge when it opens upward over Sony's dot near the chart's top (y:20
+   in PC_BRANDS). Shrinking this re-introduces that clipping. */
+.pc-demo__sub { font-size: 12px; color: #6B6E72; margin: 3px 0 32px; }
 
 /* ── Auto-scroll from the chart down to Analysis, no manual tab ──────
    .pc-scroll is the fixed-height "window"; .pc-scroll__track stacks both
@@ -6093,6 +6107,9 @@ button { cursor: pointer; border: none; background: none; }
   position: absolute;
   left: 22%;
   top: 78%;
+  /* "Landed" position (in pc-cursor-move's 18%/44% keyframe) must match
+     Sony's actual dot in PC_BRANDS (x:90, y:20) — it drifted out of sync
+     with the tooltip/dot data at some point. */
   z-index: 4;
   pointer-events: none;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
@@ -6104,15 +6121,23 @@ button { cursor: pointer; border: none; background: none; }
   animation-play-state: paused;
 }
 .pc-tooltip {
-  /* Opens upward above the dot, matching the real dashboard's default —
-     and, like the real dashboard (which portals the tooltip to
-     document.body specifically to escape clipping), it's allowed to
-     overflow .pc-chart's top edge rather than being squeezed to fit
-     inside it. Only .pc-quads clips; .pc-chart itself doesn't. */
+  /* Opens upward above the dot, matching the real dashboard's default.
+     Sony's dot sits at y:20 (see PC_BRANDS) — close to the chart's top
+     edge, so .pc-demo__sub below carries extra bottom margin specifically
+     to give this enough headroom before .pc-panel's overflow:hidden
+     clips it (see that rule's own comment).
+     x:90: left:90% matches the dot's own position exactly (same
+     containing block, .pc-chart), then translateX(-85%) shifts the box
+     by a percentage of ITS OWN width — not the chart's — so the anchor
+     point stays exact at any chart width. The arrow's right:15% is the
+     matching offset (100% - 85%) in that same own-width frame; a fixed
+     px value here would only ever be right at one specific screen size,
+     since .pc-chart's width is fluid (engine-row__visual is 60% of a
+     flex row, not a fixed px). */
   position: absolute;
-  left: 59%;
-  top: 34%;
-  transform: translate(-50%, calc(-100% - 10px)) scale(0.92);
+  left: 90%;
+  top: 20%;
+  transform: translate(-85%, calc(-100% - 10px)) scale(0.92);
   z-index: 5;
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -6128,14 +6153,14 @@ button { cursor: pointer; border: none; background: none; }
 .pc-tooltip::after {
   content: '';
   position: absolute;
-  left: 50%;
+  right: 15%;
   bottom: -6px;
   width: 11px;
   height: 11px;
   background: #fff;
   border-right: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
-  transform: translateX(-50%) rotate(45deg);
+  transform: translateX(50%) rotate(45deg);
 }
 .pc-tooltip__you { display: block; font-size: 11px; font-weight: 700; color: var(--pf-blue); margin-bottom: 2px; }
 .pc-tooltip__name { font-size: 12.5px; font-weight: 700; color: #111827; margin: 0 0 6px; }
@@ -6160,7 +6185,7 @@ button { cursor: pointer; border: none; background: none; }
 @keyframes pc-cursor-move {
   0%, 5%    { left: 22%; top: 78%; opacity: 0; }
   9%        { opacity: 1; }
-  18%, 44%  { left: 59%; top: 34%; opacity: 1; }
+  18%, 44%  { left: 90%; top: 20%; opacity: 1; }
   50%, 100% { left: 22%; top: 78%; opacity: 0; }
 }
 @keyframes pc-click-pulse {
@@ -6168,18 +6193,15 @@ button { cursor: pointer; border: none; background: none; }
   20%       { opacity: 0.6; transform: scale(1); }
   28%, 100% { opacity: 0; transform: scale(1.7); }
 }
+/* transform is repeated in full (not just the Y/scale that's actually
+   animating) because an animated `transform` replaces the whole property
+   at each step rather than merging with the base rule's translateX(-85%)
+   — omitting it here would snap the tooltip back to unshifted left:90%
+   (mostly off-screen) for the entire time it's visible. */
 @keyframes pc-tooltip-show {
-  0%, 20%   { opacity: 0; transform: translate(-50%, calc(-100% - 4px)) scale(0.92); }
-  26%, 44%  { opacity: 1; transform: translate(-50%, calc(-100% - 10px)) scale(1); }
-  50%, 100% { opacity: 0; transform: translate(-50%, calc(-100% - 4px)) scale(0.92); }
-}
-/* Mobile-only mirror: opens downward instead of upward. There isn't
-   enough headroom above the chart on a narrow card for an upward tooltip
-   to clear the title text above it — see the .pc-tooltip mobile override. */
-@keyframes pc-tooltip-show-mobile {
-  0%, 20%   { opacity: 0; transform: translate(-50%, 4px) scale(0.92); }
-  26%, 44%  { opacity: 1; transform: translate(-50%, 10px) scale(1); }
-  50%, 100% { opacity: 0; transform: translate(-50%, 4px) scale(0.92); }
+  0%, 20%   { opacity: 0; transform: translate(-85%, calc(-100% - 4px)) scale(0.92); }
+  26%, 44%  { opacity: 1; transform: translate(-85%, calc(-100% - 10px)) scale(1); }
+  50%, 100% { opacity: 0; transform: translate(-85%, calc(-100% - 4px)) scale(0.92); }
 }
 /* Chart panel visible → scroll down as the tooltip closes → hold on
    Analysis → scroll back up → settle before the loop restarts. */
@@ -6785,21 +6807,11 @@ button { cursor: pointer; border: none; background: none; }
   .pc-dot__label { display: none; }
   .pc-dot__badge { width: 21px; height: 21px; }
   .pc-quad__label { font-size: 7px; }
-  /* Not enough headroom above a narrow chart for the tooltip to open
-     upward without covering the title text — flip it to open downward,
-     and shrink it so it doesn't span multiple neighboring dots. */
+  /* Opens downward at every width now (see .pc-tooltip's own comment) —
+     just shrunk here so it doesn't span multiple neighboring dots. */
   .pc-tooltip {
-    animation-name: pc-tooltip-show-mobile;
     padding: 7px 9px;
     min-width: 84px;
-  }
-  .pc-tooltip::after {
-    top: -6px;
-    bottom: auto;
-    border-right: none;
-    border-bottom: none;
-    border-left: 1px solid #e5e7eb;
-    border-top: 1px solid #e5e7eb;
   }
   .pc-tooltip__you { font-size: 9px; }
   .pc-tooltip__name { font-size: 10.5px; margin-bottom: 4px; }
