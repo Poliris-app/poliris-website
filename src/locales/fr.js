@@ -32,6 +32,8 @@ export default {
     copy: "© 2026 Poliris · Intelligence de marque pour l'ère de l'IA",
     links: ['Produits', 'Pour les équipes', 'Comment ça marche', 'Tarifs', 'Blog'],
     legalNotice: 'Mentions légales',
+    privacyPolicy: 'Politique de confidentialité',
+    termsOfService: "Conditions d'utilisation",
   },
 
   home: {
