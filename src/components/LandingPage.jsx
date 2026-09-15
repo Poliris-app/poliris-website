@@ -261,11 +261,12 @@ function EnginePlaceholder() {
    "click a brand, see the tooltip" interaction once this row scrolls
    into view (reuses the page's existing .reveal/.visible trigger — see
    .pc-cursor / .pc-tooltip / .pc-dot--target in poliris.css). */
+// `labelKey` maps to home.engine.demo.reputation.quad* — see PositionChartDemo.
 const PC_QUADRANTS = [
-  { key: 'sentiment', top: 0, left: 0, bg: '#F8FBFC', label: 'Strong sentiment · Low visibility', edge: 'right bottom' },
-  { key: 'leaders', top: 0, left: 50, bg: '#EFF6FF', label: 'Leaders', edge: 'bottom' },
-  { key: 'atRisk', top: 50, left: 0, bg: '#FEFBEA', label: 'At risk', edge: 'right' },
-  { key: 'visibility', top: 50, left: 50, bg: '#F8FBFC', label: 'Strong visibility · Weak sentiment', edge: '' },
+  { key: 'sentiment', top: 0, left: 0, bg: '#F8FBFC', labelKey: 'quadSentimentLow', edge: 'right bottom' },
+  { key: 'leaders', top: 0, left: 50, bg: '#EFF6FF', labelKey: 'quadLeaders', edge: 'bottom' },
+  { key: 'atRisk', top: 50, left: 0, bg: '#FEFBEA', labelKey: 'quadAtRisk', edge: 'right' },
+  { key: 'visibility', top: 50, left: 50, bg: '#F8FBFC', labelKey: 'quadVisibilityWeak', edge: '' },
 ];
 // Same x/y story as HeroDashboard's own QUAD_POS (x = visibility%, used
 // directly as `left`; y here is already "distance from top", i.e. the
@@ -337,17 +338,20 @@ const PC_SENT_ROWS = [
 ];
 
 function PcAnalysis() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.reputation');
+  const tierLabels = t('dashboard.tierLabels');
   return (
     <div className="pc-an">
       <div className="pc-an__col">
-        <p className="pc-an__title">Visibility Analysis</p>
-        <p className="pc-an__sub">How often your product appears in AI answers</p>
+        <p className="pc-an__title">{d.visTitle}</p>
+        <p className="pc-an__sub">{d.visSub}</p>
         <div className="pc-an__stats">
-          <div className="pc-an__stat"><span>Avg Score</span><strong>90%</strong></div>
-          <div className="pc-an__stat"><span>Avg Position</span><strong>#2</strong></div>
-          <div className="pc-an__stat"><span>Trend</span><strong className="pc-an__stat--up">↑ Rising</strong></div>
+          <div className="pc-an__stat"><span>{d.avgScore}</span><strong>90%</strong></div>
+          <div className="pc-an__stat"><span>{d.avgPosition}</span><strong>#2</strong></div>
+          <div className="pc-an__stat"><span>{d.trend}</span><strong className="pc-an__stat--up">{d.rising}</strong></div>
         </div>
-        <p className="pc-an__label">Score by platform</p>
+        <p className="pc-an__label">{d.scoreByPlatform}</p>
         <div className="pc-an__bars">
           {PC_VIS_ROWS.map((r) => (
             <div key={r.name} className="pc-an__bar-row">
@@ -364,23 +368,23 @@ function PcAnalysis() {
             </div>
           ))}
         </div>
-        <div className="pc-an__insight">Claude coverage is weakest — highest opportunity to improve mention rate here.</div>
-        <div className="pc-an__details">Details</div>
+        <div className="pc-an__insight">{d.visInsight}</div>
+        <div className="pc-an__details">{d.details}</div>
       </div>
 
       <div className="pc-an__divider" />
 
       <div className="pc-an__col">
-        <p className="pc-an__title">Sentiment Analysis</p>
-        <p className="pc-an__sub">How your product is described by AI</p>
+        <p className="pc-an__title">{d.sentTitle}</p>
+        <p className="pc-an__sub">{d.sentSub}</p>
         <div className="pc-an__stats">
           <div className="pc-an__stat">
-            <span>Avg Score</span>
-            <strong><span className="pc-an__pill" style={{ color: 'var(--tier-s-color)', background: 'var(--tier-s-bg)' }}>Strong</span></strong>
+            <span>{d.avgScore}</span>
+            <strong><span className="pc-an__pill" style={{ color: 'var(--tier-s-color)', background: 'var(--tier-s-bg)' }}>{tierLabels.Strong}</span></strong>
           </div>
-          <div className="pc-an__stat"><span>Trend</span><strong className="pc-an__stat--muted">→ Stable</strong></div>
+          <div className="pc-an__stat"><span>{d.trend}</span><strong className="pc-an__stat--muted">{d.stable}</strong></div>
         </div>
-        <p className="pc-an__label">Score by platform</p>
+        <p className="pc-an__label">{d.scoreByPlatform}</p>
         <div className="pc-an__bars">
           {PC_SENT_ROWS.map((r) => {
             const style = SENT_TIER_STYLE[r.tier];
@@ -388,7 +392,7 @@ function PcAnalysis() {
               <div key={r.name} className="pc-an__bar-row">
                 <div className="pc-an__bar-head">
                   <span className="pc-an__bar-name">{r.name}</span>
-                  <span className="pc-an__pill" style={{ color: style.color, background: style.bg }}>{r.tier}</span>
+                  <span className="pc-an__pill" style={{ color: style.color, background: style.bg }}>{tierLabels[r.tier]}</span>
                 </div>
                 <div className="pc-an__bar-track" style={{ background: style.bg }}>
                   <div className="pc-an__bar-fill" style={{ width: `${SENT_TIER_PCT[r.tier]}%`, background: style.color }} />
@@ -397,14 +401,17 @@ function PcAnalysis() {
             );
           })}
         </div>
-        <div className="pc-an__insight">All platforms are performing well. Quality leads with the strongest sentiment coverage.</div>
-        <div className="pc-an__details">Details</div>
+        <div className="pc-an__insight">{d.sentInsight}</div>
+        <div className="pc-an__details">{d.details}</div>
       </div>
     </div>
   );
 }
 
 function PositionChartDemo() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.reputation');
+  const tierLabels = t('dashboard.tierLabels');
   const nike = PC_BRANDS.find((b) => b.isTarget);
   return (
     <div className="pc-demo">
@@ -420,8 +427,8 @@ function PositionChartDemo() {
       <div className="pc-scroll">
         <div className="pc-scroll__track">
           <div className="pc-panel pc-panel--position">
-            <p className="pc-demo__title">Position vs Competitors</p>
-            <p className="pc-demo__sub">Each dot is a brand you're tracked against.</p>
+            <p className="pc-demo__title">{d.positionTitle}</p>
+            <p className="pc-demo__sub">{d.positionSub}</p>
             <div className="pc-chart">
               {/* Clipped separately from .pc-chart so the tooltip below is free to
                   overflow the chart's rounded border — same as the real dashboard,
@@ -430,7 +437,7 @@ function PositionChartDemo() {
                 {PC_QUADRANTS.map((q) => (
                   <div key={q.key} className={`pc-quad pc-quad--${q.edge.replace(' ', '-') || 'none'}`}
                     style={{ top: `${q.top}%`, left: `${q.left}%`, background: q.bg }}>
-                    <span className="pc-quad__label">{q.label}</span>
+                    <span className="pc-quad__label">{d[q.labelKey]}</span>
                   </div>
                 ))}
               </div>
@@ -443,22 +450,22 @@ function PositionChartDemo() {
               </span>
 
               <div className="pc-tooltip">
-                <span className="pc-tooltip__you">Your Brand</span>
+                <span className="pc-tooltip__you">{d.yourBrand}</span>
                 <p className="pc-tooltip__name">{nike.name}</p>
-                <div className="pc-tooltip__row"><span>Visibility</span><span className="pc-tooltip__pill">90%</span></div>
-                <div className="pc-tooltip__row"><span>Sentiment</span><span className="pc-tooltip__pill">Strong</span></div>
+                <div className="pc-tooltip__row"><span>{d.visibility}</span><span className="pc-tooltip__pill">90%</span></div>
+                <div className="pc-tooltip__row"><span>{d.sentiment}</span><span className="pc-tooltip__pill">{tierLabels.Strong}</span></div>
               </div>
             </div>
 
             <div className="pc-legend">
-              <span>Low</span>
-              <span className="pc-legend__mid">← Visibility →</span>
-              <span>High</span>
+              <span>{d.low}</span>
+              <span className="pc-legend__mid">{d.visibilityAxis}</span>
+              <span>{d.high}</span>
             </div>
 
             <div className="pc-insight">
               <span className="pc-insight__icon">✦</span>
-              <p><strong>Poli AI Insight:</strong> Sony holds #2 at 90% visibility with Strong sentiment, closing the gap on the leader is a content and source authority play.</p>
+              <p><strong>{d.insightLabel}</strong> {d.insight}</p>
             </div>
           </div>
 
@@ -492,10 +499,11 @@ const TH_CRAWLERS = [
    and the same cumulative-taper bezier math, simplified to one flat
    fill instead of the real gradient/glow-filter build-up. ── */
 const TH_PIPE = { width: 1200, height: 420, centerY: 210, stageWidth: 400, minHalf: 15, maxHalf: 180 };
+// `labelKey` maps to home.engine.demo.trust.stage* — see ThPipelinePanel.
 const TH_STAGES = [
-  { key: 'page_access', label: 'Page Access', value: 80 },
-  { key: 'content_access', label: 'Content Access', value: 79 },
-  { key: 'content_quality', label: 'Content Quality', value: 59 },
+  { key: 'page_access', labelKey: 'stagePageAccess', value: 80 },
+  { key: 'content_access', labelKey: 'stageContentAccess', value: 79 },
+  { key: 'content_quality', labelKey: 'stageContentQuality', value: 59 },
 ];
 const TH_HEALTH_SCORE = Math.round(TH_STAGES.reduce((s, x) => s + x.value, 0) / TH_STAGES.length);
 // Flows rightward through the pipe once per cycle (see .th-pipe__icon /
@@ -553,6 +561,8 @@ function thEdgePath(halves, side, inset) {
 }
 
 function ThPipelinePanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.trust');
   const halves = thCumulativeHalves();
   const { width, height, centerY, stageWidth } = TH_PIPE;
   const masterPath = thMasterPath(halves);
@@ -569,12 +579,12 @@ function ThPipelinePanel() {
     <div className="th-pipe">
       <div className="th-pipe__hdr">
         <div>
-          <p className="pc-demo__title">Site Health Pipeline</p>
+          <p className="pc-demo__title">{d.pipelineTitle}</p>
         </div>
         <div className="th-pipe__score">
           <div className="th-pipe__score-text">
-            <span className="th-pipe__score-lbl">Health Score</span>
-            <span className="th-pipe__score-hint">Across the 3 stages</span>
+            <span className="th-pipe__score-lbl">{d.healthScore}</span>
+            <span className="th-pipe__score-hint">{d.healthHint}</span>
           </div>
           <div className="th-pipe__ring">
             <svg viewBox="0 0 64 64" width="64" height="64" style={{ transform: 'rotate(-90deg)' }}>
@@ -621,13 +631,13 @@ function ThPipelinePanel() {
             <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
-            Low content quality
+            {d.lowContentQuality}
           </div>
         )}
 
         {TH_STAGES.map((stage, i) => (
           <div key={stage.key} className="th-pipe__pill" style={pct(stageCenterX(i), centerY)}>
-            <span className="th-pipe__pill-lbl">{stage.label}</span>
+            <span className="th-pipe__pill-lbl">{d[stage.labelKey]}</span>
             <span className="th-pipe__pill-val">{stage.value}%</span>
           </div>
         ))}
@@ -639,10 +649,11 @@ function ThPipelinePanel() {
 const TH_ISSUE_TOTAL = 735;
 // Full severity split — drives the segmented bar, which stays accurate
 // even though the row list below only surfaces the two that matter.
+// `labelKey` maps to home.engine.demo.trust.sev* — see ThIssuesPanel.
 const TH_ISSUE_SEVERITIES = [
-  { label: 'Critical', count: 115, cls: 'critical' },
-  { label: 'Warning', count: 466, cls: 'warning' },
-  { label: 'Notice', count: 154, cls: 'notice' },
+  { labelKey: 'sevCritical', count: 115, cls: 'critical' },
+  { labelKey: 'sevWarning', count: 466, cls: 'warning' },
+  { labelKey: 'sevNotice', count: 154, cls: 'notice' },
 ];
 // Trimmed row list: Critical + Warning are the two worth a line each;
 // Notice is the least urgent and dropped to keep the card shorter.
@@ -656,6 +667,8 @@ const TH_ISSUE_TOP_ROWS = TH_ISSUE_SEVERITIES.filter((r) => r.cls !== 'notice');
 const TH_FIX_ISSUE = { name: 'Missing Product schema markup', page: 'sony.com/t/wf-1000xm5-earbuds' };
 
 function ThIssuesPanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.trust');
   const [count, setCount] = useState(0);
   const numRef = useRef(null);
   const wrapRef = useRef(null);
@@ -790,22 +803,22 @@ function ThIssuesPanel() {
     <div className="th-inner" ref={wrapRef}>
       <div className="th-box-hdr">
         <div>
-          <p className="pc-demo__title">Issues Overview</p>
-          <p className="pc-demo__sub">Problems found across all pages</p>
+          <p className="pc-demo__title">{d.issuesTitle}</p>
+          <p className="pc-demo__sub">{d.issuesSub}</p>
         </div>
-        <span className="th-needs-work">Needs Work</span>
+        <span className="th-needs-work">{d.needsWork}</span>
       </div>
-      <div className="th-issues-big" ref={numRef}>{displayCount}<span>issues</span></div>
+      <div className="th-issues-big" ref={numRef}>{displayCount}<span>{d.issuesUnit}</span></div>
       <div className="th-issues-bar">
         {TH_ISSUE_SEVERITIES.map((r) => (
-          <span key={r.label} className={`th-issues-bar-seg th-issues-bar-seg--${r.cls}`} style={{ width: `${Math.round((r.count / TH_ISSUE_TOTAL) * 100)}%` }} />
+          <span key={r.cls} className={`th-issues-bar-seg th-issues-bar-seg--${r.cls}`} style={{ width: `${Math.round((r.count / TH_ISSUE_TOTAL) * 100)}%` }} />
         ))}
       </div>
       <div className="th-issues-rows">
         {TH_ISSUE_TOP_ROWS.map((r) => (
-          <div key={r.label} className="th-issues-row">
+          <div key={r.cls} className="th-issues-row">
             <span className={`th-dot th-dot--${r.cls}`} />
-            <span className="th-issues-label">{r.label}</span>
+            <span className="th-issues-label">{d[r.labelKey]}</span>
             <span className="th-issues-count">{r.count}</span>
             <span className="th-issues-pct">{Math.round((r.count / TH_ISSUE_TOTAL) * 100)}%</span>
           </div>
@@ -816,24 +829,24 @@ function ThIssuesPanel() {
           a real, deployable correction, not just another line in the count. */}
       <div className={`th-fix${zoomed ? ' th-fix--zoomed' : ''}${zoomed && clicked && deployPhase === 'idle' ? ' th-fix--pulse' : ''}`}>
         <div className="th-fix__info">
-          <span className="th-fix__badge">Content Quality</span>
-          <span className="th-fix__name">{TH_FIX_ISSUE.name}</span>
+          <span className="th-fix__badge">{d.stageContentQuality}</span>
+          <span className="th-fix__name">{d.fixIssueName}</span>
           <span className="th-fix__page">{TH_FIX_ISSUE.page}</span>
         </div>
         {deployPhase === 'live' ? (
           <span className="th-fix__status th-fix__status--live">
             <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Live
+            {d.live}
           </span>
         ) : deployPhase === 'deploying' ? (
           <span className="th-fix__status th-fix__status--deploying">
             <span className="th-fix__spinner" />
-            Deploying…
+            {d.deploying}
           </span>
         ) : (
           <span className="th-deploy-btn" ref={deployBtnRef}>
             <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m14.7 6.3 3 3L19 8l-3-3zM3 21l3.5-1L17 9.5l-2.5-2.5L4 17.5z"/></svg>
-            Deploy
+            {d.deploy}
           </span>
         )}
         {cursor && (
@@ -844,22 +857,24 @@ function ThIssuesPanel() {
         )}
       </div>
 
-      <a className="th-link" href="#">View details <span>→</span></a>
+      <a className="th-link" href="#">{d.viewDetails} <span>→</span></a>
     </div>
   );
 }
 
 function ThRobotsPanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.trust');
   return (
     <div className="th-inner">
       <div className="th-robots-head">
         <div>
-          <p className="pc-demo__title">Robots.txt test</p>
-          <p className="pc-demo__sub">What AI engines can and can't crawl</p>
+          <p className="pc-demo__title">{d.robotsTitle}</p>
+          <p className="pc-demo__sub">{d.robotsSub}</p>
         </div>
         <div className="th-robots-score">
           <span className="th-robots-score-num">80<span>/100</span></span>
-          <span className="th-pass-pill">Passed</span>
+          <span className="th-pass-pill">{d.passed}</span>
         </div>
       </div>
       <div className="th-robots-bar">
@@ -867,22 +882,22 @@ function ThRobotsPanel() {
         <span className="th-robots-bar-seg th-robots-bar-seg--blocked" style={{ width: '7%' }} />
       </div>
       <div className="th-robots-legend">
-        <span><i className="th-dot th-dot--blue" />Pages allowed</span>
-        <span><i className="th-dot th-dot--red" />Pages blocked</span>
+        <span><i className="th-dot th-dot--blue" />{d.pagesAllowed}</span>
+        <span><i className="th-dot th-dot--red" />{d.pagesBlocked}</span>
       </div>
-      <p className="th-label">AI Crawler Access</p>
+      <p className="th-label">{d.crawlerAccess}</p>
       <div className="th-crawlers">
         {TH_CRAWLERS.map((c) => (
           <div key={c.name} className={`th-crawler${c.status === 'Blocked' ? ' th-crawler--blocked' : ''}`}>
             <img src={`${import.meta.env.BASE_URL}${c.logo}`} alt="" />
             <span className="th-crawler__name">{c.name}</span>
-            <span className={`th-crawler__status th-crawler__status--${c.status.toLowerCase()}`}>{c.status}</span>
+            <span className={`th-crawler__status th-crawler__status--${c.status.toLowerCase()}`}>{c.status === 'Blocked' ? d.blocked : d.allowed}</span>
           </div>
         ))}
       </div>
       <div className="th-robots-actions">
-        <span className="th-btn th-btn--ghost">View robots.txt</span>
-        <span className="th-btn th-btn--solid">View full report</span>
+        <span className="th-btn th-btn--ghost">{d.viewRobots}</span>
+        <span className="th-btn th-btn--solid">{d.viewFullReport}</span>
       </div>
     </div>
   );
@@ -910,44 +925,51 @@ function EngineTrustCard() {
 /* ── Roadmap Plan — Calendar / Board, ported from the real planner's
    Calendar+Board switch (content-planner/planner-view.tsx). Two slides,
    same horizontal auto-slide mechanic as card 02 (.rm-* namespace). ── */
+// `cls` per type stays fixed; the label itself comes from home.engine.demo.roadmap.badge*.
 const RM_TYPE_BADGE = {
-  fix: { label: 'Fix', cls: 'rm-badge--fix' },
-  backlink: { label: 'Backlink', cls: 'rm-badge--backlink' },
-  content: { label: 'Content', cls: 'rm-badge--content' },
+  fix: { labelKey: 'badgeFix', cls: 'rm-badge--fix' },
+  backlink: { labelKey: 'badgeBacklink', cls: 'rm-badge--backlink' },
+  content: { labelKey: 'badgeContent', cls: 'rm-badge--content' },
 };
 
-function RmCard({ title, type, dimmed, infoRef }) {
+// `titleKey` maps to home.engine.demo.roadmap.task* (see the data below) —
+// kept as a stable English identifier for both the translation lookup and
+// React's key prop, since the displayed title itself is now translated.
+function RmCard({ titleKey, type, dimmed, infoRef }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.roadmap');
   const badge = RM_TYPE_BADGE[type];
   return (
     <div className={`rm-card${dimmed ? ' rm-card--dimmed' : ''}`}>
       <div className="rm-card__top">
         <span className="rm-card__dot" />
-        <span className={`rm-badge ${badge.cls}`}>{badge.label}</span>
+        <span className={`rm-badge ${badge.cls}`}>{d[badge.labelKey]}</span>
         <span className="rm-card__info" ref={infoRef}>?</span>
         <span className="rm-card__x">×</span>
       </div>
-      <p className="rm-card__title">{title}</p>
+      <p className="rm-card__title">{d[titleKey]}</p>
     </div>
   );
 }
 
-const RM_CAL_DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+// `dayKey` maps to home.engine.demo.roadmap.day* — see RmCalendarPanel.
+const RM_CAL_DAYS = ['dayMon', 'dayTue', 'dayWed', 'dayThu', 'dayFri', 'daySat', 'daySun'];
 // Two weeks (Aug 24–Sep 6) — enough to show the "today" marker and both
 // task days without rendering a whole 5-week grid.
 const RM_CAL_WEEKS = [
   [24, 25, 26, 27, 28, 29, 30],
   [31, 1, 2, 3, 4, 5, 6],
 ];
-const RM_DRAGGED_CARD = { title: 'Resolve Canonical Conflict Between Running and Pegasus Pages', type: 'fix' };
+const RM_DRAGGED_CARD = { titleKey: 'taskCanonicalRunningPegasus', type: 'fix' };
 // Static cards, minus the one that actually moves (see RM_DRAGGED_CARD /
 // useRmDrag below) — that one is placed by day from `owner` state instead,
 // so Aug 25 and Aug 26 genuinely gain/lose a row and reflow, rather than
 // just showing a floating duplicate on top of a fixed layout.
 const RM_CAL_STATIC_CARDS = {
-  25: [{ title: 'Add Canonical Category Pages to XML Sitemap', type: 'fix' }],
+  25: [{ titleKey: 'taskCanonicalSitemap', type: 'fix' }],
   1: [
-    { title: 'Add ItemList Schema to Wireless Earbuds Category Page', type: 'fix' },
-    { title: 'Rewrite Page Titles and Meta Descriptions for Philippine Market', type: 'fix' },
+    { titleKey: 'taskItemListSchema', type: 'fix' },
+    { titleKey: 'taskRewriteTitles', type: 'fix' },
   ],
 };
 // Column geometry for the drag demo — MON is column 0, so Aug 25 (TUE) is
@@ -998,6 +1020,8 @@ function useRmDrag(rootRef) {
 }
 
 function RmCalendarPanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.roadmap');
   const rootRef = useRef(null);
   const { owner, flight } = useRmDrag(rootRef);
 
@@ -1013,14 +1037,14 @@ function RmCalendarPanel() {
   return (
     <>
       <div className="rm-cal-dow-row">
-        {RM_CAL_DAYS.map((d) => <div key={d} className="rm-cal-dow">{d}</div>)}
+        {RM_CAL_DAYS.map((dayKey) => <div key={dayKey} className="rm-cal-dow">{d[dayKey]}</div>)}
       </div>
       <div className="rm-cal-grid" ref={rootRef}>
         {RM_CAL_WEEKS.flat().map((day, i) => (
           <div key={i} className={`rm-cal-cell${day === 24 ? ' rm-cal-cell--today' : ''}`}>
             <span className={`rm-cal-daynum${day === 24 ? ' rm-cal-daynum--today' : ''}`}>{day}</span>
             <div className="rm-cal-cards">
-              {cardsForDay(day).map((c) => <RmCard key={c.title} {...c} />)}
+              {cardsForDay(day).map((c) => <RmCard key={c.titleKey} {...c} />)}
             </div>
           </div>
         ))}
@@ -1047,22 +1071,23 @@ function RmCalendarPanel() {
   );
 }
 
+// `labelKey`/`rangeKey` map to home.engine.demo.roadmap.week*/week*Range.
 const RM_BOARD_WEEKS = [
-  { label: 'Week 1', range: 'Aug 24 – Aug 30', cards: [
-    { title: 'Resolve Canonical Conflict Between Earbuds and Headphones Pages', type: 'fix' },
-    { title: 'Add Canonical Category Pages to XML Sitemap', type: 'fix' },
+  { labelKey: 'week1', rangeKey: 'week1Range', cards: [
+    { titleKey: 'taskCanonicalEarbudsHeadphones', type: 'fix' },
+    { titleKey: 'taskCanonicalSitemap', type: 'fix' },
   ] },
-  { label: 'Week 2', range: 'Aug 31 – Sep 6', cards: [
-    { title: 'Add ItemList Schema to Wireless Earbuds Category Page', type: 'fix' },
-    { title: 'Rewrite Page Titles and Meta Descriptions for Philippine Market', type: 'fix' },
+  { labelKey: 'week2', rangeKey: 'week2Range', cards: [
+    { titleKey: 'taskItemListSchema', type: 'fix' },
+    { titleKey: 'taskRewriteTitles', type: 'fix' },
   ] },
-  { label: 'Week 3', range: 'Sep 7 – Sep 13', cards: [
-    { title: 'Restructure Header Hierarchy on the Wireless Earbuds Hub', type: 'fix' },
-    { title: 'Improve Core Web Vitals on High-Traffic Category Pages', type: 'fix' },
+  { labelKey: 'week3', rangeKey: 'week3Range', cards: [
+    { titleKey: 'taskRestructureHeaders', type: 'fix' },
+    { titleKey: 'taskCoreWebVitals', type: 'fix' },
   ] },
-  { label: 'Week 4', range: 'Sep 14 – Sep 20', cards: [
-    { title: 'Implement Product and FAQ Schema on the WF-1000XM5 Page', type: 'fix' },
-    { title: 'Secure a Sony Philippines Link on SoundGuys', type: 'backlink' },
+  { labelKey: 'week4', rangeKey: 'week4Range', cards: [
+    { titleKey: 'taskProductFaqSchema', type: 'fix' },
+    { titleKey: 'taskSecureBacklink', type: 'backlink' },
   ] },
 ];
 
@@ -1124,6 +1149,8 @@ function useRmHover(boardRef, iconRef) {
 }
 
 function RmBoardPanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.roadmap');
   const boardRef = useRef(null);
   const iconRef = useRef(null);
   const { iconPos, visible, risen, hover } = useRmHover(boardRef, iconRef);
@@ -1133,13 +1160,13 @@ function RmBoardPanel() {
     <>
       <div className="rm-board" ref={boardRef}>
         {RM_BOARD_WEEKS.map((w, wi) => (
-          <div key={w.label} className="rm-board__col">
+          <div key={w.labelKey} className="rm-board__col">
             <div className="rm-board__hdr">
-              <span className="rm-board__wk">{w.label}</span>
-              <span className="rm-board__range">{w.range}</span>
+              <span className="rm-board__wk">{d[w.labelKey]}</span>
+              <span className="rm-board__range">{d[w.rangeKey]}</span>
             </div>
             {w.cards.map((c, ci) => (
-              <RmCard key={c.title} {...c} infoRef={wi === 2 && ci === 0 ? iconRef : undefined} />
+              <RmCard key={c.titleKey} {...c} infoRef={wi === 2 && ci === 0 ? iconRef : undefined} />
             ))}
           </div>
         ))}
@@ -1153,7 +1180,7 @@ function RmBoardPanel() {
         )}
         {iconPos && (
           <div className={`rm-hover-tip${hover ? ' rm-hover-tip--show' : ''}`} style={iconPos}>
-            {RM_HOVER_TIP}
+            {d.hoverTip}
           </div>
         )}
       </div>
@@ -1163,6 +1190,8 @@ function RmBoardPanel() {
 }
 
 function EngineRoadmapCard() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.roadmap');
   const [view, setView] = useState('calendar');
   return (
     <div className="th-box">
@@ -1173,18 +1202,18 @@ function EngineRoadmapCard() {
               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
               </svg>
-              Calendar
+              {d.calendar}
             </button>
             <button type="button" className={`rm-toggle__opt${view === 'board' ? ' rm-toggle__opt--active' : ''}`} onClick={() => setView('board')}>
               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="3" width="5" height="18" rx="1" /><rect x="10" y="3" width="5" height="11" rx="1" /><rect x="17" y="3" width="5" height="15" rx="1" />
               </svg>
-              Board
+              {d.board}
             </button>
           </div>
           {view === 'calendar' && (
             <div className="rm-cal-nav">
-              <span className="rm-cal-month">August 2026</span>
+              <span className="rm-cal-month">{d.month}</span>
             </div>
           )}
         </div>
@@ -1200,12 +1229,13 @@ function EngineRoadmapCard() {
    citation-status pill treatment, condensed to fit the compact card width.
    Fixture rows are the real run's first 13 domains. ── */
 const CIT_CATEGORY = { review: '#f97316', retail: '#8b5cf6' };
-const CIT_CATEGORY_LABEL = { review: 'Review', retail: 'Retail' };
+// Maps to home.engine.demo.citations.cat*/status* — see CitRow.
+const CIT_CATEGORY_LABEL_KEY = { review: 'catReview', retail: 'catRetail' };
 const CIT_STATUS = {
-  mention:    { label: 'Mention',    bg: '#FEF3C7', fg: '#B45309' },
-  unverified: { label: 'Unverified', bg: '#F3F4F6', fg: '#6B7280' },
-  uncited:    { label: 'Uncited',    bg: '#FEE2E2', fg: '#DC2626' },
-  pending:    { label: 'Pending',    bg: '#DBEAFE', fg: '#2563EB' },
+  mention:    { labelKey: 'statusMention',    bg: '#FEF3C7', fg: '#B45309' },
+  unverified: { labelKey: 'statusUnverified', bg: '#F3F4F6', fg: '#6B7280' },
+  uncited:    { labelKey: 'statusUncited',    bg: '#FEE2E2', fg: '#DC2626' },
+  pending:    { labelKey: 'statusPending',    bg: '#DBEAFE', fg: '#2563EB' },
 };
 const CIT_COMPETITOR_PALETTE = [
   { fg: '#0EA5E9', bg: '#E0F2FE' },
@@ -1244,6 +1274,8 @@ function CitChip({ name }) {
 }
 
 function CitRow({ row, buyBtnRef, buyClicked, buyZoomed }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.citations');
   const shown = row.competitors.slice(0, 3);
   const extra = row.competitors.length - shown.length;
   const catColor = CIT_CATEGORY[row.cat];
@@ -1274,13 +1306,13 @@ function CitRow({ row, buyBtnRef, buyClicked, buyZoomed }) {
         <span className="cit-url">{row.url}</span>
       </div>
       <div className="cit-col cit-col--cat">
-        <span className="cit-pill" style={{ color: catColor, background: `${catColor}1a` }}>{CIT_CATEGORY_LABEL[row.cat]}</span>
+        <span className="cit-pill" style={{ color: catColor, background: `${catColor}1a` }}>{d[CIT_CATEGORY_LABEL_KEY[row.cat]]}</span>
       </div>
       <div className="cit-col cit-col--auth">
-        <span className={`cit-pill${row.authority ? ' cit-pill--high' : ' cit-pill--muted'}`}>{row.authority ? 'High' : 'No'}</span>
+        <span className={`cit-pill${row.authority ? ' cit-pill--high' : ' cit-pill--muted'}`}>{row.authority ? d.high : d.no}</span>
       </div>
       <div className="cit-col cit-col--yours">
-        <span className="cit-pill cit-pill--status" style={{ color: CIT_STATUS[citationKey].fg, background: CIT_STATUS[citationKey].bg }}>{CIT_STATUS[citationKey].label}</span>
+        <span className="cit-pill cit-pill--status" style={{ color: CIT_STATUS[citationKey].fg, background: CIT_STATUS[citationKey].bg }}>{d[CIT_STATUS[citationKey].labelKey]}</span>
       </div>
       <div className="cit-col cit-col--comp">
         {row.competitors.length ? (
@@ -1295,10 +1327,10 @@ function CitRow({ row, buyBtnRef, buyClicked, buyZoomed }) {
           buyClicked ? (
             <span className="cit-buy cit-buy--done">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" width="9" height="9"><path d="M20 6 9 17l-5-5"/></svg>
-              Sent
+              {d.sent}
             </span>
           ) : (
-            <span className="cit-buy" ref={buyBtnRef}>Buy</span>
+            <span className="cit-buy" ref={buyBtnRef}>{d.buy}</span>
           )
         ) : <span className="cit-dash">–</span>}
       </div>
@@ -1311,51 +1343,53 @@ function CitRow({ row, buyBtnRef, buyClicked, buyZoomed }) {
 // of a full paginated list, since that's the only row this card's demo ever
 // buys.
 function CitAcquirePanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.citations');
   return (
     <div className="cit-acq">
       <div className="cit-acq__hdr">
         <div className="cit-acq__title">
-          Acquire Citation
+          {d.acquireTitle}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <span className="cit-acq__brand">Sony</span>
         </div>
-        <div className="cit-acq__sub">Discover guest-post and link-placement opportunities matched to your site and target keyword.</div>
+        <div className="cit-acq__sub">{d.acquireSub}</div>
       </div>
 
       <div className="cit-acq__panel">
         <div className="cit-acq__panel-hdr">
           <div>
-            <div className="cit-acq__panel-title">Citation Opportunities</div>
-            <div className="cit-acq__panel-sub">Auto-compiled from backlinks &amp; citations. Excludes domains that already link to your site.</div>
+            <div className="cit-acq__panel-title">{d.oppTitle}</div>
+            <div className="cit-acq__panel-sub">{d.oppSub}</div>
           </div>
           <div className="cit-acq__controls">
             <span className="cit-acq__sync">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="9" height="9"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
-              Sync
+              {d.sync}
             </span>
             <span className="cit-acq__search">gadgetreview.com</span>
           </div>
         </div>
         <div className="cit-acq__status-row">
-          <span className="cit-acq__status cit-acq__status--found">Found 1</span>
-          <span className="cit-acq__status">Not found 0</span>
-          <span className="cit-acq__status cit-acq__status--muted">Blacklisted 0</span>
-          <span className="cit-acq__status cit-acq__status--muted">Checking 0</span>
+          <span className="cit-acq__status cit-acq__status--found">{d.found} 1</span>
+          <span className="cit-acq__status">{d.notFound} 0</span>
+          <span className="cit-acq__status cit-acq__status--muted">{d.blacklisted} 0</span>
+          <span className="cit-acq__status cit-acq__status--muted">{d.checking} 0</span>
         </div>
         <div className="cit-acq__table">
           <div className="cit-acq__thead">
-            <span>Domain</span><span>Category</span><span>DR</span><span>Authority</span><span>Backlinks</span><span>Type</span><span>Price</span>
+            <span>{d.acqDomain}</span><span>{d.acqCategory}</span><span>{d.acqDr}</span><span>{d.acqAuthority}</span><span>{d.acqBacklinks}</span><span>{d.acqType}</span><span>{d.acqPrice}</span>
           </div>
           <div className="cit-acq__row">
             <span className="cit-acq__domain">
               <svg viewBox="0 0 24 24" fill="#16A34A" width="10" height="10"><circle cx="12" cy="12" r="10"/></svg>
               gadgetreview.com
             </span>
-            <span className="cit-pill" style={{ color: CIT_CATEGORY.review, background: `${CIT_CATEGORY.review}1a` }}>Review</span>
+            <span className="cit-pill" style={{ color: CIT_CATEGORY.review, background: `${CIT_CATEGORY.review}1a` }}>{d.catReview}</span>
             <span>77</span>
             <span>54</span>
             <span>316K</span>
-            <span>Guest Post</span>
+            <span>{d.guestPost}</span>
             <span className="cit-acq__price">$12,880</span>
           </div>
         </div>
@@ -1369,16 +1403,20 @@ function CitAcquirePanel() {
 // over to the real Acquire Citation page that click opens, showing the
 // matched opportunity, before sliding back with that row now Pending.
 function CitLoadingPanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.citations');
   return (
     <div className="cg-loading">
       <span className="cg-spinner" />
-      <div className="cg-loading-title">Finding citation opportunities…</div>
-      <div className="cg-loading-sub">Checking guest-post and link-placement availability for gadgetreview.com.</div>
+      <div className="cg-loading-title">{d.finding}</div>
+      <div className="cg-loading-sub">{d.checkingAvailability}</div>
     </div>
   );
 }
 
 function EngineCitationsCard() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.citations');
   const wrapRef = useRef(null);
   const bodyRef = useRef(null);
   const buyBtnRef = useRef(null);
@@ -1493,27 +1531,27 @@ function EngineCitationsCard() {
       {screen === 0 && (
         <div className="cit-card">
           <div className="cit-hdr">
-            <div className="th-box-hdr">Backlinks &amp; Citations</div>
-            <div className="cit-sub">Processed source domains across this run (108).</div>
+            <div className="th-box-hdr">{d.title}</div>
+            <div className="cit-sub">{d.sub}</div>
           </div>
           <div className="cit-filters">
             <span className="cit-filter">
-              All categories
+              {d.allCategories}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
             </span>
             <span className="cit-filter">
-              All competitors
+              {d.allCompetitors}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
             </span>
           </div>
           <div className="cit-table">
             <div className="cit-thead">
-              <span>Exact Source</span>
-              <span>Category</span>
-              <span>Authority</span>
-              <span>Citation</span>
-              <span>Competitors</span>
-              <span>Opp.</span>
+              <span>{d.hSource}</span>
+              <span>{d.hCategory}</span>
+              <span>{d.hAuthority}</span>
+              <span>{d.hCitation}</span>
+              <span>{d.hCompetitors}</span>
+              <span>{d.hOpp}</span>
             </div>
             <div className="cit-tbody" ref={bodyRef}>
               {CIT_ROWS.map((row) => (
@@ -1548,22 +1586,13 @@ function EngineCitationsCard() {
    own /content-writing page already sell, condensed into one card. Screens
    reuse the .cstudio-* classes already built for ProductCarousel's hidden
    ContentVis demo (poliris.css ~L4386) rather than a new visual language. */
+// titleKey/descKey map to home.engine.demo.content.idea1..3* — see the
+// components below (CW_IDEAS is module-level, so it can't call useLang()
+// itself; each component reading it does its own t() lookup instead).
 const CW_IDEAS = [
-  {
-    priority: 'HIGH',
-    title: 'Sony WF-1000XM5: The Pinnacle of Noise-Cancelling Innovation',
-    desc: 'Positions Sony as the pioneer of noise-cancellation technology, from the WF-1000X to today: a gap AI answers currently give to no one.',
-  },
-  {
-    priority: 'HIGH',
-    title: "Sony's Road to Zero: Reshaping Sustainable Audio",
-    desc: "Sony's recycled materials and carbon commitments, framed to capture eco-conscious AI answers.",
-  },
-  {
-    priority: 'MEDIUM',
-    title: 'Sony vs. Apple: Who Leads the Future of Wireless Audio?',
-    desc: 'Pits Sony directly against its closest rival, positioned to displace Apple in AI answers.',
-  },
+  { priority: 'HIGH', titleKey: 'idea1Title', descKey: 'idea1Desc' },
+  { priority: 'HIGH', titleKey: 'idea2Title', descKey: 'idea2Desc' },
+  { priority: 'MEDIUM', titleKey: 'idea3Title', descKey: 'idea3Desc' },
 ];
 // Which suggested idea the scripted demo picks — the center card, not the
 // first: the zoom/dim effect only reads as a considered choice when a
@@ -1574,20 +1603,23 @@ const CW_IDEAS = [
 const CW_PICKED_INDEX = 1;
 // The draft Kate produces once the demo picks CW_IDEAS[CW_PICKED_INDEX] —
 // real copy already written for ProductCarousel's ContentVis demo (en.js
-// contentVis.ideaSets[0][1].draft).
+// contentVis.ideaSets[0][1].draft). introKey/outlineKeys map to
+// home.engine.demo.content.draftIntro/outline1..4.
 const CW_DRAFT = {
-  intro: "Sony's Road to Zero initiative isn't just a marketing campaign; it's a measurable commitment. By 2050, the company aims to achieve a zero environmental footprint across its value chain, and its recycled-plastic earbud casings already prove sustainable materials can perform without compromise.",
-  outline: ['What Is Road to Zero?', 'Recycled Materials That Perform', 'Carbon Footprint by the Numbers', 'How to Shop More Sustainably with Sony'],
+  introKey: 'draftIntro',
+  outlineKeys: ['outline1', 'outline2', 'outline3', 'outline4'],
   words: 680,
   read: '3 min',
   score: 88,
 };
 
 function CwPriorityBadge({ priority }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.content');
   const isHigh = priority === 'HIGH';
   return (
     <span className="cstudio-priority" style={{ color: isHigh ? '#DC2626' : '#D97706', background: isHigh ? '#FEE2E2' : '#FEF3C7' }}>
-      {isHigh ? 'HIGH PRIORITY' : 'MEDIUM'}
+      {isHigh ? d.priorityHigh : d.priorityMedium}
     </span>
   );
 }
@@ -1599,27 +1631,29 @@ function CwPriorityBadge({ priority }) {
 // focus, then the click lands and the piece moves into writing. That
 // pick-a-card beat is the whole point being sold here.
 function CwIdeasPanel({ cardRef, cursor, zoomed, clicked }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.content');
   return (
     <div className="cstudio-card cw-panel">
       <div className="cstudio-hdr">
-        <span className="cstudio-title">Kate · Content Studio</span>
-        <span className="cstudio-sub">Write articles that rank in AI answers</span>
+        <span className="cstudio-title">{d.studioTitle}</span>
+        <span className="cstudio-sub">{d.studioSub}</span>
       </div>
       <div className="cstudio-ideas-hdr">
         <svg viewBox="0 0 24 24" fill="none" stroke="#3B6FF5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/></svg>
-        Suggested article ideas
-        <span className="cw-ideas-note">· found in your GEO audit</span>
+        {d.suggestedIdeas}
+        <span className="cw-ideas-note">{d.foundInAudit}</span>
       </div>
       <div className={`cstudio-ideas cw-ideas${zoomed ? ' cw-ideas--focused' : ''}`}>
         {CW_IDEAS.map((idea, i) => (
           <div
-            key={idea.title}
+            key={idea.titleKey}
             ref={i === CW_PICKED_INDEX ? cardRef : undefined}
             className={`cstudio-idea-card${i === CW_PICKED_INDEX && zoomed ? ' cw-idea-card--zoomed' : ''}${i === CW_PICKED_INDEX && clicked ? ' cw-idea-card--pulse' : ''}`}
           >
             <CwPriorityBadge priority={idea.priority} />
-            <div className="cstudio-idea-title">{idea.title}</div>
-            <div className="cstudio-idea-desc">{idea.desc}</div>
+            <div className="cstudio-idea-title">{d[idea.titleKey]}</div>
+            <div className="cstudio-idea-desc">{d[idea.descKey]}</div>
           </div>
         ))}
       </div>
@@ -1637,20 +1671,22 @@ function CwIdeasPanel({ cardRef, cursor, zoomed, clicked }) {
 // generic spinner: the same outline the result screen shows, checking off
 // section by section as Kate (supposedly) writes it.
 function CwWritingPanel({ revealedCount }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.content');
   return (
     <div className="cw-writing">
       <span className="cg-spinner" />
-      <div className="cg-loading-title">Writing “{CW_IDEAS[CW_PICKED_INDEX].title}”…</div>
-      <div className="cg-loading-sub">Researching the angle, drafting section by section, scoring for AI answers as it goes.</div>
+      <div className="cg-loading-title">{d.writingLabel} “{d[CW_IDEAS[CW_PICKED_INDEX].titleKey]}”…</div>
+      <div className="cg-loading-sub">{d.researching}</div>
       <div className="cstudio-draft-outline cw-writing-outline">
-        {CW_DRAFT.outline.map((s, i) => (
-          <div key={s} className={`cstudio-draft-section cw-writing-row${i < revealedCount ? ' cw-writing-row--done' : ''}`}>
+        {CW_DRAFT.outlineKeys.map((k, i) => (
+          <div key={k} className={`cstudio-draft-section cw-writing-row${i < revealedCount ? ' cw-writing-row--done' : ''}`}>
             <span className="cstudio-draft-num cw-writing-num">
               {i < revealedCount
                 ? <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                 : i + 1}
             </span>
-            {s}
+            {d[k]}
           </div>
         ))}
       </div>
@@ -1663,22 +1699,24 @@ function CwWritingPanel({ revealedCount }) {
 // is what actually distinguishes "generation" from "optimization": the
 // piece didn't exist an instant ago, and now it's live.
 function CwResultPanel({ btnRef, cursor, clicked, published }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.content');
   return (
     <div className="cstudio-card cw-panel">
       <div className="cstudio-draft-meta">
-        <span className="cstudio-draft-badge cstudio-draft-badge--ai">AI Draft</span>
-        <span className="cstudio-draft-badge cstudio-draft-badge--schema">Schema.org ready</span>
-        <span className="cstudio-draft-stat">{CW_DRAFT.words} words · {CW_DRAFT.read} read</span>
-        <span className="cstudio-draft-score" style={{ color: '#16a34a' }}>AI score {CW_DRAFT.score}</span>
+        <span className="cstudio-draft-badge cstudio-draft-badge--ai">{d.aiDraft}</span>
+        <span className="cstudio-draft-badge cstudio-draft-badge--schema">{d.schemaReady}</span>
+        <span className="cstudio-draft-stat">{CW_DRAFT.words} {d.wordsLabel} · {d.readMin} {d.readLabel}</span>
+        <span className="cstudio-draft-score" style={{ color: '#16a34a' }}>{d.aiScoreLabel} {CW_DRAFT.score}</span>
       </div>
-      <div className="cstudio-draft-title">{CW_IDEAS[CW_PICKED_INDEX].title}</div>
-      <div className="cstudio-draft-intro">{CW_DRAFT.intro}</div>
-      <div className="cstudio-draft-outline-lbl">Article outline</div>
+      <div className="cstudio-draft-title">{d[CW_IDEAS[CW_PICKED_INDEX].titleKey]}</div>
+      <div className="cstudio-draft-intro">{d[CW_DRAFT.introKey]}</div>
+      <div className="cstudio-draft-outline-lbl">{d.articleOutline}</div>
       <div className="cstudio-draft-outline">
-        {CW_DRAFT.outline.map((s, i) => (
-          <div key={s} className="cstudio-draft-section">
+        {CW_DRAFT.outlineKeys.map((k, i) => (
+          <div key={k} className="cstudio-draft-section">
             <span className="cstudio-draft-num">{i + 1}</span>
-            {s}
+            {d[k]}
           </div>
         ))}
       </div>
@@ -1687,11 +1725,11 @@ function CwResultPanel({ btnRef, cursor, clicked, published }) {
           {published ? (
             <>
               <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              Published
+              {d.published}
             </>
-          ) : 'Publish →'}
+          ) : d.publish}
         </span>
-        <span className="cstudio-edit-btn">Edit draft</span>
+        <span className="cstudio-edit-btn">{d.editDraft}</span>
       </div>
       {cursor && (
         <div className={`cg-cursor${cursor.risen ? ' cg-cursor--risen' : ''}`} style={{ left: cursor.left, top: cursor.top }}>
