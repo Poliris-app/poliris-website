@@ -1,5 +1,11 @@
 name: Tolgee sync
 
+# Re-touched to force GitHub to re-register workflow_dispatch after this
+# file was pushed, reverted, and re-pushed in short succession, which left
+# GitHub's workflow registration stale (dispatch calls were failing with
+# "Workflow does not have 'workflow_dispatch' trigger" despite the trigger
+# being present in the committed file).
+#
 # Triggered by api/tolgee-webhook.js the moment your boss changes anything
 # in Tolgee. Also runnable by hand (Actions tab -> Tolgee sync -> Run
 # workflow) and on a schedule as a safety net in case a webhook delivery
