@@ -246,6 +246,9 @@
    02 · REAL MARKET
    ============================================================ */
 .vis-page .mkt          { display: flex; flex-direction: column; align-items: stretch; }
+/* Wider lead text for this section only — .si-head/.lead's 340px default
+   (shared with 03 · Source Intelligence) stays untouched elsewhere. */
+.vis-page .mkt .si-head .lead { flex: 0 0 480px; max-width: 480px; }
 
 
 /* ── D3 Globe ────────────────────────────────────────────────── */
@@ -296,14 +299,14 @@
   gap: 56px;
   max-width: none;
   text-align: left;
-  margin: 0 auto 20px;
+  /* margin: 20px 0px; */
 }
 .vis-page .si-head-copy { flex: 1 1 auto; max-width: 620px; text-align: left; }
 .vis-page .si-head .lead {
   flex: 0 0 340px;
   max-width: 340px;
   margin: 0;
-  padding-left: 32px;
+  padding-left: 20px;
   border-left: 1px solid var(--border);
   color: var(--fg-4);
   text-align: left;
@@ -566,11 +569,23 @@
   display: inline-flex; align-items: flex-start; gap: 5px;
   font-size: 12.5px; color: var(--poliris-blue);
   text-decoration: none;
-  word-break: break-all; line-height: 1.5;
+  line-height: 1.5;
   text-align: left;
+  min-width: 0;
 }
 .vis-page .sit-url-link:hover { color: #1d4ed8; }
 .vis-page .sit-url-link svg { flex: 0 0 auto; margin-top: 3px; }
+/* Long URLs are cut to 2 lines with an ellipsis rather than wrapping the
+   whole thing out — a full path/query string reads worse than a clipped
+   one, and the link tooltip/href still carries the complete URL. */
+.vis-page .sit-url-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+}
 
 /* Category pill */
 .vis-page .sit-cat {
@@ -770,6 +785,7 @@
   .vis-page .si-head { flex-direction: column; align-items: flex-start; gap: 16px; max-width: 100%; }
   .vis-page .si-head-copy { max-width: 100%; }
   .vis-page .si-head .lead { flex: 0 0 auto; max-width: 100%; padding-left: 16px; }
+  .vis-page .mkt .si-head .lead { flex: 0 0 auto; max-width: 100%; }
   /* Source pipeline: horizontally scrollable */
   .vis-page .src-pipeline {
     overflow-x: auto;
@@ -844,62 +860,78 @@
 }
 
 /* ============================================================
-   LIVE MARKETS MAP — replaces the old interactive RealMarketMapV2 (a
-   standalone copy of that design was saved externally before this swap).
-   Static three-tier choropleth, light-only, no interaction: a plain d3-geo
-   country map colored by rollout tier, with a small legend under it. The
-   headline/subtitle above it are the page's own section heading (see
+   LIVE MARKETS MAP — flat gradient choropleth with a soft drop-shadow on
+   the highlighted tiers, a graticule grid, and a plain halo-dot marker.
+   The headline/subtitle above it are the page's own section heading (see
    visibility.realMarket in VisibilityPage.jsx / the locale files) — this
    component is just the card. See LiveMarketsMap.jsx for the placeholder
-   content (which countries are in which tier).
+   content (which countries are in which tier) and its inline SVG
+   gradients/shadow filter (kept in the SVG itself, not here, since CSS
+   `fill: url(#id)` needs those defs to exist in the same document).
    ============================================================ */
-.vis-page .lmm { width: 100%; max-width: 1060px; margin: 0 auto; }
+.vis-page .lmm { width: 100%; }
 .vis-page .lmm-card {
   position: relative;
-  border-radius: var(--r-xl);
+  border-radius: 22px;
   overflow: hidden;
   padding: 18px 18px 16px;
-  background: linear-gradient(165deg, #e9f0fc 0%, #fff 58%);
+  background: #fff;
   border: 1px solid var(--border);
-  box-shadow: 0 10px 34px rgba(20, 30, 60, .1), 0 2px 8px rgba(20, 30, 60, .06);
+  box-shadow: 0 34px 80px -36px rgba(20, 32, 74, .45);
+}
+.vis-page .lmm-glow {
+  position: absolute;
+  left: 50%;
+  top: -160px;
+  width: 940px;
+  height: 440px;
+  margin-left: -470px;
+  background: radial-gradient(closest-side, rgba(59, 130, 246, .11), rgba(59, 130, 246, 0));
+  pointer-events: none;
+}
+.vis-page .lmm-label {
+  position: absolute;
+  left: 28px;
+  top: 26px;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--fg-2);
 }
 .vis-page .lmm-svg { display: block; width: 100%; height: auto; }
 
-.vis-page .lmm-country { stroke: #fff; stroke-width: .6; }
-.vis-page .lmm-country--none { fill: #dfe3ec; }
-.vis-page .lmm-country--soon { fill: var(--poliris-blue-300); }
-.vis-page .lmm-country--live { fill: var(--blue-dark); }
+.vis-page .lmm-graticule { fill: none; stroke: #eef0f5; stroke-width: .8; }
 
-/* One glossy ball-on-a-needle pin per "already live" market — no label, no
-   callout, just the marker (see the `Pin` component in
-   LiveMarketsMap.jsx; its ball/needle gradients are per-instance, set
-   directly via JSX, not here). */
-.vis-page .lmm-pin { filter: drop-shadow(0 3px 4px rgba(20, 10, 10, .35)); }
+.vis-page .lmm-country { stroke: #fff; stroke-width: .7; }
+.vis-page .lmm-country--none { fill: #e4e7ef; }
+.vis-page .lmm-country--live { fill: url(#lmm-live-grad);}
+.vis-page .lmm-shadow-group { filter: url(#lmm-shadow); }
 
-.vis-page .lmm-legend {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 18px;
-  margin-top: 18px;
-}
-.vis-page .lmm-legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+/* One glossy red ball-on-a-needle pin per "already live" market (see the
+   `Marker` component in LiveMarketsMap.jsx; its ball gradient is
+   per-instance, set directly via JSX, not here). */
+.vis-page .lmm-marker-shadow { fill: #0c1330; opacity: .24; }
+.vis-page .lmm-marker-needle { fill: #b9351f; }
+.vis-page .lmm-marker-ball { stroke: #8f1d12; stroke-width: .7; }
+.vis-page .lmm-marker-shine { fill: #fff; opacity: .55; }
+.vis-page .lmm-marker-name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 12.5px;
-  color: var(--fg-2);
+  font-size: 14px;
+  text-anchor: middle;
+  fill: #16204f;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
-.vis-page .lmm-swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
-.vis-page .lmm-swatch--live { background: var(--blue-dark); }
-.vis-page .lmm-swatch--soon { background: var(--poliris-blue-300); }
-.vis-page .lmm-swatch--none { background: #dfe3ec; }
 
 @media (max-width: 700px) {
   .vis-page .lmm-card { padding: 20px 16px 16px; }
-  .vis-page .lmm-legend { gap: 12px; margin-top: 14px; }
+  .vis-page .lmm-label { left: 20px; top: 18px; font-size: 10.5px; }
 }
 
 /* Offsets anchor-scroll targets so the fixed navbar doesn't cover the

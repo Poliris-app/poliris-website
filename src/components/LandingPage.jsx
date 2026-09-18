@@ -75,12 +75,14 @@ export default function LandingPage() {
           errorText: h.websiteError,
         }}
       />
-      <ValueChain />
+      {/* ValueChain hidden for now — restore by uncommenting. */}
+      {/* <ValueChain /> */}
       {/* ProductCarousel hidden for now — restore by uncommenting. */}
       {/* <ProductCarousel /> */}
       <PlatformEngine />
       <Agents />
-      <ComparisonTable />
+      {/* ComparisonTable hidden for now — restore by uncommenting. */}
+      {/* <ComparisonTable /> */}
       <Stakes />
       <CtaBand
         heading={cta.heading}

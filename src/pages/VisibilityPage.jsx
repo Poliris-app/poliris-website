@@ -12,7 +12,7 @@ import { useLang } from '../contexts/LangContext';
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
 /* 02 · Real market — hidden for now (tour card + map section below) */
-const SHOW_REAL_MARKET = false;
+const SHOW_REAL_MARKET = true;
 
 /* ── Source intelligence table (03 · SOURCE INTELLIGENCE) ─────────────── */
 const SortIcon = () => (
@@ -395,7 +395,7 @@ export default function VisibilityPage() {
                           <div className="sit-domain">{row.domain}</div>
                         </div>
                         <a className="sit-url-link" href={row.url} target="_blank" rel="noopener noreferrer">
-                          {row.url}
+                          <span className="sit-url-text">{row.url}</span>
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
                         </a>
                       </div>

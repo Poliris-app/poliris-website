@@ -220,7 +220,7 @@
 .cw-page .cw-hub-lead {
   flex: 0 0 420px;
   max-width: 420px;
-  padding-left: 32px;
+  padding-left: 20px;
   border-left: 1px solid var(--cw-line-2);
 }
 .cw-page .cw-hub-lead p {

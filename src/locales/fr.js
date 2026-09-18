@@ -318,7 +318,7 @@ export default {
     insideDash: 'Votre tableau de bord',
     whatsInside: {
       eyebrow: 'Dans le détail',
-      h2Pre: 'Trois façons d\'analyser',
+      h2Pre: 'Quatre façons d\'analyser',
       h2Hl: 'votre visibilité dans les IA.',
       lead: "Pas des comptages de prompts la façon dont les acheteurs vous jugent réellement. Cliquez sur une carte pour y accéder directement.",
     },
@@ -369,10 +369,10 @@ export default {
     },
     realMarket: {
       eyebrow: '02 · Marché réel',
-      h2Pre: 'Où les publicités ChatGPT sont-elles',
-      h2Hl: 'en direct',
-      lead: "Chaque niveau a ses propres concurrents. Choisissez une portée et regardez les noms changer.",
-      hint: 'Changez d\'échelle, et voyez les concurrents changer avec elle.',
+      h2Pre: 'Comprenez votre produit sur',
+      h2Hl: ' vos marchés cibles',
+      lead: 'Notre audit évalue votre produit au sein de vos zones commerciales cibles, en vous aidant à comprendre la demande locale, le positionnement concurrentiel, et où votre produit a le plus fort potentiel de croissance.',
+      hint: 'Notre audit évalue votre produit au sein de vos zones commerciales cibles, en vous aidant à comprendre la demande locale, le positionnement concurrentiel, et où votre produit a le plus fort potentiel de croissance.',
     },
     sourceIntel: {
       eyebrow: '03 · Cartographie des sources',

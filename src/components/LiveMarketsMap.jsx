@@ -1,65 +1,48 @@
 import { useMemo } from 'react';
-import { geoNaturalEarth1, geoPath, geoCentroid, geoArea } from 'd3-geo';
+import { geoNaturalEarth1, geoPath, geoCentroid, geoArea, geoGraticule10 } from 'd3-geo';
 import { feature } from 'topojson-client';
 import worldTopo from 'world-atlas/countries-110m.json';
 
-// Redesign, replacing RealMarketMapV2 (the interactive tour/pin/theme-toggle
-// map — a standalone copy of that old design was saved for reference before
-// this swap). This one is a static three-tier choropleth, light-only, no
-// interaction at all: matches a reference screenshot ("Where ChatGPT Ads
-// are live" — headline, subtitle, colored country fills, a bottom-left
-// legend). The headline/subtitle live in VisibilityPage.jsx's own section
-// heading now (visibility.realMarket in the locale files), not here — this
-// component just owns the map itself. Content below (tiers, country lists)
-// is placeholder — swap it for real rollout data before shipping.
-const TIERS = [
-  { key: 'live', label: 'Already live' },
-  { key: 'soon', label: 'Launching soon' },
-  { key: 'none', label: 'Not announced' },
-];
+// Redesign #2: flat gradient choropleth with a soft drop-shadow on the
+// highlighted tiers and a plain halo-dot marker (no glossy pin), matching
+// the "Your real market, not the whole world." mock. The headline/subtitle
+// still live in VisibilityPage.jsx's own section heading (visibility.realMarket
+// in the locale files) — this component just owns the map card itself.
+// Tier data (which countries are in which tier) is placeholder — swap it
+// for real rollout data before shipping.
 
 // ISO country names as they appear in world-atlas's own `properties.name`
 // (Natural Earth's admin names — already verified against this exact
 // dataset earlier for the old map, e.g. "United States of America", not
 // "USA" or "United States").
-const LIVE_COUNTRIES = ['United States of America', 'Canada', 'Mexico', 'Brazil', 'United Kingdom', 'Japan', 'Australia', 'New Zealand'];
-const SOON_COUNTRIES = ['France', 'Germany', 'Spain', 'Portugal', 'Italy', 'Netherlands', 'Belgium', 'Switzerland', 'Austria', 'Ireland', 'Denmark', 'Norway', 'Sweden', 'Finland', 'Iceland', 'Poland', 'Czechia', 'Slovakia', 'Hungary', 'Romania', 'Bulgaria', 'Greece', 'Croatia', 'Slovenia', 'Estonia', 'Latvia', 'Lithuania', 'Luxembourg'];
+const LIVE_COUNTRIES = ['United States of America', 'France', 'Philippines'];
 
-// Glossy ball-on-a-needle pin, red — a radial-gradient sphere (bright
-// highlight near the light source, deep at the rim) on a small
-// brushed-metal post, same construction as the old interactive map's pins,
-// just recolored and with no label/chip attached.
-const PIN_BALL_HI = '#e3a19a';
-const PIN_BALL_MID = '#a3362b';
-const PIN_BALL_LO = '#4d1712';
-const PIN_NEEDLE_A = '#8b8f9c';
-const PIN_NEEDLE_B = '#e4e7ee';
-const PIN_NEEDLE_C = '#7c8391';
-// Scales the pin down from its natural ~34x52 size — full-size read as
-// oversized against a country as small as the UK or Japan on this map.
-const PIN_SCALE = 0.5;
+// Short display names for the pin labels — world-atlas's own admin name
+// ("United States of America") is too wide to sit above a small pin.
+const COUNTRY_LABELS = {
+  'United States of America': 'USA',
+  France: 'France',
+  Philippines: 'Philippines',
+};
 
-function Pin({ id, x, y }) {
-  const ballId = `lmm-ball-${id}`;
-  const needleId = `lmm-needle-${id}`;
+// Glossy red ball-on-a-needle pin — a thin spike anchored on the map with
+// a small glossy sphere at the top (radial-gradient highlight top-left,
+// deep red at the rim) and a flat contact-shadow ellipse at its foot.
+function Marker({ id, x, y, name }) {
+  const gradId = `lmm-pin-grad-${id}`;
   return (
-    <g className="lmm-pin" transform={`translate(${x} ${y}) scale(${PIN_SCALE}) translate(-17 -49.5)`}>
-      <ellipse cx="17" cy="49.5" rx="6" ry="2.2" fill="rgba(20,10,10,0.32)" />
-      <path d="M17.9 27 L17.9 48.6 L16.6 49.8 L16.1 27 Z" fill={`url(#${needleId})`} />
-      <circle cx="17" cy="17" r="11.4" fill={`url(#${ballId})`} />
-      <ellipse cx="12.8" cy="12.2" rx="4.1" ry="3" fill="rgba(255,255,255,0.72)" transform="rotate(-24 12.8 12.2)" />
-      <path d="M17 28.4a11.4 11.4 0 0 0 9.9-5.8 11.4 11.4 0 0 1-19.8 0 11.4 11.4 0 0 0 9.9 5.8Z" fill="rgba(255,255,255,0.16)" />
+    <g className="lmm-marker" transform={`translate(${x} ${y})`}>
+      <text className="lmm-marker-name" x="0" y="-25">{name}</text>
+      <ellipse className="lmm-marker-shadow" cx="0" cy="1" rx="4.5" ry="1.6" />
+      <path className="lmm-marker-needle" d="M0 0 L-1.1 -11 L1.1 -11 Z" />
+      <circle className="lmm-marker-ball" cx="0" cy="-15.4" r="5.6" fill={`url(#${gradId})`} />
+      <ellipse className="lmm-marker-shine" cx="-1.8" cy="-17.4" rx="2" ry="1.4" transform="rotate(-28 -1.8 -17.4)" />
       <defs>
-        <radialGradient id={ballId} cx="0.34" cy="0.28" r="0.82">
-          <stop offset="0" stopColor={PIN_BALL_HI} />
-          <stop offset="0.42" stopColor={PIN_BALL_MID} />
-          <stop offset="1" stopColor={PIN_BALL_LO} />
+        <radialGradient id={gradId} cx="35%" cy="28%" r="78%">
+          <stop offset="0%" stopColor="#ef6a52" />
+          <stop offset="58%" stopColor="#d1402a" />
+          <stop offset="100%" stopColor="#9e2415" />
         </radialGradient>
-        <linearGradient id={needleId} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor={PIN_NEEDLE_A} />
-          <stop offset="0.5" stopColor={PIN_NEEDLE_B} />
-          <stop offset="1" stopColor={PIN_NEEDLE_C} />
-        </linearGradient>
       </defs>
     </g>
   );
@@ -74,10 +57,10 @@ const HEIGHT = 520;
 const PAD = 6;
 
 export default function LiveMarketsMap() {
-  // No resize-driven recompute needed — unlike the old map, nothing here is
-  // an HTML overlay that has to land on exact pixel coordinates (no pins,
-  // no chips), so a plain viewBox lets CSS scale the whole thing for free.
-  const { countries, pins } = useMemo(() => {
+  // No resize-driven recompute needed — unlike an HTML-overlay map, nothing
+  // here has to land on exact pixel coordinates outside the SVG, so a plain
+  // viewBox lets CSS scale the whole thing for free.
+  const { base, live, markers, graticule } = useMemo(() => {
     const featureCollection = feature(worldTopo, worldTopo.objects.countries);
     // Fit to the actual union of country shapes, not the abstract full
     // globe ({type:'Sphere'}) — the sphere's own bounds include empty
@@ -85,21 +68,21 @@ export default function LiveMarketsMap() {
     // looking small and padded inside its own card.
     const projection = geoNaturalEarth1().fitExtent([[PAD, PAD], [WIDTH - PAD, HEIGHT - PAD]], featureCollection);
     const pathGen = geoPath(projection);
-    const countries = featureCollection.features.map((f) => {
+    const byTier = { base: [], live: [] };
+    featureCollection.features.forEach((f) => {
       const name = f.properties.name;
-      let tier = 'none';
-      if (LIVE_COUNTRIES.includes(name)) tier = 'live';
-      else if (SOON_COUNTRIES.includes(name)) tier = 'soon';
-      return { id: f.id, d: pathGen(f), tier };
-    }).filter((c) => c.d);
+      const d = pathGen(f);
+      if (!d) return;
+      const tier = LIVE_COUNTRIES.includes(name) ? 'live' : 'base';
+      byTier[tier].push({ id: f.id, d });
+    });
 
-    // One plain pin per "already live" market, no label — just marking the
-    // location. Anchored on the largest ring of the country's own geometry
-    // (not the raw multipolygon centroid), same reasoning as the old map:
-    // a country with scattered overseas territory (the US's own polygon
-    // includes Alaska) can have a centroid that lands nowhere near its
-    // actual landmass, or even in open ocean.
-    const pins = featureCollection.features
+    // One flat marker per "already live" market. Anchored on the largest
+    // ring of the country's own geometry (not the raw multipolygon
+    // centroid) — a country with scattered overseas territory (the US's
+    // own polygon includes Alaska) can have a centroid that lands nowhere
+    // near its actual landmass, or even in open ocean.
+    const markers = featureCollection.features
       .filter((f) => LIVE_COUNTRIES.includes(f.properties.name))
       .map((f) => {
         let geom = f.geometry;
@@ -113,31 +96,41 @@ export default function LiveMarketsMap() {
           geom = { type: 'Polygon', coordinates: best };
         }
         const [x, y] = projection(geoCentroid({ type: 'Feature', geometry: geom }));
-        return { id: f.id, x, y };
+        return { id: f.id, x, y, name: COUNTRY_LABELS[f.properties.name] || f.properties.name };
       });
 
-    return { countries, pins };
+    const graticule = pathGen(geoGraticule10());
+
+    return { base: byTier.base, live: byTier.live, markers, graticule };
   }, []);
 
   return (
     <div className="lmm">
       <div className="lmm-card">
+        <div className="lmm-glow" />
         <svg className="lmm-svg" width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label="World map showing market rollout status by country">
-          {countries.map((c) => (
-            <path key={c.id} className={`lmm-country lmm-country--${c.tier}`} d={c.d} />
-          ))}
-          {pins.map((p) => (
-            <Pin key={p.id} id={p.id} x={p.x} y={p.y} />
-          ))}
+          <defs>
+            <linearGradient id="lmm-live-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3358cc" />
+              <stop offset="100%" stopColor="#16297a" />
+            </linearGradient>
+            <filter id="lmm-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="6" stdDeviation="7" floodColor="#152a6b" floodOpacity="0.3" />
+            </filter>
+          </defs>
+
+          <path className="lmm-graticule" d={graticule} />
+
+          <g>
+            {base.map((c) => <path key={c.id} className="lmm-country lmm-country--none" d={c.d} />)}
+          </g>
+          <g className="lmm-shadow-group">
+            {live.map((c) => <path key={c.id} className="lmm-country lmm-country--live" d={c.d} />)}
+          </g>
+          <g>
+            {markers.map((m) => <Marker key={m.id} id={m.id} x={m.x} y={m.y} name={m.name} />)}
+          </g>
         </svg>
-        <div className="lmm-legend">
-          {TIERS.map((t) => (
-            <span key={t.key} className="lmm-legend-item">
-              <i className={`lmm-swatch lmm-swatch--${t.key}`} />
-              {t.label}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );

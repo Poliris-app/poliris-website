@@ -530,7 +530,7 @@
   line-height: 1.66;
   color: var(--muted);
   margin: 0;
-  padding-left: 32px;
+  padding-left: 20px;
   border-left: 1px solid var(--line-2);
 }
 @media (max-width: 860px) {

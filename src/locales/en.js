@@ -321,7 +321,7 @@ export default {
     insideDash: 'Inside the dashboard',
     whatsInside: {
       eyebrow: "What's inside",
-      h2Pre: 'Three ways we read',
+      h2Pre: 'Four ways we read',
       h2Hl: 'your AI visibility.',
       lead: 'Not prompt counts the way buyers actually judge you. Tap any card to jump straight to it.',
     },
@@ -372,10 +372,10 @@ export default {
     },
     realMarket: {
       eyebrow: '02 · Real market',
-      h2Pre: 'Where ChatGTP Ads are',
-      h2Hl: 'live.',
-      lead: 'Each level has its own competitors pick a scope and watch the names change.',
-      hint: 'Each level has its own competitors pick a scope and watch the names change.',
+      h2Pre: 'Understand Your Product Across',
+      h2Hl: ' Target Markets',
+      lead: 'Our audit evaluates your product within your target trading zones, helping you understand local demand, competitive positioning, and where your product has the greatest potential to grow.',
+      hint: 'Our audit evaluates your product within your target trading zones, helping you understand local demand, competitive positioning, and where your product has the greatest potential to grow.',
     },
     sourceIntel: {
       eyebrow: '03 · Source intelligence',

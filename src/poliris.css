@@ -3087,7 +3087,7 @@ button { cursor: pointer; border: none; background: none; }
   /* background: linear-gradient(180deg, #e7edff 0%, #f3f6ff 44%, #fbfcff 100%);
   border: 1px solid #a5bbff; */
   border-radius: 10px;
-  padding: 62px 56px;
+  padding: 0px 56px;
   position: relative;
   overflow: hidden;
 }
@@ -3121,7 +3121,7 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.66;
   color: var(--fg3);
   margin: 0;
-  padding-left: 32px;
+  padding-left: 20px;
   border-left: 1px solid var(--border);
 }
 .agents__grid {
@@ -3366,7 +3366,7 @@ button { cursor: pointer; border: none; background: none; }
    ================================================================ */
 .stakes {
   padding: 96px 0;
-  background: var(--surface1);
+  background: #fff;
 }
 .stakes__grid {
   display: grid;
@@ -4997,7 +4997,7 @@ button { cursor: pointer; border: none; background: none; }
 .vis-page .reveal.in {
   opacity: 1; 
   transform: none;
-  margin: 20px auto;
+  /* margin: 20px auto; */
   text-align: center;
 }
 
