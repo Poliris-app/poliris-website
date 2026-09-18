@@ -11,6 +11,9 @@ import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
+/* 02 · Real market — hidden for now (tour card + map section below) */
+const SHOW_REAL_MARKET = false;
+
 /* ── Source intelligence table (03 · SOURCE INTELLIGENCE) ─────────────── */
 const SortIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
@@ -162,8 +165,8 @@ export default function VisibilityPage() {
                 <p className="lead">{wi.lead}</p>
               </>); })()}
             </div>
-            <div className="tour reveal">
-{t('visibility.tourCards').map((card, i) => (
+            <div className={`tour reveal${SHOW_REAL_MARKET ? '' : ' tour--3'}`}>
+{t('visibility.tourCards').map((card, i) => ({ card, i })).filter(({ i }) => SHOW_REAL_MARKET || i !== 1).map(({ card, i }) => (
               <a key={i} href={['#focus','#market','#sources','#nora'][i]} className="tcard">
                 <div className="tcard-top">
                   <div className="ic">
@@ -269,7 +272,8 @@ export default function VisibilityPage() {
           </div>
         </section>
 
-        {/* ======================== 02 · REAL MARKET ======================== */}
+        {/* ======================== 02 · REAL MARKET (hidden for now) ======================== */}
+        {SHOW_REAL_MARKET && (
         <section id="market" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <div className="mkt">
@@ -296,6 +300,7 @@ export default function VisibilityPage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* ======================== 03 · SOURCE INTELLIGENCE ======================== */}
         <section id="sources">

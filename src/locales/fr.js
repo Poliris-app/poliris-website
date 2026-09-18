@@ -318,7 +318,7 @@ export default {
     insideDash: 'Votre tableau de bord',
     whatsInside: {
       eyebrow: 'Dans le détail',
-      h2Pre: 'Quatre façons d\'analyser',
+      h2Pre: 'Trois façons d\'analyser',
       h2Hl: 'votre visibilité dans les IA.',
       lead: "Pas des comptages de prompts la façon dont les acheteurs vous jugent réellement. Cliquez sur une carte pour y accéder directement.",
     },

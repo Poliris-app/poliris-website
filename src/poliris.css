@@ -5016,6 +5016,9 @@ button { cursor: pointer; border: none; background: none; }
   gap: 20px;
   margin-top: 6px;
 }
+.vis-page .tour--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
 .vis-page .tcard {
   display: flex;
   flex-direction: column;

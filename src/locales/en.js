@@ -321,7 +321,7 @@ export default {
     insideDash: 'Inside the dashboard',
     whatsInside: {
       eyebrow: "What's inside",
-      h2Pre: 'Four ways we read',
+      h2Pre: 'Three ways we read',
       h2Hl: 'your AI visibility.',
       lead: 'Not prompt counts the way buyers actually judge you. Tap any card to jump straight to it.',
     },
