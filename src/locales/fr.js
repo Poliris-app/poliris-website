@@ -370,7 +370,7 @@ export default {
     realMarket: {
       eyebrow: '02 · Marché réel',
       h2Pre: 'Comprenez votre produit sur',
-      h2Hl: ' vos marchés cibles',
+      h2Hl: 'vos marchés cibles',
       lead: 'Notre audit évalue votre produit au sein de vos zones commerciales cibles, en vous aidant à comprendre la demande locale, le positionnement concurrentiel, et où votre produit a le plus fort potentiel de croissance.',
       hint: 'Notre audit évalue votre produit au sein de vos zones commerciales cibles, en vous aidant à comprendre la demande locale, le positionnement concurrentiel, et où votre produit a le plus fort potentiel de croissance.',
     },

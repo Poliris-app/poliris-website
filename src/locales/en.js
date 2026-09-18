@@ -373,7 +373,7 @@ export default {
     realMarket: {
       eyebrow: '02 · Real market',
       h2Pre: 'Understand Your Product Across',
-      h2Hl: ' Target Markets',
+      h2Hl: 'Target Markets',
       lead: 'Our audit evaluates your product within your target trading zones, helping you understand local demand, competitive positioning, and where your product has the greatest potential to grow.',
       hint: 'Our audit evaluates your product within your target trading zones, helping you understand local demand, competitive positioning, and where your product has the greatest potential to grow.',
     },
