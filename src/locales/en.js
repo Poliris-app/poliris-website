@@ -924,7 +924,7 @@ export default {
     hero: {
       eyebrow: 'Blog',
       title: 'Field notes on AI visibility & GEO',
-      lead: 'Strategy, frameworks, and short reads from the team building the operating system for how AI sees your brand.',
+      lead: 'Practical strategies, frameworks, and insights from the team helping brands stand out in AI.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
     },
