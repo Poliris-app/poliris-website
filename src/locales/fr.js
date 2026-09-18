@@ -39,9 +39,9 @@ export default {
   home: {
     hero: {
       eyebrow: "Gestion de marque IA, au-delà du monitoring",
-      titlePre: 'Prenez en main votre SEO',
-      titleHl: 'grâce à l’IA',
-      titlePost: 'votre marque.',
+      titlePre: 'Prenez en main',
+      titleHl: 'votre SEO',
+      titlePost: 'grâce à l’IA',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
       lead: "Comprenez et gérez votre visibilité sur l'IA et le web, produit par produit, avec une équipe d'agents qui transforme les insights en plan d'action.",
       primaryCta: "Commencer l'essai gratuit",

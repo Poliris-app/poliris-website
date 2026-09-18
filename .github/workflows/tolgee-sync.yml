@@ -1,0 +1,70 @@
+name: Tolgee sync
+
+# Triggered by api/tolgee-webhook.js the moment your boss changes anything
+# in Tolgee. Also runnable by hand (Actions tab -> Tolgee sync -> Run
+# workflow) and on a schedule as a safety net in case a webhook delivery
+# is ever dropped.
+on:
+  repository_dispatch:
+    types: [tolgee-sync]
+  workflow_dispatch: {}
+  schedule:
+    - cron: '17 */6 * * *' # every 6 hours, just in case a webhook is missed
+
+# Only one sync in flight at a time. A burst of edits within a few minutes
+# triggers several dispatches — this cancels the older, still-queued run
+# in favor of a fresh one rather than letting them race to push, since
+# each run pulls the *current* full state from Tolgee anyway (nothing
+# incremental to preserve from a superseded run).
+concurrency:
+  group: tolgee-sync
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Default checkout token can push straight back to this same
+          # repo as long as the job has contents:write above — no extra
+          # PAT needed for this part (only the webhook -> dispatch hop
+          # needs one, since that's a call *into* GitHub from outside it).
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: corepack enable
+      # Pinned to match what Vercel itself resolves to for this repo (no
+      # packageManager field is set in package.json, so Vercel picks a
+      # version by heuristic) — avoids the lockfile-version mismatch that
+      # broke the very first Tolgee-integration deploy.
+      - run: corepack prepare pnpm@10 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Tolgee content into en.js / fr.js
+        env:
+          TOLGEE_API_URL: ${{ secrets.TOLGEE_API_URL }}
+          TOLGEE_API_KEY: ${{ secrets.TOLGEE_API_KEY }}
+        run: node scripts/tolgee-sync.mjs
+
+      - name: Commit and push if anything changed
+        run: |
+          git config user.name "tolgee-sync-bot"
+          git config user.email "actions@github.com"
+          if git diff --quiet -- src/locales/en.js src/locales/fr.js; then
+            echo "No changes — Tolgee already matches the codebase."
+            exit 0
+          fi
+          git add src/locales/en.js src/locales/fr.js
+          git commit -m "content: sync translations from Tolgee
+
+Automated — triggered by a change in Tolgee, pulled via scripts/tolgee-sync.mjs."
+          git push
