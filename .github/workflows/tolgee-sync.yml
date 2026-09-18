@@ -70,7 +70,5 @@ jobs:
             exit 0
           fi
           git add src/locales/en.js src/locales/fr.js
-          git commit -m "content: sync translations from Tolgee
-
-Automated — triggered by a change in Tolgee, pulled via scripts/tolgee-sync.mjs."
+          git commit -m "content: sync translations from Tolgee" -m "Automated — triggered by a change in Tolgee, pulled via scripts/tolgee-sync.mjs."
           git push
