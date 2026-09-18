@@ -1,21 +1,18 @@
 name: Tolgee sync
 
-# Re-touched to force GitHub to re-register workflow_dispatch after this
-# file was pushed, reverted, and re-pushed in short succession, which left
-# GitHub's workflow registration stale (dispatch calls were failing with
-# "Workflow does not have 'workflow_dispatch' trigger" despite the trigger
-# being present in the committed file).
+# Runs on a short timer instead of an instant webhook — Tolgee's webhook
+# feature needs a paid license, which this self-hosted free-tier project
+# doesn't have. Checking every 15 minutes gets effectively-automatic
+# behavior for free: your boss's Tolgee edits already show up on the live
+# site instantly regardless (it reads Tolgee directly at runtime), so this
+# only affects how fast the en.js/fr.js backup copy catches up, and a few
+# minutes' lag there doesn't matter.
 #
-# Triggered by api/tolgee-webhook.js the moment your boss changes anything
-# in Tolgee. Also runnable by hand (Actions tab -> Tolgee sync -> Run
-# workflow) and on a schedule as a safety net in case a webhook delivery
-# is ever dropped.
+# Also runnable by hand any time: Actions tab -> Tolgee sync -> Run workflow.
 on:
-  repository_dispatch:
-    types: [tolgee-sync]
   workflow_dispatch: {}
   schedule:
-    - cron: '17 */6 * * *' # every 6 hours, just in case a webhook is missed
+    - cron: '*/15 * * * *' # every 15 minutes
 
 # Only one sync in flight at a time. A burst of edits within a few minutes
 # triggers several dispatches — this cancels the older, still-queued run
@@ -36,9 +33,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           # Default checkout token can push straight back to this same
-          # repo as long as the job has contents:write above — no extra
-          # PAT needed for this part (only the webhook -> dispatch hop
-          # needs one, since that's a call *into* GitHub from outside it).
+          # repo as long as the job has contents:write above.
           fetch-depth: 1
 
       - uses: actions/setup-node@v4
