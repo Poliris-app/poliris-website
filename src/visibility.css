@@ -487,6 +487,11 @@
 .vis-page .src-intel {
   background: #fff; border: 1px solid var(--border);
   border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden;
+  /* Dashboard-style table: Geist like the other dashboards. Its rules read
+     --font-display / --font-body, so those are overridden here. */
+  --font-display: 'Geist', Arial, sans-serif;
+  --font-body:    'Geist', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 .vis-page .src-intel-hdr {
   display: flex; align-items: center; justify-content: space-between;

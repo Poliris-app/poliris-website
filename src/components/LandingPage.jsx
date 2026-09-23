@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 // import ProductCarousel from './ProductCarousel'; // hidden for now, see below
 import Hero from './Hero';
@@ -415,6 +416,68 @@ function PositionChartDemo() {
   const d = t('home.engine.demo.reputation');
   const tierLabels = t('dashboard.tierLabels');
   const nike = PC_BRANDS.find((b) => b.isTarget);
+  const tipSrcRef = useRef(null);
+  const tipFloatRef = useRef(null);
+  // Set after mount — the page is pre-rendered (vite-react-ssg) where
+  // `document` doesn't exist, so the portal can't render on the server.
+  const [tipHost, setTipHost] = useState(null);
+  useEffect(() => { setTipHost(document.body); }, []);
+
+  // .pc-scroll/.pc-panel clip with overflow:hidden (the auto-scroll needs
+  // it), which no z-index can escape — so the visible tooltip lives in
+  // <body>, like the real dashboard's portaled tooltip. Each frame it copies
+  // the hidden source copy's on-screen position, opacity and transform, so
+  // the CSS animation timing and anchoring stay the single source of truth.
+  // Only runs while the chart is on screen.
+  useEffect(() => {
+    const src = tipSrcRef.current;
+    const float = tipFloatRef.current;
+    const chart = src?.offsetParent;
+    const body = src?.closest('.engine-window__body');
+    const scroller = src?.closest('.pc-scroll');
+    const track = src?.closest('.pc-scroll__track');
+    if (!src || !float || !chart || !body || !scroller || !track) return undefined;
+    float.style.fontFamily = getComputedStyle(src).fontFamily;
+
+    let raf = 0;
+    const tick = () => {
+      const cs = getComputedStyle(src);
+      const r = chart.getBoundingClientRect();
+      float.style.left = `${r.left + chart.clientLeft + src.offsetLeft}px`;
+      float.style.top = `${r.top + chart.clientTop + src.offsetTop}px`;
+      float.style.opacity = cs.opacity;
+      float.style.transform = cs.transform;
+      // When the card slides up to its Analysis view the tooltip is still
+      // fading out — clip whatever part has passed the window's content top
+      // so it scrolls away with the chart instead of riding up over the
+      // browser bar. Capped by how far the chart has actually scrolled
+      // (`scrolled`), so the open tooltip at rest is never clipped — on wider
+      // cards it naturally pokes a few px above the content top, by design.
+      const scrolled = track.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+      const fr = float.getBoundingClientRect();
+      const over = Math.min(body.getBoundingClientRect().top - fr.top, -scrolled);
+      const scale = fr.height / float.offsetHeight || 1;
+      float.style.clipPath = over > 0 ? `inset(${over / scale}px 0 0 0)` : '';
+      raf = requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver(([entry]) => {
+      cancelAnimationFrame(raf);
+      if (entry.isIntersecting) raf = requestAnimationFrame(tick);
+      else float.style.opacity = '0';
+    });
+    io.observe(chart);
+    return () => { io.disconnect(); cancelAnimationFrame(raf); };
+  }, [tipHost]);
+
+  const tooltipBody = (
+    <>
+      <span className="pc-tooltip__you">{d.yourBrand}</span>
+      <p className="pc-tooltip__name">{nike.name}</p>
+      <div className="pc-tooltip__row"><span>{d.visibility}</span><span className="pc-tooltip__pill">90%</span></div>
+      <div className="pc-tooltip__row"><span>{d.sentiment}</span><span className="pc-tooltip__pill">{tierLabels.Strong}</span></div>
+    </>
+  );
+
   return (
     <div className="pc-demo">
       {/* Auto-playing loop, not a manual tab: cursor clicks Sony, the
@@ -451,12 +514,18 @@ function PositionChartDemo() {
                 </svg>
               </span>
 
-              <div className="pc-tooltip">
-                <span className="pc-tooltip__you">{d.yourBrand}</span>
-                <p className="pc-tooltip__name">{nike.name}</p>
-                <div className="pc-tooltip__row"><span>{d.visibility}</span><span className="pc-tooltip__pill">90%</span></div>
-                <div className="pc-tooltip__row"><span>{d.sentiment}</span><span className="pc-tooltip__pill">{tierLabels.Strong}</span></div>
+              {/* Invisible "source" copy — keeps its CSS position + animation
+                  so it stays in sync with the cursor, while the visible copy
+                  below is portaled to <body> and mirrors it each frame. */}
+              <div className="pc-tooltip pc-tooltip--source" ref={tipSrcRef} aria-hidden="true">
+                {tooltipBody}
               </div>
+              {tipHost && createPortal(
+                <div className="pc-tooltip pc-tooltip--float" ref={tipFloatRef}>
+                  {tooltipBody}
+                </div>,
+                tipHost,
+              )}
             </div>
 
             <div className="pc-legend">
@@ -916,7 +985,7 @@ function EngineTrustCard() {
           <div className="th-box th-box--split">
             <div className="th-col"><ThIssuesPanel /></div>
             <div className="th-divider" />
-            <div className="th-col"><ThRobotsPanel /></div>
+            <div className="th-col th-col--robots"><ThRobotsPanel /></div>
           </div>
         </div>
       </div>

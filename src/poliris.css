@@ -2,7 +2,7 @@
    POLIRIS — Vanilla CSS Design System
    ================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Chivo:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Chivo:wght@300;400;500;600;700&family=Geist:wght@400;500;600;700;800&display=swap');
 
 /* ── Design Tokens ────────────────────────────────────────────── */
 :root {
@@ -449,7 +449,7 @@ button { cursor: pointer; border: none; background: none; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 18px;
+  padding: 6px 10px;
   background: #000;
   color: #fff;
   font-family: var(--chivo);
@@ -610,15 +610,24 @@ button { cursor: pointer; border: none; background: none; }
 @media (hover: hover) {
   .nav__mobile-link:hover { color: var(--blue); }
 }
+/* Wraps on narrow phones: with each CTA on one line (see .nav__mobile-cta),
+   language toggle + Log in + free trial don't fit side by side below
+   ~430px, so the trial CTA drops to its own full-width row instead of
+   overflowing the menu. Wider screens keep a single row. */
 .nav__mobile-bottom {
   padding-top: 16px;
   margin-top: 8px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
+/* Sized by label (not equal halves) and kept on one line — equal halves
+   squeezed "Get your free trial" into two lines next to the shorter
+   "Log in", making that pill twice as tall as its neighbours. */
 .nav__mobile-cta {
-  flex: 1;
+  flex: 1 1 auto;
+  white-space: nowrap;
   text-align: center;
   padding: 12px 16px;
   background: #000;
@@ -778,6 +787,10 @@ button { cursor: pointer; border: none; background: none; }
   color: #fff;
   transform: translateY(-1px);
 }
+/* Current page — light-blue row, blue label, icon filled like its hover. */
+.nav__dropdown-item.active { background: #EEF4FF; }
+.nav__dropdown-item.active .nav__dropdown-label { color: #0062FF; }
+.nav__dropdown-item.active .nav__dropdown-icon { background: #0062ff; color: #fff; }
 
 .nav__dropdown-label {
   display: block;
@@ -869,11 +882,25 @@ button { cursor: pointer; border: none; background: none; }
   flex-shrink: 0;
   width: 34px;
   height: 34px;
-  border-radius: 50%;
-  background: #0062ff;
-  color: #fff;
+  /* Same look as the desktop dropdown's .nav__dropdown-icon — white tile,
+     blue glyph — so solid blue is left to mean "current page" only. */
+  border-radius: 9px;
+  background: #fff;
+  color: #0062ff;
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
+  transition: background 0.12s ease, color 0.12s ease;
 }
 .nav__mobile-sublink-icon svg { width: 16px; height: 16px; }
+.nav__mobile-sublink.active .nav__mobile-sublink-icon { background: #0062ff; color: #fff; }
+/* Current page in the mobile menu — the page itself gets a light-blue pill,
+   and its group header (Products/Resources) or top-level link turns blue. */
+.nav__mobile-sublink.active {
+  color: #0062FF;
+  font-weight: 600;
+  background: #EEF4FF;
+  border-radius: 999px;
+}
+.nav__mobile-link.active { color: #0062FF; }
 
 /* ── Responsive breakpoints ───────────────────────────────────── */
 @media (max-width: 900px) {
@@ -1292,12 +1319,15 @@ button { cursor: pointer; border: none; background: none; }
   background: #fff;
   box-shadow: 0 40px 110px -30px rgba(20, 30, 80, .32);
   overflow: hidden;
-  /* Swaps the site's Manrope/Chivo pairing for Poppins inside the dashboard
+  /* Swaps the site's Manrope/Chivo pairing for Geist inside the dashboard
      mockup only — every font-family rule in this section reads one of
      these two custom properties, so redefining them here is enough to
      recolor the whole mockup without touching each rule individually. */
-  --manrope: 'Poppins', Arial, sans-serif;
-  --chivo:   'Poppins', system-ui, sans-serif;
+  --manrope: 'Geist', Arial, sans-serif;
+  --chivo:   'Geist', system-ui, sans-serif;
+  /* Elements with no font rule of their own (the chart's SVG <text>) inherit
+     from here — without this they fall back to the body's Chivo. */
+  font-family: var(--chivo);
 }
 .dash__appbar {
   display: flex;
@@ -5785,6 +5815,15 @@ button { cursor: pointer; border: none; background: none; }
   overflow: hidden;
 }
 .engine .container { max-width: 1280px; }
+/* The global .container only gets side padding at ≤1024px, and this
+   section's wider 1280px container means that from 1025px up to ~1340px
+   (landscape tablets, small laptops) the rows ran flush to the screen
+   edges. max-width grows by the padding (border-box), so content stays
+   exactly 1280px wide on large screens; ≤1024px keeps the global
+   28/20/16px padding untouched. */
+@media (min-width: 1025px) {
+  .engine .container { max-width: calc(1280px + 64px); padding: 0 32px; }
+}
 .engine .sec-head { margin-bottom: 20px; }
 
 .engine-rows { display: flex; flex-direction: column; }
@@ -5919,6 +5958,14 @@ button { cursor: pointer; border: none; background: none; }
   overflow: hidden;
   width: 100%;
   transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  /* These are dashboard mockups, so they render in Geist like the other
+     dashboards. The .pc-/.th-/.rm-/.cit-/.cstudio- rules inside read the
+     --manrope/--chivo pair and, in places, --font-display/--font-body. */
+  --manrope:      'Geist', Arial, sans-serif;
+  --chivo:        'Geist', system-ui, sans-serif;
+  --font-display: 'Geist', Arial, sans-serif;
+  --font-body:    'Geist', system-ui, sans-serif;
+  font-family: var(--chivo);
 }
 .engine-row__visual:hover .engine-window {
   transform: translateY(-6px);
@@ -6165,6 +6212,20 @@ button { cursor: pointer; border: none; background: none; }
   border-bottom: 1px solid #e5e7eb;
   transform: translateX(50%) rotate(45deg);
 }
+/* Portal pair — see PositionChartDemo in LandingPage.jsx. The source copy
+   keeps the animation above but is never seen; the float copy is the
+   visible one, rendered in <body> so .pc-panel's overflow:hidden can't
+   clip it. JS copies left/top/opacity/transform onto it every frame, so
+   it has no animation of its own. z-index 40 sits under .nav (50). */
+.pc-tooltip--source { visibility: hidden; }
+.pc-tooltip--float {
+  position: fixed;
+  z-index: 40;
+  animation: none;
+  /* Portaled outside .engine, so .engine's own --pf-blue doesn't reach it —
+     without this, "Your Brand" (.pc-tooltip__you) fell back to grey. */
+  --pf-blue: #0062FF;
+}
 .pc-tooltip__you { display: block; font-size: 11px; font-weight: 700; color: var(--pf-blue); margin-bottom: 2px; }
 .pc-tooltip__name { font-size: 12.5px; font-weight: 700; color: #111827; margin: 0 0 6px; }
 .pc-tooltip__row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; font-weight: 500; color: #374151; margin-bottom: 3px; }
@@ -6281,8 +6342,11 @@ button { cursor: pointer; border: none; background: none; }
 }
 
 @media (max-width: 480px) {
-  .pc-an { flex-direction: column; gap: 20px; }
-  .pc-an__divider { width: 100%; height: 1px; }
+  /* Stacked, both columns (~686px) are far taller than the 364px panel, so
+     only a random middle slice ever showed. Visibility alone (~318px) fits
+     whole, heading included; Sentiment is dropped on phones only. */
+  .pc-an__divider,
+  .pc-an__col + .pc-an__divider + .pc-an__col { display: none; }
 }
 
 /* =================================================================
@@ -6617,8 +6681,22 @@ button { cursor: pointer; border: none; background: none; }
 .th-btn--solid { background: #1E408A; color: #fff; }
 
 @media (max-width: 640px) {
-  .th-box--split { flex-direction: column; }
-  .th-divider { width: 100%; height: 1px; }
+  /* Issues Overview only — stacked under it, Robots.txt pushed the slide
+     well past the window and got cut off. */
+  .th-divider,
+  .th-col--robots { display: none; }
+  /* Window height follows the taller slide (Issues) instead of a fixed
+     400px; both slides stretch to it, and the pipeline's box fills its
+     slide with the pipe itself growing into the extra height (every
+     icon/pill/badge on it is %-positioned, so they stay aligned) — no
+     empty half-card under the pipeline anymore. */
+  .th-scroll { height: auto; }
+  .th-slide { height: auto; display: flex; flex-direction: column; }
+  .th-box { flex: 1; }
+  .th-box--pipeline { display: flex; }
+  .th-pipe { display: flex; flex-direction: column; }
+  .th-pipe__wrap { flex: 1; min-height: 120px; }
+  .th-pipe__svg { height: 100%; }
 }
 
 /* =================================================================
@@ -6799,11 +6877,27 @@ button { cursor: pointer; border: none; background: none; }
   .engine-window__body { min-height: 260px; }
   .engine-placeholder { min-height: 204px; }
 }
+/* Phones: each card's window hugs its own content instead of the shared
+   fixed 400px. Several cards' content is taller than that on a narrow
+   screen (card 04's draft screen put its Publish button — the thing the
+   demo clicks — below the visible area), while card 02's pipeline slide
+   left half the window empty. Each card's own stage still has a fixed
+   height of its own, so screens swapping inside a card never resize it. */
+@media (max-width: 640px) {
+  .engine-window__body { height: auto; }
+  /* Card 03 has a real Calendar/Board toggle and Board is the shorter view —
+     at least the calendar's tallest phone height (314px at ≤360px) so
+     clicking it doesn't make the window jump. */
+  .rm-inner { min-height: 314px; }
+}
 @media (max-width: 480px) {
   .engine { padding: 60px 0 24px; }
   .engine-row__title { font-size: 24px; }
   .engine-row__desc { font-size: 15px; }
-  .engine-window__url { font-size: 11px; }
+  /* Centered absolutely, the pill ran into the 3rd window dot on narrow
+     phones (card 05's longer URL) — sits in the bar's own flow after the
+     dots instead, which also gives it more room before it truncates. */
+  .engine-window__url { font-size: 11px; position: static; transform: none; max-width: none; flex: 0 1 auto; min-width: 0; margin: 0 auto; }
   .engine-window__body { padding: 18px; min-height: 200px; }
   .engine-placeholder { min-height: 150px; }
   .pc-chart { height: 180px; }
@@ -7056,12 +7150,19 @@ button { cursor: pointer; border: none; background: none; }
 }
 
 @media (max-width: 480px) {
+  /* Source | Citation | Opp. — the Buy button is what the demo clicks and
+     Citation is what that click changes (Uncited → Pending), so those two
+     stay; Category, Authority and Competitors make room for them. (This
+     used to hide Opp. itself, so the cursor clicked an invisible button,
+     and left 4 visible columns in a 3-column grid, wrapping the 4th.) */
+  .cit-thead span:nth-child(2),
   .cit-thead span:nth-child(3),
+  .cit-thead span:nth-child(5),
+  .cit-row .cit-col--cat,
   .cit-row .cit-col--auth,
-  .cit-thead span:nth-child(6),
-  .cit-row .cit-col--opp { display: none; }
+  .cit-row .cit-col--comp { display: none; }
   .cit-thead,
-  .cit-row { grid-template-columns: 2.4fr 0.8fr 1.3fr; }
+  .cit-row { grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; }
 }
 
 /* ── Card 05 screens (table → loading → Acquire Citation page) ──── */
@@ -7165,6 +7266,14 @@ button { cursor: pointer; border: none; background: none; }
   color: var(--fg6);
 }
 .cit-acq__row { font-size: 9px; color: var(--fg3); }
+/* Smallest phones: 7 columns don't fit — Type/Price ran off the edge.
+   Authority and Backlinks (4th/5th) make way; DR stays as the quality cue. */
+@media (max-width: 374px) {
+  .cit-acq__thead > :nth-child(4), .cit-acq__thead > :nth-child(5),
+  .cit-acq__row > :nth-child(4), .cit-acq__row > :nth-child(5) { display: none; }
+  .cit-acq__thead,
+  .cit-acq__row { grid-template-columns: 1.7fr 0.9fr 0.4fr 0.9fr 0.9fr; }
+}
 .cit-acq__domain { display: flex; align-items: center; gap: 4px; font-weight: 700; color: #0d111a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cit-acq__price { font-weight: 800; color: #0d111a; }
 
@@ -7370,6 +7479,21 @@ button { cursor: pointer; border: none; background: none; }
   border-color: #3B6FF5;
 }
 .cstudio-idea-card.cw-idea-card--pulse { animation: cw-card-pulse .4s ease; }
+/* Phones: the shared .cstudio-ideas phone rule turns the row into a
+   sideways scroller that cuts off the 2nd card — the one this demo picks.
+   Two cards side by side instead, so the picked one is always fully in
+   view; the 3rd idea is dropped on phones only. */
+@media (max-width: 480px) {
+  .cw-ideas { display: grid; grid-template-columns: 1fr 1fr; overflow: visible; padding-bottom: 0; }
+  .cw-ideas .cstudio-idea-card { width: auto; }
+  .cw-ideas .cstudio-idea-card:nth-child(3) { display: none; }
+}
+/* Smallest phones: the draft screen wraps to ~494–514px, past the stage's
+   470px, which pushed the Publish button (what the demo clicks) below the
+   visible area. From 375px up it fits in 470px. */
+@media (max-width: 374px) {
+  .cg-stage { height: 520px; }
+}
 @keyframes cw-card-pulse {
   0%   { transform: scale(1.07) translateY(-5px); }
   45%  { transform: scale(1.11) translateY(-7px); }

@@ -8,14 +8,17 @@
 :root { --surface-1: #fafbfd; }
 
 /* ── Dashboard mockup font override ───────────────────────
-   Swaps Manrope/Chivo for Poppins inside the embedded dashboard mockup
+   Swaps Manrope/Chivo for Geist inside the embedded dashboard mockup
    only (the .dsb__ and .hdash__ rules in poliris.css all read one of
    these two custom properties) — matches the same override applied to
    .hero__dashboard on the homepage/visibility page, without touching
    the rest of this page's copy. */
 .app {
-  --manrope: 'Poppins', Arial, sans-serif;
-  --chivo:   'Poppins', system-ui, sans-serif;
+  --manrope: 'Geist', Arial, sans-serif;
+  --chivo:   'Geist', system-ui, sans-serif;
+  /* The chart's SVG <text> has no font rule of its own and would otherwise
+     inherit the body's Chivo. */
+  font-family: var(--chivo);
 }
 
 /* ── pill tags ─────────────────────────────────────────── */
@@ -176,6 +179,18 @@
 /* ============================================================
    02 FULL BREAKDOWN — lens2 grid + overband
    ============================================================ */
+/* The By axis / By model cards and the trend chart are dashboard mockups, so
+   they render in Geist like the other dashboards. Their rules read
+   --font-display / --font-body, and the .hdash__ bars inside read
+   --manrope / --chivo, so all four are overridden. */
+.vis-page .lens2,
+.vis-page .sent-trend {
+  --manrope:      'Geist', Arial, sans-serif;
+  --chivo:        'Geist', system-ui, sans-serif;
+  --font-display: 'Geist', Arial, sans-serif;
+  --font-body:    'Geist', system-ui, sans-serif;
+  font-family: var(--font-body);
+}
 .vis-page .lens2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -212,7 +227,7 @@
   color: #000;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: Manrope;
+  font-family: var(--font-display);
   font-size: 21px;
   font-style: normal;
   font-weight: 800;
@@ -221,7 +236,7 @@
 }
 .vis-page .slens-hdr-text p { 
   color: #000;
-  font-family: Manrope;
+  font-family: var(--font-display);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

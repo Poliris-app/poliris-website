@@ -75,7 +75,7 @@ export default function AuditPage() {
           ) : (
             <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img
-                src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`}
+                src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`}
                 alt="Poliris"
                 style={{ height: 28, opacity: 0.5 }}
               />

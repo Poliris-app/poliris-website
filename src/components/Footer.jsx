@@ -35,7 +35,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <a href={`/${lang}/`} className="footer__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
+          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
         </a>
         <nav className="footer__nav">
           {links.map((label, i) => (

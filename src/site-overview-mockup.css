@@ -11,12 +11,12 @@
   font-family: var(--chivo, -apple-system, system-ui, sans-serif);
   font-size: 13px;
   color: #111827;
-  /* Swaps Manrope/Chivo for Poppins inside this mockup only — every
+  /* Swaps Manrope/Chivo for Geist inside this mockup only — every
      font-family rule below reads one of these two custom properties,
      matching the same override applied to the other product dashboards
      (.hero__dashboard, .app). */
-  --manrope: 'Poppins', Arial, sans-serif;
-  --chivo:   'Poppins', system-ui, sans-serif;
+  --manrope: 'Geist', Arial, sans-serif;
+  --chivo:   'Geist', system-ui, sans-serif;
 }
 
 /* ── Browser chrome ─────────────────────────────────────────── */

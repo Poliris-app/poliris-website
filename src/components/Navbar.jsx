@@ -91,15 +91,30 @@ export default function Navbar() {
   // PRODUCT_HREFS/RESOURCE_HREFS regardless of locale — startsWith (not
   // exact equality) so a blog post's own slug still counts as "Resources".
   const path = location.pathname.replace(/^\/(en|fr)/, '') || '/';
-  const isProductsActive = PRODUCT_HREFS.some((href) => path === href || path.startsWith(`${href}/`));
-  const isResourcesActive = RESOURCE_HREFS.some((href) => path === href || path.startsWith(`${href}/`));
+  const isActive = (href) => path === href || path.startsWith(`${href}/`);
+  const isProductsActive = PRODUCT_HREFS.some(isActive);
+  const isResourcesActive = RESOURCE_HREFS.some(isActive);
+  // Props for any page link: `active` class + aria-current for the page we're on.
+  const activeProps = (href, cls) => (isActive(href)
+    ? { className: `${cls} active`, 'aria-current': 'page' }
+    : { className: cls });
+
+  // Opening the mobile menu pre-expands the group holding the current page,
+  // so its highlighted item is visible straight away.
+  const toggleMobile = () => {
+    if (!open) {
+      setMobileProducts(isProductsActive);
+      setMobileResources(isResourcesActive);
+    }
+    setOpen(!open);
+  };
 
   return (
     <>
     <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
       <div className="nav__inner">
         <Link to={`/${lang}/`} className="nav__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
+          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
         </Link>
 
         <div className="nav__links">
@@ -123,7 +138,7 @@ export default function Navbar() {
                 );
                 if (!href)
                   return <button key={i} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
-                return <Link key={i} to={`/${lang}${href}`} className="nav__dropdown-item">{inner}</Link>;
+                return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__dropdown-item')}>{inner}</Link>;
               })}
             </div>
           </div>
@@ -145,13 +160,13 @@ export default function Navbar() {
                 );
                 if (!href)
                   return <button key={i} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
-                return <Link key={i} to={`/${lang}${href}`} className="nav__dropdown-item">{inner}</Link>;
+                return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__dropdown-item')}>{inner}</Link>;
               })}
             </div>
           </div>
 
-          <Link to={`/${lang}/pricing`} className={`nav__link${path === '/pricing' ? ' active' : ''}`}>{t('nav.pricing')}</Link>
-          <Link to={`/${lang}/demo`} className={`nav__link${path === '/demo' ? ' active' : ''}`}>{t('nav.getDemo')}</Link>
+          <Link to={`/${lang}/pricing`} {...activeProps('/pricing', 'nav__link')}>{t('nav.pricing')}</Link>
+          <Link to={`/${lang}/demo`} {...activeProps('/demo', 'nav__link')}>{t('nav.getDemo')}</Link>
 
         </div>
 
@@ -212,7 +227,7 @@ export default function Navbar() {
 
         <button
           className="nav__toggle"
-          onClick={() => setOpen(!open)}
+          onClick={toggleMobile}
           aria-label="Menu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -229,7 +244,7 @@ export default function Navbar() {
           {/* Products */}
           <div>
             <button
-              className={`nav__mobile-link nav__mobile-link--btn${mobileProducts ? ' nav__mobile-link--btn--open' : ''}`}
+              className={`nav__mobile-link nav__mobile-link--btn${mobileProducts ? ' nav__mobile-link--btn--open' : ''}${isProductsActive ? ' active' : ''}`}
               onClick={() => setMobileProducts(!mobileProducts)}
             >
               {t('nav.products')}
@@ -248,7 +263,7 @@ export default function Navbar() {
                     </>
                   );
                   if (!href) return <button key={i} className="nav__mobile-sublink nav__link--btn" disabled>{inner}</button>;
-                  return <Link key={i} to={`/${lang}${href}`} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{inner}</Link>;
+                  return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__mobile-sublink')} onClick={() => setOpen(false)}>{inner}</Link>;
                 })}
               </div>
             </div>
@@ -257,7 +272,7 @@ export default function Navbar() {
           {/* Resources */}
           <div>
             <button
-              className={`nav__mobile-link nav__mobile-link--btn${mobileResources ? ' nav__mobile-link--btn--open' : ''}`}
+              className={`nav__mobile-link nav__mobile-link--btn${mobileResources ? ' nav__mobile-link--btn--open' : ''}${isResourcesActive ? ' active' : ''}`}
               onClick={() => setMobileResources(!mobileResources)}
             >
               {t('nav.resources')}
@@ -271,14 +286,14 @@ export default function Navbar() {
                   const href = RESOURCE_HREFS[i];
                   if (!href)
                     return <button key={i} className="nav__mobile-sublink nav__link--btn" disabled>{r.label}</button>;
-                  return <Link key={i} to={`/${lang}${href}`} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{r.label}</Link>;
+                  return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__mobile-sublink')} onClick={() => setOpen(false)}>{r.label}</Link>;
                 })}
               </div>
             </div>
           </div>
 
-          <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
-          <Link to={`/${lang}/demo`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
+          <Link to={`/${lang}/pricing`} {...activeProps('/pricing', 'nav__mobile-link')} onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
+          <Link to={`/${lang}/demo`} {...activeProps('/demo', 'nav__mobile-link')} onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
 
           <div className="nav__mobile-bottom">
             <div className="nav__mobile-lang">

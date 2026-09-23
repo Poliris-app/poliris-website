@@ -891,19 +891,19 @@ export default function SentimentPage() {
                   <line x1="110" y1="212" x2="760" y2="212" stroke="#e5e7eb" strokeWidth="1"/>
 
                   {/* Tier labels */}
-                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Manrope,sans-serif">{md.tiers['Very Strong']}</text>
-                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Manrope,sans-serif">{md.tiers['Strong']}</text>
-                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Manrope,sans-serif">{md.tiers['Moderate']}</text>
-                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Manrope,sans-serif">{md.tiers['Weak']}</text>
-                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Manrope,sans-serif">{md.tiers['Very Weak']}</text>
+                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Geist,sans-serif">{md.tiers['Very Strong']}</text>
+                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Geist,sans-serif">{md.tiers['Strong']}</text>
+                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Geist,sans-serif">{md.tiers['Moderate']}</text>
+                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Geist,sans-serif">{md.tiers['Weak']}</text>
+                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Geist,sans-serif">{md.tiers['Very Weak']}</text>
 
                   {/* X-axis labels   Apr 27, May 4, May 11, May 18, May 25, Jun 1 */}
-                  <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Apr 27</text>
-                  <text x="240" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 4</text>
-                  <text x="370" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 11</text>
-                  <text x="500" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 18</text>
-                  <text x="630" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 25</text>
-                  <text x="760" y="250" textAnchor="end"    fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Jun 1</text>
+                  <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">Apr 27</text>
+                  <text x="240" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 4</text>
+                  <text x="370" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 11</text>
+                  <text x="500" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 18</text>
+                  <text x="630" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 25</text>
+                  <text x="760" y="250" textAnchor="end"    fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">Jun 1</text>
 
                   {/* Green fill below overall line */}
                   {/* Data: [75,100,75,100,75,75] → Strong,VStrong,Strong,VStrong,Strong,Strong */}
@@ -944,7 +944,7 @@ export default function SentimentPage() {
                   {/* Annotation bubble   small white pill */}
                   <rect x="615" y="120" width="135" height="22" rx="6" fill="#fff" stroke="#2563eb" strokeWidth="1"/>
                   <circle cx="625" cy="131" r="3" fill="#2563eb"/>
-                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">{t('sentiment.fullBreakdown.trend.flaggedEarly')}</text>
+                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Geist,sans-serif" fontWeight="700">{t('sentiment.fullBreakdown.trend.flaggedEarly')}</text>
 
                   {/* End dots   green ends at Strong (y=68), blue ends at Weak (y=164) */}
                   <circle cx="760" cy="68"  r="5" fill="#fff" stroke="#16a34a" strokeWidth="2.5"/>
@@ -952,9 +952,9 @@ export default function SentimentPage() {
 
                   {/* End score badges */}
                   <rect x="770" y="61"  width="45" height="17" rx="8.5" fill="rgb(209, 250, 229)"/>
-                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Strong']}</text>
+                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Geist,sans-serif" fontWeight="700">{md.tiers['Strong']}</text>
                   <rect x="770" y="157" width="45" height="17" rx="8.5" fill="rgb(255, 247, 237)"/>
-                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Weak']}</text>
+                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Geist,sans-serif" fontWeight="700">{md.tiers['Weak']}</text>
                 </svg>
               </div>
 
