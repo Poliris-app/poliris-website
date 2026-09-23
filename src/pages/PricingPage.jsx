@@ -539,9 +539,12 @@ function PricingFaqItem({ item, isOpen, onToggle }) {
 // bonus matching the base allocation) — kept as separate fields so the
 // badge can spell out "300 + 300 = 600" instead of just the total.
 const PLAN_META = [
-  { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,   coveragePct: 5,   popular: false },
-  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,  coveragePct: 10,  popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
-  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,  coveragePct: 50,  popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
+  // coveragePct is a stepped visual tier, not the exact credit ratio — at
+  // true scale (600 vs 6,000) Starter's bar was indistinguishable from Free's
+  // stub. The exact credits are printed right above each bar.
+  { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,   coveragePct: 6,   popular: false },
+  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,  coveragePct: 25,  popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
+  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,  coveragePct: 60,  popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
   { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, coveragePct: 100, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
 ];
 
