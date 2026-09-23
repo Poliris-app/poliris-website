@@ -271,10 +271,12 @@
 }
 .ta-page .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--poliris-blue-300); }
 .ta-page .tcard-top   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+/* Same tile as the Visibility page's .tcard .ic — white with a soft blue glow. */
 .ta-page .tcard .ic   {
   width: 44px; height: 44px;
-  border-radius: 10px;
-  background: rgba(30,56,147,.08);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
   display: flex; align-items: center; justify-content: center;
 }
 .ta-page .tcard .ic svg { width: 21px; height: 21px; color: var(--poliris-blue); }

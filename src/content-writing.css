@@ -429,11 +429,13 @@
   justify-content: space-between;
   margin-bottom: 15px;
 }
+/* Same tile as the Visibility page's .tcard .ic — white with a soft blue glow. */
 .cw-page .cw-tcard-ic {
   width: 44px;
   height: 44px;
   border-radius: 6px;
-  background: rgba(30,56,147,.08);
+  background: #fff;
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
   display: flex;
   align-items: center;
   justify-content: center;
