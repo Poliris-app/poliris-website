@@ -1264,11 +1264,25 @@ button { cursor: pointer; border: none; background: none; }
 .btn__icon {
   width: 1.9em;
   height: 1.9em;
+  /* The circle is taller than the text line (1.9em vs .btn's 1.25em
+     line-height), which made a button with an icon ~10px taller than the
+     plain button beside it. Pulling it back by the difference keeps the
+     circle's size but lets it sit inside the padding instead of growing
+     the button — so paired CTAs always match in height. */
+  margin: calc((1.25em - 1.9em) / 2) 0;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+/* Narrowest phones: the longest French labels ("Démarrer votre essai
+   gratuit", "Commencer votre essai gratuit") wrapped to two lines in the
+   full-width stacked CTAs, making them taller than the button beside them.
+   Slightly tighter sides + 15px text keeps every label on one line. */
+@media (max-width: 374px) {
+  .hero__actions .btn,
+  .cta-band__actions .btn { padding-left: 16px; padding-right: 16px; font-size: 15px; }
 }
 .btn__icon--dark { background: #fff; }
 .btn__icon--blue { background: var(--blue); }
