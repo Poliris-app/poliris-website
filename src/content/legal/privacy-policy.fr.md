@@ -404,7 +404,7 @@ Poliris :
 
 Elles ne peuvent être communiquées qu'aux prestataires nécessaires à la fourniture de la fonctionnalité demandée, à la sécurité du Service, au respect de la loi ou à une opération juridique autorisée, dans les limites permises par les règles applicables.
 
-Notre utilisation des informations reçues des API Google respecte la Google API Services User Data Policy, y compris les exigences dites de Limited Use lorsqu'elles sont applicables.
+L'utilisation et le transfert par Poliris vers toute autre application des informations reçues des API Google respecteront la [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), y compris les exigences d'utilisation limitée (Limited Use).
 
 ### 7.6 Accès humain
 

@@ -406,7 +406,7 @@ Poliris:
 
 Such data may only be disclosed to service providers necessary to provide the requested functionality, ensure the security of the Service, comply with the law or carry out an authorized legal transaction, within the limits permitted by applicable rules.
 
-Our use of information received from Google APIs complies with the Google API Services User Data Policy, including the Limited Use requirements where applicable.
+Poliris's use and transfer to any other app of information received from Google APIs will adhere to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements.
 
 ### 7.6 Human Access
 
