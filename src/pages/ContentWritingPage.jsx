@@ -123,12 +123,11 @@ const PIPELINE_STEPS = [
 function PipeIcon({ index, active, done }) {
   const icons = [
     <span key="0" className="cw-pipe-letter">K</span>,
-    <span key="1" className="cw-pipe-letter">A</span>,
-    <svg key="2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>,
-    <span key="3" className="cw-pipe-letter">L</span>,
-    <svg key="4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-    <svg key="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
-    <svg key="6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2"><polyline points="20 6 9 17 4 12"/></svg>,
+    <svg key="1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>,
+    <span key="2" className="cw-pipe-letter">L</span>,
+    <svg key="3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
+    <svg key="4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
+    <svg key="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2"><polyline points="20 6 9 17 4 12"/></svg>,
   ];
   return icons[index];
 }
@@ -297,9 +296,9 @@ function AnimatedScoreCards({ beforeScores, afterScores, labels, beforeLabel, af
 
 const ILNK_CATEGORIES = ['footwear', 'apparel', 'gear'];
 const ILNK_CARDS = [
-  { link: 'footwear', url: 'yoursite.com/footwear' },
-  { link: 'apparel',  url: 'yoursite.com/apparel' },
-  { link: 'gear',     url: 'yoursite.com/gear' },
+  { link: 'footwear', url: 'yoursite.com/earbuds' },
+  { link: 'apparel',  url: 'yoursite.com/headphones' },
+  { link: 'gear',     url: 'yoursite.com/speakers' },
 ];
 
 function InternalLinkingBoard({ cwLink }) {
@@ -467,7 +466,7 @@ function InternalLinkingBoard({ cwLink }) {
           <span className="ilnk-skel ilnk-w-92" />
           <div className="ilnk-inline-row">
             <span className="ilnk-skel ilnk-w-30" />
-            <button className="ilnk-pill ilnk-pill-footwear" data-link="footwear">Footwear</button>
+            <button className="ilnk-pill ilnk-pill-footwear" data-link="footwear">Earbuds</button>
             <span className="ilnk-handle ilnk-handle-footwear" data-link="footwear" />
             <span className="ilnk-skel ilnk-fill" />
           </div>
@@ -481,7 +480,7 @@ function InternalLinkingBoard({ cwLink }) {
           <span className="ilnk-skel ilnk-w-70" />
         </div>
         <div className="ilnk-handle-row">
-          <button className="ilnk-pill ilnk-pill-apparel" data-link="apparel">Apparel</button>
+          <button className="ilnk-pill ilnk-pill-apparel" data-link="apparel">Headphones</button>
           <span className="ilnk-handle ilnk-handle-apparel" data-link="apparel" />
           <span className="ilnk-skel ilnk-fill" />
         </div>
@@ -494,7 +493,7 @@ function InternalLinkingBoard({ cwLink }) {
         </div>
         <div className="ilnk-handle-row">
           <span className="ilnk-skel ilnk-w-36" />
-          <button className="ilnk-pill ilnk-pill-gear" data-link="gear">Gear &amp; Accessories</button>
+          <button className="ilnk-pill ilnk-pill-gear" data-link="gear">Speakers &amp; Accessories</button>
           <span className="ilnk-handle ilnk-handle-gear" data-link="gear" />
         </div>
         <span className="ilnk-skel ilnk-w-88" style={{ marginTop: '2px' }} />
@@ -543,17 +542,20 @@ function PipelineTrack() {
   const steps = wr.steps;
   const [cur, setCur] = useState(0);
   const [fading, setFading] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(true);
   const N = steps.length;
 
   function go(i) {
     if (i < 0 || i >= N || i === cur) return;
+    setAutoPlay(false);
     setFading(true);
     setTimeout(() => { setCur(i); setFading(false); }, 150);
   }
 
-  /* Auto-advance through the steps; restarts whenever cur changes,
-     whether from the timer or a manual click. */
+  /* Auto-advance through the steps; stops for good the moment the
+     visitor steps in (a step click or a prev/next click via go()). */
   useEffect(() => {
+    if (!autoPlay) return;
     const id = setInterval(() => {
       setFading(true);
       setTimeout(() => {
@@ -562,7 +564,7 @@ function PipelineTrack() {
       }, 150);
     }, 2500);
     return () => clearInterval(id);
-  }, [cur, N]);
+  }, [cur, N, autoPlay]);
 
   const d = steps[cur];
   return (
@@ -932,7 +934,7 @@ export default function ContentWritingPage() {
                     <svg className="mbw-lock" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
                     </svg>
-                    nike.com/blog/lifestyle-footwear
+                    sony.com/blog/lifestyle-audio
                   </div>
                   <span className="mbw-live-wrap">
                     <span className="mbw-live">{cwImpl.mockup.live}</span>

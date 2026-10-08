@@ -8,15 +8,6 @@ const CODE_RE = /^[A-Za-z0-9]{6}$/;
 const SESSION_KEY = 'promoAuditModalShown';
 const SHOW_DELAY_MS = 4000;
 
-const AI_LOGOS = [
-  { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`, alt: 'ChatGPT' },
-  { src: `${import.meta.env.BASE_URL}Gemini-logo-2.svg`, alt: 'Gemini' },
-  { src: `${import.meta.env.BASE_URL}Claude-logo-2.svg`, alt: 'Claude' },
-  { src: `${import.meta.env.BASE_URL}Perplexity-logo-2.svg`, alt: 'Perplexity' },
-  { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`, alt: 'Mistral AI' },
-  { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`, alt: 'Deepseek' },
-];
-
 export default function PromoAuditModal() {
   const { lang } = useLang();
   const location = useLocation();
@@ -92,15 +83,6 @@ export default function PromoAuditModal() {
           <p className="promo-modal-lead">
             Get a free AI Visibility Audit and see exactly how ChatGPT, Gemini, and Perplexity describe (or ignore) your brand.
           </p>
-
-          <p className="promo-modal-tracked-label">Tracked across every AI that matters</p>
-          <div className="promo-modal-logos">
-            {AI_LOGOS.map((logo) => (
-              <div key={logo.alt} className="promo-modal-logo-chip">
-                <img src={logo.src} alt={logo.alt} title={logo.alt} />
-              </div>
-            ))}
-          </div>
 
           <a
             href={`/${lang}/demo`}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { hasAccountCookie } from '../lib/hasAccountCookie';
@@ -20,6 +20,12 @@ const GLOBE_ICON = (
   </svg>
 );
 
+const PERSON_ICON = (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+  </svg>
+);
+
 const PRODUCT_ICONS = [
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18" key="vis">
     <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
@@ -37,7 +43,30 @@ const PRODUCT_ICONS = [
 
 export default function Navbar() {
   const { lang, t, switchLang } = useLang();
+  const location = useLocation();
   const [stuck, setStuck] = useState(false);
+  // Reading-progress line along the bottom of the bar: fills left → right
+  // as the page scrolls, full at the bottom. Written straight to the DOM
+  // (not state) so scrolling never re-renders the navbar.
+  const progressRef = useRef(null);
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = total > 0 ? Math.min(window.scrollY / total, 1) : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
   const [open, setOpen] = useState(false);
   const [mobileProducts, setMobileProducts] = useState(false);
   const [mobileResources, setMobileResources] = useState(false);
@@ -80,18 +109,40 @@ export default function Navbar() {
 
   const langLabel = lang.toUpperCase();
 
+  // Strip the /en or /fr prefix so hrefs like "/visibility" line up with
+  // PRODUCT_HREFS/RESOURCE_HREFS regardless of locale — startsWith (not
+  // exact equality) so a blog post's own slug still counts as "Resources".
+  const path = location.pathname.replace(/^\/(en|fr)/, '') || '/';
+  const isActive = (href) => path === href || path.startsWith(`${href}/`);
+  const isProductsActive = PRODUCT_HREFS.some(isActive);
+  const isResourcesActive = RESOURCE_HREFS.some(isActive);
+  // Props for any page link: `active` class + aria-current for the page we're on.
+  const activeProps = (href, cls) => (isActive(href)
+    ? { className: `${cls} active`, 'aria-current': 'page' }
+    : { className: cls });
+
+  // Opening the mobile menu pre-expands the group holding the current page,
+  // so its highlighted item is visible straight away.
+  const toggleMobile = () => {
+    if (!open) {
+      setMobileProducts(isProductsActive);
+      setMobileResources(isResourcesActive);
+    }
+    setOpen(!open);
+  };
+
   return (
     <>
-    <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
+    <nav className={`nav nav--${lang}${stuck ? ' nav--stuck' : ''}`}>
       <div className="nav__inner">
         <Link to={`/${lang}/`} className="nav__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
+          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
         </Link>
 
         <div className="nav__links">
           {/* Products dropdown */}
           <div className="nav__dropdown-wrap">
-            <button className="nav__link nav__link--btn">
+            <button className={`nav__link nav__link--btn${isProductsActive ? ' active' : ''}`}>
               {t('nav.products')}
               {CHEVRON_DN}
             </button>
@@ -109,14 +160,14 @@ export default function Navbar() {
                 );
                 if (!href)
                   return <button key={i} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
-                return <Link key={i} to={`/${lang}${href}`} className="nav__dropdown-item">{inner}</Link>;
+                return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__dropdown-item')}>{inner}</Link>;
               })}
             </div>
           </div>
 
           {/* Resources dropdown */}
           <div className="nav__dropdown-wrap">
-            <button className="nav__link nav__link--btn">
+            <button className={`nav__link nav__link--btn${isResourcesActive ? ' active' : ''}`}>
               {t('nav.resources')}
               {CHEVRON_DN}
             </button>
@@ -131,61 +182,74 @@ export default function Navbar() {
                 );
                 if (!href)
                   return <button key={i} className="nav__dropdown-item nav__link--btn" disabled>{inner}</button>;
-                return <Link key={i} to={`/${lang}${href}`} className="nav__dropdown-item">{inner}</Link>;
+                return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__dropdown-item')}>{inner}</Link>;
               })}
             </div>
           </div>
 
-          <Link to={`/${lang}/pricing`} className="nav__link">{t('nav.pricing')}</Link>
-          <Link to={`/${lang}/demo`} className="nav__link">{t('nav.getDemo')}</Link>
+          <Link to={`/${lang}/pricing`} {...activeProps('/pricing', 'nav__link')}>{t('nav.pricing')}</Link>
+          <Link to={`/${lang}/demo`} {...activeProps('/demo', 'nav__link')}>{t('nav.getDemo')}</Link>
 
         </div>
 
         <div className="nav__actions">
-          {/* Language switcher */}
-          <div className="nav__lang" ref={langRef}>
-            <button
-              className="nav__lang-btn nav__link--btn"
-              onClick={() => setLangOpen(!langOpen)}
-            >
-              {GLOBE_ICON}
-              {langLabel}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" style={{ transform: langOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            {langOpen && (
-              <div className="nav__lang-drop">
-                {langOptions.map(l => (
-                  <button
-                    key={l.code}
-                    className={`nav__lang-opt${lang === l.code ? ' active' : ''}`}
-                    onClick={() => { switchLang(l.code); setLangOpen(false); }}
-                  >
-                    {l.label}
-                    {lang === l.code && (
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 6 9 17l-5-5"/>
-                      </svg>
-                    )}
-                  </button>
-                ))}
+          {(() => {
+            const langSwitcher = (
+              <div className="nav__lang" ref={langRef}>
+                <button
+                  className="nav__lang-btn nav__link--btn"
+                  onClick={() => setLangOpen(!langOpen)}
+                >
+                  {GLOBE_ICON}
+                  {langLabel}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" style={{ transform: langOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+                    <path d="m6 9 6 6 6-6"/>
+                  </svg>
+                </button>
+                {langOpen && (
+                  <div className="nav__lang-drop">
+                    {langOptions.map(l => (
+                      <button
+                        key={l.code}
+                        className={`nav__lang-opt${lang === l.code ? ' active' : ''}`}
+                        onClick={() => { switchLang(l.code); setLangOpen(false); }}
+                      >
+                        {l.label}
+                        {lang === l.code && (
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 6 9 17l-5-5"/>
+                          </svg>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          {hasAccount ? (
-            <a className="nav__cta" href={APP_URL}>{t('nav.dashboard')}</a>
-          ) : (
-            <>
-              <a className="nav__login" href={APP_URL}>{t('nav.logIn')}</a>
-              <a className="nav__cta" href={APP_URL} onClick={() => trackEvent('trial_cta_clicked')}>{t('nav.freeTrial')}</a>
-            </>
-          )}
+            );
+            return hasAccount ? (
+              <>
+                {langSwitcher}
+                <a className="nav__cta" href={APP_URL}>{t('nav.dashboard')}</a>
+              </>
+            ) : (
+              <>
+                <div className="nav__account-pill">
+                  {langSwitcher}
+                  <span className="nav__account-divider" />
+                  <a className="nav__login" href={APP_URL}>
+                    <span className="nav__login-icon">{PERSON_ICON}</span>
+                    {t('nav.logIn')}
+                  </a>
+                </div>
+                <a className="nav__cta" href={APP_URL} onClick={() => trackEvent('trial_cta_clicked')}>{t('nav.freeTrial')}</a>
+              </>
+            );
+          })()}
         </div>
 
         <button
           className="nav__toggle"
-          onClick={() => setOpen(!open)}
+          onClick={toggleMobile}
           aria-label="Menu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -202,7 +266,7 @@ export default function Navbar() {
           {/* Products */}
           <div>
             <button
-              className="nav__mobile-link nav__mobile-link--btn"
+              className={`nav__mobile-link nav__mobile-link--btn${mobileProducts ? ' nav__mobile-link--btn--open' : ''}${isProductsActive ? ' active' : ''}`}
               onClick={() => setMobileProducts(!mobileProducts)}
             >
               {t('nav.products')}
@@ -210,67 +274,75 @@ export default function Navbar() {
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </button>
-            {mobileProducts && (
+            <div className={`nav__mobile-subnav-wrap${mobileProducts ? ' nav__mobile-subnav-wrap--open' : ''}`}>
               <div className="nav__mobile-subnav">
                 {productsMenu.map((p, i) => {
                   const href = PRODUCT_HREFS[i];
-                  if (!href) return <button key={i} className="nav__mobile-sublink nav__link--btn" disabled>{p.label}</button>;
-                  return <Link key={i} to={`/${lang}${href}`} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{p.label}</Link>;
+                  const inner = (
+                    <>
+                      <span className="nav__mobile-sublink-icon">{PRODUCT_ICONS[i]}</span>
+                      {p.label}
+                    </>
+                  );
+                  if (!href) return <button key={i} className="nav__mobile-sublink nav__link--btn" disabled>{inner}</button>;
+                  return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__mobile-sublink')} onClick={() => setOpen(false)}>{inner}</Link>;
                 })}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Resources */}
           <div>
-            <button className="nav__mobile-link nav__mobile-link--btn" onClick={() => setMobileResources(!mobileResources)}>
+            <button
+              className={`nav__mobile-link nav__mobile-link--btn${mobileResources ? ' nav__mobile-link--btn--open' : ''}${isResourcesActive ? ' active' : ''}`}
+              onClick={() => setMobileResources(!mobileResources)}
+            >
               {t('nav.resources')}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" style={{ transform: mobileResources ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </button>
-            {mobileResources && (
+            <div className={`nav__mobile-subnav-wrap${mobileResources ? ' nav__mobile-subnav-wrap--open' : ''}`}>
               <div className="nav__mobile-subnav">
                 {resourcesMenu.map((r, i) => {
                   const href = RESOURCE_HREFS[i];
                   if (!href)
                     return <button key={i} className="nav__mobile-sublink nav__link--btn" disabled>{r.label}</button>;
-                  return <Link key={i} to={`/${lang}${href}`} className="nav__mobile-sublink" onClick={() => setOpen(false)}>{r.label}</Link>;
+                  return <Link key={i} to={`/${lang}${href}`} {...activeProps(href, 'nav__mobile-sublink')} onClick={() => setOpen(false)}>{r.label}</Link>;
                 })}
               </div>
-            )}
+            </div>
           </div>
 
-          <Link to={`/${lang}/pricing`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
-          <Link to={`/${lang}/demo`} className="nav__mobile-link" onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
-
-          <div className="nav__mobile-lang">
-            {langOptions.map(l => (
-              <button
-                key={l.code}
-                className={`nav__mobile-lang-btn${lang === l.code ? ' active' : ''}`}
-                onClick={() => { switchLang(l.code); setOpen(false); }}
-              >
-                {lang === l.code && (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6 9 17l-5-5"/>
-                  </svg>
-                )}
-                {l.label}
-              </button>
-            ))}
-          </div>
+          <Link to={`/${lang}/pricing`} {...activeProps('/pricing', 'nav__mobile-link')} onClick={() => setOpen(false)}>{t('nav.pricing')}</Link>
+          <Link to={`/${lang}/demo`} {...activeProps('/demo', 'nav__mobile-link')} onClick={() => setOpen(false)}>{t('nav.getDemo')}</Link>
 
           <div className="nav__mobile-bottom">
+            <div className="nav__mobile-lang">
+              {langOptions.map(l => (
+                <button
+                  key={l.code}
+                  className={`nav__mobile-lang-btn${lang === l.code ? ' active' : ''}`}
+                  onClick={() => { switchLang(l.code); setOpen(false); }}
+                >
+                  {l.code.toUpperCase()}
+                </button>
+              ))}
+            </div>
             {hasAccount ? (
               <a className="nav__mobile-cta" href={APP_URL} onClick={() => setOpen(false)}>{t('nav.dashboard')}</a>
             ) : (
               <>
-                <a className="nav__mobile-link" href={APP_URL} onClick={() => setOpen(false)}>{t('nav.logIn')}</a>
+                <a className="nav__mobile-cta nav__mobile-cta--login" href={APP_URL} onClick={() => setOpen(false)}>{t('nav.logIn')}</a>
                 <a className="nav__mobile-cta" href={APP_URL} onClick={() => { setOpen(false); trackEvent('trial_cta_clicked'); }}>{t('nav.freeTrial')}</a>
               </>
             )}
           </div>
+        </div>
+      )}
+      {!open && (
+        <div className="nav__progress" aria-hidden="true">
+          <span className="nav__progress-fill" ref={progressRef} />
         </div>
       )}
     </nav>

@@ -99,10 +99,10 @@ const SENT_AXES = [
   { id: 'durability',      name: 'Durability',       score: 28, tier: 'Weak', isPriority: true },
 ];
 const SENT_MODELS = [
-  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    score: 90, tier: 'Very Strong' },
-  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  score: 76, tier: 'Strong' },
-  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   score: 72, tier: 'Strong' },
-  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, score: 28, tier: 'Weak', isPriority: true },
+  { id: 'gemini',  name: 'Gemini',    score: 90, tier: 'Very Strong' },
+  { id: 'chatgpt', name: 'ChatGPT',  score: 76, tier: 'Strong' },
+  { id: 'mistral', name: 'Mistral',   score: 72, tier: 'Strong' },
+  { id: 'claude',  name: 'Claude', score: 28, tier: 'Weak', isPriority: true },
 ];
 
 function SentimentBreakdown() {
@@ -221,7 +221,7 @@ const TOUR_CARDS = [
 /* ── competitor data ─────────────────────────────────────────── */
 const COMPETITORS = [
   {
-    name: 'Adidas',   you: false, bd: '#dc2626', logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png`,
+    name: 'Apple',    you: false, bd: '#dc2626', logo: `${import.meta.env.BASE_URL}apple-com-logo.png`,
     awareness: { label: 'Very Strong', cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Moderate',    cls: 'pt-warn' },
@@ -229,7 +229,7 @@ const COMPETITORS = [
     overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'Nike',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}nike-com-logo.png`,
+    name: 'Sony',     you: true,  bd: '#111827', logo: `${import.meta.env.BASE_URL}sony-com-logo.png`,
     awareness: { label: 'Very Strong', cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Weak',        cls: 'pt-neg' },
@@ -237,7 +237,7 @@ const COMPETITORS = [
     overall: 55, overallLabel: 'Moderate',
   },
   {
-    name: 'On',       you: false, bd: '#db2777', logo: `${import.meta.env.BASE_URL}on-com-logo.png`,
+    name: 'Anker',    you: false, bd: '#db2777', logo: `${import.meta.env.BASE_URL}anker-com-logo.png`,
     awareness: { label: 'Strong',      cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
@@ -245,7 +245,7 @@ const COMPETITORS = [
     overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'Hoka',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png`,
+    name: 'Bose',     you: false, bd: '#ea580c', logo: `${import.meta.env.BASE_URL}bose-com-logo.png`,
     awareness: { label: 'Moderate',    cls: 'pt-warn' },
     design:    { label: 'Moderate',    cls: 'pt-warn' },
     durability:{ label: 'Very Strong', cls: 'pt-pos' },
@@ -253,7 +253,7 @@ const COMPETITORS = [
     overall: 55, overallLabel: 'Moderate',
   },
   {
-    name: 'Brooks',   you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png`,
+    name: 'JBL',      you: false, bd: '#7c3aed', logo: `${import.meta.env.BASE_URL}jbl-com-logo.png`,
     awareness: { label: 'Strong',      cls: 'pt-pos' },
     design:    { label: 'Strong',      cls: 'pt-pos' },
     durability:{ label: 'Strong',      cls: 'pt-pos' },
@@ -261,7 +261,7 @@ const COMPETITORS = [
     overall: 78, overallLabel: 'Strong',
   },
   {
-    name: 'New Balance',   you: false, bd: '#475569', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png`,
+    name: 'Samsung',   you: false, bd: '#475569', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png`,
     awareness: { label: 'Very Strong',           cls: 'pt-neu' },
     design:    { label: 'Strong',           cls: 'pt-neu' },
     durability:{ label: 'Strong', cls: 'pt-pos' },
@@ -335,10 +335,10 @@ export default function SentimentPage() {
                 <aside className="dash__sidebar">
                   <div className="dsb__brand">
                     <div className="dsb__brand-logo">
-                      <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                      <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
                     </div>
                     <div className="dsb__brand-info">
-                      <span className="dsb__brand-name">Nike</span>
+                      <span className="dsb__brand-name">Sony</span>
                       <span className="dsb__brand-meta">{md.activeProject}</span>
                     </div>
                   </div>
@@ -358,8 +358,8 @@ export default function SentimentPage() {
                       <span className="dsb__tree-chevron">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
                       </span>
-                      <span className="dsb__avatar dsb__avatar--n">N</span>
-                      <span className="dsb__tree-brand-name">nike</span>
+                      <span className="dsb__avatar dsb__avatar--n">S</span>
+                      <span className="dsb__tree-brand-name">sony</span>
                     </div>
                     <div className="dsb__tree-l1">
                       <div className="dsb__tree-category">
@@ -389,10 +389,10 @@ export default function SentimentPage() {
                   <div className="hdash__v2-brand-row">
                     <div className="hdash__v2-brand-left">
                       <div className="hdash__v2-brand-logo">
-                        <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                        <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
                       </div>
                       <div>
-                        <div className="hdash__v2-brand-name">Nike</div>
+                        <div className="hdash__v2-brand-name">Sony</div>
                         <div className="hdash__v2-brand-sub">{md.updatedToday}</div>
                       </div>
                     </div>
@@ -452,7 +452,7 @@ export default function SentimentPage() {
                           <div className="hdash__v2-tip-date">{SENT_X_LABELS[sentHov]}, 2026</div>
                           <div className="hdash__v2-tip-row">
                             <span className="hdash__v2-tip-dot" style={{ background: hovTier.color }} />
-                            <span className="hdash__v2-tip-name">Nike</span>
+                            <span className="hdash__v2-tip-name">Sony</span>
                             <span className="hdash__v2-tip-val" style={{ color: hovTier.color }}>{md.tiers[hovTier.label]}</span>
                           </div>
                         </div>
@@ -737,7 +737,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}gemini-ai-logo.png`} alt="Gemini" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Gemini</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gemini-3.1-pro-preview</span>
@@ -757,7 +756,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}chatgpt-com-logo.png`} alt="ChatGPT" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>ChatGPT</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gpt-4o-mini</span>
@@ -777,7 +775,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}mistral-ai-logo.png`} alt="Mistral" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Mistral</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>mistral-7b-instruct-v0.2</span>
@@ -797,7 +794,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="Claude" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Claude</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>claude-haiku-4-5-20251001</span>
@@ -891,19 +887,19 @@ export default function SentimentPage() {
                   <line x1="110" y1="212" x2="760" y2="212" stroke="#e5e7eb" strokeWidth="1"/>
 
                   {/* Tier labels */}
-                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Manrope,sans-serif">{md.tiers['Very Strong']}</text>
-                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Manrope,sans-serif">{md.tiers['Strong']}</text>
-                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Manrope,sans-serif">{md.tiers['Moderate']}</text>
-                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Manrope,sans-serif">{md.tiers['Weak']}</text>
-                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Manrope,sans-serif">{md.tiers['Very Weak']}</text>
+                  <text x="106" y="24"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#15803d" fontFamily="Geist,sans-serif">{md.tiers['Very Strong']}</text>
+                  <text x="106" y="72"  textAnchor="end" fontSize="10.5" fontWeight="700" fill="#22c55e" fontFamily="Geist,sans-serif">{md.tiers['Strong']}</text>
+                  <text x="106" y="120" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#eab308" fontFamily="Geist,sans-serif">{md.tiers['Moderate']}</text>
+                  <text x="106" y="168" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#f97316" fontFamily="Geist,sans-serif">{md.tiers['Weak']}</text>
+                  <text x="106" y="216" textAnchor="end" fontSize="10.5" fontWeight="700" fill="#ef4444" fontFamily="Geist,sans-serif">{md.tiers['Very Weak']}</text>
 
                   {/* X-axis labels   Apr 27, May 4, May 11, May 18, May 25, Jun 1 */}
-                  <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Apr 27</text>
-                  <text x="240" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 4</text>
-                  <text x="370" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 11</text>
-                  <text x="500" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 18</text>
-                  <text x="630" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">May 25</text>
-                  <text x="760" y="250" textAnchor="end"    fontSize="10" fill="#9ca3af" fontFamily="Chivo,sans-serif">Jun 1</text>
+                  <text x="110" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">Apr 27</text>
+                  <text x="240" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 4</text>
+                  <text x="370" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 11</text>
+                  <text x="500" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 18</text>
+                  <text x="630" y="250" textAnchor="middle" fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">May 25</text>
+                  <text x="760" y="250" textAnchor="end"    fontSize="10" fill="#9ca3af" fontFamily="Geist,sans-serif">Jun 1</text>
 
                   {/* Green fill below overall line */}
                   {/* Data: [75,100,75,100,75,75] → Strong,VStrong,Strong,VStrong,Strong,Strong */}
@@ -944,7 +940,7 @@ export default function SentimentPage() {
                   {/* Annotation bubble   small white pill */}
                   <rect x="615" y="120" width="135" height="22" rx="6" fill="#fff" stroke="#2563eb" strokeWidth="1"/>
                   <circle cx="625" cy="131" r="3" fill="#2563eb"/>
-                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Manrope,sans-serif" fontWeight="700">{t('sentiment.fullBreakdown.trend.flaggedEarly')}</text>
+                  <text x="635" y="135" fontSize="9.5" fill="#1e3a8a" fontFamily="Geist,sans-serif" fontWeight="700">{t('sentiment.fullBreakdown.trend.flaggedEarly')}</text>
 
                   {/* End dots   green ends at Strong (y=68), blue ends at Weak (y=164) */}
                   <circle cx="760" cy="68"  r="5" fill="#fff" stroke="#16a34a" strokeWidth="2.5"/>
@@ -952,9 +948,9 @@ export default function SentimentPage() {
 
                   {/* End score badges */}
                   <rect x="770" y="61"  width="45" height="17" rx="8.5" fill="rgb(209, 250, 229)"/>
-                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Strong']}</text>
+                  <text x="792" y="73"  textAnchor="middle" fontSize="9.5" fill="rgb(22, 163, 74)" fontFamily="Geist,sans-serif" fontWeight="700">{md.tiers['Strong']}</text>
                   <rect x="770" y="157" width="45" height="17" rx="8.5" fill="rgb(255, 247, 237)"/>
-                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Manrope,sans-serif" fontWeight="700">{md.tiers['Weak']}</text>
+                  <text x="792" y="169" textAnchor="middle" fontSize="9.5" fill="rgb(234, 88, 12)" fontFamily="Geist,sans-serif" fontWeight="700">{md.tiers['Weak']}</text>
                 </svg>
               </div>
 

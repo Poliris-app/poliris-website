@@ -30,20 +30,6 @@ const FAQ_ITEMS = [
   },
 ];
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
-      </svg>
-      <span className="bp-img-hold-label">{label}</span>
-      <span className="bp-img-hold-sub">{sub}</span>
-    </div>
-  );
-}
-
 export default function EntityBasedSeoFrPage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState(null);
@@ -158,7 +144,6 @@ export default function EntityBasedSeoFrPage() {
               <li>Le nombre de backlinks signale une autorité sans confirmer la cohérence thématique.</li>
             </ul>
             <p>Aucun de ces signaux n'indique à un moteur de recherche <em>de quoi parle</em> réellement une page.</p>
-            <ImgHold label="Figure 1" sub="Des chaînes de caractères aux choses : comment la résolution d'entités remplace le keyword matching" />
             <h3>Le vide structurel du SEO historique</h3>
             <p>La pensée <strong>orientée entités</strong> comble ce vide. Les frameworks de reconnaissance d'entités nommées (NER), de ceux qui font tourner les robots d'indexation modernes, classent les noms en catégories typées : personne, lieu, organisation, concept. Une fois classées, elles se relient à des nœuds Wikidata et à des entrées du Knowledge Graph. Une page qui fait explicitement apparaître ces connexions gagne une <strong>profondeur sémantique</strong> qu'un contenu bourré de mots-clés n'atteint jamais.</p>
             <div className="bp-note">
@@ -185,7 +170,6 @@ export default function EntityBasedSeoFrPage() {
               <li>Publiez des signaux de co-citation cohérents : assurez-vous que le nom, la description et les attributs de votre entité apparaissent de façon identique sur des sources tierces faisant autorité.</li>
               <li>Auditez régulièrement vos connexions d'entités à l'aide de validateurs de schema ou du Rich Results Test de Google, et développez vos relations de nœuds à mesure que votre entité grandit.</li>
             </ol>
-            <ImgHold label="Figure 2" sub="La marche à suivre en quatre étapes pour construire des profils d'entités définitifs" />
             <div className="bp-note">
               <div className="bp-note-label">Conseil d'expert</div>
               <p>Le manque le plus courant en SEO orienté entités est une co-citation incomplète. Votre entité peut exister dans le knowledge graph mais se connecter à trop peu de sources vérifiées pour déclencher un classement à haute confiance. Traitez la construction de co-citations comme vous traiteriez le netlinking en SEO traditionnel.</p>

@@ -11,8 +11,10 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Freemium audits are deliberately kept on the develop backend/database,
+    // separate from POLIRIS_BACKEND_URL (checkout etc., which stays on prod).
     const r = await fetch(
-      `${process.env.POLIRIS_BACKEND_URL}/api/v2/audit/public/${encodeURIComponent(code)}`
+      `${process.env.POLIRIS_AUDIT_BACKEND_URL}/api/v2/audit/public/${encodeURIComponent(code)}`
     );
     if (!r.ok) {
       return res.status(404).end();

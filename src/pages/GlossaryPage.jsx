@@ -74,7 +74,6 @@ export default function GlossaryPage() {
           primaryCta={gh.primaryCta}
           secondaryCta={gh.secondaryCta}
           showDashboard={false}
-          showAiBand={false}
         />
 
         <section className="gloss-sec">

@@ -14,7 +14,8 @@ export default async function handler(req, res) {
   const forwardedFor = req.headers['x-forwarded-for'] || '';
 
   try {
-    const r = await fetch(`${process.env.POLIRIS_BACKEND_URL}/api/v2/freemium/public-request`, {
+    // Same develop backend as api/audit.js — freemium audits stay off prod.
+    const r = await fetch(`${process.env.POLIRIS_AUDIT_BACKEND_URL}/api/v2/freemium/public-request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

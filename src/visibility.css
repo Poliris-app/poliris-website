@@ -246,6 +246,9 @@
    02 · REAL MARKET
    ============================================================ */
 .vis-page .mkt          { display: flex; flex-direction: column; align-items: stretch; }
+/* Wider lead text for this section only — .si-head/.lead's 340px default
+   (shared with 03 · Source Intelligence) stays untouched elsewhere. */
+.vis-page .mkt .si-head .lead { flex: 0 0 480px; max-width: 480px; }
 
 
 /* ── D3 Globe ────────────────────────────────────────────────── */
@@ -296,14 +299,14 @@
   gap: 56px;
   max-width: none;
   text-align: left;
-  margin: 0 auto 20px;
+  /* margin: 20px 0px; */
 }
 .vis-page .si-head-copy { flex: 1 1 auto; max-width: 620px; text-align: left; }
 .vis-page .si-head .lead {
   flex: 0 0 340px;
   max-width: 340px;
   margin: 0;
-  padding-left: 32px;
+  padding-left: 20px;
   border-left: 1px solid var(--border);
   color: var(--fg-4);
   text-align: left;
@@ -484,58 +487,110 @@
 .vis-page .src-intel {
   background: #fff; border: 1px solid var(--border);
   border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden;
+  /* Dashboard-style table: Geist like the other dashboards. Its rules read
+     --font-display / --font-body, so those are overridden here. */
+  --font-display: 'Geist', Arial, sans-serif;
+  --font-body:    'Geist', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 .vis-page .src-intel-hdr {
   display: flex; align-items: center; justify-content: space-between;
   padding: 18px 24px; border-bottom: 1px solid var(--border);
 }
-.vis-page .src-intel-title { 
-  font-family: var(--font-display); 
-  font-weight: 700; 
-  font-size: 15px; 
-  color: var(--fg-1); 
+.vis-page .src-intel-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--fg-1);
   margin-bottom: 3px;
-  text-align: left; 
+  text-align: left;
 }
 .vis-page .src-intel-meta  { font-size: 12.5px; color: var(--fg-4); }
 
-/* Table grid — 6 columns shared by header + rows */
+/* Close chrome — decorative, mirrors the real product's report panel */
+.vis-page .src-intel-x {
+  flex: 0 0 auto; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: #fff; color: var(--fg-4); cursor: default;
+}
+
+/* Toolbar — category filter */
+.vis-page .src-intel-toolbar {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  padding: 14px 24px; border-bottom: 1px solid var(--border);
+}
+.vis-page .src-intel-toolbar-label { font-size: 13px; color: var(--fg-4); }
+.vis-page .src-intel-select {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--border-strong); border-radius: 9px;
+  font-size: 13px; font-weight: 600; color: var(--fg-2);
+  background: #fff;
+}
+.vis-page .src-intel-select svg { color: var(--fg-4); flex: 0 0 auto; }
+
+/* Table grid — 5 columns shared by header + rows */
 .vis-page .sit-head,
 .vis-page .sit-row {
   display: grid;
-  grid-template-columns: 2.6fr 1.1fr 0.9fr 0.8fr 0.6fr 0.6fr;
+  grid-template-columns: 2.4fr 0.8fr 1fr 0.8fr 1.8fr;
   column-gap: 20px;
-  align-items: center;
   padding: 0 24px;
 }
 .vis-page .sit-head {
+  align-items: center;
   padding-top: 10px; padding-bottom: 10px;
   background: #f8fafc; border-bottom: 1px solid var(--border);
 }
 .vis-page .sit-head .sit-c {
+  display: flex; align-items: center; gap: 5px;
   font-family: var(--font-display); font-size: 10px; font-weight: 700;
   letter-spacing: .07em; text-transform: uppercase; color: var(--fg-5);
 }
-.vis-page .sit-row { padding-top: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.vis-page .sit-c--sortable svg { flex: 0 0 auto; }
+.vis-page .sit-c--center { justify-content: center; text-align: center; }
+.vis-page .sit-row { align-items: flex-start; padding-top: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
 .vis-page .sit-row:last-of-type { border-bottom: 0; }
 .vis-page .sit-row:hover { background: #fafbff; }
-.vis-page .sit-c { display: flex; align-items: center; gap: 8px; }
+.vis-page .sit-c { display: flex; align-items: center; gap: 8px; min-width: 0; }
 
-/* Example URL cell */
-.vis-page .sit-c--url { align-items: flex-start; }
+/* Exact source cell: [favicon + domain] on one line, the URL on the line
+   below flush to the same left edge (not indented past the favicon) —
+   always left-aligned, regardless of the center alignment used by the
+   columns after it. */
+.vis-page .sit-c--source { align-items: flex-start; text-align: left; }
+.vis-page .sit-source-stack { min-width: 0; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; }
+.vis-page .sit-source-top { display: flex; align-items: center; gap: 8px; }
+.vis-page .sit-domain { font-size: 13px; font-weight: 600; color: var(--fg-1); text-align: left; }
+.vis-page .fav svg { width: 100%; height: 100%; }
+.vis-page .fav--bordered { border: 1px solid var(--border); }
+.vis-page .fav--letter {
+  font-family: var(--font-display); font-weight: 700; font-size: 11px; color: #fff;
+  display: flex; align-items: center; justify-content: center; margin-top: 1px;
+}
+
 .vis-page .sit-url-link {
   display: inline-flex; align-items: flex-start; gap: 5px;
   font-size: 12.5px; color: var(--poliris-blue);
-  text-decoration: underline; text-underline-offset: 2px;
-  word-break: break-all; line-height: 1.5;
+  text-decoration: none;
+  line-height: 1.5;
   text-align: left;
+  min-width: 0;
 }
 .vis-page .sit-url-link:hover { color: #1d4ed8; }
 .vis-page .sit-url-link svg { flex: 0 0 auto; margin-top: 3px; }
-
-/* Source/domain cell */
-.vis-page .sit-c--source { gap: 10px; }
-.vis-page .sit-domain { font-size: 13px; font-weight: 600; color: var(--fg-1); }
+/* Long URLs are cut to 2 lines with an ellipsis rather than wrapping the
+   whole thing out — a full path/query string reads worse than a clipped
+   one, and the link tooltip/href still carries the complete URL. */
+.vis-page .sit-url-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+}
 
 /* Category pill */
 .vis-page .sit-cat {
@@ -551,11 +606,22 @@
 .vis-page .sit-authority--medium { color: var(--warning); }
 .vis-page .sit-authority--low    { color: var(--negative); }
 
-/* Comp. / Link icon cells */
-.vis-page .sit-icon         { flex: 0 0 auto; }
-.vis-page .sit-icon--warn   { color: var(--warning); }
-.vis-page .sit-icon--broken { color: #f59e0b; }
-.vis-page .sit-dash         { color: var(--fg-5); }
+/* Your citation cell */
+.vis-page .sit-citation { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+.vis-page .sit-citation--mention { color: var(--warning); }
+.vis-page .sit-citation--uncited { color: var(--negative); }
+
+/* Competitor citations — brand pills, wrap onto multiple lines */
+.vis-page .sit-c--pills { flex-wrap: wrap; row-gap: 6px; }
+.vis-page .sit-pill {
+  font-size: 11.5px; font-weight: 600;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+.vis-page .sit-pill--teal   { background: #e6f4f1; color: #1b806c; }
+.vis-page .sit-pill--purple { background: #f1edfb; color: #7c5cbf; }
+.vis-page .sit-pill--pink   { background: #fdeef5; color: #c2277e; }
+.vis-page .sit-pill--blue   { background: #eef1fb; color: var(--poliris-blue); }
 
 .vis-page .src-intel-count {
   padding: 11px 24px; border-top: 1px solid var(--border);
@@ -692,7 +758,7 @@
 }
 @media(max-width: 900px) {
   .vis-page section { padding: 64px 0; }
-  .vis-page .dark   { padding: 46px 26px; border-radius: var(--r-lg); }
+  .vis-page .dark   { padding: 46px 26px;}
 }
 @media(max-width: 760px) {
   .vis-page .tour         { grid-template-columns: 1fr; }
@@ -724,6 +790,7 @@
   .vis-page .si-head { flex-direction: column; align-items: flex-start; gap: 16px; max-width: 100%; }
   .vis-page .si-head-copy { max-width: 100%; }
   .vis-page .si-head .lead { flex: 0 0 auto; max-width: 100%; padding-left: 16px; }
+  .vis-page .mkt .si-head .lead { flex: 0 0 auto; max-width: 100%; }
   /* Source pipeline: horizontally scrollable */
   .vis-page .src-pipeline {
     overflow-x: auto;
@@ -740,11 +807,11 @@
   .vis-page .src-stat:nth-child(even) { border-right: 0; }
   .vis-page .src-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
 
-  /* Source intelligence table: only the grid rows scroll, not the header/footer */
+  /* Source intelligence table: only the grid rows scroll, not the header */
   .vis-page .src-intel-scroll { overflow-x: auto; scrollbar-width: none; }
   .vis-page .src-intel-scroll::-webkit-scrollbar { display: none; }
   .vis-page .sit-head,
-  .vis-page .sit-row   { min-width: 1100px; }
+  .vis-page .sit-row   { min-width: 1000px; }
 
   /* Source intel header: stack on narrow */
   .vis-page .src-intel-hdr { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -798,284 +865,78 @@
 }
 
 /* ============================================================
-   REAL MARKET V2 — real d3-geo/world-atlas map, brand-logo pins
+   LIVE MARKETS MAP — flat gradient choropleth with a soft drop-shadow on
+   the highlighted tiers, a graticule grid, and a plain halo-dot marker.
+   The headline/subtitle above it are the page's own section heading (see
+   visibility.realMarket in VisibilityPage.jsx / the locale files) — this
+   component is just the card. See LiveMarketsMap.jsx for the placeholder
+   content (which countries are in which tier) and its inline SVG
+   gradients/shadow filter (kept in the SVG itself, not here, since CSS
+   `fill: url(#id)` needs those defs to exist in the same document).
    ============================================================ */
-.vis-page .rm2-wrap {
-  width: 100%;
-  max-width: 1060px;
-  margin: 0 auto;
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  /* var(--shadow-lg) is a near-white shadow (rgba(236,236,236,.55)),
-     tuned for a card sitting on a pure white page — this section's
-     backdrop is var(--surface-2), close enough in color that the shadow
-     was disappearing into it. A darker, two-layer shadow (soft ambient
-     + tighter contact) instead, so the card actually lifts off the page. */
-  box-shadow: 0 10px 34px rgba(20, 30, 60, .14), 0 2px 8px rgba(20, 30, 60, .08);
-  overflow: hidden;
-}
-.vis-page .rm2 {
+.vis-page .lmm { width: 100%; }
+.vis-page .lmm-card {
   position: relative;
-  aspect-ratio: 1000 / 520;
-  border-radius: var(--r-xl);
+  border-radius: 22px;
   overflow: hidden;
-  background: var(--surface-2);
+  padding: 18px 18px 16px;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: 0 34px 80px -36px rgba(20, 32, 74, .45);
 }
-.vis-page .rm2-mapbox {
+.vis-page .lmm-glow {
   position: absolute;
-  inset: 0;
-}
-/* Mapbox's own compact attribution control — keep it legible but quiet.
-   Light glass to sit on the colorful streets-v12 map (was dark, to match
-   the old dark-v11 map). */
-.vis-page .rm2-mapbox .mapboxgl-ctrl-bottom-right { z-index: 1; }
-.vis-page .rm2-mapbox .mapboxgl-ctrl-attrib {
-  background: rgba(255, 255, 255, .7);
-  font-size: 9px;
-}
-.vis-page .rm2-mapbox .mapboxgl-ctrl-attrib a { color: rgba(50, 60, 90, .8); }
-.vis-page .rm2-kicker {
-  position: absolute;
-  top: 22px; left: 26px;
-  z-index: 3;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: .14em;
-  color: rgba(30, 56, 147, .6);
+  left: 50%;
+  top: -160px;
+  width: 940px;
+  height: 440px;
+  margin-left: -470px;
+  background: radial-gradient(closest-side, rgba(59, 130, 246, .11), rgba(59, 130, 246, 0));
   pointer-events: none;
 }
-
-.vis-page .rm2-legend {
+.vis-page .lmm-label {
   position: absolute;
-  /*
-   * Bottom-left, not top-right: several pins (Asia/Oceania at Worldwide,
-   * various country/region labels at closer zooms) land near the right
-   * edge of the map, and their centered callouts extend past them in both
-   * directions — a top-right legend panel sits right in that collision
-   * zone. Bottom-left is clear of the tab bar (bottom-center) and kicker
-   * (top-left) at every zoom level.
-   */
-  bottom: 20px; left: 20px;
-  z-index: 4;
-  background: rgba(255, 255, 255, .82);
-  border: 1px solid rgba(0, 0, 0, .08);
-  border-radius: var(--r-md);
-  padding: 11px 13px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 10px rgba(20, 30, 60, .1);
-}
-.vis-page .rm2-legend-title {
+  left: 28px;
+  top: 26px;
+  z-index: 2;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 8.5px;
-  letter-spacing: .12em;
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--fg-5);
-  margin-bottom: 8px;
+  color: var(--fg-2);
 }
-.vis-page .rm2-legend-row {
-  display: flex; align-items: center; gap: 7px;
+.vis-page .lmm-svg { display: block; width: 100%; height: auto; }
+
+.vis-page .lmm-graticule { fill: none; stroke: #eef0f5; stroke-width: .8; }
+
+.vis-page .lmm-country { stroke: #fff; stroke-width: .7; }
+.vis-page .lmm-country--none { fill: #e4e7ef; }
+.vis-page .lmm-country--live { fill: url(#lmm-live-grad);}
+.vis-page .lmm-shadow-group { filter: url(#lmm-shadow); }
+
+/* One glossy red ball-on-a-needle pin per "already live" market (see the
+   `Marker` component in LiveMarketsMap.jsx; its ball gradient is
+   per-instance, set directly via JSX, not here). */
+.vis-page .lmm-marker-shadow { fill: #0c1330; opacity: .24; }
+.vis-page .lmm-marker-needle { fill: #b9351f; }
+.vis-page .lmm-marker-ball { stroke: #8f1d12; stroke-width: .7; }
+.vis-page .lmm-marker-shine { fill: #fff; opacity: .55; }
+.vis-page .lmm-marker-name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 11px;
-  color: var(--fg-2);
-  margin-bottom: 6px;
+  font-size: 14px;
+  text-anchor: middle;
+  fill: #16204f;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
-.vis-page .rm2-legend-row:last-child { margin-bottom: 0; }
-.vis-page .rm2-legend-logo {
-  width: 18px; height: 18px;
-  object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .1);
-  flex: none;
-}
-
-/*
- * Mapbox positions `.rm2-marker` (the root element handed to
- * mapboxgl.Marker) itself by setting its own `transform` directly, every
- * frame, to keep it pinned to its lng/lat as the map pans/zooms. Marker
- * DOM elements are NOT affected by map zoom the way the old CSS-scaled
- * SVG stage was — they always render at their natural CSS size — so
- * there's no counter-scale to compose here at all, unlike the previous
- * d3-geo implementation. Anything WE want to animate (pop-in, position
- * within the marker) has to live on `.rm2-marker-inner`, a child, so it
- * never touches the `transform` property Mapbox owns on the root.
- */
-.vis-page .rm2-marker-inner {
-  position: relative;
-  width: 34px; height: 44px;
-  opacity: 0;
-  animation: rm2-marker-in .5s var(--ease-out) both;
-  animation-delay: var(--pd, 0ms);
-  transition: transform .15s var(--ease-out);
-}
-@keyframes rm2-marker-in {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-/*
- * The drop-shadow lives on the pin SVG specifically, not on
- * `.rm2-marker-inner` (its parent). A CSS `filter` forces the browser to
- * rasterize its entire subtree into an offscreen buffer to compute the
- * effect — if it sat on the parent, that subtree would include
- * `.rm2-callout`'s text too, and text that gets swept into a filter's
- * raster pass reliably comes out softer than text composited normally.
- * This is what was causing the callout text (but not the map's own
- * WebGL-rendered labels, a completely separate pipeline) to look blurry.
- */
-.vis-page .rm2-marker-pin {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .4));
-}
-.vis-page .rm2-marker-logo {
-  position: absolute;
-  left: 50%; top: 34%;
-  transform: translate(-50%, -50%);
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #fff;
-  /* A white ring made sense against the old dark/colored pin fill; the
-     pin itself is white now, so the ring needs to be dark to still read
-     as a distinct badge circle rather than disappearing into the pin. */
-  box-shadow: 0 0 0 2px rgba(30, 56, 147, .25);
-}
-.vis-page .rm2-marker-logo img { width: 100%; height: 100%; object-fit: cover; }
-
-/* Click-to-drill pins (Worldwide continents, and country/region depth
-   while exploring one — see EXPLORE/getCurrentView in RealMarketMapV2.jsx).
-   No badge or persistent hint by design — cursor + a small hover lift is
-   the only affordance, so it stays invisible until a user actually
-   reaches for it. */
-.vis-page .rm2-marker--clickable,
-.vis-page .rm2-callout-marker--clickable { cursor: pointer; }
-.vis-page .rm2-marker--clickable:hover .rm2-marker-inner { transform: translateY(-3px); }
-.vis-page .rm2-callout-marker--clickable:hover .rm2-callout { border-color: rgba(30, 56, 147, .35); }
-
-/*
- * The callout is its own top-level Marker now (see createCalloutEl),
- * positioned entirely by Mapbox's anchor:'bottom' + offset — so unlike
- * before, `.rm2-callout` needs no position/left/transform of its own for
- * PLACEMENT, only for its pop-in animation. This also sidesteps the
- * sub-pixel centering issue a manual `left:50%; transform:translateX
- * (-50%)` had (that math depends on this element's own, often-fractional
- * text-driven width; Mapbox's anchor centering doesn't).
- */
-.vis-page .rm2-callout {
-  background: rgba(255, 255, 255, .97);
-  border: 1px solid rgba(0, 0, 0, .1);
-  border-radius: 7px;
-  padding: 5px 9px;
-  white-space: nowrap;
-  text-align: center;
-  opacity: 0;
-  animation: rm2-callout-in .5s var(--ease-out) both;
-  animation-delay: var(--pd, 0ms);
-  transition: border-color .15s var(--ease-out);
-  /* A dark callout popped visibly off the old dark map on its own; a
-     light one needs its own shadow to lift off busy streets-v12 detail
-     (light land/water, roads, labels) directly behind it. */
-  box-shadow: 0 3px 10px rgba(20, 30, 60, .18);
-}
-@keyframes rm2-callout-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-/*
- * Deliberately NOT var(--font-display) (Manrope, a custom web font) here.
- * At 10px/bold, small custom-font glyphs are more prone to looking soft
- * on Windows ClearType than the OS's own hinted UI font — "Segoe UI" on
- * Windows, system-ui elsewhere — so this stack is a targeted test for
- * that specific complaint, isolated to just this map's callouts rather
- * than changing the site's typography everywhere.
- */
-.vis-page .rm2-callout-zone {
-  display: block;
-  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-  text-rendering: optimizeLegibility;
-  font-weight: 700;
-  font-size: 10px;
-  color: var(--fg-1);
-}
-/*
- * The stat line used to be colored directly with the brand's accent
- * (`color: brand.accent`) — illegible for brands whose accent is close
- * to the callout's own background color. A small color swatch carries
- * the brand color instead; the text itself stays a fixed, always-legible
- * color regardless of which brand's callout it is.
- */
-.vis-page .rm2-callout-stat {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-  text-rendering: optimizeLegibility;
-  font-size: 9.5px;
-  margin-top: 2px;
-  font-weight: 600;
-  color: var(--fg-3);
-}
-.vis-page .rm2-callout-swatch {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  flex: none;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
-}
-
-.vis-page .rm2-bar {
-  position: absolute;
-  left: 50%; bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 5;
-  display: flex; align-items: center; gap: 12px;
-  background: rgba(255, 255, 255, .82);
-  border: 1px solid rgba(0, 0, 0, .08);
-  border-radius: var(--r-pill);
-  padding: 6px 8px 6px 14px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 10px rgba(20, 30, 60, .12);
-}
-.vis-page .rm2-tabs { display: flex; gap: 2px; }
-.vis-page .rm2-tab {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--fg-5);
-  background: transparent;
-  border: none;
-  padding: 6px 10px;
-  border-radius: var(--r-pill);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
-}
-.vis-page .rm2-tab b { font-weight: 800; opacity: .55; margin-right: 4px; }
-.vis-page .rm2-tab.on { color: var(--poliris-blue); background: rgba(30, 56, 147, .08); }
-.vis-page .rm2-tab.on b { opacity: 1; }
-.vis-page .rm2-sep { width: 1px; height: 13px; background: rgba(0, 0, 0, .1); }
-.vis-page .rm2-play {
-  flex: none;
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, .12);
-  background: rgba(0, 0, 0, .04);
-  color: var(--fg-2);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: background var(--dur) var(--ease-out);
-}
-.vis-page .rm2-play:hover { background: rgba(0, 0, 0, .08); }
-.vis-page .rm2-play svg { width: 10px; height: 10px; }
 
 @media (max-width: 700px) {
-  .vis-page .rm2 { aspect-ratio: 4 / 5; }
-  .vis-page .rm2-legend { display: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vis-page .rm2-marker-inner { animation: none; opacity: 1; }
-  .vis-page .rm2-callout { animation: none; opacity: 1; }
+  .vis-page .lmm-card { padding: 20px 16px 16px; }
+  .vis-page .lmm-label { left: 20px; top: 18px; font-size: 10.5px; }
 }
 
 /* Offsets anchor-scroll targets so the fixed navbar doesn't cover the

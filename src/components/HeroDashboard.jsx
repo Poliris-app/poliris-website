@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 
 const BRANDS = [
-  { id: 'nike',       name: 'Nike',        color: '#111827', isYou: true, abbr: 'NK', logo: `${import.meta.env.BASE_URL}nike-com-logo.png` },
-  { id: 'newbalance', name: 'New Balance', color: '#ea580c', abbr: 'NB', logo: `${import.meta.env.BASE_URL}newbalance-com-logo.png` },
-  { id: 'brooks',     name: 'Brooks',      color: '#7c3aed', abbr: 'BR', logo: `${import.meta.env.BASE_URL}brooksrunning-com-logo.png` },
-  { id: 'on',         name: 'On',          color: '#16a34a', abbr: 'ON', logo: `${import.meta.env.BASE_URL}on-com-logo.png` },
-  { id: 'adidas',      name: 'Adidas',       color: '#dc2626', abbr: 'AS', logo: `${import.meta.env.BASE_URL}adidas-group-com-logo.png` },
-  { id: 'hoka',       name: 'Hoka',        color: '#0891b2', abbr: 'HK', logo: `${import.meta.env.BASE_URL}hoka-com-logo.png` },
+  { id: 'nike',       name: 'Sony',    color: '#111827', isYou: true, abbr: 'SN', logo: `${import.meta.env.BASE_URL}sony-com-logo.png` },
+  { id: 'newbalance', name: 'Samsung', color: '#ea580c', abbr: 'SM', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png` },
+  { id: 'brooks',     name: 'JBL',     color: '#7c3aed', abbr: 'JB', logo: `${import.meta.env.BASE_URL}jbl-com-logo.png` },
+  { id: 'on',         name: 'Anker',   color: '#16a34a', abbr: 'AN', logo: `${import.meta.env.BASE_URL}anker-com-logo.png` },
+  { id: 'adidas',     name: 'Apple',   color: '#dc2626', abbr: 'AP', logo: `${import.meta.env.BASE_URL}apple-com-logo.png` },
+  { id: 'hoka',       name: 'Bose',    color: '#0891b2', abbr: 'BS', logo: `${import.meta.env.BASE_URL}bose-com-logo.png` },
 ];
 
 const VIS_DATA = {
@@ -39,17 +39,17 @@ const QUAD_POS = {
 };
 
 const X_DATES = [
-  'Apr 27, 2026 6:40 AM', 'May 4, 2026 6:40 AM',  'May 11, 2026 6:40 AM',
-  'May 18, 2026 6:40 AM', 'May 25, 2026 6:40 AM', 'Jun 1, 2026 6:40 AM',
+  'Aug 31, 2026 6:40 AM', 'Sep 7, 2026 6:40 AM',  'Sep 14, 2026 6:40 AM',
+  'Sep 21, 2026 6:40 AM', 'Sep 28, 2026 6:40 AM', 'Oct 5, 2026 6:40 AM',
 ];
 
 const X_TICKS = [
-  { i: 0, label: 'Apr 27' },
-  { i: 1, label: 'May 4'  },
-  { i: 2, label: 'May 11' },
-  { i: 3, label: 'May 18' },
-  { i: 4, label: 'May 25' },
-  { i: 5, label: 'Jun 1'  },
+  { i: 0, label: 'Aug 31' },
+  { i: 1, label: 'Sep 7'  },
+  { i: 2, label: 'Sep 14' },
+  { i: 3, label: 'Sep 21' },
+  { i: 4, label: 'Sep 28' },
+  { i: 5, label: 'Oct 5'  },
 ];
 
 // SVG chart constants
@@ -167,7 +167,7 @@ export default function HeroDashboard() {
           {/* Brand header */}
           <div className="dsb__brand">
             <div className="dsb__brand-logo">
-              <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+              <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
             </div>
             <div className="dsb__brand-info">
               <span className="dsb__brand-name">{d.sidebar.nike}</span>
@@ -196,8 +196,8 @@ export default function HeroDashboard() {
               <span className="dsb__tree-chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
               </span>
-              <span className="dsb__avatar dsb__avatar--n">N</span>
-              <span className="dsb__tree-brand-name">nike</span>
+              <span className="dsb__avatar dsb__avatar--n">S</span>
+              <span className="dsb__tree-brand-name">sony</span>
             </div>
 
             {/* Level 1 children   line from brand */}
@@ -506,15 +506,14 @@ export default function HeroDashboard() {
             </div>
             <div className="hdash__plat-scroll">
             {[
-              { name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,      pct: 97, color: 'rgb(59, 130, 246)' },
-              { name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,   pct: 92, color: 'rgb(59, 130, 246)' },
-              { name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,     pct: 89, color: 'rgb(59, 130, 246)' },
-              { name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`,   pct: 82, color: 'rgb(59, 130, 246)' },
+              { name: 'Gemini',      pct: 97, color: 'rgb(59, 130, 246)' },
+              { name: 'ChatGPT',   pct: 92, color: 'rgb(59, 130, 246)' },
+              { name: 'Mistral',     pct: 89, color: 'rgb(59, 130, 246)' },
+              { name: 'Claude',   pct: 82, color: 'rgb(59, 130, 246)' },
             ].map(p => (
               <div key={p.name} className="hdash__plat-row">
                 <div className="hdash__plat-header">
                   <span className="hdash__plat-name">
-                    <img src={p.icon} alt={p.name} className="hdash__plat-icon" />
                     {p.name}
                   </span>
                   <span className="hdash__plat-pct">{p.pct}%</span>

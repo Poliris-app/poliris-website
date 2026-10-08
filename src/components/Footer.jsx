@@ -5,7 +5,7 @@ import { useLang } from '../contexts/LangContext';
 const FOOTER_HREFS = (lang) => [
   `/${lang}/#products`,
   `/${lang}/#team`,
-  `/${lang}/docs`,
+  `/${lang}/#how-it-works`,
   `/${lang}/demo`,
   `/${lang}/blog`,
 ];
@@ -20,9 +20,10 @@ const PRICING_INDEX = 3;
 
 // Labels for the locale-prefixed legal links below (see LEGAL_LINKS in
 // the render — hrefs are built per-lang there, same as Mentions légales).
+// `labelKey` maps to footer.privacyPolicy/termsOfService.
 const LEGAL_LINK_ITEMS = [
-  { slug: 'privacy', label: 'Privacy Policy' },
-  { slug: 'terms', label: 'Terms of Service' },
+  { slug: 'privacy', labelKey: 'privacyPolicy' },
+  { slug: 'terms', labelKey: 'termsOfService' },
 ];
 
 export default function Footer() {
@@ -34,7 +35,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <a href={`/${lang}/`} className="footer__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.svg`} alt="Poliris" />
+          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
         </a>
         <nav className="footer__nav">
           {links.map((label, i) => (
@@ -52,8 +53,8 @@ export default function Footer() {
           {/* Locale-prefixed directly so it navigates straight to the
               active language's page instead of round-tripping through
               the bare-URL redirects in vercel.json. */}
-          {LEGAL_LINK_ITEMS.map(({ slug, label }) => (
-            <a key={slug} href={`/${lang}/${slug}`} className="footer__link">{label}</a>
+          {LEGAL_LINK_ITEMS.map(({ slug, labelKey }) => (
+            <a key={slug} href={`/${lang}/${slug}`} className="footer__link">{t(`footer.${labelKey}`)}</a>
           ))}
           <a href={`/${lang}/mentions-legales`} className="footer__link">{t('footer.legalNotice')}</a>
         </nav>

@@ -74,7 +74,7 @@
   padding: 54px;
 }
 .ta-page .ta-stakes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
-.ta-page .ta-stakes .n { font-family: var(--display); font-weight: 800; font-size: 42px; color: var(--blue); line-height: 1; }
+.ta-page .ta-stakes .n { font-family: var(--display); font-weight: 800; font-size: 42px; color: var(--poliris-blue); line-height: 1; }
 .ta-page .ta-stakes .d { font-size: 14px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 @media (max-width: 860px) {
   .ta-page .ta-stakes-grid { grid-template-columns: 1fr 1fr; }
@@ -139,7 +139,7 @@
 }
 .ta-app-cap {
   font-family: var(--display);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   color: var(--muted);
   max-width: 600px;
@@ -271,10 +271,12 @@
 }
 .ta-page .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--poliris-blue-300); }
 .ta-page .tcard-top   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+/* Same tile as the Visibility page's .tcard .ic — white with a soft blue glow. */
 .ta-page .tcard .ic   {
   width: 44px; height: 44px;
-  border-radius: 10px;
-  background: rgba(30,56,147,.08);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
   display: flex; align-items: center; justify-content: center;
 }
 .ta-page .tcard .ic svg { width: 21px; height: 21px; color: var(--poliris-blue); }
@@ -530,7 +532,7 @@
   line-height: 1.66;
   color: var(--muted);
   margin: 0;
-  padding-left: 32px;
+  padding-left: 20px;
   border-left: 1px solid var(--line-2);
 }
 @media (max-width: 860px) {
@@ -566,7 +568,7 @@
   stroke-width: .35;
 }
 .ta-ends circle {
-  fill: #1E3893;
+  fill: var(--poliris-blue);
   stroke: #FFF;
   stroke-width: .87;
 }
@@ -638,7 +640,7 @@
   height: 64px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -662,9 +664,9 @@
   height: 30px;
   border-radius: 50%;
   padding: 8px;
-  background: var(--blue);
+  background: var(--poliris-blue);
   color: white;
-  box-shadow: 10px 3px 20px 10px #d4d4d457;
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
 }
 @media (max-width: 860px) {
   .ta-hub-stage   { margin: 8px auto 0; }
@@ -821,7 +823,7 @@
   font-weight: 700;
   font-size: 13.5px;
   color: #fff;
-  background: var(--blue);
+  background: var(--poliris-blue);
   border: 0;
   border-radius: var(--r-pill);
   padding: 10px 12px 10px 20px;
@@ -836,7 +838,7 @@
   height: 24px;
   border-radius: 50%;
   background: #fff;
-  color: var(--blue);
+  color: var(--poliris-blue);
   flex-shrink: 0;
 }
 .reveal.visible .ta-ba-apply {
@@ -913,7 +915,7 @@
 .ta-av--tom img { width: 88%; height: 88%; object-fit: contain; }
 .ta-agent-pill .ta-av--tom { width: 30px; height: 30px; }
 .ta-av--j {
-  background: var(--blue);
+  background: var(--poliris-blue);
   font-family: var(--display); font-weight: 800; color: #fff; font-size: 11px;
 }
 .ta-av--sm { width: 26px; height: 26px; font-size: 11px; }
@@ -934,10 +936,10 @@
   letter-spacing: .05em;
   text-transform: uppercase;
   color: #fff;
-  background: var(--blue);
+  background: var(--poliris-blue);
   border-radius: var(--r-pill);
   padding: 6px 13px;
-  box-shadow: 0 10px 24px -8px rgba(30, 56, 147, .55);
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
 }
 
 .ta-chat {
@@ -989,7 +991,7 @@
   font-family: var(--font-body);
 }
 .ta-bub.user {
-  background: var(--blue);
+  background: var(--poliris-blue);
   color: #fff;
   border-radius: 12px 0px 12px 12px;
 }
@@ -1013,7 +1015,7 @@
   display: flex; align-items: center; gap: 7px;
   margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #dbeafe;
   font-family: var(--display); font-size: 10.5px; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase; color: var(--blue);
+  letter-spacing: .06em; text-transform: uppercase; color: var(--poliris-blue);
 }
 .ta-plan-items { display: flex; flex-direction: column; gap: 8px; }
 .ta-plan-item {
@@ -1027,7 +1029,7 @@
 }
 .ta-plan-item .rk {
   width: 18px; height: 18px; border-radius: 9999px;
-  background: var(--blue); color: #fff;
+  background: var(--poliris-blue); color: #fff;
   font-family: var(--display); font-weight: 800; font-size: 10px;
   display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
 }
@@ -1054,19 +1056,38 @@
   font-family: var(--body);
   font-weight: 400;
   font-size: 16px;
-  padding: 15px 30px;
+  padding: 10px 15px;
   border-radius: var(--r-pill);
   border: 1.5px solid transparent;
   cursor: pointer;
   transition: .2s;
   line-height: 1;
-  background: var(--blue);
-  color: #fff;
+  background: #fff;
+  color: var(--poliris-blue);
   text-decoration: none;
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
 }
 .ta-btn-blue:hover {
-  background: var(--blue-700);
+  background: var(--poliris-blue);
+  color: #fff;
+  border-color: #fff;
   transform: translateY(-2px);
+}
+.ta-btn-blue__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: var(--poliris-blue);
+  color: #fff;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.ta-btn-blue:hover .ta-btn-blue__icon {
+  background: #fff;
+  color: var(--poliris-blue);
 }
 
 @media (max-width: 880px) {

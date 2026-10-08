@@ -229,8 +229,6 @@ export default function SeoGeoCornerstonePage() {
               <li>Optimize page speed, especially on mobile, to reduce crawl friction.</li>
               <li>Validate meta robots tags to prevent accidental indexing blocks.</li>
             </ol>
-            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-3.png`} alt="Diagram: Technical SEO as the foundation layer" loading="lazy" />
-            <p className="bp-img-caption">Fig. 3 — The dependency stack from crawl health to AI visibility</p>
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
               <p>Most organizations discover their biggest GEO gaps stem from technical oversights, not content quality. A thorough technical audit often unlocks AI visibility faster than any content refresh. Platforms like Poliris automate this entire audit process, tracking crawl directives, heading structures, and performance metrics in one dashboard. That's the kind of infrastructure monitoring that bridges technical health with measurable GEO outcomes.</p>
@@ -284,8 +282,6 @@ export default function SeoGeoCornerstonePage() {
               <h2>Navigating Modern Search Visibility with Poliris</h2>
             </div>
             <p>Most platforms force you to choose between tracking traditional rankings and monitoring AI citation performance. Poliris removes that trade-off entirely. <strong>Poliris features</strong> a dual-layer auditing architecture. It combines automated <strong>technical SEO</strong> crawls with a live GEO monitoring dashboard. That pairing is rare, and it matters. On the technical side, Poliris tracks crawl directives like robots.txt, meta robots, and HTML heading structures automatically. These are the exact signals <strong>AI-driven search engines</strong> use to decide what content gets indexed and cited. Fix them, and your visibility improves across both traditional and generative results. The GEO dashboard monitors brand mentions, AI citation rates, and sentiment scores across ChatGPT, Gemini, and Perplexity. That's actionable intelligence most teams don't have today. For decision-makers, the case is straightforward. <strong>GEO optimization tools</strong> like Poliris close the measurement gap that most auditing platforms leave open. You stop guessing which technical changes improve AI visibility, and start seeing direct cause-and-effect relationships. In practice, a B2B software company using Poliris could identify that missing schema markup was suppressing its AI citation rate. Fix the schema, then watch citation frequency climb within weeks. That feedback loop is what <strong>SEO enhancement</strong> looks like when it's tied to GEO outcomes, not just keyword rankings. This approach is exactly why GEO needs SEO as its structural foundation, and why measuring both in one platform changes the game for enterprise teams.</p>
-            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-5.png`} alt="Screenshot: Poliris GEO monitoring dashboard" loading="lazy" />
-            <p className="bp-img-caption">Fig. 5 — The Poliris dashboard: technical crawl health alongside AI citation metrics</p>
             <div className="bp-cta-box">
               <div>
                 <p className="bp-cta-heading">Measure GEO and SEO in one place</p>

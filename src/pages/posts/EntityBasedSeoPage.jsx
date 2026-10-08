@@ -30,20 +30,6 @@ const FAQ_ITEMS = [
   },
 ];
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
-      </svg>
-      <span className="bp-img-hold-label">{label}</span>
-      <span className="bp-img-hold-sub">{sub}</span>
-    </div>
-  );
-}
-
 export default function EntityBasedSeoPage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState(null);
@@ -158,7 +144,6 @@ export default function EntityBasedSeoPage() {
               <li>Backlink counts signal authority without confirming topical coherence.</li>
             </ul>
             <p>None of these signals tell a search engine <em>what</em> a page is actually about.</p>
-            <ImgHold label="Figure 1" sub="From strings to things: how entity resolution replaces keyword matching" />
             <h3>The Structural Gap in Legacy SEO</h3>
             <p><strong>Entity-based</strong> thinking resolves this gap. Named Entity Recognition frameworks, the kind powering modern crawlers, classify nouns into typed categories: person, place, organization, concept. Once classified, they connect to Wikidata nodes and Knowledge Graph entries. A page that explicitly surfaces those connections earns <strong>semantic depth</strong> that keyword-stuffed content never reaches.</p>
             <div className="bp-note">
@@ -185,7 +170,6 @@ export default function EntityBasedSeoPage() {
               <li>Publish consistent co-citation signals: ensure your entity's name, description, and attributes appear identically across authoritative third-party sources.</li>
               <li>Audit your entity connections regularly using schema validators or Google's Rich Results Test, and expand your node relationships as your entity grows.</li>
             </ol>
-            <ImgHold label="Figure 2" sub="The four-step playbook for building definitive entity profiles" />
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
               <p>The most common gap in entity-based SEO is incomplete co-citation. Your entity may exist in the knowledge graph but connect to too few verified sources to trigger high-confidence rankings. Treat co-citation building the same way you'd treat link building in traditional SEO.</p>

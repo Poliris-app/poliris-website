@@ -15,20 +15,6 @@ const SECTIONS = [
   { id: 's-takeaways',  label: 'Key takeaways' },
 ];
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
-      </svg>
-      <span className="bp-img-hold-label">{label}</span>
-      <span className="bp-img-hold-sub">{sub}</span>
-    </div>
-  );
-}
-
 export default function DeathOfTraditionalSearchPage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState(null);
@@ -157,7 +143,6 @@ export default function DeathOfTraditionalSearchPage() {
             <p>Adapting to GEO means moving beyond ranking for clicks. The new goal is to become the trusted source an AI quotes. Search did not change suddenly. For decades, SEO rewarded pages that matched keywords and earned backlinks. Then large language models arrived, and the retrieval logic flipped. AI engines now synthesize an answer from the sources they trust most instead of returning a list of links. If your content lacks the proper structure for that synthesis, it remains invisible.</p>
             <p>In practice, GEO looks like this. A founder asks Gemini how to reduce customer churn. Gemini does not show ten blue links. It composes a paragraph and attributes ideas to two or three credible sources. One of those sources wins the conversation. Generative search optimization is the discipline that puts your content in that winning seat.</p>
             <p>Entity authority earns that placement. AI engines do not just scan keywords. They assess whether your brand, your authors, and your claims form a coherent and trustworthy entity across the web. This discipline matters most for content strategists, SEO professionals, and founders. Their buyers already use AI tools to research decisions. In fact, <a target="_blank" rel="noopener" href="https://www.prnewswire.com/news-releases/73-of-b2b-buyers-use-ai-tools-in-purchase-research-multi-source-analysis-finds-302733319.html#:~:text=B2B%20buyers%20use%20AI%20search,tools%20into%20their%20research%20process.">73% of B2B buyers use AI tools like ChatGPT or Perplexity in vendor research</a>. If your audience asks questions in ChatGPT before they visit a search engine, GEO is your priority today. Sound SEO integration remains the foundation. You can explore how those two disciplines connect in our guide, <Link to={`/${lang}/blog/why-seo-is-the-cornerstone-of-geo-success`}>Why SEO is the Cornerstone of GEO Success</Link>.</p>
-            <ImgHold label="Figure 1" sub="The retrieval shift: from ranked links to a single synthesized answer" />
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
               <p>Write every key claim as a single, declarative sentence under 50 words. That is the exact format AI engines extract verbatim when composing answers.</p>
@@ -203,7 +188,6 @@ export default function DeathOfTraditionalSearchPage() {
               <li><strong>Build entity-rich context:</strong> Name the what, who, and why explicitly. Generative search optimization rewards content that defines its own terms rather than assuming shared industry knowledge.</li>
               <li><strong>Structure with hierarchy:</strong> Clear H2 and H3 headings act as vital navigation cues for AI crawlers.</li>
             </ol>
-            <ImgHold label="Figure 2" sub="The five-step framework for aligning content with AI search standards" />
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
               <p>Run your draft through a Flesch reading-level checker before publishing. If your content scores above a 10th-grade reading level, rewrite the densest paragraphs first. Simpler sentence structures dramatically improve AI citation rates.</p>
@@ -227,7 +211,6 @@ export default function DeathOfTraditionalSearchPage() {
             </ul>
             <h3>Structure Data for Entity Extraction</h3>
             <p>Raw text is hard for language models to parse quickly. Schema markup changes that by wrapping your content in a machine-readable format. This makes entity relationships explicit. Use Article schema on editorial content. Add FAQPage schema to Q&A sections. This is where AI engines pull direct answers. Apply Organization schema to your About page to strengthen overall entity authority. Additionally, implementing an llm.txt file is a critical new standard for LLM indexing. This file acts as a direct map for AI crawlers and ensures your core data is parsed without friction.</p>
-            <ImgHold label="Figure 3" sub="The crawl-to-citation dependency stack: access, schema, and heading hierarchy" />
             <h3>Fix Content Hierarchy and Readability</h3>
             <p>Broken heading levels confuse parsers. An H4 tag appearing directly after an H2 with no H3 in between signals poor structure. Language models weigh properly nested headings as a sign of logical, trustworthy content. Plain language matters just as much. Short sentences, clear claims, and logical flow all reduce parsing friction for AI systems.</p>
             <p><strong>Key takeaway:</strong> Clean crawl access, comprehensive schema, and logical heading hierarchies are the three non-negotiable prerequisites before any generative search optimization effort can gain traction.</p>

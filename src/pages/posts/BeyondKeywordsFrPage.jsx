@@ -6,20 +6,6 @@ import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
-      </svg>
-      <span className="bp-img-hold-label">{label}</span>
-      <span className="bp-img-hold-sub">{sub}</span>
-    </div>
-  );
-}
-
 const SECTIONS = [
   { id: 's-strategy',    label: "Qu'est-ce qu'une stratégie de génération de contenu par IA ?" },
   { id: 's-reshaping',   label: 'Redéfinir le marketing digital' },
@@ -173,7 +159,6 @@ export default function BeyondKeywordsFrPage() {
               <li>Une <Link to={`/${lang}/visibility`}>visibilité</Link> renforcée dans les surfaces de réponse pilotées par l'IA, pas seulement dans les classements de recherche traditionnels.</li>
               <li>Une qualité de contenu plus constante à grande échelle, sans augmentation proportionnelle des effectifs.</li>
             </ol>
-            <ImgHold label="Figure 1" sub="Comment les moteurs de réponse IA redessinent le parcours de recherche de l'acheteur B2B" />
             <div className="bp-note">
               <div className="bp-note-label">Conseil d'expert</div>
               <p>Faites correspondre vos sujets de contenu aux questions précises que vos acheteurs posent à chaque étape du parcours d'achat. Les moteurs IA récompensent le contenu qui reflète une recherche naturelle, pas un contenu construit autour du jargon produit interne.</p>
@@ -207,7 +192,6 @@ export default function BeyondKeywordsFrPage() {
               <li>Ajouter un bloc de définition structuré à toute page pilier qui explique un concept central.</li>
               <li>Aligner votre stratégie de contenu de marque sur les questions précises que vos acheteurs posent pendant la phase de considération.</li>
             </ol>
-            <ImgHold label="Figure 2" sub="Où concentrer vos efforts en premier pour intégrer des techniques génératives" />
           </section>
 
           {/* 05 */}
@@ -224,7 +208,6 @@ export default function BeyondKeywordsFrPage() {
               <li><strong>Appuyer les affirmations par un raisonnement.</strong> Les modèles de langage accordent un poids important à la logique explicative. Une affirmation déclarative comme <em>« L'automatisation réduit les cycles de vente en éliminant les revues de conformité manuelles »</em> apporte un gain d'information bien plus élevé qu'une affirmation générique comme <em>« L'automatisation est une solution leader du marché »</em>.</li>
               <li><strong>Utiliser un langage d'entités cohérent.</strong> Nommez vos produits, catégories et cas d'usage de la même façon sur tous vos supports, pour que le modèle puisse construire une image fiable de ce que fait votre marque.</li>
             </ol>
-            <ImgHold label="Figure 3" sub="Trois changements concrets pour une amélioration de contenu pilotée par les LLM" />
             <p>C'est là que l'<strong>optimisation LLM</strong> diverge nettement du SEO traditionnel. La densité de mots-clés compte à peine. La cohérence conceptuelle compte bien davantage. Pour les grandes marques qui gèrent des dizaines de programmes de contenu, appliquer ces changements à grande échelle nécessite généralement un outillage d'audit et une gouvernance éditoriale. Une approche courante consiste à faire passer les pages à fort trafic existantes par une couche d'évaluation LLM qui repère les structures de réponse faibles avant d'entamer un cycle de réécriture.</p>
           </section>
 

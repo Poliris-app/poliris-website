@@ -15,20 +15,6 @@ const SECTIONS = [
   { id: 's-takeaways',  label: 'Points clés' },
 ];
 
-function ImgHold({ label, sub }) {
-  return (
-    <div className="bp-img-hold">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
-      </svg>
-      <span className="bp-img-hold-label">{label}</span>
-      <span className="bp-img-hold-sub">{sub}</span>
-    </div>
-  );
-}
-
 export default function DeathOfTraditionalSearchFrPage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState(null);
@@ -154,7 +140,6 @@ export default function DeathOfTraditionalSearchFrPage() {
             <p>S'adapter au GEO signifie dépasser le classement pour les clics. Le nouvel objectif est de devenir la source de confiance qu'une IA cite. La recherche n'a pas changé soudainement. Pendant des décennies, le SEO a récompensé les pages qui correspondaient à des mots-clés et gagnaient des backlinks. Puis les grands modèles de langage sont arrivés, et la logique de récupération s'est inversée. Les moteurs IA synthétisent désormais une réponse à partir des sources en lesquelles ils ont le plus confiance, au lieu de renvoyer une liste de liens. Si votre contenu manque de la structure adéquate pour cette synthèse, il reste invisible.</p>
             <p>En pratique, voici à quoi ressemble le GEO. Un fondateur demande à Gemini comment réduire le taux d'attrition client. Gemini n'affiche pas dix liens bleus. Il compose un paragraphe et attribue des idées à deux ou trois sources crédibles. L'une de ces sources remporte la conversation. L'optimisation pour la recherche générative est la discipline qui place votre contenu dans ce siège gagnant.</p>
             <p>L'autorité d'entité permet d'obtenir ce placement. Les moteurs IA ne se contentent pas de scanner des mots-clés. Ils évaluent si votre marque, vos auteurs et vos affirmations forment une entité cohérente et fiable sur l'ensemble du web. Cette discipline concerne avant tout les stratèges de contenu, les professionnels du SEO et les fondateurs. Leurs acheteurs utilisent déjà des outils IA pour orienter leurs décisions. En effet, <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.prnewswire.com/news-releases/73-of-b2b-buyers-use-ai-tools-in-purchase-research-multi-source-analysis-finds-302733319.html#:~:text=B2B%20buyers%20use%20AI%20search,tools%20into%20their%20research%20process.">73 % des acheteurs B2B utilisent des outils IA comme ChatGPT ou Perplexity dans leurs recherches fournisseurs</a>. Si votre audience pose des questions à ChatGPT avant de visiter un moteur de recherche, le GEO est votre priorité dès aujourd'hui. Une bonne intégration SEO reste le fondement. Vous pouvez découvrir comment ces deux disciplines se rejoignent dans notre guide, <Link to={`/${lang}/blog/why-seo-is-the-cornerstone-of-geo-success`}>Pourquoi le SEO est la pierre angulaire du succès GEO</Link>.</p>
-            <ImgHold label="Figure 1" sub="Le basculement de la récupération : des liens classés à une réponse unique synthétisée" />
             <div className="bp-note">
               <div className="bp-note-label">Note d'expert</div>
               <p>Rédigez chaque affirmation clé sous la forme d'une phrase déclarative unique de moins de 50 mots. C'est exactement le format que les moteurs IA extraient mot pour mot lorsqu'ils composent leurs réponses.</p>
@@ -200,7 +185,6 @@ export default function DeathOfTraditionalSearchFrPage() {
               <li><strong>Construisez un contexte riche en entités :</strong> nommez explicitement le quoi, le qui et le pourquoi. L'optimisation pour la recherche générative récompense le contenu qui définit ses propres termes plutôt que de présumer une connaissance sectorielle partagée.</li>
               <li><strong>Structurez avec une hiérarchie :</strong> des titres H2 et H3 clairs servent de repères de navigation essentiels pour les crawlers IA.</li>
             </ol>
-            <ImgHold label="Figure 2" sub="Le cadre en cinq étapes pour aligner le contenu sur les standards de la recherche IA" />
             <div className="bp-note">
               <div className="bp-note-label">Note d'expert</div>
               <p>Faites passer votre brouillon dans un outil de mesure de lisibilité (comme le score de Flesch) avant publication. Si votre contenu dépasse un niveau de lecture avancé, réécrivez d'abord les paragraphes les plus denses. Des structures de phrases plus simples améliorent nettement les taux de citation IA.</p>
@@ -224,7 +208,6 @@ export default function DeathOfTraditionalSearchFrPage() {
             </ul>
             <h3>Structurez les données pour l'extraction d'entités</h3>
             <p>Le texte brut est difficile à analyser rapidement pour les modèles de langage. Le balisage schema change la donne en enveloppant votre contenu dans un format lisible par les machines. Cela rend les relations entre entités explicites. Utilisez le schema Article sur le contenu éditorial. Ajoutez le schema FAQPage aux sections de questions-réponses : c'est de là que les moteurs IA extraient des réponses directes. Appliquez le schema Organization à votre page À propos pour renforcer l'autorité d'entité globale. Par ailleurs, la mise en place d'un fichier llm.txt constitue un nouveau standard critique pour l'indexation par les LLM. Ce fichier agit comme une carte directe pour les crawlers IA et garantit que vos données essentielles sont analysées sans friction.</p>
-            <ImgHold label="Figure 3" sub="La pile de dépendances entre le crawl, le schema et la hiérarchie des titres, jusqu'à la citation" />
             <h3>Corrigez la hiérarchie du contenu et la lisibilité</h3>
             <p>Des niveaux de titres cassés perturbent les analyseurs. Une balise H4 apparaissant directement après un H2, sans H3 intermédiaire, signale une structure médiocre. Les modèles de langage considèrent une hiérarchie de titres correctement imbriquée comme un signe de contenu logique et fiable. Un langage simple compte tout autant. Des phrases courtes, des affirmations claires et un enchaînement logique réduisent tous la friction d'analyse pour les systèmes IA.</p>
             <p><strong>Point clé :</strong> un accès de crawl propre, un schema complet et une hiérarchie de titres logique sont les trois prérequis non négociables avant que tout effort d'optimisation pour la recherche générative puisse porter ses fruits.</p>

@@ -411,6 +411,41 @@
   line-height: 1.6;
 }
 
+/* ── Table ──────────────────────────────────────────────── */
+.bp-table-wrap {
+  overflow-x: auto;
+  border: 1.5px solid #e4e8f2;
+  border-radius: 12px;
+  margin: 1.5rem 0 2rem;
+}
+.bp-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+}
+.bp-table th {
+  text-align: left;
+  padding: 0.85rem 1.1rem;
+  background: #f7f8fb;
+  font-family: var(--manrope);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0d1020;
+  border-bottom: 1.5px solid #e4e8f2;
+}
+.bp-table td {
+  padding: 0.9rem 1.1rem;
+  font-size: 0.88rem;
+  color: #3a3f52;
+  line-height: 1.6;
+  vertical-align: top;
+  border-bottom: 1px solid #e4e8f2;
+}
+.bp-table tr:last-child td { border-bottom: none; }
+.bp-table td strong { color: #0d1020; font-weight: 600; }
+
 /* ── FAQ ────────────────────────────────────────────────── */
 .bp-faq { margin: 1rem 0; }
 .bp-faq-item { border-bottom: 1px solid #eceef4; }

@@ -11,10 +11,10 @@ const SB_SCORE = 90;
 const RAW_AXES_PCT = [75, 67, 42, 13];
 const RAW_AXES_IDS = ['brand-awareness', 'performance', 'design', 'durability'];
 const RAW_MODELS = [
-  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  pct: 92 },
-  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   pct: 89 },
-  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    pct: 97 },
-  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, pct: 82 },
+  { id: 'chatgpt', name: 'ChatGPT',  pct: 92 },
+  { id: 'mistral', name: 'Mistral',   pct: 89 },
+  { id: 'gemini',  name: 'Gemini',    pct: 97 },
+  { id: 'claude',  name: 'Claude', pct: 82 },
 ];
 
 function getScoreLabel(score) {
@@ -164,7 +164,7 @@ export default function VisibilityDashboard() {
         <aside className="dash__sidebar">
           <div className="dsb__brand">
             <div className="dsb__brand-logo">
-              <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+              <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
             </div>
             <div className="dsb__brand-info">
               <span className="dsb__brand-name">{ds.sidebar.nike}</span>
@@ -187,8 +187,8 @@ export default function VisibilityDashboard() {
               <span className="dsb__tree-chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
               </span>
-              <span className="dsb__avatar dsb__avatar--n">N</span>
-              <span className="dsb__tree-brand-name">nike</span>
+              <span className="dsb__avatar dsb__avatar--n">S</span>
+              <span className="dsb__tree-brand-name">sony</span>
             </div>
             <div className="dsb__tree-l1">
               <div className="dsb__tree-category">
@@ -218,10 +218,10 @@ export default function VisibilityDashboard() {
           <div className="hdash__v2-brand-row">
             <div className="hdash__v2-brand-left">
               <div className="hdash__v2-brand-logo">
-                <img src={`${import.meta.env.BASE_URL}nike-com-logo.png`} alt="Nike" />
+                <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
               </div>
               <div>
-                <div className="hdash__v2-brand-name">Nike</div>
+                <div className="hdash__v2-brand-name">Sony</div>
                 <div className="hdash__v2-brand-sub">{vd.brandSub}</div>
               </div>
             </div>
@@ -281,7 +281,7 @@ export default function VisibilityDashboard() {
                 <div className="hdash__v2-tip-date">{X_LABELS[chartHov]}, 2026</div>
                 <div className="hdash__v2-tip-row">
                   <span className="hdash__v2-tip-dot" style={{ background: '#2563eb' }} />
-                  <span className="hdash__v2-tip-name">Nike</span>
+                  <span className="hdash__v2-tip-name">Sony</span>
                   <span className="hdash__v2-tip-val">{NIKE_DATA[chartHov]}%</span>
                 </div>
               </div>
