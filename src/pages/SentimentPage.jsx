@@ -99,10 +99,10 @@ const SENT_AXES = [
   { id: 'durability',      name: 'Durability',       score: 28, tier: 'Weak', isPriority: true },
 ];
 const SENT_MODELS = [
-  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    score: 90, tier: 'Very Strong' },
-  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  score: 76, tier: 'Strong' },
-  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   score: 72, tier: 'Strong' },
-  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, score: 28, tier: 'Weak', isPriority: true },
+  { id: 'gemini',  name: 'Gemini',    score: 90, tier: 'Very Strong' },
+  { id: 'chatgpt', name: 'ChatGPT',  score: 76, tier: 'Strong' },
+  { id: 'mistral', name: 'Mistral',   score: 72, tier: 'Strong' },
+  { id: 'claude',  name: 'Claude', score: 28, tier: 'Weak', isPriority: true },
 ];
 
 function SentimentBreakdown() {
@@ -737,7 +737,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}gemini-ai-logo.png`} alt="Gemini" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Gemini</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gemini-3.1-pro-preview</span>
@@ -757,7 +756,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}chatgpt-com-logo.png`} alt="ChatGPT" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>ChatGPT</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gpt-4o-mini</span>
@@ -777,7 +775,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}mistral-ai-logo.png`} alt="Mistral" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Mistral</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>mistral-7b-instruct-v0.2</span>
@@ -797,7 +794,6 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="Claude" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Claude</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>claude-haiku-4-5-20251001</span>

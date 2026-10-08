@@ -73,7 +73,6 @@ export default function BlogPage() {
           primaryCta={bh.primaryCta}
           secondaryCta={bh.secondaryCta}
           showDashboard={false}
-          showAiBand={false}
         />
 
         <section className="blog-sec">

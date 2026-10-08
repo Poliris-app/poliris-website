@@ -99,7 +99,6 @@ export default function GetaDemoPage() {
           primaryCta={d.hero.primaryCta}
           secondaryCta={d.hero.secondaryCta}
           showDashboard={false}
-          showAiBand={false}
         />
 
         <section className="demo-section">

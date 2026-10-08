@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import ShaderBackground from './ShaderBackground';
 import HeroDashboard from './HeroDashboard';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
@@ -127,65 +128,16 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
   );
 }
 
-const LOGOS = [
-  { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`, alt: 'ChatGPT' },
-  { src: `${import.meta.env.BASE_URL}Gemini-logo-2.svg`, alt: 'Gemini' },
-  { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`, alt: 'Deepseek' },
-  { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`, alt: 'Mistral AI' },
-  { src: `${import.meta.env.BASE_URL}Claude-logo-2.svg`, alt: 'Claude' },
-  { src: `${import.meta.env.BASE_URL}Perplexity-logo-2.svg`, alt: 'Perplexity' },
-];
-
-function AiBand() {
-  const doubled = [...LOGOS, ...LOGOS];
-  return (
-    <section className="ai-band">
-      <div className="ai-band__track">
-        {doubled.map((l, i) => (
-          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ScrollHint() {
-  const { t } = useLang();
-  const travelRef = useRef(null);
-
-  useEffect(() => {
-    const LINE_H = 80;
-    const onScroll = () => {
-      const scrolled = window.scrollY;
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
-      if (travelRef.current) {
-        travelRef.current.style.top = `${progress * LINE_H}px`;
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  return (
-    <div className="scroll-hint" aria-hidden="true">
-      <span className="scroll-hint__label">{t('scroll')}</span>
-      <span className="scroll-hint__line">
-        <span className="scroll-hint__travel" ref={travelRef} />
-      </span>
-    </div>
-  );
-}
-
-export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = true, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
+export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = true, dark = false, bottom = null, websiteCapture = null, answerCard = null, secondaryKind = null, fullFold = false, visualHeader = null }) {
   const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
   const primaryAudit = isAuditCta(primaryCta);
-  const secondaryTrial = isTrialCta(secondaryCta);
-  const secondaryDemo  = isDemoCta(secondaryCta);
-  const secondaryAudit = isAuditCta(secondaryCta);
+  // secondaryKind ('trial' | 'demo' | 'audit') pins the link explicitly, so
+  // label copy can change without silently losing its destination.
+  const secondaryTrial = secondaryKind ? secondaryKind === 'trial' : isTrialCta(secondaryCta);
+  const secondaryDemo  = secondaryKind ? secondaryKind === 'demo'  : isDemoCta(secondaryCta);
+  const secondaryAudit = secondaryKind ? secondaryKind === 'audit' : isAuditCta(secondaryCta);
 
   const primaryHref  = primaryTrial ? TRIAL_URL : primaryDemo ? DEMO_URL : primaryAudit ? `/${lang}/demo` : '#';
   const secondaryHref = secondaryTrial ? TRIAL_URL : secondaryDemo ? DEMO_URL : secondaryAudit ? `/${lang}/demo` : '#';
@@ -194,10 +146,12 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
 
   return (
     <>
-      <ScrollHint />
-      <header id="top" className={`hero${dark ? ' hero--dark' : ''}`}>
-        <div className="hero__glow" aria-hidden="true" />
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${fullFold ? ' hero--fold' : ''}`}>
+        {!dark && <ShaderBackground className="hero__shader" />}
         <div className="hero__inner">
+          {/* fullFold: the headline block fills the first screen on its own,
+              so everything after it (AI band, dashboard) starts below the fold. */}
+          <div className={fullFold ? 'hero__fold' : undefined}>
           <div className="eyebrow">{eyebrow}</div>
           <h1 className="hero__h1">{title}</h1>
           {audience && <p className="hero__audience">{audience}</p>}
@@ -237,12 +191,25 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
             </a>
           </div>
           <p className="hero__note">{note}</p>
+          </div>
 
           {bottom && <div className="hero__bottom-slot">{bottom}</div>}
 
-          {showAiBand && <AiBand />}
+          {/* Optional section header introducing the product preview below. */}
+          {showDashboard && visualHeader && (
+            <div className="sec-head hero__visual-head reveal">
+              <div className="eyebrow">{visualHeader.eyebrow}</div>
+              <h2 className="sec-h2">{visualHeader.title}</h2>
+              <p className="sec-lead">{visualHeader.lead}</p>
+            </div>
+          )}
 
-          {showDashboard && <HeroDashboard />}
+          {showDashboard && (answerCard ? (
+            <div className="hero__visual">
+              {answerCard}
+              <HeroDashboard />
+            </div>
+          ) : <HeroDashboard />)}
         </div>
       </header>
     </>

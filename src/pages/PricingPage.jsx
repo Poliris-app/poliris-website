@@ -46,25 +46,17 @@ const AGENCY_ICONS = [
 // table below (generic per-provider badges — unrelated to the calculator's
 // own model list, see CALC_MODELS).
 const MODELS = [
-  { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
-  { logo: 'gemini-logo.png', label: 'Gemini' },
-  { logo: 'claudeai-com-logo.png', label: 'Claude' },
+  { label: 'ChatGPT' },
+  { label: 'Gemini' },
+  { label: 'Claude' },
   { logo: 'google-com-logo.png', label: 'AI Mode' },
   { logo: 'google-com-logo.png', label: 'AI Overviews' },
-  { logo: 'perplexity-ai-logo.png', label: 'Perplexity' },
-  { logo: 'mistral-ai-logo.png', label: 'Mistral' },
-  { logo: 'grok-com-logo.png', label: 'Grok' },
-  { logo: 'deepseek.png', label: 'DeepSeek' },
+  { label: 'Perplexity' },
+  { label: 'Mistral' },
+  { label: 'Grok' },
+  { label: 'DeepSeek' },
 ];
 const FREE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
-// Teaser icon set for the Free plan's "10 providers" bullet — a marketing
-// preview of the full provider lineup (not FREE_MODELS' actual Free-tier
-// access list), so the duplicate Google entry is swapped for Claude and
-// the rest are collapsed into a "+5" chip instead of wrapping.
-const FREE_FEATURE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[2], MODELS[5]];
-// Whatever's in MODELS but not already shown as an icon above — named in
-// the "+N" chip's tooltip so the count and the list can't drift apart.
-const FREE_FEATURE_MODELS_REST = MODELS.filter((m) => !FREE_FEATURE_MODELS.includes(m));
 // Same generic badges, split by tracking method (see the `modelspecs.web_ui`
 // column) — ChatGPT and Gemini are tracked both ways, so they appear in
 // both groups; Claude/Mistral/Grok are API-only, AI Mode/AI Overviews/
@@ -84,27 +76,27 @@ const API_INTEGRATION_MODELS = [MODELS[0], MODELS[1], MODELS[2], MODELS[6], MODE
 // models and versioned API integrations.
 const CALC_MODELS = [
   // Web interface — flat rate, 1 credit per request regardless of provider.
-  { id: 'chatgpt-web', group: 'web', logo: 'chatgpt-com-logo.png', label: 'ChatGPT Web', weight: 1 },
-  { id: 'gemini-web', group: 'web', logo: 'gemini-logo.png', label: 'Gemini Web', weight: 1 },
+  { id: 'chatgpt-web', group: 'web', label: 'ChatGPT Web', weight: 1 },
+  { id: 'gemini-web', group: 'web', label: 'Gemini Web', weight: 1 },
   { id: 'google-ai-mode', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Mode', weight: 1 },
   { id: 'google-ai-overview', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Overview', weight: 1 },
-  { id: 'perplexity', group: 'web', logo: 'perplexity-ai-logo.png', label: 'Perplexity', weight: 1 },
+  { id: 'perplexity', group: 'web', label: 'Perplexity', weight: 1 },
   // API integration — versioned, credit cost scales with the model.
-  { id: 'gpt-4o-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-4o Mini', weight: 1 },
-  { id: 'gpt-5.4-nano', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Nano', weight: 3 },
-  { id: 'gpt-5.4-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Mini', weight: 5 },
-  { id: 'gpt-5.4', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4', weight: 10 },
-  { id: 'gpt-5.5', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.5', weight: 15 },
-  { id: 'gemini-3.1-flash-lite', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.1 Flash Lite', weight: 3 },
-  { id: 'gemini-3-flash-preview', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3 Flash Preview', weight: 4 },
-  { id: 'gemini-3.5-flash', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.5 Flash', weight: 7 },
-  { id: 'gemini-3.1-pro-preview', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.1 Pro Preview', weight: 12 },
-  { id: 'claude-haiku-4-5', group: 'api', logo: 'claudeai-com-logo.png', label: 'Claude Haiku 4.5', weight: 2 },
-  { id: 'grok-4.3', group: 'api', logo: 'grok-com-logo.png', label: 'Grok 4.3', weight: 2 },
-  { id: 'mistral-small', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Small', weight: 1 },
-  { id: 'mistral-medium', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Medium', weight: 2 },
-  { id: 'mistral-large', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Large', weight: 2 },
-  { id: 'deepseek-v3', group: 'api', logo: 'deepseek.png', label: 'DeepSeek V3', weight: 2 },
+  { id: 'gpt-4o-mini', group: 'api', label: 'GPT-4o Mini', weight: 1 },
+  { id: 'gpt-5.4-nano', group: 'api', label: 'GPT-5.4 Nano', weight: 3 },
+  { id: 'gpt-5.4-mini', group: 'api', label: 'GPT-5.4 Mini', weight: 5 },
+  { id: 'gpt-5.4', group: 'api', label: 'GPT-5.4', weight: 10 },
+  { id: 'gpt-5.5', group: 'api', label: 'GPT-5.5', weight: 15 },
+  { id: 'gemini-3.1-flash-lite', group: 'api', label: 'Gemini 3.1 Flash Lite', weight: 3 },
+  { id: 'gemini-3-flash-preview', group: 'api', label: 'Gemini 3 Flash Preview', weight: 4 },
+  { id: 'gemini-3.5-flash', group: 'api', label: 'Gemini 3.5 Flash', weight: 7 },
+  { id: 'gemini-3.1-pro-preview', group: 'api', label: 'Gemini 3.1 Pro Preview', weight: 12 },
+  { id: 'claude-haiku-4-5', group: 'api', label: 'Claude Haiku 4.5', weight: 2 },
+  { id: 'grok-4.3', group: 'api', label: 'Grok 4.3', weight: 2 },
+  { id: 'mistral-small', group: 'api', label: 'Mistral Small', weight: 1 },
+  { id: 'mistral-medium', group: 'api', label: 'Mistral Medium', weight: 2 },
+  { id: 'mistral-large', group: 'api', label: 'Mistral Large', weight: 2 },
+  { id: 'deepseek-v3', group: 'api', label: 'DeepSeek V3', weight: 2 },
 ];
 const CALC_MODEL_BY_ID = Object.fromEntries(CALC_MODELS.map((m) => [m.id, m]));
 const CALC_WEB_MODELS = CALC_MODELS.filter((m) => m.group === 'web');
@@ -129,7 +121,6 @@ const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) =
 function ModelBadge({ model }) {
   return (
     <span className="pricing-model-badge">
-      <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt="" />
       {model.label}
     </span>
   );
@@ -353,7 +344,6 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                   aria-pressed={modelIds.includes(m.id)}
                   onClick={() => toggleModel(m.id)}
                 >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
                   {m.label}
                 </button>
               ))}
@@ -369,7 +359,6 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                   aria-pressed={modelIds.includes(m.id)}
                   onClick={() => toggleModel(m.id)}
                 >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
                   {m.label}
                 </button>
               ))}
@@ -755,42 +744,6 @@ export default function PricingPage() {
                           <div className="pricing-feature-info-tooltip" role="tooltip">{plan.featureTooltips[j]}</div>
                         </span>
                       ) : f}
-                      {/* 3rd feature on Free ("10 providers") and Starter ("Access to all API models")
-                          — see pricing.plans[0].features / pricing.plans[1].features. Free shows a
-                          5-icon teaser (FREE_FEATURE_MODELS) plus a "+N" chip (N = FREE_FEATURE_MODELS_REST.length)
-                          instead of its real FREE_MODELS access list; Starter (and up) get every provider. */}
-                      {plan.tier === 'free' && j === 2 && (
-                        <span className="pricing-feature-models">
-                          {FREE_FEATURE_MODELS.map((m) => (
-                            <img
-                              key={m.label}
-                              className="pricing-feature-model-icon"
-                              src={`${import.meta.env.BASE_URL}${m.logo}`}
-                              alt={m.label}
-                              title={m.label}
-                            />
-                          ))}
-                          <span className="pricing-feature-model-more-wrap" tabIndex={0}>
-                            <span className="pricing-feature-model-more">+{FREE_FEATURE_MODELS_REST.length}</span>
-                            <div className="pricing-feature-model-tooltip" role="tooltip">
-                              {FREE_FEATURE_MODELS_REST.map((m) => m.label).join(', ')}
-                            </div>
-                          </span>
-                        </span>
-                      )}
-                      {plan.tier === 'starter' && j === 2 && (
-                        <span className="pricing-feature-models">
-                          {MODELS.map((m) => (
-                            <img
-                              key={m.label}
-                              className="pricing-feature-model-icon"
-                              src={`${import.meta.env.BASE_URL}${m.logo}`}
-                              alt={m.label}
-                              title={m.label}
-                            />
-                          ))}
-                        </span>
-                      )}
                     </span>
                   </li>
                 ))}

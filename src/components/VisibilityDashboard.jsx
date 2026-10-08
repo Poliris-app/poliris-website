@@ -11,10 +11,10 @@ const SB_SCORE = 90;
 const RAW_AXES_PCT = [75, 67, 42, 13];
 const RAW_AXES_IDS = ['brand-awareness', 'performance', 'design', 'durability'];
 const RAW_MODELS = [
-  { id: 'chatgpt', name: 'ChatGPT', icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png`,  pct: 92 },
-  { id: 'mistral', name: 'Mistral', icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png`,   pct: 89 },
-  { id: 'gemini',  name: 'Gemini',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png`,    pct: 97 },
-  { id: 'claude',  name: 'Claude',  icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png`, pct: 82 },
+  { id: 'chatgpt', name: 'ChatGPT',  pct: 92 },
+  { id: 'mistral', name: 'Mistral',   pct: 89 },
+  { id: 'gemini',  name: 'Gemini',    pct: 97 },
+  { id: 'claude',  name: 'Claude', pct: 82 },
 ];
 
 function getScoreLabel(score) {

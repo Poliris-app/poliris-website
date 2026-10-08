@@ -134,7 +134,6 @@ export default function FaqsPage() {
           primaryCta={fh.primaryCta}
           secondaryCta={fh.secondaryCta}
           showDashboard={false}
-          showAiBand={false}
           bottom={
             <div className="faq-hero-bottom">
               <div className="faq-stats">

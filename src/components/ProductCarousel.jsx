@@ -45,10 +45,10 @@ function VisibilityVis() {
   const vv = t('productCarousel.visibilityVis');
   const MODELS = [
     { label: vv.avg,        icon: null },
-    { label: 'ChatGPT',     icon: `${import.meta.env.BASE_URL}chatgpt-com-logo.png` },
-    { label: 'Claude',      icon: `${import.meta.env.BASE_URL}claudeai-com-logo.png` },
-    { label: 'Mistral',     icon: `${import.meta.env.BASE_URL}mistral-ai-logo.png` },
-    { label: 'Gemini Web',  icon: `${import.meta.env.BASE_URL}gemini-ai-logo.png` },
+    { label: 'ChatGPT' },
+    { label: 'Claude' },
+    { label: 'Mistral' },
+    { label: 'Gemini Web' },
   ];
   const BRANDS = [
     { name: 'Apple',   logo: `${import.meta.env.BASE_URL}apple-com-logo.png`,   scores: [95, 97, 90, 96, 97] },
