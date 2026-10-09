@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import DashSidebar from '../components/DashSidebar';
 import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
@@ -319,6 +320,7 @@ export default function SentimentPage() {
           secondaryCta={t('sentiment.hero.secondaryCta')}
           note={t('sentiment.hero.note')}
           showDashboard={false}
+          showAiBand={false}
         />
 
         {/* ===== DASHBOARD ===== */}
@@ -332,57 +334,7 @@ export default function SentimentPage() {
             <div className="app reveal">
               <div className="hdash__v2-body">
                 {/* sidebar */}
-                <aside className="dash__sidebar">
-                  <div className="dsb__brand">
-                    <div className="dsb__brand-logo">
-                      <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
-                    </div>
-                    <div className="dsb__brand-info">
-                      <span className="dsb__brand-name">Sony</span>
-                      <span className="dsb__brand-meta">{md.activeProject}</span>
-                    </div>
-                  </div>
-                  <div className="dsb__ask-poli">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
-                      <path d="M20 2v4"/><path d="M22 4h-4"/>
-                      <circle cx="4" cy="20" r="2"/>
-                    </svg>
-                    {md.askPoliAI}
-                  </div>
-                  <div className="dsb__section-hdr">
-                    <span className="dsb__section-lbl">{md.geoAudit}</span>
-                  </div>
-                  <div className="dsb__tree">
-                    <div className="dsb__tree-brand">
-                      <span className="dsb__tree-chevron">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
-                      </span>
-                      <span className="dsb__avatar dsb__avatar--n">S</span>
-                      <span className="dsb__tree-brand-name">sony</span>
-                    </div>
-                    <div className="dsb__tree-l1">
-                      <div className="dsb__tree-category">
-                        <span className="dsb__tree-chevron">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
-                        </span>
-                        <span className="dsb__avatar dsb__avatar--n">A</span>
-                        <span className="dsb__tree-cat-name">{md.footwear}</span>
-                      </div>
-                      <div className="dsb__tree-l2">
-                        {md.navItems.map((l, idx) => (
-                          <div key={idx} className={`dash__nav-item${idx === 2 ? ' dash__nav-item--active' : ''}`}>{l}</div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="dsb__section-hdr dsb__section-hdr--mt">
-                    <span className="dsb__section-lbl">{md.technicalAudit}</span>
-                  </div>
-                  <div className="dsb__section-hdr">
-                    <span className="dsb__section-lbl">{md.contentGen}</span>
-                  </div>
-                </aside>
+                <DashSidebar />
 
                 {/* main */}
                 <div className="hdash__v2-main">

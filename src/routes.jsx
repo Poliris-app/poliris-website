@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { LangWrapper } from './contexts/LangContext';
 import NotFoundRedirect from './components/NotFoundRedirect';
+import RouteErrorBoundary from './components/RouteErrorBoundary';
 import HomePage from './components/HomePage';
 import VisibilityPage from './pages/VisibilityPage';
 import SentimentPage from './pages/SentimentPage';
@@ -30,6 +31,9 @@ export const routes = [
   {
     path: '/:lang',
     element: <LangWrapper />,
+    // Replaces react-router's raw "Unexpected Application Error!" screen;
+    // reloads tabs left on an old deploy (see RouteErrorBoundary).
+    errorElement: <RouteErrorBoundary />,
     children: [
       { index: true, element: <HomePage /> },
       { path: 'visibility', element: <VisibilityPage /> },

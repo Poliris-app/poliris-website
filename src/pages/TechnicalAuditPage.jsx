@@ -179,6 +179,7 @@ export default function TechnicalAuditPage() {
           secondaryCta={hero.secondaryCta}
           note={hero.note}
           showDashboard={false}
+          showAiBand={false}
         />
 
         {/* ── LLM chips + dashboard ─────────────────── */}

@@ -711,6 +711,7 @@ export default function ContentWritingPage() {
           secondaryCta={cwHero.secondaryCta}
           note={cwHero.note}
           showDashboard={false}
+          showAiBand={false}
         />
 
         {/* ── PRODUCT PREVIEW   Kate Studio dashboard ──────── */}
