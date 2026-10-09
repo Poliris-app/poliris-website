@@ -323,7 +323,7 @@ export default {
       eyebrow: "What's inside",
       h2Pre: 'Four ways we read',
       h2Hl: 'your AI visibility.',
-      lead: 'Not prompt counts the way buyers actually judge you. Tap any card to jump straight to it.',
+      lead: 'We go beyond counting prompts to measure what buyers actually care about. Tap any card to jump straight to it.',
     },
     tourCards: [
       { h3: 'Product focus',        p: 'Scored on the topics buyers judge on reliability, integrations, pricing not isolated prompts.' },

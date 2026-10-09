@@ -320,7 +320,7 @@ export default {
       eyebrow: 'Dans le détail',
       h2Pre: 'Quatre façons d\'analyser',
       h2Hl: 'votre visibilité dans les IA.',
-      lead: "Pas des comptages de prompts la façon dont les acheteurs vous jugent réellement. Cliquez sur une carte pour y accéder directement.",
+      lead: 'Nous allons au-delà du simple comptage des prompts pour mesurer ce qui compte réellement aux yeux des acheteurs. Cliquez sur une carte pour y accéder directement.',
     },
     tourCards: [
       { h3: 'Focus produit',          p: 'Scoré sur les sujets que les acheteurs jugent fiabilité, intégrations, tarification pas des prompts isolés.' },
