@@ -1324,6 +1324,122 @@ button { cursor: pointer; border: none; background: none; }
   opacity: 0.5;
 }
 
+/* Onboarding flow demo — "tilt with tracing light + orbit" reveal around
+   the iframe of public/onboarding-flow.html. HeroOnboarding.jsx drives --p
+   (0→1) from scroll; everything below derives its motion from it. */
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 180deg;
+}
+.hreveal {
+  --p: 0;
+  --t: 0;
+  position: relative;
+  /* Below the logo strip/text (hero__inner is the stacking context), so
+     the orbit rings that rise above the frame pass behind them. */
+  z-index: -1;
+  /* Full-bleed so the 1200px frame and 1500px glow can exceed the 1110px
+     hero column; clip sideways only — the rings extend above. */
+  width: 100vw;
+  margin: 96px calc(50% - 50vw) 0;
+  padding: 0 24px;
+  box-sizing: border-box;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+/* While tilted, the whole composition sits 40px higher (closer to
+   the logo strip) so more of the dashboard shows above the fold; it eases
+   back to its layout position as it flattens. Transform only — page
+   height and scroll are unaffected. */
+.hreveal__stage {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  perspective: 2400px;
+  transform: translateY(calc(-40px * (1 - var(--t))));
+}
+.hreveal[data-done] .hreveal__stage { transform: none; }
+.hreveal__orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1680px;
+  height: 1040px;
+  margin: -520px 0 0 -840px;
+  overflow: visible;
+  pointer-events: none;
+  transform: scale(calc(.9 + .15 * var(--p)));
+  opacity: calc(1 - .35 * var(--p));
+}
+.hreveal__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1500px;
+  height: 760px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(41, 97, 246, .24), transparent);
+  pointer-events: none;
+}
+.hreveal__frame {
+  position: relative;
+  padding: 2px;
+  border-radius: 24px;
+  box-shadow: 0 60px 140px -50px rgba(22, 50, 141, .6);
+  transform-origin: 50% 0;
+  transform: rotateX(calc(26deg * (1 - var(--t)))) scale(calc(.9 + .1 * var(--t)));
+}
+.hreveal[data-done] .hreveal__frame { transform: none; }
+/* Tracing light: a 2px conic ring masked down to the border area. */
+.hreveal__frame::before {
+  --angle: calc(180deg + 360deg * var(--p));
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--angle),
+    rgba(99, 137, 248, .18) 0 250deg,
+    #6389F8 300deg, #fff 320deg, #6389F8 340deg,
+    rgba(99, 137, 248, .18) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+  pointer-events: none;
+}
+.hreveal__mat {
+  padding: 9px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .82);
+}
+.hreveal__dash {
+  position: relative;
+  aspect-ratio: 1120 / 780;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 0 0 1px #E1E7EF;
+}
+.hreveal__iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  color-scheme: light;
+}
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .hreveal { --p: 1; --t: 1; }
+  .hreveal__frame { transform: none; }
+}
+/* The fixed 1500×760 glow dwarfs a phone-sized frame and gets cut off by
+   the hero's bottom edge; size it to the frame instead. */
+@media (max-width: 768px) {
+  .hreveal__glow { width: calc(100% + 160px); height: calc(100% + 160px); }
+}
+
 /* Dashboard mockup */
 .hero__dashboard {
   max-width: 1120px;
@@ -1550,6 +1666,210 @@ button { cursor: pointer; border: none; background: none; }
   font-weight: 600;
 }
 .dash__nav-item--active:hover { background: rgb(31, 95, 166); color: #fff; }
+
+/* ── Dashboard sidebar v2 (DashSidebar.jsx) ──────────────────────
+   The app's current sidebar (as in the hero onboarding demo) at ~0.82×
+   its real size. The inner column is absolutely positioned so the
+   sidebar takes the dashboard's height instead of setting it, and
+   clips like the app's scrolling sidebar. */
+.dsb2 {
+  position: relative;
+  flex-shrink: 0;
+  width: 224px;
+  border-right: 1px solid #e1e7ef;
+  background: #fff;
+  font-family: 'Geist', system-ui, sans-serif;
+  line-height: 1.5;
+  /* The hero centres its text; the app sidebar is left-aligned. */
+  text-align: left;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+}
+.dsb2__inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dsb2__muted { color: #8b8b8b; flex-shrink: 0; }
+.dsb2__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  padding: 12px;
+  flex-shrink: 0;
+}
+.dsb2__logo { width: 105px; height: auto; display: block; }
+.dsb2__toggle { color: #8b8b8b; flex-shrink: 0; }
+.dsb2__dotted { border-top: 1.5px dotted #c8b5dc; margin: 5px 10px; flex-shrink: 0; }
+.dsb2__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+
+.dsb2__proj-row { display: flex; gap: 5px; padding: 4px 10px 7px; flex-shrink: 0; }
+.dsb2__proj {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 7px;
+  border: .5px solid #e2e2e5;
+  border-radius: 7px;
+  background: #fff;
+}
+.dsb2__proj-logo {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: contain;
+  padding: 2px;
+  background: #fff;
+  border: .5px solid #e2e2e5;
+  box-sizing: border-box;
+}
+.dsb2__proj-meta { flex: 1; min-width: 0; overflow: hidden; }
+.dsb2__proj-name,
+.dsb2__proj-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsb2__proj-name { font-size: 11px; font-weight: 600; line-height: 1.3; }
+.dsb2__proj-sub { font-size: 9px; color: #8b8b8b; line-height: 1.4; }
+.dsb2__proj-settings {
+  width: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: .5px solid #e2e2e5;
+  border-radius: 7px;
+  color: #5a5a5a;
+  background: #fff;
+}
+
+.dsb2__pad { padding: 0 10px 7px; flex-shrink: 0; }
+.dsb2__mode {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 8px;
+  background: #eef1f5;
+}
+.dsb2__mode-seg {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 6px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #5f6b7a;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.dsb2__mode-seg svg { flex-shrink: 0; }
+.dsb2__mode-seg--on {
+  /* Equal halves like the app, but never narrower than its label
+     (FR "Tableau de bord" needs more than half). */
+  min-width: max-content;
+  background: #fff;
+  font-weight: 600;
+  color: #1f5fa6;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+}
+.dsb2__roadmap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1px solid rgb(24 48 76 / .1);
+  background: #fff;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #18304c;
+}
+.dsb2__roadmap svg { color: #0062ff; flex-shrink: 0; }
+
+.dsb2__section { padding: 3px 10px; flex-shrink: 0; }
+.dsb2__sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  min-height: 23px;
+  padding: 0 5px 5px;
+}
+.dsb2__sec-head > span {
+  font-size: 9px;
+  font-weight: 600;
+  color: #8b8b8b;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.dsb2__fold {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 7px;
+  border-radius: 7px;
+}
+.dsb2__fold-ico { display: flex; flex-shrink: 0; color: #5a5a5a; }
+.dsb2__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dsb2__chev { color: #8b8b8b; flex-shrink: 0; margin-right: 3px; }
+.dsb2__chev--open { transform: rotate(90deg); }
+.dsb2__sub-list {
+  margin-left: 13px;
+  padding: 2px 0 2px 7px;
+  border-left: .5px solid #e2e2e5;
+}
+.dsb2__prod {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 7px;
+  border-radius: 7px;
+}
+.dsb2__prod--on { background: color-mix(in oklch, #6366f1 12%, white); }
+.dsb2__chip {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  background: #6366f1;
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 600;
+}
+.dsb2__prod-lbl {
+  flex: 1;
+  min-width: 0;
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dsb2__prod--on .dsb2__prod-lbl { font-weight: 600; color: #6366f1; }
+
 .dash__main {
   padding: 26px 28px;
   display: grid;
@@ -5421,6 +5741,7 @@ button { cursor: pointer; border: none; background: none; }
 .hero__note       { animation: hero-fade-up 0.60s cubic-bezier(0.16,1,0.3,1) 0.74s both; }
 .ai-band          { animation: hero-fade-up 0.70s cubic-bezier(0.16,1,0.3,1) 0.86s both; }
 .hero__dashboard  { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
+.hreveal          { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
 
 /* Hero glow ambient pulse */
 .hero__glow { animation: glow-breathe 9s ease-in-out infinite; }
@@ -5524,6 +5845,7 @@ button { cursor: pointer; border: none; background: none; }
   /* Hero */
   .hero__inner { padding: 80px 28px 32px; }
   .hero__dashboard { margin: 36px 28px 0; }
+  .hreveal { padding: 0 28px; }
 
   /* Value chain */
   .vchain-frame  { padding: 20px 20px 28px; }
@@ -5551,6 +5873,7 @@ button { cursor: pointer; border: none; background: none; }
     padding: 52px 20px 20px;
   }
   .hero__lead  { max-width: 100%; }
+  .hreveal { padding: 0 20px; }
   .hero__dashboard {
     margin: 24px 20px 0;
     overflow-x: auto;
@@ -5628,6 +5951,7 @@ button { cursor: pointer; border: none; background: none; }
   .hero-website-form { width: 100%; }
   .hero__note { font-size: 12.5px; margin-top: 14px; }
   .hero__dashboard { margin: 16px 16px 0; }
+  .hreveal { padding: 0 16px; }
 
   /* Eyebrow / sec typography */
   .eyebrow { font-size: 11px; margin-bottom: 12px; }
@@ -5672,7 +5996,8 @@ button { cursor: pointer; border: none; background: none; }
     grid-template-columns: 1fr 260px;
     min-height: 460px;
   }
-  .dash__sidebar { display: none; }
+  .dash__sidebar,
+  .dsb2 { display: none; }
 
   /* Product carousel tabs — scrollable row */
   .products__tabs {

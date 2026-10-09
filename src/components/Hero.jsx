@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import HeroDashboard from './HeroDashboard';
+import HeroOnboarding from './HeroOnboarding';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { APP_URL } from '../lib/appUrl';
@@ -242,7 +242,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
 
           {showAiBand && <AiBand />}
 
-          {showDashboard && <HeroDashboard />}
+          {showDashboard && <HeroOnboarding />}
         </div>
       </header>
     </>
