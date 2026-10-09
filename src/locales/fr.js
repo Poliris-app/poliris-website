@@ -46,7 +46,7 @@ export default {
       lead: "Comprenez et gérez votre visibilité sur l'IA et le web, produit par produit, avec une équipe d'agents qui transforme les insights en plan d'action.",
       primaryCta: "Commencer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
-      note: "Prêt à l'emploi. Utilisable par tous.",
+      note: 'Aucune compétence technique requise.',
       websitePlaceholder: 'votre-site.com',
       websiteCta: 'Essai gratuit',
       websiteError: 'Entrez un site valide, comme votre-site.com',
