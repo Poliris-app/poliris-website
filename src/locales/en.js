@@ -381,7 +381,7 @@ export default {
       eyebrow: '03 · Source intelligence',
       h2Pre: 'Explore the sources',
       h2Hl: 'shaping AI-generated answers',
-      lead: 'We collect the domains AI cites on your category, then show where you\'re present, absent, or beaten.',
+      lead: 'We collect the domains AI cites in your category, then show where you\'re present, absent, or beaten.',
       pipeline: [
         { title: 'AI generates a response',   sub: 'Cites external sources' },
         { title: 'Poliris collects sources',   sub: '100+ source types tracked' },
@@ -406,7 +406,7 @@ export default {
     nora: {
       agentPill: 'Meet Nora your AI visibility expert',
       eyebrow: '04 · NORA ACTS ON IT',
-      h2: 'Not just insights. A clear path forward.',
+      h2: 'Turn insights into a clear path forward',
       lead: 'Nora reads every data point from your visibility report and turns it into a ranked action plan then helps you implement it, step by step.',
       points: [
         { tt: 'Understands your situation',    dd: 'Nora reads your full visibility report, sentiment data and source analysis then explains what it means in plain language.' },
@@ -440,7 +440,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'See your AI visibility score for free.',
+      heading: 'See your AI visibility score for free',
       lead: 'Find out where you appear in AI answers today by topic and by market and exactly what\'s eating your share.',
       primaryCta: 'Get a free audit',
       secondaryCta: 'Talk to an expert',
@@ -595,7 +595,7 @@ export default {
         { from: 'user', text: 'Why is my Durability sentiment slipping?' },
         { from: 'ivy', text: 'On durability questions, <b>Gemini</b> now puts Bose and JBL first and mentions Sony later dragging Durability down 11 points in 30 days. Every other axis is stable.' },
         { from: 'user', text: 'What do I do?' },
-        { from: 'ivy', text: "I've built your action plan. Start here, these three changes move the needle fastest:" },
+        { from: 'ivy', text: 'I\'ve built your action plan. Start here: these three changes move the needle fastest' },
       ],
       planItems: [
         { t: 'Publish durability test results and materials data', impact: 'hi', label: '+9 pts' },

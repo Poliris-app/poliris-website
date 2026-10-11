@@ -376,8 +376,8 @@ export default {
     },
     sourceIntel: {
       eyebrow: '03 · Cartographie des sources',
-      h2Pre: 'Repérez les sources qui façonnent les réponses de l\'IA,',
-      h2Hl: 'et imposez-vous.',
+      h2Pre: 'Explorez les sources qui influencent',
+      h2Hl: 'les réponses IA',
       lead: 'Nous collectons les domaines que l\'IA cite dans votre catégorie, puis nous vous montrons où vous êtes présent, absent ou devancé.',
       pipeline: [
         { title: "L'IA génère une réponse",          sub: 'Cite des sources externes' },
@@ -403,7 +403,7 @@ export default {
     nora: {
       agentPill: 'Rencontrez Nora, votre experte en visibilité IA',
       eyebrow: '04 · NORA PASSE A L\'ACTION',
-      h2: 'Pas seulement des constats. Un plan d\'action clair.',
+      h2: 'Transformez vos analyses en actions ciblées',
       lead: 'Nora lit chaque donnée de votre rapport de visibilité et la transforme en plan d\'action priorisé. Puis elle vous aide à le mettre en œuvre, étape par étape.',
       points: [
         { tt: 'Elle comprend votre situation',    dd: 'Nora lit votre rapport de visibilité complet : données de sentiment, analyse des sources. Puis elle vous explique ce que cela signifie, en langage clair.' },
@@ -437,7 +437,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'Voyez gratuitement votre score de visibilité IA.',
+      heading: 'Voyez gratuitement votre score de visibilité IA',
       lead: 'Découvrez, par sujet et par marché, où vous apparaissez aujourd\'hui dans les réponses des IA, et où vos concurrents passent devant.',
       primaryCta: 'Obtenir un audit gratuit',
       secondaryCta: 'Parler à un expert',
