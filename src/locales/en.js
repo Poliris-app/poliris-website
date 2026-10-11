@@ -579,7 +579,7 @@ export default {
     ivy: {
       agentPill: 'Meet IVY · your AI sentiment agent',
       eyebrow: '03 · IVY ACTS ON IT',
-      h2: 'Your analyst, on tap.',
+      h2: 'Your analyst, on tap',
       lead: "IVY is your AI sentiment analyst that is built into the platform. She reads every score, explains what's driving each one, alerts you when something is slipping, and tells you exactly what to do next.",
       points: [
         { tt: 'Explains', dd: "What's lifting each axis, what's dragging it." },

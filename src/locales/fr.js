@@ -576,7 +576,7 @@ export default {
     ivy: {
       agentPill: 'Rencontrez IVY · votre agent sentiment IA',
       eyebrow: '03 · IVY PASSE À L\'ACTION',
-      h2: 'Votre analyste, disponible à la demande.',
+      h2: 'Votre analyste, disponible à la demande',
       lead: "IVY est votre analyste de sentiment IA intégrée à la plateforme. Elle lit chaque score, explique ce qui le motive, vous alerte dès qu'une baisse survient, et vous dit exactement quoi faire ensuite.",
       points: [
         { tt: 'Explique',    dd: 'Ce qui fait monter ou baisser chaque axe.' },
