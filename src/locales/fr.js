@@ -331,8 +331,8 @@ export default {
     seeBelow: 'Voir ci-dessous',
     productFocus: {
       eyebrow: '01 · Focus produit',
-      h2Pre: 'Allez au-delà des prompts.',
-      h2Hl: 'Maîtrisez toute la conversation.',
+      h2Pre: 'Découvrez comment l’IA positionne votre marque',
+      h2Hl: 'sur les thématiques clés de votre secteur',
       lead: 'Des dizaines de requêtes, un même thème. Nous les regroupons par sujet et évaluons votre couverture : une vue d\'ensemble pour guider vos décisions.',
       foot: "Chaque sujet est une vraie décision d'achat votre score cesse d'être un classement et devient une liste de tâches.",
       fromPrompts: '{shown} sur {n} requêtes',
