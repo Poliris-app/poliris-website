@@ -301,10 +301,10 @@ export default {
     },
     cta: {
       heading: 'See how AI describes your brand',
-      lead: 'Start a 14-day free trial. No setup, no expertise needed, just the picture of how AI sees you today.',
+      lead: 'Start your free trial with no setup or technical expertise required, and see how AI perceives your brand today.',
       primaryCta: 'Get your free trial',
       secondaryCta: 'Book a demo',
-      note: '14 days free · No credit card required',
+      note: 'No credit card required',
     },
   },
 
@@ -316,7 +316,7 @@ export default {
       lead: 'The AI-visibility analysis built around your product and your real market. See exactly where you\'re recommended, topic by topic and market by market.',
       primaryCta: 'Get your free trial',
       secondaryCta: 'Book a demo',
-      note: '14 days free · No credit card required',
+      note: 'No credit card required',
     },
     insideDash: 'Inside the dashboard',
     whatsInside: {
@@ -457,7 +457,7 @@ export default {
       lead: 'See what AI says about your brand and how you compare to competitors across key areas of analysis.',
       primaryCta: 'Get your free trial',
       secondaryCta: 'Book a demo',
-      note: '14 days free · No credit card required',
+      note: 'No credit card required',
     },
     dashboard: {
       h2Pre: 'Your AI reputation,',
@@ -1817,7 +1817,7 @@ export default {
       lead: 'Choose how much visibility coverage you need across AI models. Every plan includes sentiment tracking, competitor benchmarking, and real-time GEO scoring so you always know where you stand across AI search.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
-      note: '14 days free · No credit card required',
+      note: 'No credit card required',
       trialDetail: 'In 14 days, you can run your first AI audit, see how ChatGPT, Claude, and Gemini describe your brand, and benchmark yourself against your competitors.',
     },
     billing: { monthly: 'Monthly', annual: 'Annual', save: 'Save 20%', billedAnnually: 'Billed {amount} annually' },
@@ -2107,10 +2107,10 @@ export default {
     ],
     cta: {
       heading: 'See how AI describes your brand',
-      lead: 'Start a 14-day free trial. No setup, no expertise needed, just the picture of how AI sees you today.',
+      lead: 'Start your free trial with no setup or technical expertise required, and see how AI perceives your brand today.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
-      note: '14 days free · No credit card required',
+      note: 'No credit card required',
     },
   },
 

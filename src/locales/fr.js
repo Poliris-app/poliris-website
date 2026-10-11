@@ -298,10 +298,10 @@ export default {
     },
     cta: {
       heading: 'Découvrez comment l\'IA décrit votre marque',
-      lead: "Commencez un essai gratuit de 14 jours. Sans configuration, sans expertise juste l'image de la façon dont l'IA vous voit aujourd'hui.",
+      lead: 'Démarrez votre essai gratuit, sans configuration ni expertise technique, et découvrez comment l’IA perçoit votre marque aujourd’hui.',
       primaryCta: 'Obtenez votre essai gratuit',
       secondaryCta: 'Réserver une démo',
-      note: '14 jours gratuits · Aucune carte bancaire requise',
+      note: 'Aucune carte bancaire requise',
     },
   },
 
@@ -313,7 +313,7 @@ export default {
       lead: "L'analyse de visibilité IA construite autour de votre produit et de votre marché réel. Voyez exactement où vous êtes recommandé, sujet par sujet et marché par marché.",
       primaryCta: 'Obtenez votre essai gratuit',
       secondaryCta: 'Réserver une démo',
-      note: '14 jours gratuits · Aucune carte bancaire requise',
+      note: 'Aucune carte bancaire requise',
     },
     insideDash: 'Votre tableau de bord',
     whatsInside: {
@@ -454,7 +454,7 @@ export default {
       lead: 'Découvrez ce que l’IA dit de votre marque et comment vous vous positionnez face à vos concurrents sur les différents axes d’analyse.',
       primaryCta: 'Obtenez votre essai gratuit',
       secondaryCta: 'Réserver une démo',
-      note: '14 jours gratuits · Aucune carte bancaire requise',
+      note: 'Aucune carte bancaire requise',
     },
     dashboard: {
       h2Pre: 'Votre réputation IA,',
@@ -1804,7 +1804,7 @@ export default {
       lead: "Choisissez le niveau de couverture de visibilité dont vous avez besoin sur les modèles IA. Chaque forfait inclut le suivi de sentiment, le benchmark concurrentiel et le score GEO en temps réel, pour toujours savoir où vous en êtes sur la recherche IA.",
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
-      note: '14 jours gratuits · Sans carte bancaire',
+      note: 'Aucune carte bancaire requise',
       trialDetail: "En 14 jours, lancez votre premier audit IA, découvrez comment ChatGPT, Claude et Gemini décrivent votre marque, et comparez-vous à vos concurrents.",
     },
     billing: { monthly: 'Mensuel', annual: 'Annuel', save: '-20%', billedAnnually: 'Facturé {amount} par an' },
@@ -2094,10 +2094,10 @@ export default {
     ],
     cta: {
       heading: 'Découvrez comment l\'IA décrit votre marque',
-      lead: 'Démarrez un essai gratuit de 14 jours. Sans configuration, sans expertise — juste la photo de comment l\'IA vous voit aujourd\'hui.',
+      lead: 'Démarrez votre essai gratuit, sans configuration ni expertise technique, et découvrez comment l’IA perçoit votre marque aujourd’hui.',
       primaryCta: 'Démarrer votre essai gratuit',
       secondaryCta: 'Réserver une démo',
-      note: '14 jours gratuits · Sans carte bancaire',
+      note: 'Aucune carte bancaire requise',
     },
   },
 
