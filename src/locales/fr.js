@@ -418,7 +418,7 @@ export default {
         { from: 'user', text: "Pourquoi notre score Tarification n'est que de 54 % alors que Fiabilité est à 88 % ?" },
         { from: 'nora', text: "Bonne question. <b>Deux causes principales :</b> D'abord, votre page tarifs est bloquée par robots.txt les moteurs IA ne peuvent pas la lire. Ensuite, le Concurrent A a deux articles comparatifs détaillés sur forbes.com et techradar.com qui dominent les résultats pour les requêtes liées à la valeur. Vous n'apparaissez sur aucun des deux." },
         { from: 'user', text: 'Que devons-nous corriger en premier ?' },
-        { from: 'nora', text: "J'ai préparé votre plan d'action. Commencez ici, ces trois changements font le plus la différence :" },
+        { from: 'nora', text: 'J\'ai préparé votre plan d\'action. Commencez ici : ces trois changements font le plus la différence' },
       ],
       planItems: [
         { t: 'Corriger robots.txt autoriser les robots IA à indexer /pricing', impact: 'hi', label: 'Impact élevé' },
@@ -450,8 +450,8 @@ export default {
       eyebrow: 'Poliris Sentiment',
       titlePre: 'Comprenez',
       titleHl: 'comment',
-      titlePost: "l'IA décrit votre marque.",
-      lead: "Apparaître dans les réponses IA ne suffit pas, ce qui compte, c'est comment vous apparaissez. Poliris note la façon dont l'IA parle de vous, sur chaque axe que votre marché juge, sur chaque modèle, face à chaque concurrent.",
+      titlePost: 'l\'IA décrit votre marque',
+      lead: 'Découvrez ce que l’IA dit de votre marque et comment vous vous positionnez face à vos concurrents sur les différents axes d’analyse.',
       primaryCta: 'Obtenez votre essai gratuit',
       secondaryCta: 'Réserver une démo',
       note: '14 jours gratuits · Aucune carte bancaire requise',
@@ -592,7 +592,7 @@ export default {
         { from: 'user', text: 'Pourquoi mon sentiment Durabilité baisse-t-il ?' },
         { from: 'ivy', text: "Sur les questions de durabilité, <b>Gemini</b> place désormais Bose et JBL en premier et ne mentionne Sony que plus tard ce qui fait chuter la Durabilité de 11 points en 30 jours. Tous les autres axes sont stables." },
         { from: 'user', text: 'Que dois-je faire ?' },
-        { from: 'ivy', text: "J'ai préparé votre plan d'action. Commencez ici, ces trois changements font le plus la différence :" },
+        { from: 'ivy', text: 'J\'ai préparé votre plan d\'action. Commencez ici: ces trois changements font le plus la différence' },
       ],
       planItems: [
         { t: 'Publier les résultats des tests de durabilité et les données matériaux', impact: 'hi', label: '+9 pts' },
