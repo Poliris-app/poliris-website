@@ -334,8 +334,8 @@ export default {
     seeBelow: 'See it below',
     productFocus: {
       eyebrow: '01 · Product focus',
-      h2Pre: 'Move beyond prompts.',
-      h2Hl: 'Own the entire conversation.',
+      h2Pre: 'See how AI positions your brand',
+      h2Hl: 'across relevant topics',
       lead: 'Dozens of questions, one theme. We map each to the topic it speaks to and score your coverage the view that drives decisions.',
       foot: 'Each topic is a real buying decision so your score stops being a ranking and becomes a to-do list.',
       fromPrompts: '{shown} of {n} prompts',
