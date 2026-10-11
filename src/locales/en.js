@@ -379,8 +379,8 @@ export default {
     },
     sourceIntel: {
       eyebrow: '03 · Source intelligence',
-      h2Pre: 'See the sources shaping AI\'s answers',
-      h2Hl: 'and secure your spot',
+      h2Pre: 'Explore the sources',
+      h2Hl: 'shaping AI-generated answers',
       lead: 'We collect the domains AI cites on your category, then show where you\'re present, absent, or beaten.',
       pipeline: [
         { title: 'AI generates a response',   sub: 'Cites external sources' },
