@@ -257,7 +257,7 @@ export default {
     agents: {
       eyebrow: "L'équipe",
       h2: 'Une équipe complète qui travaille pour vous,',
-      h2Blue: "intégrée dans l'application.",
+      h2Blue: 'intégrée dans l\'application',
       lead: "Une équipe complète d'agents IA spécialisés qui vous aident à opérer comme un expert de l'analyse des performances et la détection des opportunités aux recommandations et à la mise en œuvre des améliorations, tout depuis la plateforme.",
       footNote: "Chaque agent apporte une expertise spécialisée à la plateforme vous aidant à comprendre les données, identifier les opportunités et mettre en œuvre les améliorations. Les agents font le gros du travail ; vous prenez les décisions.",
       list: [
@@ -287,7 +287,7 @@ export default {
     stakes: {
       eyebrow: 'Les enjeux',
       h2Pre: "L'IA façonne déjà votre marque.",
-      h2Hl: 'sans vous.',
+      h2Hl: 'sans vous',
       h2Mid: 'Avec ou',
       lead: "Chaque jour, les assistants IA décrivent, recommandent ou ignorent vos produits. La plupart des marques ne peuvent pas le voir et n'ont aucun moyen d'agir.",
       cards: [

@@ -41,7 +41,7 @@ export default {
       eyebrow: 'AI brand management, beyond monitoring',
       titlePre: 'Take control of how',
       titleHl: 'AI sees',
-      titlePost: 'your brand.',
+      titlePost: 'your brand',
       audience: 'For in-house brand teams, agencies, and enterprise marketing managers.',
       lead: 'Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan.',
       primaryCta: 'Start your free trial',
@@ -260,7 +260,7 @@ export default {
     agents: {
       eyebrow: 'The team',
       h2: 'A full team working for you,',
-      h2Blue: 'right inside the app.',
+      h2Blue: 'right inside the app',
       lead: 'A complete team of specialized AI agents that help you operate like an expert from analyzing performance and spotting opportunities to recommending next steps and implementing improvements, all from within the platform.',
       footNote: 'Each agent brings specialized expertise to the platform, helping you understand the data, identify opportunities, and implement improvements. The agents do the heavy lifting; you make the decisions.',
       list: [
@@ -290,7 +290,7 @@ export default {
     stakes: {
       eyebrow: 'The stakes',
       h2Pre: 'AI is already shaping your brand.',
-      h2Hl: 'without you.',
+      h2Hl: 'without you',
       h2Mid: 'With or',
       lead: 'Every day, AI assistants describe, recommend, or ignore your products. Most brands can\'t see it, and have no way to act on it.',
       cards: [
