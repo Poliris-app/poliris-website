@@ -297,7 +297,7 @@ export default {
       ],
     },
     cta: {
-      heading: "Découvrez comment l'IA décrit votre marque.",
+      heading: 'Découvrez comment l\'IA décrit votre marque',
       lead: "Commencez un essai gratuit de 14 jours. Sans configuration, sans expertise juste l'image de la façon dont l'IA vous voit aujourd'hui.",
       primaryCta: 'Obtenez votre essai gratuit',
       secondaryCta: 'Réserver une démo',
@@ -309,7 +309,7 @@ export default {
     hero: {
       eyebrow: 'Poliris Visibilité',
       titlePre: 'Devenez la marque',
-      titleHl: 'que les IA recommandent.',
+      titleHl: 'que les IA recommandent',
       lead: "L'analyse de visibilité IA construite autour de votre produit et de votre marché réel. Voyez exactement où vous êtes recommandé, sujet par sujet et marché par marché.",
       primaryCta: 'Obtenez votre essai gratuit',
       secondaryCta: 'Réserver une démo',
@@ -319,7 +319,7 @@ export default {
     whatsInside: {
       eyebrow: 'Dans le détail',
       h2Pre: 'Quatre façons d\'analyser',
-      h2Hl: 'votre visibilité dans les IA.',
+      h2Hl: 'votre visibilité dans les IA',
       lead: 'Nous allons au-delà du simple comptage des prompts pour mesurer ce qui compte réellement aux yeux des acheteurs. Cliquez sur une carte pour y accéder directement.',
     },
     tourCards: [
@@ -2093,7 +2093,7 @@ export default {
       },
     ],
     cta: {
-      heading: 'Découvrez comment l\'IA décrit votre marque.',
+      heading: 'Découvrez comment l\'IA décrit votre marque',
       lead: 'Démarrez un essai gratuit de 14 jours. Sans configuration, sans expertise — juste la photo de comment l\'IA vous voit aujourd\'hui.',
       primaryCta: 'Démarrer votre essai gratuit',
       secondaryCta: 'Réserver une démo',

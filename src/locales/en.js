@@ -300,7 +300,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'See how AI describes your brand.',
+      heading: 'See how AI describes your brand',
       lead: 'Start a 14-day free trial. No setup, no expertise needed, just the picture of how AI sees you today.',
       primaryCta: 'Get your free trial',
       secondaryCta: 'Book a demo',
@@ -312,7 +312,7 @@ export default {
     hero: {
       eyebrow: 'Poliris Visibility',
       titlePre: 'Win the share of voice',
-      titleHl: 'inside AI answers.',
+      titleHl: 'inside AI answers',
       lead: 'The AI-visibility analysis built around your product and your real market. See exactly where you\'re recommended, topic by topic and market by market.',
       primaryCta: 'Get your free trial',
       secondaryCta: 'Book a demo',
@@ -322,7 +322,7 @@ export default {
     whatsInside: {
       eyebrow: "What's inside",
       h2Pre: 'Four ways we read',
-      h2Hl: 'your AI visibility.',
+      h2Hl: 'your AI visibility',
       lead: 'We go beyond counting prompts to measure what buyers actually care about. Tap any card to jump straight to it.',
     },
     tourCards: [
@@ -2106,7 +2106,7 @@ export default {
       },
     ],
     cta: {
-      heading: 'See how AI describes your brand.',
+      heading: 'See how AI describes your brand',
       lead: 'Start a 14-day free trial. No setup, no expertise needed, just the picture of how AI sees you today.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
