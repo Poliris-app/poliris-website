@@ -458,7 +458,7 @@ export default {
     },
     dashboard: {
       h2Pre: 'Votre réputation IA,',
-      h2Hl: 'en toute transparence.',
+      h2Hl: 'en toute transparence',
       lead: "Transparent et granulaire : votre sentiment décomposé par axe et par modèle, avec chaque score traçable jusqu'aux mots exacts que l'IA utilise à votre sujet.",
     },
     mockDash: {
@@ -483,7 +483,7 @@ export default {
     whatsInside: {
       eyebrow: 'Dans le détail',
       h2Pre: 'Quatre raisons qui en font',
-      h2Hl: 'plus qu\'un simple outil de suivi.',
+      h2Hl: 'plus qu\'un simple outil de suivi',
       lead: 'La plupart des outils s\'arrêtent à un chiffre. Chaque élément ci-dessous transforme le sentiment des IA en actions concrètes.',
     },
     tourCards: [

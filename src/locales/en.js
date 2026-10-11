@@ -461,7 +461,7 @@ export default {
     },
     dashboard: {
       h2Pre: 'Your AI reputation,',
-      h2Hl: 'in plain sight.',
+      h2Hl: 'in plain sight',
       lead: 'Transparent and granular: your sentiment broken down by axis and by model, with every score traceable to the exact words AI uses about you.',
     },
     mockDash: {
@@ -486,7 +486,7 @@ export default {
     whatsInside: {
       eyebrow: "What's inside",
       h2Pre: 'Four reasons it\'s',
-      h2Hl: 'more than monitoring.',
+      h2Hl: 'more than monitoring',
       lead: 'Most tools stop at a number. Each one below is a strength of the analysis and what turns AI sentiment into something you can act on.',
     },
     tourCards: [
