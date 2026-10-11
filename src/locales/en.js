@@ -485,8 +485,8 @@ export default {
     },
     whatsInside: {
       eyebrow: "What's inside",
-      h2Pre: 'Four reasons it\'s',
-      h2Hl: 'more than monitoring',
+      h2Pre: 'Four features',
+      h2Hl: 'that go beyond monitoring',
       lead: 'Most tools stop at a number. Each one below is a strength of the analysis and what turns AI sentiment into something you can act on.',
     },
     tourCards: [
@@ -498,8 +498,8 @@ export default {
     seeIt: 'See it below',
     perAxis: {
       eyebrow: '01 · Product focus',
-      h2Pre: 'Turn dozens of AI prompts',
-      h2Hl: 'into clear, topic-level insights.',
+      h2Pre: 'Turn your AI prompts',
+      h2Hl: 'into meaningful insights by topic',
       h2Post: '',
       lead: 'We group related prompts into topics. This lets you see the overall sentiment and key perceptions AI is creating around your brand.',
       fromPrompts: '{shown} of {n} prompts',
@@ -540,9 +540,9 @@ export default {
     },
     fullBreakdown: {
       eyebrow: '02 · Full breakdown',
-      h2Pre: 'Break it down,',
-      h2Hl: 'every way.',
-      lead: 'One overall number doesn\'t tell you how to act. We read your sentiment by axis and by model because the fix is never the same twice.',
+      h2Pre: 'Analyze your AI reputation',
+      h2Hl: 'from every angle',
+      lead: 'An overall score isn\'t enough to know where to focus. Analyze your brand\'s reputation across key attributes and AI models to identify areas for improvement.',
       byAxis: {
         h3: 'By axis',
         p: 'Every score broken out by the four axes we track. See what\'s holding you back and what\'s already working.',

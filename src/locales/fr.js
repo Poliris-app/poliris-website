@@ -483,7 +483,7 @@ export default {
     whatsInside: {
       eyebrow: 'Dans le détail',
       h2Pre: 'Quatre fonctionnalités',
-      h2Hl: 'qui vont plus loin que les outils de suivi classiques',
+      h2Hl: 'pour aller au-delà du suivi',
       lead: 'La plupart des outils s\'arrêtent à un chiffre. Chaque élément ci-dessous transforme le sentiment des IA en actions concrètes.',
     },
     tourCards: [
@@ -495,8 +495,8 @@ export default {
     seeIt: 'Voir ci-dessous',
     perAxis: {
       eyebrow: '01 · Focus produit',
-      h2Pre: "Transformez des dizaines de prompts IA",
-      h2Hl: 'en enseignements clairs, par sujet.',
+      h2Pre: 'Transformez vos prompts IA',
+      h2Hl: 'en analyses pertinentes par thématique',
       h2Post: '',
       lead: "Nous regroupons les prompts liés en sujets. Vous voyez ainsi le sentiment global et les perceptions clés que l'IA crée autour de votre marque.",
       fromPrompts: '{shown} sur {n} requêtes',
@@ -537,9 +537,9 @@ export default {
     },
     fullBreakdown: {
       eyebrow: '02 · Décomposition complète',
-      h2Pre: 'Décomposez-le,',
-      h2Hl: 'sous tous les angles.',
-      lead: 'Un chiffre global ne vous dit pas comment agir. Nous lisons votre sentiment par axe et par modèle, pour voir précisément où agir.',
+      h2Pre: 'Analysez votre réputation IA',
+      h2Hl: 'sous tous les angles',
+      lead: 'Un score global ne suffit pas pour savoir où agir. Analysez votre réputation par axe et par modèle d’IA pour identifier les points à améliorer.',
       byAxis: {
         h3: 'Par axe',
         p: "Chaque score ventilé par les quatre axes que nous suivons. Voyez ce qui vous freine et ce qui fonctionne déjà.",
