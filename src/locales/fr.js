@@ -482,8 +482,8 @@ export default {
     },
     whatsInside: {
       eyebrow: 'Dans le détail',
-      h2Pre: 'Quatre raisons qui en font',
-      h2Hl: 'plus qu\'un simple outil de suivi',
+      h2Pre: 'Quatre fonctionnalités',
+      h2Hl: 'qui vont plus loin que les outils de suivi classiques',
       lead: 'La plupart des outils s\'arrêtent à un chiffre. Chaque élément ci-dessous transforme le sentiment des IA en actions concrètes.',
     },
     tourCards: [
