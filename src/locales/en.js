@@ -431,7 +431,7 @@ export default {
     },
     stakes: {
       h2Pre: 'Visibility is the',
-      h2Hl: 'new traffic.',
+      h2Hl: 'new traffic',
       stats: [
         { n: '60%',  d: 'of B2B buyers now use AI in their research phase' },
         { n: '3 in 4', d: 'brands have zero visibility into their AI mention data' },
@@ -570,7 +570,7 @@ export default {
     competitive: {
       eyebrow: '04 · Your competitors',
       h2Pre: 'See how AI',
-      h2Hl: 'ranks the field.',
+      h2Hl: 'ranks the field',
       lead: 'These are your real competitors scored on the same axes. See where AI is handing them wins you should own.',
       tableHeaders: ['Brand', 'Brand Awareness', 'Design', 'Durability', 'Performance', 'Overall Axes'],
       you: 'You',
@@ -580,11 +580,11 @@ export default {
       agentPill: 'Meet IVY · your AI sentiment agent',
       eyebrow: '03 · IVY ACTS ON IT',
       h2: 'Your AI analyst by your side',
-      lead: "IVY is your AI sentiment analyst that is built into the platform. She reads every score, explains what's driving each one, alerts you when something is slipping, and tells you exactly what to do next.",
+      lead: 'IVY analyzes your brand’s reputation across AI models, helps you understand your scores, and alerts you to important changes so you can take the right action.',
       points: [
-        { tt: 'Explains', dd: "What's lifting each axis, what's dragging it." },
-        { tt: 'Alerts',   dd: 'Flags a slipping axis before it becomes a problem.' },
-        { tt: 'Recommends', dd: 'A concrete next step, not just a score.' },
+        { tt: 'Explains', dd: 'Breaks down the factors influencing your scores.' },
+        { tt: 'Alerts',   dd: 'Notifies you of performance drops worth watching.' },
+        { tt: 'Recommends', dd: 'Suggests concrete actions to improve your results.' },
       ],
       liveSession: 'LIVE SESSION',
       chatId: 'IVY · Sentiment analyst',
@@ -604,7 +604,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'See how AI talks about you free.',
+      heading: 'See how AI talks about you free',
       lead: 'Run a sentiment scan on your brand and your competitors axis by axis, model by model and find out exactly where you\'re slipping.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Talk to an expert',

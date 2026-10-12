@@ -428,7 +428,7 @@ export default {
     },
     stakes: {
       h2Pre: 'La visibilité est',
-      h2Hl: 'le nouveau trafic.',
+      h2Hl: 'le nouveau trafic',
       stats: [
         { n: '60%', d: 'des acheteurs B2B utilisent désormais l\'IA dans leur phase de recherche' },
         { n: '3 sur 4', d: 'marques ignorent comment les IA parlent d\'elles' },
@@ -438,7 +438,7 @@ export default {
     },
     cta: {
       heading: 'Voyez gratuitement votre score de visibilité IA',
-      lead: 'Découvrez, par sujet et par marché, où vous apparaissez aujourd\'hui dans les réponses des IA, et où vos concurrents passent devant.',
+      lead: 'Découvrez où votre marque se démarque dans les réponses des IA et où vos concurrents prennent l’avantage, par thématique et par marché.',
       primaryCta: 'Obtenir un audit gratuit',
       secondaryCta: 'Parler à un expert',
       note: 'Aucune carte · résultat en 60s · annulation à tout moment',
@@ -567,7 +567,7 @@ export default {
     competitive: {
       eyebrow: '04 · Vos concurrents',
       h2Pre: 'Voyez comment l\'IA vous situe',
-      h2Hl: 'face à vos concurrents.',
+      h2Hl: 'face à vos concurrents',
       lead: 'Vos vrais concurrents, notés sur les mêmes axes. Voyez les places que l\'IA leur donne et que vous pourriez reprendre.',
       tableHeaders: ['Marque', 'Brand Awareness', 'Design', 'Durability', 'Performance', 'Axes globaux'],
       you: 'Vous',
@@ -577,11 +577,11 @@ export default {
       agentPill: 'Rencontrez IVY · votre agent sentiment IA',
       eyebrow: '03 · IVY PASSE À L\'ACTION',
       h2: 'Votre analyste IA à vos côtés',
-      lead: 'IVY analyse votre réputation auprès des IA, vous aide à comprendre les facteurs qui influencent vos scores et vous alerte en cas de baisse, tout en vous recommandant les actions à mettre en place pour améliorer vos résultats.',
+      lead: 'IVY analyse votre réputation auprès des IA, vous aide à comprendre vos scores et vous alerte sur les évolutions importantes pour mieux orienter vos actions.',
       points: [
-        { tt: 'Explique',    dd: 'Ce qui fait monter ou baisser chaque axe.' },
-        { tt: 'Alerte',      dd: "Signale un axe en baisse avant qu'il ne devienne un problème." },
-        { tt: 'Recommande',  dd: 'Une prochaine étape concrète, pas juste un score.' },
+        { tt: 'Explique',    dd: 'Décrypte les facteurs qui influencent vos scores.' },
+        { tt: 'Alerte',      dd: 'Vous informe des baisses de performance à surveiller.' },
+        { tt: 'Recommande',  dd: 'Propose des actions concrètes pour améliorer vos résultats.' },
       ],
       liveSession: 'SESSION EN DIRECT',
       chatId: 'IVY · Analyste Sentiment',
@@ -601,7 +601,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'Voyez gratuitement comment l\'IA parle de vous.',
+      heading: 'Voyez gratuitement comment l\'IA parle de vous',
       lead: "Lancez un scan de sentiment sur votre marque et vos concurrents axe par axe, modèle par modèle et découvrez exactement où vous glissez.",
       primaryCta: 'Commencer votre essai gratuit',
       secondaryCta: 'Parler à un expert',
