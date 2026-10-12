@@ -2102,7 +2102,7 @@ export default {
         title: 'Agency program',
         desc: 'Manage GEO across clients, co-branded reports, volume pricing, and a dedicated partner lead.',
         cta: 'Talk to us',
-        href: 'https://cal.com/team/poliris/discovery-call',
+        href: 'https://app.poliris.io',
       },
     ],
     cta: {
