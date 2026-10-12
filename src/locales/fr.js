@@ -634,10 +634,10 @@ export default {
       h2Hl: 'passer à l\'action',
       lead: 'D\'un site lisible par tous, jusqu\'à un correctif livré pour vous.',
       cards: [
-        { n: '01', h4: 'Une analyse technique approfondie',      p: '140 tests par page, transformés en trois réponses claires lisibles par tous.',           href: '#p1' },
-        { n: '02', h4: 'Tous les outils, un seul endroit', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog en une seule observation.',href: '#p2' },
-        { n: '03', h4: 'Corrigé, pas signalé',     p: 'Approuvez une correction, Poliris l\'applique directement sur votre site.',            href: '#p3' },
-        { n: '04', h4: 'Votre agent s\'en charge', p: 'Posez votre question à Tom, recevez un plan priorisé, validez en un clic.',                href: '#p4' },
+        { n: '01', h4: 'Une analyse technique approfondie',      p: '140 vérifications par page, avec des résultats structurés autour de trois axes clés.',           href: '#p1' },
+        { n: '02', h4: 'Une vision centralisée de vos outils ', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog en une seule plateforme.',href: '#p2' },
+        { n: '03', h4: 'Des corrections directement intégrées',     p: 'Approuvez les corrections proposées et déployez-les directement sur votre site.',            href: '#p3' },
+        { n: '04', h4: 'Un accompagnement sur mesure', p: 'Posez votre question à Tom, recevez un plan priorisé, validez en un clic.',                href: '#p4' },
       ],
     },
     p1: {
@@ -656,7 +656,7 @@ export default {
       ],
     },
     p2: {
-      tag: '02 Tous les outils, un seul endroit',
+      tag: '02 Une vision centralisée de vos outils ',
       h3Pre: 'Connectez',
       h3Hl: 'tous les outils',
       h3Post: 'que vous utilisez déjà.',
