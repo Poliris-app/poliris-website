@@ -657,10 +657,10 @@ export default {
     },
     p2: {
       tag: '02 Une vision centralisée de vos outils ',
-      h3Pre: 'Connectez',
-      h3Hl: 'tous les outils',
-      h3Post: 'que vous utilisez déjà',
-      p: 'Search Console, Analytics, Matomo, SearchAtlas, Screaming Frog et plus encore Poliris les connecte tous et les réconcilie en une seule observation. La force ne réside pas dans un seul crawler, mais dans tous vos outils, au même endroit.',
+      h3Pre: 'Tous vos',
+      h3Hl: 'outils SEO réunis',
+      h3Post: 'sur une seule plateforme',
+      p: 'Poliris centralise les données de Google Search Console, Google Analytics, Matomo, SearchAtlas et Screaming Frog pour vous offrir une vision complète de votre site et faciliter l’analyse de vos données techniques.',
       hubSub: 'connecte tout',
       addTool: 'Ajouter un outil',
       toolSubs: { analytics: 'analytiques', crawler: 'crawler', seoPlatform: 'plateforme SEO' },
@@ -2029,8 +2029,8 @@ export default {
   demo: {
     hero: {
       eyebrow: 'Obtenir une démo',
-      title: 'Découvrez Poliris avec votre propre marque.',
-      lead: 'Réservez une session en direct, lancez un audit GEO gratuit ou contactez-nous pour un partenariat. Nous répondons rapidement les jours ouvrés.',
+      title: 'Découvrez Poliris avec votre propre marque',
+      lead: 'Réservez une session en direct, lancez un audit GEO gratuit ou contactez-nous pour un partenariat.',
       primaryCta: 'Réserver une démo',
       secondaryCta: 'Démarrer l\'essai gratuit',
     },
