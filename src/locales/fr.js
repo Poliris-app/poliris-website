@@ -438,10 +438,10 @@ export default {
     },
     cta: {
       heading: 'Voyez gratuitement votre score de visibilité IA',
-      lead: 'Découvrez où votre marque se démarque dans les réponses des IA et où vos concurrents prennent l’avantage, par thématique et par marché.',
+      lead: 'Découvrez où votre marque se démarque face à vos concurrents, par thématique et par marché.',
       primaryCta: 'Obtenir un audit gratuit',
       secondaryCta: 'Parler à un expert',
-      note: 'Aucune carte · résultat en 60s · annulation à tout moment',
+      note: 'Aucune carte requise',
     },
   },
 
@@ -602,10 +602,10 @@ export default {
     },
     cta: {
       heading: 'Voyez gratuitement comment l\'IA parle de vous',
-      lead: "Lancez un scan de sentiment sur votre marque et vos concurrents axe par axe, modèle par modèle et découvrez exactement où vous glissez.",
+      lead: 'Comparez votre réputation à celle de vos concurrents, par axe et par modèle d’IA, pour identifier vos axes d’amélioration.',
       primaryCta: 'Commencer votre essai gratuit',
       secondaryCta: 'Parler à un expert',
-      note: 'Gratuit · aucune carte · résultats en 60 secondes',
+      note: 'Aucune carte requise',
     },
   },
 

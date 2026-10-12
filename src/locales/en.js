@@ -441,10 +441,10 @@ export default {
     },
     cta: {
       heading: 'See your AI visibility score for free',
-      lead: 'Find out where you appear in AI answers today by topic and by market and exactly what\'s eating your share.',
+      lead: 'Discover where your brand stands out from competitors across topics and markets.',
       primaryCta: 'Get a free audit',
       secondaryCta: 'Talk to an expert',
-      note: 'No credit card · result in 60s · cancel anytime',
+      note: 'No credit card required',
     },
   },
 
@@ -605,10 +605,10 @@ export default {
     },
     cta: {
       heading: 'See how AI talks about you free',
-      lead: 'Run a sentiment scan on your brand and your competitors axis by axis, model by model and find out exactly where you\'re slipping.',
+      lead: 'Compare your brand’s reputation with competitors across key attributes and AI models to identify areas for improvement.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Talk to an expert',
-      note: 'Free · no credit card · results in 60 seconds',
+      note: 'No credit card required',
     },
   },
 
