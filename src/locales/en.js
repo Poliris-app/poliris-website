@@ -633,8 +633,8 @@ export default {
     seeIt: 'See it below',
     toc: {
       eyebrow: 'In this audit',
-      h2Pre: 'What the audit does,',
-      h2Hl: 'in four parts.',
+      h2Pre: 'A technical audit designed to',
+      h2Hl: 'turn insights into action',
       lead: 'From a site anyone can read, to a fix shipped for you.',
       cards: [
         { n: '01', h4: 'Complex, made simple',  p: '140 tests a page, turned into three plain answers anyone can read.',             href: '#p1' },
@@ -733,7 +733,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'Run a free technical audit on your site.',
+      heading: 'Run a free technical audit on your site',
       lead: 'See exactly where AI is winning, losing, and what to fix first page by page.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',

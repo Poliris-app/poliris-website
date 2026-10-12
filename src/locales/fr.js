@@ -630,8 +630,8 @@ export default {
     seeIt: 'Voir ci-dessous',
     toc: {
       eyebrow: 'Dans cet audit',
-      h2Pre: 'Ce que fait l\'audit,',
-      h2Hl: 'en quatre parties.',
+      h2Pre: 'L\'audit technique pensé pour',
+      h2Hl: 'passer à l\'action',
       lead: 'D\'un site lisible par tous, jusqu\'à un correctif livré pour vous.',
       cards: [
         { n: '01', h4: 'Complexe, simplifié',      p: '140 tests par page, transformés en trois réponses claires lisibles par tous.',           href: '#p1' },
@@ -730,7 +730,7 @@ export default {
       ],
     },
     cta: {
-      heading: 'Lancez gratuitement un audit technique sur votre site.',
+      heading: 'Lancez gratuitement un audit technique sur votre site',
       lead: 'Découvrez exactement où l\'IA gagne, perd et ce qu\'il faut corriger en premier page par page.',
       primaryCta: 'Démarrer votre essai gratuit',
       secondaryCta: 'Réserver une démo',
