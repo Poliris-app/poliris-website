@@ -634,7 +634,7 @@ export default {
       h2Hl: 'passer à l\'action',
       lead: 'D\'un site lisible par tous, jusqu\'à un correctif livré pour vous.',
       cards: [
-        { n: '01', h4: 'Complexe, simplifié',      p: '140 tests par page, transformés en trois réponses claires lisibles par tous.',           href: '#p1' },
+        { n: '01', h4: 'Une analyse technique approfondie',      p: '140 tests par page, transformés en trois réponses claires lisibles par tous.',           href: '#p1' },
         { n: '02', h4: 'Tous les outils, un seul endroit', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog en une seule observation.',href: '#p2' },
         { n: '03', h4: 'Corrigé, pas signalé',     p: 'Approuvez une correction, Poliris l\'applique directement sur votre site.',            href: '#p3' },
         { n: '04', h4: 'Votre agent s\'en charge', p: 'Posez votre question à Tom, recevez un plan priorisé, validez en un clic.',                href: '#p4' },

@@ -637,7 +637,7 @@ export default {
       h2Hl: 'turn insights into action',
       lead: 'From a site anyone can read, to a fix shipped for you.',
       cards: [
-        { n: '01', h4: 'Complex, made simple',  p: '140 tests a page, turned into three plain answers anyone can read.',             href: '#p1' },
+        { n: '01', h4: 'In-Depth Technical Analysis',  p: '140 tests a page, turned into three plain answers anyone can read.',             href: '#p1' },
         { n: '02', h4: 'Every tool, one place', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog all in one observation.', href: '#p2' },
         { n: '03', h4: 'Fixed, not flagged',    p: 'Approve a fix and Poliris applies it straight to your live site.',              href: '#p3' },
         { n: '04', h4: 'Your agent does it',    p: 'Ask Tom anything, get a ranked plan, approve in a click.',                      href: '#p4' },
