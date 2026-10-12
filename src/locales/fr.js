@@ -613,18 +613,18 @@ export default {
     hero: {
       eyebrow: 'Audit Technique',
       titlePre: 'Un audit complet de votre site,',
-      titleHl: 'conçu pour l\'ère de l\'IA.',
-      lead: 'Chaque signal technique important pour l\'IA expliqué en langage clair, tracé jusqu\'aux pages exactes, et corrigé pour vous. Pas de formation SEO, pas de développeur, pas de consultant.',
+      titleHl: 'conçu pour l\'ère de l\'IA',
+      lead: 'Identifiez les obstacles techniques qui freinent votre visibilité en ligne et déployez des corrections ciblées directement depuis la plateforme.',
       primaryCta: 'Démarrer votre essai gratuit',
       secondaryCta: 'Réserver une démo',
-      note: 'Sans carte bancaire · Sans consultant · Tableaux de bord en direct',
+      note: 'Aucune carte bancaire requise',
     },
     llmBand: {
       cap: 'Testé pour les moteurs IA qui lisent votre site',
       chips: ['ChatGPT', 'Claude', 'Gemini', 'Mistral', 'Deepseek', 'Perplexity'],
     },
     dashboard: {
-      cap: 'Le tableau de bord votre site entier lu à travers le pipeline Poliris : Accès aux pages, Accès au contenu, Qualité du contenu.',
+      cap: 'Une vue d’ensemble de votre site à travers les trois piliers de l’audit Poliris : accès aux pages, accès au contenu et qualité du contenu.',
       barTitle: 'Poliris · Audit technique',
     },
     seeIt: 'Voir ci-dessous',
@@ -734,7 +734,7 @@ export default {
       lead: 'Découvrez exactement où l\'IA gagne, perd et ce qu\'il faut corriger en premier page par page.',
       primaryCta: 'Démarrer votre essai gratuit',
       secondaryCta: 'Réserver une démo',
-      note: 'Sans carte bancaire · Sans consultant · Tableaux de bord en direct',
+      note: 'Aucune carte bancaire requise',
     },
   },
 

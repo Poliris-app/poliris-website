@@ -616,18 +616,18 @@ export default {
     hero: {
       eyebrow: 'Technical Audit',
       titlePre: 'A complete website test,',
-      titleHl: 'built for the AI era.',
-      lead: 'Every technical signal AI cares about explained in plain English, traced to the exact pages, and fixed for you. No SEO degree, no developer, no consultant.',
+      titleHl: 'built for the AI era',
+      lead: 'Identify technical issues holding back your online visibility and implement targeted fixes directly from the platform.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
-      note: 'No credit card · No consultant · Live dashboards, not PDF reports',
+      note: 'No credit card required',
     },
     llmBand: {
       cap: 'Tested for the AI engines that read your site',
       chips: ['ChatGPT', 'Claude', 'Gemini', 'Mistral', 'Deepseek', 'Perplexity'],
     },
     dashboard: {
-      cap: 'The dashboard your whole site read through the Poliris pipeline: Page Access, Content Access, Content Quality.',
+      cap: 'A complete overview of your website across the three pillars of the Poliris audit: Page Access, Content Access, and Content Quality.',
       barTitle: 'Poliris · Technical audit',
     },
     seeIt: 'See it below',
@@ -737,7 +737,7 @@ export default {
       lead: 'See exactly where AI is winning, losing, and what to fix first page by page.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
-      note: 'No credit card · No consultant · Live dashboards, not PDF reports',
+      note: 'No credit card required',
     },
   },
 
