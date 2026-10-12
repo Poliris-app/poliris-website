@@ -2089,7 +2089,7 @@ export default {
         title: 'Programme agence',
         desc: 'Gérez le GEO pour vos clients, rapports co-brandés, tarifs volume et un responsable partenaires dédié.',
         cta: 'Nous contacter',
-        href: 'https://app.poliris.io',
+        href: 'https://cal.com/team/poliris/discovery-call',
       },
     ],
     cta: {

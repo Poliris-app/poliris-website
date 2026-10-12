@@ -47,7 +47,7 @@ const CARD_ICONS = {
 
 export default function GetaDemoPage() {
   useReveal();
-  const { t } = useLang();
+  const { lang, t } = useLang();
 
   useEffect(() => { trackEvent('demo_page_viewed'); }, []);
   const d = t('demo');
@@ -181,7 +181,7 @@ export default function GetaDemoPage() {
                   <input type="checkbox" id="demo-privacy" name="privacy" checked={form.privacy} onChange={handleChange} required />
                   <label className="demo-privacy-label" htmlFor="demo-privacy">
                     {d.privacyPre}
-                    <a href="#" onClick={e => e.preventDefault()}>{d.privacyLink}</a>
+                    <a href={`/${lang}/privacy`} target="_blank" rel="noopener noreferrer">{d.privacyLink}</a>
                     {d.privacyPost}
                   </label>
                 </div>
