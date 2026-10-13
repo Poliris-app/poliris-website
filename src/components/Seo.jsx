@@ -4,8 +4,13 @@ import {
   getMeta,
   canonicalUrl,
   SITE_NAME,
+  SITE_URL,
   LANGS,
 } from '../seo';
+
+// Share/preview image (1200x630) used by Google, LinkedIn, Slack, X, etc.
+// Without it Google picks an arbitrary image off the page for the thumbnail.
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 // Per-page <head>: title, description, canonical, hreflang alternates,
 // Open Graph and Twitter cards. Also sets <html lang> for the current page.
@@ -36,11 +41,16 @@ export default function Seo({ page }) {
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonical} />
       <meta property="og:locale" content={ogLocale} />
+      <meta property="og:image" content={OG_IMAGE} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={SITE_NAME} />
 
       {/* Twitter */}
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={OG_IMAGE} />
     </Head>
   );
 }
