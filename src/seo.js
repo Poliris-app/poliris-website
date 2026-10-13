@@ -33,6 +33,7 @@ export const BLOG_POST_SLUGS = [
   'entity-based-seo',
   'beyond-keywords-ai-content-generation',
   'blueprint-for-high-visibility-content',
+  'ai-brand-visibility-strategies',
 ];
 
 const META = {
@@ -109,7 +110,7 @@ const META = {
   },
   fr: {
     home: {
-      title: 'Poliris',
+      title: 'Visibilité dans la recherche IA, outil GEO & SEO IA | Poliris',
       description:
         "Comprenez et pilotez la façon dont l'IA voit votre marque. Suivez votre visibilité sur les moteurs IA, auditez votre site et déployez les correctifs — produit par produit.",
     },

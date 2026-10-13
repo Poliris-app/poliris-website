@@ -977,6 +977,13 @@ export default {
         date: 'Aug 20, 2026', dateValue: '2026-08-20',
         slug: 'blueprint-for-high-visibility-content',
       },
+      {
+        id: 16, label: 'AI VISIBILITY', category: 'VISIBILITY',
+        title: 'Unlocking AI Brand Visibility: Strategies That Work',
+        desc: "Learn AI brand visibility strategies to enhance recognition and visibility across AI-driven search platforms. Boost your brand's AI presence today.",
+        date: 'Oct 13, 2026', dateValue: '2026-10-13',
+        slug: 'ai-brand-visibility-strategies',
+      },
     ],
     cta: {
       heading: 'Want updates from the team?',

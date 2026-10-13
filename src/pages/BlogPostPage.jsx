@@ -12,6 +12,8 @@ import BeyondKeywordsPage from './posts/BeyondKeywordsPage';
 import BeyondKeywordsFrPage from './posts/BeyondKeywordsFrPage';
 import HighVisibilityContentPage from './posts/HighVisibilityContentPage';
 import HighVisibilityContentFrPage from './posts/HighVisibilityContentFrPage';
+import AiBrandVisibilityPage from './posts/AiBrandVisibilityPage';
+import AiBrandVisibilityFrPage from './posts/AiBrandVisibilityFrPage';
 
 const POST_MAP = {
   en: {
@@ -20,6 +22,7 @@ const POST_MAP = {
     'entity-based-seo': EntityBasedSeoPage,
     'beyond-keywords-ai-content-generation': BeyondKeywordsPage,
     'blueprint-for-high-visibility-content': HighVisibilityContentPage,
+    'ai-brand-visibility-strategies': AiBrandVisibilityPage,
   },
   fr: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstoneFrPage,
@@ -27,6 +30,7 @@ const POST_MAP = {
     'entity-based-seo': EntityBasedSeoFrPage,
     'beyond-keywords-ai-content-generation': BeyondKeywordsFrPage,
     'blueprint-for-high-visibility-content': HighVisibilityContentFrPage,
+    'ai-brand-visibility-strategies': AiBrandVisibilityFrPage,
   },
 };
 

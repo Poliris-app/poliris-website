@@ -162,6 +162,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
   </url>
 
+<!-- ==================== BLOG POST 6 ==================== -->
+  <url>
+    <loc>https://poliris.io/en/blog/ai-brand-visibility-strategies</loc>
+    <lastmod>2026-10-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/ai-brand-visibility-strategies" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
+  </url>
+  <url>
+    <loc>https://poliris.io/fr/blog/ai-brand-visibility-strategies</loc>
+    <lastmod>2026-10-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/blog/ai-brand-visibility-strategies" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
+  </url>
+
   <!-- ==================== FAQS ==================== -->
   <url>
     <loc>https://poliris.io/en/faqs</loc>

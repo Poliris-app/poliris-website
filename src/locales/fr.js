@@ -969,6 +969,13 @@ export default {
         date: '20 août 2026', dateValue: '2026-08-20',
         slug: 'blueprint-for-high-visibility-content',
       },
+      {
+        id: 16, label: 'VISIBILITÉ IA', category: 'VISIBILITÉ',
+        title: 'Libérer la visibilité de marque IA : des stratégies qui fonctionnent',
+        desc: "Découvrez des stratégies de visibilité de marque IA pour renforcer la reconnaissance et la visibilité sur les plateformes de recherche pilotées par l'IA. Boostez la présence IA de votre marque dès aujourd'hui.",
+        date: '13 oct. 2026', dateValue: '2026-10-13',
+        slug: 'ai-brand-visibility-strategies',
+      },
     ],
     cta: {
       heading: "Vous voulez des mises à jour de l'équipe ?",
