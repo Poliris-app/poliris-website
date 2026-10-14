@@ -10,8 +10,8 @@ import { useLang } from '../contexts/LangContext';
  * Wrapped in a scroll-driven "tilt with tracing light + orbit" reveal:
  * --p (0→1, ease-out cubic) runs over REVEAL_PX of scroll from the moment
  * the section enters the viewport and drives the light and rings; --t is
- * the same curve finishing at FLAT_AT and drives the dashboard's tilt,
- * scale and lift. Phones and reduced motion pin both to 1 (no tilt).
+ * the same curve finishing at FLAT_AT and drives the dashboard's tilt
+ * and scale. Phones and reduced motion pin both to 1 (no tilt).
  */
 const REVEAL_PX = 480;
 // Ease-out cubic spends its last ~half crawling through tilts of a few

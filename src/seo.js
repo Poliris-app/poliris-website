@@ -105,7 +105,7 @@ const META = {
     // French-language disclosure requirement); this is informational.
     'mentions-legales': {
       title: 'Legal Notice | Poliris',
-      description: "Legal notice for poliris.io, published by FCFD.",
+      description: "Legal notice for poliris.io, published by POLIRIS.",
     },
   },
   fr: {
@@ -173,7 +173,7 @@ const META = {
     },
     'mentions-legales': {
       title: 'Mentions légales | Poliris',
-      description: "Mentions légales du site poliris.io, édité par FCFD.",
+      description: "Mentions légales du site poliris.io, édité par POLIRIS.",
     },
   },
 };

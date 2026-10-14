@@ -1342,24 +1342,21 @@ button { cursor: pointer; border: none; background: none; }
   /* Full-bleed so the 1200px frame and 1500px glow can exceed the 1110px
      hero column; clip sideways only — the rings extend above. */
   width: 100vw;
-  margin: 96px calc(50% - 50vw) 0;
+  margin: 50px calc(50% - 50vw) 0;
   padding: 0 24px;
   box-sizing: border-box;
   overflow-x: clip;
   overflow-y: visible;
 }
-/* While tilted, the whole composition sits 40px higher (closer to
-   the logo strip) so more of the dashboard shows above the fold; it eases
-   back to its layout position as it flattens. Transform only — page
-   height and scroll are unaffected. */
+/* No vertical lift while tilted: the frame tilts from its top edge
+   (transform-origin 50% 0), so the gap above it stays the same from the
+   tilted start to the flat end. */
 .hreveal__stage {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
   perspective: 2400px;
-  transform: translateY(calc(-40px * (1 - var(--t))));
 }
-.hreveal[data-done] .hreveal__stage { transform: none; }
 .hreveal__orbit {
   position: absolute;
   left: 50%;
@@ -1416,7 +1413,7 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hreveal__dash {
   position: relative;
-  aspect-ratio: 1120 / 780;
+  aspect-ratio: 1120 / 730;
   border-radius: 14px;
   overflow: hidden;
   background: #fff;
@@ -5873,7 +5870,7 @@ button { cursor: pointer; border: none; background: none; }
     padding: 52px 20px 20px;
   }
   .hero__lead  { max-width: 100%; }
-  .hreveal { padding: 0 20px; }
+  .hreveal { padding: 0 20px; margin-top: 48px; }
   .hero__dashboard {
     margin: 24px 20px 0;
     overflow-x: auto;
@@ -5951,7 +5948,7 @@ button { cursor: pointer; border: none; background: none; }
   .hero-website-form { width: 100%; }
   .hero__note { font-size: 12.5px; margin-top: 14px; }
   .hero__dashboard { margin: 16px 16px 0; }
-  .hreveal { padding: 0 16px; }
+  .hreveal { padding: 0 16px; margin-top: 32px; }
 
   /* Eyebrow / sec typography */
   .eyebrow { font-size: 11px; margin-bottom: 12px; }
