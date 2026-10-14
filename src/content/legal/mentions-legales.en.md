@@ -34,7 +34,7 @@ All elements comprising the poliris.io website (texts, graphics, logos, software
 
 ## Personal Data
 
-The processing of personal data carried out through the website and platform is described in our [Privacy Policy](https://poliris.io/privacy). For any questions or to exercise your rights, please contact: florian.michel@poliris.io.
+The processing of personal data carried out through the website and platform is described in our [Privacy Policy](/en/privacy). For any questions or to exercise your rights, please contact: florian.michel@poliris.io.
 
 You also have the right to lodge a complaint with the French Data Protection Authority (CNIL) ([www.cnil.fr](https://www.cnil.fr)).
 

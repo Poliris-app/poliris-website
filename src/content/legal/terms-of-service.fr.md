@@ -1,10 +1,10 @@
 # Conditions Générales d'Utilisation
 
-**Dernière mise à jour : 15 juillet 2026**
+**Dernière mise à jour : 14 octobre 2026**
 
-Les présentes Conditions Générales d'Utilisation (les « **Conditions** ») régissent l'accès à la plateforme Poliris disponible aux adresses **poliris.io** et **app.poliris.io** (le « **Service** ») ainsi qu'au **plugin WordPress Poliris** (le « **Plugin** »), exploités par **FCFD**, société à responsabilité limitée (SARL) de droit français au capital de 100 €, immatriculée au Registre du Commerce et des Sociétés (RCS) de Sarreguemines sous le numéro 940 441 876, dont le siège social est situé 12 rue Saint-Blaise, 57460 Behren-lès-Forbach, France (« **Poliris** », « **nous** »).
+Les présentes Conditions Générales d'Utilisation (les « Conditions ») régissent l'accès à la plateforme Poliris disponible aux adresses poliris.io et app.poliris.io (le « Service ») ainsi qu'au plugin WordPress Poliris (le « Plugin »), exploités par POLIRIS, société par actions simplifiée unipersonnelle (SASU) de droit français au capital de 5 000 €, immatriculée au Registre du Commerce et des Sociétés (RCS) de Paris sous le numéro 130 526 890, dont le siège social est situé 61 rue de Lyon, 75012 Paris, France (« Poliris », « nous »).
 
-En créant un compte, en souscrivant au Service, ou en installant le Plugin, vous (le « **Client** », « **vous** ») acceptez les présentes Conditions. Si vous les acceptez au nom d'une entreprise, vous déclarez être autorisé à l'engager.
+En créant un compte, en souscrivant au Service, ou en installant le Plugin, vous (le « Client », « vous ») acceptez les présentes Conditions. Si vous les acceptez au nom d'une entreprise, vous déclarez être autorisé à l'engager.
 
 ## 1. Le Service
 
@@ -26,13 +26,13 @@ Vous devez fournir des informations exactes lors de la création d'un compte et 
 
 ## 4. Contenu et données du Client
 
-4.1 Vous conservez l'ensemble des droits sur les sites web, contenus, et données que vous soumettez ou connectez au Service (le « **Contenu Client** »). Vous nous accordez une licence non exclusive pour héberger, traiter, et analyser le Contenu Client dans le seul but de fournir le Service.
+4.1 Vous conservez l'ensemble des droits sur les sites web, contenus, et données que vous soumettez ou connectez au Service (le « Contenu Client »). Vous nous accordez une licence non exclusive pour héberger, traiter, et analyser le Contenu Client dans le seul but de fournir le Service.
 
 4.2 Vous êtes responsable de disposer des droits nécessaires sur les sites web et contenus que vous connectez au Service, ainsi que de la licéité du Contenu Client.
 
 4.3 Les productions générées avec l'assistance de modèles d'IA sont fournies à titre de brouillon pour votre examen. Vous êtes responsable de la relecture, de la modification, et de l'approbation de toute production avant utilisation ou publication.
 
-4.4 Les données personnelles sont traitées conformément à notre [Politique de confidentialité](https://poliris.io/privacy). Lorsque nous traitons des données personnelles pour votre compte, un accord de traitement des données est disponible sur demande et fait partie intégrante des présentes Conditions une fois signé.
+4.4 Les données personnelles sont traitées conformément à notre [Politique de confidentialité](/fr/privacy). Lorsque nous traitons des données personnelles pour votre compte, un accord de traitement des données est disponible sur demande et fait partie intégrante des présentes Conditions une fois signé.
 
 ## 5. Usage autorisé
 
@@ -44,7 +44,7 @@ Vous ne devez pas : (a) utiliser le Service sur des sites web que vous n'êtes p
 
 6.2 **Autorisation.** En connectant un site WordPress à Poliris (l'« appairage »), vous autorisez Poliris à accéder à ce site et à le modifier en votre nom, au moyen d'un mot de passe d'application WordPress que le Plugin crée pour le compte administrateur effectuant l'appairage. Vous déclarez et garantissez être autorisé à accorder cet accès pour le site concerné.
 
-6.3 **Étendue des modifications.** Une fois un site connecté, Poliris peut, exclusivement en réponse à des actions que vous effectuez dans le tableau de bord Poliris : (a) mettre à jour les titres, titres SEO, meta descriptions, contenus de pages et d'articles, et textes alternatifs d'images ; (b) créer de nouveaux articles de blog **à l'état de brouillon** ; et (c) appliquer les correctifs approuvés au HTML rendu par votre site, ce qui peut inclure la modification du balisage de page servi à vos visiteurs (par exemple des titres corrigés, des meta descriptions, des balises canoniques, des données structurées, ou des modifications ciblées d'éléments).
+6.3 **Étendue des modifications.** Une fois un site connecté, Poliris peut, exclusivement en réponse à des actions que vous effectuez dans le tableau de bord Poliris : (a) mettre à jour les titres, titres SEO, meta descriptions, contenus de pages et d'articles, et textes alternatifs d'images ; (b) créer de nouveaux articles de blog à l'état de brouillon ; et (c) appliquer les correctifs approuvés au HTML rendu par votre site, ce qui peut inclure la modification du balisage de page servi à vos visiteurs (par exemple des titres corrigés, des meta descriptions, des balises canoniques, des données structurées, ou des modifications ciblées d'éléments).
 
 6.4 **Absence de publication automatique.** Le contenu généré via Poliris est créé à l'état de brouillon et n'est jamais publié sans une décision humaine de votre part.
 
@@ -84,7 +84,7 @@ Nous pouvons améliorer ou modifier le Service, à condition que cela ne dégrad
 
 ## 13. Droit applicable et juridiction
 
-Les présentes Conditions sont régies par le **droit français**. Tout litige qui ne pourrait être résolu à l'amiable sera soumis aux **tribunaux compétents de Sarreguemines, France**, nonobstant la pluralité de défendeurs ou les mises en cause de tiers, sans préjudice des protections impératives applicables aux consommateurs ou du droit local, le cas échéant.
+Les présentes Conditions sont régies par le droit français. Tout litige qui ne pourrait être résolu à l'amiable sera soumis aux tribunaux compétents de Paris, France, nonobstant la pluralité de défendeurs ou les mises en cause de tiers, sans préjudice des protections impératives applicables aux consommateurs ou du droit local, le cas échéant.
 
 ## 14. Dispositions diverses
 
@@ -92,5 +92,5 @@ Si une disposition des présentes Conditions est jugée inapplicable, les autres
 
 ## 15. Contact
 
-**FCFD (Poliris)** – 12 rue Saint-Blaise, 57460 Behren-lès-Forbach, France\
-Juridique : florian.michel@fcfd.fr – Confidentialité : florian.michel@poliris.io
+**POLIRIS** - 61 rue de Lyon, 75012 Paris, France\
+Juridique : [florian.michel@poliris.io](mailto:florian.michel@poliris.io) - Confidentialité : [florian.michel@poliris.io](mailto:florian.michel@poliris.io)

@@ -34,7 +34,7 @@ L'ensemble des éléments composant le site poliris.io (textes, graphismes, logo
 
 ## Données personnelles
 
-Les traitements de données personnelles réalisés via le site et la plateforme sont décrits dans notre [Politique de confidentialité](https://poliris.io/privacy). Pour toute question ou pour exercer vos droits : florian.michel@poliris.io. Vous disposez également du droit d'introduire une réclamation auprès de la CNIL ([www.cnil.fr](https://www.cnil.fr)).
+Les traitements de données personnelles réalisés via le site et la plateforme sont décrits dans notre [Politique de confidentialité](/fr/privacy). Pour toute question ou pour exercer vos droits : florian.michel@poliris.io. Vous disposez également du droit d'introduire une réclamation auprès de la CNIL ([www.cnil.fr](https://www.cnil.fr)).
 
 ## Liens hypertextes
 

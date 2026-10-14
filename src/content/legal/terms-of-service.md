@@ -1,10 +1,10 @@
 # Terms of Service
 
-**Last updated: July 15, 2026**
+**Last updated: October 14, 2026**
 
-These Terms of Service (the "**Terms**") govern access to and use of the Poliris platform available at **poliris.io** and **app.poliris.io** (the "**Service**") and the **Poliris WordPress plugin** (the "**Plugin**"), operated by **FCFD**, a French limited liability company (SARL) with a share capital of €100, registered with the Sarreguemines Trade and Companies Register (RCS) under number 940 441 876, having its registered office at 12 rue Saint-Blaise, 57460 Behren-lès-Forbach, France ("**Poliris**", "**we**", "**us**").
+These Terms of Service (the "Terms") govern access to and use of the Poliris platform available at poliris.io and app.poliris.io (the "Service") and the Poliris WordPress plugin (the "Plugin"), operated by POLIRIS, a French single-shareholder simplified joint-stock company (SASU) with a share capital of €5,000, registered with the Paris Trade and Companies Register (RCS) under number 130 526 890, having its registered office at 61 rue de Lyon, 75012 Paris, France ("Poliris", "we", "us").
 
-By creating an account, subscribing to the Service, or installing the Plugin, you ("**Customer**", "**you**") agree to these Terms. If you accept on behalf of a company, you represent that you are authorized to bind it.
+By creating an account, subscribing to the Service, or installing the Plugin, you ("Customer", "you") agree to these Terms. If you accept on behalf of a company, you represent that you are authorized to bind it.
 
 ## 1. The Service
 
@@ -26,13 +26,13 @@ You must provide accurate information when creating an account and keep your cre
 
 ## 4. Customer content and data
 
-4.1 You retain all rights to the websites, content, and data you submit to or connect with the Service ("**Customer Content**"). You grant us a non-exclusive license to host, process, and analyze Customer Content solely to provide the Service.
+4.1 You retain all rights to the websites, content, and data you submit to or connect with the Service ("Customer Content"). You grant us a non-exclusive license to host, process, and analyze Customer Content solely to provide the Service.
 
 4.2 You are responsible for having the necessary rights to the websites and content you connect to the Service, and for the lawfulness of Customer Content.
 
 4.3 Output generated with the assistance of AI models is provided as a draft for your review. You are responsible for reviewing, editing, and approving any output before use or publication.
 
-4.4 Personal data is processed in accordance with our [Privacy Policy](https://poliris.io/privacy). Where we process personal data on your behalf, a Data Processing Agreement is available upon request and forms part of these Terms once executed.
+4.4 Personal data is processed in accordance with our [Privacy Policy](/en/privacy). Where we process personal data on your behalf, a Data Processing Agreement is available upon request and forms part of these Terms once executed.
 
 ## 5. Acceptable use
 
@@ -44,7 +44,7 @@ You must not: (a) use the Service on websites you are not authorized to manage; 
 
 6.2 **Authorization.** By connecting a WordPress site to Poliris ("pairing"), you authorize Poliris to access and modify that site on your behalf, using a WordPress Application Password that the Plugin creates for the administrator account performing the pairing. You represent and warrant that you are authorized to grant this access for the site concerned.
 
-6.3 **Scope of changes.** Once a site is connected, Poliris may, exclusively in response to actions you take within the Poliris dashboard: (a) update titles, SEO titles, meta descriptions, page and post content, and image alternative text; (b) create new blog posts **as drafts**; and (c) apply approved fixes to the HTML rendered by your site, which may include modifying the page markup served to your visitors (e.g. corrected titles, meta descriptions, canonical tags, structured data, or targeted element edits).
+6.3 **Scope of changes.** Once a site is connected, Poliris may, exclusively in response to actions you take within the Poliris dashboard: (a) update titles, SEO titles, meta descriptions, page and post content, and image alternative text; (b) create new blog posts as drafts; and (c) apply approved fixes to the HTML rendered by your site, which may include modifying the page markup served to your visitors (e.g. corrected titles, meta descriptions, canonical tags, structured data, or targeted element edits).
 
 6.4 **No automatic publishing.** Content generated through Poliris is created as a draft and is never published without a human decision on your side.
 
@@ -64,7 +64,9 @@ Each party will protect the other party's non-public information with at least t
 
 ## 9. Warranty disclaimer
 
-The Service and the Plugin are provided "as is" and "as available". To the maximum extent permitted by law, we disclaim all warranties, express or implied, including merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the Service will be uninterrupted or error-free, nor do we guarantee any specific search-engine ranking, AI-visibility, traffic, or business outcome. This disclaimer extends to modifications made to a live website through the Plugin, which you review and approve under Section 6.5.
+The Service and the Plugin are provided "as is" and "as available". To the maximum extent permitted by law, we disclaim all warranties, express or implied, including merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the Service will be uninterrupted or error-free, nor do we guarantee any specific search-engine ranking, AI-visibility, traffic, or business outcome.
+
+This disclaimer extends to modifications made to a live website through the Plugin, which you review and approve under Section 6.5.
 
 ## 10. Limitation of liability
 
@@ -84,7 +86,7 @@ We may improve or modify the Service, provided this does not materially degrade 
 
 ## 13. Governing law and jurisdiction
 
-These Terms are governed by **French law**. Any dispute that cannot be resolved amicably shall be submitted to the **competent courts of Sarreguemines, France**, notwithstanding multiple defendants or third-party claims, without prejudice to mandatory consumer or local-law protections where applicable.
+These Terms are governed by French law. Any dispute that cannot be resolved amicably shall be submitted to the competent courts of Paris, France, notwithstanding multiple defendants or third-party claims, without prejudice to mandatory consumer or local-law protections where applicable.
 
 ## 14. Miscellaneous
 
@@ -92,5 +94,5 @@ If a provision of these Terms is held unenforceable, the remainder stays in effe
 
 ## 15. Contact
 
-**FCFD (Poliris)** – 12 rue Saint-Blaise, 57460 Behren-lès-Forbach, France\
-Legal: florian.michel@fcfd.fr – Privacy: florian.michel@poliris.io
+**POLIRIS** – 61 rue de Lyon, 75012 Paris, France\
+Legal: [florian.michel@poliris.io](mailto:florian.michel@poliris.io) – Privacy: [florian.michel@poliris.io](mailto:florian.michel@poliris.io)
