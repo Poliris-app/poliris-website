@@ -212,18 +212,18 @@
 
   <!-- ==================== DOCS ==================== -->
   <url>
-    <loc>https://poliris.io/en/docs</loc>
+    <loc>https://poliris.io/docs/en/</loc>
     <lastmod>2026-07-03</lastmod>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/docs" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/docs" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/docs/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/docs/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/docs/en/" />
   </url>
   <url>
-    <loc>https://poliris.io/fr/docs</loc>
+    <loc>https://poliris.io/docs/fr/</loc>
     <lastmod>2026-07-03</lastmod>
-    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/en/docs" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/fr/docs" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/en/docs" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://poliris.io/docs/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://poliris.io/docs/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://poliris.io/docs/en/" />
   </url>
 
   <!-- ==================== PRICING ==================== -->

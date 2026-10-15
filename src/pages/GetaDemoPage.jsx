@@ -107,7 +107,7 @@ export default function GetaDemoPage() {
           {/* ── Left: form ── */}
           <div className="demo-form-col">
             <p className="demo-eyebrow">{d.eyebrow}</p>
-            <h1 className="demo-heading">{d.heading}</h1>
+            <h2 className="demo-heading">{d.heading}</h2>
             <p className="demo-lead">{d.lead}</p>
 
             {/* Topic chips */}

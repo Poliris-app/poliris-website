@@ -121,7 +121,7 @@ export default function HighVisibilityContentFrPage() {
               <span className="bp-dot" />
               <span>20 août 2026</span>
             </div>
-            <h1 className="bp-title">Le plan directeur pour un contenu à forte visibilité : mise en forme, lisibilité et optimisation pour l'IA</h1>
+            <h1 className="bp-title">Contenu à forte visibilité : mise en forme, lisibilité et IA</h1>
             <p className="bp-deck">La découverte via la recherche connaît une fragmentation massive. Pour réussir à <strong>optimiser le contenu pour l'IA générative</strong>, les équipes éditoriales doivent comprendre que les grands modèles de langage (LLM) ne traitent pas l'information exactement de la même façon que les robots d'indexation traditionnels. Alors que les systèmes historiques comme Google utilisent des algorithmes complexes pour cartographier la densité de mots-clés et les profils de backlinks, les moteurs génératifs modernes utilisant la génération augmentée par récupération (RAG) segmentent les documents, vectorisent les concepts, et associent les requêtes utilisateur à un sens sémantique.</p>
           </header>
 

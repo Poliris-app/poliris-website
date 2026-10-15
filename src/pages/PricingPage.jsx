@@ -624,7 +624,7 @@ export default function PricingPage() {
       <div className="pricing-wrap">
 
         <div className="pricing-title-wrap">
-          <div className="eyebrow">{p.hero.eyebrow}</div>
+          <h1 className="eyebrow">{p.hero.eyebrow}</h1>
         </div>
 
         <div className="pricing-toggle-wrap">

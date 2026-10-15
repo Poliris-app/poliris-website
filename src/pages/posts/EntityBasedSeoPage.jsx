@@ -18,15 +18,15 @@ const SECTIONS = [
 const FAQ_ITEMS = [
   {
     q: 'What Is an Example of an SEO Entity?',
-    a: <><strong>Short answer:</strong> An <strong>SEO entity</strong> is any real-world object, person, organization, or concept that a search engine can uniquely identify and connect to related facts. A practical example is a medical clinic. Google's Knowledge Graph doesn't just read the words "Boston Children's Hospital." It resolves that string to a verified node. That node carries attributes: location, specialty, founding date, affiliated physicians. Content that names and contextualizes those attributes earns stronger semantic authority than content stuffed with keyword variations.</>,
+    a: <><strong>Short answer:</strong> An <strong>SEO entity</strong> is any real thing a search engine can name and link to facts: a person, a place, a brand, or an idea. Take a hospital. Google's Knowledge Graph doesn't just read the words "Boston Children's Hospital." It links them to one known node. That node holds facts: where it is, what it treats, when it was founded, who works there. Content that names those facts earns more trust than content stuffed with keyword variants.</>,
   },
   {
     q: 'How Do LLMs Crawl Knowledge Graphs?',
-    a: <><strong>Short answer:</strong> <strong>LLMs</strong> don't crawl <strong>knowledge graphs</strong> the way a traditional bot indexes pages. They learn relational patterns during training, then retrieve structured facts through retrieval-augmented generation at query time. Think of it like a student who read every encyclopedia before an exam. At test time, they recall connected facts, not isolated pages. This is why entity context matters more than keyword density. Content that names entities with clear subject-predicate-object relationships gets cited more reliably in neural search outputs.</>,
+    a: <><strong>Short answer:</strong> <strong>LLMs</strong> don't crawl <strong>knowledge graphs</strong> the way a search bot reads pages. They learn how facts link up while they train. Then, when a user asks something, they pull in fresh facts to answer. Think of a student who read every book before an exam. On the day, they recall linked facts, not single pages. That's why entity context counts for more than keyword density. Content that names entities and states clearly how they link gets cited more often.</>,
   },
   {
     q: 'What Is a Common Mistake in Entity Optimization?',
-    a: <><strong>Short answer:</strong> The most damaging <strong>common mistake</strong> in <strong>entity optimization</strong> is treating schema markup as a cosmetic layer rather than a structural foundation. Many specialists add schema after content is written, without adjusting the underlying copy. Schema should mirror the relational claims in the text. A second frequent error is ignoring co-occurrence. Entities gain semantic weight when they appear consistently alongside their verified relationships across multiple pages, not just once in an isolated article.</>,
+    a: <><strong>Short answer:</strong> The worst <strong>common mistake</strong> in <strong>entity optimization</strong> is treating schema markup as a coat of paint, not a core part of the page. Many teams add schema after the copy is done and never change the text. Schema should match the claims the text makes. A second mistake is ignoring co-occurrence. Entities gain weight when they show up next to the same known facts on many pages, not just once in one post.</>,
   },
 ];
 
@@ -120,13 +120,13 @@ export default function EntityBasedSeoPage() {
               <span className="bp-dot" />
               <span>Jul 7, 2026</span>
             </div>
-            <h1 className="bp-title">The Rise of Entity-Based SEO: Moving from Strings to Things in the AI Era</h1>
-            <p className="bp-deck"><strong>Semantic SEO</strong> is the practice of optimizing content around meaning, entities, and relationships rather than isolated keyword strings. Search engines no longer match words, they resolve concepts. <a target="_blank" rel="noopener" href="https://developers.google.com/knowledge-graph">Google's Knowledge Graph</a> connects entities like people, places, and ideas into a structured map of meaning. That shift is the core of the AI era's impact on search. The pain point for most SEO specialists is real: strategies built on keyword density and backlink volume are losing ground to systems that reward <strong>entity resolution</strong> and contextual relevance. If your content doesn't map to a recognized entity node, it's nearly invisible to modern <strong>neural search</strong> systems. This section frames the <strong>evolution</strong> of search from string-matching to meaning-matching. Understanding that shift tells you exactly where to invest your optimization effort next. The goal isn't to abandon what works, it's to extend it into semantic territory before your competitors do.</p>
+            <h1 className="bp-title">The Rise of Entity-Based SEO: From Strings to Things in the AI Era</h1>
+            <p className="bp-deck"><strong>Semantic SEO</strong> means building content around meaning, entities, and how they link, not around single keywords. Search engines no longer just match words. They work out what you mean. <a target="_blank" rel="noopener" href="https://developers.google.com/knowledge-graph">Google's Knowledge Graph</a> links people, places, and ideas into one map of meaning. That shift is how AI has changed search. And it hurts. Plans built on keyword density and backlink counts are losing ground to systems that reward <strong>entity resolution</strong> and context. If your content doesn't map to a known entity, <strong>neural search</strong> can barely see it. This post covers the <strong>evolution</strong> of search from matching strings to matching meaning. Once you see that shift, you know where to spend your effort next. You don't need to drop what works. You need to extend it before your rivals do.</p>
           </header>
 
           <div className="bp-note">
             <div className="bp-note-label">Expert Tip</div>
-            <p>The clearest signal that <strong>user intent</strong> has overtaken keyword frequency is <a target="_blank" rel="noopener" href="https://blog.google/products-and-platforms/products/search/search-language-understanding-bert/">Google's BERT rollout</a>, which began prioritizing whole-sentence context over individual query tokens. That architectural decision made entity relationships a first-class ranking signal, not a secondary refinement.</p>
+            <p>The clearest sign that <strong>user intent</strong> now beats keyword counts is <a target="_blank" rel="noopener" href="https://blog.google/products-and-platforms/products/search/search-language-understanding-bert/">Google's BERT launch</a>. With BERT, Google began to read the whole sentence, not just single words. That made the links between entities a core ranking signal, not a small tweak.</p>
           </div>
 
           {/* 01 */}
@@ -135,22 +135,22 @@ export default function EntityBasedSeoPage() {
               <span className="bp-num">01</span>
               <h2>Entity-Based SEO vs. Traditional SEO: The Structural Shift</h2>
             </div>
-            <p><strong>Traditional SEO treats every query as a string of characters to match.</strong> Semantic SEO treats it as a question from a person with context, intent, and a specific meaning. That distinction sounds simple. In practice, it changes everything about how you build content.</p>
+            <p><strong>Traditional SEO treats every query as a string of characters to match.</strong> Semantic SEO treats it as a question from a real person, with a goal and a clear meaning. That sounds like a small change. In practice, it changes how you build every page.</p>
             <h3>How Keyword Matching Diverges from Entity Resolution</h3>
-            <p><strong>Keyword matching</strong> works by counting word frequency and measuring proximity. A page with "best running shoes" appearing twelve times ranked well. The engine didn't ask what running shoes <em>were</em>, it just tallied strings. <strong>Entity resolution</strong> works differently. It asks: what real-world thing does this query describe? Google's Knowledge Graph, for example, doesn't store the string "Paris." It stores Paris as a node, a city, a capital, a cultural entity, connected to France, the Eiffel Tower, and the Seine River. Those relationships carry meaning that keywords never could. Here's where the structural problem with <strong>legacy metrics</strong> becomes clear:</p>
+            <p><strong>Keyword matching</strong> counts how often words appear and how close they sit. A page that said "best running shoes" twelve times ranked well. The engine never asked what running shoes <em>were</em>. It just counted. <strong>Entity resolution</strong> works in a new way. It asks: what real thing is this query about? Google's Knowledge Graph, for example, doesn't store the word "Paris." It stores Paris as a node: a city, a capital, a place with its own culture. That node links to France, the Eiffel Tower, and the Seine. Those links carry meaning that keywords never could. Here's where <strong>legacy metrics</strong> fall short:</p>
             <ul className="bp-prose-list">
               <li>Keyword density measures repetition, not relevance.</li>
-              <li>TF-IDF scores term frequency against a corpus, but ignores entity relationships.</li>
-              <li>Backlink counts signal authority without confirming topical coherence.</li>
+              <li>TF-IDF checks how often a term shows up, but not how entities link.</li>
+              <li>Backlink counts show trust, but not whether the page stays on topic.</li>
             </ul>
             <p>None of these signals tell a search engine <em>what</em> a page is actually about.</p>
             <h3>The Structural Gap in Legacy SEO</h3>
-            <p><strong>Entity-based</strong> thinking resolves this gap. Named Entity Recognition frameworks, the kind powering modern crawlers, classify nouns into typed categories: person, place, organization, concept. Once classified, they connect to Wikidata nodes and Knowledge Graph entries. A page that explicitly surfaces those connections earns <strong>semantic depth</strong> that keyword-stuffed content never reaches.</p>
+            <p><strong>Entity-based</strong> thinking closes this gap. Named Entity Recognition (NER) tools, the kind that power today's crawlers, sort nouns into types: person, place, brand, idea. Each one then links to a Wikidata node or Knowledge Graph entry. A page that shows those links clearly earns <strong>semantic depth</strong> that keyword-stuffed pages never reach.</p>
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
-              <p>Run a Named Entity Recognition pass on your top-performing pages. If your entities don't map cleanly to Knowledge Graph nodes, your content is invisible to neural search engines regardless of its keyword density.</p>
+              <p>Run an NER check on your best pages. If your entities don't map cleanly to Knowledge Graph nodes, neural search can't see your content, no matter how many keywords it has.</p>
             </div>
-            <p>This fundamental shift explains why understanding the <Link to={`/${lang}/blog/why-seo-is-the-cornerstone-of-geo-success`}>cornerstone of GEO success</Link> is critical for anyone building a modern visibility strategy. The shift from string-matching to entity resolution isn't a trend. It's the operating model search has already adopted.</p>
+            <p>This shift is why the <Link to={`/${lang}/blog/why-seo-is-the-cornerstone-of-geo-success`}>cornerstone of GEO success</Link> matters to anyone who wants to be seen in search today. The move from matching strings to matching entities isn't a trend. It's how search already works.</p>
           </section>
 
           {/* 02 */}
@@ -159,22 +159,22 @@ export default function EntityBasedSeoPage() {
               <span className="bp-num">02</span>
               <h2>Knowledge Graph Optimization for Search Visibility</h2>
             </div>
-            <p>Knowledge graphs determine which entities Google treats as verified, authoritative sources of truth. When Google's <strong>knowledge graph</strong> links your brand, product, or concept to confirmed external references, your content gains <strong>semantic authority</strong> that keyword density alone can't produce. Think of it like a citation network in academic publishing: the more credible sources point to your entity, the more trusted it becomes.</p>
+            <p>Knowledge graphs decide which entities Google treats as trusted facts. When Google's <strong>knowledge graph</strong> links your brand, product, or idea to trusted outside sources, your content gains <strong>semantic authority</strong>. Keyword density alone can't give you that. Think of how research papers cite each other: the more trusted sources point to your entity, the more it is trusted.</p>
             <h3>How Verified Nodes Build Semantic Authority</h3>
-            <p>Every entity in Google's Knowledge Graph exists as a node with defined relationships to other entities. A <strong>verified node</strong> for a software company, for example, connects to its founders, its product category, its industry, and its competitors. Each confirmed connection strengthens the entity's credibility signal in neural search environments. <strong>Search visibility</strong> rises when those connections are sourced from high-authority references like Wikidata, Wikipedia, or structured schema markup on your own domain. Named Entity Recognition frameworks, including those built into most modern NLP pipelines, read these connections to classify content relevance. So the richer your entity's relationship map, the more confidently an NLP system categorizes your content.</p>
+            <p>Every entity in Google's Knowledge Graph is a node with set links to other entities. A <strong>verified node</strong> for a software firm, for example, links to its founders, its product type, its market, and its rivals. Each proven link makes the entity more trusted in neural search. <strong>Search visibility</strong> grows when those links come from strong sources like Wikidata, Wikipedia, or schema markup on your own site. NER tools read these links to judge what your content is about. So the richer your entity's map of links, the more sure an AI system is about your content.</p>
             <h3>Playbook for Building Definitive Entity Profiles</h3>
-            <p>Use this four-step process to build <strong>entity profiles</strong> that Google can verify:</p>
+            <p>Use these four steps to build <strong>entity profiles</strong> that Google can check:</p>
             <ol className="bp-steps">
-              <li>Claim or create a <a target="_blank" rel="noopener" href="https://www.wikidata.org/">Wikidata entry</a> that accurately describes your entity using recognized subject-predicate-object triples.</li>
-              <li>Add structured schema markup (Organization, Person, or Product schema) to your site's core pages, linking it to your Wikidata and Wikipedia sources.</li>
-              <li>Publish consistent co-citation signals: ensure your entity's name, description, and attributes appear identically across authoritative third-party sources.</li>
-              <li>Audit your entity connections regularly using schema validators or Google's Rich Results Test, and expand your node relationships as your entity grows.</li>
+              <li>Claim or create a <a target="_blank" rel="noopener" href="https://www.wikidata.org/">Wikidata entry</a> that describes your entity in clear "subject, verb, object" facts.</li>
+              <li>Add schema markup (Organization, Person, or Product) to your main pages, and link it to your Wikidata and Wikipedia pages.</li>
+              <li>Keep your co-citations in sync: make sure your entity's name, summary, and facts read the same on every trusted outside site.</li>
+              <li>Check your entity links often with a schema checker or Google's Rich Results Test, and add new links as your entity grows.</li>
             </ol>
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
-              <p>The most common gap in entity-based SEO is incomplete co-citation. Your entity may exist in the knowledge graph but connect to too few verified sources to trigger high-confidence rankings. Treat co-citation building the same way you'd treat link building in traditional SEO.</p>
+              <p>The most common gap in entity-based SEO is weak co-citation. Your entity may be in the knowledge graph but link to too few trusted sources to rank with confidence. Treat co-citation the way you'd treat link building in classic SEO.</p>
             </div>
-            <p>If you need a quick technical breakdown of these core concepts, explore our semantic <Link to={`/${lang}/glossary`}>SEO &amp; GEO Glossary</Link> as you map out your architecture.</p>
+            <p>For quick definitions of these terms, see our <Link to={`/${lang}/glossary`}>SEO &amp; GEO Glossary</Link> as you plan your site.</p>
           </section>
 
           {/* 03 */}
@@ -183,9 +183,9 @@ export default function EntityBasedSeoPage() {
               <span className="bp-num">03</span>
               <h2>How Semantic Entities Shape Content Strategy for LLMs</h2>
             </div>
-            <p><strong>Large language models don't read pages the way search crawlers do.</strong> They extract meaning by identifying named entities, mapping relationships between them, and then scoring your content against their internal knowledge models. That shift changes everything about how you write. <strong>Semantic entities</strong> are the foundation of this process. An LLM doesn't process the string "New York attorney." It recognizes "New York" as a geopolitical entity and "attorney" as a professional role. Then connects both to legal services through trained associations. Your content strategy must mirror that structure, not fight it.</p>
+            <p><strong>Large language models don't read pages the way search crawlers do.</strong> They find the named entities, map how they link, and then score your content against what they already know. That changes how you should write. <strong>Semantic entities</strong> are the base of this process. An LLM doesn't see "New York attorney" as just a string. It sees "New York" as a place and "attorney" as a job. Then it links both to legal services, based on what it learned in training. Your content plan should match that structure, not fight it.</p>
             <h3>How LLMs Use Entity Relationships to Award Rag Citations</h3>
-            <p><strong>LLMs</strong> use entities to handle <strong>intent interpretation</strong> before they generate any response. When a model pulls source content to answer a query, it selects passages where entities are clearly defined, directly connected, and consistent with its training data. That selection process is what drives <strong>RAG citations</strong>. Content that names entities explicitly and states their relationships in Subject-Predicate-Object form wins those citations far more often than keyword-dense prose. In practice, a product page that states "Stripe processes card payments for e-commerce merchants" gives an LLM a clean triple to extract. A page that says "our platform helps businesses handle transactions better" gives it almost nothing to work with. Design <strong>content loops</strong> so each page reinforces the same entity relationships across multiple formats: a definition paragraph, a how-to section, and a structured FAQ. This repetition across content types deepens the semantic signal without keyword stuffing. For a broader view of how these shifts are rewriting discovery, explore our deep dive on the <Link to={`/${lang}/blog/death-of-traditional-search-geo-priority`}>death of traditional search and why GEO is now a priority</Link>.</p>
+            <p><strong>LLMs</strong> use entities to work out <strong>intent</strong> before they write any answer. When a model pulls in pages to answer a question, it picks passages where entities are clear, linked, and match what it already knows. That choice is what drives <strong>RAG citations</strong>. Content that names entities and states plainly how they link, in "subject, verb, object" form, wins those citations far more often than keyword-heavy text. Say a product page states "Stripe handles card payments for online shops." That gives an LLM a clean fact to pull out. A page that says "our platform helps businesses handle transactions better" gives it almost nothing. Build <strong>content loops</strong> so each page repeats the same entity links in more than one format: a short definition, a how-to section, and an FAQ. Repeating the facts this way makes the signal stronger without keyword stuffing. For the bigger picture, read our deep dive on the <Link to={`/${lang}/blog/death-of-traditional-search-geo-priority`}>death of traditional search and why GEO is now a priority</Link>.</p>
           </section>
 
           {/* 04 */}
@@ -194,17 +194,17 @@ export default function EntityBasedSeoPage() {
               <span className="bp-num">04</span>
               <h2>Implementing Semantic SEO: Steps &amp; Tools</h2>
             </div>
-            <p>Migrating to entity-based SEO feels less daunting once you break it into a clear sequence. The right <strong>migration steps</strong> follow a logical order: audit what exists, restructure what's broken, then build outward toward verified entity connections.</p>
+            <p>Moving to entity-based SEO feels less scary once you break it into clear steps. The right <strong>migration steps</strong> go in order: check what you have, fix what's broken, then build out links to trusted entities.</p>
             <h3>How Do You Migrate Your Existing Site Framework?</h3>
-            <p>Start by inventorying your current <strong>site framework</strong> for entity gaps. Run a crawl to identify pages that describe concepts without naming them as entities. A product page that says "fast delivery" without mentioning the brand, location, or service category as a named node gives search engines nothing to anchor. Here's a practical sequence most teams follow:</p>
+            <p>Start by checking your current <strong>site framework</strong> for entity gaps. Run a crawl to find pages that talk about ideas without naming them. Say a product page reads "fast delivery" but never names the brand, the place, or the type of service. Search engines then have nothing to hold on to. Here's the order most teams follow:</p>
             <ol className="bp-steps">
-              <li><strong>Audit existing content</strong> for unresolved entity references using Named Entity Recognition (NER) tools such as Google's Natural Language API.</li>
-              <li><strong>Run connection audits</strong> to map which entities on your site link to verified nodes in Google's Knowledge Graph or Wikidata.</li>
-              <li><strong>Deploy custom schema</strong> markup (Organization, Product, FAQPage, or Event types) so each entity carries machine-readable attributes.</li>
-              <li><strong>Cross-check semantic authority</strong> by comparing your entity coverage against competitor pages that rank in AI-generated summaries.</li>
-              <li><strong>Validate with a </strong><Link to={`/${lang}/technical-audit`}><strong>Technical Audit</strong></Link> to catch orphaned schema, broken structured data, and missing entity identifiers before publishing.</li>
+              <li><strong>Audit your content</strong> for unclear entity mentions, using NER tools such as Google's Natural Language API.</li>
+              <li><strong>Run link audits</strong> to see which entities on your site link to known nodes in Google's Knowledge Graph or Wikidata.</li>
+              <li><strong>Add custom schema</strong> markup (Organization, Product, FAQPage, or Event) so each entity has facts that machines can read.</li>
+              <li><strong>Check your semantic authority</strong> by comparing your entities with rival pages that show up in AI answers.</li>
+              <li><strong>Check it with a </strong><Link to={`/${lang}/technical-audit`}><strong>Technical Audit</strong></Link> to catch stray schema, broken markup, and missing entity IDs before you publish.</li>
             </ol>
-            <p>Good <strong>SEO tools</strong> make step two and three manageable. Schema validators, knowledge graph checkers, and NER dashboards each serve a distinct role. Don't try to run all three from a single generalist platform. A semantic SEO example worth studying: a SaaS brand that replaced vague feature descriptions with structured entity blocks saw its product pages appear in AI-generated comparison answers within a standard re-indexing cycle.</p>
+            <p>Good <strong>SEO tools</strong> make steps two and three easy to manage. Schema checkers, knowledge graph tools, and NER dashboards each do a different job. Don't try to run all three from one all-in-one tool. Here's a semantic SEO example worth a look: a SaaS brand swapped vague feature text for clear entity blocks. Its product pages then showed up in AI comparison answers within one normal re-index cycle.</p>
           </section>
 
           {/* 05 */}
@@ -213,7 +213,7 @@ export default function EntityBasedSeoPage() {
               <span className="bp-num">05</span>
               <h2>Frequently Asked Questions</h2>
             </div>
-            <p>Semantic SEO puzzles even experienced practitioners. Here are direct answers to the questions that come up most often.</p>
+            <p>Semantic SEO puzzles even seasoned pros. Here are short answers to the questions we hear most.</p>
             <div className="bp-faq">
               {FAQ_ITEMS.map((item, i) => (
                 <div key={i} className="bp-faq-item">
@@ -238,20 +238,20 @@ export default function EntityBasedSeoPage() {
           {/* Takeaways */}
           <div id="s-takeaways" style={{ scrollMarginTop: '90px', marginTop: '3.5rem' }}>
             <h2 className="bp-section-h2">Conclusion</h2>
-            <p className="bp-takeaways-intro">The shift from string matching to entity resolution marks one of the most significant <strong>evolution</strong>s in search history. <strong>Semantic SEO</strong> isn't a trend to monitor from a distance. It's the operating framework that determines whether your content earns a citation in AI-generated answers or disappears from neural search results entirely.</p>
+            <p className="bp-takeaways-intro">The move from matching strings to matching entities is one of the biggest steps in the <strong>evolution</strong> of search. <strong>Semantic SEO</strong> isn't a trend to watch from afar. It decides whether your content gets cited in AI answers or drops out of neural search for good.</p>
             <div className="bp-takeaways">
               <h2 className="bp-takeaways-title">Key Takeaways</h2>
               <ul className="bp-takeaways-list">
-                <li><strong>Knowledge graphs</strong> connect named entities to verified facts, giving AI engines a structured map to interpret and cite your content.</li>
-                <li><strong>Semantic authority</strong> is built through consistent entity profiles across your site, schema markup, and third-party corroboration.</li>
-                <li>LLMs reward content that resolves entity relationships clearly. Ambiguity reduces your RAG citation probability.</li>
-                <li>A sound <strong>content strategy</strong> maps every page to a defined entity node before a single word is written.</li>
-                <li>The <strong>AI future</strong> of search favors sites that function as knowledge sources, not keyword containers.</li>
-                <li>Schema audits and entity resolution are maintenance tasks, not one-time migrations. Treat them as ongoing operations.</li>
-                <li>SEO specialists who adopt entity-based thinking now build a compounding advantage that keyword-focused peers cannot easily replicate.</li>
+                <li><strong>Knowledge graphs</strong> link named entities to trusted facts. That gives AI engines a clear map to read and cite your content.</li>
+                <li><strong>Semantic authority</strong> comes from the same entity profile across your site, your schema markup, and outside sources.</li>
+                <li>LLMs reward content that makes entity links clear. Vague content gets fewer RAG citations.</li>
+                <li>A sound <strong>content strategy</strong> maps every page to one clear entity before a single word is written.</li>
+                <li>The <strong>AI future</strong> of search favors sites that act as sources of facts, not bags of keywords.</li>
+                <li>Schema audits and entity checks are ongoing upkeep, not one-time jobs. Keep doing them.</li>
+                <li>SEO pros who switch to entity-based thinking now build a lead that grows over time. Keyword-focused rivals will struggle to catch up.</li>
               </ul>
             </div>
-            <p className="bp-takeaways-intro">The practitioners who thrive in this environment treat their site as a structured knowledge base. They map entities to Wikidata identifiers. They run schema audits on a regular cycle. That operational discipline separates sites that surface in AI Overviews from those that don't. The <strong>evolution</strong> continues. Start with one entity. Build from there.</p>
+            <p className="bp-takeaways-intro">The teams who win here treat their site as a well-ordered base of facts. They map entities to Wikidata IDs. They run schema audits on a set schedule. That habit is what sets apart the sites that show up in AI Overviews from those that don't. The <strong>evolution</strong> continues. Start with one entity. Build from there.</p>
           </div>
 
         </main>

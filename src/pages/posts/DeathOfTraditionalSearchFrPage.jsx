@@ -69,6 +69,9 @@ export default function DeathOfTraditionalSearchFrPage() {
     <div className="bp-page">
       <Head>
         <title>La mort de la recherche traditionnelle : pourquoi le GEO est votre priorité | Poliris</title>
+        <link rel="canonical" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority" />
+        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority" />
+        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
         <meta name="description" content="Le GEO consiste à structurer votre contenu pour que les moteurs de réponse IA puissent l'extraire et le citer directement. Voici pourquoi c'est votre nouvelle priorité." />
       </Head>
       <Navbar />
@@ -125,7 +128,7 @@ export default function DeathOfTraditionalSearchFrPage() {
               <span className="bp-dot" />
               <span>30 juin 2026</span>
             </div>
-            <h1 className="bp-title">La mort de la recherche traditionnelle : pourquoi l'optimisation pour les moteurs génératifs (GEO) est votre nouvelle priorité</h1>
+            <h1 className="bp-title">La mort de la recherche traditionnelle : pourquoi le GEO s'impose</h1>
             <p className="bp-deck">L'optimisation pour les moteurs génératifs (GEO) consiste à structurer le contenu pour que les moteurs de réponse IA puissent l'extraire et le citer directement. Ces moteurs incluent ChatGPT, Claude et Gemini. Le SEO traditionnel optimise pour des listes classées sur Google. Le GEO cible la couche de réponse au-dessus de la page de résultats de recherche.</p>
             <p className="bp-deck">Le comportement de recherche a déjà changé. <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.gartner.com/en/newsroom/press-releases/2024-02-19-gartner-predicts-search-engine-volume-will-drop-25-percent-by-2026-due-to-ai-chatbots-and-other-virtual-agents">Gartner prévoit que le volume de recherche traditionnelle diminuera de 25 % d'ici 2026</a>. Les requêtes basculent massivement vers des interfaces IA conversationnelles. Si votre contenu manque de la structure adaptée à cet environnement, il sera probablement ignoré. Votre classement Google n'aura plus d'importance. Ce guide est la remise à zéro de votre stratégie digitale. Vous apprendrez exactement comment fonctionne le GEO, pourquoi il exige une architecture de contenu différente du SEO classique, et comment les principes du SEO génératif IA vous aident à vous adapter dès aujourd'hui.</p>
             <div className="bp-tags">GEO · SEO · Visibilité IA</div>

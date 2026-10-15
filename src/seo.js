@@ -186,6 +186,9 @@ export function getMeta(lang, pageKey) {
 // Builds the canonical URL for a (lang, pageKey) pair.
 // Home keeps a trailing slash (/en/); sub-pages have none (/en/visibility).
 export function canonicalUrl(lang, pageKey) {
+  // /:lang/docs only iframes the static docs, so the real content lives at
+  // /docs/:lang/ — point search engines there instead of the near-empty shell.
+  if (pageKey === 'docs') return `${SITE_URL}/docs/${lang}/`;
   const slug = PAGE_SLUGS[pageKey] ?? '';
   return slug ? `${SITE_URL}/${lang}/${slug}` : `${SITE_URL}/${lang}/`;
 }

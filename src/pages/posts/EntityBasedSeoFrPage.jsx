@@ -120,7 +120,7 @@ export default function EntityBasedSeoFrPage() {
               <span className="bp-dot" />
               <span>7 juil. 2026</span>
             </div>
-            <h1 className="bp-title">L'essor du SEO orienté entités : des chaînes de caractères aux choses à l'ère de l'IA</h1>
+            <h1 className="bp-title">L'essor du SEO orienté entités à l'ère de l'IA</h1>
             <p className="bp-deck">Le <strong>SEO sémantique</strong> consiste à optimiser le contenu autour du sens, des entités et des relations plutôt que de chaînes de mots-clés isolées. Les moteurs de recherche n'associent plus des mots, ils résolvent des concepts. Le <a target="_blank" rel="noopener" href="https://developers.google.com/knowledge-graph">Knowledge Graph de Google</a> relie des entités comme des personnes, des lieux et des idées au sein d'une carte structurée du sens. Ce basculement est au cœur de l'impact de l'ère de l'IA sur la recherche. Le point de friction est bien réel pour la plupart des spécialistes SEO : les stratégies bâties sur la densité de mots-clés et le volume de backlinks perdent du terrain face à des systèmes qui récompensent la <strong>résolution d'entités</strong> et la pertinence contextuelle. Si votre contenu ne se rattache pas à un nœud d'entité reconnu, il est quasiment invisible pour les systèmes de <strong>recherche neuronale</strong> modernes. Cette section pose le cadre de l'<strong>évolution</strong> de la recherche, du string-matching au meaning-matching. Comprendre ce basculement vous indique exactement où investir vos efforts d'optimisation ensuite. L'objectif n'est pas d'abandonner ce qui fonctionne, mais de l'étendre au territoire sémantique avant que vos concurrents ne le fassent.</p>
           </header>
 

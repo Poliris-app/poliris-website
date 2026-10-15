@@ -70,6 +70,9 @@ export default function SeoGeoCornerstoneFrPage() {
     <div className="bp-page">
       <Head>
         <title>Pourquoi le SEO est la pierre angulaire du succès GEO | Poliris</title>
+        <link rel="canonical" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success" />
+        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success" />
+        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
         <meta name="description" content="Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et par où commencer." />
       </Head>
       <Navbar />
