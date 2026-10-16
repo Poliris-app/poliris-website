@@ -6336,7 +6336,9 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
 })(__mkDoc(document.getElementById('pg-cite')),__mkWin(),1400,912.5);</script>
 <script>(function () {
   "use strict";
-  var W = 1120, H = 730, K = 0.8, Q = -4.6, E = -1.8, D = 18.85 + Q + E, LOOP = 22.75 + D, S0 = 4.75;
+  // Order: AI Visibility → Sites → Roadmap → Content → Citations. The roadmap
+  // block runs right after Sites (14.45s click); C shifts content + citations after it.
+  var W = 1120, H = 730, K = 0.8, Q = -4.6, E = -1.8, D = 18.85 + Q + E, LOOP = 22.75 + D, S0 = 4.75, C = 8.2;
   var $ = function (id) { return document.getElementById(id); };
   var flow = $("pf-flow"), stage = $("pf-stage"), frame = $("pf-frame");
   var P = { rep: $("pg-rep"), sites: $("pg-sites"), content: $("pg-content"), cite: $("pg-cite"), road: $("pg-road") };
@@ -6380,6 +6382,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   var sitesContent = q("sites", '.nav-row[data-key="content"]') || navRow("sites", "Contenu");
   var roadFolds = P.road.querySelectorAll(".fold-head");
   var roadContent = navRow("road", "Contenu"), roadCite = navRow("road", "Citations");
+  var sitesRoad = q("sites", ".roadmap");
   var roadTitle = q("road", ".page-title"), roadBody = q("road", ".page-body");
   function bodyShift(y) { for (var i = 0; i < roadBody.children.length; i++) roadBody.children[i].style.transform = y ? "translateY(" + (-y) + "px)" : ""; }
   var road = window.__road;
@@ -6391,10 +6394,10 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   var SPOTS = [
     { el: visCard, on: 5.9, off: 8.55, s: 1.035, r: 18 },
     { el: pipeCard, on: 10.75, off: 13.5, s: 1.012, r: 14, clip: auditScroll },
-    { get: function () { return cq(".sb-card"); }, on: 19.1, off: 20.25, s: 1.012, r: 14, clip: cgWork },
-    { get: function () { return citeTop(); }, on: 23.05, off: 25.5, s: 1.015, r: 12, rect: citeTopRect, rows: true }
+    { get: function () { return cq(".sb-card"); }, on: 19.1 + C, off: 20.25 + C, s: 1.012, r: 14, clip: cgWork },
+    { get: function () { return citeTop(); }, on: 23.05 + C, off: 25.5 + C, s: 1.015, r: 12, rect: citeTopRect, rows: true }
   ];
-  var HL0 = 23.05;
+  var HL0 = 23.05 + C;
   function citeTop() { var rs = [].slice.call(P.cite.querySelectorAll(".ct tbody tr")).filter(function (r, i) { return i % 2 === 0; }).slice(0, 5); return rs.length ? rs : null; }
   function citeTopRect() { var rs = citeRows(); if (!rs.length) return null; var a = R(rs[0]), b = R(rs[rs.length - 1]); return { x: a.x, y: a.y, w: a.w, h: b.y + b.h - a.y }; }
   function spotEl(sp) { var el = sp.get ? sp.get() : sp.el; if (el && !Array.isArray(el)) el.style.transformOrigin = "50% 0"; return el; }
@@ -6456,7 +6459,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
 
   // ── content generation: idea → configuration → internal links → outline → generate (research · write · score) → scored article ──
   var gen = { t0: 0, d: -1 }, cgScore = null;
-  var G0 = 15.7, G1 = 18.7;
+  var G0 = 15.7 + C, G1 = 18.7 + C;
   function cgReset() {
     if (!CG) return;
     CG.clearTimers();
@@ -6471,7 +6474,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   function cgAuto() {
     cgPick();
     var S = CG.S; S.phase = "generating"; S.progress = { step: 1, pct: 2, detail: 0, auto: true };
-    CG.upsertDraft("generating"); CG.render(); gen = { t0: 15.45, d: 0 };
+    CG.upsertDraft("generating"); CG.render(); gen = { t0: 15.45 + C, d: 0 };
   }
   function navSub(p, label) { var rows = P[p].querySelectorAll(".nav-sub"); for (var i = 0; i < rows.length; i++) if (rows[i].textContent.trim() === label) return rows[i]; return null; }
   function cgOpenCite() { var sc = cq(".sb-content"), y = sc ? sc.scrollTop : 0; CG.S.sb.citations = true; CG.renderSidebar(); sc = cq(".sb-content"); if (sc) sc.scrollTop = y; }
@@ -6482,7 +6485,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     var S = CG.S; S.outlineLoading = false; S.outline = CG.buildOutline(S.cfg); CG.upsertDraft("draft"); CG.render();
     stagger([].slice.call(P.content.querySelectorAll(".sec-card")), 0.05, 0.07);
   }
-  function cgGenerate() { var S = CG.S; S.phase = "generating"; S.progress = { step: 1, pct: 2, detail: 0 }; CG.upsertDraft("generating"); CG.render(); gen = { t0: 18.1, d: 0 }; }
+  function cgGenerate() { var S = CG.S; S.phase = "generating"; S.progress = { step: 1, pct: 2, detail: 0 }; CG.upsertDraft("generating"); CG.render(); gen = { t0: 18.1 + C, d: 0 }; }
   function cgProgress(t) {
     var S = CG.S; if (S.phase !== "generating" || !S.progress) return;
     var au = S.progress.auto, p = Math.max(2, Math.round(100 * seg(t, G0, G1))), st = au ? (p < 34 ? 1 : p < 67 ? 2 : 3) : (p < 34 ? 1 : p < 80 ? 2 : 3);
@@ -6532,7 +6535,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
 
   // ── roadmap drag ──
   var drag = null, boardScroll = 0, roadShift = 0;
-  var D0 = 19.65 + D, D1 = 20.75 + D;
+  var D0 = 19.65, D1 = 20.75;
   function startDrag() {
     var card = q("road", '.board-list[data-status="backlog"] .action-card');
     var col = q("road", '.board-col[data-status="in_progress"]');
@@ -6583,7 +6586,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   function reset() {
     cleanPages();
     counts.forEach(function (c) { c.el.textContent = c.txt; });
-    tint(repSite, false); tint(sitesSite, true); tint(sitesContent, false);
+    tint(repSite, false); tint(sitesSite, true); tint(sitesContent, false); tint(roadContent, false);
     cgReset(); cqReset(); frozen = {}; SS = {};
     cancelDrag(); resetRoad();
     P.road.scrollTop = 0; roadBody.scrollTop = 0; bodyShift(0); roadShift = 0;
@@ -6595,29 +6598,31 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
 
   var EVENTS = [
     [6.0, function () { fills(true); }], [9.55, function () { tint(repSite, true); }],
-    [10.85, function () { ring(true); }], [14.45, function () { tint(sitesContent, true); }],
-    [15.45, cgAuto], [18.85, cgResult],
-    [21.4, cgOpenCite], [21.95, function () { tint(navSub("content", "Acquérir une citation"), true); }], [26.75 + Q, cqRows],
-    
-    [15.3 + D, function () { tint(roadFolds[0], true); tint(roadFolds[2], true); }],
-    [16.05 + D, function () { tint(roadFolds[0], false); tint(roadFolds[2], false); }],
-    [16.3 + D, function () { roadBars("show"); }], [19.6 + D, startDrag], [20.8 + D, drop]
+    [10.85, function () { ring(true); }],
+    [15.3, function () { tint(roadFolds[0], true); tint(roadFolds[2], true); }],
+    [16.05, function () { tint(roadFolds[0], false); tint(roadFolds[2], false); }],
+    [16.3, function () { roadBars("show"); }], [19.6, startDrag], [20.8, drop],
+    [14.45 + C, function () { tint(roadContent, true); }],
+    [15.45 + C, cgAuto], [18.85 + C, cgResult],
+    [21.4 + C, cgOpenCite], [21.95 + C, function () { tint(navSub("content", "Acquérir une citation"), true); }], [26.75 + Q + C, cqRows]
   ];
-  var CLICKS = [9.55, 14.45, 15.45, 21.4, 21.95].concat([33.3 + Q + E]);
+  var CLICKS = [9.55, 14.45, 14.45 + C, 15.45 + C, 21.4 + C, 21.95 + C];
 
   function at(g, fx, fy) { return function () { var el = typeof g === "function" ? g() : g; if (!el) return null; var r = R(el); if (!r.w && !r.h) return null; return { x: r.x + r.w * fx, y: r.y + r.h * fy }; }; }
   var pt = function (x, y) { return function () { return { x: x, y: y }; }; };
-  var citeRoad = at(function () { return qq(".roadmap"); }, .32, .5);
+  var sitesRoadPt = at(sitesRoad, .32, .5);
+  var backlogCard = function () { var c = q("road", '.board-list[data-status="backlog"] .action-card'); var r = c ? R(c) : { x: 600, y: 300, w: 100 }; return { x: r.x + r.w * 0.42, y: r.y + 26 }; };
+  // after the drop, the moved card sits first in "In progress" — where the drag ended
+  var droppedCard = function () { var c = q("road", '.board-list[data-status="in_progress"] .action-card'); if (!c) return null; var r = R(c); return { x: r.x + r.w * 0.42, y: r.y + 26 }; };
   var CUR = [
     [8.3, pt(940, 640)], [9.5, at(repSite, .3, .5)], [13.35, at(sitesSite, .3, .5)],
-    [14.4, at(sitesContent, .3, .5)],
-    [15.4, at(function () { return cq('.idea[data-action="pick-idea"]'); }, .42, .38)],
-    [16.3, pt(800, 560)], [19.7, pt(800, 560)],
-    [21.35, at(function () { return cq('.nav-row[data-key="citations"]'); }, .3, .5)],
-    [21.9, at(function () { return navSub("content", "Acquérir une citation"); }, .4, .5)],
-    [25.9, at(function () { return navSub("content", "Acquérir une citation"); }, .4, .5)],
-    [33.25 + Q + E, citeRoad], [18.6 + D, citeRoad],
-    [19.4 + D, function () { var c = q("road", '.board-list[data-status="backlog"] .action-card'); var r = c ? R(c) : { x: 600, y: 300, w: 100 }; return { x: r.x + r.w * 0.42, y: r.y + 26 }; }]
+    [14.4, sitesRoadPt], [18.6, sitesRoadPt],
+    [19.4, backlogCard], [19.65, backlogCard], [20.8, droppedCard],
+    [14.4 + C, at(roadContent, .3, .5)],
+    [15.4 + C, at(function () { return cq('.idea[data-action="pick-idea"]'); }, .42, .38)],
+    [16.3 + C, pt(800, 560)], [19.7 + C, pt(800, 560)],
+    [21.35 + C, at(function () { return cq('.nav-row[data-key="citations"]'); }, .3, .5)],
+    [21.9 + C, at(function () { return navSub("content", "Acquérir une citation"); }, .4, .5)]
   ];
   var frozen = {}, lastCursor = { x: 940, y: 640 };
   function ptOf(i, t) {
@@ -6672,31 +6677,31 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     pct.textContent = p + "%";
 
     // pages
-    var rk = out(seg(t, 4.75, 5.4)), sk = out(seg(t, 9.7, 10.05)), ck = out(seg(t, 14.6, 14.95)), qk = out(seg(t, 22.1, 22.45)), dk = out(seg(t, 14.6 + D, 14.95 + D));
+    var rk = out(seg(t, 4.75, 5.4)), sk = out(seg(t, 9.7, 10.05)), dk = out(seg(t, 14.6, 14.95)), ck = out(seg(t, 14.6 + C, 14.95 + C)), qk = out(seg(t, 22.1 + C, 22.45 + C));
     P.rep.style.opacity = (t < 10.07 ? rk : 0).toFixed(3);
     P.rep.style.transform = rk >= 1 ? "scale(" + K + ")" : "translateY(" + ((1 - rk) * 10).toFixed(2) + "px) scale(" + (K * (0.985 + 0.015 * rk)).toFixed(4) + ")";
     P.sites.style.opacity = (t < 14.97 ? sk : 0).toFixed(3);
     P.sites.style.transform = "translateY(" + ((1 - sk) * 6).toFixed(2) + "px) scale(" + K + ")";
-    P.content.style.opacity = (t < 22.47 ? ck : 0).toFixed(3);
-    P.content.style.transform = "translateY(" + ((1 - ck) * 6).toFixed(2) + "px) scale(" + K + ")";
-    P.cite.style.opacity = (t < 14.97 + D ? qk : 0).toFixed(3);
-    P.cite.style.transform = "translateY(" + ((1 - qk) * 6).toFixed(2) + "px) scale(" + K + ")";
-    P.road.style.opacity = (dk * (1 - io(seg(t, 22.1 + D, 22.65 + D)))).toFixed(3);
+    P.road.style.opacity = (t < 14.97 + C ? dk : 0).toFixed(3);
     P.road.style.transform = "translateY(" + ((1 - dk) * 6).toFixed(2) + "px) scale(" + K + ")";
+    P.content.style.opacity = (t < 22.47 + C ? ck : 0).toFixed(3);
+    P.content.style.transform = "translateY(" + ((1 - ck) * 6).toFixed(2) + "px) scale(" + K + ")";
+    P.cite.style.opacity = (qk * (1 - io(seg(t, 22.1 + D, 22.65 + D)))).toFixed(3);
+    P.cite.style.transform = "translateY(" + ((1 - qk) * 6).toFixed(2) + "px) scale(" + K + ")";
 
     // content studio: scroll the long steps, drive the generation progress, count the score
-    if (CG && t > 15 && t < 22.5) {
+    if (CG && t > 15 + C && t < 22.5 + C) {
       var ph = CG.S.phase, w = cgWork();
-      if (ph === "config") scrollSeg("cfg", w, t, 15.85, 16.45);
-      if (ph === "outline" && !CG.S.outlineLoading) scrollSeg("ol", w, t, 17.4, 17.95);
+      if (ph === "config") scrollSeg("cfg", w, t, 15.85 + C, 16.45 + C);
+      if (ph === "outline" && !CG.S.outlineLoading) scrollSeg("ol", w, t, 17.4 + C, 17.95 + C);
       if (ph === "generating") cgProgress(t);
-      if (cgScore && t >= 18.9 && t <= 20.1) cgScore.el.textContent = Math.round(cgScore.n * out(seg(t, 18.9, 20.0)));
+      if (cgScore && t >= 18.9 + C && t <= 20.1 + C) cgScore.el.textContent = Math.round(cgScore.n * out(seg(t, 18.9 + C, 20.0 + C)));
       var sb = cq(".sb-content");
-      scrollSeg("sb1", sb, t, 20.6, 21.15); scrollSeg("sb2", sb, t, 21.5, 21.8);
+      scrollSeg("sb1", sb, t, 20.6 + C, 21.15 + C); scrollSeg("sb2", sb, t, 21.5 + C, 21.8 + C);
     }
-    if (CQ && t >= 22.2 && t <= 23.3) { var sv = qq(".stat-card .v"); if (sv) sv.textContent = Math.round(CQ.ROWS.length * out(seg(t, 22.2, 23.2))); }
+    if (CQ && t >= 22.2 + C && t <= 23.3 + C) { var sv = qq(".stat-card .v"); if (sv) sv.textContent = Math.round(CQ.ROWS.length * out(seg(t, 22.2 + C, 23.2 + C))); }
 
-    if (t > 17.5 + D && t < 22.7 + D) { roadShift = boardScroll * io(seg(t, 17.7 + D, 19.05 + D)); bodyShift(roadShift); }
+    if (t > 17.5 && t < 22.7) { roadShift = boardScroll * io(seg(t, 17.7, 19.05)); bodyShift(roadShift); }
 
     // spotlight
     var shown = false, rowsShown = false;
@@ -6738,7 +6743,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     counts.forEach(function (c) { if (t >= c.t0 && t <= c.t1 + 0.05) c.el.textContent = Math.round(c.n * out(seg(t, c.t0, c.t1))) + c.suf; });
 
     // merge chips: the four pillars fly from the roadmap sidebar into one plan
-    if (t > 15 + D && t < 22.6 + D) {
+    if (t > 15 && t < 22.6) {
       var tr = R(roadTitle), rg = document.createRange();
       rg.selectNodeContents(roadTitle);
       var tb = rg.getBoundingClientRect(), fr = window.__rawRect.call(frame);
@@ -6749,12 +6754,12 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
       CHIPS.forEach(function (ch, i) {
         var src = R(SRC[i]);
         var s0 = { x: src.x + 30, y: src.y + src.h / 2 - 12 };
-        var t0 = 15.4 + D + i * 0.12, k = io(seg(t, t0, t0 + 0.85));
+        var t0 = 15.4 + i * 0.12, k = io(seg(t, t0, t0 + 0.85));
         var cx = lerp(s0.x, dst[i].x, k), cy = lerp(s0.y, dst[i].y, k) - Math.sin(Math.PI * k) * 46;
-        ch.style.opacity = (seg(t, t0 - 0.05, t0 + 0.15) * (1 - seg(t, 22.1 + D, 22.5 + D))).toFixed(3);
+        ch.style.opacity = (seg(t, t0 - 0.05, t0 + 0.15) * (1 - seg(t, 22.1, 22.5))).toFixed(3);
         ch.style.transform = "translate(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px) scale(" + lerp(0.92, 1, k).toFixed(3) + ")";
       });
-      var no = seg(t, 16.2 + D, 16.6 + D) * (1 - seg(t, 22.1 + D, 22.5 + D));
+      var no = seg(t, 16.2, 16.6) * (1 - seg(t, 22.1, 22.5));
       PLUS.forEach(function (pl, i) { pl.style.opacity = no.toFixed(3); pl.style.transform = "translate(" + (dst[i].x + CHIPS[i].offsetWidth + 7) + "px," + ty + "px)"; });
       note.style.opacity = no.toFixed(3);
       note.style.transform = "translate(" + (x - 12) + "px," + ty + "px)";
@@ -6767,17 +6772,17 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     var c = (t < 8.3 || t > 21.7 + D) ? lastCursor : (lastCursor = cursorAt(t));
     var press = 1;
     CLICKS.forEach(function (ct) { var d = Math.abs(t - ct); if (d < 0.12) press = Math.min(press, 0.84 + 0.16 * d / 0.12); });
-    if (t > 19.5 + D && t < 20.85 + D) press = 0.9;
+    if (t > 19.5 && t < 20.85) press = 0.9;
     cur.style.opacity = (seg(t, 8.3, 8.6) * (1 - seg(t, 21.3 + D, 21.7 + D))).toFixed(3);
     cur.style.transform = "translate(" + (c.x - 3).toFixed(1) + "px," + (c.y - 3).toFixed(1) + "px) scale(" + press.toFixed(3) + ")";
     var ro = 0, rs = 0.4;
-    CLICKS.concat([19.52 + D]).forEach(function (ct) { if (t >= ct && t < ct + 0.6) { var k = out(seg(t, ct, ct + 0.6)); ro = 1 - k; rs = 0.4 + 0.8 * k; } });
+    CLICKS.concat([19.52]).forEach(function (ct) { if (t >= ct && t < ct + 0.6) { var k = out(seg(t, ct, ct + 0.6)); ro = 1 - k; rs = 0.4 + 0.8 * k; } });
     rip.style.opacity = ro.toFixed(3);
     rip.style.transform = "translate(" + c.x.toFixed(1) + "px," + c.y.toFixed(1) + "px) scale(" + rs.toFixed(3) + ")";
   }
 
   // ── interactive mode: a click stops the demo, user browses the 5 pages ──
-  function pageAt(t) { return t < 10.07 ? "rep" : t < 14.97 ? "sites" : t < 22.47 ? "content" : t < 14.97 + D ? "cite" : "road"; }
+  function pageAt(t) { return t < 10.07 ? "rep" : t < 14.97 ? "sites" : t < 14.97 + C ? "road" : t < 22.47 + C ? "content" : "cite"; }
   function show(name) {
     NAMES.forEach(function (n) {
       var on = n === name, el = P[n];
@@ -6800,7 +6805,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     if (drag) drop();
     var y = roadShift; bodyShift(0); roadShift = 0;
     roadBody.style.overflowY = "auto"; roadBody.scrollTop = y;
-    tint(repSite, false); tint(sitesContent, false); tint(cq('.nav-row[data-key="citations"]'), false);
+    tint(repSite, false); tint(sitesContent, false); tint(roadContent, false); tint(cq('.nav-row[data-key="citations"]'), false);
     tint(roadFolds[0], false); tint(roadFolds[2], false); tint(navSub("content", "Acquérir une citation"), false);
     [cur, rip, note].concat(CHIPS, PLUS).forEach(function (e) { e.style.opacity = "0"; });
     loader.style.visibility = "hidden"; loader.style.opacity = "0";
