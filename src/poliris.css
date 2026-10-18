@@ -3007,6 +3007,56 @@ button { cursor: pointer; border: none; background: none; }
   .hero-answer { animation: none; }
 }
 
+/* ── Split hero (homepage, ≥1025px) ─────────────────────────────────
+   Copy left, the answer card + dashboard right (50/50), both in the
+   first screen. The composition renders at its native 1166px and is
+   scaled as one piece by HeroVisualStage (--hero-visual-scale/-h). Below
+   1025px none of this applies and the hero stacks exactly as before. */
+@media (min-width: 1025px) {
+  .hero.hero--split { text-align: left; }
+  .hero--split .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 56px;
+    align-items: center;
+    max-width: calc(1280px + 64px);
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 74px 32px 32px; /* 74px = fixed nav height */
+  }
+  .hero--split .hero__fold { min-height: 0; padding: 0; align-items: flex-start; }
+  .hero--split .hero__fold > .eyebrow { align-self: flex-start; }
+  /* Two lines max in both languages. French ("La plateforme d’intelligence
+     de recherche.") is longer, so it gets a smaller ceiling of its own. */
+  .hero--split .hero__fold .hero__h1 { font-size: clamp(38px, 3.6vw, 54px); }
+  :lang(fr) .hero--split .hero__fold .hero__h1 { font-size: clamp(34px, 3.2vw, 46px); }
+  .hero--split .hero__fold .hero__lead { max-width: none; margin: 0 0 32px; text-wrap: pretty; }
+  .hero--split .hero__actions { justify-content: flex-start; }
+  /* Error line under the website form lines up with the form, not centered. */
+  .hero--split .hero-website-form-wrap { align-items: flex-start; }
+  /* The section header that introduced the dashboard below the fold has
+     nothing to introduce once the dashboard sits beside the copy. */
+  .hero--split .hero__visual-head { display: none; }
+
+  .hero--split .hero__visual-stage { height: var(--hero-visual-h, auto); }
+  .hero--split .hero__visual {
+    width: 1110px;
+    margin: 0 0 0 56px; /* room for the answer card hanging off the left */
+    transform: scale(var(--hero-visual-scale, 1));
+    transform-origin: -56px 0;
+  }
+  /* At the stage's fixed native width the card always overlaps the
+     dashboard, whatever the viewport (overrides the ≤1240px stacking). */
+  .hero--split .hero-answer {
+    position: absolute;
+    top: 48px;
+    left: -56px;
+    width: 330px;
+    max-width: none;
+    margin: 0;
+  }
+}
+
 
 /* ================================================================
    WORKFLOW VS
@@ -3838,7 +3888,7 @@ button { cursor: pointer; border: none; background: none; }
 }
 .trust__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-top: 48px;
 }
@@ -3948,7 +3998,8 @@ button { cursor: pointer; border: none; background: none; }
   .how, .trust, .home-faq { padding: 64px 0; }
   .how__steps { grid-template-columns: 1fr; gap: 32px; }
   .how__link { display: none; }
-  .trust__grid { grid-template-columns: repeat(2, 1fr); }
+  /* One column, not two — three items in a 2-up grid leaves an orphan. */
+  .trust__grid { grid-template-columns: 1fr; }
 }
 /* Three stakes cards get too narrow for their copy on tablets and phones. */
 @media (max-width: 768px) {
@@ -6325,7 +6376,9 @@ button { cursor: pointer; border: none; background: none; }
   --pf-blue: #0062FF;
   --pf-blue-dark: #0050D6;
   padding: 100px 0 50px;
-  overflow: hidden;
+  /* clip, not hidden — hidden makes .engine a scroll container, which
+     stops the desktop showcase's sticky window from sticking. */
+  overflow: clip;
 }
 /* Room for "Your complete AI optimization engine" on one line, so the
    heading reads as two lines on desktop (it needs ~760px at 42px). */
@@ -7378,6 +7431,201 @@ button { cursor: pointer; border: none; background: none; }
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 .rm-hover-tip--show { opacity: 1; transform: translate(-38%, calc(-100% - 8px)) scale(1); }
+
+/* ── Desktop showcase (≥1025px) — bento: cards wrap a center media tile ──
+   Rendered instead of .engine-rows by PlatformEngine on desktop only, so
+   none of this needs a mobile override. Columns 1 : 1.5 : 1 so the center
+   tile is wide enough for the demos (they were tuned for ~750px). */
+.engine-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 20px;
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+.engine-showcase__col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.engine-showcase__col--left   { grid-column: 1; grid-row: 1; }
+.engine-showcase__col--center { grid-column: 2; grid-row: 1; }
+.engine-showcase__col--right  { grid-column: 3; grid-row: 1; }
+/* 05 sits above 04 visually (top-right), but stays after it in the DOM. */
+.engine-showcase__col--right > .engine-card:last-child { order: -1; }
+/* Side cards split their column's height evenly, so each column's pair
+   lines up top and bottom with the media tile + card 05 stack. */
+.engine-showcase__col--left .engine-card,
+.engine-showcase__col--right .engine-card { flex: 1 1 0; }
+
+.engine-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px;
+  border-radius: 20px;
+  background: #F5F7FC;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+.engine-card:hover { background: #EEF3FE; }
+.engine-card--active,
+.engine-card--active:hover {
+  background: #fff;
+  border-color: #DCE6FE;
+  box-shadow: 0 18px 40px -20px rgba(20, 30, 80, 0.22), 0 4px 14px rgba(0, 98, 255, 0.06);
+}
+/* Icon, title and number share one row to keep the cards short. */
+.engine-card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+  margin-bottom: 12px;
+}
+.engine-card__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--pf-blue);
+  background: #E3EBFF;
+  transition: color 0.3s var(--ease-out), background 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+.engine-card--active .engine-card__icon {
+  color: #fff;
+  background: var(--pf-blue);
+  box-shadow: 0 8px 18px -6px rgba(0, 98, 255, 0.55);
+}
+.engine-card__num {
+  flex: none;
+  margin-left: auto;
+  align-self: flex-start;
+  font-family: var(--manrope);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: #B4C6F3;
+  transition: color 0.3s var(--ease-out);
+}
+.engine-card--active .engine-card__num { color: var(--pf-blue); }
+.engine-card__title {
+  font-family: var(--manrope);
+  font-weight: 800;
+  font-size: 19px;
+  line-height: 1.3;
+  color: #0d111a;
+  margin: 0;
+}
+/* Reset to plain text — the button only exists for keyboard access; the
+   whole card is the real hit area. */
+.engine-card__trigger {
+  all: unset;
+  cursor: pointer;
+}
+.engine-card__trigger:focus-visible { outline: 2px solid var(--pf-blue); outline-offset: 4px; border-radius: 4px; }
+.engine-card__desc {
+  font-family: var(--chivo);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg4);
+  margin: 0;
+}
+/* Shown on every card (as in the reference) rather than only the active
+   one — toggling it changed card heights under the cursor, which shifted
+   the next card into the pointer and flipped the selection back. Pushed
+   to the bottom so it lines up across cards of different text lengths. */
+.engine-card__link { margin-top: auto; padding-top: 18px; font-size: 15px; }
+
+/* Center media — the active demo's window on its own, no colored
+   backdrop, lifted off the page by a soft shadow. */
+.engine-showcase__panel { display: flex; }
+/* Undo the rows' 60% flex sizing — here the column sets the width. */
+.engine-showcase__visual { flex: 1 1 auto; width: 100%; max-width: none; }
+/* Card 02's three stage pills sit ~130px apart in the narrower column —
+   at their 13px row size neighbors overlapped. */
+.engine-showcase .th-pipe__pill { font-size: 10.5px; padding: 4px 9px; gap: 4px; white-space: nowrap; }
+/* Whole frame (no browser bar here) is locked to 4:3, so every card's media —
+   these demos now, videos later — fills the same frame. The body takes
+   whatever height is left instead of the rows' fixed 400px. */
+.engine-showcase__panel .engine-window {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 4 / 3;
+  border: 1.5px solid var(--pf-blue);
+  box-shadow: 0 30px 60px -24px rgba(20, 30, 80, 0.28), 0 10px 24px -8px rgba(20, 30, 80, 0.10);
+}
+/* Even inset so the demo content clears the blue stroke on every side. */
+.engine-showcase__panel .engine-window__body { flex: 1 1 auto; height: auto; min-height: 0; padding: 24px; overflow: hidden; }
+/* ── Flip to center ────────────────────────────────────────────────
+   The active card flips over into the center panel (its back face is the
+   preview), and the previous one flips back down into its own slot. The
+   transforms themselves are driven from JS (Web Animations, see
+   EngineShowcase); .is-flipping only exists while one is in flight, so a
+   resting panel is a plain, untransformed preview — no 3D layer on the
+   live demo, no blurry text. */
+.engine-showcase { position: relative; }
+.engine-flip { position: relative; width: 100%; transform-origin: 50% 50%; }
+.engine-flip__front { display: none; }
+.engine-flip__spacer { aspect-ratio: 4 / 3; }
+.engine-flip.is-flipping { transform-style: preserve-3d; z-index: 3; }
+.engine-flip.is-flipping .engine-flip__front {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.engine-flip.is-flipping .engine-flip__back {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* The center panel needs to paint above the side columns mid-flight. */
+.engine-showcase__col--center:has(.engine-flip.is-flipping) { position: relative; z-index: 3; }
+
+/* Stand-in for the card flying back to its slot. */
+.engine-flip--return { position: absolute; z-index: 4; pointer-events: none; }
+.engine-flip--return .engine-flip__back { position: absolute; inset: 0; }
+.engine-flip__blank {
+  border-radius: 16px;
+  border: 1.5px solid var(--pf-blue);
+  background: #fff;
+  box-shadow: 0 30px 60px -24px rgba(20, 30, 80, 0.28), 0 10px 24px -8px rgba(20, 30, 80, 0.10);
+}
+
+/* Every card but the active one reads as inactive — muted until hovered.
+   The active card keeps its full white/blue styling (.engine-card--active
+   above) in its own slot while its preview holds the center. The flying
+   stand-in uses --muted so it lands looking exactly like its slot. */
+.engine-showcase .engine-card:not(.engine-card--active) > *,
+.engine-card--muted > * { opacity: 0.5; transition: opacity 0.3s var(--ease-out); }
+.engine-showcase .engine-card:not(.engine-card--active):hover > * { opacity: 1; }
+.engine-card--away { visibility: hidden; }
+
+/* Autoplay countdown traced along the active card's border. Sits on the
+   card's outer edge (overflow visible) so it covers the 1px border. */
+.engine-showcase .engine-card { position: relative; }
+.engine-showcase .engine-card > .engine-card__progress {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 1;
+}
+.engine-card__progress rect {
+  fill: none;
+  stroke: #8CB4FF;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: engine-card-progress var(--engine-progress-ms, 5000ms) linear var(--engine-progress-delay, 0ms) forwards;
+}
+@keyframes engine-card-progress { to { stroke-dashoffset: 0; } }
 
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 1100px) {

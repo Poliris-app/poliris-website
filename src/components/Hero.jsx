@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ShaderBackground from './ShaderBackground';
 import HeroDashboard from './HeroDashboard';
 import { useLang } from '../contexts/LangContext';
@@ -128,7 +128,35 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
   );
 }
 
-export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = true, dark = false, bottom = null, websiteCapture = null, answerCard = null, secondaryKind = null, fullFold = false, visualHeader = null }) {
+// Native width of the answer card + dashboard composition: the dashboard's
+// 1110px plus the 56px the answer card hangs off its left edge.
+const HERO_VISUAL_W = 1110 + 56;
+
+/** Shrinks the answer card + dashboard as one piece to fit the split hero's
+ *  right column, so its internal proportions never change. Publishes the
+ *  scale and resulting height as CSS variables; only the split hero's
+ *  desktop rules read them, everywhere else the stage is a plain wrapper. */
+function HeroVisualStage({ children }) {
+  const stageRef = useRef(null);
+  useEffect(() => {
+    const stage = stageRef.current;
+    const visual = stage?.firstElementChild;
+    if (!stage || !visual) return;
+    const update = () => {
+      const scale = Math.min(1, stage.clientWidth / HERO_VISUAL_W);
+      stage.style.setProperty('--hero-visual-scale', String(scale));
+      stage.style.setProperty('--hero-visual-h', `${visual.offsetHeight * scale}px`);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(stage);
+    ro.observe(visual);
+    return () => ro.disconnect();
+  }, []);
+  return <div className="hero__visual-stage" ref={stageRef}>{children}</div>;
+}
+
+export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = true, dark = false, bottom = null, websiteCapture = null, answerCard = null, secondaryKind = null, fullFold = false, visualHeader = null, split = false }) {
   const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
@@ -146,7 +174,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
 
   return (
     <>
-      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${fullFold ? ' hero--fold' : ''}`}>
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${fullFold ? ' hero--fold' : ''}${split ? ' hero--split' : ''}`}>
         {!dark && <ShaderBackground className="hero__shader" />}
         <div className="hero__inner">
           {/* fullFold: the headline block fills the first screen on its own,
@@ -205,10 +233,12 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
           )}
 
           {showDashboard && (answerCard ? (
-            <div className="hero__visual">
-              {answerCard}
-              <HeroDashboard />
-            </div>
+            <HeroVisualStage>
+              <div className="hero__visual">
+                {answerCard}
+                <HeroDashboard />
+              </div>
+            </HeroVisualStage>
           ) : <HeroDashboard />)}
         </div>
       </header>

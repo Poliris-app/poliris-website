@@ -333,12 +333,11 @@ export default {
       ],
     },
     trust: {
-      eyebrow: 'Early access',
-      h2Pre: 'Poliris is new.',
-      h2Hl: 'Join our first brands.',
-      lead: 'We work closely with every brand that starts with us today. Try it free, or book a demo to see if it fits.',
+      eyebrow: 'Why Poliris',
+      h2Pre: 'Easy to start.',
+      h2Hl: 'Built to earn your trust.',
+      lead: 'We work closely with every brand we support. Try it free, or book a demo to see if it fits.',
       items: [
-        { title: 'Hosted in the EU',      desc: 'Our app, website and database all run in the European Union.' },
         { title: 'Your data stays yours', desc: 'We never sell your data or use it for advertising.' },
         { title: 'English and French',    desc: 'Every feature works in both languages, from audits to content.' },
         { title: 'Free for 14 days',      desc: 'No credit card. Monthly plans have no contract.' },

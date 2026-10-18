@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 // import ProductCarousel from './ProductCarousel'; // hidden for now, see below
@@ -86,6 +86,8 @@ export default function LandingPage() {
         }}
         answerCard={<HeroAnswerCard />}
         fullFold
+        // Desktop: copy left, scaled answer card + dashboard right (50/50).
+        split
         visualHeader={{
           eyebrow: h.preview.eyebrow,
           title: <>{h.preview.h2Pre}<br /><HL>{h.preview.h2Hl}</HL></>,
@@ -260,15 +262,19 @@ function ValueChain() {
 /* ================================================================
    PLATFORM ENGINE — 5-pillar feature showcase (before Team section)
    ================================================================ */
-function EngineWindow({ url, children }) {
+// `bare` drops the browser bar (dots + URL) — the desktop showcase frames
+// its media without browser chrome; the mobile rows keep it.
+function EngineWindow({ url, bare = false, children }) {
   return (
     <div className="engine-window">
-      <div className="engine-window__bar">
-        <span className="engine-window__dot" style={{ background: '#ff5f57' }} />
-        <span className="engine-window__dot" style={{ background: '#febc2e' }} />
-        <span className="engine-window__dot" style={{ background: '#28c840' }} />
-        <span className="engine-window__url">{url}</span>
-      </div>
+      {!bare && (
+        <div className="engine-window__bar">
+          <span className="engine-window__dot" style={{ background: '#ff5f57' }} />
+          <span className="engine-window__dot" style={{ background: '#febc2e' }} />
+          <span className="engine-window__dot" style={{ background: '#28c840' }} />
+          <span className="engine-window__url">{url}</span>
+        </div>
+      )}
       <div className="engine-window__body">{children}</div>
     </div>
   );
@@ -1986,9 +1992,292 @@ function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everReve
   );
 }
 
+// Desktop-only layout: the 5 pillars as a stack of cards on the left, one
+// shared window on the right showing whichever card is active. Below
+// ENGINE_DESKTOP_MQ the section keeps the alternating EngineRow layout.
+const ENGINE_DESKTOP_MQ = '(min-width: 1025px)';
+
+function useEngineDesktop() {
+  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(ENGINE_DESKTOP_MQ).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(ENGINE_DESKTOP_MQ);
+    const onChange = () => setMatches(mql.matches);
+    onChange();
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+  return matches;
+}
+
+// One icon per pillar for the desktop showcase cards, in card order:
+// Reputation (chart), Trust (shield), Roadmap (calendar), Content (pen),
+// Build Trust Across the Web (link).
+const ENGINE_ICON_PROPS = { viewBox: '0 0 24 24', width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' };
+const ENGINE_ICONS = [
+  <svg key="rep" {...ENGINE_ICON_PROPS}><path d="M3 3v18h18" /><path d="m7 15 4-4 3 3 5-6" /></svg>,
+  <svg key="trust" {...ENGINE_ICON_PROPS}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>,
+  <svg key="road" {...ENGINE_ICON_PROPS}><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>,
+  <svg key="content" {...ENGINE_ICON_PROPS}><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>,
+  <svg key="web" {...ENGINE_ICON_PROPS}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>,
+];
+
+// Card copy (icon, title, number, short desc, Learn More). `interactive`
+// is off for the copies riding on the flip animation — those are purely
+// visual, so no second button/link for keyboard or screen readers.
+function EngineCardFace({ card, index, learnMore, pressed, highlight, interactive }) {
+  const title = <span className={highlight ? 'engine-row__title--tour-active' : undefined}>{card.title}</span>;
+  return (
+    <>
+      <div className="engine-card__head">
+        <span className="engine-card__icon" aria-hidden="true">{ENGINE_ICONS[index]}</span>
+        {interactive ? (
+          <h3 className="engine-card__title">
+            <button type="button" className="engine-card__trigger" aria-pressed={pressed} aria-controls="engine-showcase-panel">{title}</button>
+          </h3>
+        ) : (
+          <div className="engine-card__title">{title}</div>
+        )}
+        <span className="engine-card__num">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <p className="engine-card__desc">{card.desc}</p>
+      {card.href && (() => {
+        const inner = (
+          <>
+            {learnMore}
+            <span className="engine-row__link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+          </>
+        );
+        return interactive
+          ? <Link to={card.href} className="engine-row__link engine-card__link">{inner}</Link>
+          : <span className="engine-row__link engine-card__link">{inner}</span>;
+      })()}
+    </>
+  );
+}
+
+function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, registerSlot, onHoverIn, onHoverOut, onSelect }) {
+  return (
+    <div
+      ref={(el) => registerSlot(index, el)}
+      className={`engine-card${isActive ? ' engine-card--active' : ''}${isAway ? ' engine-card--away' : ''}`}
+      onMouseEnter={() => onHoverIn(index)}
+      onMouseLeave={onHoverOut}
+      onFocus={() => onSelect(index)}
+      onClick={() => onSelect(index)}
+    >
+      <EngineCardFace card={card} index={index} learnMore={learnMore} pressed={isActive} interactive />
+      {/* Autoplay countdown: a stroke that traces the card's border once,
+          timed to the hold (after the flip lands), so the visitor can see
+          the next card coming. Unmounted while paused, so it restarts from
+          zero together with the autoplay timer. */}
+      {showProgress && (
+        <svg
+          className="engine-card__progress"
+          aria-hidden="true"
+          style={{ '--engine-progress-ms': `${ENGINE_AUTOPLAY_MS}ms`, '--engine-progress-delay': `${ENGINE_FLIP_MS}ms` }}
+        >
+          <rect x="0" y="0" width="100%" height="100%" rx="20" ry="20" pathLength="100" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
+const ENGINE_FLIP_MS = 700;
+const ENGINE_FLIP_EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
+// Hover has to rest this long before a card flips in — sweeping the
+// pointer across the grid shouldn't fire a flip for every card it crosses.
+const ENGINE_HOVER_DELAY = 120;
+// Autoplay: each card holds the center this long after landing, then the
+// next one flips in (05 wraps back to 01).
+const ENGINE_AUTOPLAY_MS = 5000;
+
+// Center-to-center translate + scale that maps box `to` onto box `from`
+// (transform-origin is the element's center), with a fixed perspective so
+// the rotateY reads as a real 3D flip.
+function engineFlipTransform(from, to, deg) {
+  const dx = (from.left + from.width / 2) - (to.left + to.width / 2);
+  const dy = (from.top + from.height / 2) - (to.top + to.height / 2);
+  return `perspective(1600px) translate(${dx}px, ${dy}px) scale(${from.width / to.width}, ${from.height / to.height}) rotateY(${deg}deg)`;
+}
+
+function EngineShowcase({ cards, learnMore }) {
+  // null until the section scrolls into view, then 0 — so card 01's own
+  // flip into the center is the first thing a visitor sees here.
+  const [active, setActive] = useState(null);
+  // The previously active card, flying from the center back to its slot.
+  const [returning, setReturning] = useState(null);
+  // Autoplay only runs while the section is on screen and the visitor
+  // isn't pointing at or tabbing through it — any interaction holds the
+  // current card until they leave.
+  const [onScreen, setOnScreen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const wrapRef = useRef(null);
+  const flipRef = useRef(null);
+  const returnRef = useRef(null);
+  const slotRefs = useRef([]);
+  const hoverTimer = useRef(null);
+  const activeRef = useRef(null);
+  const reducedMotion = useRef(false);
+  const card = active == null ? null : cards[active];
+  const Visual = active == null ? null : (ENGINE_VISUALS[active] || EnginePlaceholder);
+
+  const rectIn = (el) => {
+    const r = el.getBoundingClientRect();
+    const w = wrapRef.current.getBoundingClientRect();
+    return { left: r.left - w.left, top: r.top - w.top, width: r.width, height: r.height };
+  };
+
+  const select = useCallback((i) => {
+    const prev = activeRef.current;
+    if (prev === i) return;
+    activeRef.current = i;
+    if (prev != null && !reducedMotion.current && flipRef.current && slotRefs.current[prev]) {
+      setReturning({ index: prev, slot: rectIn(slotRefs.current[prev]), from: rectIn(flipRef.current) });
+    } else {
+      setReturning(null);
+    }
+    setActive(i);
+  }, []);
+
+  const hoverIn = useCallback((i) => {
+    clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => select(i), ENGINE_HOVER_DELAY);
+  }, [select]);
+  const hoverOut = useCallback(() => clearTimeout(hoverTimer.current), []);
+  const registerSlot = useCallback((i, el) => { slotRefs.current[i] = el; }, []);
+
+  useEffect(() => {
+    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      setOnScreen(entry.isIntersecting);
+      if (entry.isIntersecting && activeRef.current == null) select(0);
+    }, { threshold: 0.25 });
+    io.observe(el);
+    return () => { io.disconnect(); clearTimeout(hoverTimer.current); };
+  }, [select]);
+
+  useEffect(() => {
+    if (active == null || !onScreen || paused) return;
+    const t = setTimeout(() => select((active + 1) % cards.length), ENGINE_FLIP_MS + ENGINE_AUTOPLAY_MS);
+    return () => clearTimeout(t);
+  }, [active, onScreen, paused, cards.length, select]);
+
+  // Incoming: the center panel itself starts exactly over the card's slot,
+  // face up, and flips over (180°) as it grows into the center — its back
+  // face is the preview. Once it lands, .is-flipping comes off and the
+  // panel is a plain, untransformed preview again.
+  useLayoutEffect(() => {
+    const flip = flipRef.current;
+    const slot = slotRefs.current[active];
+    if (active == null || !flip || !slot || reducedMotion.current) return;
+    flip.getAnimations().forEach((a) => a.cancel());
+    const to = rectIn(flip);
+    const from = rectIn(slot);
+    flip.classList.add('is-flipping');
+    const anim = flip.animate(
+      [{ transform: engineFlipTransform(from, to, 0) }, { transform: 'perspective(1600px) translate(0, 0) scale(1, 1) rotateY(180deg)' }],
+      { duration: ENGINE_FLIP_MS, easing: ENGINE_FLIP_EASE },
+    );
+    anim.onfinish = () => flip.classList.remove('is-flipping');
+    anim.oncancel = () => flip.classList.remove('is-flipping');
+  }, [active]);
+
+  // Outgoing: a stand-in for the previous card starts over the center
+  // (preview side up, shown as a blank face) and flips back down into its
+  // own slot. The real card reappears there when it lands.
+  useLayoutEffect(() => {
+    const el = returnRef.current;
+    if (!returning || !el) return;
+    const anim = el.animate(
+      [{ transform: engineFlipTransform(returning.from, returning.slot, 180) }, { transform: 'perspective(1600px) translate(0, 0) scale(1, 1) rotateY(0deg)' }],
+      { duration: ENGINE_FLIP_MS, easing: ENGINE_FLIP_EASE },
+    );
+    anim.onfinish = () => setReturning((r) => (r === returning ? null : r));
+    return () => anim.cancel();
+  }, [returning]);
+
+  const renderCard = (i) => (
+    <EngineSlot
+      key={cards[i].title}
+      card={cards[i]}
+      index={i}
+      learnMore={learnMore}
+      isActive={i === active}
+      // Hidden only while its stand-in is flying back into it, so the card
+      // never shows twice; the slot still holds its place in the grid.
+      isAway={returning?.index === i && i !== active}
+      showProgress={i === active && onScreen && !paused}
+      registerSlot={registerSlot}
+      onHoverIn={hoverIn}
+      onHoverOut={hoverOut}
+      onSelect={select}
+    />
+  );
+
+  // Bento, running around the center panel: 01 top-left, 02 bottom-left,
+  // 03 under the panel, 04 bottom-right, 05 top-right. The right column is
+  // 04 then 05 in the DOM (CSS lifts 05 to the top) so keyboard/reader
+  // order still runs 01 → 05; CSS places each column on the grid.
+  return (
+    <div
+      className="container engine-showcase"
+      ref={wrapRef}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false); }}
+    >
+      <div className="engine-showcase__col engine-showcase__col--left">{[0, 1].map(renderCard)}</div>
+      <div className="engine-showcase__col engine-showcase__col--center">
+        <div className="engine-showcase__panel" id="engine-showcase-panel">
+          <div className="engine-flip" ref={flipRef}>
+            <div className="engine-flip__front engine-card engine-card--active" aria-hidden="true">
+              {card && <EngineCardFace card={card} index={active} learnMore={learnMore} />}
+            </div>
+            <div className="engine-flip__back">
+              {/* Keyed on the active card so each demo remounts and replays
+                  from its first frame every time its card is selected. */}
+              {card ? (
+                <div key={active} className="engine-row__visual engine-showcase__visual reveal visible">
+                  <EngineWindow url={card.url} bare><Visual /></EngineWindow>
+                </div>
+              ) : (
+                <div className="engine-flip__spacer" />
+              )}
+            </div>
+          </div>
+        </div>
+        {renderCard(2)}
+      </div>
+      <div className="engine-showcase__col engine-showcase__col--right">{[3, 4].map(renderCard)}</div>
+      {returning && (
+        <div
+          className="engine-flip engine-flip--return is-flipping"
+          ref={returnRef}
+          aria-hidden="true"
+          style={{ left: returning.slot.left, top: returning.slot.top, width: returning.slot.width, height: returning.slot.height }}
+        >
+          <div className="engine-flip__front engine-card engine-card--muted">
+            <EngineCardFace card={cards[returning.index]} index={returning.index} learnMore={learnMore} />
+          </div>
+          <div className="engine-flip__back engine-flip__blank" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PlatformEngine() {
   const { t } = useLang();
   const pe = t('home.engine');
+  const isDesktop = useEngineDesktop();
   const rowRefs = useRef([]);
   // Indices whose title highlight has ever played — once added, a card's
   // highlight stays on permanently; only a full page reload clears this.
@@ -2017,7 +2306,7 @@ function PlatformEngine() {
     );
     rows.forEach((row) => observer.observe(row));
     return () => observer.disconnect();
-  }, []);
+  }, [isDesktop]);
 
   return (
     <section className="engine" id="engine">
@@ -2028,19 +2317,23 @@ function PlatformEngine() {
           <p className="sec-lead">{pe.lead}</p>
         </div>
       </div>
-      <div className="engine-rows">
-        {pe.cards.map((card, i) => (
-          <EngineRow
-            key={card.title}
-            index={i}
-            card={card}
-            learnMore={pe.learnMore}
-            innerRef={(el) => { rowRefs.current[i] = el; }}
-            everHighlighted={visitedIdx.has(i)}
-            everRevealed={visitedIdx.has(i)}
-          />
-        ))}
-      </div>
+      {isDesktop ? (
+        <EngineShowcase cards={pe.cards} learnMore={pe.learnMore} />
+      ) : (
+        <div className="engine-rows">
+          {pe.cards.map((card, i) => (
+            <EngineRow
+              key={card.title}
+              index={i}
+              card={card}
+              learnMore={pe.learnMore}
+              innerRef={(el) => { rowRefs.current[i] = el; }}
+              everHighlighted={visitedIdx.has(i)}
+              everRevealed={visitedIdx.has(i)}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -2361,14 +2654,13 @@ function HowItWorks() {
 }
 
 /* ================================================================
-   TRUST — early access + facts we can stand behind (EU hosting and
-   no data selling are both stated in the privacy policy)
+   TRUST — facts we can stand behind (no data selling is stated in the
+   privacy policy)
    ================================================================ */
 function Trust() {
   const { t } = useLang();
   const tr = t('home.trust');
   const ICONS = [
-    (<><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></>),
     (<><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>),
     (<><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></>),
     (<><path d="M20 6 9 17l-5-5"/></>),

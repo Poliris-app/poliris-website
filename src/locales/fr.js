@@ -330,12 +330,11 @@ export default {
       ],
     },
     trust: {
-      eyebrow: 'Accès anticipé',
-      h2Pre: 'Poliris est nouveau.',
-      h2Hl: 'Rejoignez nos premières marques.',
-      lead: "Nous accompagnons de près chaque marque qui démarre avec nous aujourd'hui. Essayez gratuitement, ou réservez une démo pour voir si Poliris vous convient.",
+      eyebrow: 'Pourquoi Poliris',
+      h2Pre: 'Simple pour démarrer.',
+      h2Hl: 'Conçu pour mériter votre confiance.',
+      lead: "Nous accompagnons de près chaque marque. Essayez gratuitement, ou réservez une démo pour voir si Poliris vous convient.",
       items: [
-        { title: "Hébergé dans l'UE",          desc: "Notre application, notre site et notre base de données sont hébergés dans l'Union européenne." },
         { title: 'Vos données restent à vous', desc: "Nous ne vendons jamais vos données et ne les utilisons pas à des fins publicitaires." },
         { title: 'Anglais et français',        desc: 'Toutes les fonctionnalités marchent dans les deux langues, des audits au contenu.' },
         { title: 'Gratuit pendant 14 jours',   desc: 'Sans carte bancaire. Les offres mensuelles sont sans engagement.' },
