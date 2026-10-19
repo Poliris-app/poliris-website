@@ -40,7 +40,7 @@ export default {
     hero: {
       eyebrow: 'Conçu pour l\'ère de l\'IA',
       titlePre: 'Le',
-      titleHl: 'SEO',
+      titleHl: 'référencement web',
       titlePost: 'à l\'ère de l\'IA',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
       lead: 'Voyez où vos produits apparaissent dans la recherche et les réponses IA, pourquoi vos concurrents sont choisis à votre place, et quoi corriger en priorité, au même endroit.',
