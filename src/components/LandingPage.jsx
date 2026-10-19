@@ -309,18 +309,18 @@ const PC_BRANDS = [
   // with their own brand-colored background baked in (no transparency), so
   // they're cropped to fill the whole circle (cover) instead of floating
   // inset on a badge background like Apple's transparent-PNG mark below.
-  { id: 'nb', name: 'Samsung', x: 38, y: 18, initial: 'S', bg: '#12121a', logo: 'samsung-com-logo.png', cover: true },
-  { id: 'hoka', name: 'Bose', x: 38, y: 44, initial: 'B', bg: '#1e1e1e', logo: 'bose-com-logo.png', cover: true },
+  { id: 'samsung', name: 'Samsung', x: 38, y: 18, initial: 'S', bg: '#12121a', logo: 'samsung-com-logo.png', cover: true },
+  { id: 'bose', name: 'Bose', x: 38, y: 44, initial: 'B', bg: '#1e1e1e', logo: 'bose-com-logo.png', cover: true },
   // Apple's logo is a black mark on a transparent PNG — a black badge bg made
   // it invisible (looked like a plain black dot), so it gets a white badge
   // instead of the cover treatment the opaque tiles above use.
-  { id: 'adidas', name: 'Apple', x: 95, y: 9, initial: 'a', bg: '#ffffff', logo: 'apple-com-logo.png' },
-  { id: 'asics', name: 'JBL', x: 36, y: 50, initial: 'j', bg: '#f03c02', logo: 'jbl-com-logo.png', cover: true },
+  { id: 'apple', name: 'Apple', x: 95, y: 9, initial: 'a', bg: '#ffffff', logo: 'apple-com-logo.png' },
+  { id: 'jbl', name: 'JBL', x: 36, y: 50, initial: 'j', bg: '#f03c02', logo: 'jbl-com-logo.png', cover: true },
   // y is deliberately not too close to the chart's top edge — the tooltip
   // opens upward above the dot and .pc-panel clips at 0, so too little
   // headroom here cuts the tooltip's own top edge off.
-  { id: 'nike', name: 'Sony', x: 90, y: 20, initial: 'S', bg: '#0d0d0d', logo: 'sony-com-logo.png', isTarget: true, cover: true },
-  { id: 'on', name: 'Anker', x: 40, y: 50, initial: 'A', bg: '#00b4f0', logo: 'anker-com-logo.png', cover: true },
+  { id: 'sony', name: 'Sony', x: 90, y: 20, initial: 'S', bg: '#0d0d0d', logo: 'sony-com-logo.png', isTarget: true, cover: true },
+  { id: 'anker', name: 'Anker', x: 40, y: 50, initial: 'A', bg: '#00b4f0', logo: 'anker-com-logo.png', cover: true },
 ];
 
 function PcDot({ brand }) {
@@ -442,7 +442,7 @@ function PositionChartDemo() {
   const { t } = useLang();
   const d = t('home.engine.demo.reputation');
   const tierLabels = t('dashboard.tierLabels');
-  const nike = PC_BRANDS.find((b) => b.isTarget);
+  const target = PC_BRANDS.find((b) => b.isTarget);
   const tipSrcRef = useRef(null);
   const tipFloatRef = useRef(null);
   // Set after mount — the page is pre-rendered (vite-react-ssg) where
@@ -499,7 +499,7 @@ function PositionChartDemo() {
   const tooltipBody = (
     <>
       <span className="pc-tooltip__you">{d.yourBrand}</span>
-      <p className="pc-tooltip__name">{nike.name}</p>
+      <p className="pc-tooltip__name">{target.name}</p>
       <div className="pc-tooltip__row"><span>{d.visibility}</span><span className="pc-tooltip__pill">90%</span></div>
       <div className="pc-tooltip__row"><span>{d.sentiment}</span><span className="pc-tooltip__pill">{tierLabels.Strong}</span></div>
     </>
@@ -1491,7 +1491,7 @@ function CitAcquirePanel() {
             <span>54</span>
             <span>316K</span>
             <span>{d.guestPost}</span>
-            <span className="cit-acq__price">$12,880</span>
+            <span className="cit-acq__price">$280</span>
           </div>
         </div>
       </div>
@@ -2205,7 +2205,7 @@ function EngineShowcase({ cards, learnMore }) {
 
   const renderCard = (i) => (
     <EngineSlot
-      key={cards[i].title}
+      key={i}
       card={cards[i]}
       index={i}
       learnMore={learnMore}
@@ -2302,7 +2302,10 @@ function PlatformEngine() {
           observer.unobserve(entry.target);
         });
       },
-      { threshold: 0.3 },
+      // Fire once ~20% of the viewport into the row, not on a ratio of the
+      // row's own height — a ratio threshold can never be met when a
+      // stacked mobile row is taller than ~3× the viewport.
+      { threshold: 0, rootMargin: '0px 0px -20% 0px' },
     );
     rows.forEach((row) => observer.observe(row));
     return () => observer.disconnect();
@@ -2321,9 +2324,12 @@ function PlatformEngine() {
         <EngineShowcase cards={pe.cards} learnMore={pe.learnMore} />
       ) : (
         <div className="engine-rows">
+          {/* Keyed by index, not card.title — the title changes on EN↔FR
+              switch, which would remount the row with fresh DOM the observer
+              above never watches, leaving unvisited rows stuck invisible. */}
           {pe.cards.map((card, i) => (
             <EngineRow
-              key={card.title}
+              key={i}
               index={i}
               card={card}
               learnMore={pe.learnMore}

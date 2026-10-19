@@ -2,40 +2,40 @@ import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 
 const BRANDS = [
-  { id: 'nike',       name: 'Sony',    color: '#111827', isYou: true, abbr: 'SN', logo: `${import.meta.env.BASE_URL}sony-com-logo.png` },
-  { id: 'newbalance', name: 'Samsung', color: '#ea580c', abbr: 'SM', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png` },
-  { id: 'brooks',     name: 'JBL',     color: '#7c3aed', abbr: 'JB', logo: `${import.meta.env.BASE_URL}jbl-com-logo.png` },
-  { id: 'on',         name: 'Anker',   color: '#16a34a', abbr: 'AN', logo: `${import.meta.env.BASE_URL}anker-com-logo.png` },
-  { id: 'adidas',     name: 'Apple',   color: '#dc2626', abbr: 'AP', logo: `${import.meta.env.BASE_URL}apple-com-logo.png` },
-  { id: 'hoka',       name: 'Bose',    color: '#0891b2', abbr: 'BS', logo: `${import.meta.env.BASE_URL}bose-com-logo.png` },
+  { id: 'sony',       name: 'Sony',    color: '#111827', isYou: true, abbr: 'SN', logo: `${import.meta.env.BASE_URL}sony-com-logo.png` },
+  { id: 'samsung',    name: 'Samsung', color: '#ea580c', abbr: 'SM', logo: `${import.meta.env.BASE_URL}samsung-com-logo.png` },
+  { id: 'jbl',        name: 'JBL',     color: '#7c3aed', abbr: 'JB', logo: `${import.meta.env.BASE_URL}jbl-com-logo.png` },
+  { id: 'anker',      name: 'Anker',   color: '#16a34a', abbr: 'AN', logo: `${import.meta.env.BASE_URL}anker-com-logo.png` },
+  { id: 'apple',      name: 'Apple',   color: '#dc2626', abbr: 'AP', logo: `${import.meta.env.BASE_URL}apple-com-logo.png` },
+  { id: 'bose',       name: 'Bose',    color: '#0891b2', abbr: 'BS', logo: `${import.meta.env.BASE_URL}bose-com-logo.png` },
 ];
 
 const VIS_DATA = {
-  nike:       [45, 47, 52, 62, 78, 90],
-  newbalance: [84, 72, 56, 48, 42, 38],
-  brooks:     [58, 64, 56, 48, 42, 36],
-  on:         [20, 38, 54, 65, 72, 40],
-  adidas:     [92, 88, 94, 88, 90, 95],
-  hoka:       [22, 40, 52, 58, 56, 38],
+  sony:    [45, 47, 52, 62, 78, 90],
+  samsung: [84, 72, 56, 48, 42, 38],
+  jbl:     [58, 64, 56, 48, 42, 36],
+  anker:   [20, 38, 54, 65, 72, 40],
+  apple:   [92, 88, 94, 88, 90, 95],
+  bose:    [22, 40, 52, 58, 56, 38],
 };
 // Sentiment lines snap to tier gridline values: Very Strong=100, Strong=75, Moderate=50, Weak=25, Very Weak=0
 // Transitions between tiers produce smooth S-curves via bezier math.
 const SENT_DATA = {
-  nike:       [ 75, 100,  75, 100, 100,  75],
-  newbalance: [ 75,  75,  75,  75,  75,  75],
-  brooks:     [ 75,  75,  50,  50,  75,  50],
-  on:         [ 50,  25,   0,  50,  50,  50],
-  adidas:     [100, 100, 100, 100, 100, 100],
-  hoka:       [ 50,  50,  75,  75,  75,  75],
+  sony:    [ 75, 100,  75, 100, 100,  75],
+  samsung: [ 75,  75,  75,  75,  75,  75],
+  jbl:     [ 75,  75,  50,  50,  75,  50],
+  anker:   [ 50,  25,   0,  50,  50,  50],
+  apple:   [100, 100, 100, 100, 100, 100],
+  bose:    [ 50,  50,  75,  75,  75,  75],
 };
 
 const QUAD_POS = {
-  nike:       { x: 90, y: 80 },
-  newbalance: { x: 38, y: 75 },
-  brooks:     { x: 36, y: 50 },
-  on:         { x: 40, y: 50 },
-  adidas:      { x: 95, y: 91 },
-  hoka:       { x: 38, y: 62 },
+  sony:    { x: 90, y: 80 },
+  samsung: { x: 38, y: 75 },
+  jbl:     { x: 36, y: 50 },
+  anker:   { x: 40, y: 50 },
+  apple:   { x: 95, y: 91 },
+  bose:    { x: 38, y: 62 },
 };
 
 const X_DATES = [
@@ -112,7 +112,7 @@ export default function HeroDashboard() {
   }
 
   const chartData = tab === 'visibility' ? VIS_DATA : SENT_DATA;
-  const n = VIS_DATA.nike.length;
+  const n = VIS_DATA.sony.length;
 
   const PL = tab === 'visibility' ? PL_VIS : PL_SENT;
   const cw = VW - PL - PR;

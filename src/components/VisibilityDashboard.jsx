@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useLang } from '../contexts/LangContext';
+import DashSidebar from './DashSidebar';
 
 /* ── Single-brand chart data ─────────────────────────────────────── */
 const NIKE_DATA = [45, 47, 52, 62, 78, 90];
@@ -143,7 +144,6 @@ function ScoreBreakdown() {
 export default function VisibilityDashboard() {
   const { t } = useLang();
   const vd = t('visibilityDashboard');
-  const ds = t('dashboard');
   const [chartHov, setChartHov] = useState(null);
 
   function handleChartMove(e) {
@@ -160,58 +160,7 @@ export default function VisibilityDashboard() {
     <div className="hero__dashboard">
       <div className="hdash__v2-body">
 
-        {/* ── Sidebar ── */}
-        <aside className="dash__sidebar">
-          <div className="dsb__brand">
-            <div className="dsb__brand-logo">
-              <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
-            </div>
-            <div className="dsb__brand-info">
-              <span className="dsb__brand-name">{ds.sidebar.nike}</span>
-              <span className="dsb__brand-meta">{ds.sidebar.activeProject}</span>
-            </div>
-          </div>
-          <div className="dsb__ask-poli">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/>
-              <path d="M20 2v4"/><path d="M22 4h-4"/>
-              <circle cx="4" cy="20" r="2"/>
-            </svg>
-            {ds.sidebar.askPoliAI}
-          </div>
-          <div className="dsb__section-hdr">
-            <span className="dsb__section-lbl">{ds.sidebar.geoAudit}</span>
-          </div>
-          <div className="dsb__tree">
-            <div className="dsb__tree-brand">
-              <span className="dsb__tree-chevron">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-              <span className="dsb__avatar dsb__avatar--n">S</span>
-              <span className="dsb__tree-brand-name">sony</span>
-            </div>
-            <div className="dsb__tree-l1">
-              <div className="dsb__tree-category">
-                <span className="dsb__tree-chevron">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10"><path d="m6 9 6 6 6-6"/></svg>
-                </span>
-                <span className="dsb__avatar dsb__avatar--n">A</span>
-                <span className="dsb__tree-cat-name">{ds.sidebar.footwear}</span>
-              </div>
-              <div className="dsb__tree-l2">
-                {ds.sidebar.navItems.map((l, li) => (
-                  <div key={l} className={`dash__nav-item${li === 1 ? ' dash__nav-item--active' : ''}`}>{l}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="dsb__section-hdr dsb__section-hdr--mt">
-            <span className="dsb__section-lbl">{ds.sidebar.technicalAudit}</span>
-          </div>
-          <div className="dsb__section-hdr">
-            <span className="dsb__section-lbl">{ds.sidebar.contentGeneration}</span>
-          </div>
-        </aside>
+        <DashSidebar />
 
         <div className="hdash__v2-main">
 

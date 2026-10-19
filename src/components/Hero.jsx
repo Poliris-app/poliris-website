@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ShaderBackground from './ShaderBackground';
 import HeroDashboard from './HeroDashboard';
+import HeroOnboarding from './HeroOnboarding';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { APP_URL } from '../lib/appUrl';
@@ -232,6 +233,8 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
             </div>
           )}
 
+          {/* Homepage (answerCard): answer card + dashboard composition.
+              Every other page: the onboarding preview. */}
           {showDashboard && (answerCard ? (
             <HeroVisualStage>
               <div className="hero__visual">
@@ -239,7 +242,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
                 <HeroDashboard />
               </div>
             </HeroVisualStage>
-          ) : <HeroDashboard />)}
+          ) : <HeroOnboarding />)}
         </div>
       </header>
     </>
