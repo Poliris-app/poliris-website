@@ -81,14 +81,14 @@ export default {
       cards: [
         {
           title: 'AI Reputation',
-          desc: 'See how often AI names and recommends you, broken down by product and by market, compared to the competitors that are actually winning.',
+          desc: 'See how ChatGPT, Gemini, and more talk about your brand. Track your visibility and sentiment against the competitors AI recommends.',
           tags: ['Global Score', 'Visibility Analysis', 'Sentiment Analysis', 'Competitive Position', 'Prompt Explorer', 'Recommendations'],
           url: 'poliris.io/dashboard/brands/sony',
           href: '/visibility',
         },
         {
-          title: 'AI Trust',
-          desc: "Get your website's AI health score in minutes and see exactly what's blocking AI systems from finding, trusting, and recommending you, with a specific fix for every issue.",
+          title: 'Site Health Check',
+          desc: 'Test your site’s health for Google and AI crawlers. Find what’s blocking indexing, with a clear fix for each issue.',
           tags: ['Crawling & Indexing', 'Page Status', 'Page Speed Insights', 'Overall Health Score', 'Sitemap Test', 'Robots.txt Test'],
           url: 'poliris.io/dashboard/audit/sony',
           href: '/technical-audit',
@@ -109,7 +109,7 @@ export default {
         },
         {
           title: 'Build Trust Across the Web',
-          desc: 'AI doesn\'t just read your site: it cross-checks what the rest of the web says about you. Strengthen the citations, mentions, and third-party signals that make AI confident enough to recommend you.',
+          desc: 'AI trusts what the web says about you. Find the sources it cites most and secure your place on them.',
           tags: ['Citations & Mentions', 'Backlink Quality', 'Third-Party Reviews', 'Trust Signals', 'Structured Data'],
           url: 'poliris.io/dashboard/citations/sony',
           href: '/demo',
