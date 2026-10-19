@@ -64,7 +64,10 @@ export default function LandingPage() {
       <AuditModal open={auditModalOpen} onClose={() => setAuditModalOpen(false)} /> */}
       <Hero
         eyebrow={h.eyebrow}
-        title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
+        // No hard break: the highlighted phrase spans two lines at most
+        // widths, which a <br /> before it would prevent. The no-break
+        // space keeps "The" from being left alone on a line.
+        title={<>{h.titlePre}{' '}<HL>{h.titleHl}</HL> {h.titlePost}</>}
         audience={h.audience}
         lead={h.lead}
         primaryCta={h.primaryCta}
