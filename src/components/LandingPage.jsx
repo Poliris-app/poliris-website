@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useLayoutEffect, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 // import ProductCarousel from './ProductCarousel'; // hidden for now, see below
 import Hero from './Hero';
 import CtaBand from './CtaBand';
+import StepLottieIcon from './StepLottieIcon';
 // import AuditModal from './AuditModal'; // hidden for now, see below
 import { useLang } from '../contexts/LangContext';
 
@@ -64,7 +65,10 @@ export default function LandingPage() {
       <AuditModal open={auditModalOpen} onClose={() => setAuditModalOpen(false)} /> */}
       <Hero
         eyebrow={h.eyebrow}
-        title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
+        // No hard break: the highlighted phrase spans two lines at most
+        // widths, which a <br /> before it would prevent. The no-break
+        // space keeps "The" from being left alone on a line.
+        title={<>{h.titlePre}{' '}<HL>{h.titleHl}</HL> {h.titlePost}</>}
         audience={h.audience}
         lead={h.lead}
         primaryCta={h.primaryCta}
@@ -77,6 +81,7 @@ export default function LandingPage() {
         }}
         showAiBand={false}
       />
+      <HowItWorks />
       {/* ValueChain hidden for now — restore by uncommenting. */}
       {/* <ValueChain /> */}
       {/* ProductCarousel hidden for now — restore by uncommenting. */}
@@ -86,6 +91,7 @@ export default function LandingPage() {
       {/* ComparisonTable hidden for now — restore by uncommenting. */}
       {/* <ComparisonTable /> */}
       <Stakes />
+      <HomeFaq />
       <CtaBand
         heading={cta.heading}
         lead={cta.lead}
@@ -94,6 +100,208 @@ export default function LandingPage() {
         note={cta.note}
       />
     </div>
+  );
+}
+
+/* ================================================================
+   HOW IT WORKS — Track → Fix → Publish → Monitor, right below the
+   hero's dashboard demo. Ported from the PR #5 homepage design: the
+   icons sit bare on the page (their box blends into the background)
+   and the first three play Lottie animations in turn, with the
+   connector lines drawing between them. Monitor has no Lottie of its
+   own, so it shows its drawn SVG — StepLottieIcon falls back to that
+   and reports done immediately, which keeps the sequence moving.
+   ================================================================ */
+const HOW_ICONS = [
+  {
+    // Track — a radar sweep finding blips (where AI names you and rivals)
+    key: 'track',
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <circle cx="16" cy="16" r="11" opacity="0.45" />
+        <circle cx="16" cy="16" r="6" opacity="0.45" />
+        <g className="how-anim how-anim--sweep">
+          <path d="M16 16 L16 5" />
+          <path d="M16 16 L16 5 A11 11 0 0 1 23.8 8.2 Z" fill="currentColor" stroke="none" opacity="0.25" />
+        </g>
+        <circle className="how-anim how-anim--blip how-anim--b1" cx="21.5" cy="11" r="1.7" fill="currentColor" stroke="none" />
+        <circle className="how-anim how-anim--blip how-anim--b2" cx="10" cy="19.5" r="1.7" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    // Fix — a prioritized checklist ticking itself off
+    key: 'fix',
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {[9, 16, 23].map((y, n) => (
+          <g key={y}>
+            <rect x="5.5" y={y - 2.5} width="5" height="5" rx="1.2" opacity="0.55" />
+            <path className={`how-anim how-anim--tick how-anim--t${n + 1}`} d={`M6.6 ${y} l1.4 1.4 l2.6 -2.8`} pathLength="1" />
+            <path d={`M14 ${y} H${26 - n * 3}`} opacity="0.55" />
+          </g>
+        ))}
+      </svg>
+    ),
+  },
+  {
+    // Publish — a page writes itself, then ships up to your site
+    key: 'publish',
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <g className="how-anim how-anim--page">
+          <path d="M9 5.5h10l4 4v17H9z" />
+          <path d="M19 5.5v4h4" opacity="0.6" />
+          <path className="how-anim how-anim--line how-anim--l1" d="M12.5 14H19.5" pathLength="1" />
+          <path className="how-anim how-anim--line how-anim--l2" d="M12.5 18H19.5" pathLength="1" />
+          <path className="how-anim how-anim--line how-anim--l3" d="M12.5 22H17" pathLength="1" />
+        </g>
+      </svg>
+    ),
+  },
+  {
+    // Monitor — a live pulse across the screen. No Lottie file for this
+    // one, so this drawing is what shows and its trace draws itself when
+    // the step lights up; `lottie: false` is what gives it a timed turn
+    // of its own instead of the player's "animation finished" signal.
+    key: 'monitor',
+    lottie: false,
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3.5" y="5" width="25" height="18" rx="2.5" opacity="0.55" />
+        <path d="M11.5 28h9M16 23v5" opacity="0.55" />
+        <path className="how-anim how-anim--line how-anim--l1" pathLength="1" d="M7.5 14.5h4l2-4.5 4 9 2-4.5h5" />
+      </svg>
+    ),
+  },
+];
+
+/* The steps play in a loop while in view, paced like a guided walk-through:
+   icon 1 plays, a pause, the line to step 2 draws left to right, icon 2, a
+   pause, the next line, and so on. After the last icon: a hold, the lines
+   fade out, and it starts over.
+   `stage`, three per step (i = step index):
+     3i = icon i playing, 3i+1 = pause after it, 3i+2 = line i drawing.
+   The last step has no line after it, so with N steps the tail is
+   3N-2 = hold, 3N-1 = lines fading, 3N = lines reset.
+   `cycle` counts loops so each icon knows to play again. */
+const HOW_DWELL_MS = 1000;
+const HOW_LINE_MS = 900;
+const HOW_HOLD_MS = 2000;
+const HOW_FADE_MS = 500;
+// How long a step without a Lottie holds its turn. The player reports
+// when its animation ends; a drawn icon has nothing to report, so its
+// turn is timed instead — long enough for the trace to finish drawing.
+const HOW_PLAY_MS = 1100;
+
+function HowItWorks() {
+  const { t } = useLang();
+  const hw = t('home.howItWorks');
+  const listRef = useRef(null);
+  const [stage, setStage] = useState(-1);
+  const [cycle, setCycle] = useState(0);
+  const [inView, setInView] = useState(false);
+
+  const stepCount = hw.steps.length;
+  const holdStage = stepCount * 3 - 2;
+  const fadeStage = holdStage + 1;
+  const resetStage = holdStage + 2;
+
+  // Track whether the steps are on screen; the loop only runs while they are
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(([entry]) => {
+      setInView(entry.isIntersecting);
+      if (entry.isIntersecting) setStage((s) => (s < 0 ? 0 : s));
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Timed stages: pauses, lines drawing, the hold, the fade-out, the reset.
+  // The icon-playing stages (3i) aren't timed here — the icon itself calls
+  // finishIcon when its animation completes.
+  useEffect(() => {
+    // An icon stage normally ends when the Lottie player says so; a step
+    // whose icon is a drawing has no player, so time its turn here.
+    const isIconStage = stage % 3 === 0 && stage < holdStage;
+    const iconIsTimed = isIconStage && HOW_ICONS[stage / 3]?.lottie === false;
+    if (stage < 0 || (isIconStage && !iconIsTimed)) return undefined;
+    const media = (q) => window.matchMedia(q).matches;
+    const reduce = media('(prefers-reduced-motion: reduce)');
+    const noLines = media('(max-width: 768px)') || reduce;
+    // Reduced motion: play through once and stop on the finished state
+    if (stage === holdStage && reduce) return undefined;
+    // Wait at the end until the section is back on screen
+    if (stage === holdStage && !inView) return undefined;
+    let next;
+    if (iconIsTimed) next = reduce ? 0 : HOW_PLAY_MS;
+    else if (stage === holdStage) next = HOW_HOLD_MS;
+    else if (stage === fadeStage) next = noLines ? 0 : HOW_FADE_MS;
+    else if (stage === resetStage) next = 50; // one painted frame with the lines collapsed, transitions off
+    else if (stage % 3 === 1) next = reduce ? 0 : HOW_DWELL_MS;
+    else next = noLines ? 0 : HOW_LINE_MS;
+    const timer = setTimeout(() => {
+      if (stage === resetStage) {
+        setCycle((c) => c + 1);
+        setStage(0);
+      } else {
+        setStage(stage + 1);
+      }
+    }, next);
+    return () => clearTimeout(timer);
+  }, [stage, inView, holdStage, fadeStage, resetStage]);
+
+  const finishIcon = useCallback((i) => {
+    setStage((s) => (s === i * 3 ? s + 1 : s));
+  }, []);
+
+  // Icons start gray, turn blue as their step plays and stay blue for the
+  // rest of the run; all go back to gray as the lines fade out.
+  const isLit = (i) => stage >= i * 3 && stage <= holdStage;
+
+  const lineClass = (i) => {
+    if (stage === resetStage) return ' is-reset';
+    if (stage === fadeStage) return ' is-drawn is-fading';
+    return stage >= i * 3 + 2 ? ' is-drawn' : '';
+  };
+
+  return (
+    <section id="how-it-works" className="how">
+      <div className="container">
+        <div className="sec-head reveal">
+          <Eyebrow>{hw.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{hw.h2Pre}<br /><HL>{hw.h2Hl}</HL></h2>
+          <p className="sec-lead">{hw.lead}</p>
+        </div>
+        <ol ref={listRef} className="how__steps" style={{ '--how-cols': stepCount }}>
+          {hw.steps.map((step, i) => (
+            <li key={step.title} className={`how__step reveal reveal--d${i + 1}`}>
+              {i < stepCount - 1 && (
+                <span className={`how__link${lineClass(i)}`} aria-hidden="true" />
+              )}
+              <span className={`how__icon how__icon--${HOW_ICONS[i].key}${isLit(i) ? ' is-lit' : ''}`} aria-hidden="true">
+                {/* A step with no Lottie file just shows its drawing —
+                    going through the player would only have it report
+                    "failed, already done" and skip the step's turn. */}
+                {HOW_ICONS[i].lottie === false ? HOW_ICONS[i].svg : (
+                  <StepLottieIcon
+                    name={HOW_ICONS[i].key}
+                    fallback={HOW_ICONS[i].svg}
+                    active={stage === i * 3}
+                    playKey={cycle}
+                    onDone={() => finishIcon(i)}
+                  />
+                )}
+              </span>
+              <h3 className="how__h3">{i + 1}. {step.title}</h3>
+              <p className="how__desc">{step.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
   );
 }
 
@@ -239,15 +447,17 @@ function ValueChain() {
 /* ================================================================
    PLATFORM ENGINE — 5-pillar feature showcase (before Team section)
    ================================================================ */
-function EngineWindow({ url, children }) {
+function EngineWindow({ url, bare = false, children }) {
   return (
     <div className="engine-window">
-      <div className="engine-window__bar">
-        <span className="engine-window__dot" style={{ background: '#ff5f57' }} />
-        <span className="engine-window__dot" style={{ background: '#febc2e' }} />
-        <span className="engine-window__dot" style={{ background: '#28c840' }} />
-        <span className="engine-window__url">{url}</span>
-      </div>
+      {!bare && (
+        <div className="engine-window__bar">
+          <span className="engine-window__dot" style={{ background: '#ff5f57' }} />
+          <span className="engine-window__dot" style={{ background: '#febc2e' }} />
+          <span className="engine-window__dot" style={{ background: '#28c840' }} />
+          <span className="engine-window__url">{url}</span>
+        </div>
+      )}
       <div className="engine-window__body">{children}</div>
     </div>
   );
@@ -558,738 +768,887 @@ function PositionChartDemo() {
 // adding height the card doesn't need) — kept ChatGPT/Claude/Gemini as the
 // most-recognized, plus Perplexity since its "Blocked" status is the one
 // worth surfacing.
-const TH_CRAWLERS = [
-  { name: 'ChatGPT', logo: 'chatgpt-com-logo.png', status: 'Allowed' },
-  { name: 'Claude', logo: 'claudeai-com-logo.png', status: 'Allowed' },
-  { name: 'Gemini', logo: 'gemini-ai-logo.png', status: 'Allowed' },
-  { name: 'Perplexity', logo: 'perplexity-ai-logo.png', status: 'Blocked' },
+/* ── AI Trust (card 02) — a direct port of the "AI Trust Animation"
+   reference prototype. One 531×399 frame, three acts on a 15s loop
+   driven by a single rAF clock: Crawl (0–5.3s) → Score (5.3–10.2s) →
+   Fix (10.2–15s), with step chips tracking progress top-right. Every
+   value below is interpolated from `t` exactly as the reference does,
+   so there are no CSS keyframes and nothing to keep in sync; the styles
+   are inline for the same reason. Note the loop is longer than it looks
+   — ENGINE_AUTOPLAY_MS has to clear 15s or the showcase swaps this card
+   out mid-animation. ── */
+const ATD_CYCLE = 15000;
+const ATD_ACTS = [[0, 5300], [5300, 10200], [10200, 15000]];
+const ATD_LOGO = (file) => `${import.meta.env.BASE_URL}${file}`;
+const ATD_LOGOS = {
+  chatgpt: ATD_LOGO('chatgpt-com-logo.png'),
+  claude: ATD_LOGO('claudeai-com-logo.png'),
+  gemini: ATD_LOGO('gemini-ai-logo.png'),
+  perplexity: ATD_LOGO('perplexity-ai-logo.png'),
+  mistral: ATD_LOGO('mistral-ai-logo.png'),
+  grok: ATD_LOGO('grok-com-logo.png'),
+};
+// Crawl log fixture: [status, path, latency].
+const ATD_LOG = [
+  [200, '/', '84ms'], [200, '/headphones', '112ms'], [200, '/headphones/wireless-earbuds', '96ms'],
+  [301, '/store/earbuds', '41ms'], [200, '/t/wf-1000xm5-earbuds', '138ms'], [200, '/t/wf-c700n-earbuds', '121ms'],
+  [404, '/t/wf-1000xm3-legacy', '33ms'], [200, '/support/earbuds', '88ms'], [200, '/blog/best-noise-cancelling', '143ms'],
+  [200, '/t/linkbuds-s', '109ms'], [301, '/promo/earbuds-sale', '38ms'], [200, '/compare/wf-1000xm5', '127ms'],
+  [200, '/t/ult-wear', '102ms'], [200, '/sitemap.xml', '57ms'],
 ];
+// The pipeline's half-width at each stage boundary — the same taper the
+// Site Health Pipeline uses, sampled at x = 0 / 400 / 800 / 1200.
+const ATD_HALVES = [180, 147, 119.28, 76.53];
+const ATD_PATH = 'M 0 30 C 200 30, 200 63, 400 63 C 600 63, 600 90.72, 800 90.72 C 1000 90.72, 1000 133.47, 1200 133.47 L 1200 286.53 C 1000 286.53, 1000 329.28, 800 329.28 C 600 329.28, 600 357, 400 357 C 200 357, 200 390, 0 390 Z';
 
-/* ── Site Health Pipeline — ported from components/common/
-   SiteHealthPipeline.tsx in poliris-frontend: same PIPELINE_CONFIG
-   (1200×420 viewBox, stageWidth 400, centerY 210, half-width 15–180)
-   and the same cumulative-taper bezier math, simplified to one flat
-   fill instead of the real gradient/glow-filter build-up. ── */
-const TH_PIPE = { width: 1200, height: 420, centerY: 210, stageWidth: 400, minHalf: 15, maxHalf: 180 };
-// `labelKey` maps to home.engine.demo.trust.stage* — see ThPipelinePanel.
-const TH_STAGES = [
-  { key: 'page_access', labelKey: 'stagePageAccess', value: 80 },
-  { key: 'content_access', labelKey: 'stageContentAccess', value: 79 },
-  { key: 'content_quality', labelKey: 'stageContentQuality', value: 59 },
-];
-const TH_HEALTH_SCORE = Math.round(TH_STAGES.reduce((s, x) => s + x.value, 0) / TH_STAGES.length);
-// Flows rightward through the pipe once per cycle (see .th-pipe__icon /
-// @keyframes th-icon-flow), staggered a few tenths of a second apart so
-// they arrive in succession rather than as one clump — all landed by
-// ~38% of the shared cycle, well before the card slides to Issues/Robots
-// at 45% (see TH_CYCLE_DURATION and .th-scroll below).
-const TH_PIPE_ICONS = [
-  { logo: 'mistral-ai-logo.png', top: '22%', startLeft: '2%' },
-  { logo: 'chatgpt-com-logo.png', top: '38%', startLeft: '2%' },
-  { logo: 'claudeai-com-logo.png', top: '22%', startLeft: '2%' },
-  { logo: 'perplexity-ai-logo.png', top: '66%', startLeft: '2%' },
-  { logo: 'grok-com-logo.png', top: '80%', startLeft: '2%' },
-  { logo: 'gemini-ai-logo.png', top: '66%', startLeft: '2%' },
-];
-// Shared by the icon flow AND the panel slide (.th-scroll__track) so
-// "icons finish, then it slides" stays true — kept as one constant
-// rather than duplicated magic numbers in the CSS.
-const TH_CYCLE_DURATION = 14; // seconds
-const TH_ICON_STAGGER = 0.3; // seconds between each icon's start
-
-function thCumulativeHalves() {
-  const { minHalf, maxHalf } = TH_PIPE;
-  const halves = [maxHalf];
-  let cumulative = 1;
-  for (const stage of TH_STAGES) {
-    cumulative *= stage.value / 100;
-    halves.push(minHalf + cumulative * (maxHalf - minHalf));
-  }
-  return halves;
-}
-
-function thMasterPath(halves) {
-  const { centerY, stageWidth } = TH_PIPE;
-  const [h0, h1, h2, h3] = halves;
-  const x = [0, stageWidth, stageWidth * 2, stageWidth * 3];
-  const top = (h) => centerY - h, bot = (h) => centerY + h;
-  const taperTop = (xa, xb, ha, hb) => { const m = (xa + xb) / 2; return `C ${m} ${top(ha)}, ${m} ${top(hb)}, ${xb} ${top(hb)}`; };
-  const taperBot = (xa, xb, ha, hb) => { const m = (xa + xb) / 2; return `C ${m} ${bot(hb)}, ${m} ${bot(ha)}, ${xa} ${bot(ha)}`; };
-  return [
-    `M ${x[0]} ${top(h0)}`, taperTop(x[0], x[1], h0, h1), taperTop(x[1], x[2], h1, h2), taperTop(x[2], x[3], h2, h3),
-    `L ${x[3]} ${bot(h3)}`, taperBot(x[2], x[3], h2, h3), taperBot(x[1], x[2], h1, h2), taperBot(x[0], x[1], h0, h1), 'Z',
-  ].join(' ');
-}
-
-function thEdgePath(halves, side, inset) {
-  const { centerY, stageWidth } = TH_PIPE;
-  const ih = halves.map((h) => Math.max(0, h - inset));
-  const [h0, h1, h2, h3] = ih;
-  const x = [0, stageWidth, stageWidth * 2, stageWidth * 3];
-  const d = side === 'top' ? -1 : 1;
-  const y = (h) => centerY + d * h;
-  const tp = (xa, xb, ha, hb) => { const m = (xa + xb) / 2; return `C ${m} ${y(ha)}, ${m} ${y(hb)}, ${xb} ${y(hb)}`; };
-  return [`M ${x[0]} ${y(h0)}`, tp(x[0], x[1], h0, h1), tp(x[1], x[2], h1, h2), tp(x[2], x[3], h2, h3)].join(' ');
-}
-
-function ThPipelinePanel() {
-  const { t } = useLang();
-  const d = t('home.engine.demo.trust');
-  const halves = thCumulativeHalves();
-  const { width, height, centerY, stageWidth } = TH_PIPE;
-  const masterPath = thMasterPath(halves);
-  const ringR = 26, ringC = 2 * Math.PI * ringR;
-  // The first stage under the "healthy" threshold (70) is the bottleneck —
-  // Content Quality at 59 — everything after it inherits the constraint,
-  // but here it's also the last stage, so it just gets the warning badge.
-  const limitingIndex = TH_STAGES.findIndex((s) => s.value < 70);
-  const stageCenterX = (i) => stageWidth * i + stageWidth / 2;
-  const stageAnchorY = (i) => centerY - (halves[i] + halves[i + 1]) / 2 - 18;
-  const pct = (svgX, svgY) => ({ left: `${(svgX / width) * 100}%`, top: `${(svgY / height) * 100}%` });
-
-  return (
-    <div className="th-pipe">
-      <div className="th-pipe__hdr">
-        <div>
-          <p className="pc-demo__title">{d.pipelineTitle}</p>
-        </div>
-        <div className="th-pipe__score">
-          <div className="th-pipe__score-text">
-            <span className="th-pipe__score-lbl">{d.healthScore}</span>
-            <span className="th-pipe__score-hint">{d.healthHint}</span>
-          </div>
-          <div className="th-pipe__ring">
-            <svg viewBox="0 0 64 64" width="64" height="64" style={{ transform: 'rotate(-90deg)' }}>
-              <circle cx="32" cy="32" r={ringR} fill="none" stroke="#E2E8F0" strokeWidth="5" />
-              <circle
-                cx="32" cy="32" r={ringR} fill="none" stroke="#1F3EA8" strokeWidth="5" strokeLinecap="round"
-                strokeDasharray={ringC}
-                className="th-pipe__ring-fill"
-                style={{ '--ring-c': ringC, '--ring-offset': ringC - (ringC * TH_HEALTH_SCORE) / 100 }}
-              />
-            </svg>
-            <span className="th-pipe__ring-val">{TH_HEALTH_SCORE}%</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="th-pipe__wrap">
-        <svg viewBox={`0 0 ${width} ${height}`} className="th-pipe__svg" preserveAspectRatio="none">
-          <line x1={stageWidth} y1={24} x2={stageWidth} y2={height - 24} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6" />
-          <line x1={stageWidth * 2} y1={24} x2={stageWidth * 2} y2={height - 24} stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6" />
-          <path d={masterPath} fill="#2563EB" fillOpacity="0.9" />
-          <path d={thEdgePath(halves, 'top', 14)} fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round" />
-          <path d={thEdgePath(halves, 'bottom', 14)} fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round" />
-        </svg>
-
-        {TH_PIPE_ICONS.map((ic, i) => (
-          <div
-            key={ic.logo}
-            className="th-pipe__icon"
-            style={{
-              top: ic.top,
-              '--start-left': ic.startLeft,
-              '--end-left': '93%',
-              animationDuration: `${TH_CYCLE_DURATION}s`,
-              animationDelay: `${TH_ICON_STAGGER * i}s`,
-            }}
-          >
-            <img src={`${import.meta.env.BASE_URL}${ic.logo}`} alt="" />
-          </div>
-        ))}
-
-        {limitingIndex !== -1 && (
-          <div className="th-pipe__badge th-pipe__badge--warn" style={pct(stageCenterX(limitingIndex), stageAnchorY(limitingIndex))}>
-            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-            {d.lowContentQuality}
-          </div>
-        )}
-
-        {TH_STAGES.map((stage, i) => (
-          <div key={stage.key} className="th-pipe__pill" style={pct(stageCenterX(i), centerY)}>
-            <span className="th-pipe__pill-lbl">{d[stage.labelKey]}</span>
-            <span className="th-pipe__pill-val">{stage.value}%</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const TH_ISSUE_TOTAL = 735;
-// Full severity split — drives the segmented bar, which stays accurate
-// even though the row list below only surfaces the two that matter.
-// `labelKey` maps to home.engine.demo.trust.sev* — see ThIssuesPanel.
-const TH_ISSUE_SEVERITIES = [
-  { labelKey: 'sevCritical', count: 115, cls: 'critical' },
-  { labelKey: 'sevWarning', count: 466, cls: 'warning' },
-  { labelKey: 'sevNotice', count: 154, cls: 'notice' },
-];
-// Trimmed row list: Critical + Warning are the two worth a line each;
-// Notice is the least urgent and dropped to keep the card shorter.
-const TH_ISSUE_TOP_ROWS = TH_ISSUE_SEVERITIES.filter((r) => r.cls !== 'notice');
-// The one issue this card actually fixes — a real Content Quality gap
-// (ties back to the pipeline slide's own "Low content quality" bottleneck
-// at 59%, not a random pick) that Poliris can pixel-deploy live without a
-// developer, matching the real "Deploy" action in the app's Technical
-// Audit → Roadmap flow (deployCorrection, see
-// agent/projects/[planId]/initiative/[id]/page.tsx in poliris-frontend).
-const TH_FIX_ISSUE = { name: 'Missing Product schema markup', page: 'sony.com/t/wf-1000xm5-earbuds' };
-
-function ThIssuesPanel() {
-  const { t } = useLang();
-  const d = t('home.engine.demo.trust');
-  const [count, setCount] = useState(0);
-  const numRef = useRef(null);
-  const wrapRef = useRef(null);
-  const deployBtnRef = useRef(null);
-  const [cursor, setCursor] = useState(null);
-  // Same hover-lift-then-click beat as cards 04/05, applied to the one
-  // fixable issue: zoomed = lifted/focused, deployPhase carries it through
-  // to the actual state change ("suggested" → "deploying" → "live").
-  const [zoomed, setZoomed] = useState(false);
-  const [clicked, setClicked] = useState(false);
-  const [deployPhase, setDeployPhase] = useState('idle'); // idle | deploying | live
-
-  // Counts up once, the moment this number scrolls into the viewport —
-  // a small "something happened" beat that doesn't depend on any
-  // scroll/cycle mechanic, just a plain reveal.
-  useEffect(() => {
-    const el = numRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) return;
-        observer.disconnect();
-        const duration = 1100;
-        const start = performance.now();
-        const tick = (now) => {
-          const p = Math.min(1, (now - start) / duration);
-          const eased = 1 - (1 - p) ** 3;
-          setCount(Math.round(TH_ISSUE_TOTAL * eased));
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      },
-      { threshold: 0.4 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // The Deploy sequence — this card's slide swap is pure CSS
-  // (.th-scroll__track's @keyframes th-scroll-move, ~14s/cycle, slide 2
-  // visible from 50%–85% i.e. roughly 7s–11.9s in), so rather than rebuild
-  // that as React state, this effect times its own loop to land inside
-  // that same visible window: waits ~7.3s for slide 2 to be the one
-  // showing, then repeats every full cycle. Critically, its own t=0 is
-  // pinned to the exact moment .engine-row__visual gets .visible (below)
-  // — the same class-toggle that unpauses the CSS animation itself — so
-  // the two clocks can't drift apart the way two independent observers
-  // eventually do.
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    let timers = [];
-    let started = false;
-    const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
-
-    function cursorAt(risen) {
-      const btn = deployBtnRef.current;
-      if (!btn) return null;
-      return {
-        left: btn.offsetLeft + btn.offsetWidth / 2,
-        top: btn.offsetTop + btn.offsetHeight / 2 + (risen ? 0 : 18),
-        risen,
-      };
-    }
-
-    function runSequence() {
-      setCursor(null); setZoomed(false); setClicked(false); setDeployPhase('idle');
-      after(600, () => setCursor(cursorAt(false)));
-      after(1000, () => setCursor(cursorAt(true)));
-      after(1250, () => setZoomed(true));
-      after(1800, () => setClicked(true));
-      after(2050, () => { setDeployPhase('deploying'); setCursor(null); });
-      after(3200, () => setDeployPhase('live'));
-    }
-
-    function start() {
-      if (started) return;
-      started = true;
-      // Scheduled against a fixed absolute anchor, not a chained
-      // setTimeout(fn, 14000) — a chain only guarantees "at least" 14000ms
-      // per hop, and the handful of ms of event-loop/scheduling slack each
-      // hop adds is invisible for a lap or two but keeps accumulating.
-      // The CSS animation runs on the compositor and never drifts, so by
-      // lap 3+ the JS side has fallen behind enough to blow past the
-      // 100ms safety margin below and land after slide 2 is already
-      // visible — showing the previous lap's stale "Live" again. Recomputing
-      // the delay from the anchor on every lap self-corrects instead of
-      // compounding.
-      //
-      // First target is 6900ms, not 7000/7300: slide 2 (Issues Overview)
-      // actually becomes visible at t=7000 in the CSS cycle, and the
-      // reset-to-idle has to land strictly *before* that on every lap —
-      // landing after leaves the previous lap's "Live" state showing for
-      // the gap, since deployPhase only starts at 'idle' by default on the
-      // very first lap.
-      const anchor = performance.now() + 6900;
-      let lap = 0;
-      function scheduleNext() {
-        const delay = Math.max(0, anchor + lap * 14000 - performance.now());
-        timers.push(setTimeout(() => {
-          runSequence();
-          lap += 1;
-          scheduleNext();
-        }, delay));
-      }
-      scheduleNext();
-    }
-
-    // Sync to the exact same signal that unpauses .th-scroll__track's own
-    // CSS animation (.engine-row__visual.reveal.visible), not a separate
-    // IntersectionObserver on this element — two independent triggers
-    // drift apart over time, landing "live" outside slide 2's visible
-    // window instead of the click actually happening on-screen.
-    const visualEl = el.closest('.engine-row__visual');
-    let mo;
-    if (visualEl?.classList.contains('visible')) {
-      start();
-    } else if (visualEl) {
-      mo = new MutationObserver(() => {
-        if (visualEl.classList.contains('visible')) start();
-      });
-      mo.observe(visualEl, { attributes: true, attributeFilter: ['class'] });
-    }
-
-    return () => { mo?.disconnect(); timers.forEach(clearTimeout); };
-  }, []);
-
-  const isLive = deployPhase === 'live';
-  const displayCount = isLive ? count - 1 : count;
-
-  return (
-    <div className="th-inner" ref={wrapRef}>
-      <div className="th-box-hdr">
-        <div>
-          <p className="pc-demo__title">{d.issuesTitle}</p>
-          <p className="pc-demo__sub">{d.issuesSub}</p>
-        </div>
-        <span className="th-needs-work">{d.needsWork}</span>
-      </div>
-      <div className="th-issues-big" ref={numRef}>{displayCount}<span>{d.issuesUnit}</span></div>
-      <div className="th-issues-bar">
-        {TH_ISSUE_SEVERITIES.map((r) => (
-          <span key={r.cls} className={`th-issues-bar-seg th-issues-bar-seg--${r.cls}`} style={{ width: `${Math.round((r.count / TH_ISSUE_TOTAL) * 100)}%` }} />
-        ))}
-      </div>
-      <div className="th-issues-rows">
-        {TH_ISSUE_TOP_ROWS.map((r) => (
-          <div key={r.cls} className="th-issues-row">
-            <span className={`th-dot th-dot--${r.cls}`} />
-            <span className="th-issues-label">{d[r.labelKey]}</span>
-            <span className="th-issues-count">{r.count}</span>
-            <span className="th-issues-pct">{Math.round((r.count / TH_ISSUE_TOTAL) * 100)}%</span>
-          </div>
-        ))}
-      </div>
-
-      {/* The one issue this demo actually fixes, singled out from the pile —
-          a real, deployable correction, not just another line in the count. */}
-      <div className={`th-fix${zoomed ? ' th-fix--zoomed' : ''}${zoomed && clicked && deployPhase === 'idle' ? ' th-fix--pulse' : ''}`}>
-        <div className="th-fix__info">
-          <span className="th-fix__badge">{d.stageContentQuality}</span>
-          <span className="th-fix__name">{d.fixIssueName}</span>
-          <span className="th-fix__page">{TH_FIX_ISSUE.page}</span>
-        </div>
-        {deployPhase === 'live' ? (
-          <span className="th-fix__status th-fix__status--live">
-            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            {d.live}
-          </span>
-        ) : deployPhase === 'deploying' ? (
-          <span className="th-fix__status th-fix__status--deploying">
-            <span className="th-fix__spinner" />
-            {d.deploying}
-          </span>
-        ) : (
-          <span className="th-deploy-btn" ref={deployBtnRef}>
-            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m14.7 6.3 3 3L19 8l-3-3zM3 21l3.5-1L17 9.5l-2.5-2.5L4 17.5z"/></svg>
-            {d.deploy}
-          </span>
-        )}
-        {cursor && (
-          <div className={`cg-cursor${cursor.risen ? ' cg-cursor--risen' : ''}`} style={{ left: cursor.left, top: cursor.top }}>
-            <svg viewBox="0 0 24 24" fill="#18181B" width="14" height="14"><path d="M5 3l14 8-6 2-2 6-6-16z"/></svg>
-            {clicked && <span className="cg-cursor__ripple" />}
-          </div>
-        )}
-      </div>
-
-      <a className="th-link" href="#">{d.viewDetails} <span>→</span></a>
-    </div>
-  );
-}
-
-function ThRobotsPanel() {
-  const { t } = useLang();
-  const d = t('home.engine.demo.trust');
-  return (
-    <div className="th-inner">
-      <div className="th-robots-head">
-        <div>
-          <p className="pc-demo__title">{d.robotsTitle}</p>
-          <p className="pc-demo__sub">{d.robotsSub}</p>
-        </div>
-        <div className="th-robots-score">
-          <span className="th-robots-score-num">80<span>/100</span></span>
-          <span className="th-pass-pill">{d.passed}</span>
-        </div>
-      </div>
-      <div className="th-robots-bar">
-        <span className="th-robots-bar-seg th-robots-bar-seg--allowed" style={{ width: '93%' }} />
-        <span className="th-robots-bar-seg th-robots-bar-seg--blocked" style={{ width: '7%' }} />
-      </div>
-      <div className="th-robots-legend">
-        <span><i className="th-dot th-dot--blue" />{d.pagesAllowed}</span>
-        <span><i className="th-dot th-dot--red" />{d.pagesBlocked}</span>
-      </div>
-      <p className="th-label">{d.crawlerAccess}</p>
-      <div className="th-crawlers">
-        {TH_CRAWLERS.map((c) => (
-          <div key={c.name} className={`th-crawler${c.status === 'Blocked' ? ' th-crawler--blocked' : ''}`}>
-            <img src={`${import.meta.env.BASE_URL}${c.logo}`} alt="" />
-            <span className="th-crawler__name">{c.name}</span>
-            <span className={`th-crawler__status th-crawler__status--${c.status.toLowerCase()}`}>{c.status === 'Blocked' ? d.blocked : d.allowed}</span>
-          </div>
-        ))}
-      </div>
-      <div className="th-robots-actions">
-        <span className="th-btn th-btn--ghost">{d.viewRobots}</span>
-        <span className="th-btn th-btn--solid">{d.viewFullReport}</span>
-      </div>
-    </div>
-  );
-}
+const atdClamp = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+const atdOut = (x) => 1 - Math.pow(1 - atdClamp(x), 3);
+const atdInOut = (x) => { x = atdClamp(x); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const atdBack = (x) => { x = atdClamp(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
 
 function EngineTrustCard() {
-  return (
-    <div className="th-scroll">
-      <div className="th-scroll__track">
-        <div className="th-slide">
-          <div className="th-box th-box--pipeline"><ThPipelinePanel /></div>
-        </div>
-        <div className="th-slide">
-          <div className="th-box th-box--split">
-            <div className="th-col"><ThIssuesPanel /></div>
-            <div className="th-divider" />
-            <div className="th-col th-col--robots"><ThRobotsPanel /></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+  const { t: tr } = useLang();
+  const d = tr('home.engine.demo.trust');
+  const [t, setT] = useState(0);
+  const rootRef = useRef(null);
 
-/* ── Roadmap Plan — Calendar / Board, ported from the real planner's
-   Calendar+Board switch (content-planner/planner-view.tsx). Two slides,
-   same horizontal auto-slide mechanic as card 02 (.rm-* namespace). ── */
-// `cls` per type stays fixed; the label itself comes from home.engine.demo.roadmap.badge*.
-const RM_TYPE_BADGE = {
-  fix: { labelKey: 'badgeFix', cls: 'rm-badge--fix' },
-  backlink: { labelKey: 'badgeBacklink', cls: 'rm-badge--backlink' },
-  content: { labelKey: 'badgeContent', cls: 'rm-badge--content' },
-};
-
-// `titleKey` maps to home.engine.demo.roadmap.task* (see the data below) —
-// kept as a stable English identifier for both the translation lookup and
-// React's key prop, since the displayed title itself is now translated.
-function RmCard({ titleKey, type, dimmed, infoRef }) {
-  const { t } = useLang();
-  const d = t('home.engine.demo.roadmap');
-  const badge = RM_TYPE_BADGE[type];
-  return (
-    <div className={`rm-card${dimmed ? ' rm-card--dimmed' : ''}`}>
-      <div className="rm-card__top">
-        <span className="rm-card__dot" />
-        <span className={`rm-badge ${badge.cls}`}>{d[badge.labelKey]}</span>
-        <span className="rm-card__info" ref={infoRef}>?</span>
-        <span className="rm-card__x">×</span>
-      </div>
-      <p className="rm-card__title">{d[titleKey]}</p>
-    </div>
-  );
-}
-
-// `dayKey` maps to home.engine.demo.roadmap.day* — see RmCalendarPanel.
-const RM_CAL_DAYS = ['dayMon', 'dayTue', 'dayWed', 'dayThu', 'dayFri', 'daySat', 'daySun'];
-// Two weeks (Aug 24–Sep 6) — enough to show the "today" marker and both
-// task days without rendering a whole 5-week grid.
-const RM_CAL_WEEKS = [
-  [24, 25, 26, 27, 28, 29, 30],
-  [31, 1, 2, 3, 4, 5, 6],
-];
-const RM_DRAGGED_CARD = { titleKey: 'taskCanonicalRunningPegasus', type: 'fix' };
-// Static cards, minus the one that actually moves (see RM_DRAGGED_CARD /
-// useRmDrag below) — that one is placed by day from `owner` state instead,
-// so Aug 25 and Aug 26 genuinely gain/lose a row and reflow, rather than
-// just showing a floating duplicate on top of a fixed layout.
-const RM_CAL_STATIC_CARDS = {
-  25: [{ titleKey: 'taskCanonicalSitemap', type: 'fix' }],
-  1: [
-    { titleKey: 'taskItemListSchema', type: 'fix' },
-    { titleKey: 'taskRewriteTitles', type: 'fix' },
-  ],
-};
-// Column geometry for the drag demo — MON is column 0, so Aug 25 (TUE) is
-// column 1 and Aug 26 (WED) is column 2, out of the calendar's 7 equal
-// columns.
-const RM_COL_PCT = 100 / 7;
-const RM_DAY_LEFT = { 25: `calc(${RM_COL_PCT * 1}% + 2px)`, 26: `calc(${RM_COL_PCT * 2}% + 2px)` };
-
-// Drives the "drag a card to a new date" loop: `owner` is which day's cell
-// actually holds RM_DRAGGED_CARD in the real layout (so the grid reflows
-// the moment it arrives), `flight` is the floating ghost's state while
-// it's between cells. Starts only once the calendar has actually scrolled
-// into view, then repeats on a ~7.6s cycle: lift → fly → hold 2.5s at the
-// new date → lift → fly back → hold at rest → repeat.
-function useRmDrag(rootRef) {
-  const [owner, setOwner] = useState(25);
-  const [flight, setFlight] = useState(null); // null | { from, to?, lifted }
-
+  // One clock for the whole card. Runs only while the card is on screen
+  // — off-screen it would burn a frame callback a tick for nothing, and
+  // in the showcase this card is unmounted anyway between turns.
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    let timers = [];
-    const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
+    let raf = 0, t0 = 0, running = false;
+    const tick = (now) => {
+      if (!t0) t0 = now;
+      setT((now - t0) % ATD_CYCLE);
+      raf = requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !running) {
+        running = true; t0 = 0;
+        raf = requestAnimationFrame(tick);
+      } else if (!entry.isIntersecting && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    }, { threshold: 0.2 });
+    io.observe(el.closest('.engine-showcase__panel') || el.closest('.engine-row__visual') || el);
+    return () => { io.disconnect(); cancelAnimationFrame(raf); };
+  }, []);
 
-    function cycle() {
-      after(500, () => setFlight({ from: 25 }));
-      after(900, () => setFlight({ from: 25, to: 26 }));
-      after(900 + 800, () => { setOwner(26); setFlight(null); });
-      after(900 + 800 + 2500, () => setFlight({ from: 26 }));
-      after(900 + 800 + 2500 + 400, () => setFlight({ from: 26, to: 25 }));
-      after(900 + 800 + 2500 + 400 + 800, () => { setOwner(25); setFlight(null); });
-      after(900 + 800 + 2500 + 400 + 800 + 1200, cycle);
+  const L = ATD_LOGOS;
+  const pop = (t0, from = 0.6, dur = 320) => ({
+    o: atdOut((t - t0) / (dur * 0.7)),
+    s: t < t0 ? from : from + (1 - from) * atdBack((t - t0) / dur),
+  });
+  const act = ([s, e]) => {
+    const i = atdOut((t - s) / 420), o = atdClamp((e - t) / 320);
+    return { o: Math.min(i, o), y: (1 - i) * 10 - (1 - o) * 6, s: 0.985 + 0.015 * i };
+  };
+  const a1 = act(ATD_ACTS[0]), a2 = act(ATD_ACTS[1]), a3 = act(ATD_ACTS[2]);
+
+  const steps = [d.stepCrawl, d.stepScore, d.stepFix].map((label, i) => {
+    const [s, e] = ATD_ACTS[i], on = t >= s && t < e, done = t >= e;
+    return {
+      label, mark: done ? '✓' : String(i + 1), prog: on ? atdClamp((t - s) / (e - s)) * 100 : 0,
+      bg: on ? '#EEF4FF' : 'transparent', color: on ? '#0047b8' : done ? '#3F3F46' : '#9aa1ac',
+      numBg: on ? 'rgb(0,98,255)' : done ? '#DCFCE7' : '#EEF1F6', numColor: on ? '#fff' : done ? '#16A34A' : '#9aa1ac',
+    };
+  });
+
+  /* ── Act 1 · Crawl ── */
+  const cp = atdOut((t - 300) / 4300);
+  const R0 = 300, RT = 320, VIS = 8;
+  const n = Math.max(0, Math.min(ATD_LOG.length, Math.floor((t - R0) / RT) + 1));
+  const base = Math.max(0, n - VIS) * 22, prev = Math.max(0, n - 1 - VIS) * 22;
+  const frac = atdOut((t - R0 - (n - 1) * RT) / 220);
+  const rows = ATD_LOG.map(([code, path, ms], i) => {
+    const ti = R0 + i * RT, fresh = t >= ti ? atdClamp(1 - (t - ti) / 700) : 0;
+    return {
+      code, path, ms, o: atdOut((t - ti) / 220), bg: `rgba(0,98,255,${(0.09 * fresh).toFixed(3)})`,
+      cBg: code === 200 ? '#DCFCE7' : code === 301 ? '#FFF3EB' : '#FEE2E2',
+      cColor: code === 200 ? '#16A34A' : code === 301 ? '#FA7319' : '#DC2626',
+    };
+  });
+  const sp = atdClamp((t - 700) / 2900);
+  const tags = [[14, d.scanTitleMeta, '✓', 1], [34, d.scanH1, '✓', 1], [60, d.scanSchemaMissing, '!', 0], [86, d.scanAltText, '✓', 1]]
+    .map(([top, label, mark, ok]) => {
+      const p = pop(700 + 2900 * top / 100, 0.7, 300);
+      return { top, label, mark, o: p.o, s: p.s, bg: ok ? '#DCFCE7' : '#FFF3EB', color: ok ? '#16A34A' : '#FA7319' };
+    });
+  const bots = [['chatgpt', 'ChatGPT', 1], ['claude', 'Claude', 1], ['gemini', 'Gemini', 1], ['perplexity', 'Perplexity', 0]]
+    .map(([k, name, ok], i) => {
+      const tb = 3900 + i * 200, p = pop(tb), dd = pop(tb + 160, 0.4, 260), bad = !ok && t >= tb + 160;
+      return {
+        name, src: L[k], o: p.o, s: p.s, dotO: dd.o, dotS: dd.s,
+        dot: ok ? '#16A34A' : '#DC2626', mark: ok ? '✓' : '✕',
+        bg: bad ? '#FEF2F2' : '#fff', border: bad ? '#FCA5A5' : '#ECECEF',
+      };
+    });
+  const pulse = (t % 1200) / 1200;
+
+  /* ── Act 2 · Score ── */
+  const ringP = atdOut((t - 5700) / 1300);
+  const pills = [[d.stagePageAccess, 80, 16.667], [d.stageContentAccess, 79, 50], [d.stageContentQuality, 59, 83.333]]
+    .map(([label, v, x], i) => {
+      const tp = 5750 + i * 200, p = pop(tp, 0.8, 350);
+      return { label, x, o: p.o, s: p.s, val: Math.round(v * atdOut((t - tp) / 900)) + '%' };
+    });
+  const badge = pop(7800, 0.6, 320);
+  const halfAt = (xp) => {
+    const X = Math.min(1199.9, Math.max(0, xp * 12)), i = Math.floor(X / 400), u = (X - i * 400) / 400;
+    const sm = u * u * (3 - 2 * u);
+    return ATD_HALVES[i] + (ATD_HALVES[i + 1] - ATD_HALVES[i]) * sm;
+  };
+  const laneY = (lane, xp) => 50 + (lane - 50) * (halfAt(xp) / 180) * 0.86;
+  let blkO = 0, blkS = 0.7;
+  const icons = [['mistral', 27], ['chatgpt', 37], ['claude', 27], ['perplexity', 68], ['grok', 76], ['gemini', 68]]
+    .map(([k, y], i) => {
+      const st = 5900 + i * 320, dt = t - st;
+      // Perplexity is the one that gets stopped — it shakes, turns red
+      // and the "Blocked by robots.txt" chip pops next to it.
+      if (k === 'perplexity') {
+        const hit = dt > 1000;
+        const sh = dt > 1000 && dt < 1400 ? Math.sin(((dt - 1000) / 400) * Math.PI * 6) * 3 * (1 - (dt - 1000) / 400) : 0;
+        const b = pop(st + 1050, 0.7, 280);
+        blkO = b.o * atdClamp((2700 - dt) / 400); blkS = b.s;
+        const px = 2 + 25 * atdOut(dt / 1000);
+        return { src: L[k], y: laneY(y, px), x: px, shake: sh, outline: hit ? '2px solid #EF4444' : '1px solid #e2e8f0', o: atdClamp(dt / 200) * atdClamp((2600 - dt) / 400) };
+      }
+      const p = atdClamp(dt / 2700), px = 2 + 91 * atdInOut(p);
+      return { src: L[k], y: laneY(y, px), x: px, shake: 0, outline: '1px solid #e2e8f0', o: dt <= 0 ? 0 : atdClamp(p / 0.08) * atdClamp((1 - p) / 0.1) };
+    });
+
+  /* ── Act 3 · Fix ── */
+  const live = t >= 13600, idle = t < 12750;
+  const segK = atdOut((t - 10450) / 800);
+  const sev = [[d.sevCritical, 115, '16%', '#EF4444'], [d.sevWarning, 466, '63%', '#F97316'], [d.sevNotice, 154, '21%', '#0062FF']]
+    .map(([label, nn, p, c], i) => {
+      const o = atdOut((t - (10600 + i * 120)) / 300);
+      return { label, n: nn, p, c, o, y: (1 - o) * 6 };
+    });
+  const fo = atdOut((t - 10950) / 350);
+  const zk = atdOut((t - 12350) / 300) * atdClamp((13900 - t) / 300);
+  const cm = atdOut((t - 11900) / 650), press = t > 12600 && t < 12780, rp = (t - 12650) / 600;
+  const access = [['chatgpt', 'ChatGPT', 1], ['claude', 'Claude', 1], ['gemini', 'Gemini', 1], ['perplexity', 'Perplexity', 0]]
+    .map(([k, name, ok], i) => {
+      const o = atdOut((t - (10900 + i * 110)) / 300);
+      return {
+        name, src: L[k], o, x: (1 - o) * 8, status: ok ? d.allowed : d.blocked,
+        bg: ok ? '#FAFAFA' : '#FEF2F2', border: ok ? '#ECECEF' : '#FCA5A5',
+        sBg: ok ? '#DCFCE7' : '#FEE2E2', sColor: ok ? '#16A34A' : '#DC2626',
+      };
+    });
+
+  // The reference insets each act by 14/16px because it owns the whole
+  // frame; here the window body already pads 24px, and stacking the two
+  // left the content 40px off every edge. Inset 0 so the body's 24px is
+  // the only padding — the acts get those 16px back on all four sides.
+  const actStyle = (a) => ({ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', opacity: a.o, transform: `translateY(${a.y}px) scale(${a.s})` });
+  const muted = { fontSize: 11.5, color: '#6B6E72' };
+  const capLabel = { fontSize: 9.5, fontWeight: 700, letterSpacing: '.05em', color: '#9aa1ac' };
+
+  // The reference stands alone in a 531×399 frame and pins itself to
+  // min-height:390. Inside this card the window body is 349px after its
+  // padding, so that floor overran it and cut the bottom row off — fill
+  // the body instead and let the three acts lay out to it.
+  return (
+    <div ref={rootRef} style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column', background: '#fff', fontFamily: 'var(--manrope)', color: '#09090b', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
+
+        {/* Crawl · Score · Fix, each filling as its act plays. */}
+        <div style={{ position: 'absolute', top: 14, right: 16, zIndex: 3, display: 'flex', gap: 4 }}>
+          {steps.map((s) => (
+            <div key={s.label} style={{ position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', gap: 5, height: 22, padding: '0 9px 0 5px', borderRadius: 999, background: s.bg, color: s.color, fontSize: 10.5, fontWeight: 600, transition: 'background .3s, color .3s' }}>
+              <span style={{ width: 14, height: 14, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8.5, fontWeight: 700, background: s.numBg, color: s.numColor, transition: 'background .3s, color .3s' }}>{s.mark}</span>
+              <span>{s.label}</span>
+              <span style={{ position: 'absolute', left: 0, bottom: 0, height: 2, width: `${s.prog}%`, background: 'rgb(0,98,255)' }} />
+            </div>
+          ))}
+        </div>
+
+        {/* ── Act 1 · Crawl ── */}
+        <div style={actStyle(a1)}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <span style={{ position: 'relative', width: 8, height: 8, flex: 'none' }}>
+                <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#16A34A', transform: `scale(${1 + 1.6 * pulse})`, opacity: 0.5 * (1 - pulse) }} />
+                <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#16A34A' }} />
+              </span>
+              <span style={{ fontSize: 14, fontWeight: 700 }}>{d.crawlingTitle}</span>
+            </div>
+            <span style={muted}>{d.crawlingSub}</span>
+          </div>
+          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 7 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+              <span style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-0.5px', fontVariantNumeric: 'tabular-nums' }}>{Math.round(1284 * cp).toLocaleString('en-US')}</span>
+              <span style={{ fontSize: 12, color: '#6B6E72' }}>{d.pagesCrawled}</span>
+              <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: '#0047b8', fontVariantNumeric: 'tabular-nums' }}>{Math.round(cp * 100)}%</span>
+            </div>
+            <div style={{ height: 6, borderRadius: 999, background: '#EEF1F6', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${cp * 100}%`, background: 'rgb(0,98,255)', borderRadius: 999 }} />
+            </div>
+          </div>
+          <div style={{ marginTop: 12, flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 12 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minHeight: 0, border: '1px solid #ECECEF', borderRadius: 10, background: '#FAFBFC', padding: '9px 8px 6px' }}>
+              <span style={{ ...capLabel, padding: '0 2px' }}>{d.liveCrawlLog}</span>
+              <div style={{ position: 'relative', flex: 1, minHeight: 0, overflow: 'hidden', WebkitMaskImage: 'linear-gradient(180deg,#000 78%,transparent)', maskImage: 'linear-gradient(180deg,#000 78%,transparent)' }}>
+                <div style={{ transform: `translateY(${-(prev + (base - prev) * frac)}px)` }}>
+                  {rows.map((r) => (
+                    <div key={r.path} style={{ display: 'flex', alignItems: 'center', gap: 6, height: 22, padding: '0 4px', borderRadius: 5, opacity: r.o, background: r.bg }}>
+                      <span style={{ flex: 'none', width: 26, textAlign: 'center', fontSize: 9, fontWeight: 700, padding: '1px 0', borderRadius: 4, background: r.cBg, color: r.cColor }}>{r.code}</span>
+                      <span style={{ flex: 1, minWidth: 0, fontSize: 10.5, color: '#3F3F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.path}</span>
+                      <span style={{ flex: 'none', fontSize: 9.5, color: '#9aa1ac', fontVariantNumeric: 'tabular-nums' }}>{r.ms}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7, minHeight: 0, border: '1px solid #ECECEF', borderRadius: 10, background: '#fff', padding: '9px 10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ ...capLabel, flex: 'none' }}>{d.pageScan}</span>
+                <span style={{ marginLeft: 'auto', minWidth: 0, fontSize: 9.5, fontWeight: 500, color: 'rgb(0,98,255)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>/t/wf-1000xm5-earbuds</span>
+              </div>
+              {/* A wireframe of the page being read, with the scan beam
+                  sweeping it and a verdict chip popping at each band. */}
+              <div style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: 7, background: '#F7F9FC', border: '1px solid #EEF1F6', overflow: 'hidden', padding: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                  <span style={{ width: 18, height: 6, borderRadius: 2, background: '#CBD5E1' }} />
+                  <span style={{ flex: 1 }} />
+                  {[0, 1, 2].map((i) => <span key={i} style={{ width: 12, height: 4, borderRadius: 2, background: '#E2E8F0' }} />)}
+                </div>
+                <div style={{ display: 'flex', gap: 7 }}>
+                  <div style={{ width: '42%', height: 46, borderRadius: 5, background: '#E6ECF7' }} />
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, paddingTop: 2 }}>
+                    <span style={{ height: 7, width: '85%', borderRadius: 2, background: '#94A3B8' }} />
+                    <span style={{ height: 4, width: '95%', borderRadius: 2, background: '#E2E8F0' }} />
+                    <span style={{ height: 4, width: '70%', borderRadius: 2, background: '#E2E8F0' }} />
+                    <span style={{ marginTop: 3, height: 9, width: '44%', borderRadius: 3, background: '#C9D9FF' }} />
+                  </div>
+                </div>
+                <span style={{ height: 4, width: '100%', borderRadius: 2, background: '#E2E8F0' }} />
+                <span style={{ height: 4, width: '92%', borderRadius: 2, background: '#E2E8F0' }} />
+                <span style={{ height: 4, width: '64%', borderRadius: 2, background: '#E2E8F0' }} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 4 }}>
+                  {[0, 1, 2].map((i) => <span key={i} style={{ height: 16, borderRadius: 3, background: '#EDF1F7' }} />)}
+                </div>
+                <div style={{ position: 'absolute', left: 0, right: 0, top: `${sp * 100}%`, height: 34, transform: 'translateY(-100%)', background: 'linear-gradient(180deg,rgba(0,98,255,0),rgba(0,98,255,.16))', opacity: atdClamp((t - 600) / 200) * atdClamp((3800 - t) / 300), pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', left: 0, right: 0, top: `${sp * 100}%`, height: 2, background: 'rgb(0,98,255)', boxShadow: '0 0 8px rgba(0,98,255,.6)', opacity: atdClamp((t - 600) / 200) * atdClamp((3800 - t) / 300) }} />
+                {tags.map((g) => (
+                  <div key={g.label} style={{ position: 'absolute', right: 6, top: `${g.top}%`, transform: `translateY(-50%) scale(${g.s})`, transformOrigin: 'right center', opacity: g.o, display: 'flex', alignItems: 'center', gap: 4, padding: '2px 7px', borderRadius: 999, background: g.bg, color: g.color, fontSize: 9, fontWeight: 700, boxShadow: '0 2px 6px rgba(15,23,42,.12)', whiteSpace: 'nowrap' }}>
+                    <span>{g.mark}</span><span>{g.label}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={capLabel}>{d.aiCrawlers}</span>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, paddingRight: 3 }}>
+                  {bots.map((b) => (
+                    <div key={b.name} style={{ position: 'relative', width: 24, height: 24, borderRadius: 7, background: b.bg, border: `1px solid ${b.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: b.o, transform: `scale(${b.s})` }}>
+                      <img src={b.src} alt={b.name} style={{ width: 14, height: 14, objectFit: 'contain' }} />
+                      <span style={{ position: 'absolute', right: -5, bottom: -5, width: 13, height: 13, borderRadius: '50%', background: b.dot, color: '#fff', fontSize: 7.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1.5px solid #fff', opacity: b.dotO, transform: `scale(${b.dotS})` }}>{b.mark}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Act 2 · Score ── */}
+        <div style={actStyle(a2)}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <span style={{ fontSize: 14, fontWeight: 700 }}>{d.pipelineTitle}</span>
+            <span style={muted}>{d.pipelineSub}</span>
+          </div>
+          <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ position: 'relative', width: 48, height: 48, flex: 'none' }}>
+              <svg width="48" height="48" viewBox="0 0 64 64" style={{ display: 'block', transform: 'rotate(-90deg)' }}>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#E2E8F0" strokeWidth="6" />
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#1F3EA8" strokeWidth="6" strokeLinecap="round" strokeDasharray="163.36" strokeDashoffset={163.36 * (1 - 0.73 * ringP)} />
+              </svg>
+              <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#1F3EA8', fontVariantNumeric: 'tabular-nums' }}>{Math.round(73 * ringP)}%</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <span style={capLabel}>{d.healthScore}</span>
+              <span style={muted}>{d.acrossCrawled}</span>
+            </div>
+            <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: '#FA7319', background: '#FFF3EB', padding: '4px 10px', borderRadius: 999, opacity: atdOut((t - 7000) / 300) }}>{d.needsWork}</span>
+          </div>
+          {/* Negative margins bleed the pipeline out past the body's own
+              padding so it still runs to the frame's edges. */}
+          <div style={{ position: 'relative', margin: '12px -24px -24px', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+            <svg viewBox="0 0 1200 420" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
+              <defs>
+                <linearGradient id="atdFlow" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
+                  <stop offset="0%" stopColor="#1e3a8a" /><stop offset="33.333%" stopColor="#3e5aa1" />
+                  <stop offset="66.667%" stopColor="#5975b5" /><stop offset="100%" stopColor="#839fd3" />
+                </linearGradient>
+                <filter id="atdGlow" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="10" /></filter>
+              </defs>
+              <line x1="400" y1="24" x2="400" y2="396" stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6" vectorEffect="non-scaling-stroke" />
+              <line x1="800" y1="24" x2="800" y2="396" stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 6" vectorEffect="non-scaling-stroke" />
+              <path d={ATD_PATH} fill="none" stroke="url(#atdFlow)" strokeOpacity="0.22" strokeWidth="26" strokeLinejoin="round" filter="url(#atdGlow)" />
+              <path d={ATD_PATH} fill="none" stroke="url(#atdFlow)" strokeOpacity="0.32" strokeWidth="12" strokeLinejoin="round" />
+              <path d={ATD_PATH} fill="url(#atdFlow)" />
+              <path d="M 0 44 C 200 44, 200 77, 400 77 C 600 77, 600 104.72, 800 104.72 C 1000 104.72, 1000 147.47, 1200 147.47" fill="none" stroke="#FFFFFF" strokeOpacity="0.6" strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+              <path d="M 0 376 C 200 376, 200 343, 400 343 C 600 343, 600 315.28, 800 315.28 C 1000 315.28, 1000 272.53, 1200 272.53" fill="none" stroke="#FFFFFF" strokeOpacity="0.6" strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+            </svg>
+            {icons.map((i, idx) => (
+              <div key={idx} style={{ position: 'absolute', left: `${i.x}%`, top: `${i.y}%`, width: 26, height: 26, margin: '-13px 0 0 -13px', transform: `translateX(${i.shake}px)`, borderRadius: 8, background: '#fff', boxShadow: '0 4px 12px rgba(15,23,42,.18)', outline: i.outline, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: i.o }}>
+                <img src={i.src} alt="" style={{ width: 16, height: 16, objectFit: 'contain' }} />
+              </div>
+            ))}
+            <div style={{ position: 'absolute', left: '27%', top: `${laneY(68, 27)}%`, transform: `translate(-50%,20px) scale(${blkS})`, opacity: blkO, display: 'flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: '#FEE2E2', color: '#DC2626', fontSize: 9.5, fontWeight: 700, whiteSpace: 'nowrap', boxShadow: '0 2px 8px rgba(15,23,42,.12)' }}>{d.blockedByRobots}</div>
+            {pills.map((p) => (
+              <div key={p.label} style={{ position: 'absolute', left: `${p.x}%`, top: '50%', transform: `translate(-50%,-50%) scale(${p.s})`, opacity: p.o, display: 'flex', alignItems: 'center', gap: 5, background: '#fff', padding: '5px 11px', borderRadius: 999, boxShadow: '0 2px 10px rgba(15,23,42,.12)', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: '#1e293b' }}>{p.label}</span>
+                <span style={{ fontSize: 11.5, color: '#64748b', fontVariantNumeric: 'tabular-nums' }}>{p.val}</span>
+              </div>
+            ))}
+            <div style={{ position: 'absolute', left: '83.33%', top: '25%', transform: `translate(-50%,-100%) scale(${badge.s})`, opacity: badge.o, display: 'flex', alignItems: 'center', gap: 4, padding: '3px 9px', borderRadius: 999, background: '#FFF3EB', color: '#FA7319', fontSize: 10, fontWeight: 600, whiteSpace: 'nowrap' }}>
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+              <span>{d.lowContentQuality}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Act 3 · Fix ── */}
+        <div style={actStyle(a3)}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <span style={{ fontSize: 14, fontWeight: 700 }}>{d.issuesTitle}</span>
+            <span style={muted}>{d.issuesGenerated}</span>
+          </div>
+          <div style={{ marginTop: 12, flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'minmax(0,1.12fr) 1px minmax(0,1fr)', gap: 14 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
+                <span style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-0.8px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{live ? 734 : Math.round(735 * atdOut((t - 10500) / 1100))}</span>
+                <span style={{ fontSize: 13, color: '#6B6E72' }}>{d.issuesUnit}</span>
+                <span style={{ marginLeft: 'auto', alignSelf: 'center', fontSize: 10.5, fontWeight: 600, color: '#FA7319', background: '#FFF3EB', padding: '4px 9px', borderRadius: 999 }}>{d.needsWork}</span>
+              </div>
+              <div style={{ marginTop: 12, display: 'flex', gap: 2, height: 7, borderRadius: 999, overflow: 'hidden', background: '#F1F3F7' }}>
+                <span style={{ width: `${16 * segK}%`, background: '#EF4444' }} />
+                <span style={{ width: `${63 * segK}%`, background: '#F97316' }} />
+                <span style={{ width: `${21 * segK}%`, background: '#0062FF' }} />
+              </div>
+              <div style={{ marginTop: 9, display: 'flex', flexDirection: 'column' }}>
+                {sev.map((v) => (
+                  <div key={v.label} style={{ display: 'flex', alignItems: 'center', gap: 8, height: 22, opacity: v.o, transform: `translateY(${v.y}px)` }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', flex: 'none', background: v.c }} />
+                    <span style={{ flex: 1, fontSize: 12.5, color: '#3F3F46' }}>{v.label}</span>
+                    <span style={{ fontSize: 12.5, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{v.n}</span>
+                    <span style={{ width: 30, textAlign: 'right', fontSize: 11, color: '#9aa1ac' }}>{v.p}</span>
+                  </div>
+                ))}
+              </div>
+              {/* The one fix the demo deploys — cursor drops in, presses
+                  Deploy, and the chip goes Deploying… → Live. */}
+              <div style={{ position: 'relative', marginTop: 10, display: 'flex', alignItems: 'center', gap: 8, padding: '7px 9px', borderRadius: 9, border: `1px solid ${zk > 0.5 ? '#3B6FF5' : '#d5d9e4'}`, background: '#fff', boxShadow: `0 0 0 ${zk.toFixed(2)}px #3B6FF5, 0 6px 16px -6px rgba(15,23,42,${(0.28 * zk).toFixed(3)})`, opacity: fo, transform: `translateY(${(1 - fo) * 8 - 2 * zk}px)` }}>
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ alignSelf: 'flex-start', fontSize: 8, fontWeight: 700, letterSpacing: '.03em', color: '#FA7319', background: '#FFF3EB', padding: '1.5px 6px', borderRadius: 999, marginBottom: 2 }}>{d.stageContentQuality.toUpperCase()}</span>
+                  <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0d111a', lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{d.fixIssueName}</span>
+                  <span style={{ fontSize: 9.5, color: 'rgb(0,98,255)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>sony.com/t/wf-1000xm5-earbuds</span>
+                </div>
+                <div style={{ position: 'relative', flex: 'none' }}>
+                  {idle && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 700, color: '#fff', background: '#3B6FF5', borderRadius: 6, padding: '5px 9px', transform: `scale(${press ? 0.94 : 1})` }}>
+                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m14.7 6.3 3 3L19 8l-3-3zM3 21l3.5-1L17 9.5l-2.5-2.5L4 17.5z" /></svg>
+                      <span>{d.deploy}</span>
+                    </span>
+                  )}
+                  {!idle && !live && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 10, fontWeight: 700, color: '#737373', background: '#f3f5f9', borderRadius: 6, padding: '5px 9px' }}>
+                      <span style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid #d5d9e4', borderTopColor: '#737373', transform: `rotate(${(t * 0.55) % 360}deg)` }} />
+                      <span>{d.deploying}</span>
+                    </span>
+                  )}
+                  {live && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 700, color: '#16A34A', background: '#DCFCE7', borderRadius: 6, padding: '5px 9px', transform: `scale(${0.85 + 0.15 * atdBack((t - 13600) / 350)})` }}>
+                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                      <span>{d.live}</span>
+                    </span>
+                  )}
+                  <span style={{ position: 'absolute', left: '50%', top: '50%', width: 22, height: 22, margin: '-11px 0 0 -11px', borderRadius: '50%', border: '2px solid rgb(0,98,255)', transform: `scale(${0.4 + 1.4 * atdClamp(rp)})`, opacity: rp > 0 && rp < 1 ? 0.7 * (1 - rp) : 0, pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', left: '50%', top: '50%', zIndex: 3, transform: `translate(${64 * (1 - cm) + 2}px,${44 * (1 - cm) + 4}px) scale(${press ? 0.82 : 1})`, opacity: atdClamp((t - 11800) / 200) * atdClamp((13000 - t) / 250), pointerEvents: 'none', filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.35))' }}>
+                    <svg viewBox="0 0 24 24" fill="#18181B" width="15" height="15"><path d="M5 3l14 8-6 2-2 6-6-16z" /></svg>
+                  </div>
+                </div>
+              </div>
+              <span style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: 'rgb(0,98,255)' }}>{d.viewDetails} <span>→</span></span>
+            </div>
+            <div style={{ background: '#ECECEF' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, opacity: atdOut((t - 10700) / 400) }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: '#1f2430' }}>{d.robotsTitle}</span>
+                  <span style={{ fontSize: 10.5, color: '#6B6E72' }}>{d.robotsShortSub}</span>
+                </div>
+                <span style={{ fontSize: 17, fontWeight: 600, whiteSpace: 'nowrap' }}>80<span style={{ fontSize: 11, fontWeight: 400, color: '#A1A1AA' }}>/100</span></span>
+              </div>
+              <div style={{ marginTop: 10, display: 'flex', gap: 3, height: 7 }}>
+                <span style={{ width: `${93 * atdOut((t - 10750) / 800)}%`, borderRadius: 999, background: '#2563EB' }} />
+                <span style={{ width: `${7 * atdOut((t - 10750) / 800)}%`, borderRadius: 999, background: '#EF4444' }} />
+              </div>
+              <div style={{ marginTop: 7, display: 'flex', gap: 12, fontSize: 10.5, color: '#3F3F46' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i style={{ width: 7, height: 7, borderRadius: '50%', background: '#2563EB' }} />{d.allowed}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i style={{ width: 7, height: 7, borderRadius: '50%', background: '#EF4444' }} />{d.blocked}</span>
+              </div>
+              <span style={{ ...capLabel, marginTop: 11 }}>{d.crawlerAccess}</span>
+              <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                {access.map((c) => (
+                  <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '4px 7px', borderRadius: 8, background: c.bg, border: `1px solid ${c.border}`, opacity: c.o, transform: `translateX(${c.x}px)` }}>
+                    <img src={c.src} alt="" style={{ width: 13, height: 13, objectFit: 'contain' }} />
+                    <span style={{ flex: 1, fontSize: 11, fontWeight: 500, color: '#3F3F46' }}>{c.name}</span>
+                    <span style={{ fontSize: 8.5, fontWeight: 700, padding: '2px 7px', borderRadius: 999, background: c.sBg, color: c.sColor }}>{c.status}</span>
+                  </div>
+                ))}
+              </div>
+              <span style={{ marginTop: 'auto', textAlign: 'center', fontSize: 11.5, fontWeight: 600, padding: '6px 0', borderRadius: 999, background: '#1E408A', color: '#fff' }}>{d.viewFullReport}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+/* ── Roadmap Plan — Timeline / Execution board, a direct port of the
+   "Roadmap Timeline" reference prototype: same five lanes, same explicit
+   bar rows, same 188px label column + 7.9fr week-1 track, same board
+   columns and the same recorded cursor choreography (useRmtShowcase
+   below). Markup lives under its own .rmt-* namespace so it doesn't
+   collide with the .rm-* rules (the toggle pill) shared with the rest of
+   this card. Task text comes from home.engine.demo.roadmap. ── */
+
+// The reference's own palette (its `C` map), one color per lane.
+const RMT_COLORS = {
+  blue: 'rgb(0, 98, 255)',
+  pink: 'rgb(204, 121, 167)',
+  yellow: 'rgb(230, 159, 0)',
+  green: 'rgb(0, 158, 115)',
+  lightBlue: 'rgb(86, 180, 233)',
+};
+const rmtRange = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => from + i);
+
+// The plan runs 18 weeks (the header still says so), but the chart stops
+// at week 10 — past that the bars are pure color anyway, and the width
+// those weeks would cost is what the lane names and the week-1 task
+// titles need to be readable rather than truncated.
+const RMT_WEEKS = 10;
+
+// Lane rows, spelled out exactly as the reference's `data` — no packing
+// heuristic, so every bar lands on the row it was authored on. A cell
+// that is an array is the lane's one *named* bar: it starts at week 1
+// and spans weeks 1–2, and is the only cell that carries text. A number
+// is a plain one-week bar in that week, color only.
+const RMT_LANES = [
+  {
+    labelKey: 'catTechnical', color: RMT_COLORS.blue, rows: [
+      [['taskFixCrawlability'], 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18],
+      [['taskAllowAiCrawlers'], 4, 18],
+      [['taskFixNoindexProAnc'], 4],
+    ],
+  },
+  { labelKey: 'catContentOptimize', color: RMT_COLORS.yellow, rows: [rmtRange(7, 16)] },
+  { labelKey: 'catContentPlan', color: RMT_COLORS.green, rows: [rmtRange(3, 18), [3]] },
+  { labelKey: 'catInternalLinking', color: RMT_COLORS.pink, rows: [[['taskLinkPillarPage']]] },
+  { labelKey: 'catBacklink', color: RMT_COLORS.lightBlue, rows: [rmtRange(8, 15), rmtRange(8, 14)] },
+];
+
+// The board lists the five real tasks (the reference's `tasks`), not one
+// card per timeline cell — the rest of the plan stays behind "Show N
+// more", which is what keeps the Backlog column readable.
+const RMT_MOVE_TASK_ID = 'il1';
+const RMT_TOTAL_TASKS = 63;
+const RMT_BACKLOG_SHOWN = 3;
+const RMT_BOARD_TASKS = [
+  { id: RMT_MOVE_TASK_ID, labelKey: 'catInternalLinking', color: RMT_COLORS.pink, titleKey: 'taskLinkPillarPage', week: 1, span: 2 },
+  { id: 'tf1', labelKey: 'catTechnical', color: RMT_COLORS.blue, titleKey: 'taskFixCrawlability', week: 1, span: 2 },
+  { id: 'tf2', labelKey: 'catTechnical', color: RMT_COLORS.blue, titleKey: 'taskAllowAiCrawlers', week: 1, span: 2 },
+  { id: 'tf3', labelKey: 'catTechnical', color: RMT_COLORS.blue, titleKey: 'taskFixNoindexProAnc', week: 1, span: 2 },
+  { id: 'lc1', labelKey: 'catContentPlan', color: RMT_COLORS.green, titleKey: 'taskBuyingGuide', week: 3, span: 1 },
+];
+
+// ── Timeline (Gantt) — the label column and every lane's bar track share
+// the same two-column outer grid, and each bar track repeats the week
+// columns, so bars line up with the week header above them. Clicking a
+// bar selects it (outline + the hint line names it), as in the
+// reference; nothing here autoplays — the Execution board carries the
+// one animated demo. ── */
+function RmTimelinePanel() {
+  const { t } = useLang();
+  const d = t('home.engine.demo.roadmap');
+  const [sel, setSel] = useState(null);
+
+  // Walk the lanes once, building both the bars to render and the label
+  // for whichever one is selected.
+  let selLabel = null;
+  const lanes = RMT_LANES.map((lane, laneIdx) => {
+    const bars = [];
+    lane.rows.forEach((row, rowIdx) => row.forEach((cell) => {
+      const named = Array.isArray(cell);
+      const week = named ? 1 : cell;
+      if (week > RMT_WEEKS) return; // chart is cut at RMT_WEEKS, see above
+      const id = `${laneIdx}-${rowIdx}-${week}`;
+      const label = named ? d[cell[0]] : `${d[lane.labelKey]} · ${d[`wk${week}`]}`;
+      if (sel === id) selLabel = `${label} — ${named ? d.week1Span : d[`wk${week}`]}`;
+      bars.push({
+        id, label,
+        text: named ? d[cell[0]] : '',
+        gridColumn: named ? '1 / span 2' : `${week} / span 1`,
+        gridRow: `${rowIdx + 1}`,
+        outline: sel === id ? `2px solid ${lane.color}` : 'none',
+      });
+    }));
+    return { key: lane.labelKey, name: d[lane.labelKey], color: lane.color, bars };
+  });
+
+  return (
+    <div className="rmt-timeline">
+      <p className="rmt-hint">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+          <path d="M6 1.5v3M6 9.5v3M1.5 7h3M9.5 7h3M2.8 3.8l1.6 1.6M7.6 8.6l1.6 1.6M9.2 3.8L7.6 5.4M4.4 8.6l-1.6 1.6M11.5 11.5l3 3" />
+        </svg>
+        <span>{selLabel ? `${d.selectedPrefix} ${selLabel}` : d.selectHint}</span>
+      </p>
+      <div className="rmt-grid" style={{ '--rmt-week-cols': RMT_WEEKS - 1 }}>
+        <div className="rmt-grid__labelhead" />
+        <div className="rmt-weeks">
+          {/* Week 1 owns the wide first track — the only one carrying
+              task titles — so it gets the filled pill and a full label. */}
+          <span className="rmt-week rmt-week--cur">{d.currentWeekLabel}</span>
+          {rmtRange(2, RMT_WEEKS).map((wk) => (
+            <span key={wk} className="rmt-week">{d[`wk${wk}`]}</span>
+          ))}
+        </div>
+        {lanes.map((lane) => (
+          <Fragment key={lane.key}>
+            <div className="rmt-lane-label">
+              <span className="rmt-lane-dot" style={{ background: lane.color }} />
+              <span>{lane.name}</span>
+            </div>
+            <div className="rmt-bars">
+              {lane.bars.map((bar) => (
+                <button
+                  key={bar.id}
+                  type="button"
+                  className="rmt-bar"
+                  title={bar.label}
+                  onClick={() => setSel((cur) => (cur === bar.id ? null : bar.id))}
+                  style={{ gridColumn: bar.gridColumn, gridRow: bar.gridRow, background: lane.color, outline: bar.outline }}
+                >
+                  {bar.text}
+                </button>
+              ))}
+            </div>
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RmtBoardCard({ task, dimmed, done, innerRef }) {
+  const { t } = useLang();
+  const d = t('home.engine.demo.roadmap');
+  const span = task.span ?? 1;
+  // "W1"/"S1" → non-digit prefix, so a multi-week task reads "W1–2"
+  // without needing a translation key per possible range.
+  const weekBadge = span > 1 ? `${d.wk1.replace(/\d+$/, '')}${task.week}–${task.week + span - 1}` : d[`wk${task.week}`];
+  return (
+    <div className={`rmt-bcard${dimmed ? ' rmt-bcard--dimmed' : ''}${done ? ' rmt-bcard--done' : ''}`} ref={innerRef}>
+      <span className="rmt-bcard__top">
+        <i className="rmt-bcard__dot" style={{ background: task.color }} />
+        <span className="rmt-bcard__cat">{d[task.labelKey]}</span>
+        <span className="rmt-bcard__wk">{weekBadge}</span>
+      </span>
+      <span className="rmt-bcard__title">{d[task.titleKey]}</span>
+    </div>
+  );
+}
+
+// ── Execution Board showcase — ported from the reference prototype's own
+// recorded choreography (same waits, same grab-point ratios, same
+// two-stage drag): a cursor clicks the Execution board tab, drags the
+// one named card from Backlog to In progress, then drags it again from
+// In progress to Completed. The one change from the reference: there,
+// "Replay interaction" is a manual button and the sequence runs once;
+// here it just restarts itself after a pause, on a loop. Starts once the
+// card has scrolled into view.
+function useRmtShowcase({ rootRef, boardBtnRef, cardRef, progressRef, doneRef, setView }) {
+  const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false, down: false, dur: 0 });
+  const [ghost, setGhost] = useState(null); // null | { x, y, w, dur }
+  const [over, setOver] = useState(null); // null | 'in_progress' | 'done'
+  const [dragging, setDragging] = useState(false);
+  const [status, setStatus] = useState('backlog'); // 'backlog' | 'in_progress' | 'done'
+  const [ebPressed, setEbPressed] = useState(false);
+  const cancelledRef = useRef(false);
+  const timersRef = useRef([]);
+
+  function wait(ms) {
+    return new Promise((resolve) => { timersRef.current.push(setTimeout(resolve, ms)); });
+  }
+  function patchCursor(p) {
+    setCursor((s) => ({ ...s, ...p }));
+  }
+  // The demo is laid out at the reference's own 1197px width and scaled
+  // down to the card (see .rmt-stage) — so client rects come back in
+  // scaled pixels while `left`/`top` on the cursor and ghost are read in
+  // the unscaled layout. Divide out the scale to stay in one space.
+  function rel(node) {
+    const root = rootRef.current;
+    const r = node.getBoundingClientRect();
+    const o = root.getBoundingClientRect();
+    const scale = o.width / root.offsetWidth || 1;
+    return { x: (r.left - o.left) / scale, y: (r.top - o.top) / scale, w: r.width / scale, h: r.height / scale };
+  }
+
+  async function run() {
+    const root = rootRef.current;
+    if (!root) return;
+    const ok = () => !cancelledRef.current && rootRef.current;
+    const W = root.offsetWidth, H = root.offsetHeight;
+
+    setView('timeline');
+    setStatus('backlog'); setGhost(null); setOver(null); setDragging(false);
+    setCursor({ x: W * 0.62, y: H * 0.7, visible: false, down: false, dur: 0 });
+    await wait(300); if (!ok()) return;
+    patchCursor({ visible: true }); await wait(400); if (!ok()) return;
+
+    const b = rel(boardBtnRef.current);
+    patchCursor({ x: b.x + b.w * 0.55, y: b.y + b.h * 0.6, dur: 900 }); await wait(1050); if (!ok()) return;
+    patchCursor({ down: true }); setEbPressed(true); await wait(140); if (!ok()) return;
+    setView('board'); setEbPressed(false); patchCursor({ down: false }); await wait(750); if (!ok()) return;
+    if (!cardRef.current) return;
+
+    const c = rel(cardRef.current);
+    const gx = c.w * 0.42, gy = c.h * 0.55;
+    patchCursor({ x: c.x + gx, y: c.y + gy, dur: 900 }); await wait(1050); if (!ok()) return;
+    patchCursor({ down: true }); setDragging(true); setGhost({ x: c.x, y: c.y, w: c.w, dur: 0 });
+    await wait(260); if (!ok()) return;
+
+    const p = rel(progressRef.current);
+    const tx = p.x + 10, ty = p.y + 44;
+    setOver('in_progress'); setGhost({ x: tx, y: ty, w: c.w, dur: 1000 });
+    patchCursor({ x: tx + gx, y: ty + gy, dur: 1000 }); await wait(1100); if (!ok()) return;
+    setStatus('in_progress'); setGhost(null); setOver(null); setDragging(false); patchCursor({ down: false });
+    await wait(800); if (!ok()) return;
+    if (!cardRef.current) return;
+
+    const c2 = rel(cardRef.current);
+    patchCursor({ x: c2.x + gx, y: c2.y + gy, dur: 400 }); await wait(500); if (!ok()) return;
+    patchCursor({ down: true }); setDragging(true); setGhost({ x: c2.x, y: c2.y, w: c2.w, dur: 0 });
+    await wait(260); if (!ok()) return;
+
+    const don = rel(doneRef.current);
+    const dx = don.x + 10, dy = don.y + 44;
+    setOver('done'); setGhost({ x: dx, y: dy, w: c2.w, dur: 1000 });
+    patchCursor({ x: dx + gx, y: dy + gy, dur: 1000 }); await wait(1100); if (!ok()) return;
+    setStatus('done'); setGhost(null); setOver(null); setDragging(false); patchCursor({ down: false });
+    await wait(700); if (!ok()) return;
+
+    patchCursor({ visible: false, dur: 0 });
+  }
+
+  useEffect(() => {
+    // Gate on the nearest ancestor that isn't on a transformed layer. In
+    // the bento showcase this card rides the flip panel, whose 3D
+    // transform projects its descendants' client rects far off-screen —
+    // observing the card itself there means the sequence never starts.
+    const root = rootRef.current;
+    if (!root) return;
+    // Checked in order: the bento's panel sits outside the flip, while
+    // the row visual (which the demo also carries a class for) is inside
+    // it — a single selector list would match the inner one first.
+    const el = root.closest('.engine-showcase__panel') || root.closest('.engine-row__visual') || root;
+    async function loop() {
+      while (!cancelledRef.current) {
+        await run();
+        if (cancelledRef.current) return;
+        await wait(1400);
+      }
     }
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries[0].isIntersecting) return;
         observer.disconnect();
-        cycle();
+        loop();
       },
       { threshold: 0.3 },
     );
     observer.observe(el);
-    return () => { observer.disconnect(); timers.forEach(clearTimeout); };
+    return () => {
+      observer.disconnect();
+      cancelledRef.current = true;
+      // timersRef.current is a stable array (pushed to, never reassigned)
+      // for this hook's whole lifetime, so reading it here is safe.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      timersRef.current.forEach(clearTimeout);
+    };
+    // `run` intentionally isn't a dependency — it's meant to be captured
+    // once, the moment the card first scrolls into view, not re-armed on
+    // every render; `cancelledRef`/`ok()` checks inside it already guard
+    // every await against a stale/unmounted run.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rootRef]);
 
-  return { owner, flight };
+  return { status, cursor, ghost, over, dragging, ebPressed };
 }
 
-function RmCalendarPanel() {
+function RmExecutionBoardPanel({ status, over, dragging, cardRef, progressRef, doneRef }) {
   const { t } = useLang();
   const d = t('home.engine.demo.roadmap');
-  const rootRef = useRef(null);
-  const { owner, flight } = useRmDrag(rootRef);
 
-  // The dragged card renders as a genuine member of whichever day's list
-  // currently owns it — not an overlay on top of a fixed layout — so Aug
-  // 25 and Aug 26 actually gain/lose a row and the grid reflows for real.
-  const cardsForDay = (day) => {
-    const rest = RM_CAL_STATIC_CARDS[day] || [];
-    if (day !== owner) return rest;
-    return [{ ...RM_DRAGGED_CARD, dimmed: flight !== null }, ...rest];
-  };
+  // Only the one card the showcase drags ever leaves Backlog, so the
+  // other four stay put. Backlog's count is the whole plan minus
+  // whatever has moved — the five cards on screen are just the top of
+  // it, with the rest behind "Show N more", as in the reference.
+  const moved = status === 'backlog' ? 0 : 1;
+  // The reference lists five here; this card's stage only has the height
+  // for three at a size anyone can read, so the other two join the ones
+  // already behind "Show N more".
+  const inBacklog = RMT_BOARD_TASKS
+    .filter((task) => task.id !== RMT_MOVE_TASK_ID || status === 'backlog')
+    .slice(0, RMT_BACKLOG_SHOWN);
+  const moveTask = RMT_BOARD_TASKS.find((task) => task.id === RMT_MOVE_TASK_ID);
+  const cols = [
+    { key: 'backlog', label: d.colBacklog, count: RMT_TOTAL_TASKS - moved, tasks: inBacklog, hasMore: true },
+    { key: 'in_progress', label: d.colInProgress, count: status === 'in_progress' ? 1 : 0, tasks: status === 'in_progress' ? [moveTask] : [], empty: d.colEmptyInProgress, innerRef: progressRef },
+    { key: 'done', label: d.colCompleted, count: status === 'done' ? 1 : 0, tasks: status === 'done' ? [moveTask] : [], empty: d.colEmptyCompleted, innerRef: doneRef },
+  ];
 
   return (
-    <>
-      <div className="rm-cal-dow-row">
-        {RM_CAL_DAYS.map((dayKey) => <div key={dayKey} className="rm-cal-dow">{d[dayKey]}</div>)}
-      </div>
-      <div className="rm-cal-grid" ref={rootRef}>
-        {RM_CAL_WEEKS.flat().map((day, i) => (
-          <div key={i} className={`rm-cal-cell${day === 24 ? ' rm-cal-cell--today' : ''}`}>
-            <span className={`rm-cal-daynum${day === 24 ? ' rm-cal-daynum--today' : ''}`}>{day}</span>
-            <div className="rm-cal-cards">
-              {cardsForDay(day).map((c) => <RmCard key={c.titleKey} {...c} />)}
-            </div>
+    <div className="rmt-board">
+      {cols.map((col) => (
+        <div
+          key={col.key}
+          ref={col.innerRef}
+          className={`rmt-bcol${over === col.key ? ' rmt-bcol--over' : ''}`}
+        >
+          <div className="rmt-bcol__hdr">
+            <span className="rmt-bcol__label">{col.label}</span>
+            <span className="rmt-bcol__count">{col.count}</span>
           </div>
-        ))}
-
-        {/* The floating ghost + cursor only exist while airborne (flight
-            !== null) — .rm-drag-ghost's `left` transitions between
-            RM_DAY_LEFT[from] and RM_DAY_LEFT[to] on re-render, giving the
-            actual flight motion; the real card swap happens the instant
-            it lands (see useRmDrag), so nothing pops. */}
-        {flight && (
-          <>
-            <div className="rm-drag-ghost" style={{ left: RM_DAY_LEFT[flight.to ?? flight.from] }}>
-              <RmCard {...RM_DRAGGED_CARD} />
-            </div>
-            <span className="rm-drag-cursor" aria-hidden="true" style={{ left: RM_DAY_LEFT[flight.to ?? flight.from] }}>
-              <svg viewBox="0 0 24 24" width="18" height="18">
-                <path d="M4 2l14 6.5-6 1.7-1.7 6L4 2z" fill="#0d111a" stroke="#fff" strokeWidth="1.2" strokeLinejoin="round" />
-              </svg>
-            </span>
-          </>
-        )}
-      </div>
-    </>
-  );
-}
-
-// `labelKey`/`rangeKey` map to home.engine.demo.roadmap.week*/week*Range.
-const RM_BOARD_WEEKS = [
-  { labelKey: 'week1', rangeKey: 'week1Range', cards: [
-    { titleKey: 'taskCanonicalEarbudsHeadphones', type: 'fix' },
-    { titleKey: 'taskCanonicalSitemap', type: 'fix' },
-  ] },
-  { labelKey: 'week2', rangeKey: 'week2Range', cards: [
-    { titleKey: 'taskItemListSchema', type: 'fix' },
-    { titleKey: 'taskRewriteTitles', type: 'fix' },
-  ] },
-  { labelKey: 'week3', rangeKey: 'week3Range', cards: [
-    { titleKey: 'taskRestructureHeaders', type: 'fix' },
-    { titleKey: 'taskCoreWebVitals', type: 'fix' },
-  ] },
-  { labelKey: 'week4', rangeKey: 'week4Range', cards: [
-    { titleKey: 'taskProductFaqSchema', type: 'fix' },
-    { titleKey: 'taskSecureBacklink', type: 'backlink' },
-  ] },
-];
-
-const RM_HOVER_TIP = "Ensure a single H1 names the product category and supporting H2s map to key performance axes (noise cancellation, call clarity, battery life) so crawlers and LLMs read a clear topical outline rather than product-image titles.";
-const RM_CURSOR_RISE = 44; // px the cursor starts below the icon before rising into it
-
-// Auto-plays once Board is open: cursor rises from below into the "?" on
-// one card, hovers it, the rationale tooltip fades in, holds, fades out,
-// repeat. Real DOM measurement (not guessed percentages) — the board's
-// columns are flex, not a fixed grid, so the icon's on-screen position is
-// read straight off the element instead of estimated.
-function useRmHover(boardRef, iconRef) {
-  const [iconPos, setIconPos] = useState(null);
-  const [visible, setVisible] = useState(false); // cursor on screen at all
-  const [risen, setRisen] = useState(false);     // cursor has risen into the icon
-  const [hover, setHover] = useState(false);     // tooltip open
-
-  useEffect(() => {
-    const boardEl = boardRef.current;
-    if (!boardEl) return;
-    let timers = [];
-    let cancelled = false;
-    const after = (ms, fn) => { timers.push(setTimeout(() => { if (!cancelled) fn(); }, ms)); };
-
-    function measure() {
-      if (!iconRef.current || !boardRef.current) return;
-      const iconRect = iconRef.current.getBoundingClientRect();
-      const boardRect = boardRef.current.getBoundingClientRect();
-      setIconPos({
-        left: iconRect.left - boardRect.left + iconRect.width / 2,
-        top: iconRect.top - boardRect.top + iconRect.height / 2,
-      });
-    }
-
-    function cycle() {
-      measure();
-      setRisen(false);
-      after(10, () => setVisible(true));        // cursor fades in, low, below the icon
-      after(500, () => setRisen(true));         // then rises up into it (~900ms transition)
-      after(1450, () => setHover(true));        // arrived — open the tooltip
-      after(1450 + 2800, () => setHover(false));
-      after(1450 + 2800 + 500, () => { setVisible(false); setRisen(false); });
-      after(1450 + 2800 + 500 + 700, cycle);
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) return;
-        observer.disconnect();
-        cycle();
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(boardEl);
-    return () => { observer.disconnect(); cancelled = true; timers.forEach(clearTimeout); };
-  }, [boardRef, iconRef]);
-
-  return { iconPos, visible, risen, hover };
-}
-
-function RmBoardPanel() {
-  const { t } = useLang();
-  const d = t('home.engine.demo.roadmap');
-  const boardRef = useRef(null);
-  const iconRef = useRef(null);
-  const { iconPos, visible, risen, hover } = useRmHover(boardRef, iconRef);
-  const cursorPos = iconPos && { left: iconPos.left, top: iconPos.top + (risen ? 0 : RM_CURSOR_RISE) };
-
-  return (
-    <>
-      <div className="rm-board" ref={boardRef}>
-        {RM_BOARD_WEEKS.map((w, wi) => (
-          <div key={w.labelKey} className="rm-board__col">
-            <div className="rm-board__hdr">
-              <span className="rm-board__wk">{d[w.labelKey]}</span>
-              <span className="rm-board__range">{d[w.rangeKey]}</span>
-            </div>
-            {w.cards.map((c, ci) => (
-              <RmCard key={c.titleKey} {...c} infoRef={wi === 2 && ci === 0 ? iconRef : undefined} />
+          {/* Its own scroll area, so the column's header and "Show N
+              more" stay put while the cards run past the bottom — the
+              third card reading as cut off is the point: it says there's
+              more of the plan here without costing the height. */}
+          <div className="rmt-bcol__list">
+            {col.tasks.map((task) => (
+              <RmtBoardCard
+                key={task.id}
+                task={task}
+                done={col.key === 'done'}
+                dimmed={dragging && task.id === RMT_MOVE_TASK_ID}
+                innerRef={task.id === RMT_MOVE_TASK_ID ? cardRef : undefined}
+              />
             ))}
           </div>
-        ))}
-
-        {visible && cursorPos && (
-          <span className="rm-hover-cursor rm-hover-cursor--show" style={cursorPos} aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="16" height="16">
-              <path d="M4 2l14 6.5-6 1.7-1.7 6L4 2z" fill="#0d111a" stroke="#fff" strokeWidth="1.2" strokeLinejoin="round" />
-            </svg>
-          </span>
-        )}
-        {iconPos && (
-          <div className={`rm-hover-tip${hover ? ' rm-hover-tip--show' : ''}`} style={iconPos}>
-            {d.hoverTip}
-          </div>
-        )}
-      </div>
-      <div className="rm-board__scrollbar"><span /></div>
-    </>
+          {col.hasMore && (
+            <button type="button" className="rmt-bcol__more">
+              {d.showMore.replace('{n}', RMT_TOTAL_TASKS - col.tasks.length - moved)}
+            </button>
+          )}
+          {col.tasks.length === 0 && <p className="rmt-bcol__empty">{col.empty}</p>}
+        </div>
+      ))}
+    </div>
   );
 }
 
 function EngineRoadmapCard() {
   const { t } = useLang();
   const d = t('home.engine.demo.roadmap');
-  const [view, setView] = useState('calendar');
+  const [view, setView] = useState('timeline');
+  const rootRef = useRef(null);
+  const boardBtnRef = useRef(null);
+  const cardRef = useRef(null);
+  const progressRef = useRef(null);
+  const doneRef = useRef(null);
+  const { status, cursor, ghost, over, dragging, ebPressed } = useRmtShowcase({ rootRef, boardBtnRef, cardRef, progressRef, doneRef, setView });
+  const moveTask = RMT_BOARD_TASKS.find((ta) => ta.id === RMT_MOVE_TASK_ID);
+  const stageRef = useRef(null);
+
+  // Rather than re-tune every size for this card's stage, lay the demo
+  // out at RMT_REF_WIDTH and scale it to fill the stage — whichever of
+  // width or height runs out first, so nothing is ever clipped and both
+  // views are as large as the space allows. The two views have
+  // different natural heights, so this re-measures on every change to
+  // the laid-out box, not just on resize.
+  // Keyed on `view` as well, and in a layout effect, so the switch to
+  // the (taller) board is already scaled on the frame it first paints —
+  // waiting for the observer leaves one frame of it clipped.
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    const inner = rootRef.current;
+    if (!stage || !inner) return;
+    const fit = () => {
+      const w = inner.offsetWidth, h = inner.offsetHeight;
+      if (!w || !h) return;
+      const scale = Math.min(stage.clientWidth / w, stage.clientHeight / h);
+      stage.style.setProperty('--rmt-scale', String(scale));
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(stage);
+    ro.observe(inner);
+    return () => ro.disconnect();
+  }, [view]);
+
   return (
-    <div className="th-box">
-      <div className="rm-inner">
-        <div className="rm-cal-hdr">
-          <div className="rm-toggle">
-            <button type="button" className={`rm-toggle__opt${view === 'calendar' ? ' rm-toggle__opt--active' : ''}`} onClick={() => setView('calendar')}>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              {d.calendar}
-            </button>
-            <button type="button" className={`rm-toggle__opt${view === 'board' ? ' rm-toggle__opt--active' : ''}`} onClick={() => setView('board')}>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="5" height="18" rx="1" /><rect x="10" y="3" width="5" height="11" rx="1" /><rect x="17" y="3" width="5" height="15" rx="1" />
-              </svg>
-              {d.board}
-            </button>
+    <div className="th-box th-box--roadmap">
+      <div className="rmt-stage" ref={stageRef}>
+      <div className="rmt-inner" ref={rootRef}>
+        <div className="rmt-hdr">
+          <div className="rmt-hdr__main">
+            <h4 className="rmt-hdr__title">{view === 'timeline' ? d.timelineTitle : d.boardTitle}</h4>
+            <p className="rmt-hdr__sub">{view === 'timeline' ? d.timelineSub : d.boardSub}</p>
           </div>
-          {view === 'calendar' && (
-            <div className="rm-cal-nav">
-              <span className="rm-cal-month">{d.month}</span>
+          <div className="rmt-hdr__side">
+            <div className="rm-toggle">
+              <button type="button" className={`rm-toggle__opt${view === 'timeline' ? ' rm-toggle__opt--active' : ''}`} onClick={() => setView('timeline')}>
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.4">
+                  <rect x="2" y="3" width="12" height="11" rx="2" /><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3" />
+                </svg>
+                {d.timeline}
+              </button>
+              <button
+                type="button"
+                ref={boardBtnRef}
+                className={`rm-toggle__opt${view === 'board' ? ' rm-toggle__opt--active' : ''}${ebPressed ? ' rm-toggle__opt--pressed' : ''}`}
+                onClick={() => setView('board')}
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.4">
+                  <path d="M3 2.5v11M8 2.5v6M13 2.5v8" />
+                </svg>
+                {d.executionBoard}
+              </button>
             </div>
-          )}
+            <span className="rmt-hdr__done">{status === 'done' ? d.tasksDoneOne : d.tasksDone}</span>
+          </div>
         </div>
-        {view === 'calendar' ? <RmCalendarPanel /> : <RmBoardPanel />}
+        {view === 'timeline'
+          ? <RmTimelinePanel />
+          : <RmExecutionBoardPanel status={status} over={over} dragging={dragging} cardRef={cardRef} progressRef={progressRef} doneRef={doneRef} />}
+
+        {/* Cursor + dragged-card ghost live here (not inside either panel)
+            so they can travel across the view switch — e.g. from the
+            toggle button, which sits outside both — using coordinates
+            relative to this same .rmt-inner box throughout. */}
+        <div
+          className="rmt-cursor"
+          style={{ left: cursor.x, top: cursor.y, opacity: cursor.visible ? 1 : 0, transform: `scale(${cursor.down ? 0.85 : 1})`, '--rmt-dur': `${cursor.dur}ms` }}
+        >
+          <svg viewBox="0 0 20 22" width="20" height="22"><path d="M3 2v16l4.2-4 2.9 6.4 2.6-1.2-2.9-6.2H16z" fill="#111" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" /></svg>
+        </div>
+        {ghost && (
+          <div className="rmt-ghost" style={{ left: ghost.x, top: ghost.y, width: ghost.w, '--rmt-dur': `${ghost.dur}ms` }}>
+            <RmtBoardCard task={moveTask} />
+          </div>
+        )}
+      </div>
       </div>
     </div>
   );
@@ -1963,9 +2322,296 @@ function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everReve
   );
 }
 
+// Desktop-only layout: the 5 pillars as a stack of cards on the left, one
+// shared window on the right showing whichever card is active. Below
+// ENGINE_DESKTOP_MQ the section keeps the alternating EngineRow layout.
+const ENGINE_DESKTOP_MQ = '(min-width: 1025px)';
+
+function useEngineDesktop() {
+  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(ENGINE_DESKTOP_MQ).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(ENGINE_DESKTOP_MQ);
+    const onChange = () => setMatches(mql.matches);
+    onChange();
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+  return matches;
+}
+
+// One icon per pillar for the desktop showcase cards, in card order:
+// Reputation (chart), Trust (shield), Roadmap (calendar), Content (pen),
+// Build Trust Across the Web (link).
+const ENGINE_ICON_PROPS = { viewBox: '0 0 24 24', width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' };
+const ENGINE_ICONS = [
+  <svg key="rep" {...ENGINE_ICON_PROPS}><path d="M3 3v18h18" /><path d="m7 15 4-4 3 3 5-6" /></svg>,
+  <svg key="trust" {...ENGINE_ICON_PROPS}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>,
+  <svg key="road" {...ENGINE_ICON_PROPS}><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>,
+  <svg key="content" {...ENGINE_ICON_PROPS}><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>,
+  <svg key="web" {...ENGINE_ICON_PROPS}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>,
+];
+
+// Card copy (icon, title, number, short desc, Learn More). `interactive`
+// is off for the copies riding on the flip animation — those are purely
+// visual, so no second button/link for keyboard or screen readers.
+function EngineCardFace({ card, index, learnMore, pressed, highlight, interactive }) {
+  const title = <span className={highlight ? 'engine-row__title--tour-active' : undefined}>{card.title}</span>;
+  return (
+    <>
+      <div className="engine-card__head">
+        <span className="engine-card__icon" aria-hidden="true">{ENGINE_ICONS[index]}</span>
+        {interactive ? (
+          <h3 className="engine-card__title">
+            <button type="button" className="engine-card__trigger" aria-pressed={pressed} aria-controls="engine-showcase-panel">{title}</button>
+          </h3>
+        ) : (
+          <div className="engine-card__title">{title}</div>
+        )}
+        <span className="engine-card__num">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <p className="engine-card__desc">{card.desc}</p>
+      {card.href && (() => {
+        const inner = (
+          <>
+            {learnMore}
+            <span className="engine-row__link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+          </>
+        );
+        return interactive
+          ? <Link to={card.href} className="engine-row__link engine-card__link">{inner}</Link>
+          : <span className="engine-row__link engine-card__link">{inner}</span>;
+      })()}
+    </>
+  );
+}
+
+function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, registerSlot, onHoverIn, onHoverOut, onSelect }) {
+  return (
+    <div
+      ref={(el) => registerSlot(index, el)}
+      className={`engine-card${isActive ? ' engine-card--active' : ''}${isAway ? ' engine-card--away' : ''}`}
+      onMouseEnter={() => onHoverIn(index)}
+      onMouseLeave={onHoverOut}
+      onFocus={() => onSelect(index)}
+      onClick={() => onSelect(index)}
+    >
+      <EngineCardFace card={card} index={index} learnMore={learnMore} pressed={isActive} interactive />
+      {/* Autoplay countdown: a stroke that traces the card's border once,
+          timed to the hold (after the flip lands), so the visitor can see
+          the next card coming. Unmounted while paused, so it restarts from
+          zero together with the autoplay timer. */}
+      {showProgress && (
+        <svg
+          className="engine-card__progress"
+          aria-hidden="true"
+          style={{ '--engine-progress-ms': `${ENGINE_AUTOPLAY_MS}ms`, '--engine-progress-delay': `${ENGINE_FLIP_MS}ms` }}
+        >
+          <rect x="0" y="0" width="100%" height="100%" rx="20" ry="20" pathLength="100" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
+const ENGINE_FLIP_MS = 700;
+const ENGINE_FLIP_EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
+// Hover has to rest this long before a card flips in — sweeping the
+// pointer across the grid shouldn't fire a flip for every card it crosses.
+const ENGINE_HOVER_DELAY = 120;
+// Autoplay: each card holds the center this long after landing, then the
+// next one flips in (05 wraps back to 01). Card 02's animation is the
+// long one at ATD_CYCLE — this clears the beat its fix lands on "Live"
+// (13.6s in) and trims only the hold after it, so don't drop below 14s
+// without checking that ending again.
+const ENGINE_AUTOPLAY_MS = 14000;
+
+// Center-to-center translate + scale that maps box `to` onto box `from`
+// (transform-origin is the element's center), with a fixed perspective so
+// the rotateY reads as a real 3D flip.
+function engineFlipTransform(from, to, deg) {
+  const dx = (from.left + from.width / 2) - (to.left + to.width / 2);
+  const dy = (from.top + from.height / 2) - (to.top + to.height / 2);
+  return `perspective(1600px) translate(${dx}px, ${dy}px) scale(${from.width / to.width}, ${from.height / to.height}) rotateY(${deg}deg)`;
+}
+
+function EngineShowcase({ cards, learnMore }) {
+  // null until the section scrolls into view, then 0 — so card 01's own
+  // flip into the center is the first thing a visitor sees here.
+  const [active, setActive] = useState(null);
+  // The previously active card, flying from the center back to its slot.
+  const [returning, setReturning] = useState(null);
+  // Autoplay only runs while the section is on screen and the visitor
+  // isn't pointing at or tabbing through it — any interaction holds the
+  // current card until they leave.
+  const [onScreen, setOnScreen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const wrapRef = useRef(null);
+  const flipRef = useRef(null);
+  const returnRef = useRef(null);
+  const slotRefs = useRef([]);
+  const hoverTimer = useRef(null);
+  const activeRef = useRef(null);
+  const reducedMotion = useRef(false);
+  const card = active == null ? null : cards[active];
+  const Visual = active == null ? null : (ENGINE_VISUALS[active] || EnginePlaceholder);
+
+  const rectIn = (el) => {
+    const r = el.getBoundingClientRect();
+    const w = wrapRef.current.getBoundingClientRect();
+    return { left: r.left - w.left, top: r.top - w.top, width: r.width, height: r.height };
+  };
+
+  const select = useCallback((i) => {
+    const prev = activeRef.current;
+    if (prev === i) return;
+    activeRef.current = i;
+    if (prev != null && !reducedMotion.current && flipRef.current && slotRefs.current[prev]) {
+      setReturning({ index: prev, slot: rectIn(slotRefs.current[prev]), from: rectIn(flipRef.current) });
+    } else {
+      setReturning(null);
+    }
+    setActive(i);
+  }, []);
+
+  const hoverIn = useCallback((i) => {
+    clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => select(i), ENGINE_HOVER_DELAY);
+  }, [select]);
+  const hoverOut = useCallback(() => clearTimeout(hoverTimer.current), []);
+  const registerSlot = useCallback((i, el) => { slotRefs.current[i] = el; }, []);
+
+  useEffect(() => {
+    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      setOnScreen(entry.isIntersecting);
+      if (entry.isIntersecting && activeRef.current == null) select(0);
+    }, { threshold: 0.25 });
+    io.observe(el);
+    return () => { io.disconnect(); clearTimeout(hoverTimer.current); };
+  }, [select]);
+
+  useEffect(() => {
+    if (active == null || !onScreen || paused) return;
+    const t = setTimeout(() => select((active + 1) % cards.length), ENGINE_FLIP_MS + ENGINE_AUTOPLAY_MS);
+    return () => clearTimeout(t);
+  }, [active, onScreen, paused, cards.length, select]);
+
+  // Incoming: the center panel itself starts exactly over the card's slot,
+  // face up, and flips over (180°) as it grows into the center — its back
+  // face is the preview. Once it lands, .is-flipping comes off and the
+  // panel is a plain, untransformed preview again.
+  useLayoutEffect(() => {
+    const flip = flipRef.current;
+    const slot = slotRefs.current[active];
+    if (active == null || !flip || !slot || reducedMotion.current) return;
+    flip.getAnimations().forEach((a) => a.cancel());
+    const to = rectIn(flip);
+    const from = rectIn(slot);
+    flip.classList.add('is-flipping');
+    const anim = flip.animate(
+      [{ transform: engineFlipTransform(from, to, 0) }, { transform: 'perspective(1600px) translate(0, 0) scale(1, 1) rotateY(180deg)' }],
+      { duration: ENGINE_FLIP_MS, easing: ENGINE_FLIP_EASE },
+    );
+    anim.onfinish = () => flip.classList.remove('is-flipping');
+    anim.oncancel = () => flip.classList.remove('is-flipping');
+  }, [active]);
+
+  // Outgoing: a stand-in for the previous card starts over the center
+  // (preview side up, shown as a blank face) and flips back down into its
+  // own slot. The real card reappears there when it lands.
+  useLayoutEffect(() => {
+    const el = returnRef.current;
+    if (!returning || !el) return;
+    const anim = el.animate(
+      [{ transform: engineFlipTransform(returning.from, returning.slot, 180) }, { transform: 'perspective(1600px) translate(0, 0) scale(1, 1) rotateY(0deg)' }],
+      { duration: ENGINE_FLIP_MS, easing: ENGINE_FLIP_EASE },
+    );
+    anim.onfinish = () => setReturning((r) => (r === returning ? null : r));
+    return () => anim.cancel();
+  }, [returning]);
+
+  const renderCard = (i) => (
+    <EngineSlot
+      key={cards[i].title}
+      card={cards[i]}
+      index={i}
+      learnMore={learnMore}
+      isActive={i === active}
+      // Hidden only while its stand-in is flying back into it, so the card
+      // never shows twice; the slot still holds its place in the grid.
+      isAway={returning?.index === i && i !== active}
+      showProgress={i === active && onScreen && !paused}
+      registerSlot={registerSlot}
+      onHoverIn={hoverIn}
+      onHoverOut={hoverOut}
+      onSelect={select}
+    />
+  );
+
+  // Bento, running around the center panel: 01 top-left, 02 bottom-left,
+  // 03 under the panel, 04 bottom-right, 05 top-right. The right column is
+  // 04 then 05 in the DOM (CSS lifts 05 to the top) so keyboard/reader
+  // order still runs 01 → 05; CSS places each column on the grid.
+  return (
+    <div
+      className="container engine-showcase"
+      ref={wrapRef}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false); }}
+    >
+      <div className="engine-showcase__col engine-showcase__col--left">{[0, 1].map(renderCard)}</div>
+      <div className="engine-showcase__col engine-showcase__col--center">
+        <div className="engine-showcase__panel" id="engine-showcase-panel">
+          <div className="engine-flip" ref={flipRef}>
+            <div className="engine-flip__front engine-card engine-card--active" aria-hidden="true">
+              {card && <EngineCardFace card={card} index={active} learnMore={learnMore} />}
+            </div>
+            <div className="engine-flip__back">
+              {/* Keyed on the active card so each demo remounts and replays
+                  from its first frame every time its card is selected. */}
+              {card ? (
+                <div key={active} className="engine-row__visual engine-showcase__visual reveal visible">
+                  <EngineWindow url={card.url} bare><Visual /></EngineWindow>
+                </div>
+              ) : (
+                <div className="engine-flip__spacer" />
+              )}
+            </div>
+          </div>
+        </div>
+        {renderCard(2)}
+      </div>
+      <div className="engine-showcase__col engine-showcase__col--right">{[3, 4].map(renderCard)}</div>
+      {returning && (
+        <div
+          className="engine-flip engine-flip--return is-flipping"
+          ref={returnRef}
+          aria-hidden="true"
+          style={{ left: returning.slot.left, top: returning.slot.top, width: returning.slot.width, height: returning.slot.height }}
+        >
+          <div className="engine-flip__front engine-card engine-card--muted">
+            <EngineCardFace card={cards[returning.index]} index={returning.index} learnMore={learnMore} />
+          </div>
+          <div className="engine-flip__back engine-flip__blank" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 function PlatformEngine() {
   const { t } = useLang();
   const pe = t('home.engine');
+  const isDesktop = useEngineDesktop();
   const rowRefs = useRef([]);
   // Indices whose title highlight has ever played — once added, a card's
   // highlight stays on permanently; only a full page reload clears this.
@@ -1997,7 +2643,9 @@ function PlatformEngine() {
     );
     rows.forEach((row) => observer.observe(row));
     return () => observer.disconnect();
-  }, []);
+    // Desktop renders the bento showcase instead of the rows, so the rows
+    // the observer watches only exist (and need re-observing) per layout.
+  }, [isDesktop]);
 
   return (
     <section className="engine" id="engine">
@@ -2008,22 +2656,26 @@ function PlatformEngine() {
           <p className="sec-lead">{pe.lead}</p>
         </div>
       </div>
-      <div className="engine-rows">
-        {/* Keyed by index, not card.title — the title changes on EN↔FR
-            switch, which would remount the row with fresh DOM the observer
-            above never watches, leaving unvisited rows stuck invisible. */}
-        {pe.cards.map((card, i) => (
-          <EngineRow
-            key={i}
-            index={i}
-            card={card}
-            learnMore={pe.learnMore}
-            innerRef={(el) => { rowRefs.current[i] = el; }}
-            everHighlighted={visitedIdx.has(i)}
-            everRevealed={visitedIdx.has(i)}
-          />
-        ))}
-      </div>
+      {isDesktop ? (
+        <EngineShowcase cards={pe.cards} learnMore={pe.learnMore} />
+      ) : (
+        <div className="engine-rows">
+          {/* Keyed by index, not card.title — the title changes on EN↔FR
+              switch, which would remount the row with fresh DOM the observer
+              above never watches, leaving unvisited rows stuck invisible. */}
+          {pe.cards.map((card, i) => (
+            <EngineRow
+              key={i}
+              index={i}
+              card={card}
+              learnMore={pe.learnMore}
+              innerRef={(el) => { rowRefs.current[i] = el; }}
+              everHighlighted={visitedIdx.has(i)}
+              everRevealed={visitedIdx.has(i)}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -2181,6 +2833,62 @@ function ComparisonTable() {
 /* ================================================================
    STAKES
    ================================================================ */
+/* ================================================================
+   FAQ — five common questions below the Stakes, one open at a time,
+   linking out to the full /faqs page.
+   ================================================================ */
+function HomeFaq() {
+  const { t, lang } = useLang();
+  const d = t('home.faq');
+  const [open, setOpen] = useState(-1);
+
+  return (
+    <section className="hfaq" id="faq">
+      <div className="container">
+        <div className="sec-head reveal">
+          <Eyebrow>{d.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{d.h2Pre} <HL>{d.h2Hl}</HL></h2>
+        </div>
+        <div className="hfaq__list reveal reveal--d1">
+          {d.items.map((item, i) => {
+            const isOpen = open === i;
+            return (
+              <div key={item.q} className={`hfaq__item${isOpen ? ' is-open' : ''}`}>
+                <h3 className="hfaq__q-h">
+                  <button
+                    type="button"
+                    className="hfaq__btn"
+                    aria-expanded={isOpen}
+                    aria-controls={`hfaq-a-${i}`}
+                    onClick={() => setOpen(isOpen ? -1 : i)}
+                  >
+                    <span>{item.q}</span>
+                    <span className="hfaq__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="12" height="12">
+                        <path d="M5 12h14" /><path className="hfaq__icon-v" d="M12 5v14" />
+                      </svg>
+                    </span>
+                  </button>
+                </h3>
+                <div className="hfaq__body" id={`hfaq-a-${i}`} role="region">
+                  <div className="hfaq__body-inner">
+                    <p className="hfaq__a">{item.a}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="hfaq__foot">
+          <Link to={`/${lang}/faqs`} className="hfaq__all">
+            {d.seeAll} <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Stakes() {
   const { t } = useLang();
   const CARD_ICONS = [
@@ -2204,7 +2912,7 @@ function Stakes() {
           {cards.map((card, i) => (
             <div key={i} className={`stakes__card reveal reveal--d${i + 1}`}>
               <div className="stakes__iconbox">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="30" height="30">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="30" height="30">
                   {card.icon}
                 </svg>
               </div>

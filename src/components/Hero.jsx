@@ -220,7 +220,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
                 {primaryCta}
                 {!dark && (
                   <span className="btn__icon btn__icon--dark">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
                       <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                     </svg>
                   </span>

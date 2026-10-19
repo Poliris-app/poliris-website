@@ -450,7 +450,7 @@ button { cursor: pointer; border: none; background: none; }
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  background: #000;
+  background: var(--poliris-blue);
   color: #fff;
   font-family: var(--chivo);
   font-weight: 600;
@@ -462,8 +462,8 @@ button { cursor: pointer; border: none; background: none; }
 }
 .nav__cta:hover {
   background: #fff;
-  color: #000;
-  border-color: #000;
+  border-color: var(--poliris-blue);
+  color: var(--poliris-blue);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px -2px rgba(15,23,60,0.18);
 }
@@ -1122,10 +1122,10 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hero-website-form__submit {
   flex-shrink: 0;
-  border: 0;
+  border: 1.5px solid var(--poliris-blue);
   border-radius: 999px;
   padding: 12px 22px;
-  background: #000;
+  background: var(--poliris-blue);
   color: #fff;
   font-family: var(--chivo);
   font-weight: 600;
@@ -1134,7 +1134,9 @@ button { cursor: pointer; border: none; background: none; }
   transition: background 0.2s;
 }
 .hero-website-form__submit:hover {
-  background: #1d1d22;
+  background: #fff;
+  border-color: var(--poliris-blue);
+  color: var(--poliris-blue);
 }
 .hero-website-form__error {
   margin: 8px 0 0;
@@ -1224,19 +1226,18 @@ button { cursor: pointer; border: none; background: none; }
   transition: background 0.25s, color 0.25s, border-color 0.25s;
 }
 .btn--primary {
-  background: #000;
+  background: var(--poliris-blue);
   color: #fff;
-  border-color: #000;
 }
 
 .btn--primary:hover{
   background: white;
-  border-color: black;
-  color: black;
+  border-color: var(--poliris-blue);
+  color: var(--poliris-blue);
 }
 
 .btn--primary:hover .btn__icon--dark {
-  background: #000;
+  background: var(--poliris-blue);
   color: #fff;
 }
 .btn--primary:hover .btn__icon--dark svg {
@@ -1332,6 +1333,228 @@ button { cursor: pointer; border: none; background: none; }
   inherits: false;
   initial-value: 180deg;
 }
+/* ================================================================
+   HOW IT WORKS — three numbered steps joined by a line
+   ================================================================ */
+.how {
+  padding: 96px 0;
+  background: var(--surface1);
+}
+.how__steps {
+  list-style: none;
+  margin: 48px 0 0;
+  padding: 0;
+  display: grid;
+  /* One column per step — the count comes from the component, since the
+     reference this is ported from had three and this section has four. */
+  grid-template-columns: repeat(var(--how-cols, 3), minmax(0, 1fr));
+  --how-gap: 32px;
+  gap: var(--how-gap);
+  position: relative;
+}
+/* Connector lines — one per gap, each drawn left to right in turn by the
+   HowItWorks sequence. It runs from just past this step's icon to just
+   before the next one (44px = half the 64px icon slot + 12px breathing
+   room on each side), across the grid gap. */
+.how__link {
+  position: absolute;
+  top: 31px;
+  left: calc(50% + 44px);
+  width: calc(100% + var(--how-gap) - 88px);
+  height: 2px;
+  background: var(--border-strong);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition:
+    transform 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 0.5s ease;
+}
+.how__link.is-drawn { transform: scaleX(1); }
+/* End of each loop: fade the drawn lines out, then snap them back to
+   zero width with transitions off so they don't visibly retract. */
+.how__link.is-fading { opacity: 0; }
+.how__link.is-reset { transition: none; opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .how__link { transition: none; }
+}
+.how__step {
+  position: relative;
+  text-align: center;
+}
+.how__icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  color: var(--fg6);
+  transition: color 0.4s ease;
+  margin-bottom: 16px;
+  /* Same colour as the section, so the connector line stops short of
+     the icon instead of running through it. */
+  background: var(--surface1);
+  box-shadow: 0 0 0 12px var(--surface1);
+}
+.how__icon svg {
+  width: 44px;
+  height: 44px;
+  overflow: visible;
+}
+
+/* Lottie icon (StepLottieIcon) — replaces the SVG fallback once loaded */
+/* The artwork only fills the middle of its canvas, so the box is drawn
+   larger than the 64px slot and allowed to overflow it evenly. */
+.how__lottie {
+  display: block;
+  flex-shrink: 0;
+  width: 84px;
+  height: 84px;
+}
+.how__lottie[hidden] { display: none; }
+/* Icons wait in gray, turn blue as their step plays and stay blue until
+   the loop resets. The Lottie SVG paints its colours as attributes, so
+   gray icons override them in CSS, and lit ones keep their own two-tone
+   blue. The swap is instant: a colour transition fights Lottie's
+   per-frame redraws. */
+.how__icon.is-lit { color: var(--poliris-blue); }
+@media (prefers-reduced-motion: no-preference) {
+  /* Only the two icon blues — the files also use white and black shapes
+     as masks, which must keep their colour or the artwork ghosts. */
+  .how__icon:not(.is-lit) .how__lottie svg [stroke="rgb(0,98,255)"],
+  .how__icon:not(.is-lit) .how__lottie svg [stroke="rgb(143,184,255)"] { stroke: var(--fg6); }
+  .how__icon:not(.is-lit) .how__lottie svg [fill="rgb(0,98,255)"],
+  .how__icon:not(.is-lit) .how__lottie svg [fill="rgb(143,184,255)"] { fill: var(--fg6); }
+}
+/* Reduced motion: no sequence, so every icon simply shows in blue */
+@media (prefers-reduced-motion: reduce) {
+  .how__icon { color: var(--poliris-blue); }
+}
+
+/* Track's artwork sits a little smaller in its canvas, so its box is
+   tuned to land at the same visual size as Fix and Publish. */
+.how__icon--track .how__lottie {
+  width: 78px;
+  height: 78px;
+}
+
+/* Icon animations — paused until the step reveals */
+.how-anim { transform-box: view-box; animation-play-state: paused; }
+.how__step.visible .how-anim { animation-play-state: running; }
+
+/* Track: radar sweep + blips lighting up as the beam passes */
+.how-anim--sweep {
+  transform-origin: 16px 16px;
+  animation: how-sweep 3s linear infinite;
+}
+.how-anim--blip {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0.2;
+  animation: how-blip 3s ease-out infinite;
+}
+.how-anim--b1 { animation-delay: 0.3s; }
+.how-anim--b2 { animation-delay: 1.9s; }
+@keyframes how-sweep { to { transform: rotate(360deg); } }
+@keyframes how-blip {
+  0%   { opacity: 1; transform: scale(1.4); }
+  35%  { opacity: 0.2; transform: scale(1); }
+  100% { opacity: 0.2; transform: scale(1); }
+}
+
+/* Fix: ticks draw in one after another, hold, then reset */
+.how-anim--tick {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: how-tick 3.6s ease-out infinite;
+}
+.how-anim--t2 { animation-delay: 0.35s; }
+.how-anim--t3 { animation-delay: 0.7s; }
+@keyframes how-tick {
+  0%   { stroke-dashoffset: 1; }
+  15%  { stroke-dashoffset: 0; }
+  75%  { stroke-dashoffset: 0; opacity: 1; }
+  88%  { stroke-dashoffset: 0; opacity: 0; }
+  100% { stroke-dashoffset: 1; opacity: 0; }
+}
+
+/* Publish: lines get written, then the page lifts off and returns */
+.how-anim--line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: how-write 3.6s ease-out infinite;
+}
+.how-anim--l2 { animation-delay: 0.3s; }
+.how-anim--l3 { animation-delay: 0.6s; }
+.how-anim--page { animation: how-ship 3.6s ease-in-out infinite; }
+@keyframes how-write {
+  0%   { stroke-dashoffset: 1; }
+  18%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+/* Monitor's drawing is permanent (it has no Lottie), so its trace plays
+   on the step's turn rather than looping the way a brief fallback does:
+   undrawn while it waits, drawn once as the step lights up, and held
+   until the loop resets it. */
+.how__icon--monitor .how-anim--line {
+  animation: none;
+  stroke-dashoffset: 1;
+}
+.how__icon--monitor.is-lit .how-anim--line {
+  animation: how-trace 0.9s ease-out forwards;
+  animation-play-state: running;
+}
+@keyframes how-trace {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .how__icon--monitor .how-anim--line { animation: none; stroke-dashoffset: 0; }
+}
+@keyframes how-ship {
+  0%, 55% { transform: translateY(0); opacity: 1; }
+  72%     { transform: translateY(-9px); opacity: 0; }
+  73%     { transform: translateY(8px); opacity: 0; }
+  90%, 100% { transform: translateY(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .how-anim { animation: none !important; }
+  .how-anim--tick, .how-anim--line { stroke-dashoffset: 0; }
+  .how-anim--blip { opacity: 1; }
+}
+.how__h3 {
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 19px;
+  color: #000;
+  margin: 0 0 10px;
+}
+.how__desc {
+  font-size: 14.5px;
+  color: var(--fg4);
+  line-height: 1.6;
+  max-width: 300px;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+/* One column below tablet — four steps side by side leave no room for the
+   copy, and the connector lines have nothing to join. */
+@media (max-width: 900px) {
+  .how__steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+  /* 2×2: only 1→2 and 3→4 sit side by side, so the line after step 2
+     would point at nothing. */
+  .how__step:nth-child(2) .how__link { display: none; }
+}
+@media (max-width: 768px) {
+  .how { padding: 64px 0; }
+  .how__steps { grid-template-columns: 1fr; gap: 32px; }
+  .how__link { display: none; }
+}
+@media (max-width: 480px) {
+  .how { padding: 48px 0; }
+}
+
 .hreveal {
   --p: 0;
   --t: 0;
@@ -3743,14 +3966,13 @@ button { cursor: pointer; border: none; background: none; }
   box-shadow: 0 3px 20px 0 rgba(212, 212, 212, 0.25);
 }
 .stakes__iconbox {
-  width: 66px;
-  height: 66px;
-  border-radius: 99px;
-  background: var(--Blue, #0062FF);
+  width: 44px;
+  height: 44px;
+  color: #0062FF;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
+  margin: 0 auto 16px;
 }
 .stakes__h3 {
   font-family: var(--manrope);
@@ -3765,6 +3987,93 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.6;
   max-width: 300px;
   margin: 0 auto;
+}
+
+/* ── Home FAQ (below the Stakes) ─────────────────────────────── */
+.hfaq {
+  padding: 96px 24px 104px;
+  background: var(--surface1);
+}
+.hfaq__list {
+  max-width: 760px;
+  margin: 44px auto 0;
+  border-top: 1px solid var(--border);
+}
+.hfaq__item { border-bottom: 1px solid var(--border); }
+.hfaq__q-h { margin: 0; }
+.hfaq__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+  transition: color 0.2s ease;
+}
+.hfaq__btn:hover,
+.hfaq__item.is-open .hfaq__btn { color: #0062FF; }
+.hfaq__btn:focus-visible { outline: 2px solid #0062FF; outline-offset: 4px; border-radius: 4px; }
+.hfaq__icon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  display: grid;
+  place-items: center;
+  color: var(--fg5);
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+.hfaq__btn:hover .hfaq__icon { border-color: #0062FF; color: #0062FF; }
+.hfaq__item.is-open .hfaq__icon { background: #0062FF; border-color: #0062FF; color: #fff; }
+.hfaq__icon-v {
+  transform-origin: 50% 50%;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hfaq__item.is-open .hfaq__icon-v { transform: scaleY(0); }
+/* 0fr → 1fr animates to the answer's natural height */
+.hfaq__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hfaq__item.is-open .hfaq__body { grid-template-rows: 1fr; }
+.hfaq__body-inner { overflow: hidden; }
+.hfaq__a {
+  margin: 0;
+  padding: 0 46px 22px 0;
+  font-family: var(--chivo);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--fg4);
+}
+.hfaq__foot {
+  max-width: 760px;
+  margin: 28px auto 0;
+}
+.hfaq__all {
+  font-family: var(--manrope);
+  font-weight: 700;
+  font-size: 14.5px;
+  color: #0062FF;
+  text-decoration: none;
+}
+.hfaq__all:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 560px) {
+  .hfaq { padding: 72px 16px 80px; }
+  .hfaq__btn { font-size: 15px; padding: 18px 0; }
+  .hfaq__a { padding-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hfaq__body, .hfaq__icon-v { transition: none; }
 }
 
 
@@ -3831,6 +4140,32 @@ button { cursor: pointer; border: none; background: none; }
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+}
+/* On the blue band the primary button reads as the light one — white
+   fill, blue label — which is the inverse of its default elsewhere.
+   Scoped to .cta-band so the hero's own button is untouched; hover
+   swaps to the blue fill so it still responds to the pointer. */
+.cta-band .btn--primary {
+  background: #fff;
+  border-color: #fff;
+  color: var(--poliris-blue);
+}
+.cta-band .btn--primary:hover {
+  background: var(--poliris-blue);
+  border-color: #fff;
+  color: #fff;
+}
+/* The secondary becomes the outline button on the band: the blue shows
+   through, with a white rule and label. Hover fills it white. */
+.cta-band .btn--secondary {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+}
+.cta-band .btn--secondary:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--poliris-blue);
 }
 .cta-band__note {
   color: rgba(255, 255, 255, .6);
@@ -6371,13 +6706,18 @@ button { cursor: pointer; border: none; background: none; }
   overflow: hidden;
   border-radius: 8px;
 }
+/* Two panels, each the full height of the window above — expressed as
+   percentages of the track so the whole demo follows .pc-scroll's
+   height instead of a hard-coded 364px (see the showcase override
+   below, where the panel's 4:3 frame decides that height). */
 .pc-scroll__track {
   display: flex;
   flex-direction: column;
+  height: 200%;
   animation: pc-scroll-move 11s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   animation-play-state: paused;
 }
-.pc-panel { flex: 0 0 364px; height: 364px; overflow: hidden; }
+.pc-panel { flex: 0 0 50%; height: 50%; overflow: hidden; }
 .pc-panel--analysis { display: flex; flex-direction: column; justify-content: center; }
 
 .pc-chart {
@@ -6605,9 +6945,11 @@ button { cursor: pointer; border: none; background: none; }
 }
 /* Chart panel visible → scroll down as the tooltip closes → hold on
    Analysis → scroll back up → settle before the loop restarts. */
+/* -50% of the (two-panel) track is exactly one panel, whatever height
+   .pc-scroll happens to have. */
 @keyframes pc-scroll-move {
   0%, 46%   { transform: translateY(0); }
-  53%, 82%  { transform: translateY(-364px); }
+  53%, 82%  { transform: translateY(-50%); }
   90%, 100% { transform: translateY(0); }
 }
 
@@ -6663,6 +7005,15 @@ button { cursor: pointer; border: none; background: none; }
   font-size: 10px;
   line-height: 1.45;
   color: #09090b;
+  /* Exactly two rows, so both columns' insights are the same height
+     however long each one's copy runs. flex: none stops the column
+     shrinking the box below those two rows, and the copy itself is
+     written to fit them — -webkit-line-clamp is no use here, since the
+     build rewrites `display: -webkit-box` to flow-root and the clamp
+     is silently dropped. */
+  overflow: hidden;
+  flex: none;
+  height: calc(2 * 1.45em + 12px); /* 2 rows at the line-height, plus the padding */
 }
 
 .pc-an__details {
@@ -7036,167 +7387,496 @@ button { cursor: pointer; border: none; background: none; }
 }
 
 /* =================================================================
-   ROADMAP PLAN — Calendar / Board (card 03), ported from the real
-   planner's Calendar+Board switch. A real click toggles the view (no
-   auto-cycling); the one animation is a cursor dragging a task card
-   from Aug 25 to Aug 26 on a loop. Own .rm-* namespace.
+   ROADMAP PLAN — Timeline / Execution board (card 03). A direct port of
+   the "Roadmap Timeline" reference prototype: its measurements, colors
+   and type scale, reproduced here as classes instead of inline styles.
+   A real click toggles the view (no auto-cycling); the one animation is
+   the recorded cursor dragging a card Backlog → In progress → Completed
+   on a loop. Markup lives under its own .rmt-* namespace; .rm-toggle is
+   this card's segmented switch and nothing else uses it.
    ================================================================= */
-/* Fixed height so switching Calendar ↔ Board doesn't resize the row —
-   Board's content is naturally shorter than Calendar's. */
-.rm-inner { font-family: var(--manrope);}
-.rm-cal-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.rm-toggle { display: flex; background: #F4F4F5; border-radius: var(--r-pill); padding: 3px; gap: 2px; }
+/* The whole demo is laid out at the reference card's own 1197px width
+   and scaled to the stage (--rmt-scale is set from the stage's measured
+   width in EngineRoadmapCard), so every size below is the reference's
+   literal value and the card renders its exact proportions. */
+/* The width the demo is laid out at before being scaled to the stage.
+   It's a trade: a wider layout keeps more of the reference's own
+   proportions but scales down further, and its 14px card titles stop
+   being readable — 650 is about where they still are. */
+.rmt-stage { --rmt-ref-width: 560px; position: relative; width: 100%; height: 100%; overflow: hidden; }
+/* Both views lay out at the same width on purpose: the scale follows
+   from it, so a wider board would render its title and cards visibly
+   smaller than the timeline's. The backlog's scroll area is what buys
+   the height back at this width. */
+/* Centred in the stage: the two views have different natural heights, so
+   one of them always has space left over on one axis. */
+.rmt-inner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--rmt-ref-width);
+  font-family: var(--manrope);
+  color: #151517;
+  transform-origin: 50% 50%;
+  transform: translate(-50%, -50%) scale(var(--rmt-scale, 1));
+}
+/* .th-box itself has no fixed height elsewhere on the site, so this
+   stays scoped to the roadmap card and doesn't affect .th-box's other
+   uses (pipeline/issues/robots panels). */
+.th-box--roadmap { height: 100%; display: flex; flex-direction: column; }
+.th-box--roadmap .rmt-stage { flex: 1; min-height: 0; }
+
+/* ── Segmented switch (reference: #f1f1f4 trough, 32px tabs, the active
+   one a white chip with a soft shadow rather than a filled accent). ── */
+.rm-toggle { display: flex; gap: 2px; background: #f1f1f4; border-radius: 10px; padding: 3px; flex: none; }
 .rm-toggle__opt {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
+  height: 32px;
+  padding: 0 11px;
   font-family: var(--manrope);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #71717A;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #55555c;
   background: transparent;
-  border: none;
-  padding: 5px 12px;
-  border-radius: var(--r-pill);
+  border: 0;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, transform 0.12s;
 }
-.rm-toggle__opt--active, .rm-toggle__opt--active:hover { background: var(--pf-blue); color: #fff; }
-.rm-toggle__opt:hover:not(.rm-toggle__opt--active) { color: #3F3F46; }
-.rm-cal-month { font-size: 12.5px; font-weight: 700; color: #09090b; }
-
-.rm-cal-dow-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
-.rm-cal-dow { font-size: 9px; font-weight: 700; color: #9aa1ac; text-align: center; text-transform: uppercase; }
-/* Explicit row heights, not auto-sized from content — a min-height on
-   the cells still let the row (and so the whole outer card) grow/shrink
-   by a few px as content changed during the drag. Fixed rows make that
-   impossible: only the ghost moves, the card itself never resizes. */
-.rm-cal-grid { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(2, 128px); gap: 4px; }
-/* min-height reserves room for the busiest cell (2 stacked cards) on
-   every cell in the row — otherwise, mid-drag, neither Aug 25 nor Aug 26
-   has 2 cards, the row's tallest cell shrinks, and the whole card
-   visibly resizes instead of just the small ghost moving. */
-.rm-cal-cell { background: #FAFAFA; border-radius: 6px; padding: 4px; min-height: 128px; display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
-.rm-cal-cell--today { background: #EAF0FF; }
-.rm-cal-daynum { font-size: 10px; font-weight: 600; color: #71717A; }
-.rm-cal-daynum--today {
-  display: flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--pf-blue); color: #fff;
-}
-.rm-cal-cards { display: flex; flex-direction: column; gap: 3px; }
-
-.rm-card {
+.rm-toggle__opt--active, .rm-toggle__opt--active:hover {
   background: #fff;
-  border: 1.5px solid var(--pf-blue);
-  border-radius: 6px;
-  padding: 4px 5px;
+  color: #151517;
+  box-shadow: 0 1px 2px rgba(20, 20, 40, 0.08);
 }
-/* Dimmed rather than hidden outright — while the ghost is lifted at the
-   exact same spot (higher z-index, slightly scaled up) it fully covers
-   this, so the low opacity only shows as a faint edge, not a duplicate. */
-.rm-card--dimmed { opacity: 0.12; transition: opacity 0.3s ease; }
-.rm-card__top { display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
-.rm-card__dot { width: 5px; height: 5px; border-radius: 50%; background: #16A34A; flex: none; }
-.rm-card__info {
+.rm-toggle__opt:hover:not(.rm-toggle__opt--active) { color: #151517; }
+/* Brief press-down scale while the showcase cursor "clicks" this tab. */
+.rm-toggle__opt--pressed { transform: scale(.96); }
+
+/* ── Header: title/sub on the left, switch + "N of 63 tasks done" on the
+   right. ── */
+/* The reference lets this row wrap; here it must not — wrapping drops
+   the switcher below the title and pulls it to the left edge. The title
+   block shrinks instead. */
+.rmt-hdr { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: nowrap; }
+.rmt-hdr__main { display: flex; flex-direction: column; gap: 5px; padding-top: 2px; min-width: 0; }
+.rmt-hdr__title { font-size: 19px; font-weight: 500; letter-spacing: -0.2px; color: #151517; margin: 0; }
+.rmt-hdr__sub { font-size: 12.5px; color: #55555c; margin: 0; }
+.rmt-hdr__side { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.rmt-hdr__done { font-size: 12px; color: #55555c; }
+
+/* ── Timeline (Gantt) — the label column and each lane's bar track share
+   one outer grid; every bar track repeats the same week columns, so the
+   bars line up under the week header. Week 1 owns a 7.9fr track (it's
+   the only week carrying task titles); weeks 2–18 share 1fr each, which
+   is all a plain color pill needs — so the chart always fits the card's
+   width with nothing to scroll. ── */
+/* Tighter vertically than the reference throughout: the stage's height
+   is what caps the scale, so every row of padding given back here is
+   type size everywhere else. */
+/* The right padding is room for the last week's label: it's centred on a
+   track narrower than the label is, so "W10" overhangs the grid and
+   would otherwise be clipped at the stage's edge. */
+.rmt-timeline { display: flex; flex-direction: column; flex: 1; min-height: 0; padding-bottom: 4px; padding-right: 8px; }
+.rmt-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: rgb(16, 72, 190);
+  min-height: 16px;
+}
+.rmt-hint svg { flex: none; }
+.rmt-hint span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Wide enough for the longest lane name at this size ("Long-term content
+   plan") — a truncated lane name costs more than a week column does. */
+.rmt-grid { display: grid; grid-template-columns: 196px minmax(0, 1fr); margin-top: 6px; }
+.rmt-grid__labelhead { border-bottom: 1px solid #e9e9ee; margin-right: 20px; }
+.rmt-weeks,
+.rmt-bars {
+  display: grid;
+  grid-template-columns: minmax(0, 7.9fr) repeat(var(--rmt-week-cols, 11), minmax(0, 1fr));
+  border-bottom: 1px solid #e9e9ee;
+}
+.rmt-weeks { padding-bottom: 5px; column-gap: 4px; align-items: center; }
+/* Row height is the one lever that decides which axis the fit runs out
+   on: at 26px the chart fits on height and leaves gutters either side,
+   which the board (filling the width) doesn't have. */
+.rmt-bars { padding: 4px 0; grid-auto-rows: 24px; gap: 3px; }
+/* Type a step up from the reference's own: the chart is scaled down to
+   this card, so the reference's 11–13px lands under 8px here. */
+.rmt-week { font-size: 12.5px; color: #55555c; text-align: center; white-space: nowrap; }
+.rmt-week--cur {
+  height: 18px;
+  border-radius: 9px;
+  background: #e5eeff;
+  color: rgb(16, 72, 190);
+  font-size: 12.5px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  border: 1px solid #D4D4D8;
-  color: #A1A1AA;
-  font-size: 7px;
-  font-weight: 700;
-  line-height: 1;
-  flex: none;
 }
-.rm-card__x { margin-left: auto; font-size: 9px; color: #A1A1AA; line-height: 1; }
-.rm-card__title { font-size: 8.5px; font-weight: 600; color: #09090b; line-height: 1.25; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
-.rm-badge { font-size: 7px; font-weight: 800; text-transform: uppercase; padding: 1px 4px; border-radius: var(--r-pill); }
-.rm-badge--fix { background: #FEF3C7; color: #B45309; }
-.rm-badge--backlink { background: #EDE9FE; color: #6D28D9; }
-.rm-badge--content { background: rgba(0, 98, 255, 0.1); color: var(--pf-blue); }
-
-/* ── Drag demo — cursor carries the ghost card from Aug 25 to Aug 26 ──
-   State-driven (see useRmDrag in the component), not a CSS keyframe loop:
-   the ghost's `left` is set inline per render, so changing it triggers
-   this transition — and the moment it lands, React swaps the card into
-   the real day cell and unmounts the ghost, so the grid reflows for real
-   instead of a floating duplicate sitting on top of a static layout. */
-.rm-drag-ghost {
-  position: absolute;
-  top: 21px;
-  z-index: 6;
-  width: calc(100% / 7 - 6px);
-  transform: translateY(-4px) scale(1.04);
-  box-shadow: 0 10px 20px -6px rgba(15, 23, 42, 0.28);
-  border-radius: 6px;
-  pointer-events: none;
-  transition: left 0.8s cubic-bezier(0.45, 0, 0.55, 1);
+.rmt-lane-label {
+  border-bottom: 1px solid #e9e9ee;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 4px 0;
+  font-size: 14.5px;
+  color: #151517;
 }
-.rm-drag-cursor {
-  position: absolute;
-  top: 52px;
-  z-index: 7;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
-  transition: left 0.8s cubic-bezier(0.45, 0, 0.55, 1);
-}
-@media (prefers-reduced-motion: reduce) {
-  .rm-drag-ghost, .rm-drag-cursor { transition: none; }
-  .rm-hover-cursor, .rm-hover-tip { transition: none !important; opacity: 0 !important; }
-}
-
-/* overflow: visible — not hidden — so the hover tooltip below can escape
-   upward past the board's own top edge instead of clipping against it. */
-.rm-board { position: relative; display: flex; gap: 12px; }
-.rm-board__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.rm-board__hdr { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; }
-.rm-board__wk { font-size: 11px; font-weight: 700; color: #09090b; }
-.rm-board__range { font-size: 9.5px; color: #9aa1ac; }
-.rm-board__col .rm-card { padding: 8px; }
-.rm-board__col .rm-card__title { font-size: 11px; -webkit-line-clamp: 3; line-clamp: 3; }
-.rm-board__col .rm-badge { font-size: 8.5px; padding: 2px 6px; }
-.rm-board__col .rm-card__dot { width: 6px; height: 6px; }
-.rm-board__col .rm-card__info { width: 14px; height: 14px; font-size: 9px; }
-.rm-board__col .rm-card__x { font-size: 12px; }
-.rm-board__scrollbar { height: 4px; background: #F4F4F5; border-radius: var(--r-pill); margin-top: 12px; }
-.rm-board__scrollbar span { display: block; width: 40%; height: 100%; background: #D4D4D8; border-radius: var(--r-pill); }
-
-/* ── Hover demo (Board view) — cursor hovers a card's "?" and its
-   rationale tooltip opens. Position is read off the real DOM (see
-   useRmHover), not guessed, since the board's columns are flex, not a
-   fixed grid like the calendar. ── */
-.rm-hover-cursor {
-  position: absolute;
-  z-index: 8;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
-  transition: opacity 0.3s ease, top 0.9s var(--ease-out);
-}
-.rm-hover-cursor--show { opacity: 1; }
-.rm-hover-tip {
-  position: absolute;
-  z-index: 9;
-  width: 220px;
-  transform: translate(-38%, calc(-100% - 12px)) scale(0.94);
-  background: #18181B;
-  color: #E4E4E7;
-  font-family: var(--manrope);
-  font-size: 10.5px;
-  line-height: 1.5;
-  padding: 10px 12px;
+.rmt-lane-label span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rmt-lane-dot { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.rmt-bar {
+  border: 0;
   border-radius: 8px;
-  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  outline-offset: 2px;
+  color: #fff;
+  font-family: var(--manrope);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 24px;
+  padding: 0 6px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: filter .12s;
 }
-.rm-hover-tip--show { opacity: 1; transform: translate(-38%, calc(-100% - 8px)) scale(1); }
+.rmt-bar:hover { filter: brightness(0.92); }
+
+/* ── Execution board — three drop columns; Backlog shows the plan's five
+   real tasks with the rest behind "Show N more". ── */
+.rmt-board {
+  position: relative;
+  display: grid;
+  align-items: start;
+  gap: 12px;
+  /* The reference's auto-fit columns resolve to three on its full-width
+     card; pinned to three here so the narrower layout can't stack them,
+     which would leave the drag demo moving a card straight down the page
+     instead of across the board. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+.rmt-bcol {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 12px;
+  background: #f7f8fa;
+  padding: 10px;
+  transition: box-shadow .15s;
+}
+.rmt-bcol--over { box-shadow: 0 0 0 2px rgba(0, 98, 255, .4); }
+/* Capped so three cards fit the stage at the timeline's scale with the
+   third one cut — it scrolls, and the hairline bar is the only hint it
+   needs. The cap is a layout-space value: the stage scales it along with
+   everything else. */
+.rmt-bcol__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #d4dae6 transparent;
+}
+.rmt-bcol__list::-webkit-scrollbar { width: 4px; }
+.rmt-bcol__list::-webkit-scrollbar-track { background: transparent; }
+.rmt-bcol__list::-webkit-scrollbar-thumb { background: #d4dae6; border-radius: 2px; }
+/* An empty column has no list to space away from its header. */
+.rmt-bcol__list:empty { display: none; }
+.rmt-bcol__hdr { display: flex; align-items: center; gap: 8px; padding: 4px 4px 2px; }
+.rmt-bcol__label { font-size: 13px; line-height: 20px; font-weight: 500; color: #0a0a0b; }
+.rmt-bcol__count { border-radius: var(--r-pill); background: #fff; padding: 1px 8px; font-size: 12px; line-height: 16px; color: #525252; }
+.rmt-bcol__more {
+  align-self: flex-start;
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-family: var(--manrope);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #0047b8;
+  background: none;
+  cursor: pointer;
+  transition: background-color .15s;
+}
+.rmt-bcol__more:hover { background: #fff; }
+.rmt-bcol__empty { margin: 0; padding: 16px 4px; text-align: center; font-size: 12px; line-height: 16px; color: #737373; }
+.rmt-bcard {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  border-radius: 10px;
+  border: 1px solid #e1e7ef;
+  background: #fff;
+  padding: 10px 12px;
+  transition: border-color .15s, box-shadow .15s, opacity .15s;
+}
+.rmt-bcard--dimmed { opacity: 0.4; }
+.rmt-bcard__top { display: flex; width: 100%; align-items: center; gap: 6px; }
+.rmt-bcard__dot { height: 6px; width: 6px; flex-shrink: 0; border-radius: 2px; display: block; }
+.rmt-bcard__cat { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; line-height: 16px; color: #737373; }
+.rmt-bcard__wk { flex-shrink: 0; font-size: 11px; line-height: 16px; color: #a3a3a3; }
+/* Clamped to two lines so the column's height doesn't depend on how a
+   title happens to wrap — a third line in one locale would otherwise
+   push the board past the stage and shrink the whole demo. */
+.rmt-bcard__title {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #0a0a0b;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.rmt-bcard--done .rmt-bcard__title { color: #525252; }
+
+/* ── Execution Board showcase — cursor + drag ghost ─────────────────────
+   State-driven (see useRmtShowcase in the component), not a CSS keyframe
+   loop: `left`/`top` are set inline per render with a per-step `--rmt-dur`
+   custom property, so changing them triggers this transition — and the
+   moment a drag lands, React swaps the card into the real column list
+   and clears the ghost, so the columns reflow for real instead of a
+   floating duplicate sitting on top of a static layout. */
+.rmt-ghost {
+  position: absolute;
+  z-index: 10;
+  transform: rotate(2deg) scale(1.02);
+  pointer-events: none;
+  transition: left var(--rmt-dur, .7s) cubic-bezier(.65, 0, .35, 1), top var(--rmt-dur, .7s) cubic-bezier(.65, 0, .35, 1);
+}
+.rmt-ghost .rmt-bcard {
+  border-color: #b8cdf0;
+  box-shadow: 0 14px 28px -10px rgba(10, 20, 50, .28), 0 2px 6px rgba(10, 20, 50, .08);
+}
+.rmt-cursor {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  transform-origin: 4px 3px;
+  transition: left var(--rmt-dur, .9s) cubic-bezier(.65, 0, .35, 1), top var(--rmt-dur, .9s) cubic-bezier(.65, 0, .35, 1), opacity .25s ease, transform .12s ease;
+}
+.rmt-cursor svg { display: block; transform: translate(-4px, -3px); }
+@media (prefers-reduced-motion: reduce) {
+  .rmt-ghost, .rmt-cursor { transition: none; }
+}
+
+/* ── Desktop showcase (≥1025px) — bento: cards wrap a center media tile ──
+   Rendered instead of .engine-rows by PlatformEngine on desktop only, so
+   none of this needs a mobile override. Columns 1 : 1.5 : 1 so the center
+   tile is wide enough for the demos (they were tuned for ~750px). */
+.engine-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 20px;
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+.engine-showcase__col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.engine-showcase__col--left   { grid-column: 1; grid-row: 1; }
+.engine-showcase__col--center { grid-column: 2; grid-row: 1; }
+.engine-showcase__col--right  { grid-column: 3; grid-row: 1; }
+/* 05 sits above 04 visually (top-right), but stays after it in the DOM. */
+.engine-showcase__col--right > .engine-card:last-child { order: -1; }
+/* Side cards split their column's height evenly, so each column's pair
+   lines up top and bottom with the media tile + card 05 stack. */
+.engine-showcase__col--left .engine-card,
+.engine-showcase__col--right .engine-card { flex: 1 1 0; }
+
+.engine-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px;
+  border-radius: 20px;
+  background: #F5F7FC;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+.engine-card:hover { background: #EEF3FE; }
+.engine-card--active,
+.engine-card--active:hover {
+  background: #fff;
+  border-color: #DCE6FE;
+  box-shadow: 0 18px 40px -20px rgba(20, 30, 80, 0.22), 0 4px 14px rgba(0, 98, 255, 0.06);
+}
+/* Icon, title and number share one row to keep the cards short. */
+.engine-card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+  margin-bottom: 12px;
+}
+.engine-card__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--pf-blue);
+  background: #E3EBFF;
+  transition: color 0.3s var(--ease-out), background 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+.engine-card--active .engine-card__icon {
+  color: #fff;
+  background: var(--pf-blue);
+  box-shadow: 0 8px 18px -6px rgba(0, 98, 255, 0.55);
+}
+.engine-card__num {
+  flex: none;
+  margin-left: auto;
+  align-self: flex-start;
+  font-family: var(--manrope);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: #B4C6F3;
+  transition: color 0.3s var(--ease-out);
+}
+.engine-card--active .engine-card__num { color: var(--pf-blue); }
+.engine-card__title {
+  font-family: var(--manrope);
+  font-weight: 800;
+  font-size: 19px;
+  line-height: 1.3;
+  color: #0d111a;
+  margin: 0;
+}
+/* Reset to plain text — the button only exists for keyboard access; the
+   whole card is the real hit area. */
+.engine-card__trigger {
+  all: unset;
+  cursor: pointer;
+}
+.engine-card__trigger:focus-visible { outline: 2px solid var(--pf-blue); outline-offset: 4px; border-radius: 4px; }
+.engine-card__desc {
+  font-family: var(--chivo);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg4);
+  margin: 0;
+}
+/* Shown on every card (as in the reference) rather than only the active
+   one — toggling it changed card heights under the cursor, which shifted
+   the next card into the pointer and flipped the selection back. Pushed
+   to the bottom so it lines up across cards of different text lengths. */
+.engine-card__link { margin-top: auto; padding-top: 18px; font-size: 15px; }
+
+/* Center media — the active demo's window on its own, no colored
+   backdrop, lifted off the page by a soft shadow. */
+.engine-showcase__panel { display: flex; }
+/* Undo the rows' 60% flex sizing — here the column sets the width. */
+.engine-showcase__visual { flex: 1 1 auto; width: 100%; max-width: none; }
+/* Card 02's three stage pills sit ~130px apart in the narrower column —
+   at their 13px row size neighbors overlapped. */
+.engine-showcase .th-pipe__pill { font-size: 10.5px; padding: 4px 9px; gap: 4px; white-space: nowrap; }
+/* Card 01's demo is a fixed 364px tall in the rows layout; here the
+   frame is 4:3, so that overran the body and ate into its bottom
+   padding. Fill the body instead, so the inset is an even 24px. */
+.engine-showcase__panel .pc-demo,
+.engine-showcase__panel .pc-scroll { height: 100%; }
+/* Whole frame (no browser bar here) is locked to 4:3, so every card's media —
+   these demos now, videos later — fills the same frame. The body takes
+   whatever height is left instead of the rows' fixed 400px. */
+.engine-showcase__panel .engine-window {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 4 / 3;
+  border: 1.5px solid var(--pf-blue);
+  box-shadow: 0 30px 60px -24px rgba(20, 30, 80, 0.28), 0 10px 24px -8px rgba(20, 30, 80, 0.10);
+}
+/* Even inset so the demo content clears the blue stroke on every side. */
+.engine-showcase__panel .engine-window__body { flex: 1 1 auto; height: auto; min-height: 0; padding: 24px; overflow: hidden; }
+/* ── Flip to center ────────────────────────────────────────────────
+   The active card flips over into the center panel (its back face is the
+   preview), and the previous one flips back down into its own slot. The
+   transforms themselves are driven from JS (Web Animations, see
+   EngineShowcase); .is-flipping only exists while one is in flight, so a
+   resting panel is a plain, untransformed preview — no 3D layer on the
+   live demo, no blurry text. */
+.engine-showcase { position: relative; }
+.engine-flip { position: relative; width: 100%; transform-origin: 50% 50%; }
+.engine-flip__front { display: none; }
+.engine-flip__spacer { aspect-ratio: 4 / 3; }
+.engine-flip.is-flipping { transform-style: preserve-3d; z-index: 3; }
+.engine-flip.is-flipping .engine-flip__front {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.engine-flip.is-flipping .engine-flip__back {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* The center panel needs to paint above the side columns mid-flight. */
+.engine-showcase__col--center:has(.engine-flip.is-flipping) { position: relative; z-index: 3; }
+
+/* Stand-in for the card flying back to its slot. */
+.engine-flip--return { position: absolute; z-index: 4; pointer-events: none; }
+.engine-flip--return .engine-flip__back { position: absolute; inset: 0; }
+.engine-flip__blank {
+  border-radius: 16px;
+  border: 1.5px solid var(--pf-blue);
+  background: #fff;
+  box-shadow: 0 30px 60px -24px rgba(20, 30, 80, 0.28), 0 10px 24px -8px rgba(20, 30, 80, 0.10);
+}
+
+/* Every card but the active one reads as inactive — muted until hovered.
+   The active card keeps its full white/blue styling (.engine-card--active
+   above) in its own slot while its preview holds the center. The flying
+   stand-in uses --muted so it lands looking exactly like its slot. */
+.engine-showcase .engine-card:not(.engine-card--active) > *,
+.engine-card--muted > * { opacity: 0.5; transition: opacity 0.3s var(--ease-out); }
+.engine-showcase .engine-card:not(.engine-card--active):hover > * { opacity: 1; }
+.engine-card--away { visibility: hidden; }
+
+/* Autoplay countdown traced along the active card's border. Sits on the
+   card's outer edge (overflow visible) so it covers the 1px border. */
+.engine-showcase .engine-card { position: relative; }
+.engine-showcase .engine-card > .engine-card__progress {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 1;
+}
+.engine-card__progress rect {
+  fill: none;
+  stroke: #8CB4FF;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: engine-card-progress var(--engine-progress-ms, 5000ms) linear var(--engine-progress-delay, 0ms) forwards;
+}
+@keyframes engine-card-progress { to { stroke-dashoffset: 0; } }
 
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
@@ -7221,10 +7901,10 @@ button { cursor: pointer; border: none; background: none; }
    height of its own, so screens swapping inside a card never resize it. */
 @media (max-width: 640px) {
   .engine-window__body { height: auto; }
-  /* Card 03 has a real Calendar/Board toggle and Board is the shorter view —
-     at least the calendar's tallest phone height (314px at ≤360px) so
-     clicking it doesn't make the window jump. */
-  .rm-inner { min-height: 314px; }
+  /* Card 03 has a real Timeline/Execution board toggle — keep both views
+     at least as tall as the taller one so clicking it doesn't make the
+     window jump. */
+  .rmt-inner { min-height: 314px; }
 }
 @media (max-width: 480px) {
   .engine { padding: 60px 0 24px; }
