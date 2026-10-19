@@ -292,7 +292,7 @@ export default {
       h2Pre: 'Google ranks. AI recommends.',
       h2Hl: 'depends on both.',
       h2Mid: 'Your brand\'s growth',
-      lead: 'Every day, AI assistants describe, recommend, or ignore your products. Most brands can\'t see it, and have no way to act on it.',
+      lead: 'Every day, search engines rank you and AI engines describe you. Most brands only measure half of that, and optimize even less.',
       cards: [
         { title: 'Buyers ask AI first',   desc: "Customers don't just Google you anymore, they ask ChatGPT first." },
         { title: "You're flying blind",   desc: 'Do you know if ChatGPT, Gemini, and other AI models are actually recommending your business to buyers?' },
