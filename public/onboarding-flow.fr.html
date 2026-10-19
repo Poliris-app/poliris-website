@@ -2431,11 +2431,6 @@ function __mkDoc(root){return new Proxy(document,{get(t,p){
     </button>
   </div>
         <div class="fold-head">
-          <a><span class="fold-ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg></span><span class="row-label">Mots-clés</span></a>
-          <button type="button" class="fold-chev" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chev open" style="" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
-        </div>
-        <div class="sub-list"><a class="sub-entry">Audit de mots-clés</a><a class="sub-entry">Recherche de mots-clés</a><a class="sub-entry">Suivi des mots-clés</a></div>
-        <div class="fold-head">
           <a><span class="fold-ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="" style="" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg></span><span class="row-label">Sites</span></a>
           <button type="button" class="fold-chev" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chev open" style="" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
         </div>
@@ -2783,11 +2778,6 @@ function renderSidebar() {
           <button type="button" class="fold-chev" aria-expanded="${S.sb.ai}" data-action="fold" data-key="ai">${ic("chevron-right", 13, { cls: `chev ${S.sb.ai ? "open" : ""}` })}</button>
         </div>
         ${S.sb.ai ? `<div class="sub-list scroll" id="prod-list">${products}</div>` : ""}
-        <div class="fold-head">
-          <a data-action="noop"><span class="fold-ico">${ic("search", 16)}</span><span class="row-label">Mots-clés</span></a>
-          <button type="button" class="fold-chev" aria-expanded="${S.sb.kw}" data-action="fold" data-key="kw">${ic("chevron-right", 13, { cls: `chev ${S.sb.kw ? "open" : ""}` })}</button>
-        </div>
-        ${S.sb.kw ? `<div class="sub-list"><a class="sub-entry" data-action="noop">Audit de mots-clés</a><a class="sub-entry" data-action="noop">Recherche de mots-clés</a><a class="sub-entry" data-action="noop">Suivi des mots-clés</a></div>` : ""}
         <div class="fold-head">
           <a data-action="noop"><span class="fold-ico">${ic("globe", 16)}</span><span class="row-label">Sites</span></a>
           <button type="button" class="fold-chev" aria-expanded="${S.sb.sites}" data-action="fold" data-key="sites">${ic("chevron-right", 13, { cls: `chev ${S.sb.sites ? "open" : ""}` })}</button>
@@ -3863,11 +3853,6 @@ function renderSidebar() {
         </div>
         ${S.sb.ai ? `<div class="sub-list scroll" id="prod-list">${products}</div>` : ""}
         <div class="fold-head">
-          <a data-action="noop"><span class="fold-ico">${ic("search", 16)}</span><span class="row-label">Mots-clés</span></a>
-          <button type="button" class="fold-chev" aria-expanded="${S.sb.kw}" data-action="fold" data-key="kw">${ic("chevron-right", 13, { cls: `chev ${S.sb.kw ? "open" : ""}` })}</button>
-        </div>
-        ${S.sb.kw ? `<div class="sub-list"><a class="sub-entry" data-action="noop">Audit de mots-clés</a><a class="sub-entry" data-action="noop">Recherche de mots-clés</a><a class="sub-entry" data-action="noop">Suivi des mots-clés</a></div>` : ""}
-        <div class="fold-head">
           <a data-action="noop"><span class="fold-ico">${ic("globe", 16)}</span><span class="row-label">Sites</span></a>
           <button type="button" class="fold-chev" aria-expanded="${S.sb.sites}" data-action="fold" data-key="sites">${ic("chevron-right", 13, { cls: `chev ${S.sb.sites ? "open" : ""}` })}</button>
         </div>
@@ -4771,11 +4756,6 @@ function renderSidebar() {
           <button type="button" class="fold-chev" aria-expanded="${S.sb.ai}" data-action="fold" data-key="ai">${ic("chevron-right", 13, { cls: `chev ${S.sb.ai ? "open" : ""}` })}</button>
         </div>
         ${S.sb.ai ? `<div class="sub-list scroll" id="prod-list">${products}</div>` : ""}
-        <div class="fold-head">
-          <a data-action="noop"><span class="fold-ico">${ic("search", 16)}</span><span class="row-label">Mots-clés</span></a>
-          <button type="button" class="fold-chev" aria-expanded="${S.sb.kw}" data-action="fold" data-key="kw">${ic("chevron-right", 13, { cls: `chev ${S.sb.kw ? "open" : ""}` })}</button>
-        </div>
-        ${S.sb.kw ? `<div class="sub-list"><a class="sub-entry" data-action="noop">Audit de mots-clés</a><a class="sub-entry" data-action="noop">Recherche de mots-clés</a><a class="sub-entry" data-action="noop">Suivi des mots-clés</a></div>` : ""}
         <div class="fold-head">
           <a data-action="noop"><span class="fold-ico">${ic("globe", 16)}</span><span class="row-label">Sites</span></a>
           <button type="button" class="fold-chev" aria-expanded="${S.sb.sites}" data-action="fold" data-key="sites">${ic("chevron-right", 13, { cls: `chev ${S.sb.sites ? "open" : ""}` })}</button>
@@ -5959,11 +5939,6 @@ function renderSidebar() {
         </div>
         ${S.sb.ai ? `<div class="sub-list scroll" id="prod-list">${products}</div>` : ""}
         <div class="fold-head">
-          <a data-action="noop"><span class="fold-ico">${ic("search", 16)}</span><span class="row-label">Mots-clés</span></a>
-          <button type="button" class="fold-chev" aria-expanded="${S.sb.kw}" data-action="fold" data-key="kw">${ic("chevron-right", 13, { cls: `chev ${S.sb.kw ? "open" : ""}` })}</button>
-        </div>
-        ${S.sb.kw ? `<div class="sub-list"><a class="sub-entry" data-action="noop">Audit de mots-clés</a><a class="sub-entry" data-action="noop">Recherche de mots-clés</a><a class="sub-entry" data-action="noop">Suivi des mots-clés</a></div>` : ""}
-        <div class="fold-head">
           <a data-action="noop"><span class="fold-ico">${ic("globe", 16)}</span><span class="row-label">Sites</span></a>
           <button type="button" class="fold-chev" aria-expanded="${S.sb.sites}" data-action="fold" data-key="sites">${ic("chevron-right", 13, { cls: `chev ${S.sb.sites ? "open" : ""}` })}</button>
         </div>
@@ -6083,10 +6058,10 @@ function rnd(seed) { const x = Math.sin(seed * 9301 + 49297) * 233280; return x 
 
 // Page 1 matches the screenshot; the rest is generated so all 136 rows exist.
 const BUY_TOP = [
-  ["tomsguide.com", "review", "Écouteurs sans fil", 387, 72, 86], ["whathifi.com", "review", "Casques à réduction de bruit", 520, 80, 79], ["soundguys.com", "review", "Écouteurs sans fil", 640, 74, 77],
-  ["rtings.com", "review", "Casques circum-auriculaires", 1150, 79, 75], ["techradar.com", "media", "Écouteurs sans fil", 980, 91, 74], ["forbes.com", "news", "Casques à réduction de bruit", 3364, 85, 69],
-  ["coherentmarketinsights.com", "industry", "Enceintes Bluetooth", 105, 78, 62], ["cnet.com", "media", "Écouteurs sans fil", 3305, 92, 61], ["theverge.com", "news", "Casques circum-auriculaires", 4830, 90, 59],
-  ["wired.com", "media", "Écouteurs de sport", 7203, 93, 58],
+  ["tomsguide.com", "review", "Écouteurs sans fil", 49, 72, 86], ["whathifi.com", "review", "Casques à réduction de bruit", 65, 80, 79], ["soundguys.com", "review", "Écouteurs sans fil", 79, 74, 77],
+  ["rtings.com", "review", "Casques circum-auriculaires", 145, 79, 75], ["techradar.com", "media", "Écouteurs sans fil", 125, 91, 74], ["forbes.com", "news", "Casques à réduction de bruit", 269, 85, 69],
+  ["coherentmarketinsights.com", "industry", "Enceintes Bluetooth", 25, 78, 62], ["cnet.com", "media", "Écouteurs sans fil", 265, 92, 61], ["theverge.com", "news", "Casques circum-auriculaires", 389, 90, 59],
+  ["wired.com", "media", "Écouteurs de sport", 480, 93, 58],
 ];
 const WORDS_A = ["audio", "sound", "hifi", "beat", "tune", "wave", "bass", "sonic", "ear", "mix", "tech", "gear"];
 const WORDS_B = ["hub", "daily", "review", "lab", "guide", "world", "insider", "pro", "zone", "report", "talk", "weekly"];
@@ -6096,7 +6071,7 @@ BUY_TOP.forEach(([domain, category, product, price, dr, score]) => ROWS.push({ d
 let k = 0;
 const nextDomain = () => { const d = `${WORDS_A[k % 12]}${WORDS_B[Math.floor(k / 12) % 12]}.com`; k += 1; return d; };
 for (let i = 0; i < 34; i++) {
-  ROWS.push({ domain: nextDomain(), category: MORE_CATS[i % MORE_CATS.length], product: PRODUCTS[i % 5], type: "buy", price: Math.round(90 + rnd(i + 3) * 4200), dr: Math.round(42 + rnd(i + 70) * 50), score: 57 - Math.round(i * 1.05) });
+  ROWS.push({ domain: nextDomain(), category: MORE_CATS[i % MORE_CATS.length], product: PRODUCTS[i % 5], type: "buy", price: Math.round(25 + rnd(i + 3) * 455), dr: Math.round(42 + rnd(i + 70) * 50), score: 57 - Math.round(i * 1.05) });
 }
 for (let i = 0; i < 92; i++) {
   ROWS.push({ domain: nextDomain(), category: MORE_CATS[(i + 3) % MORE_CATS.length], product: PRODUCTS[(i + 2) % 6], type: "claim_listing", price: 0, dr: Math.round(25 + rnd(i + 400) * 60), score: null });
@@ -6114,9 +6089,9 @@ function offersFor(r, i) {
   const date = (d) => new Date(2026, 7, d).toLocaleDateString("fr-FR", { month: "short", day: "numeric", year: "numeric" });
   if (r.domain === "tomsguide.com") {
     return [
-      { label: "collaborator.pro", provider: "fatgrid", rating: "9.0", type: "Article", price: 387, checked: date(26), url: "https://collaborator.pro" },
-      { label: "whitepress.com", provider: "fatgrid", rating: null, type: "Article", price: 7700, checked: date(24), url: "https://whitepress.com" },
-      { label: "prnews.io", provider: "fatgrid", rating: "10.0", type: "Article", price: 10674, checked: date(26), url: "https://prnews.io" },
+      { label: "collaborator.pro", provider: "fatgrid", rating: "9.0", type: "Article", price: 49, checked: date(26), url: "https://collaborator.pro" },
+      { label: "whitepress.com", provider: "fatgrid", rating: null, type: "Article", price: 299, checked: date(24), url: "https://whitepress.com" },
+      { label: "prnews.io", provider: "fatgrid", rating: "10.0", type: "Article", price: 459, checked: date(26), url: "https://prnews.io" },
     ];
   }
   const base = [
@@ -6338,6 +6313,8 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   "use strict";
   // Order: AI Visibility → Sites → Roadmap → Content → Citations. The roadmap
   // block runs right after Sites (14.45s click); C shifts content + citations after it.
+  // Content holds the base clock twice (see warp): the sony.com copy → paste
+  // (SINS, XS) and the cover-image generation (HINS, HX).
   var W = 1120, H = 730, K = 0.8, Q = -4.6, E = -1.8, D = 18.85 + Q + E, LOOP = 22.75 + D, S0 = 4.75, C = 8.2;
   var $ = function (id) { return document.getElementById(id); };
   var flow = $("pf-flow"), stage = $("pf-stage"), frame = $("pf-frame");
@@ -6394,7 +6371,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   var SPOTS = [
     { el: visCard, on: 5.9, off: 8.55, s: 1.035, r: 18 },
     { el: pipeCard, on: 10.75, off: 13.5, s: 1.012, r: 14, clip: auditScroll },
-    { get: function () { return cq(".sb-card"); }, on: 19.1 + C, off: 20.25 + C, s: 1.012, r: 14, clip: cgWork },
+    { get: function () { return cq(".sb-card"); }, on: 19.1 + C, off: 19.9 + C, s: 1.012, r: 14, clip: cgWork },
     { get: function () { return citeTop(); }, on: 23.05 + C, off: 25.5 + C, s: 1.015, r: 12, rect: citeTopRect, rows: true }
   ];
   var HL0 = 23.05 + C;
@@ -6587,20 +6564,148 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     cleanPages();
     counts.forEach(function (c) { c.el.textContent = c.txt; });
     tint(repSite, false); tint(sitesSite, true); tint(sitesContent, false); tint(roadContent, false);
-    cgReset(); cqReset(); frozen = {}; SS = {};
+    if (CG) CG.S.imaging = false; cgReset(); cqReset(); frozen = {}; SS = {}; pasted = false; lastN = -1; heroStage = 0; heroC0 = null; heroB = null; heroScroll = null;
     cancelDrag(); resetRoad();
     P.road.scrollTop = 0; roadBody.scrollTop = 0; bodyShift(0); roadShift = 0;
     roadBars("hide");
     var b = q("road", "#board");
     boardScroll = b ? Math.max(0, (R(b).y - R(roadBody).y) / K - 24) : 0;
-    tint(roadFolds[0], false); tint(roadFolds[2], false);
+    tint(roadFolds[0], false); tint(roadFolds[1], false);
+  }
+
+  // ── content: grab product copy from the brand's site, paste it into Content Studio ──
+  var SINS = 15.0 + C, XS = 8.8, pasted = false;
+  var PASTE = "ADVANCED NOISE CANCELLATION: Powered by the HD Noise Cancelling Processor QN3e and an ergonomic shape for a secure fit.";
+  function warp(t) { if (t < SINS) return t; if (t < SINS + XS) return SINS; var b = t - XS; if (b < HINS) return b; if (b < HINS + HX) return HINS; return b - HX; }
+  var HINS = 20.55 + C, HX = 6.4, heroStage = 0, heroC0 = null, heroB = null, heroScroll = null;
+  var HERO = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22630%22%20viewBox%3D%220%200%201200%20630%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230a1330%22%2F%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%2314286b%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232b59d9%22%2F%3E%3C%2FlinearGradient%3E%3CradialGradient%20id%3D%22gl%22%20cx%3D%22.5%22%20cy%3D%22.55%22%20r%3D%22.45%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%237fa6ff%22%20stop-opacity%3D%22.55%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237fa6ff%22%20stop-opacity%3D%220%22%2F%3E%3C%2FradialGradient%3E%3ClinearGradient%20id%3D%22hA%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fbfaf8%22%2F%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23dcd8d1%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23b3ada3%22%2F%3E%3C%2FlinearGradient%3E%3CradialGradient%20id%3D%22hF%22%20cx%3D%22.4%22%20cy%3D%22.35%22%20r%3D%22.7%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23e7e4de%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23c4bfb6%22%2F%3E%3C%2FradialGradient%3E%3ClinearGradient%20id%3D%22hT%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23cfcac2%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238f897f%22%2F%3E%3C%2FlinearGradient%3E%3Cfilter%20id%3D%22hS%22%20x%3D%22-50%25%22%20y%3D%22-50%25%22%20width%3D%22200%25%22%20height%3D%22200%25%22%3E%3CfeGaussianBlur%20stdDeviation%3D%223%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%221200%22%20height%3D%22630%22%20fill%3D%22url(%23bg)%22%2F%3E%3Crect%20width%3D%221200%22%20height%3D%22630%22%20fill%3D%22url(%23gl)%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fff%22%3E%3Ccircle%20cx%3D%22600%22%20cy%3D%22330%22%20r%3D%22210%22%20stroke-opacity%3D%22.10%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22600%22%20cy%3D%22330%22%20r%3D%22280%22%20stroke-opacity%3D%22.07%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22600%22%20cy%3D%22330%22%20r%3D%22350%22%20stroke-opacity%3D%22.045%22%20stroke-width%3D%222%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(330%20110)%20scale(3.6)%22%3E%3Cellipse%20cx%3D%2254%22%20cy%3D%2288%22%20rx%3D%2226%22%20ry%3D%224.5%22%20fill%3D%22rgba(0%2C0%2C0%2C.35)%22%20filter%3D%22url(%23hS)%22%2F%3E%3Cellipse%20cx%3D%22101%22%20cy%3D%2287%22%20rx%3D%2223%22%20ry%3D%224.5%22%20fill%3D%22rgba(0%2C0%2C0%2C.35)%22%20filter%3D%22url(%23hS)%22%2F%3E%3Cellipse%20cx%3D%2234%22%20cy%3D%2250%22%20rx%3D%2210%22%20ry%3D%2212.5%22%20transform%3D%22rotate(-18%2034%2050)%22%20fill%3D%22url(%23hT)%22%2F%3E%3Cellipse%20cx%3D%2231%22%20cy%3D%2247%22%20rx%3D%224%22%20ry%3D%226%22%20transform%3D%22rotate(-18%2031%2047)%22%20fill%3D%22%236b665e%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M38%2044c6-14%2030-16%2040-2%208%2011%205%2030-9%2037-13%206-29%201-33-12-2-7-1-16%202-23z%22%20fill%3D%22url(%23hA)%22%2F%3E%3Cpath%20d%3D%22M46%2046c5-8%2018-9%2024-2%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%20opacity%3D%22.85%22%2F%3E%3Ccircle%20cx%3D%22101%22%20cy%3D%2258%22%20r%3D%2224%22%20fill%3D%22url(%23hA)%22%2F%3E%3Ccircle%20cx%3D%22101%22%20cy%3D%2258%22%20r%3D%2217.5%22%20fill%3D%22url(%23hF)%22%2F%3E%3Ccircle%20cx%3D%22109%22%20cy%3D%2250%22%20r%3D%222.2%22%20fill%3D%22%238d877d%22%2F%3E%3Cpath%20d%3D%22M89%2049a15%2015%200%200%201%2010-7%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%20opacity%3D%22.9%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E";
+  function toReal(b) { return b < SINS ? b : b < HINS ? b + XS : b + XS + HX; }
+  function heroFinish() { if (CG && CG.S.imaging) { CG.S.imaging = false; CG.S.heroUrl = HERO; CG.render(); } }
+  function heroRender(t) {
+    var u = t - (HINS + XS);
+    if (u < 0 || u > HX || !CG) return;
+    if (!heroC0) heroC0 = { x: lastCursor.x, y: lastCursor.y };
+    if (!heroB) heroB = at(function () { return cq('[data-action="hero"]'); }, .5, .5)();
+    var B = heroB || heroC0, c;
+    var hop = function (a, b, k) { return { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k) - Math.sin(Math.PI * k) * Math.min(18, Math.hypot(b.x - a.x, b.y - a.y) * 0.12) }; };
+    if (u < 2.5) c = B;
+    else if (u < 5.3) c = { x: lerp(B.x, 760, io(seg(u, 2.6, 3.4))), y: lerp(B.y, 520, io(seg(u, 2.6, 3.4))) };
+    else c = hop({ x: 760, y: 520 }, heroC0, io(seg(u, 5.3, 6.2)));
+    lastCursor = c;
+    var press = 1, d = Math.abs(u - 0.3); if (d < 0.12) press = 0.84 + 0.16 * d / 0.12;
+    cur.style.opacity = "1";
+    cur.style.transform = "translate(" + (c.x - 3).toFixed(1) + "px," + (c.y - 3).toFixed(1) + "px) scale(" + press.toFixed(3) + ")";
+    var ro = 0, rs = 0.4;
+    if (u >= 0.3 && u < 0.9) { var k = out(seg(u, 0.3, 0.9)); ro = 1 - k; rs = 0.4 + 0.8 * k; }
+    rip.style.opacity = ro.toFixed(3);
+    rip.style.transform = "translate(" + c.x.toFixed(1) + "px," + c.y.toFixed(1) + "px) scale(" + rs.toFixed(3) + ")";
+    if (u >= 0.3 && heroStage < 1) { heroStage = 1; CG.S.imaging = true; CG.render(); }
+    if (u >= 2.35 && heroStage < 2) {
+      heroStage = 2; CG.S.imaging = false; CG.S.heroUrl = HERO; CG.render();
+      var w = cgWork(), im = [].slice.call(P.content.querySelectorAll("img")).filter(function (x) { return x.getAttribute("src") === HERO; })[0];
+      if (im) { im.style.opacity = "0"; im.style.transform = "scale(.985)"; void im.offsetWidth; im.style.transition = "opacity .6s ease, transform .8s cubic-bezier(.2,.8,.2,1)"; im.style.opacity = "1"; im.style.transform = "none"; }
+      if (w && im) { var card = im.parentElement; var mx = w.scrollHeight - w.clientHeight, hb2 = Math.max(0, Math.min(mx, w.scrollTop + (R(card).y - R(w).y - 24) / K)); heroScroll = { w: w, a: w.scrollTop, b: hb2, c: Math.min(mx, hb2 + 1100) }; }
+    }
+    if (heroStage >= 2 && heroScroll) heroScroll.w.scrollTop = u < 3.6 ? lerp(heroScroll.a, heroScroll.b, io(seg(u, 2.45, 3.3))) : lerp(heroScroll.b, heroScroll.c, io(seg(u, 3.6, 5.9)));
+  }
+
+  var site = document.createElement("div");
+  site.id = "pf-site"; site.dataset.pfskip = "1";
+  site.style.cssText = "position:absolute;left:0;top:0;width:" + W + "px;height:" + H + "px;background:#fff;opacity:0;pointer-events:none;overflow:hidden;font-family:Geist,Inter,system-ui,sans-serif;color:#111";
+  site.innerHTML = "<div style=\"position:absolute;left:0;top:0;right:0;height:40px;background:#f3f4f6;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:6px;padding:0 14px\"><i style=\"width:10px;height:10px;border-radius:50%;background:#ff5f57\"></i><i style=\"width:10px;height:10px;border-radius:50%;background:#febc2e\"></i><i style=\"width:10px;height:10px;border-radius:50%;background:#28c840\"></i><span style=\"position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:4px 14px;font-size:11.5px;color:#6b7280\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 12 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><rect x=\"2\" y=\"5.5\" width=\"8\" height=\"5.5\" rx=\"1.2\"/><path d=\"M4 5.5V4a2 2 0 0 1 4 0v1.5\"/></svg>sony.com/headphones/truly-wireless</span></div>\n<div style=\"position:absolute;left:0;right:0;top:40px;height:46px;background:#0b0b0c;display:flex;align-items:center;padding:0 40px;gap:26px;color:#e7e7e7;font-size:12px\"><b style=\"color:#fff;font-size:16px;font-weight:800;letter-spacing:.24em;margin-right:18px\">SONY</b><span>TV &amp; Home Cinema</span><span>Audio</span><span>Gaming</span><span>Cameras</span><span>Support</span><span style=\"margin-left:auto;display:flex;align-items:center;gap:6px;border:1px solid #4b4b4f;border-radius:999px;padding:5px 14px;color:#cfcfd2\"><svg width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg>Search</span><span>Account</span></div>\n<div style=\"position:absolute;left:0;right:0;top:86px;height:56px;border-bottom:1px solid #e5e7eb;display:flex;align-items:flex-end;padding:0 40px;gap:28px;font-size:13px;color:#333\"><b style=\"font-size:20px;font-weight:700;color:#111;align-self:center;margin-right:24px\">Headphones</b><span style=\"padding-bottom:16px\">Discover</span><span style=\"padding-bottom:13px;border-bottom:3px solid #111;color:#111;font-weight:500\">Products</span><span style=\"padding-bottom:16px\">Accessories</span><span style=\"padding-bottom:16px\">Compare</span></div>\n<div style=\"position:absolute;left:40px;top:162px;font-size:24px;color:#111\">Truly Wireless</div>\n<div style=\"position:absolute;left:40px;top:214px;width:200px;display:flex;flex-direction:column;gap:9px;font-size:12.5px;color:#333\"><b style=\"font-size:11.5px;letter-spacing:.04em;color:#111\">COLOUR</b><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:14px;height:14px;border-radius:50%;background:#f0508f\"></i>Pink (3)</span><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:14px;height:14px;border-radius:50%;background:#f2a33a\"></i>Yellow (1)</span><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:14px;height:14px;border-radius:50%;background:#a6d22c\"></i>Green (1)</span><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:14px;height:14px;border-radius:50%;background:#33c4dd\"></i>Blue (2)</span><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:14px;height:14px;border-radius:50%;background:#fff;border:1px solid #d4d4d8\"></i>White (3)</span><b style=\"font-size:11.5px;letter-spacing:.04em;color:#111;margin-top:14px\">FEATURES</b><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:13px;height:13px;border-radius:3px;border:1px solid #a1a1aa\"></i>Noise Cancelling (3)</span><span style=\"display:flex;align-items:center;gap:9px\"><i style=\"width:13px;height:13px;border-radius:3px;border:1px solid #a1a1aa\"></i>Water Resistant (2)</span></div>\n<div style=\"position:absolute;left:270px;top:214px;font-size:13px;color:#333\"><b style=\"color:#111\">6</b> Products</div>\n<div style=\"position:absolute;left:270px;right:40px;top:244px;border-top:1px solid #ececef\"></div>\n<div style=\"position:absolute;left:290px;top:264px;width:150px;height:110px;border-radius:10px;background:linear-gradient(180deg,#f7f7f8,#eceef1)\"><svg width=\"150\" height=\"110\" viewBox=\"0 0 150 110\" style=\"display:block\"><defs><linearGradient id=\"ebA\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fbfaf8\"/><stop offset=\".55\" stop-color=\"#dcd8d1\"/><stop offset=\"1\" stop-color=\"#b9b3a9\"/></linearGradient><radialGradient id=\"ebF\" cx=\".4\" cy=\".35\" r=\".7\"><stop offset=\"0\" stop-color=\"#ffffff\"/><stop offset=\".6\" stop-color=\"#e7e4de\"/><stop offset=\"1\" stop-color=\"#c9c4bb\"/></radialGradient><linearGradient id=\"ebT\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#cfcac2\"/><stop offset=\"1\" stop-color=\"#9c968c\"/></linearGradient><filter id=\"ebS\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feGaussianBlur stdDeviation=\"3\"/></filter></defs><ellipse cx=\"54\" cy=\"88\" rx=\"26\" ry=\"4.5\" fill=\"rgba(0,0,0,.16)\" filter=\"url(#ebS)\"/><ellipse cx=\"101\" cy=\"87\" rx=\"23\" ry=\"4.5\" fill=\"rgba(0,0,0,.16)\" filter=\"url(#ebS)\"/><ellipse cx=\"34\" cy=\"50\" rx=\"10\" ry=\"12.5\" transform=\"rotate(-18 34 50)\" fill=\"url(#ebT)\"/><ellipse cx=\"31\" cy=\"47\" rx=\"4\" ry=\"6\" transform=\"rotate(-18 31 47)\" fill=\"#7f796f\" opacity=\".55\"/><path d=\"M38 44c6-14 30-16 40-2 8 11 5 30-9 37-13 6-29 1-33-12-2-7-1-16 2-23z\" fill=\"url(#ebA)\"/><path d=\"M46 46c5-8 18-9 24-2\" stroke=\"#fff\" stroke-width=\"3\" stroke-linecap=\"round\" fill=\"none\" opacity=\".8\"/><circle cx=\"101\" cy=\"58\" r=\"24\" fill=\"url(#ebA)\"/><circle cx=\"101\" cy=\"58\" r=\"17.5\" fill=\"url(#ebF)\"/><circle cx=\"109\" cy=\"50\" r=\"2.2\" fill=\"#8d877d\"/><path d=\"M89 49a15 15 0 0 1 10-7\" stroke=\"#fff\" stroke-width=\"2.5\" stroke-linecap=\"round\" fill=\"none\" opacity=\".9\"/></svg></div>\n<div style=\"position:absolute;left:462px;top:266px;width:360px;font-size:16px;font-weight:600;line-height:1.35;color:#111\">1000X series | WF-1000XM6 Wireless Noise Cancelling Earbuds</div>\n<div style=\"position:absolute;left:462px;top:320px;font-size:12.5px;color:#333\"><span style=\"color:#e0362b;letter-spacing:1px\">★★★★☆</span> 4.4 (240)</div>\n<div class=\"pf-bul\" style=\"position:absolute;left:300px;top:396px;width:528px;font-size:12.5px;line-height:1.5;color:#1f2937\"><span class=\"pf-sel\" style=\"position:absolute;left:-4px;top:0;bottom:0;width:0;background:#b8d1ff;border-radius:2px\"></span><span style=\"position:relative\">• <b style=\"font-weight:600\">ADVANCED NOISE CANCELLATION:</b> Powered by the HD Noise Cancelling Processor QN3e and an ergonomic shape for a secure fit.</span></div>\n<div class=\"pf-bul\" style=\"position:absolute;left:300px;top:440px;width:528px;font-size:12.5px;line-height:1.5;color:#1f2937\"><span class=\"pf-sel\" style=\"position:absolute;left:-4px;top:0;bottom:0;width:0;background:#b8d1ff;border-radius:2px\"></span><span style=\"position:relative\">• <b style=\"font-weight:600\">PURE SOUND QUALITY:</b> An original driver, fine-tuned by mastering engineers for clarity, depth and expressive detail.</span></div>\n<div class=\"pf-bul\" style=\"position:absolute;left:300px;top:484px;width:528px;font-size:12.5px;line-height:1.5;color:#1f2937\"><span class=\"pf-sel\" style=\"position:absolute;left:-4px;top:0;bottom:0;width:0;background:#b8d1ff;border-radius:2px\"></span><span style=\"position:relative\">• <b style=\"font-weight:600\">SUPERIOR CALL CLARITY:</b> Four microphones with AI beamforming and bone-conduction sensors keep calls focused on your voice.</span></div>\n<div style=\"position:absolute;left:860px;top:262px;width:220px;height:300px;background:#f6f6f8;border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:8px\"><span style=\"font-size:11px;color:#333\">WF1000XM6/S</span><b style=\"font-size:21px;font-weight:600;color:#111\">₱ 18,999.00</b><span style=\"display:flex;gap:8px;margin-top:6px\"><i style=\"width:20px;height:20px;border-radius:50%;background:#1f1f22\"></i><i style=\"width:20px;height:20px;border-radius:50%;background:#d9d6d0;box-shadow:0 0 0 2px #fff,0 0 0 3px #60a5fa\"></i></span><span style=\"font-size:10px;color:#6b7280\">Platinum Silver</span><span style=\"margin-top:auto;display:flex;gap:8px\"><span style=\"flex:1;text-align:center;padding:9px 0;border-radius:999px;background:#1d63f0;color:#fff;font-size:12.5px;font-weight:600\">Learn more</span><span style=\"flex:1;text-align:center;padding:9px 0;border-radius:999px;background:#e2531b;color:#fff;font-size:12.5px;font-weight:600\">Buy</span></span></div>\n<div class=\"pf-copied\" style=\"position:absolute;left:0;top:0;opacity:0;display:flex;align-items:center;gap:6px;background:#0b1220;color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:500;box-shadow:0 10px 24px -10px rgba(0,0,0,.5);white-space:nowrap\"><span style=\"font-size:10px;font-weight:700;background:#1f2937;border-radius:4px;padding:1px 5px\">⌘C</span>Point fort produit copié</div>";
+  P.road.parentNode.insertBefore(site, P.road.nextSibling);
+  var sels = [].slice.call(site.querySelectorAll(".pf-sel")), copied = site.querySelector(".pf-copied");
+  var pchip = document.createElement("div");
+  pchip.style.cssText = "position:absolute;left:0;top:0;opacity:0;pointer-events:none;display:flex;align-items:center;gap:6px;background:#E5EEFF;color:#0047b8;border:1px solid #BFD3FF;border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:600;white-space:nowrap;z-index:2";
+  pchip.textContent = "Collé depuis sony.com/headphones";
+  site.parentNode.insertBefore(pchip, site.nextSibling);
+  var chrome = document.createElement("div");
+  chrome.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:40px;background:#e9ebef;border-bottom:1px solid #dcdfe5;display:flex;align-items:stretch;gap:4px;padding:0 14px;opacity:0;pointer-events:none;z-index:3;font-family:Geist,Inter,system-ui,sans-serif;align-items:center";
+  chrome.innerHTML = "<span style=\"display:flex;gap:6px;margin-right:14px\"><i style=\"width:10px;height:10px;border-radius:50%;background:#ff5f57\"></i><i style=\"width:10px;height:10px;border-radius:50%;background:#febc2e\"></i><i style=\"width:10px;height:10px;border-radius:50%;background:#28c840\"></i></span><span class=\"pf-tabP\" style=\"align-self:flex-end;width:210px;height:31px;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:8px;padding:0 10px 0 12px;font-size:12px;font-weight:500;background:#fff;color:#111\"><img alt=\"\" style=\"width:14px;height:14px;object-fit:contain\"><span style=\"flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis\">Studio de contenu · Poliris</span><span style=\"color:#9ca3af;font-size:13px\">×</span></span><span class=\"pf-tabS\" style=\"align-self:flex-end;width:210px;height:31px;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:8px;padding:0 10px 0 12px;font-size:12px;font-weight:500;background:transparent;color:#6b7280\"><i style=\"width:14px;height:14px;border-radius:3px;background:#0b0b0c;color:#fff;font-size:8px;font-weight:800;font-style:normal;display:flex;align-items:center;justify-content:center\">S</i><span style=\"flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis\">Truly Wireless | Sony</span><span style=\"color:#9ca3af;font-size:13px\">×</span></span><span style=\"align-self:center;margin-left:6px;color:#9ca3af;font-size:16px\">+</span>";
+  pchip.parentNode.insertBefore(chrome, pchip.nextSibling);
+  var tabP = chrome.querySelector(".pf-tabP"), tabS = chrome.querySelector(".pf-tabS");
+  var tabImg = tabP.querySelector("img"); if (tabImg && mk) tabImg.src = mk.src;
+  var bulTxt = site.querySelectorAll(".pf-bul")[0].children[1], lastN = -1;
+  var BSEG = [["• ", 0], ["ADVANCED NOISE CANCELLATION:", 1], [" Powered by the HD Noise Cancelling Processor QN3e and an ergonomic shape for a secure fit.", 0]];
+  var BLEN = BSEG.reduce(function (s, g) { return s + g[0].length; }, 0);
+  function bulHtml(n) {
+    var h = "", left = n, mk = false;
+    BSEG.forEach(function (sg) {
+      var s = sg[0], k = Math.max(0, Math.min(s.length, left)); left -= k;
+      var w = function (x) { return sg[1] ? '<b style="font-weight:600">' + x + '</b>' : x; };
+      if (k) h += '<span style="background:#b8d1ff">' + w(s.slice(0, k)) + '</span>';
+      if (!mk && (k < s.length || left === 0)) { h += '<i class="pf-mk" style="display:inline-block;width:0;height:1em;vertical-align:-2px"></i>'; mk = true; }
+      if (k < s.length) h += w(s.slice(k));
+    });
+    return h;
+  }
+  function bulMark(n) {
+    if (n !== lastN) { lastN = n; bulTxt.innerHTML = bulHtml(n); }
+    var m = bulTxt.querySelector(".pf-mk"), r = m ? R(m) : null;
+    return r ? { x: r.x + 1, y: r.y + r.h * 0.6 } : { x: 300, y: 405 };
+  }
+  function siteHide() { site.style.opacity = "0"; pchip.style.opacity = "0"; chrome.style.opacity = "0"; }
+  function render(t) { renderBase(warp(t)); siteRender(t); heroRender(t); }
+  function siteRender(t) {
+    var u = t - SINS;
+    var ta = cq("#studio-topic");
+    if (u < 0 || u > XS) { siteHide(); if (ta && u > XS) ta.style.boxShadow = ""; return; }
+    var cin = out(seg(u, 0, 0.35)), cout = io(seg(u, 5.7, 6.1));
+    chrome.style.opacity = (cin * (1 - cout)).toFixed(3);
+    chrome.style.transform = "translateY(" + (-42 * (1 - cin) - 42 * cout).toFixed(1) + "px)";
+    var onSony = u >= 1.05 && u < 5.15;
+    tabP.style.background = onSony ? "transparent" : "#fff"; tabP.style.color = onSony ? "#6b7280" : "#111";
+    tabS.style.background = onSony ? "#fff" : "transparent"; tabS.style.color = onSony ? "#111" : "#6b7280";
+    var ki = out(seg(u, 1.1, 1.45)), ko = io(seg(u, 5.2, 5.55));
+    site.style.opacity = (ki * (1 - ko)).toFixed(3);
+    site.style.transform = "none";
+    sels.forEach(function (s) { s.style.display = "none"; });
+    var p = seg(u, 2.5, 3.6), MK = bulMark(Math.round(BLEN * p));
+    var S0 = at(function () { return cq("#start-writing"); }, .5, .5)() || { x: 960, y: 300 };
+    var T0 = at(function () { return ta; }, .45, .55)() || { x: 700, y: 260 };
+    var TS = { x: 400, y: 24 }, TP = { x: 185, y: 24 }, c;
+    var hop = function (a, b, k) { return { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k) - Math.sin(Math.PI * k) * Math.min(18, Math.hypot(b.x - a.x, b.y - a.y) * 0.12) }; };
+    if (u < 0.35) c = S0;
+    else if (u < 1.05) c = hop(S0, TS, io(seg(u, 0.35, 1.0)));
+    else if (u < 1.5) c = TS;
+    else if (u < 2.45) c = hop(TS, MK, io(seg(u, 1.5, 2.4)));
+    else if (u < 4.5) c = MK;
+    else if (u < 5.15) c = hop(MK, TP, io(seg(u, 4.5, 5.1)));
+    else if (u < 5.6) c = TP;
+    else if (u < 6.5) c = hop(TP, T0, io(seg(u, 5.6, 6.45)));
+    else if (u < 7.3) c = T0;
+    else c = hop(T0, S0, io(seg(u, 7.3, 8.2)));
+    lastCursor = c;
+    var press = 1;
+    [1.05, 2.45, 5.15, 6.55].forEach(function (ct) { var d = Math.abs(u - ct); if (d < 0.12) press = Math.min(press, 0.84 + 0.16 * d / 0.12); });
+    if (u > 2.5 && u < 3.6) press = 0.9;
+    cur.style.opacity = "1";
+    cur.style.transform = "translate(" + (c.x - 3).toFixed(1) + "px," + (c.y - 3).toFixed(1) + "px) scale(" + press.toFixed(3) + ")";
+    var ro = 0, rs = 0.4;
+    [1.05, 5.15, 6.55].forEach(function (ct) { if (u >= ct && u < ct + 0.6) { var k = out(seg(u, ct, ct + 0.6)); ro = 1 - k; rs = 0.4 + 0.8 * k; } });
+    rip.style.opacity = ro.toFixed(3);
+    rip.style.transform = "translate(" + c.x.toFixed(1) + "px," + c.y.toFixed(1) + "px) scale(" + rs.toFixed(3) + ")";
+    var co = seg(u, 3.7, 3.9) * (1 - seg(u, 4.3, 4.5));
+    copied.style.opacity = co.toFixed(3);
+    copied.style.transform = "translate(" + (MK.x + 14).toFixed(1) + "px," + (MK.y + 14 - co * 4).toFixed(1) + "px)";
+    if (u >= 6.7 && !pasted && CG && ta) {
+      pasted = true; CG.S.topic = PASTE; ta.value = PASTE; ta.scrollTop = 0;
+      var b = cq("#start-writing"); if (b) b.disabled = false;
+    }
+    if (ta) {
+      var fl = seg(u, 6.7, 6.9) * (1 - seg(u, 7.5, 8.1));
+      ta.style.boxShadow = fl > 0 ? "0 0 0 3px rgba(0,98,255," + (0.28 * fl).toFixed(3) + ")" : "";
+      var tr = R(ta), po = seg(u, 6.75, 6.95) * (1 - seg(u, 8.2, 8.7));
+      pchip.style.opacity = po.toFixed(3);
+      pchip.style.transform = "translate(" + (tr.x + tr.w - 210).toFixed(1) + "px," + (tr.y - 14 + (1 - po) * 4).toFixed(1) + "px)";
+    }
   }
 
   var EVENTS = [
     [6.0, function () { fills(true); }], [9.55, function () { tint(repSite, true); }],
     [10.85, function () { ring(true); }],
-    [15.3, function () { tint(roadFolds[0], true); tint(roadFolds[2], true); }],
-    [16.05, function () { tint(roadFolds[0], false); tint(roadFolds[2], false); }],
+    [15.3, function () { tint(roadFolds[0], true); tint(roadFolds[1], true); }],
+    [16.05, function () { tint(roadFolds[0], false); tint(roadFolds[1], false); }],
     [16.3, function () { roadBars("show"); }], [19.6, startDrag], [20.8, drop],
     [14.45 + C, function () { tint(roadContent, true); }],
     [15.45 + C, cgAuto], [18.85 + C, cgResult],
@@ -6619,8 +6724,8 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     [14.4, sitesRoadPt], [18.6, sitesRoadPt],
     [19.4, backlogCard], [19.65, backlogCard], [20.8, droppedCard],
     [14.4 + C, at(roadContent, .3, .5)],
-    [15.4 + C, at(function () { return cq('.idea[data-action="pick-idea"]'); }, .42, .38)],
-    [16.3 + C, pt(800, 560)], [19.7 + C, pt(800, 560)],
+    [15.0 + C, at(function () { return cq("#start-writing"); }, .5, .5)], [15.4 + C, at(function () { return cq("#start-writing"); }, .5, .5)],
+    [16.3 + C, pt(800, 560)], [19.7 + C, pt(800, 560)], [20.4 + C, at(function () { return cq('[data-action="hero"]'); }, .5, .5)], [20.6 + C, at(function () { return cq('[data-action="hero"]'); }, .5, .5)],
     [21.35 + C, at(function () { return cq('.nav-row[data-key="citations"]'); }, .3, .5)],
     [21.9 + C, at(function () { return navSub("content", "Acquérir une citation"); }, .4, .5)]
   ];
@@ -6639,14 +6744,15 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
       if (t <= b[0]) {
         var A = ptOf(i, t) || lastCursor, B = ptOf(i + 1, t) || A;
         var k = io(seg(t, a[0], b[0]));
-        return { x: lerp(A.x, B.x, k), y: lerp(A.y, B.y, k) - Math.sin(Math.PI * k) * 18 };
+        var dd = Math.hypot(B.x - A.x, B.y - A.y);
+        return { x: lerp(A.x, B.x, k), y: lerp(A.y, B.y, k) - Math.sin(Math.PI * k) * Math.min(18, dd * 0.12) };
       }
     }
     return ptOf(CUR.length - 1, t) || lastCursor;
   }
   function scrollTo(w, t, a, b) { if (w && t > a - 0.05 && t < b + 0.15) w.scrollTop = Math.max(0, w.scrollHeight - w.clientHeight) * io(seg(t, a, b)); }
 
-  function render(t) {
+  function renderBase(t) {
     // loader
     var lt = t > 30 ? 0 : t;
     var lc = 1 - io(seg(t, 4.3, 4.75)) + io(seg(t, 22.75 + D, 23.35 + D));
@@ -6748,7 +6854,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
       rg.selectNodeContents(roadTitle);
       var tb = rg.getBoundingClientRect(), fr = window.__rawRect.call(frame);
       var tx = (tb.right - fr.left) / sc + 14, ty = tr.y + tr.h / 2 - 12;
-      var SRC = [roadFolds[0], roadFolds[2]];
+      var SRC = [roadFolds[0], roadFolds[1]];
       var x = tx, dst = [];
       CHIPS.forEach(function (ch) { dst.push({ x: x, y: ty }); x += ch.offsetWidth + 22; });
       CHIPS.forEach(function (ch, i) {
@@ -6795,7 +6901,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
   function stopAuto() {
     if (!auto) return;
     auto = false;
-    var pg = pageAt(T);
+    var pg = pageAt(warp(T)); siteHide(); heroFinish();
     SPOTS.forEach(function (sp) { var el = spotEl(sp); if (Array.isArray(el)) liftRows(el, 0, 1); else if (el) el.style.transform = ""; });
     hole.style.display = "none"; dim.style.display = "none"; RHL.forEach(function (b) { b.style.display = "none"; });
     counts.forEach(function (c) { c.el.textContent = c.txt; });
@@ -6806,7 +6912,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     var y = roadShift; bodyShift(0); roadShift = 0;
     roadBody.style.overflowY = "auto"; roadBody.scrollTop = y;
     tint(repSite, false); tint(sitesContent, false); tint(roadContent, false); tint(cq('.nav-row[data-key="citations"]'), false);
-    tint(roadFolds[0], false); tint(roadFolds[2], false); tint(navSub("content", "Acquérir une citation"), false);
+    tint(roadFolds[0], false); tint(roadFolds[1], false); tint(navSub("content", "Acquérir une citation"), false);
     [cur, rip, note].concat(CHIPS, PLUS).forEach(function (e) { e.style.opacity = "0"; });
     loader.style.visibility = "hidden"; loader.style.opacity = "0";
     show(pg);
@@ -6870,7 +6976,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
       var a = t.closest(".fold-head a");
       if (a) {
         var fh = a.closest(".fold-head"), all = P[n].querySelectorAll(".fold-head");
-        if (fh === all[0]) show("rep"); else if (fh === all[2]) show("sites");
+        if (fh === all[0]) show("rep"); else if (fh === all[1]) show("sites");
       }
     });
   });
@@ -6888,7 +6994,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     else if (e.data === "pf-pause") hold = true;
   });
   if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(flow);
-  function fire() { EVENTS.forEach(function (e, i) { if (!fired[i] && T >= e[0]) { fired[i] = 1; try { e[1](); } catch (err) { console.error(err); } } }); }
+  function fire() { EVENTS.forEach(function (e, i) { if (!fired[i] && warp(T) >= e[0]) { fired[i] = 1; try { e[1](); } catch (err) { console.error(err); } } }); }
   function tick(now) {
     if (last == null) last = now;
     var dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -6896,7 +7002,7 @@ window.__cq = { S, renderBoard, openMarketplace, openOutreach, closeModal, ROWS 
     if (Math.abs(flow.clientWidth / W - sc) > 1e-4) fit();
     if (visible && auto && !hold) {
       T += dt;
-      if (T >= LOOP) { T = S0; fired = {}; reset(); }
+      if (T >= toReal(LOOP)) { T = S0; fired = {}; reset(); }
       fire(); render(T);
     }
     requestAnimationFrame(tick);

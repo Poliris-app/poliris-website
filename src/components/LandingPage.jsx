@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Hero from './Hero';
 import CtaBand from './CtaBand';
 import StepLottieIcon from './StepLottieIcon';
+import ContentGenDemo from './ContentGenDemo';
 // import AuditModal from './AuditModal'; // hidden for now, see below
 import { useLang } from '../contexts/LangContext';
 
@@ -104,13 +105,12 @@ export default function LandingPage() {
 }
 
 /* ================================================================
-   HOW IT WORKS — Track → Fix → Publish → Monitor, right below the
-   hero's dashboard demo. Ported from the PR #5 homepage design: the
-   icons sit bare on the page (their box blends into the background)
-   and the first three play Lottie animations in turn, with the
-   connector lines drawing between them. Monitor has no Lottie of its
-   own, so it shows its drawn SVG — StepLottieIcon falls back to that
-   and reports done immediately, which keeps the sequence moving.
+   HOW IT WORKS — Analyze → Decide → Act, right below the hero's
+   dashboard demo. Ported from the PR #5 homepage design: the icons sit
+   bare on the page (their box blends into the background) and play
+   their Lottie animations in turn, with the connector lines drawing
+   between them. A step with `lottie: false` shows its drawn SVG
+   instead and gets a timed turn (see HOW_PLAY_MS).
    ================================================================ */
 const HOW_ICONS = [
   {
@@ -156,21 +156,6 @@ const HOW_ICONS = [
           <path className="how-anim how-anim--line how-anim--l2" d="M12.5 18H19.5" pathLength="1" />
           <path className="how-anim how-anim--line how-anim--l3" d="M12.5 22H17" pathLength="1" />
         </g>
-      </svg>
-    ),
-  },
-  {
-    // Monitor — a live pulse across the screen. No Lottie file for this
-    // one, so this drawing is what shows and its trace draws itself when
-    // the step lights up; `lottie: false` is what gives it a timed turn
-    // of its own instead of the player's "animation finished" signal.
-    key: 'monitor',
-    lottie: false,
-    svg: (
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3.5" y="5" width="25" height="18" rx="2.5" opacity="0.55" />
-        <path d="M11.5 28h9M16 23v5" opacity="0.55" />
-        <path className="how-anim how-anim--line how-anim--l1" pathLength="1" d="M7.5 14.5h4l2-4.5 4 9 2-4.5h5" />
       </svg>
     ),
   },
@@ -775,7 +760,7 @@ function PositionChartDemo() {
    value below is interpolated from `t` exactly as the reference does,
    so there are no CSS keyframes and nothing to keep in sync; the styles
    are inline for the same reason. Note the loop is longer than it looks
-   — ENGINE_AUTOPLAY_MS has to clear 15s or the showcase swaps this card
+   — ENGINE_CARD_MS[1] has to clear 15s or the showcase swaps this card
    out mid-animation. ── */
 const ATD_CYCLE = 15000;
 const ATD_ACTS = [[0, 5300], [5300, 10200], [10200, 15000]];
@@ -954,7 +939,7 @@ function EngineTrustCard() {
   // padding, so that floor overran it and cut the bottom row off — fill
   // the body instead and let the three acts lay out to it.
   return (
-    <div ref={rootRef} style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column', background: '#fff', fontFamily: 'var(--manrope)', color: '#09090b', overflow: 'hidden' }}>
+    <div ref={rootRef} className="atd-frame" style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column', background: '#fff', fontFamily: 'var(--manrope)', color: '#09090b', overflow: 'hidden' }}>
       <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
 
         {/* Crawl · Score · Fix, each filling as its act plays. */}
@@ -1257,6 +1242,18 @@ const RMT_LANES = [
   { labelKey: 'catBacklink', color: RMT_COLORS.lightBlue, rows: [rmtRange(8, 15), rmtRange(8, 14)] },
 ];
 
+// Week 2's named tasks, shown only once the demo moves the current week
+// from Week 1 to Week 2 (lane index into RMT_LANES, row within the lane).
+const RMT_WEEK2_TASKS = [
+  { lane: 2, row: 0, titleKey: 'taskLaunchContentPlan' },
+  { lane: 2, row: 1, titleKey: 'taskFirstArticle' },
+  { lane: 4, row: 0, titleKey: 'taskSecondBacklink' },
+];
+// Grid tracks per current week: that week owns the wide track (the only
+// one carrying task titles), the rest share the remaining space. Same
+// track count either way, so the switch animates (see .rmt-weeks).
+const rmtWeekCols = (cur) => rmtRange(1, RMT_WEEKS).map((wk) => `minmax(0, ${wk === cur ? 7.9 : 1}fr)`).join(' ');
+
 // The board lists the five real tasks (the reference's `tasks`), not one
 // card per timeline cell — the rest of the plan stays behind "Show N
 // more", which is what keeps the Backlog column readable.
@@ -1277,13 +1274,16 @@ const RMT_BOARD_TASKS = [
 // bar selects it (outline + the hint line names it), as in the
 // reference; nothing here autoplays — the Execution board carries the
 // one animated demo. ── */
-function RmTimelinePanel() {
+function RmTimelinePanel({ week = 1, week2Ref }) {
   const { t } = useLang();
   const d = t('home.engine.demo.roadmap');
   const [sel, setSel] = useState(null);
+  const onWeek2 = week === 2;
 
   // Walk the lanes once, building both the bars to render and the label
-  // for whichever one is selected.
+  // for whichever one is selected. Once the current week is Week 2, the
+  // Week 1 tasks shrink to their own column (no title) and Week 2's own
+  // tasks appear in the wide track instead.
   let selLabel = null;
   const lanes = RMT_LANES.map((lane, laneIdx) => {
     const bars = [];
@@ -1296,14 +1296,26 @@ function RmTimelinePanel() {
       if (sel === id) selLabel = `${label} — ${named ? d.week1Span : d[`wk${week}`]}`;
       bars.push({
         id, label,
-        text: named ? d[cell[0]] : '',
-        gridColumn: named ? '1 / span 2' : `${week} / span 1`,
+        text: named && !onWeek2 ? d[cell[0]] : '',
+        gridColumn: named && !onWeek2 ? '1 / span 2' : `${week} / span 1`,
         gridRow: `${rowIdx + 1}`,
         outline: sel === id ? `2px solid ${lane.color}` : 'none',
       });
     }));
+    if (onWeek2) {
+      RMT_WEEK2_TASKS.filter((task) => task.lane === laneIdx).forEach((task) => {
+        const id = `${laneIdx}-${task.row}-w2`;
+        if (sel === id) selLabel = `${d[task.titleKey]} — ${d.wk2}`;
+        bars.push({
+          id, label: d[task.titleKey], text: d[task.titleKey], isNew: true,
+          gridColumn: '2 / span 1', gridRow: `${task.row + 1}`,
+          outline: sel === id ? `2px solid ${lane.color}` : 'none',
+        });
+      });
+    }
     return { key: lane.labelKey, name: d[lane.labelKey], color: lane.color, bars };
   });
+  const cols = { gridTemplateColumns: rmtWeekCols(week) };
 
   return (
     <div className="rmt-timeline">
@@ -1313,15 +1325,19 @@ function RmTimelinePanel() {
         </svg>
         <span>{selLabel ? `${d.selectedPrefix} ${selLabel}` : d.selectHint}</span>
       </p>
+      <div className="rmt-scroll">
       <div className="rmt-grid" style={{ '--rmt-week-cols': RMT_WEEKS - 1 }}>
         <div className="rmt-grid__labelhead" />
-        <div className="rmt-weeks">
-          {/* Week 1 owns the wide first track — the only one carrying
+        <div className="rmt-weeks" style={cols}>
+          {/* The current week owns the wide track — the only one carrying
               task titles — so it gets the filled pill and a full label. */}
-          <span className="rmt-week rmt-week--cur">{d.currentWeekLabel}</span>
-          {rmtRange(2, RMT_WEEKS).map((wk) => (
-            <span key={wk} className="rmt-week">{d[`wk${wk}`]}</span>
-          ))}
+          {rmtRange(1, RMT_WEEKS).map((wk) => (wk === week ? (
+            <span key={wk} className="rmt-week rmt-week--cur" ref={wk === 2 ? week2Ref : undefined}>
+              {d.currentWeekLabel.replace(/\d+$/, String(wk))}
+            </span>
+          ) : (
+            <span key={wk} className="rmt-week" ref={wk === 2 ? week2Ref : undefined}>{d[`wk${wk}`]}</span>
+          )))}
         </div>
         {lanes.map((lane) => (
           <Fragment key={lane.key}>
@@ -1329,12 +1345,12 @@ function RmTimelinePanel() {
               <span className="rmt-lane-dot" style={{ background: lane.color }} />
               <span>{lane.name}</span>
             </div>
-            <div className="rmt-bars">
+            <div className="rmt-bars" style={cols}>
               {lane.bars.map((bar) => (
                 <button
                   key={bar.id}
                   type="button"
-                  className="rmt-bar"
+                  className={`rmt-bar${bar.isNew ? ' rmt-bar--new' : ''}`}
                   title={bar.label}
                   onClick={() => setSel((cur) => (cur === bar.id ? null : bar.id))}
                   style={{ gridColumn: bar.gridColumn, gridRow: bar.gridRow, background: lane.color, outline: bar.outline }}
@@ -1345,6 +1361,7 @@ function RmTimelinePanel() {
             </div>
           </Fragment>
         ))}
+      </div>
       </div>
     </div>
   );
@@ -1377,7 +1394,7 @@ function RmtBoardCard({ task, dimmed, done, innerRef }) {
 // "Replay interaction" is a manual button and the sequence runs once;
 // here it just restarts itself after a pause, on a loop. Starts once the
 // card has scrolled into view.
-function useRmtShowcase({ rootRef, boardBtnRef, cardRef, progressRef, doneRef, setView }) {
+function useRmtShowcase({ rootRef, boardBtnRef, week2Ref, cardRef, progressRef, doneRef, setView, setWeek }) {
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false, down: false, dur: 0 });
   const [ghost, setGhost] = useState(null); // null | { x, y, w, dur }
   const [over, setOver] = useState(null); // null | 'in_progress' | 'done'
@@ -1411,11 +1428,19 @@ function useRmtShowcase({ rootRef, boardBtnRef, cardRef, progressRef, doneRef, s
     const ok = () => !cancelledRef.current && rootRef.current;
     const W = root.offsetWidth, H = root.offsetHeight;
 
-    setView('timeline');
+    setView('timeline'); setWeek(1);
     setStatus('backlog'); setGhost(null); setOver(null); setDragging(false);
     setCursor({ x: W * 0.62, y: H * 0.7, visible: false, down: false, dur: 0 });
     await wait(300); if (!ok()) return;
     patchCursor({ visible: true }); await wait(400); if (!ok()) return;
+
+    // Move the current week from Week 1 to Week 2 (click the W2 header),
+    // and hold so Week 2's tasks can be read before going to the board.
+    if (!week2Ref.current) return;
+    const w2 = rel(week2Ref.current);
+    patchCursor({ x: w2.x + w2.w * 0.5, y: w2.y + w2.h * 0.6, dur: 800 }); await wait(950); if (!ok()) return;
+    patchCursor({ down: true }); await wait(140); if (!ok()) return;
+    setWeek(2); patchCursor({ down: false }); await wait(1700); if (!ok()) return;
 
     const b = rel(boardBtnRef.current);
     patchCursor({ x: b.x + b.w * 0.55, y: b.y + b.h * 0.6, dur: 900 }); await wait(1050); if (!ok()) return;
@@ -1562,12 +1587,14 @@ function EngineRoadmapCard() {
   const { t } = useLang();
   const d = t('home.engine.demo.roadmap');
   const [view, setView] = useState('timeline');
+  const [week, setWeek] = useState(1);
   const rootRef = useRef(null);
   const boardBtnRef = useRef(null);
+  const week2Ref = useRef(null);
   const cardRef = useRef(null);
   const progressRef = useRef(null);
   const doneRef = useRef(null);
-  const { status, cursor, ghost, over, dragging, ebPressed } = useRmtShowcase({ rootRef, boardBtnRef, cardRef, progressRef, doneRef, setView });
+  const { status, cursor, ghost, over, dragging, ebPressed } = useRmtShowcase({ rootRef, boardBtnRef, week2Ref, cardRef, progressRef, doneRef, setView, setWeek });
   const moveTask = RMT_BOARD_TASKS.find((ta) => ta.id === RMT_MOVE_TASK_ID);
   const stageRef = useRef(null);
 
@@ -1580,15 +1607,22 @@ function EngineRoadmapCard() {
   // Keyed on `view` as well, and in a layout effect, so the switch to
   // the (taller) board is already scaled on the frame it first paints —
   // waiting for the observer leaves one frame of it clipped.
+  // Fit on height only (capped at 1:1), so the type stays readable instead
+  // of shrinking with the card's width. The inner box is then made exactly
+  // as wide as the stage (in unscaled px): the header and board fit it, and
+  // only the timeline chart, which needs more room, scrolls sideways
+  // (thin scrollbar, see .rmt-timeline).
   useLayoutEffect(() => {
     const stage = stageRef.current;
     const inner = rootRef.current;
     if (!stage || !inner) return;
     const fit = () => {
-      const w = inner.offsetWidth, h = inner.offsetHeight;
-      if (!w || !h) return;
-      const scale = Math.min(stage.clientWidth / w, stage.clientHeight / h);
+      const h = inner.offsetHeight;
+      if (!h || !stage.clientWidth) return;
+      const scale = Math.min(1, stage.clientHeight / h);
       stage.style.setProperty('--rmt-scale', String(scale));
+      inner.style.width = `${stage.clientWidth / scale}px`;
+      stage.style.setProperty('--rmt-y', `${Math.max(0, (stage.clientHeight - h * scale) / 2)}px`);
     };
     fit();
     const ro = new ResizeObserver(fit);
@@ -1630,7 +1664,7 @@ function EngineRoadmapCard() {
           </div>
         </div>
         {view === 'timeline'
-          ? <RmTimelinePanel />
+          ? <RmTimelinePanel week={week} week2Ref={week2Ref} />
           : <RmExecutionBoardPanel status={status} over={over} dragging={dragging} cardRef={cardRef} progressRef={progressRef} doneRef={doneRef} />}
 
         {/* Cursor + dragged-card ghost live here (not inside either panel)
@@ -2005,275 +2039,10 @@ function EngineCitationsCard() {
 }
 
 /* ---------- Card 04 · Content Generation ----------
-   Replaces the old "paste & optimize" loop. That flow is real — Kate does
-   rewrite existing pages too, it's step 02 on /content-writing — but leading
-   the one card most visitors see with it made Poliris look like a generic
-   AI rewriter. This demo leads with the actual differentiator instead: the
-   article doesn't start from a blank page or pasted text, it starts from a
-   gap Poliris's own GEO audit already found, reasoned in plain English
-   ("positions Sony as the pioneer…"), then goes all the way to a scored,
-   schema-ready draft published live — the same "Write it → Implement it"
-   loop poliris-frontend's Content Studio (studio-home.tsx) and this site's
-   own /content-writing page already sell, condensed into one card. Screens
-   reuse the .cstudio-* classes already built for ProductCarousel's hidden
-   ContentVis demo (poliris.css ~L4386) rather than a new visual language. */
-// titleKey/descKey map to home.engine.demo.content.idea1..3* — see the
-// components below (CW_IDEAS is module-level, so it can't call useLang()
-// itself; each component reading it does its own t() lookup instead).
-const CW_IDEAS = [
-  { priority: 'HIGH', titleKey: 'idea1Title', descKey: 'idea1Desc' },
-  { priority: 'HIGH', titleKey: 'idea2Title', descKey: 'idea2Desc' },
-  { priority: 'MEDIUM', titleKey: 'idea3Title', descKey: 'idea3Desc' },
-];
-// Which suggested idea the scripted demo picks — the center card, not the
-// first: the zoom/dim effect only reads as a considered choice when a
-// sibling recedes on *both* sides, and always grabbing index 0 started to
-// look mechanical ("the demo just clicks whatever's first") rather than
-// deliberate. Change this one value to pick a different idea — CW_DRAFT
-// below must describe whichever index it points to.
-const CW_PICKED_INDEX = 1;
-// The draft Kate produces once the demo picks CW_IDEAS[CW_PICKED_INDEX] —
-// real copy already written for ProductCarousel's ContentVis demo (en.js
-// contentVis.ideaSets[0][1].draft). introKey/outlineKeys map to
-// home.engine.demo.content.draftIntro/outline1..4.
-const CW_DRAFT = {
-  introKey: 'draftIntro',
-  outlineKeys: ['outline1', 'outline2', 'outline3', 'outline4'],
-  words: 680,
-  read: '3 min',
-  score: 88,
-};
+   ContentGenDemo (./ContentGenDemo.jsx): brief → Kate writes it from the
+   product page → published live, one 14.5s loop. */
 
-function CwPriorityBadge({ priority }) {
-  const { t } = useLang();
-  const d = t('home.engine.demo.content');
-  const isHigh = priority === 'HIGH';
-  return (
-    <span className="cstudio-priority" style={{ color: isHigh ? '#DC2626' : '#D97706', background: isHigh ? '#FEE2E2' : '#FEF3C7' }}>
-      {isHigh ? d.priorityHigh : d.priorityMedium}
-    </span>
-  );
-}
-
-// Screen 1 — the suggested-idea grid, sourced from the audit rather than a
-// blank prompt. The scripted cursor lands on the top-priority card, the card
-// lifts toward the viewer (a hover-zoom, not a real modal — cheaper and
-// reads faster in a looping background demo) while its siblings dim out of
-// focus, then the click lands and the piece moves into writing. That
-// pick-a-card beat is the whole point being sold here.
-function CwIdeasPanel({ cardRef, cursor, zoomed, clicked }) {
-  const { t } = useLang();
-  const d = t('home.engine.demo.content');
-  return (
-    <div className="cstudio-card cw-panel">
-      <div className="cstudio-hdr">
-        <span className="cstudio-title">{d.studioTitle}</span>
-        <span className="cstudio-sub">{d.studioSub}</span>
-      </div>
-      <div className="cstudio-ideas-hdr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3B6FF5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/></svg>
-        {d.suggestedIdeas}
-        <span className="cw-ideas-note">{d.foundInAudit}</span>
-      </div>
-      <div className={`cstudio-ideas cw-ideas${zoomed ? ' cw-ideas--focused' : ''}`}>
-        {CW_IDEAS.map((idea, i) => (
-          <div
-            key={idea.titleKey}
-            ref={i === CW_PICKED_INDEX ? cardRef : undefined}
-            className={`cstudio-idea-card${i === CW_PICKED_INDEX && zoomed ? ' cw-idea-card--zoomed' : ''}${i === CW_PICKED_INDEX && clicked ? ' cw-idea-card--pulse' : ''}`}
-          >
-            <CwPriorityBadge priority={idea.priority} />
-            <div className="cstudio-idea-title">{d[idea.titleKey]}</div>
-            <div className="cstudio-idea-desc">{d[idea.descKey]}</div>
-          </div>
-        ))}
-      </div>
-      {cursor && (
-        <div className={`cg-cursor${cursor.risen ? ' cg-cursor--risen' : ''}`} style={{ left: cursor.left, top: cursor.top }}>
-          <svg viewBox="0 0 24 24" fill="#18181B" width="15" height="15"><path d="M5 3l14 8-6 2-2 6-6-16z"/></svg>
-          {clicked && <span className="cg-cursor__ripple" />}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Screen 2 — "researching → writing → scoring" made visible instead of a
-// generic spinner: the same outline the result screen shows, checking off
-// section by section as Kate (supposedly) writes it.
-function CwWritingPanel({ revealedCount }) {
-  const { t } = useLang();
-  const d = t('home.engine.demo.content');
-  return (
-    <div className="cw-writing">
-      <span className="cg-spinner" />
-      <div className="cg-loading-title">{d.writingLabel} “{d[CW_IDEAS[CW_PICKED_INDEX].titleKey]}”…</div>
-      <div className="cg-loading-sub">{d.researching}</div>
-      <div className="cstudio-draft-outline cw-writing-outline">
-        {CW_DRAFT.outlineKeys.map((k, i) => (
-          <div key={k} className={`cstudio-draft-section cw-writing-row${i < revealedCount ? ' cw-writing-row--done' : ''}`}>
-            <span className="cstudio-draft-num cw-writing-num">
-              {i < revealedCount
-                ? <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                : i + 1}
-            </span>
-            {d[k]}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// Screen 3 — the finished draft: scored, schema-ready, and (once the
-// scripted click lands) published — no developer, no copy-paste. This beat
-// is what actually distinguishes "generation" from "optimization": the
-// piece didn't exist an instant ago, and now it's live.
-function CwResultPanel({ btnRef, cursor, clicked, published }) {
-  const { t } = useLang();
-  const d = t('home.engine.demo.content');
-  return (
-    <div className="cstudio-card cw-panel">
-      <div className="cstudio-draft-meta">
-        <span className="cstudio-draft-badge cstudio-draft-badge--ai">{d.aiDraft}</span>
-        <span className="cstudio-draft-badge cstudio-draft-badge--schema">{d.schemaReady}</span>
-        <span className="cstudio-draft-stat">{CW_DRAFT.words} {d.wordsLabel} · {d.readMin} {d.readLabel}</span>
-        <span className="cstudio-draft-score" style={{ color: '#16a34a' }}>{d.aiScoreLabel} {CW_DRAFT.score}</span>
-      </div>
-      <div className="cstudio-draft-title">{d[CW_IDEAS[CW_PICKED_INDEX].titleKey]}</div>
-      <div className="cstudio-draft-intro">{d[CW_DRAFT.introKey]}</div>
-      <div className="cstudio-draft-outline-lbl">{d.articleOutline}</div>
-      <div className="cstudio-draft-outline">
-        {CW_DRAFT.outlineKeys.map((k, i) => (
-          <div key={k} className="cstudio-draft-section">
-            <span className="cstudio-draft-num">{i + 1}</span>
-            {d[k]}
-          </div>
-        ))}
-      </div>
-      <div className="cstudio-draft-actions">
-        <span className={`cstudio-start-btn cw-publish-btn${published ? ' cw-publish-btn--done' : ''}`} ref={btnRef}>
-          {published ? (
-            <>
-              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              {d.published}
-            </>
-          ) : d.publish}
-        </span>
-        <span className="cstudio-edit-btn">{d.editDraft}</span>
-      </div>
-      {cursor && (
-        <div className={`cg-cursor${cursor.risen ? ' cg-cursor--risen' : ''}`} style={{ left: cursor.left, top: cursor.top }}>
-          <svg viewBox="0 0 24 24" fill="#18181B" width="15" height="15"><path d="M5 3l14 8-6 2-2 6-6-16z"/></svg>
-          {clicked && <span className="cg-cursor__ripple" />}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function EngineContentCard() {
-  const wrapRef = useRef(null);
-  // Reused across screens rather than one ref per element — only one screen
-  // is ever mounted at a time, so whichever element needs the cursor next
-  // (the idea card, then the Publish button) just attaches this same ref.
-  const btnRef = useRef(null);
-  const [screen, setScreen] = useState(0); // 0 ideas, 1 writing, 2 result
-  const [fading, setFading] = useState(false);
-  const [cursor, setCursor] = useState(null);
-  // Hover-lift on the target idea card — true from the moment the cursor
-  // settles on it through the click, false again once we move on.
-  const [zoomed, setZoomed] = useState(false);
-  const [clicked, setClicked] = useState(false);
-  const [revealedCount, setRevealedCount] = useState(0);
-  const [published, setPublished] = useState(false);
-
-  useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    let timers = [];
-    let started = false;
-    const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
-
-    // Each screen replaces the last in place — a brief opacity dip masks the
-    // height change instead of carrying it as a sideways slide.
-    function goTo(next) {
-      setFading(true);
-      after(200, () => { setScreen(next); setFading(false); });
-    }
-
-    function reset() {
-      setScreen(0); setFading(false); setCursor(null); setZoomed(false); setClicked(false); setRevealedCount(0); setPublished(false);
-    }
-
-    function cursorAt(risen) {
-      const btn = btnRef.current;
-      if (!btn) return null;
-      return {
-        left: btn.offsetLeft + btn.offsetWidth / 2,
-        top: btn.offsetTop + btn.offsetHeight / 2 + (risen ? 0 : 20),
-        risen,
-      };
-    }
-
-    function cycle() {
-      reset();
-      // Screen 1 (ideas): cursor lands on the top-priority suggestion, the
-      // card lifts toward the viewer (zoomed) with its siblings dimming out
-      // — a beat to actually look at the card before the click lands, not
-      // an instant jump. This is what sells "the topic came from your own
-      // audit," not a blank prompt.
-      after(700, () => setCursor(cursorAt(false)));
-      after(1200, () => setCursor(cursorAt(true)));
-      after(1450, () => setZoomed(true));
-      after(2000, () => setClicked(true));
-      after(2350, () => { setCursor(null); goTo(1); });
-
-      // Screen 2 (writing): the outline checks itself off section by
-      // section — visible progress instead of a generic spinner.
-      after(3050, () => setRevealedCount(1));
-      after(3900, () => setRevealedCount(2));
-      after(4750, () => setRevealedCount(3));
-      after(5600, () => setRevealedCount(4));
-      after(6450, () => goTo(2));
-
-      // Screen 3 (result): hold the finished, scored draft, then the
-      // scripted click publishes it — the moment that actually
-      // distinguishes "generated" from "optimized": nothing existed a
-      // moment ago, and now it's live.
-      after(6950, () => setClicked(false));
-      after(7750, () => setCursor(cursorAt(false)));
-      after(8250, () => setCursor(cursorAt(true)));
-      after(8750, () => { setClicked(true); setPublished(true); });
-      after(9150, () => setCursor(null));
-
-      // goTo(0) alone isn't enough here: zoomed/clicked are still true from
-      // the click back at the start of this same pass (they only get
-      // cleared by reset(), which doesn't run again until cycle() restarts
-      // at 15050) — without clearing them first, screen 0 reappears with
-      // the first card already zoomed for ~600ms before any cursor motion,
-      // as if it had been hovered before the loop even started.
-      after(14450, () => { setZoomed(false); setClicked(false); setPublished(false); goTo(0); });
-      after(15050, cycle);
-    }
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting && !started) { started = true; cycle(); } });
-    }, { threshold: 0.3 });
-    io.observe(wrap);
-    return () => { io.disconnect(); timers.forEach(clearTimeout); };
-  }, []);
-
-  return (
-    <div className={`cg-stage${fading ? ' cg-stage--fading' : ''}`} ref={wrapRef}>
-      {screen === 0 && <CwIdeasPanel cardRef={btnRef} cursor={cursor} zoomed={zoomed} clicked={clicked} />}
-      {screen === 1 && <CwWritingPanel revealedCount={revealedCount} />}
-      {screen === 2 && <CwResultPanel btnRef={btnRef} cursor={cursor} clicked={clicked} published={published} />}
-    </div>
-  );
-}
-
-const ENGINE_VISUALS = { 0: PositionChartDemo, 1: EngineTrustCard, 2: EngineRoadmapCard, 3: EngineContentCard, 4: EngineCitationsCard };
+const ENGINE_VISUALS = { 0: PositionChartDemo, 1: EngineTrustCard, 2: EngineRoadmapCard, 3: ContentGenDemo, 4: EngineCitationsCard };
 
 function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everRevealed }) {
   const reverse = index % 2 === 1;
@@ -2389,14 +2158,13 @@ function EngineCardFace({ card, index, learnMore, pressed, highlight, interactiv
   );
 }
 
-function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, registerSlot, onHoverIn, onHoverOut, onSelect }) {
+// Cards switch on click only (Enter/Space on the card's button counts as a
+// click) — not on hover or focus.
+function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, registerSlot, onSelect }) {
   return (
     <div
       ref={(el) => registerSlot(index, el)}
       className={`engine-card${isActive ? ' engine-card--active' : ''}${isAway ? ' engine-card--away' : ''}`}
-      onMouseEnter={() => onHoverIn(index)}
-      onMouseLeave={onHoverOut}
-      onFocus={() => onSelect(index)}
       onClick={() => onSelect(index)}
     >
       <EngineCardFace card={card} index={index} learnMore={learnMore} pressed={isActive} interactive />
@@ -2408,7 +2176,7 @@ function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, re
         <svg
           className="engine-card__progress"
           aria-hidden="true"
-          style={{ '--engine-progress-ms': `${ENGINE_AUTOPLAY_MS}ms`, '--engine-progress-delay': `${ENGINE_FLIP_MS}ms` }}
+          style={{ '--engine-progress-ms': `${ENGINE_CARD_MS[index] - ENGINE_FLIP_MS}ms`, '--engine-progress-delay': `${ENGINE_FLIP_MS}ms` }}
         >
           <rect x="0" y="0" width="100%" height="100%" rx="20" ry="20" pathLength="100" />
         </svg>
@@ -2419,15 +2187,13 @@ function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, re
 
 const ENGINE_FLIP_MS = 700;
 const ENGINE_FLIP_EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
-// Hover has to rest this long before a card flips in — sweeping the
-// pointer across the grid shouldn't fire a flip for every card it crosses.
-const ENGINE_HOVER_DELAY = 120;
-// Autoplay: each card holds the center this long after landing, then the
-// next one flips in (05 wraps back to 01). Card 02's animation is the
-// long one at ATD_CYCLE — this clears the beat its fix lands on "Live"
-// (13.6s in) and trims only the hold after it, so don't drop below 14s
-// without checking that ending again.
-const ENGINE_AUTOPLAY_MS = 14000;
+// Autoplay: how long each card stays selected, counted from the click /
+// switch (flip included), before the next one flips in (05 wraps back to
+// 01). The progress stroke traces the border over the same span, after
+// the flip, so it finishes exactly on the switch. Card 02 keeps its full
+// ATD_CYCLE so its fix still lands on "Live" (13.6s in), and card 04 its
+// full 14.5s brief → write → publish loop.
+const ENGINE_CARD_MS = [7000, ATD_CYCLE, 11000, 14500, 10000];
 
 // Center-to-center translate + scale that maps box `to` onto box `from`
 // (transform-origin is the element's center), with a fixed perspective so
@@ -2453,7 +2219,6 @@ function EngineShowcase({ cards, learnMore }) {
   const flipRef = useRef(null);
   const returnRef = useRef(null);
   const slotRefs = useRef([]);
-  const hoverTimer = useRef(null);
   const activeRef = useRef(null);
   const reducedMotion = useRef(false);
   const card = active == null ? null : cards[active];
@@ -2477,11 +2242,6 @@ function EngineShowcase({ cards, learnMore }) {
     setActive(i);
   }, []);
 
-  const hoverIn = useCallback((i) => {
-    clearTimeout(hoverTimer.current);
-    hoverTimer.current = setTimeout(() => select(i), ENGINE_HOVER_DELAY);
-  }, [select]);
-  const hoverOut = useCallback(() => clearTimeout(hoverTimer.current), []);
   const registerSlot = useCallback((i, el) => { slotRefs.current[i] = el; }, []);
 
   useEffect(() => {
@@ -2493,12 +2253,12 @@ function EngineShowcase({ cards, learnMore }) {
       if (entry.isIntersecting && activeRef.current == null) select(0);
     }, { threshold: 0.25 });
     io.observe(el);
-    return () => { io.disconnect(); clearTimeout(hoverTimer.current); };
+    return () => io.disconnect();
   }, [select]);
 
   useEffect(() => {
     if (active == null || !onScreen || paused) return;
-    const t = setTimeout(() => select((active + 1) % cards.length), ENGINE_FLIP_MS + ENGINE_AUTOPLAY_MS);
+    const t = setTimeout(() => select((active + 1) % cards.length), ENGINE_CARD_MS[active]);
     return () => clearTimeout(t);
   }, [active, onScreen, paused, cards.length, select]);
 
@@ -2548,8 +2308,6 @@ function EngineShowcase({ cards, learnMore }) {
       isAway={returning?.index === i && i !== active}
       showProgress={i === active && onScreen && !paused}
       registerSlot={registerSlot}
-      onHoverIn={hoverIn}
-      onHoverOut={hoverOut}
       onSelect={select}
     />
   );
@@ -2834,56 +2592,32 @@ function ComparisonTable() {
    STAKES
    ================================================================ */
 /* ================================================================
-   FAQ — five common questions below the Stakes, one open at a time,
-   linking out to the full /faqs page.
+   FAQ — five common questions below the Stakes (native <details>, so each
+   opens independently and works without JS), linking out to the full
+   /faqs page. Copied from PR #5's home page.
    ================================================================ */
 function HomeFaq() {
   const { t, lang } = useLang();
   const d = t('home.faq');
-  const [open, setOpen] = useState(-1);
-
   return (
-    <section className="hfaq" id="faq">
-      <div className="container">
+    <section className="home-faq" id="faq">
+      <div className="container home-faq__inner">
         <div className="sec-head reveal">
           <Eyebrow>{d.eyebrow}</Eyebrow>
           <h2 className="sec-h2">{d.h2Pre} <HL>{d.h2Hl}</HL></h2>
         </div>
-        <div className="hfaq__list reveal reveal--d1">
-          {d.items.map((item, i) => {
-            const isOpen = open === i;
-            return (
-              <div key={item.q} className={`hfaq__item${isOpen ? ' is-open' : ''}`}>
-                <h3 className="hfaq__q-h">
-                  <button
-                    type="button"
-                    className="hfaq__btn"
-                    aria-expanded={isOpen}
-                    aria-controls={`hfaq-a-${i}`}
-                    onClick={() => setOpen(isOpen ? -1 : i)}
-                  >
-                    <span>{item.q}</span>
-                    <span className="hfaq__icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="12" height="12">
-                        <path d="M5 12h14" /><path className="hfaq__icon-v" d="M12 5v14" />
-                      </svg>
-                    </span>
-                  </button>
-                </h3>
-                <div className="hfaq__body" id={`hfaq-a-${i}`} role="region">
-                  <div className="hfaq__body-inner">
-                    <p className="hfaq__a">{item.a}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="home-faq__list reveal">
+          {d.items.map((item) => (
+            <details key={item.q} className="home-faq__item">
+              <summary className="home-faq__q">
+                <span>{item.q}</span>
+                <span className="home-faq__icon" aria-hidden="true">+</span>
+              </summary>
+              <p className="home-faq__a">{item.a}</p>
+            </details>
+          ))}
         </div>
-        <div className="hfaq__foot">
-          <Link to={`/${lang}/faqs`} className="hfaq__all">
-            {d.seeAll} <span aria-hidden="true">→</span>
-          </Link>
-        </div>
+        <Link to={`/${lang}/faqs`} className="home-faq__all">{d.allLink} →</Link>
       </div>
     </section>
   );

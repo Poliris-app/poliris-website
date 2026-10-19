@@ -1345,10 +1345,9 @@ button { cursor: pointer; border: none; background: none; }
   margin: 48px 0 0;
   padding: 0;
   display: grid;
-  /* One column per step — the count comes from the component, since the
-     reference this is ported from had three and this section has four. */
+  /* One column per step — the count comes from the component. */
   grid-template-columns: repeat(var(--how-cols, 3), minmax(0, 1fr));
-  --how-gap: 32px;
+  --how-gap: 24px;
   gap: var(--how-gap);
   position: relative;
 }
@@ -1492,25 +1491,6 @@ button { cursor: pointer; border: none; background: none; }
   18%  { stroke-dashoffset: 0; }
   100% { stroke-dashoffset: 0; }
 }
-/* Monitor's drawing is permanent (it has no Lottie), so its trace plays
-   on the step's turn rather than looping the way a brief fallback does:
-   undrawn while it waits, drawn once as the step lights up, and held
-   until the loop resets it. */
-.how__icon--monitor .how-anim--line {
-  animation: none;
-  stroke-dashoffset: 1;
-}
-.how__icon--monitor.is-lit .how-anim--line {
-  animation: how-trace 0.9s ease-out forwards;
-  animation-play-state: running;
-}
-@keyframes how-trace {
-  from { stroke-dashoffset: 1; }
-  to   { stroke-dashoffset: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .how__icon--monitor .how-anim--line { animation: none; stroke-dashoffset: 0; }
-}
 @keyframes how-ship {
   0%, 55% { transform: translateY(0); opacity: 1; }
   72%     { transform: translateY(-9px); opacity: 0; }
@@ -1538,14 +1518,8 @@ button { cursor: pointer; border: none; background: none; }
   margin: 0 auto;
   text-wrap: balance;
 }
-/* One column below tablet — four steps side by side leave no room for the
-   copy, and the connector lines have nothing to join. */
-@media (max-width: 900px) {
-  .how__steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
-  /* 2×2: only 1→2 and 3→4 sit side by side, so the line after step 2
-     would point at nothing. */
-  .how__step:nth-child(2) .how__link { display: none; }
-}
+/* One column below tablet — three steps side by side leave no room for
+   the copy, and the connector lines have nothing to join. */
 @media (max-width: 768px) {
   .how { padding: 64px 0; }
   .how__steps { grid-template-columns: 1fr; gap: 32px; }
@@ -3989,91 +3963,63 @@ button { cursor: pointer; border: none; background: none; }
   margin: 0 auto;
 }
 
-/* ── Home FAQ (below the Stakes) ─────────────────────────────── */
-.hfaq {
-  padding: 96px 24px 104px;
-  background: var(--surface1);
-}
-.hfaq__list {
-  max-width: 760px;
-  margin: 44px auto 0;
-  border-top: 1px solid var(--border);
-}
-.hfaq__item { border-bottom: 1px solid var(--border); }
-.hfaq__q-h { margin: 0; }
-.hfaq__btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
+/* ── Home FAQ (below the Stakes) — copied from PR #5's home page ── */
+.home-faq { background: var(--surface1); padding: 96px 0; }
+.home-faq__inner { max-width: 760px; }
+.home-faq__list { border-top: 1px solid #eceef4; margin-top: 40px; }
+.home-faq__item { border-bottom: 1px solid #eceef4; }
+.home-faq__q {
+  cursor: pointer;
+  color: #1a1d23;
   justify-content: space-between;
+  align-items: center;
   gap: 20px;
   padding: 22px 0;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  text-align: left;
-  font-family: var(--manrope);
-  font-weight: 700;
   font-size: 16px;
-  color: #000;
-  transition: color 0.2s ease;
+  font-weight: 600;
+  line-height: 1.45;
+  list-style: none;
+  transition: color .15s;
+  display: flex;
 }
-.hfaq__btn:hover,
-.hfaq__item.is-open .hfaq__btn { color: #0062FF; }
-.hfaq__btn:focus-visible { outline: 2px solid #0062FF; outline-offset: 4px; border-radius: 4px; }
-.hfaq__icon {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
+.home-faq__q::-webkit-details-marker { display: none; }
+.home-faq__q:hover { color: var(--poliris-blue); }
+.home-faq__q:focus-visible { outline: 2px solid var(--poliris-blue); outline-offset: 4px; border-radius: 4px; }
+.home-faq__icon {
+  color: #9aa0ab;
+  background: #fff;
+  border: 1.5px solid #dde1ec;
   border-radius: 50%;
-  border: 1px solid var(--border-strong);
-  display: grid;
-  place-items: center;
-  color: var(--fg5);
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  flex: none;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
+  transition: border-color .2s, color .2s, transform .28s cubic-bezier(.4, 0, .2, 1);
+  display: flex;
 }
-.hfaq__btn:hover .hfaq__icon { border-color: #0062FF; color: #0062FF; }
-.hfaq__item.is-open .hfaq__icon { background: #0062FF; border-color: #0062FF; color: #fff; }
-.hfaq__icon-v {
-  transform-origin: 50% 50%;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.hfaq__item.is-open .hfaq__icon-v { transform: scaleY(0); }
-/* 0fr → 1fr animates to the answer's natural height */
-.hfaq__body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.hfaq__item.is-open .hfaq__body { grid-template-rows: 1fr; }
-.hfaq__body-inner { overflow: hidden; }
-.hfaq__a {
-  margin: 0;
-  padding: 0 46px 22px 0;
-  font-family: var(--chivo);
+.home-faq__q:hover .home-faq__icon,
+.home-faq__item[open] .home-faq__icon { border-color: var(--poliris-blue); color: var(--poliris-blue); }
+.home-faq__item[open] .home-faq__icon { transform: rotate(45deg); }
+.home-faq__a { color: #4b5563; margin: 0; padding: 0 48px 22px 0; font-size: 14.5px; line-height: 1.7; }
+.home-faq__all {
+  color: var(--poliris-blue);
+  margin-top: 28px;
   font-size: 15px;
-  line-height: 1.65;
-  color: var(--fg4);
-}
-.hfaq__foot {
-  max-width: 760px;
-  margin: 28px auto 0;
-}
-.hfaq__all {
-  font-family: var(--manrope);
-  font-weight: 700;
-  font-size: 14.5px;
-  color: #0062FF;
+  font-weight: 600;
   text-decoration: none;
+  display: inline-block;
 }
-.hfaq__all:hover { text-decoration: underline; text-underline-offset: 3px; }
-@media (max-width: 560px) {
-  .hfaq { padding: 72px 16px 80px; }
-  .hfaq__btn { font-size: 15px; padding: 18px 0; }
-  .hfaq__a { padding-right: 0; }
+.home-faq__all:hover { text-decoration: underline; }
+@media (max-width: 768px) {
+  .home-faq { padding: 64px 0; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hfaq__body, .hfaq__icon-v { transition: none; }
+@media (max-width: 480px) {
+  .home-faq { padding: 48px 0; }
+  .home-faq__a { padding-right: 0; }
 }
 
 
@@ -7403,7 +7349,7 @@ button { cursor: pointer; border: none; background: none; }
    It's a trade: a wider layout keeps more of the reference's own
    proportions but scales down further, and its 14px card titles stop
    being readable — 650 is about where they still are. */
-.rmt-stage { --rmt-ref-width: 560px; position: relative; width: 100%; height: 100%; overflow: hidden; }
+.rmt-stage { position: relative; width: 100%; height: 100%; overflow: hidden; }
 /* Both views lay out at the same width on purpose: the scale follows
    from it, so a wider board would render its title and cards visibly
    smaller than the timeline's. The backlog's scroll area is what buys
@@ -7412,13 +7358,13 @@ button { cursor: pointer; border: none; background: none; }
    one of them always has space left over on one axis. */
 .rmt-inner {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--rmt-ref-width);
+  left: 0;
+  top: 0;
+  width: 560px; /* replaced inline with the stage's width ÷ scale */
   font-family: var(--manrope);
   color: #151517;
-  transform-origin: 50% 50%;
-  transform: translate(-50%, -50%) scale(var(--rmt-scale, 1));
+  transform-origin: 0 0;
+  transform: translateY(var(--rmt-y, 0px)) scale(var(--rmt-scale, 1));
 }
 /* .th-box itself has no fixed height elsewhere on the site, so this
    stays scoped to the roadmap card and doesn't affect .th-box's other
@@ -7479,7 +7425,19 @@ button { cursor: pointer; border: none; background: none; }
 /* The right padding is room for the last week's label: it's centred on a
    track narrower than the label is, so "W10" overhangs the grid and
    would otherwise be clipped at the stage's edge. */
-.rmt-timeline { display: flex; flex-direction: column; flex: 1; min-height: 0; padding-bottom: 4px; padding-right: 8px; }
+.rmt-timeline { display: flex; flex-direction: column; flex: 1; min-height: 0; padding-bottom: 4px; }
+/* The chart keeps a readable width and scrolls sideways when the card is
+   narrower; the header above stays put. Thin scrollbar — Chrome ignores
+   ::-webkit-scrollbar once scrollbar-width is set, so the standard
+   properties are for Firefox only. */
+.rmt-scroll { overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+.rmt-scroll .rmt-grid { min-width: 552px; padding-right: 8px; }
+@supports not selector(::-webkit-scrollbar) {
+  .rmt-scroll { scrollbar-width: thin; scrollbar-color: #d4dae6 transparent; }
+}
+.rmt-scroll::-webkit-scrollbar { height: 4px; }
+.rmt-scroll::-webkit-scrollbar-track { background: transparent; }
+.rmt-scroll::-webkit-scrollbar-thumb { background: #d4dae6; border-radius: 2px; }
 .rmt-hint {
   display: flex;
   align-items: center;
@@ -7502,6 +7460,11 @@ button { cursor: pointer; border: none; background: none; }
   border-bottom: 1px solid #e9e9ee;
 }
 .rmt-weeks { padding-bottom: 5px; column-gap: 4px; align-items: center; }
+/* The demo moves the current (wide) week from Week 1 to Week 2 — the
+   track sizes are set inline, this slides between them. */
+.rmt-weeks, .rmt-bars { transition: grid-template-columns .6s cubic-bezier(0.65, 0, 0.35, 1); }
+.rmt-bar--new { animation: rmt-bar-in .45s ease .35s both; }
+@keyframes rmt-bar-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
 /* Row height is the one lever that decides which axis the fit runs out
    on: at 26px the chart fits on height and leaves gutters either side,
    which the board (filling the width) doesn't have. */
@@ -7905,6 +7868,12 @@ button { cursor: pointer; border: none; background: none; }
      at least as tall as the taller one so clicking it doesn't make the
      window jump. */
   .rmt-inner { min-height: 314px; }
+  /* Cards 02 and 03 fill their parent's height rather than having one of
+     their own, so with the body on height:auto they collapsed to 0px.
+     Give each the same 4:3 frame the desktop panel uses. (Card 02 sizes
+     itself inline, hence the !important.) */
+  .atd-frame { height: auto !important; aspect-ratio: 4 / 3; }
+  .th-box--roadmap { height: auto; aspect-ratio: 4 / 3; }
 }
 @media (max-width: 480px) {
   .engine { padding: 60px 0 24px; }
@@ -8504,11 +8473,44 @@ button { cursor: pointer; border: none; background: none; }
   .cw-ideas .cstudio-idea-card { width: auto; }
   .cw-ideas .cstudio-idea-card:nth-child(3) { display: none; }
 }
-/* Smallest phones: the draft screen wraps to ~494–514px, past the stage's
-   470px, which pushed the Publish button (what the demo clicks) below the
-   visible area. From 375px up it fits in 470px. */
-@media (max-width: 374px) {
-  .cg-stage { height: 520px; }
+/* Phones: a fixed 470px was too short on the smallest phones (the draft
+   wraps past it and hid the Publish button the demo clicks) and left empty
+   space under it on wider ones. Instead the screens stack in one grid cell
+   with an invisible copy of the draft, the tallest screen, so the stage is
+   exactly as tall as the draft at every width and never resizes between
+   screens. */
+/* Card 04 · ContentGenDemo — a fixed 531×399 stage, scaled in JS to fit
+   and centered. Like the other cards, it sits inside the window body's
+   padding (24px in the showcase panel, 20px in the rows) in a bordered
+   box matching .th-box; where the body has no height of its own (phones)
+   it takes the demo's aspect ratio. */
+.engine-window__body:has(> .cgd) { position: relative; overflow: hidden; }
+/* No frame of its own: the engine window already is the card, and a
+   second bordered box inside it read as a double frame. The inset is
+   what the body's padding would be, so the demo sits on the same 24px
+   as cards 01 and 02. */
+.cgd {
+  position: absolute;
+  inset: 20px;
+  overflow: hidden;
+  background: #fff;
+}
+/* Three things stack into the visible inset here: this box's own inset,
+   the letterboxing from fitting a 531×399 stage into it, and the ~14px
+   the design already keeps inside that stage. At inset:24 they summed to
+   about 46px, far more than the 24px the other cards sit on; 8px brings
+   the total back to ~24. */
+.engine-showcase__panel .cgd { inset: 8px; }
+.cgd__stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+@media (max-width: 640px) {
+  .engine-window__body:has(> .cgd) { aspect-ratio: 531 / 399; }
+}
+
+.cg-sizer { display: none; }
+@media (max-width: 640px) {
+  .cg-stage { height: auto; display: grid; }
+  .cg-stage > * { grid-area: 1 / 1; min-width: 0; }
+  .cg-sizer { display: block; visibility: hidden; pointer-events: none; }
 }
 @keyframes cw-card-pulse {
   0%   { transform: scale(1.07) translateY(-5px); }
