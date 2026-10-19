@@ -94,8 +94,8 @@ export default {
           href: '/technical-audit',
         },
         {
-          title: 'Action Roadmap',
-          desc: 'Know exactly what to fix, what to prioritize, and what to do next. Organize your SEO and GEO work into a clear roadmap and track every step from strategy to implementation.',
+          title: 'Prioritized Action Roadmap',
+          desc: 'An intelligent, actionable step-by-step roadmap automatically generated from the AI Reputation and Technical Audit findings. Tells teams exactly what to fix first.',
           tags: ['Clear priorities', 'Step-by-step guide', 'Organized workflow', 'Actionable Recommendations', 'Stay focused on growth'],
           url: 'poliris.io/dashboard/roadmap/sony',
           href: '/demo',
@@ -261,7 +261,7 @@ export default {
       eyebrow: 'The team',
       h2: 'A full team working for you,',
       h2Blue: 'right inside the app',
-      lead: 'A complete team of specialized AI agents that help you operate like an expert from analyzing performance and spotting opportunities to recommending next steps and implementing improvements, all from within the platform.',
+      lead: 'A complete team of specialized AI agents continuously analyzing performance, surface high-impact opportunities, and implement improvements for you.',
       footNote: 'Each agent brings specialized expertise to the platform, helping you understand the data, identify opportunities, and implement improvements. The agents do the heavy lifting; you make the decisions.',
       list: [
         { name: 'Leo',  role: 'Strategy & Orchestration',  desc: 'Reads the whole picture and sets the game plan, like a lead strategist briefing the team.' },
@@ -300,8 +300,8 @@ export default {
       ],
     },
     cta: {
-      heading: 'See how AI describes your brand',
-      lead: 'Start your free trial with no setup or technical expertise required, and see how AI perceives your brand today.',
+      heading: 'Know where your brand stands\non Google and in AI.',
+      lead: 'Start your free trial in minutes, with no setup or technical expertise required. See how Google, ChatGPT, Gemini, and more, present your brand today.',
       primaryCta: 'Get your free trial',
       secondaryCta: 'Book a demo',
       note: 'No credit card required',
