@@ -288,7 +288,7 @@ export default {
       concl: 'One subscription instead of four everything above lives inside Poliris.',
     },
     stakes: {
-      eyebrow: 'The stakes',
+      eyebrow: 'The search shift',
       h2Pre: 'AI is already shaping your brand.',
       h2Hl: 'without you',
       h2Mid: 'With or',
