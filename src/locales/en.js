@@ -289,9 +289,9 @@ export default {
     },
     stakes: {
       eyebrow: 'The search shift',
-      h2Pre: 'AI is already shaping your brand.',
-      h2Hl: 'without you',
-      h2Mid: 'With or',
+      h2Pre: 'Google ranks. AI recommends.',
+      h2Hl: 'depends on both.',
+      h2Mid: 'Your brand\'s growth',
       lead: 'Every day, AI assistants describe, recommend, or ignore your products. Most brands can\'t see it, and have no way to act on it.',
       cards: [
         { title: 'Buyers ask AI first',   desc: "Customers don't just Google you anymore, they ask ChatGPT first." },
