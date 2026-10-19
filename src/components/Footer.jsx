@@ -5,7 +5,7 @@ import { useLang } from '../contexts/LangContext';
 const FOOTER_HREFS = (lang) => [
   `/${lang}/#products`,
   `/${lang}/#team`,
-  `/${lang}/docs`,
+  `/${lang}/#how-it-works`,
   `/${lang}/demo`,
   `/${lang}/blog`,
 ];

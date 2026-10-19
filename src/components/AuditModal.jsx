@@ -8,15 +8,6 @@ import { trackEvent } from '../lib/analytics';
 // that the Lemlist audit email only sends the direct link). Kept here,
 // hidden, in case the free-audit request flow gets a new entry point later.
 
-const AI_LOGOS = [
-  { src: `${import.meta.env.BASE_URL}Chatgpt-logo-2.svg`, alt: 'ChatGPT' },
-  { src: `${import.meta.env.BASE_URL}Gemini-logo-2.svg`, alt: 'Gemini' },
-  { src: `${import.meta.env.BASE_URL}Claude-logo-2.svg`, alt: 'Claude' },
-  { src: `${import.meta.env.BASE_URL}Perplexity-logo-2.svg`, alt: 'Perplexity' },
-  { src: `${import.meta.env.BASE_URL}Mistral-ai-logo.svg`, alt: 'Mistral AI' },
-  { src: `${import.meta.env.BASE_URL}Deepseek-logo.svg`, alt: 'Deepseek' },
-];
-
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
 
@@ -163,15 +154,6 @@ export default function AuditModal({ open, onClose }) {
               <p className="promo-modal-lead">
                 {am.lead}
               </p>
-
-              <p className="promo-modal-tracked-label">{am.trackedLabel}</p>
-              <div className="promo-modal-logos">
-                {AI_LOGOS.map((logo) => (
-                  <div key={logo.alt} className="promo-modal-logo-chip">
-                    <img src={logo.src} alt={logo.alt} title={logo.alt} />
-                  </div>
-                ))}
-              </div>
 
               <form onSubmit={handleFreeSubmit} className="free-audit-form">
                 <input

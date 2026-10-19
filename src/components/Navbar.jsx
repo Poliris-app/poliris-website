@@ -45,6 +45,28 @@ export default function Navbar() {
   const { lang, t, switchLang } = useLang();
   const location = useLocation();
   const [stuck, setStuck] = useState(false);
+  // Reading-progress line along the bottom of the bar: fills left → right
+  // as the page scrolls, full at the bottom. Written straight to the DOM
+  // (not state) so scrolling never re-renders the navbar.
+  const progressRef = useRef(null);
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = total > 0 ? Math.min(window.scrollY / total, 1) : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
   const [open, setOpen] = useState(false);
   const [mobileProducts, setMobileProducts] = useState(false);
   const [mobileResources, setMobileResources] = useState(false);
@@ -111,7 +133,7 @@ export default function Navbar() {
 
   return (
     <>
-    <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
+    <nav className={`nav nav--${lang}${stuck ? ' nav--stuck' : ''}`}>
       <div className="nav__inner">
         <Link to={`/${lang}/`} className="nav__logo">
           <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
@@ -316,6 +338,11 @@ export default function Navbar() {
               </>
             )}
           </div>
+        </div>
+      )}
+      {!open && (
+        <div className="nav__progress" aria-hidden="true">
+          <span className="nav__progress-fill" ref={progressRef} />
         </div>
       )}
     </nav>

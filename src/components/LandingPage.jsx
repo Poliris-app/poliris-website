@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 // import ProductCarousel from './ProductCarousel'; // hidden for now, see below
 import Hero from './Hero';
+import HeroAnswerCard from './HeroAnswerCard';
 import CtaBand from './CtaBand';
+import StepLottieIcon from './StepLottieIcon';
 // import AuditModal from './AuditModal'; // hidden for now, see below
 import { useLang } from '../contexts/LangContext';
 
@@ -18,7 +20,11 @@ const AVATARS = {
 };
 
 /* ── Highlight span ──────────────────────────────────────────── */
-const HL = ({ children }) => <span className="hl">{children}</span>;
+// Highlighted heading phrases sit on their own line after a <br />, where
+// text-wrap: balance doesn't always reach — glue the last two words with a
+// no-break space so the phrase never ends on a lone word.
+const keepLastTwo = (text) => (typeof text === 'string' ? text.replace(/ (\S+)$/, '\u00A0$1') : text);
+const HL = ({ children }) => <span className="hl">{keepLastTwo(children)}</span>;
 
 /* ── Eyebrow label ───────────────────────────────────────────── */
 const Eyebrow = ({ children }) => <div className="eyebrow">{children}</div>;
@@ -64,19 +70,35 @@ export default function LandingPage() {
       <AuditModal open={auditModalOpen} onClose={() => setAuditModalOpen(false)} /> */}
       <Hero
         eyebrow={h.eyebrow}
-        title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
+        // Plain .hl span (not <HL>) so the highlighted phrase can wrap on
+        // phones; the no-break space keeps "The" off a line of its own.
+        title={<>{h.titlePre}{'\u00A0'}<span className="hl">{h.titleHl}</span> {h.titlePost}</>}
         audience={h.audience}
         lead={h.lead}
         primaryCta={h.primaryCta}
         secondaryCta={h.secondaryCta}
+        secondaryKind="demo"
         note={h.note}
         websiteCapture={{
           placeholder: h.websitePlaceholder,
           ctaLabel: h.websiteCta,
           errorText: h.websiteError,
         }}
-        showAiBand={false}
+        answerCard={<HeroAnswerCard />}
+        fullFold
+        // Desktop: copy left, scaled answer card + dashboard right (50/50).
+        split
+        visualHeader={{
+          eyebrow: h.preview.eyebrow,
+          title: <>{h.preview.h2Pre}<br /><HL>{h.preview.h2Hl}</HL></>,
+          lead: h.preview.lead,
+        }}
       />
+      {/* Order: why it matters → how it works → the product → the team →
+          trust → questions → final CTA, so visitors feel the problem before
+          they see the tool. */}
+      <Stakes />
+      <HowItWorks />
       {/* ValueChain hidden for now — restore by uncommenting. */}
       {/* <ValueChain /> */}
       {/* ProductCarousel hidden for now — restore by uncommenting. */}
@@ -85,7 +107,8 @@ export default function LandingPage() {
       <Agents />
       {/* ComparisonTable hidden for now — restore by uncommenting. */}
       {/* <ComparisonTable /> */}
-      <Stakes />
+      <Trust />
+      <HomeFaq />
       <CtaBand
         heading={cta.heading}
         lead={cta.lead}
@@ -239,15 +262,19 @@ function ValueChain() {
 /* ================================================================
    PLATFORM ENGINE — 5-pillar feature showcase (before Team section)
    ================================================================ */
-function EngineWindow({ url, children }) {
+// `bare` drops the browser bar (dots + URL) — the desktop showcase frames
+// its media without browser chrome; the mobile rows keep it.
+function EngineWindow({ url, bare = false, children }) {
   return (
     <div className="engine-window">
-      <div className="engine-window__bar">
-        <span className="engine-window__dot" style={{ background: '#ff5f57' }} />
-        <span className="engine-window__dot" style={{ background: '#febc2e' }} />
-        <span className="engine-window__dot" style={{ background: '#28c840' }} />
-        <span className="engine-window__url">{url}</span>
-      </div>
+      {!bare && (
+        <div className="engine-window__bar">
+          <span className="engine-window__dot" style={{ background: '#ff5f57' }} />
+          <span className="engine-window__dot" style={{ background: '#febc2e' }} />
+          <span className="engine-window__dot" style={{ background: '#28c840' }} />
+          <span className="engine-window__url">{url}</span>
+        </div>
+      )}
       <div className="engine-window__body">{children}</div>
     </div>
   );
@@ -318,10 +345,10 @@ function PcDot({ brand }) {
 // Same per-platform numbers as HeroDashboard's own Visibility Analysis
 // panel, so the two don't disagree about Sony's actual scores.
 const PC_VIS_ROWS = [
-  { name: 'Gemini', icon: 'gemini-ai-logo.png', pct: 97 },
-  { name: 'ChatGPT', icon: 'chatgpt-com-logo.png', pct: 92 },
-  { name: 'Mistral', icon: 'mistral-ai-logo.png', pct: 89 },
-  { name: 'Claude', icon: 'claudeai-com-logo.png', pct: 82 },
+  { name: 'Gemini', pct: 97 },
+  { name: 'ChatGPT', pct: 92 },
+  { name: 'Mistral', pct: 89 },
+  { name: 'Claude', pct: 82 },
 ];
 // Sentiment bars snap to their tier's fixed width, same as SCORE_TO_PCT in
 // the real component — the bar reflects the tier bucket, not the raw score.
@@ -361,7 +388,6 @@ function PcAnalysis() {
             <div key={r.name} className="pc-an__bar-row">
               <div className="pc-an__bar-head">
                 <span className="pc-an__bar-name">
-                  <img src={`${import.meta.env.BASE_URL}${r.icon}`} alt="" />
                   {r.name}
                 </span>
                 <span className="pc-an__bar-pct">{r.pct}%</span>
@@ -559,10 +585,10 @@ function PositionChartDemo() {
 // most-recognized, plus Perplexity since its "Blocked" status is the one
 // worth surfacing.
 const TH_CRAWLERS = [
-  { name: 'ChatGPT', logo: 'chatgpt-com-logo.png', status: 'Allowed' },
-  { name: 'Claude', logo: 'claudeai-com-logo.png', status: 'Allowed' },
-  { name: 'Gemini', logo: 'gemini-ai-logo.png', status: 'Allowed' },
-  { name: 'Perplexity', logo: 'perplexity-ai-logo.png', status: 'Blocked' },
+  { name: 'ChatGPT', status: 'Allowed' },
+  { name: 'Claude', status: 'Allowed' },
+  { name: 'Gemini', status: 'Allowed' },
+  { name: 'Perplexity', status: 'Blocked' },
 ];
 
 /* ── Site Health Pipeline — ported from components/common/
@@ -583,13 +609,14 @@ const TH_HEALTH_SCORE = Math.round(TH_STAGES.reduce((s, x) => s + x.value, 0) / 
 // they arrive in succession rather than as one clump — all landed by
 // ~38% of the shared cycle, well before the card slides to Issues/Robots
 // at 45% (see TH_CYCLE_DURATION and .th-scroll below).
+// Positions for the crawler glyphs that flow through the pipeline.
 const TH_PIPE_ICONS = [
-  { logo: 'mistral-ai-logo.png', top: '22%', startLeft: '2%' },
-  { logo: 'chatgpt-com-logo.png', top: '38%', startLeft: '2%' },
-  { logo: 'claudeai-com-logo.png', top: '22%', startLeft: '2%' },
-  { logo: 'perplexity-ai-logo.png', top: '66%', startLeft: '2%' },
-  { logo: 'grok-com-logo.png', top: '80%', startLeft: '2%' },
-  { logo: 'gemini-ai-logo.png', top: '66%', startLeft: '2%' },
+  { top: '22%', startLeft: '2%' },
+  { top: '38%', startLeft: '2%' },
+  { top: '22%', startLeft: '2%' },
+  { top: '66%', startLeft: '2%' },
+  { top: '80%', startLeft: '2%' },
+  { top: '66%', startLeft: '2%' },
 ];
 // Shared by the icon flow AND the panel slide (.th-scroll__track) so
 // "icons finish, then it slides" stays true — kept as one constant
@@ -684,7 +711,7 @@ function ThPipelinePanel() {
 
         {TH_PIPE_ICONS.map((ic, i) => (
           <div
-            key={ic.logo}
+            key={i}
             className="th-pipe__icon"
             style={{
               top: ic.top,
@@ -694,7 +721,10 @@ function ThPipelinePanel() {
               animationDelay: `${TH_ICON_STAGGER * i}s`,
             }}
           >
-            <img src={`${import.meta.env.BASE_URL}${ic.logo}`} alt="" />
+            {/* Generic crawler glyph — no AI-engine brand logos on the site. */}
+            <svg viewBox="0 0 24 24" width="60%" height="60%" fill="none" stroke="#0062ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" /><path d="M2 14h2" /><path d="M20 14h2" /><path d="M15 13v2" /><path d="M9 13v2" />
+            </svg>
           </div>
         ))}
 
@@ -961,7 +991,6 @@ function ThRobotsPanel() {
       <div className="th-crawlers">
         {TH_CRAWLERS.map((c) => (
           <div key={c.name} className={`th-crawler${c.status === 'Blocked' ? ' th-crawler--blocked' : ''}`}>
-            <img src={`${import.meta.env.BASE_URL}${c.logo}`} alt="" />
             <span className="th-crawler__name">{c.name}</span>
             <span className={`th-crawler__status th-crawler__status--${c.status.toLowerCase()}`}>{c.status === 'Blocked' ? d.blocked : d.allowed}</span>
           </div>
@@ -1026,29 +1055,29 @@ function RmCard({ titleKey, type, dimmed, infoRef }) {
 
 // `dayKey` maps to home.engine.demo.roadmap.day* — see RmCalendarPanel.
 const RM_CAL_DAYS = ['dayMon', 'dayTue', 'dayWed', 'dayThu', 'dayFri', 'daySat', 'daySun'];
-// Two weeks (Aug 24–Sep 6) — enough to show the "today" marker and both
+// Two weeks (Oct 5–Oct 18) — enough to show the "today" marker and both
 // task days without rendering a whole 5-week grid.
 const RM_CAL_WEEKS = [
-  [24, 25, 26, 27, 28, 29, 30],
-  [31, 1, 2, 3, 4, 5, 6],
+  [5, 6, 7, 8, 9, 10, 11],
+  [12, 13, 14, 15, 16, 17, 18],
 ];
 const RM_DRAGGED_CARD = { titleKey: 'taskCanonicalRunningPegasus', type: 'fix' };
 // Static cards, minus the one that actually moves (see RM_DRAGGED_CARD /
 // useRmDrag below) — that one is placed by day from `owner` state instead,
-// so Aug 25 and Aug 26 genuinely gain/lose a row and reflow, rather than
+// so Oct 6 and Oct 7 genuinely gain/lose a row and reflow, rather than
 // just showing a floating duplicate on top of a fixed layout.
 const RM_CAL_STATIC_CARDS = {
-  25: [{ titleKey: 'taskCanonicalSitemap', type: 'fix' }],
-  1: [
+  6: [{ titleKey: 'taskCanonicalSitemap', type: 'fix' }],
+  13: [
     { titleKey: 'taskItemListSchema', type: 'fix' },
     { titleKey: 'taskRewriteTitles', type: 'fix' },
   ],
 };
-// Column geometry for the drag demo — MON is column 0, so Aug 25 (TUE) is
-// column 1 and Aug 26 (WED) is column 2, out of the calendar's 7 equal
+// Column geometry for the drag demo — MON is column 0, so Oct 6 (TUE) is
+// column 1 and Oct 7 (WED) is column 2, out of the calendar's 7 equal
 // columns.
 const RM_COL_PCT = 100 / 7;
-const RM_DAY_LEFT = { 25: `calc(${RM_COL_PCT * 1}% + 2px)`, 26: `calc(${RM_COL_PCT * 2}% + 2px)` };
+const RM_DAY_LEFT = { 6: `calc(${RM_COL_PCT * 1}% + 2px)`, 7: `calc(${RM_COL_PCT * 2}% + 2px)` };
 
 // Drives the "drag a card to a new date" loop: `owner` is which day's cell
 // actually holds RM_DRAGGED_CARD in the real layout (so the grid reflows
@@ -1057,7 +1086,7 @@ const RM_DAY_LEFT = { 25: `calc(${RM_COL_PCT * 1}% + 2px)`, 26: `calc(${RM_COL_P
 // into view, then repeats on a ~7.6s cycle: lift → fly → hold 2.5s at the
 // new date → lift → fly back → hold at rest → repeat.
 function useRmDrag(rootRef) {
-  const [owner, setOwner] = useState(25);
+  const [owner, setOwner] = useState(6);
   const [flight, setFlight] = useState(null); // null | { from, to?, lifted }
 
   useEffect(() => {
@@ -1067,12 +1096,12 @@ function useRmDrag(rootRef) {
     const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
 
     function cycle() {
-      after(500, () => setFlight({ from: 25 }));
-      after(900, () => setFlight({ from: 25, to: 26 }));
-      after(900 + 800, () => { setOwner(26); setFlight(null); });
-      after(900 + 800 + 2500, () => setFlight({ from: 26 }));
-      after(900 + 800 + 2500 + 400, () => setFlight({ from: 26, to: 25 }));
-      after(900 + 800 + 2500 + 400 + 800, () => { setOwner(25); setFlight(null); });
+      after(500, () => setFlight({ from: 6 }));
+      after(900, () => setFlight({ from: 6, to: 7 }));
+      after(900 + 800, () => { setOwner(7); setFlight(null); });
+      after(900 + 800 + 2500, () => setFlight({ from: 7 }));
+      after(900 + 800 + 2500 + 400, () => setFlight({ from: 7, to: 6 }));
+      after(900 + 800 + 2500 + 400 + 800, () => { setOwner(6); setFlight(null); });
       after(900 + 800 + 2500 + 400 + 800 + 1200, cycle);
     }
 
@@ -1098,8 +1127,8 @@ function RmCalendarPanel() {
   const { owner, flight } = useRmDrag(rootRef);
 
   // The dragged card renders as a genuine member of whichever day's list
-  // currently owns it — not an overlay on top of a fixed layout — so Aug
-  // 25 and Aug 26 actually gain/lose a row and the grid reflows for real.
+  // currently owns it — not an overlay on top of a fixed layout — so Oct
+  // 6 and Oct 7 actually gain/lose a row and the grid reflows for real.
   const cardsForDay = (day) => {
     const rest = RM_CAL_STATIC_CARDS[day] || [];
     if (day !== owner) return rest;
@@ -1113,8 +1142,8 @@ function RmCalendarPanel() {
       </div>
       <div className="rm-cal-grid" ref={rootRef}>
         {RM_CAL_WEEKS.flat().map((day, i) => (
-          <div key={i} className={`rm-cal-cell${day === 24 ? ' rm-cal-cell--today' : ''}`}>
-            <span className={`rm-cal-daynum${day === 24 ? ' rm-cal-daynum--today' : ''}`}>{day}</span>
+          <div key={i} className={`rm-cal-cell${day === 5 ? ' rm-cal-cell--today' : ''}`}>
+            <span className={`rm-cal-daynum${day === 5 ? ' rm-cal-daynum--today' : ''}`}>{day}</span>
             <div className="rm-cal-cards">
               {cardsForDay(day).map((c) => <RmCard key={c.titleKey} {...c} />)}
             </div>
@@ -1963,9 +1992,292 @@ function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everReve
   );
 }
 
+// Desktop-only layout: the 5 pillars as a stack of cards on the left, one
+// shared window on the right showing whichever card is active. Below
+// ENGINE_DESKTOP_MQ the section keeps the alternating EngineRow layout.
+const ENGINE_DESKTOP_MQ = '(min-width: 1025px)';
+
+function useEngineDesktop() {
+  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(ENGINE_DESKTOP_MQ).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(ENGINE_DESKTOP_MQ);
+    const onChange = () => setMatches(mql.matches);
+    onChange();
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+  return matches;
+}
+
+// One icon per pillar for the desktop showcase cards, in card order:
+// Reputation (chart), Trust (shield), Roadmap (calendar), Content (pen),
+// Build Trust Across the Web (link).
+const ENGINE_ICON_PROPS = { viewBox: '0 0 24 24', width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' };
+const ENGINE_ICONS = [
+  <svg key="rep" {...ENGINE_ICON_PROPS}><path d="M3 3v18h18" /><path d="m7 15 4-4 3 3 5-6" /></svg>,
+  <svg key="trust" {...ENGINE_ICON_PROPS}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>,
+  <svg key="road" {...ENGINE_ICON_PROPS}><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>,
+  <svg key="content" {...ENGINE_ICON_PROPS}><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>,
+  <svg key="web" {...ENGINE_ICON_PROPS}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>,
+];
+
+// Card copy (icon, title, number, short desc, Learn More). `interactive`
+// is off for the copies riding on the flip animation — those are purely
+// visual, so no second button/link for keyboard or screen readers.
+function EngineCardFace({ card, index, learnMore, pressed, highlight, interactive }) {
+  const title = <span className={highlight ? 'engine-row__title--tour-active' : undefined}>{card.title}</span>;
+  return (
+    <>
+      <div className="engine-card__head">
+        <span className="engine-card__icon" aria-hidden="true">{ENGINE_ICONS[index]}</span>
+        {interactive ? (
+          <h3 className="engine-card__title">
+            <button type="button" className="engine-card__trigger" aria-pressed={pressed} aria-controls="engine-showcase-panel">{title}</button>
+          </h3>
+        ) : (
+          <div className="engine-card__title">{title}</div>
+        )}
+        <span className="engine-card__num">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <p className="engine-card__desc">{card.desc}</p>
+      {card.href && (() => {
+        const inner = (
+          <>
+            {learnMore}
+            <span className="engine-row__link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+          </>
+        );
+        return interactive
+          ? <Link to={card.href} className="engine-row__link engine-card__link">{inner}</Link>
+          : <span className="engine-row__link engine-card__link">{inner}</span>;
+      })()}
+    </>
+  );
+}
+
+function EngineSlot({ card, index, learnMore, isActive, isAway, showProgress, registerSlot, onHoverIn, onHoverOut, onSelect }) {
+  return (
+    <div
+      ref={(el) => registerSlot(index, el)}
+      className={`engine-card${isActive ? ' engine-card--active' : ''}${isAway ? ' engine-card--away' : ''}`}
+      onMouseEnter={() => onHoverIn(index)}
+      onMouseLeave={onHoverOut}
+      onFocus={() => onSelect(index)}
+      onClick={() => onSelect(index)}
+    >
+      <EngineCardFace card={card} index={index} learnMore={learnMore} pressed={isActive} interactive />
+      {/* Autoplay countdown: a stroke that traces the card's border once,
+          timed to the hold (after the flip lands), so the visitor can see
+          the next card coming. Unmounted while paused, so it restarts from
+          zero together with the autoplay timer. */}
+      {showProgress && (
+        <svg
+          className="engine-card__progress"
+          aria-hidden="true"
+          style={{ '--engine-progress-ms': `${ENGINE_AUTOPLAY_MS}ms`, '--engine-progress-delay': `${ENGINE_FLIP_MS}ms` }}
+        >
+          <rect x="0" y="0" width="100%" height="100%" rx="20" ry="20" pathLength="100" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
+const ENGINE_FLIP_MS = 700;
+const ENGINE_FLIP_EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
+// Hover has to rest this long before a card flips in — sweeping the
+// pointer across the grid shouldn't fire a flip for every card it crosses.
+const ENGINE_HOVER_DELAY = 120;
+// Autoplay: each card holds the center this long after landing, then the
+// next one flips in (05 wraps back to 01).
+const ENGINE_AUTOPLAY_MS = 5000;
+
+// Center-to-center translate + scale that maps box `to` onto box `from`
+// (transform-origin is the element's center), with a fixed perspective so
+// the rotateY reads as a real 3D flip.
+function engineFlipTransform(from, to, deg) {
+  const dx = (from.left + from.width / 2) - (to.left + to.width / 2);
+  const dy = (from.top + from.height / 2) - (to.top + to.height / 2);
+  return `perspective(1600px) translate(${dx}px, ${dy}px) scale(${from.width / to.width}, ${from.height / to.height}) rotateY(${deg}deg)`;
+}
+
+function EngineShowcase({ cards, learnMore }) {
+  // null until the section scrolls into view, then 0 — so card 01's own
+  // flip into the center is the first thing a visitor sees here.
+  const [active, setActive] = useState(null);
+  // The previously active card, flying from the center back to its slot.
+  const [returning, setReturning] = useState(null);
+  // Autoplay only runs while the section is on screen and the visitor
+  // isn't pointing at or tabbing through it — any interaction holds the
+  // current card until they leave.
+  const [onScreen, setOnScreen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const wrapRef = useRef(null);
+  const flipRef = useRef(null);
+  const returnRef = useRef(null);
+  const slotRefs = useRef([]);
+  const hoverTimer = useRef(null);
+  const activeRef = useRef(null);
+  const reducedMotion = useRef(false);
+  const card = active == null ? null : cards[active];
+  const Visual = active == null ? null : (ENGINE_VISUALS[active] || EnginePlaceholder);
+
+  const rectIn = (el) => {
+    const r = el.getBoundingClientRect();
+    const w = wrapRef.current.getBoundingClientRect();
+    return { left: r.left - w.left, top: r.top - w.top, width: r.width, height: r.height };
+  };
+
+  const select = useCallback((i) => {
+    const prev = activeRef.current;
+    if (prev === i) return;
+    activeRef.current = i;
+    if (prev != null && !reducedMotion.current && flipRef.current && slotRefs.current[prev]) {
+      setReturning({ index: prev, slot: rectIn(slotRefs.current[prev]), from: rectIn(flipRef.current) });
+    } else {
+      setReturning(null);
+    }
+    setActive(i);
+  }, []);
+
+  const hoverIn = useCallback((i) => {
+    clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => select(i), ENGINE_HOVER_DELAY);
+  }, [select]);
+  const hoverOut = useCallback(() => clearTimeout(hoverTimer.current), []);
+  const registerSlot = useCallback((i, el) => { slotRefs.current[i] = el; }, []);
+
+  useEffect(() => {
+    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      setOnScreen(entry.isIntersecting);
+      if (entry.isIntersecting && activeRef.current == null) select(0);
+    }, { threshold: 0.25 });
+    io.observe(el);
+    return () => { io.disconnect(); clearTimeout(hoverTimer.current); };
+  }, [select]);
+
+  useEffect(() => {
+    if (active == null || !onScreen || paused) return;
+    const t = setTimeout(() => select((active + 1) % cards.length), ENGINE_FLIP_MS + ENGINE_AUTOPLAY_MS);
+    return () => clearTimeout(t);
+  }, [active, onScreen, paused, cards.length, select]);
+
+  // Incoming: the center panel itself starts exactly over the card's slot,
+  // face up, and flips over (180°) as it grows into the center — its back
+  // face is the preview. Once it lands, .is-flipping comes off and the
+  // panel is a plain, untransformed preview again.
+  useLayoutEffect(() => {
+    const flip = flipRef.current;
+    const slot = slotRefs.current[active];
+    if (active == null || !flip || !slot || reducedMotion.current) return;
+    flip.getAnimations().forEach((a) => a.cancel());
+    const to = rectIn(flip);
+    const from = rectIn(slot);
+    flip.classList.add('is-flipping');
+    const anim = flip.animate(
+      [{ transform: engineFlipTransform(from, to, 0) }, { transform: 'perspective(1600px) translate(0, 0) scale(1, 1) rotateY(180deg)' }],
+      { duration: ENGINE_FLIP_MS, easing: ENGINE_FLIP_EASE },
+    );
+    anim.onfinish = () => flip.classList.remove('is-flipping');
+    anim.oncancel = () => flip.classList.remove('is-flipping');
+  }, [active]);
+
+  // Outgoing: a stand-in for the previous card starts over the center
+  // (preview side up, shown as a blank face) and flips back down into its
+  // own slot. The real card reappears there when it lands.
+  useLayoutEffect(() => {
+    const el = returnRef.current;
+    if (!returning || !el) return;
+    const anim = el.animate(
+      [{ transform: engineFlipTransform(returning.from, returning.slot, 180) }, { transform: 'perspective(1600px) translate(0, 0) scale(1, 1) rotateY(0deg)' }],
+      { duration: ENGINE_FLIP_MS, easing: ENGINE_FLIP_EASE },
+    );
+    anim.onfinish = () => setReturning((r) => (r === returning ? null : r));
+    return () => anim.cancel();
+  }, [returning]);
+
+  const renderCard = (i) => (
+    <EngineSlot
+      key={i}
+      card={cards[i]}
+      index={i}
+      learnMore={learnMore}
+      isActive={i === active}
+      // Hidden only while its stand-in is flying back into it, so the card
+      // never shows twice; the slot still holds its place in the grid.
+      isAway={returning?.index === i && i !== active}
+      showProgress={i === active && onScreen && !paused}
+      registerSlot={registerSlot}
+      onHoverIn={hoverIn}
+      onHoverOut={hoverOut}
+      onSelect={select}
+    />
+  );
+
+  // Bento, running around the center panel: 01 top-left, 02 bottom-left,
+  // 03 under the panel, 04 bottom-right, 05 top-right. The right column is
+  // 04 then 05 in the DOM (CSS lifts 05 to the top) so keyboard/reader
+  // order still runs 01 → 05; CSS places each column on the grid.
+  return (
+    <div
+      className="container engine-showcase"
+      ref={wrapRef}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false); }}
+    >
+      <div className="engine-showcase__col engine-showcase__col--left">{[0, 1].map(renderCard)}</div>
+      <div className="engine-showcase__col engine-showcase__col--center">
+        <div className="engine-showcase__panel" id="engine-showcase-panel">
+          <div className="engine-flip" ref={flipRef}>
+            <div className="engine-flip__front engine-card engine-card--active" aria-hidden="true">
+              {card && <EngineCardFace card={card} index={active} learnMore={learnMore} />}
+            </div>
+            <div className="engine-flip__back">
+              {/* Keyed on the active card so each demo remounts and replays
+                  from its first frame every time its card is selected. */}
+              {card ? (
+                <div key={active} className="engine-row__visual engine-showcase__visual reveal visible">
+                  <EngineWindow url={card.url} bare><Visual /></EngineWindow>
+                </div>
+              ) : (
+                <div className="engine-flip__spacer" />
+              )}
+            </div>
+          </div>
+        </div>
+        {renderCard(2)}
+      </div>
+      <div className="engine-showcase__col engine-showcase__col--right">{[3, 4].map(renderCard)}</div>
+      {returning && (
+        <div
+          className="engine-flip engine-flip--return is-flipping"
+          ref={returnRef}
+          aria-hidden="true"
+          style={{ left: returning.slot.left, top: returning.slot.top, width: returning.slot.width, height: returning.slot.height }}
+        >
+          <div className="engine-flip__front engine-card engine-card--muted">
+            <EngineCardFace card={cards[returning.index]} index={returning.index} learnMore={learnMore} />
+          </div>
+          <div className="engine-flip__back engine-flip__blank" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PlatformEngine() {
   const { t } = useLang();
   const pe = t('home.engine');
+  const isDesktop = useEngineDesktop();
   const rowRefs = useRef([]);
   // Indices whose title highlight has ever played — once added, a card's
   // highlight stays on permanently; only a full page reload clears this.
@@ -1997,7 +2309,7 @@ function PlatformEngine() {
     );
     rows.forEach((row) => observer.observe(row));
     return () => observer.disconnect();
-  }, []);
+  }, [isDesktop]);
 
   return (
     <section className="engine" id="engine">
@@ -2008,22 +2320,26 @@ function PlatformEngine() {
           <p className="sec-lead">{pe.lead}</p>
         </div>
       </div>
-      <div className="engine-rows">
-        {/* Keyed by index, not card.title — the title changes on EN↔FR
-            switch, which would remount the row with fresh DOM the observer
-            above never watches, leaving unvisited rows stuck invisible. */}
-        {pe.cards.map((card, i) => (
-          <EngineRow
-            key={i}
-            index={i}
-            card={card}
-            learnMore={pe.learnMore}
-            innerRef={(el) => { rowRefs.current[i] = el; }}
-            everHighlighted={visitedIdx.has(i)}
-            everRevealed={visitedIdx.has(i)}
-          />
-        ))}
-      </div>
+      {isDesktop ? (
+        <EngineShowcase cards={pe.cards} learnMore={pe.learnMore} />
+      ) : (
+        <div className="engine-rows">
+          {/* Keyed by index, not card.title — the title changes on EN↔FR
+              switch, which would remount the row with fresh DOM the observer
+              above never watches, leaving unvisited rows stuck invisible. */}
+          {pe.cards.map((card, i) => (
+            <EngineRow
+              key={i}
+              index={i}
+              card={card}
+              learnMore={pe.learnMore}
+              innerRef={(el) => { rowRefs.current[i] = el; }}
+              everHighlighted={visitedIdx.has(i)}
+              everRevealed={visitedIdx.has(i)}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -2181,6 +2497,237 @@ function ComparisonTable() {
 /* ================================================================
    STAKES
    ================================================================ */
+/* ================================================================
+   HOW IT WORKS — three plain steps: track, fix, publish
+   ================================================================ */
+/* One animated glyph per step. Animations only run once the step has
+   revealed (.reveal.visible), and are switched off for reduced motion. */
+const HOW_ICONS = [
+  {
+    // Track — a radar sweep finding blips (where AI names you and rivals)
+    key: 'track',
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <circle cx="16" cy="16" r="11" opacity="0.45" />
+        <circle cx="16" cy="16" r="6" opacity="0.45" />
+        <g className="how-anim how-anim--sweep">
+          <path d="M16 16 L16 5" />
+          <path d="M16 16 L16 5 A11 11 0 0 1 23.8 8.2 Z" fill="currentColor" stroke="none" opacity="0.25" />
+        </g>
+        <circle className="how-anim how-anim--blip how-anim--b1" cx="21.5" cy="11" r="1.7" fill="currentColor" stroke="none" />
+        <circle className="how-anim how-anim--blip how-anim--b2" cx="10" cy="19.5" r="1.7" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    // Fix — a prioritized checklist ticking itself off
+    key: 'fix',
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {[9, 16, 23].map((y, n) => (
+          <g key={y}>
+            <rect x="5.5" y={y - 2.5} width="5" height="5" rx="1.2" opacity="0.55" />
+            <path className={`how-anim how-anim--tick how-anim--t${n + 1}`} d={`M6.6 ${y} l1.4 1.4 l2.6 -2.8`} pathLength="1" />
+            <path d={`M14 ${y} H${26 - n * 3}`} opacity="0.55" />
+          </g>
+        ))}
+      </svg>
+    ),
+  },
+  {
+    // Publish — a page writes itself, then ships up to your site
+    key: 'publish',
+    svg: (
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <g className="how-anim how-anim--page">
+          <path d="M9 5.5h10l4 4v17H9z" />
+          <path d="M19 5.5v4h4" opacity="0.6" />
+          <path className="how-anim how-anim--line how-anim--l1" d="M12.5 14H19.5" pathLength="1" />
+          <path className="how-anim how-anim--line how-anim--l2" d="M12.5 18H19.5" pathLength="1" />
+          <path className="how-anim how-anim--line how-anim--l3" d="M12.5 22H17" pathLength="1" />
+        </g>
+      </svg>
+    ),
+  },
+];
+
+/* The steps play in a loop while in view, paced like a guided walk-through:
+   icon 1 plays, a pause, the line to step 2 draws left to right, icon 2, a
+   pause, the next line, icon 3; a hold, the lines fade out, and it starts
+   over.
+   `stage`, three per step (i = step index):
+     3i = icon i playing, 3i+1 = pause after it, 3i+2 = line i drawing;
+     6 = icon 3 playing, 7 = hold, 8 = lines fading, 9 = lines reset.
+   `cycle` counts loops so each icon knows to play again. */
+const HOW_DWELL_MS = 1000;
+const HOW_LINE_MS = 900;
+const HOW_HOLD_MS = 2000;
+const HOW_FADE_MS = 500;
+const HOW_HOLD_STAGE = 7;
+
+function HowItWorks() {
+  const { t } = useLang();
+  const hw = t('home.howItWorks');
+  const listRef = useRef(null);
+  const [stage, setStage] = useState(-1);
+  const [cycle, setCycle] = useState(0);
+  const [inView, setInView] = useState(false);
+
+  // Track whether the steps are on screen; the loop only runs while they are
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(([entry]) => {
+      setInView(entry.isIntersecting);
+      if (entry.isIntersecting) setStage((s) => (s < 0 ? 0 : s));
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Timed stages: pauses, lines drawing, the hold, the fade-out, the reset
+  useEffect(() => {
+    if (stage < 0 || (stage % 3 === 0 && stage < HOW_HOLD_STAGE)) return undefined;
+    const media = (q) => window.matchMedia(q).matches;
+    const reduce = media('(prefers-reduced-motion: reduce)');
+    const noLines = media('(max-width: 768px)') || reduce;
+    // Reduced motion: play through once and stop on the finished state
+    if (stage === HOW_HOLD_STAGE && reduce) return undefined;
+    // Wait at the end until the section is back on screen
+    if (stage === HOW_HOLD_STAGE && !inView) return undefined;
+    let next;
+    if (stage === HOW_HOLD_STAGE) next = HOW_HOLD_MS;
+    else if (stage === 8) next = noLines ? 0 : HOW_FADE_MS;
+    else if (stage === 9) next = 50; // one painted frame with the lines collapsed, transitions off
+    else if (stage % 3 === 1) next = reduce ? 0 : HOW_DWELL_MS;
+    else next = noLines ? 0 : HOW_LINE_MS;
+    const timer = setTimeout(() => {
+      if (stage === 9) {
+        setCycle((c) => c + 1);
+        setStage(0);
+      } else {
+        setStage(stage + 1);
+      }
+    }, next);
+    return () => clearTimeout(timer);
+  }, [stage, inView]);
+
+  const finishIcon = useCallback((i) => {
+    setStage((s) => (s === i * 3 ? s + 1 : s));
+  }, []);
+
+  // Icons start gray, turn blue as their step plays and stay blue for the
+  // rest of the run; all go back to gray as the lines fade out.
+  const isLit = (i) => stage >= i * 3 && stage <= HOW_HOLD_STAGE;
+
+  const lineClass = (i) => {
+    if (stage === 9) return ' is-reset';
+    if (stage === 8) return ' is-drawn is-fading';
+    return stage >= i * 3 + 2 ? ' is-drawn' : '';
+  };
+
+  return (
+    <section id="how-it-works" className="how">
+      <div className="container">
+        <div className="sec-head reveal">
+          <Eyebrow>{hw.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{hw.h2Pre}<br /><HL>{hw.h2Hl}</HL></h2>
+          <p className="sec-lead">{hw.lead}</p>
+        </div>
+        <ol ref={listRef} className="how__steps">
+          {hw.steps.map((step, i) => (
+            <li key={step.title} className={`how__step reveal reveal--d${i + 1}`}>
+              {i < hw.steps.length - 1 && (
+                <span className={`how__link${lineClass(i)}`} aria-hidden="true" />
+              )}
+              <span className={`how__icon how__icon--${HOW_ICONS[i].key}${isLit(i) ? ' is-lit' : ''}`} aria-hidden="true">
+                <StepLottieIcon
+                  name={HOW_ICONS[i].key}
+                  fallback={HOW_ICONS[i].svg}
+                  active={stage === i * 3}
+                  playKey={cycle}
+                  onDone={() => finishIcon(i)}
+                />
+              </span>
+              <h3 className="how__h3">{i + 1}. {step.title}</h3>
+              <p className="how__desc">{step.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================
+   TRUST — facts we can stand behind (no data selling is stated in the
+   privacy policy)
+   ================================================================ */
+function Trust() {
+  const { t } = useLang();
+  const tr = t('home.trust');
+  const ICONS = [
+    (<><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>),
+    (<><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></>),
+    (<><path d="M20 6 9 17l-5-5"/></>),
+  ];
+  return (
+    <section className="trust">
+      <div className="container">
+        <div className="sec-head reveal">
+          <Eyebrow>{tr.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{tr.h2Pre}<br /><HL>{tr.h2Hl}</HL></h2>
+          <p className="sec-lead">{tr.lead}</p>
+        </div>
+        <div className="trust__grid">
+          {tr.items.map((item, i) => (
+            <div key={item.title} className={`trust__item reveal reveal--d${i + 1}`}>
+              <span className="trust__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {ICONS[i]}
+                </svg>
+              </span>
+              <h3 className="trust__h3">{item.title}</h3>
+              <p className="trust__desc">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================
+   HOME FAQ — the five questions buyers ask first; the full list
+   lives on /faqs. Native <details> so it works without JS.
+   ================================================================ */
+function HomeFaq() {
+  const { t, lang } = useLang();
+  const fq = t('home.faq');
+  return (
+    <section className="home-faq">
+      <div className="container home-faq__inner">
+        <div className="sec-head reveal">
+          <Eyebrow>{fq.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{fq.h2Pre} <HL>{fq.h2Hl}</HL></h2>
+        </div>
+        <div className="home-faq__list reveal">
+          {fq.items.map((item) => (
+            <details key={item.q} className="home-faq__item">
+              <summary className="home-faq__q">
+                <span>{item.q}</span>
+                <span className="home-faq__icon" aria-hidden="true">+</span>
+              </summary>
+              <p className="home-faq__a">{item.a}</p>
+            </details>
+          ))}
+        </div>
+        <Link to={`/${lang}/faqs`} className="home-faq__all">{fq.allLink} →</Link>
+      </div>
+    </section>
+  );
+}
+
 function Stakes() {
   const { t } = useLang();
   const CARD_ICONS = [
@@ -2204,7 +2751,7 @@ function Stakes() {
           {cards.map((card, i) => (
             <div key={i} className={`stakes__card reveal reveal--d${i + 1}`}>
               <div className="stakes__iconbox">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="30" height="30">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   {card.icon}
                 </svg>
               </div>
