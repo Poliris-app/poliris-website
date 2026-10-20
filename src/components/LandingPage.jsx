@@ -38,7 +38,12 @@ export default function LandingPage() {
       (entries) => {
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      // Fire as soon as the element reaches the viewport, not on a ratio
+      // of its own height: a tall element (the How it works steps are
+      // ~210px) can have its top on screen and still be under 12% of
+      // itself, so it stayed at opacity 0 and read as missing content.
+      // The small positive margin starts the fade just before it enters.
+      { threshold: 0, rootMargin: '0px 0px 5% 0px' }
     );
     els.forEach(el => observer.observe(el));
     return () => observer.disconnect();
@@ -1394,6 +1399,23 @@ function RmtBoardCard({ task, dimmed, done, innerRef }) {
 // "Replay interaction" is a manual button and the sequence runs once;
 // here it just restarts itself after a pause, on a loop. Starts once the
 // card has scrolled into view.
+// Pauses a scripted demo while it's off screen: gate(fn) runs fn right away
+// if the demo is visible, otherwise holds it until it scrolls back into view
+// (setVisible(true) flushes the held steps). So a looping demo stops at its
+// next step instead of cycling forever in the background.
+function makeVisibilityGate() {
+  let visible = false;
+  let held = [];
+  return {
+    setVisible(v) {
+      visible = v;
+      if (v && held.length) { const run = held; held = []; run.forEach((fn) => fn()); }
+    },
+    gate(fn) { if (visible) fn(); else held.push(fn); },
+    clear() { held = []; },
+  };
+}
+
 function useRmtShowcase({ rootRef, boardBtnRef, week2Ref, cardRef, progressRef, doneRef, setView, setWeek }) {
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false, down: false, dur: 0 });
   const [ghost, setGhost] = useState(null); // null | { x, y, w, dur }
@@ -1403,9 +1425,12 @@ function useRmtShowcase({ rootRef, boardBtnRef, week2Ref, cardRef, progressRef, 
   const [ebPressed, setEbPressed] = useState(false);
   const cancelledRef = useRef(false);
   const timersRef = useRef([]);
+  const [gate] = useState(makeVisibilityGate);
 
+  // Each step's wait only resolves while the card is on screen, so the loop
+  // stops at its next step when scrolled away and resumes when it's back.
   function wait(ms) {
-    return new Promise((resolve) => { timersRef.current.push(setTimeout(resolve, ms)); });
+    return new Promise((resolve) => { timersRef.current.push(setTimeout(() => gate.gate(resolve), ms)); });
   }
   function patchCursor(p) {
     setCursor((s) => ({ ...s, ...p }));
@@ -1495,17 +1520,20 @@ function useRmtShowcase({ rootRef, boardBtnRef, week2Ref, cardRef, progressRef, 
         await wait(1400);
       }
     }
+    // Starts the first time the card is 30% in view; after that it only
+    // tracks visibility, so the loop pauses whenever the card is off screen.
+    let started = false;
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) return;
-        observer.disconnect();
-        loop();
+      ([entry]) => {
+        gate.setVisible(entry.isIntersecting);
+        if (!started && entry.intersectionRatio >= 0.3) { started = true; loop(); }
       },
-      { threshold: 0.3 },
+      { threshold: [0, 0.3] },
     );
     observer.observe(el);
     return () => {
       observer.disconnect();
+      gate.clear();
       cancelledRef.current = true;
       // timersRef.current is a stable array (pushed to, never reassigned)
       // for this hook's whole lifetime, so reading it here is safe.
@@ -1899,7 +1927,10 @@ function EngineCitationsCard() {
     let timers = [];
     let raf;
     let started = false;
-    const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
+    // Steps fire only while the card is on screen (see makeVisibilityGate),
+    // so the loop stops when scrolled away and resumes when it's back.
+    const gate = makeVisibilityGate();
+    const after = (ms, fn) => { timers.push(setTimeout(() => gate.gate(fn), ms)); };
 
     // Own eased scrollTo instead of the browser's native smooth-scroll —
     // gives full control over how slow/deliberate it feels, rather than
@@ -1984,11 +2015,12 @@ function EngineCitationsCard() {
       after(15350, cycle);
     }
 
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting && !started) { started = true; cycle(); } });
-    }, { threshold: 0.3 });
+    const io = new IntersectionObserver(([e]) => {
+      gate.setVisible(e.isIntersecting);
+      if (!started && e.intersectionRatio >= 0.3) { started = true; cycle(); }
+    }, { threshold: [0, 0.3] });
     io.observe(wrap);
-    return () => { io.disconnect(); cancelAnimationFrame(raf); timers.forEach(clearTimeout); };
+    return () => { io.disconnect(); gate.clear(); cancelAnimationFrame(raf); timers.forEach(clearTimeout); };
   }, []);
 
   return (
@@ -2123,6 +2155,12 @@ const ENGINE_ICONS = [
 // Card copy (icon, title, number, short desc, Learn More). `interactive`
 // is off for the copies riding on the flip animation — those are purely
 // visual, so no second button/link for keyboard or screen readers.
+// Which tags each desktop card shows (indexes into card.tags). Cards 01,
+// 03 and 04 carry a third; the others stay at two because their longest
+// labels ("Smart Content Generation", card 05's FR pair) already fill
+// the row side by side.
+const ENGINE_CARD_TAGS = [[0, 1, 2], [0, 1], [0, 1, 2], [1, 2, 3], [1, 2]];
+
 function EngineCardFace({ card, index, learnMore, pressed, highlight, interactive }) {
   const title = <span className={highlight ? 'engine-row__title--tour-active' : undefined}>{card.title}</span>;
   return (
@@ -2139,6 +2177,15 @@ function EngineCardFace({ card, index, learnMore, pressed, highlight, interactiv
         <span className="engine-card__num">{String(index + 1).padStart(2, '0')}</span>
       </div>
       <p className="engine-card__desc">{card.desc}</p>
+      {/* Two of the row layout's tags (the phone/rows layout still shows
+          them all), picked per card so they fit on one row in EN and FR. */}
+      {card.tags?.length > 0 && (
+        <div className="engine-card__tags">
+          {(ENGINE_CARD_TAGS[index] || [0, 1]).map((i) => card.tags[i]).filter(Boolean).map((tag) => (
+            <span key={tag} className="engine-tag engine-card__tag">{tag}</span>
+          ))}
+        </div>
+      )}
       {card.href && (() => {
         const inner = (
           <>
@@ -2377,6 +2424,18 @@ function PlatformEngine() {
   // no separate tracking needed since both now happen together, the first
   // time each row scrolls into view (no auto-scroll driving any of it).
   const [visitedIdx, setVisitedIdx] = useState(() => new Set());
+  // Off screen, the whole section is marked paused: CSS freezes every
+  // animation inside it (.engine--paused), and the JS-driven demos stop on
+  // their own visibility checks.
+  const sectionRef = useRef(null);
+  const [sectionVisible, setSectionVisible] = useState(true);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setSectionVisible(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const rows = rowRefs.current.filter(Boolean);
@@ -2406,7 +2465,7 @@ function PlatformEngine() {
   }, [isDesktop]);
 
   return (
-    <section className="engine" id="engine">
+    <section className={`engine${sectionVisible ? '' : ' engine--paused'}`} id="engine" ref={sectionRef}>
       <div className="container">
         <div className="sec-head reveal">
           <Eyebrow>{pe.eyebrow}</Eyebrow>
@@ -2466,9 +2525,10 @@ function Agents() {
           <div className="agents__head reveal">
             <div className="agents__head-copy">
               <Eyebrow>{ag.eyebrow}</Eyebrow>
+              {/* Same treatment as the other section headings: the second
+                  line is highlighted rather than coloured blue. */}
               <h2 className="agents__h2">
-                {ag.h2}
-                <span className="agents__h2-blue">{ag.h2Blue}</span>
+                {ag.h2}<br /><HL>{ag.h2Blue}</HL>
               </h2>
             </div>
             <p className="agents__lead">{ag.lead}</p>

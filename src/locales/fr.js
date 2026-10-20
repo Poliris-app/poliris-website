@@ -339,6 +339,19 @@ export default {
         // Card 04's demo (ContentGenDemo): brief → write → publish.
         contentGen: {
           steps: ['Brief', 'Rédaction', 'Publication'],
+          // Voir en.js : l'acte 1 choisit une idée suggérée par Kate.
+          studioTitle: 'Kate · Studio de contenu',
+          studioSub: 'Rédigez des articles bien classés dans les réponses IA',
+          suggestedIdeas: "Idées d'articles suggérées",
+          foundInAudit: '· trouvées dans votre audit GEO',
+          priorityHigh: 'PRIORITÉ HAUTE',
+          priorityMedium: 'MOYENNE',
+          idea1Title: "Sony WF-1000XM5 : le sommet de l'innovation en réduction de bruit",
+          idea1Desc: "Positionne Sony comme le pionnier de la réduction de bruit, du WF-1000X à aujourd'hui : un créneau que les réponses IA n'attribuent actuellement à personne.",
+          idea2Title: "La route vers zéro de Sony : repenser l'audio durable",
+          idea2Desc: "Les matériaux recyclés et engagements carbone de Sony, mis en avant pour capter les réponses IA sensibles à l'écologie.",
+          idea3Title: "Sony contre Apple : qui mène l'avenir de l'audio sans fil ?",
+          idea3Desc: 'Oppose directement Sony à son plus proche rival, pour le positionner devant Apple dans les réponses IA.',
           briefTitle: 'Dites à Kate quoi écrire',
           briefSub: 'Elle lit votre page produit pour en tirer les faits',
           inputLabel: 'Que doit écrire Kate ?',

@@ -195,7 +195,10 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
   return (
     <>
       <ScrollHint />
-      <header id="top" className={`hero${dark ? ' hero--dark' : ''}`}>
+      {/* hero--fr: the French headline is wider than the English one and
+          needs its own type scale to hold one line. <html lang> isn't
+          updated client-side, so :lang(fr) can't be relied on here. */}
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${lang === 'fr' ? ' hero--fr' : ''}`}>
         <div className="hero__glow" aria-hidden="true" />
         <div className="hero__inner">
           <div className="eyebrow">{eyebrow}</div>

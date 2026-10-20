@@ -341,12 +341,21 @@ export default {
         // Card 04's demo (ContentGenDemo): brief → write → publish.
         contentGen: {
           steps: ['Brief', 'Write', 'Publish'],
-          briefTitle: 'Tell Kate what to write',
-          briefSub: 'She reads your product page for the facts',
-          inputLabel: 'What should Kate write?',
-          placeholder: 'e.g. Comparison of noise cancelling earbuds…',
-          prompt: 'Write a guide on how the WF-1000XM6 cancels noise',
-          startWriting: 'Start writing →',
+          // Act 1 picks one of Kate's suggested ideas rather than typing a
+          // brief; same copy as the `content` block above, which the
+          // earlier version of this demo read.
+          studioTitle: 'Kate · Content Studio',
+          studioSub: 'Write articles that rank in AI answers',
+          suggestedIdeas: 'Suggested article ideas',
+          foundInAudit: '· found in your GEO audit',
+          priorityHigh: 'HIGH PRIORITY',
+          priorityMedium: 'MEDIUM',
+          idea1Title: 'Sony WF-1000XM5: The Pinnacle of Noise-Cancelling Innovation',
+          idea1Desc: 'Positions Sony as the pioneer of noise-cancellation technology, from the WF-1000X to today: a gap AI answers currently give to no one.',
+          idea2Title: "Sony's Road to Zero: Reshaping Sustainable Audio",
+          idea2Desc: "Sony's recycled materials and carbon commitments, framed to capture eco-conscious AI answers.",
+          idea3Title: 'Sony vs. Apple: Who Leads the Future of Wireless Audio?',
+          idea3Desc: 'Pits Sony directly against its closest rival, positioned to displace Apple in AI answers.',
           pulled: 'PULLED FROM YOUR PRODUCT PAGE',
           productName: 'WF-1000XM6 Wireless Noise Cancelling Earbuds',
           facts: ['HD Noise Cancelling Processor QN3e', '4 mics + bone-conduction sensors', 'Ergonomic, secure fit'],

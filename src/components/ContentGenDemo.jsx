@@ -13,6 +13,16 @@ const W = 531;
 const H = 399;
 const LOOP = 14500;
 
+/* Act 1's idea grid: three cards across the 499px content width, and the
+   centre of the one the demo picks — the cursor aims at it. */
+const CGD_IDEA_W = 159;
+const CGD_IDEA_GAP = 11;
+const CGD_IDEA_TOP = 96;
+const CGD_IDEA_H = 186;
+const CGD_PICKED = 1;
+const CGD_PICK_X = 16 + CGD_PICKED * (CGD_IDEA_W + CGD_IDEA_GAP) + CGD_IDEA_W / 2;
+const CGD_PICK_Y = CGD_IDEA_TOP + CGD_IDEA_H / 2;
+
 // The original is written as inline style strings; parse them once so the
 // markup below can stay a near-verbatim copy.
 const cache = new Map();
@@ -47,26 +57,40 @@ function vals(t, d) {
       numBg: on ? '#0062FF' : done ? '#DCFCE7' : '#EEF1F6', numColor: on ? '#fff' : done ? '#16A34A' : '#9aa1ac' };
   });
 
-  // cursor: [time, x, y]
-  const K = [[0, 300, 300], [2600, 300, 300], [3200, 447, 171], [8100, 300, 250], [8700, 435, 368], [14500, 435, 368]];
+  // cursor: [time, x, y]. Act 1 now ends on the middle idea card
+  // (CGD_PICK_X/Y) instead of a "Start writing" button.
+  const K = [[0, 300, 330], [2600, 300, 330], [3200, CGD_PICK_X, CGD_PICK_Y], [8100, 300, 250], [8700, 435, 368], [14500, 435, 368]];
   let k = 0; while (k < K.length - 2 && t > K[k + 1][0]) k++;
   const [ta, xa, ya] = K[k], [tb, xb, yb] = K[k + 1];
   const mv = (k === 1 || k === 3) ? eio((t - ta) / (tb - ta)) : (k === 2 ? 1 : (k === 4 ? 1 : 0));
   let curX = xa + (xb - xa) * mv, curY = ya + (yb - ya) * mv;
-  if (k === 2) { curX = 447; curY = 171; }
+  if (k === 2) { curX = CGD_PICK_X; curY = CGD_PICK_Y; }
   if (k === 3 && t < 8100) { curX = 300; curY = 250; }
   const curO = Math.max(cl((t - 2600) / 200) * cl((3750 - t) / 250), cl((t - 8100) / 200) * cl((9300 - t) / 250));
   let curS = 1, ripO = 0, ripS = 0.4, ripX = 0, ripY = 0;
-  [[3300, 447, 171], [8800, 435, 368]].forEach(([tc, x, y]) => { if (t > tc && t < tc + 150) curS = 0.82; const r = (t - tc) / 600; if (r > 0 && r < 1) { ripO = 0.6 * (1 - r); ripS = 0.4 + 1.4 * r; ripX = x; ripY = y; } });
+  [[3300, CGD_PICK_X, CGD_PICK_Y], [8800, 435, 368]].forEach(([tc, x, y]) => { if (t > tc && t < tc + 150) curS = 0.82; const r = (t - tc) / 600; if (r > 0 && r < 1) { ripO = 0.6 * (1 - r); ripS = 0.4 + 1.4 * r; ripX = x; ripY = y; } });
 
-  // act 1
-  const prompt = d.prompt;
-  const typed = t >= 300 ? type(prompt, 300, 1700) : '';
-  const src = pop(1800, 0.7, 320);
-  const fo = eo((t - 1900) / 400);
-  const facts = d.facts.map((text, i) => {
-    const ti = 2200 + i * 260, o = eo((t - ti) / 300), g = t >= ti ? cl(1 - (t - ti) / 700) : 0;
-    return { text, o, y: (1 - o) * 6, border: g > 0.05 ? '#BFD3FF' : '#e6e9f0', glow: `0 0 0 ${(3 * g).toFixed(2)}px rgba(0,98,255,.12)` };
+  // act 1 — Kate's suggested ideas; the demo picks one rather than
+  // typing a brief. PICKED is the centre card: a sibling receding on
+  // either side reads as a considered choice, where always taking the
+  // first looked mechanical.
+  const ideasHdrO = eo((t - 250) / 350);
+  const focus = cl((t - 3050) / 300) * cl((3900 - t) / 250); // 0..1 zoom/dim
+  const ideas = [
+    { priority: 'HIGH', title: d.idea1Title, desc: d.idea1Desc },
+    { priority: 'HIGH', title: d.idea2Title, desc: d.idea2Desc },
+    { priority: 'MEDIUM', title: d.idea3Title, desc: d.idea3Desc },
+  ].map((idea, i) => {
+    const ti = 450 + i * 180, o = eo((t - ti) / 320);
+    const picked = i === CGD_PICKED;
+    const clicked = picked && t > 3300 && t < 3450;
+    return {
+      ...idea, o, y: (1 - o) * 8,
+      s: picked ? 1 + 0.04 * focus - (clicked ? 0.03 : 0) : 1,
+      dim: picked ? 1 : 1 - 0.55 * focus,
+      border: picked && focus > 0.5 ? '#3B6FF5' : '#e8eaf0',
+      shadow: picked ? `0 0 0 ${(1.5 * focus).toFixed(2)}px rgba(59,111,245,.35), 0 ${(10 * focus).toFixed(1)}px ${(22 * focus).toFixed(1)}px -10px rgba(15,23,42,${(0.3 * focus).toFixed(2)})` : 'none',
+    };
   });
 
   // act 2
@@ -83,11 +107,7 @@ function vals(t, d) {
 
   return {
     steps, a1: act(A[0]), a2: act(A[1]), a3: act(A[2]),
-    inText: typed || d.placeholder, inColor: typed ? '#09090b' : '#9aa1ac',
-    inBorder: t >= 300 && t < 3300 ? '#8FB4FF' : '#e3e6ec', inRing: t >= 300 && t < 3300 ? '0 0 0 3px rgba(0,98,255,.12)' : 'none',
-    inCaret: blink(t >= 300 && t < 3300), srcO: src.o, srcS: src.s,
-    startBg: typed.length === prompt.length ? '#0062FF' : '#8BB5FF', startS: t > 3300 && t < 3450 ? 0.95 : 1,
-    factsO: fo, factsY: (1 - fo) * 8, facts,
+    ideas, ideasHdrO,
     h1: type(title, 4200, 4900), h1Caret: blink(t >= 4200 && t < 4900), metaO: eo((t - 4950) / 300),
     pa: P[0].slice(0, Math.min(n, a)), pb: P[1].slice(0, Math.max(0, Math.min(n - a, b))), pc: P[2].slice(0, Math.max(0, n - a - b)),
     hlBg: n > a ? '#FFF4CC' : 'transparent', citeD: n >= a + b ? 'inline-flex' : 'none', pCaret: blink(t >= 5000 && n < tot),
@@ -199,49 +219,40 @@ export default function ContentGenDemo() {
           {/* Act 1 · Brief */}
           <div style={{ ...css('position:absolute;inset:0'), opacity: v.a1.o, transform: `translateY(${v.a1.y}px)` }}>
             <div style={css('position:absolute;left:16px;top:14px;display:flex;flex-direction:column;gap:3px')}>
-              <span style={css('font-size:14px;font-weight:700')}>{d.briefTitle}</span>
-              <span style={css('font-size:11.5px;color:#6B6E72')}>{d.briefSub}</span>
+              <span style={css('font-size:14px;font-weight:700')}>{d.studioTitle}</span>
+              <span style={css('font-size:11.5px;color:#6B6E72')}>{d.studioSub}</span>
             </div>
-            <div style={css('position:absolute;left:16px;top:62px;width:499px;height:140px;border:1px solid #e3e6ec;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(20,30,60,.05)')}>
-              <span style={css('position:absolute;left:12px;top:11px;font-size:12.5px;font-weight:600')}>{d.inputLabel}</span>
-              <div style={{ ...css('position:absolute;left:12px;top:34px;width:475px;height:50px;border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.4'), border: `1px solid ${v.inBorder}`, color: v.inColor, boxShadow: v.inRing }}>
-                <span>{v.inText}</span><span style={{ ...css('display:inline-block;width:1.5px;height:14px;margin-left:1px;vertical-align:-2px;background:#0062FF'), opacity: v.inCaret }} />
-              </div>
-              <div style={{ ...css('position:absolute;left:12px;top:96px;height:26px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:999px;background:#EEF4FF;border:1px solid #BFD3FF;color:#0047b8;font-size:11px;font-weight:600;transform-origin:left center'), opacity: v.srcO, transform: `scale(${v.srcS})` }}>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg>
-                <span>sony.com/headphones/wf-1000xm6</span>
-              </div>
-              <span style={{ ...css('position:absolute;left:375px;top:94px;width:112px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600'), background: v.startBg, transform: `scale(${v.startS})` }}>{d.startWriting}</span>
+            {/* Ideas come from the audit, so the demo picks one instead
+                of typing a brief from a blank prompt. */}
+            <div style={{ ...css('position:absolute;left:16px;top:66px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#3B6FF5'), opacity: v.ideasHdrO }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3B6FF5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z" /></svg>
+              <span>{d.suggestedIdeas}</span>
+              <span style={css('font-weight:500;color:#9aa1ac')}>{d.foundInAudit}</span>
             </div>
-            <div style={{ ...css('position:absolute;left:16px;top:214px;width:499px;height:171px;border:1px solid #e3e6ec;border-radius:12px;background:#FAFBFC;padding:11px 12px;display:flex;flex-direction:column;gap:10px'), opacity: v.factsO, transform: `translateY(${v.factsY}px)` }}>
-              <span style={css('font-size:9.5px;font-weight:700;letter-spacing:.05em;color:#9aa1ac')}>{d.pulled}</span>
-              <div style={css('display:flex;align-items:center;gap:12px')}>
-                <div style={css('width:72px;height:54px;flex:none;border-radius:8px;background:linear-gradient(180deg,#f7f7f8,#eceef1);overflow:hidden')}>
-                  <svg width="72" height="54" viewBox="0 0 150 110" style={{ display: 'block' }}>
-                    <defs>
-                      <linearGradient id="cgd-pA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fbfaf8" /><stop offset=".55" stopColor="#dcd8d1" /><stop offset="1" stopColor="#b9b3a9" /></linearGradient>
-                      <radialGradient id="cgd-pF" cx=".4" cy=".35" r=".7"><stop offset="0" stopColor="#ffffff" /><stop offset=".6" stopColor="#e7e4de" /><stop offset="1" stopColor="#c9c4bb" /></radialGradient>
-                    </defs>
-                    <ellipse cx="34" cy="50" rx="10" ry="12.5" transform="rotate(-18 34 50)" fill="#b3ada3" />
-                    <path d="M38 44c6-14 30-16 40-2 8 11 5 30-9 37-13 6-29 1-33-12-2-7-1-16 2-23z" fill="url(#cgd-pA)" />
-                    <circle cx="101" cy="58" r="24" fill="url(#cgd-pA)" />
-                    <circle cx="101" cy="58" r="17.5" fill="url(#cgd-pF)" />
-                    <circle cx="109" cy="50" r="2.2" fill="#8d877d" />
-                  </svg>
-                </div>
-                <div style={css('display:flex;flex-direction:column;gap:3px;min-width:0')}>
-                  <span style={css('font-size:12.5px;font-weight:600')}>{d.productName}</span>
-                  <span style={css('font-size:10.5px;color:#6B6E72')}>sony.com · Truly Wireless</span>
-                </div>
+            {v.ideas.map((idea, i) => (
+              <div
+                key={idea.title}
+                style={{
+                  ...css('position:absolute;display:flex;flex-direction:column;gap:6px;border-radius:10px;background:#fff;padding:11px 12px;transform-origin:center center'),
+                  left: 16 + i * (CGD_IDEA_W + CGD_IDEA_GAP),
+                  top: CGD_IDEA_TOP,
+                  width: CGD_IDEA_W,
+                  height: CGD_IDEA_H,
+                  border: `1px solid ${idea.border}`,
+                  boxShadow: idea.shadow,
+                  opacity: idea.o * idea.dim,
+                  transform: `translateY(${idea.y}px) scale(${idea.s})`,
+                }}
+              >
+                <span style={{
+                  ...css('align-self:flex-start;font-size:8.5px;font-weight:700;letter-spacing:.03em;padding:3px 7px;border-radius:999px'),
+                  color: idea.priority === 'HIGH' ? '#DC2626' : '#D97706',
+                  background: idea.priority === 'HIGH' ? '#FEE2E2' : '#FEF3C7',
+                }}>{idea.priority === 'HIGH' ? d.priorityHigh : d.priorityMedium}</span>
+                <span style={css('font-size:12px;font-weight:700;line-height:1.3;color:#0d111a')}>{idea.title}</span>
+                <span style={css('font-size:10.5px;line-height:1.45;color:#6B6E72')}>{idea.desc}</span>
               </div>
-              <div style={css('display:flex;flex-wrap:wrap;gap:6px')}>
-                {v.facts.map((f) => (
-                  <span key={f.text} style={{ ...css('display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:#fff;font-size:11px;font-weight:500;color:#3F3F46'), border: `1px solid ${f.border}`, opacity: f.o, transform: `translateY(${f.y}px)`, boxShadow: f.glow }}>
-                    <span style={css('color:#16A34A;font-weight:700')}>✓</span><span>{f.text}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Act 2 · Write */}

@@ -324,6 +324,11 @@ button { cursor: pointer; border: none; background: none; }
   margin: 0 auto;
   text-align: center;
 }
+/* "Your complete AI optimization engine" needs ~755px at this size, so
+   the shared 680px cap broke it over two lines and the heading ran to
+   three. Widened here only; the lead keeps the narrower measure. */
+#engine .sec-head { max-width: 800px; }
+#engine .sec-lead { max-width: 680px; margin-left: auto; margin-right: auto; }
 
 .sec-h2 {
   font-family: var(--manrope);
@@ -944,17 +949,32 @@ button { cursor: pointer; border: none; background: none; }
   z-index: 1;
   max-width: 1110px;
   margin: 0 auto;
-  padding: 84px 0 32px;
+  padding: 120px 0 32px;
 }
 .hero__h1 {
   font-family: var(--manrope);
   font-weight: 800;
-  font-size: clamp(46px, 6.1vw, 72px);
+  /* Sized so "The Search Intelligence Platform" holds one line from the
+     tablet breakpoint up. The headline needs ~15.44px of width per pixel
+     of font size, and the narrowest point in this band (769px) leaves it
+     ~698px — hence 5.7vw, with the floor low enough not to force a
+     wrap there and the cap well inside the 1110px container. */
+  font-size: clamp(42px, 5.7vw, 64px);
   line-height: 1.06;
   letter-spacing: -0.02em;
   color: #000;
   margin: 0 0 22px;
 }
+/* The French headline is about a quarter wider than the English one
+   ("La plateforme d’intelligence de recherche"), so it needs its own,
+   smaller scale to hold the same single line across this band. The
+   class comes from Hero.jsx — <html lang> stays "en" client-side. */
+.hero--fr .hero__h1 {
+  font-size: clamp(34px, 4.5vw, 56px);
+}
+/* Same reason for the lead: the French sentence needs ~860px a line to
+   land on two, where the English one needs ~666px. */
+.hero--fr .hero__lead { max-width: 940px; }
 .hero__audience {
   font-family: var(--chivo);
   font-style: italic;
@@ -966,7 +986,10 @@ button { cursor: pointer; border: none; background: none; }
   font-family: var(--chivo);
   font-size: clamp(18px, 1.5vw, 21px);
   color: var(--fg2);
-  max-width: 660px;
+  /* Two lines: the copy needs ~666px a line and the old 660px cap left
+     it six pixels short, spilling a third. The extra room lets the break
+     land on a word rather than exactly at the halfway point. */
+  max-width: 760px;
   margin: 0 auto 32px;
   line-height: 1.55;
 }
@@ -3666,10 +3689,6 @@ button { cursor: pointer; border: none; background: none; }
   letter-spacing: -0.01em;
   color: #000;
   margin: 0;
-}
-.agents__h2-blue { 
-  color: #0062FF; 
-  display: block; 
 }
 .agents__lead {
   flex: 0 0 340px;
@@ -6566,6 +6585,12 @@ button { cursor: pointer; border: none; background: none; }
   transform: none;
 }
 
+/* Off screen, the whole Platform engine section is paused (PlatformEngine
+   toggles .engine--paused) so its looping demos aren't animating unseen. */
+.engine--paused *,
+.engine--paused *::before,
+.engine--paused *::after { animation-play-state: paused !important; }
+
 /* ── Browser-window chrome ──────────────────────────────────────── */
 .engine-window {
   background: #fff;
@@ -7740,6 +7765,13 @@ button { cursor: pointer; border: none; background: none; }
   color: var(--fg4);
   margin: 0;
 }
+/* Desktop showcase cards show two of each pillar's tags (see EngineCardFace). */
+/* Always a single row: the box is one chip tall, so on narrower desktops a
+   chip that would wrap is hidden instead of starting a second line. */
+/* Two rows of chips (32px each plus the 8px gap). The cap was one row,
+   which silently clipped the third chip on the narrower side cards. */
+.engine-card__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; max-height: 72px; overflow: hidden; }
+.engine-card__tag { font-size: 12.5px; line-height: 18px; padding: 6px 14px; white-space: nowrap; }
 /* Shown on every card (as in the reference) rather than only the active
    one — toggling it changed card heights under the cursor, which shifted
    the next card into the pointer and flipped the selection back. Pushed
@@ -7809,13 +7841,11 @@ button { cursor: pointer; border: none; background: none; }
   box-shadow: 0 30px 60px -24px rgba(20, 30, 80, 0.28), 0 10px 24px -8px rgba(20, 30, 80, 0.10);
 }
 
-/* Every card but the active one reads as inactive — muted until hovered.
-   The active card keeps its full white/blue styling (.engine-card--active
-   above) in its own slot while its preview holds the center. The flying
-   stand-in uses --muted so it lands looking exactly like its slot. */
-.engine-showcase .engine-card:not(.engine-card--active) > *,
-.engine-card--muted > * { opacity: 0.5; transition: opacity 0.3s var(--ease-out); }
-.engine-showcase .engine-card:not(.engine-card--active):hover > * { opacity: 1; }
+/* Every card stays fully legible, hovered or not — the inactive ones
+   used to sit at 0.5 and only come up on hover, which made four of the
+   five hard to read. The active card still reads as active through its
+   own white/blue styling (.engine-card--active above), so it doesn't
+   need the others dimmed to stand out. */
 .engine-card--away { visibility: hidden; }
 
 /* Autoplay countdown traced along the active card's border. Sits on the
