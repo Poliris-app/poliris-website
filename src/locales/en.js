@@ -88,7 +88,7 @@ export default {
         },
         {
           title: 'Site Health Check',
-          desc: 'Test your site’s health for Google and AI crawlers. Find what’s blocking indexing, with a clear fix for each issue.',
+          desc: 'Run 150+ checks on every page to see how Google and AI crawlers read your site. Find what’s blocking indexing, with a clear fix for each issue.',
           tags: ['Crawling & Indexing', 'Page Status', 'Page Speed Insights', 'Overall Health Score', 'Sitemap Test', 'Robots.txt Test'],
           url: 'poliris.io/dashboard/audit/sony',
           href: '/technical-audit',
