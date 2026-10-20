@@ -4154,6 +4154,9 @@ button { cursor: pointer; border: none; background: none; }
   will-change: transform;
 }
 .cta-model-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   font-family: var(--chivo);
   font-size: 13.5px;
   font-weight: 500;
@@ -4161,6 +4164,15 @@ button { cursor: pointer; border: none; background: none; }
   padding: 0 44px;
   white-space: nowrap;
   letter-spacing: 0.03em;
+}
+/* Flattened to white so eight different brand palettes read as one
+   strip on the blue, and at the same weight as the labels beside them. */
+.cta-model-logo {
+  height: 18px;
+  width: auto;
+  flex: none;
+  filter: brightness(0) invert(1);
+  opacity: 0.55;
 }
 
 
