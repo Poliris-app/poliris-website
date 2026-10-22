@@ -38,12 +38,12 @@ export default {
 
   home: {
     hero: {
-      eyebrow: 'Conçu pour l\'ère de l\'IA',
-      titlePre: 'Le',
-      titleHl: 'référencement web',
-      titlePost: 'à l\'ère de l\'IA',
+      eyebrow: 'Gestion de marque IA, au-delà du monitoring',
+      titlePre: 'Prenez en main',
+      titleHl: 'votre SEO',
+      titlePost: 'grâce à l’IA',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
-      lead: 'Voyez où vos produits apparaissent dans la recherche et les réponses IA, pourquoi vos concurrents sont choisis à votre place, et quoi corriger en priorité, au même endroit.',
+      lead: 'Comprenez et gérez votre visibilité sur l\'IA et le web, produit par produit, avec une équipe d\'agents qui transforme les insights en plan d\'action.',
       primaryCta: "Commencer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       note: 'Aucune compétence technique requise.',
