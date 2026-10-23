@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { useLang } from '../contexts/LangContext';
+import HeroWindows from './hero/HeroWindows';
 
 /**
  * Hero product demo — embeds the self-contained onboarding flow
@@ -7,16 +8,17 @@ import { useLang } from '../contexts/LangContext';
  * flow patches globals (getBoundingClientRect, MouseEvent coords,
  * innerWidth) that would otherwise leak into the landing page.
  *
- * Wrapped in a scroll-driven "tilt with tracing light + orbit" reveal:
- * --p (0→1, ease-out cubic) runs over REVEAL_PX of scroll from the moment
- * the section enters the viewport and drives the light and rings; --t is
- * the same curve finishing at FLAT_AT and drives the dashboard's tilt
- * and scale. Phones and reduced motion pin both to 1 (no tilt).
+ * Wrapped in a scroll-driven "tracing light + orbit" reveal: --p (0→1,
+ * ease-out cubic) runs over REVEAL_PX of scroll from the moment the
+ * section enters the viewport and drives the light and rings; --t is the
+ * same curve finishing at FLAT_AT and eases the dashboard up to full
+ * size. Phones and reduced motion pin both to 1.
  */
 const REVEAL_PX = 480;
-// Ease-out cubic spends its last ~half crawling through tilts of a few
-// degrees — invisible, but any 3D tilt renders the iframe blurry. So the
-// dashboard goes exactly flat (and sharp) at p = FLAT_AT (~225px of scroll).
+// Ease-out cubic spends its last ~half crawling through the final fraction
+// of a percent of scale — invisible, but a fractional scale leaves the
+// iframe resampled and soft. So it reaches exactly 1 (and sharp) at
+// p = FLAT_AT (~225px of scroll).
 const FLAT_AT = 0.85;
 const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
@@ -79,8 +81,8 @@ export default function HeroOnboarding() {
       const t = Math.min(1, p / FLAT_AT);
       el.style.setProperty('--p', p.toFixed(4));
       el.style.setProperty('--t', t.toFixed(4));
-      // Once flat, the frame drops its transform entirely, so the iframe
-      // paints as a plain, pixel-snapped layer instead of a 3D texture.
+      // At full size the frame drops its transform entirely, so the iframe
+      // paints as a plain, pixel-snapped layer rather than a resampled one.
       const done = t >= 1;
       el.toggleAttribute('data-done', done);
 
@@ -112,25 +114,35 @@ export default function HeroOnboarding() {
 
   return (
     <section className="hreveal" ref={ref}>
+      {/* The rings and the glow sit outside .hreveal__stage on purpose: the
+          stage has a `perspective`, which makes it a stacking context, so
+          anything inside it — however low its z-index — still paints with
+          the stage, i.e. over the feature windows. Out here they are simply
+          painted before the windows, which is what puts them behind.
+          They are centred the same either way: the stage is centred in
+          .hreveal, and its padding is symmetric. */}
+      <svg
+        className="hreveal__orbit"
+        viewBox={`0 0 ${CX * 2} ${CY * 2}`}
+        aria-hidden="true"
+      >
+        {RINGS.map(({ rx, ry, opacity, dashed }) => (
+          <ellipse
+            key={rx}
+            cx={CX} cy={CY} rx={rx} ry={ry}
+            fill="none"
+            stroke="#0062FF"
+            strokeOpacity={opacity}
+            strokeWidth="1"
+            strokeDasharray={dashed ? '4 6' : undefined}
+          />
+        ))}
+      </svg>
+      <div className="hreveal__glow" aria-hidden="true" />
+      {/* Beside the dashboard and painted before it, so the windows slide
+          out from underneath rather than across it. */}
+      <HeroWindows />
       <div className="hreveal__stage">
-        <svg
-          className="hreveal__orbit"
-          viewBox={`0 0 ${CX * 2} ${CY * 2}`}
-          aria-hidden="true"
-        >
-          {RINGS.map(({ rx, ry, opacity, dashed }) => (
-            <ellipse
-              key={rx}
-              cx={CX} cy={CY} rx={rx} ry={ry}
-              fill="none"
-              stroke="#0062FF"
-              strokeOpacity={opacity}
-              strokeWidth="1"
-              strokeDasharray={dashed ? '4 6' : undefined}
-            />
-          ))}
-        </svg>
-        <div className="hreveal__glow" aria-hidden="true" />
         <div className="hreveal__frame">
           <div className="hreveal__mat">
             <div className="hreveal__dash" ref={dashRef}>

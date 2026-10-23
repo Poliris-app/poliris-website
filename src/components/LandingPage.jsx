@@ -25,11 +25,18 @@ const HL = ({ children }) => <span className="hl">{children}</span>;
 /* ── Eyebrow label ───────────────────────────────────────────── */
 const Eyebrow = ({ children }) => <div className="eyebrow">{children}</div>;
 
-export default function LandingPage() {
+/* The top of the landing page: the hero and How it works.
+
+   Pulled out so the standalone extract (standalone/main.jsx) renders this
+   very component rather than a copy of it - the one-file export and the
+   real page cannot drift apart.
+
+   The .reveal observer lives here rather than in LandingPage because it
+   queries the whole document on mount: it still picks up every .reveal
+   below this section, and the standalone gets it without a second copy. */
+export function LandingTop() {
   const { t } = useLang();
-  // "Get your free audit" button hidden for now — see below. State kept so
-  // it's a one-line restore once a real entry point is decided.
-  // const [auditModalOpen, setAuditModalOpen] = useState(false);
+  const h = t('home.hero');
 
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -49,32 +56,12 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  const h = t('home.hero');
-  const cta = t('home.cta');
-
   return (
-    <div className="landing">
-      {/* "Get your free audit" button hidden for now — restore by uncommenting
-          this and the auditModalOpen state above. */}
-      {/* <button
-        type="button"
-        onClick={() => setAuditModalOpen(true)}
-        style={{
-          position: 'fixed', bottom: 20, right: 20, zIndex: 9999,
-          padding: '10px 16px', borderRadius: 999,
-          background: '#0062ff', color: '#fff', fontWeight: 700, fontSize: 13,
-          boxShadow: '0 8px 24px rgba(0,98,255,0.35)',
-        }}
-      >
-        Get your free audit
-      </button>
-      <AuditModal open={auditModalOpen} onClose={() => setAuditModalOpen(false)} /> */}
+    <>
       <Hero
         eyebrow={h.eyebrow}
-        // No hard break: the highlighted phrase spans two lines at most
-        // widths, which a <br /> before it would prevent. The no-break
-        // space keeps "The" from being left alone on a line.
-        title={<>{h.titlePre}{' '}<HL>{h.titleHl}</HL> {h.titlePost}</>}
+        // Two rows: "Take control of how" / "AI sees your brand".
+        title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
         audience={h.audience}
         lead={h.lead}
         primaryCta={h.primaryCta}
@@ -88,6 +75,21 @@ export default function LandingPage() {
         showAiBand={false}
       />
       <HowItWorks />
+    </>
+  );
+}
+
+export default function LandingPage() {
+  const { t } = useLang();
+  // "Get your free audit" button hidden for now — see below. State kept so
+  // it's a one-line restore once a real entry point is decided.
+  // const [auditModalOpen, setAuditModalOpen] = useState(false);
+
+  const cta = t('home.cta');
+
+  return (
+    <div className="landing">
+      <LandingTop />
       {/* ValueChain hidden for now — restore by uncommenting. */}
       {/* <ValueChain /> */}
       {/* ProductCarousel hidden for now — restore by uncommenting. */}

@@ -38,13 +38,13 @@ export default {
 
   home: {
     hero: {
-      eyebrow: "Conçu pour l'ère de l'IA",
+      eyebrow: "Gestion de marque IA, au-delà du monitoring",
       // Voir en.js : titlePre + titleHl surligné + titlePost.
-      titlePre: 'La',
-      titleHl: 'plateforme d’intelligence',
-      titlePost: 'de recherche',
+      titlePre: 'Prenez en main',
+      titleHl: 'votre SEO',
+      titlePost: 'grâce à l’IA',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
-      lead: "Voyez où vos produits apparaissent dans la recherche et les réponses IA, pourquoi vos concurrents sont choisis à votre place, et quoi corriger en priorité, au même endroit.",
+      lead: "Comprenez et gérez votre visibilité sur l'IA et le web, produit par produit, avec une équipe d'agents qui transforme les insights en plan d'action.",
       primaryCta: "Commencer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       note: 'Aucune compétence technique requise.',
@@ -1933,6 +1933,51 @@ export default {
     ],
   },
   pricing: {
+    audience: {
+      label: 'Pour qui',
+      brands: 'Pour les marques',
+      agencies: 'Pour les agences',
+    },
+    // The enterprise column and card. Priced on request, so its CTA books
+    // a call rather than opening checkout.
+    customPlan: {
+      name: 'Sur mesure',
+      price: 'Parlons-en',
+      desc: 'Pour les grandes équipes et les besoins spécifiques.',
+      coverageLabel: 'Adapté à votre volume',
+      features: [
+        'Projets et zones de marché illimités',
+        'Volume de crédits sur mesure',
+        'Tous les modèles IA, dans toutes les combinaisons',
+        'Responsable de compte dédié',
+        'Support prioritaire avec un canal Slack',
+      ],
+      cta: 'Réserver un appel',
+    },
+    agencyLink: {
+      text: 'Vous dirigez une agence ?',
+      cta: 'Voir les tarifs agence',
+    },
+    // The agencies view. Tier names are placeholders - rename them here.
+    agencyView: {
+      packTitle: 'Pack Agence',
+      packDesc: 'Exploitez Poliris comme votre propre plateforme, avec tous vos espaces clients au même endroit.',
+      perMonth: '/mois',
+      includedTitle: 'Ce qui est inclus',
+      includes: [
+        'Marque blanche complète avec votre logo et vos couleurs',
+        'Hébergement sur domaine personnalisé',
+        'Facturation centralisée, une seule facture pour tous vos clients',
+        "Gestion d'agence",
+        'Contrôle des accès clients',
+      ],
+      comingSoon: 'Bientôt disponible',
+      cta: 'Réserver un appel avec un partenaire',
+      tiers: ['Essential', 'Growth', 'Scale'],
+      perClientShort: '/client/mois',
+      perClientNote: 'Facturé à votre agence pour chaque espace client, en plus du Pack Agence.',
+      monthlyOnly: 'Les offres agence sont facturées mensuellement.',
+    },
     hero: {
       eyebrow: 'Tarifs',
       titlePre: "Maîtrisez ce que l'IA dit de votre marque,",
@@ -1943,10 +1988,31 @@ export default {
       note: 'Aucune carte bancaire requise',
       trialDetail: "En 14 jours, lancez votre premier audit IA, découvrez comment ChatGPT, Claude et Gemini décrivent votre marque, et comparez-vous à vos concurrents.",
     },
-    billing: { monthly: 'Mensuel', annual: 'Annuel', save: '-20%', billedAnnually: 'Facturé {amount} par an' },
+    billing: {
+      label: 'Période de facturation',
+      monthly: 'Mensuel',
+      annual: 'Annuel',
+      save: '-20%',
+      saveShort: '-20%',
+      billedAnnually: 'Facturé {amount} par an',
+      currencyNote: 'Changez de forfait ou annulez à tout moment. Prix en {code}',
+      switchCurrency: 'Passer en {code}',
+    },
+    // Plan card meters under the overview table. Free's meter
+    // reads plans[0].coverageLabel; the paid meters show their credits.
+    cards: {
+      credits: '{n} crédits',
+      bonus: '+{n} bonus',
+      custom: {
+        meter: 'Volume adapté',
+        meterTag: 'Toute taille',
+      },
+    },
     flexibilityNote: 'Changez de forfait ou annulez à tout moment. Sans engagement, sans tracas.',
     coverage: 'Couverture',
     mostPopular: 'Le plus populaire',
+    plansLabel: 'Offres',
+    popularShort: 'Populaire',
     currentPlan: 'Plan actuel',
     currentPlanCta: 'Gérer le plan',
     bonusCredits: 'Crédits bonus',
@@ -2087,6 +2153,8 @@ export default {
       anyCadence: 'Toute cadence',
       anyCombination: 'Toute combinaison',
       multipleCreditLimited: 'Plusieurs (limité par les crédits)',
+      multipleZones: 'Plusieurs zones de marché',
+      multipleProjects: 'Plusieurs projets',
       volumeTitle: 'Usage & limites',
       workspacesLabel: 'Espaces de travail',
       boostLabel: 'Suivi prioritaire',

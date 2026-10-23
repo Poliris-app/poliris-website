@@ -34,17 +34,6 @@ const CALCULATOR_ICON = (
   </svg>
 );
 
-// One distinct icon per agency feature — order matches p.agency.features.
-const AGENCY_ICONS = [
-  <svg key="layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>,
-  <svg key="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20Z"/></svg>,
-  <svg key="card" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>,
-  <svg key="manager" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 11 2 2 4-4"/></svg>,
-];
-
-// Square icon-only marks (see public/*-logo.png). Used by the comparison
-// table below (generic per-provider badges — unrelated to the calculator's
-// own model list, see CALC_MODELS).
 const MODELS = [
   { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
   { logo: 'gemini-logo.png', label: 'Gemini' },
@@ -60,7 +49,7 @@ const FREE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
 // Teaser icon set for the Free plan's "10 providers" bullet — a marketing
 // preview of the full provider lineup (not FREE_MODELS' actual Free-tier
 // access list), so the duplicate Google entry is swapped for Claude and
-// the rest are collapsed into a "+5" chip instead of wrapping.
+// the rest are collapsed into a "+N" chip instead of wrapping.
 const FREE_FEATURE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[2], MODELS[5]];
 // Whatever's in MODELS but not already shown as an icon above — named in
 // the "+N" chip's tooltip so the count and the list can't drift apart.
@@ -155,17 +144,71 @@ function ModelCell({ webModels, apiModels, c }) {
   );
 }
 
-// Shared renderer for the many "label + 5 checkmarks" comparison rows —
-// `values` is a 5-length boolean array (Free, Starter, Growth, Pro, Agency).
-function CheckRow({ label, values }) {
+/* ── The comparison table, as data ─────────────────────────────────
+   Every `values` array is in column order: Free, Starter, Growth, Pro,
+   Custom. The brand table draws all five columns; the agency table draws
+   the Starter, Growth and Pro ones under agency names and prices. Having
+   one set of rows is what keeps the two tables identical row for row —
+   a feature added here shows up in both. */
+const BRAND_COLS = [0, 1, 2, 3, 4];
+const AGENCY_COLS = [1, 2, 3];
+
+const textRow = (label, values, sub) => ({ label, sub, values });
+const checkRow = (label, values) => ({ label, values, check: true });
+// Most rows are "everyone gets this".
+const allYes = (label) => checkRow(label, [true, true, true, true, true]);
+
+function buildCompareRows(c) {
+  const paid = { web: WEB_INTERFACE_MODELS, api: API_INTEGRATION_MODELS };
+  return [
+    {
+      label: c.modelsLabel,
+      sub: c.modelsSub,
+      models: true,
+      values: [{ web: FREE_MODELS, api: [] }, paid, paid, paid, paid],
+    },
+    textRow(c.promptsTrackedLabel, ['10', '100', '500', '1,000', c.custom], c.promptsTrackedSub),
+
+    { section: c.volumeTitle, rows: [
+      textRow(c.creditsLabel, ['—', '300', '1,500', '3,000', c.custom]),
+      textRow(c.modelsCountLabel, ['2', c.anyCombination, c.anyCombination, c.anyCombination, c.anyCombination]),
+      textRow(c.projectsLabel, ['1', c.multipleProjects, c.multipleProjects, c.multipleProjects, c.unlimited]),
+      textRow(c.zonesLabel, [c.zonesFree, c.multipleZones, c.multipleZones, c.multipleZones, c.unlimited]),
+      textRow(c.cadenceLabel, [c.daily, c.anyCadence, c.anyCadence, c.anyCadence, c.anyCadence]),
+      checkRow(c.premiumModelLabel, [false, true, true, true, true]),
+    ] },
+
+    { section: c.platformTitle, rows: [c.enginesLabel, c.languagesLabel, c.teamMembersLabel, c.exportsLabel].map(allYes) },
+    { section: c.dashboardTitle, rows: [c.overviewLabel, c.geoMatrixLabel, c.benchmarkingLabel].map(allYes) },
+    { section: c.monitorTitle, rows: [c.promptTrackingLabel, c.responseAnalysisLabel, c.mentionsLabel, c.sourceExplorerLabel, c.insightsLabel].map(allYes) },
+    { section: c.analyzeTitle, rows: [c.sentimentScoreLabel, c.perceptionLabel].map(allYes) },
+    { section: c.actTitle, rows: [c.contentOppsLabel, c.backlinkOppsLabel, c.contentStudioLabel].map(allYes) },
+    { section: c.auditTitle, rows: [c.siteReadinessLabel, c.siteDiagnosticsLabel].map(allYes) },
+    { section: c.measureTitle, rows: [c.gscLabel, c.pagePerfLabel, c.crawlerAnalyticsLabel].map(allYes) },
+    { section: c.integrationsTitle, rows: [checkRow(c.virtualTeamsLabel, [false, true, true, true, true])] },
+
+    { section: c.supportTitle, rows: [
+      checkRow(c.slackLabel, [false, true, true, true, true]),
+    ] },
+  ];
+}
+
+function CompareRow({ row, cols, c }) {
   return (
     <div className="pricing-compare-row">
-      <div className="pricing-row-label">{label}</div>
-      {values.map((yes, i) => (
-        <div key={i} className="pricing-cell">
-          {yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}
-        </div>
-      ))}
+      <div className="pricing-row-label">{row.label}{row.sub && <small>{row.sub}</small>}</div>
+      {cols.map((i) => {
+        const v = row.values[i];
+        if (row.models) return <ModelCell key={i} webModels={v.web} apiModels={v.api} c={c} />;
+        if (row.check) {
+          return (
+            <div key={i} className="pricing-cell">
+              {v ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}
+            </div>
+          );
+        }
+        return <div key={i} className="pricing-cell">{v === '—' ? <span className="pricing-check-dash">—</span> : v}</div>;
+      })}
     </div>
   );
 }
@@ -228,13 +271,13 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   const modelCreditWeight = modelIds.reduce((sum, id) => sum + (CALC_MODEL_BY_ID[id]?.weight ?? 1), 0);
   const estimated = Math.round(prompts * sites * modelCreditWeight * runsPerMonth);
 
-  let recommendedTier = 'agency';
+  let recommendedTier = 'custom';
   if (estimated <= 300) recommendedTier = 'starter';
   else if (estimated <= 1500) recommendedTier = 'growth';
   else if (estimated <= 3000) recommendedTier = 'pro';
   const recommendedPlan = plans.find((pl) => pl.tier === recommendedTier);
-  // Agency has no fixed monthly allotment (custom/unlimited), so there's
-  // nothing to subtract the estimate from — spareCredits stays null.
+  // Custom has no fixed monthly allotment, so there's nothing to subtract
+  // the estimate from — spareCredits stays null.
   const planCredits = recommendedPlan?.monthlyCredits ? Number(recommendedPlan.monthlyCredits.replace(/,/g, '')) : null;
   const spareCredits = planCredits !== null ? Math.max(0, planCredits - estimated) : null;
 
@@ -426,7 +469,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
           <div className="pricing-calc-summary-fit">
             <div className="pricing-calc-summary-fit-head">
               <span className="pricing-calc-summary-fit-label">
-                {c.fitsPre} {recommendedTier === 'agency' ? agencyLabel : recommendedPlan.name}
+                {c.fitsPre} {recommendedTier === 'custom' ? agencyLabel : recommendedPlan.name}
               </span>
               {spareCredits !== null && (
                 <span className="pricing-calc-summary-spare">{c.spareCredits.replace('{n}', spareCredits.toLocaleString())}</span>
@@ -441,7 +484,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
           </div>
 
           <button type="button" className="pricing-calc-cta" onClick={() => onRecommend(recommendedTier)}>
-            {recommendedTier === 'agency' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
+            {recommendedTier === 'custom' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
             {ARROW_ICON}
           </button>
         </div>
@@ -548,15 +591,56 @@ const PLAN_META = [
   { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, coveragePct: 100, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
 ];
 
+const modelIcon = (m) => (
+  <img
+    key={m.label}
+    className="pricing-feature-model-icon"
+    src={`${import.meta.env.BASE_URL}${m.logo}`}
+    alt={m.label}
+    title={m.label}
+  />
+);
+
 // currency/annual now flow through to checkout (see PlanCheckoutModal) —
 // the backend has real Stripe prices per (plan_tier, currency,
 // billing_interval), see app/api/v2/public_checkout.py.
 const CURRENCIES = { usd: { symbol: '$', label: 'USD', code: 'USD' }, eur: { symbol: '€', label: 'EUR', code: 'EUR' } };
 
+/* ── Agency pricing ────────────────────────────────────────────────
+   Everything about agency pricing is set here.
+
+   AGENCY_DISCOUNT is the single value to change: each agency tier is
+   the matching brand tier's monthly price less this share, in whichever
+   currency is showing. At 0.25 that is $21.75 / $74.25 / $141.75 and
+   €20.25 / €69 / €131.25.
+
+   The tier NAMES are copy, not code — pricing.agencyView.tiers in
+   src/locales/en.js and fr.js. AGENCY_TIER_SOURCE only says which brand
+   tier each one mirrors for its credits and feature rows.
+
+   Agency plans are not self-serve: there are no Stripe prices behind
+   them and no checkout, which is why nothing here feeds
+   PlanCheckoutModal. They are unlocked by Poliris partners and admins,
+   so the only action is booking a call. */
+const AGENCY_DISCOUNT = 0.25;
+const AGENCY_TIER_SOURCE = ['starter', 'growth', 'pro'];
+// The Agency Pack's own monthly price, on top of the per-client tiers.
+const AGENCY_PACK_PRICE = { usd: 69, eur: 64 };
+const AGENCY_COMING_SOON_INDEX = 1;
+// Same booking link the hero and the CTA band use.
+const BOOKING_URL = 'https://cal.com/team/poliris/discovery-call';
+
+// Brand prices are whole numbers; the agency discount makes fractions, and
+// the page shows exactly what gets billed — so .25 stays, .00 does not.
+const formatPrice = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
+
 export default function PricingPage() {
   const { lang, t } = useLang();
   const [annual, setAnnual] = useState(false);
   const [currency, setCurrency] = useState('usd');
+  // 'brands' is the default view; 'agencies' swaps the plans for the
+  // Agency Pack and its per-client tiers.
+  const [audience, setAudience] = useState('brands');
   const [checkoutPlan, setCheckoutPlan] = useState(null);
   const [currentTier, setCurrentTier] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
@@ -564,11 +648,11 @@ export default function PricingPage() {
   const highlightTimeoutRef = useRef(null);
   const p = t('pricing');
 
-  // Scrolls to and briefly pulses the matching plan card (or the Agency
-  // banner) — used by the calculator's "Get {plan}" CTA so the
-  // recommendation is a click, not just a label.
+  // Scrolls to and briefly pulses the matching plan card — used by the
+  // calculator's "Get {plan}" CTA so the recommendation is a click, not
+  // just a label. Above Pro it lands on the Custom card.
   const scrollToPlan = (tier) => {
-    const el = document.getElementById(tier === 'agency' ? 'pricing-agency-banner' : `pricing-card-${tier}`);
+    const el = document.getElementById(`pricing-card-${tier}`);
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setHighlightTier(tier);
@@ -588,6 +672,19 @@ export default function PricingPage() {
   const plans = p.plans.map((plan, i) => ({ ...plan, ...PLAN_META[i] }));
 
   const symbol = CURRENCIES[currency].symbol;
+  const agencyView = audience === 'agencies';
+  const cols = agencyView ? AGENCY_COLS : BRAND_COLS;
+  const compareRows = buildCompareRows(p.compare);
+
+  // Each agency tier is the brand tier it mirrors, less AGENCY_DISCOUNT,
+  // in the currency on screen. Monthly only — there is no annual agency
+  // price yet, so the Annual switch leaves these alone.
+  const agencyTiers = AGENCY_TIER_SOURCE.map((tier, i) => {
+    const base = PLAN_META.find((m) => m.tier === tier);
+    const full = currency === 'eur' ? base.eurMonthly : base.monthly;
+    return { name: p.agencyView.tiers[i], price: formatPrice(full * (1 - AGENCY_DISCOUNT)) };
+  });
+  const packPrice = AGENCY_PACK_PRICE[currency];
   const priceFor = (plan, isAnnual) => {
     if (currency === 'eur') return isAnnual ? plan.eurAnnual : plan.eurMonthly;
     return isAnnual ? plan.annual : plan.monthly;
@@ -627,178 +724,190 @@ export default function PricingPage() {
           <h1 className="eyebrow">{p.hero.eyebrow}</h1>
         </div>
 
+        <div className="pricing-audience-switch" role="tablist" aria-label={p.audience.label}>
+          {[['brands', p.audience.brands], ['agencies', p.audience.agencies]].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={audience === key}
+              className={`pricing-audience-btn${audience === key ? ' active' : ''}`}
+              onClick={() => setAudience(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div className="pricing-toggle-wrap">
-          <div className="pricing-switcher-card">
-            <div className="pricing-billing-switch">
-              <button type="button" className={`pricing-billing-label${!annual ? ' active' : ''}`} onClick={() => setAnnual(false)}>
-                {p.billing.monthly}
-              </button>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={annual}
-                aria-label={p.billing.annual}
-                className={`pricing-switch${annual ? ' on' : ''}`}
-                onClick={() => setAnnual(a => !a)}
-              >
-                <span className="pricing-switch__knob" />
-              </button>
-              <button type="button" className={`pricing-billing-label${annual ? ' active' : ''}`} onClick={() => setAnnual(true)}>
-                {p.billing.annual}
-              </button>
-              <span className="pricing-save-badge">{p.billing.save}</span>
-            </div>
-
-            <div className="pricing-switcher-divider" />
-
-            <div className="pricing-currency-switch">
-              {Object.entries(CURRENCIES).map(([code, c]) => (
-                <button
-                  key={code}
-                  type="button"
-                  className={`pricing-currency-btn${currency === code ? ' active' : ''}`}
-                  onClick={() => setCurrency(code)}
-                >
-                  {c.symbol} {c.label}
-                </button>
-              ))}
-            </div>
+          <div className="pricing-billing-switch" role="radiogroup" aria-label={p.billing.label}>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={!annual}
+              className={`pricing-billing-opt${!annual ? ' active' : ''}`}
+              onClick={() => setAnnual(false)}
+            >
+              {p.billing.monthly}
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={annual}
+              className={`pricing-billing-opt${annual ? ' active' : ''}`}
+              onClick={() => setAnnual(true)}
+            >
+              {p.billing.annual}
+              <span className="pricing-save-badge">{p.billing.saveShort}</span>
+            </button>
           </div>
         </div>
 
-        <p className="pricing-flexibility-note">{p.flexibilityNote}</p>
+        {/* Two currencies, so the switch is just a link to the other one. */}
+        <p className="pricing-currency-note">
+          {p.billing.currencyNote.replace('{code}', CURRENCIES[currency].code)}
+          {' · '}
+          {Object.entries(CURRENCIES).filter(([code]) => code !== currency).map(([code, c]) => (
+            <button key={code} type="button" className="pricing-currency-link" onClick={() => setCurrency(code)}>
+              {p.billing.switchCurrency.replace('{code}', c.code)}
+            </button>
+          ))}
+        </p>
 
-        <div className="pricing-grid">
+        {/* The brands view: plan cards, the calculator and the five-column
+            table. The agencies view replaces the cards and the calculator
+            with the Agency Pack and its per-client tiers. */}
+        {!agencyView && (
+          <>
+
+        {/* Plan cards: one per plan (Custom last), with a credits meter
+            and the feature list. Each keeps the pricing-card-{tier} id so
+            the calculator's "Get {plan}" CTA can scroll to and pulse it. */}
+        <div className="pricing-cards">
           {plans.map((plan) => {
             const isCurrentPlan = plan.tier === currentTier;
             return (
-            <div
-              key={plan.name}
-              id={`pricing-card-${plan.tier}`}
-              className={`pricing-card${plan.popular ? ' popular' : ''}${highlightTier === plan.tier ? ' calc-highlight' : ''}`}
-            >
-              {isCurrentPlan ? (
-                <span className="pricing-badge-popular">{p.currentPlan}</span>
-              ) : (
-                plan.popular && <span className="pricing-badge-popular">{p.mostPopular}</span>
-              )}
-              <div className="pricing-plan-name">{plan.name}</div>
-              <div className="pricing-plan-desc">{plan.desc}</div>
-              <div className={`pricing-price-row${plan.firstMonthCredits ? ' has-first-month-tip' : ''}`} tabIndex={plan.firstMonthCredits ? 0 : undefined}>
-                <span className="pricing-price">{symbol}{priceFor(plan, annual)}</span>
-                <div className="pricing-price-meta">
+              <div
+                key={plan.tier}
+                id={`pricing-card-${plan.tier}`}
+                className={`pricing-card${plan.popular ? ' popular' : ''}${highlightTier === plan.tier ? ' calc-highlight' : ''}`}
+              >
+                <div className="pricing-plan-head">
+                  <div className="pricing-plan-name">{plan.name}</div>
+                  {isCurrentPlan ? (
+                    <span className="pricing-badge-popular">{p.currentPlan}</span>
+                  ) : (
+                    plan.popular && <span className="pricing-badge-popular">{p.mostPopular}</span>
+                  )}
+                </div>
+                <p className="pricing-card-desc">{plan.desc}</p>
+                <div className="pricing-card-price">
+                  {/* Both numbers are stacked, monthly over annual, in a
+                      one-line window after the currency sign, which stays
+                      put; the Annual switch rolls the stack up to the
+                      annual price and back down for monthly. */}
+                  {priceFor(plan, false) === priceFor(plan, true) ? (
+                    <span className="pricing-card-amount">{symbol}{priceFor(plan, false)}</span>
+                  ) : (
+                    <span className="pricing-card-amount">
+                      {symbol}
+                      <span className={`pricing-card-roll${annual ? ' is-annual' : ''}`}>
+                        <span className="pricing-card-roll-track">
+                          <span aria-hidden={annual}>{priceFor(plan, false)}</span>
+                          <span aria-hidden={!annual}>{priceFor(plan, true)}</span>
+                        </span>
+                      </span>
+                    </span>
+                  )}
                   <span className="pricing-price-period">/mo</span>
-                  {plan.firstMonthCredits && (
-                    <div className="pricing-first-month-tip">
-                      <span className="pricing-first-month-badge">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8"/><path d="M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8"/></svg>
-                        {p.bonusCredits}
-                      </span>
-                      <div className="pricing-first-month-tooltip" role="tooltip">
-                        <div className="pricing-first-month-tooltip-head">
-                          <span className="pricing-first-month-tooltip-x2">×2</span>
-                          <span className="pricing-first-month-tooltip-title">{p.firstMonthTitle}</span>
-                        </div>
-                        <p className="pricing-first-month-tooltip-body">
-                          <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>{' '}
-                          <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  {/* Always rendered (blank when monthly) so the cards don't
+                      jump in height when the Annual switch is flipped. */}
+                  <span className="pricing-card-billed">
+                    {annual && plan.tier !== 'free'
+                      ? p.billing.billedAnnually.replace('{amount}', `${symbol}${annualTotalFor(plan)}`)
+                      : ' '}
+                  </span>
                 </div>
-              </div>
-              {annual && plan.tier !== 'free' ? (
-                <div className="pricing-billed-annually">
-                  {p.billing.billedAnnually.replace('{amount}', `${symbol}${annualTotalFor(plan)}`)}
+                <div className="pricing-card-meter">
+                  <div className="pricing-card-meter-head">
+                    <span>{plan.monthlyCredits ? p.cards.credits.replace('{n}', plan.monthlyCredits) : plan.coverageLabel}</span>
+                    {plan.monthlyCredits && <span className="pricing-card-meter-tag">{p.cards.bonus.replace('{n}', plan.monthlyCredits)}</span>}
+                  </div>
+                  {/* Paid plans split the bar into base credits and the
+                      matching first-month bonus, as the old cards did. */}
+                  <div className="pricing-card-meter-bar">
+                    {plan.monthlyCredits ? (
+                      <>
+                        <span style={{ width: `${plan.coveragePct / 2}%` }} />
+                        <span className="is-bonus" style={{ width: `${plan.coveragePct / 2}%` }} />
+                      </>
+                    ) : (
+                      <span style={{ width: `${plan.coveragePct}%` }} />
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <div className="pricing-price-annual-note">&nbsp;</div>
-              )}
-              <div className="pricing-coverage">
-                <div className="pricing-coverage-label">
-                  <span>{p.coverage}</span>
-                  {plan.monthlyCredits ? (
-                    <span>
-                      <span className="pricing-coverage-num">{plan.monthlyCredits}</span>
-                      {/* Reuses the same "{base} + {base} bonus" string as the
-                          first-month tooltip (already translated) instead of
-                          a new key — only the first {base} renders bold. */}
-                      <span className="pricing-coverage-bonus">
-                        {p.firstMonthCalc.replace('{base}', '').replaceAll('{base}', plan.monthlyCredits)}
-                      </span>
-                    </span>
-                  ) : (
-                    <span>{plan.coverageLabel}</span>
-                  )}
-                </div>
-                <div className="pricing-coverage-track">
-                  {plan.monthlyCredits ? (
-                    <>
-                      <div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct / 2}%` }} />
-                      <div className="pricing-coverage-fill pricing-coverage-fill--bonus" style={{ width: `${plan.coveragePct / 2}%` }} />
-                    </>
-                  ) : (
-                    <div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct}%` }} />
-                  )}
-                </div>
-              </div>
-              <div className="pricing-divider" />
-              <ul className="pricing-features">
-                {plan.features.map((f, j) => (
-                  <li key={j}>
-                    {CHECK_ICON}
-                    <span>
-                      {plan.featureTooltips?.[j] ? (
-                        <span className="pricing-feature-info-wrap" tabIndex={0}>
-                          {f}
-                          <div className="pricing-feature-info-tooltip" role="tooltip">{plan.featureTooltips[j]}</div>
-                        </span>
-                      ) : f}
-                      {/* 3rd feature on Free ("10 providers") and Starter ("Access to all API models")
-                          — see pricing.plans[0].features / pricing.plans[1].features. Free shows a
-                          5-icon teaser (FREE_FEATURE_MODELS) plus a "+N" chip (N = FREE_FEATURE_MODELS_REST.length)
-                          instead of its real FREE_MODELS access list; Starter (and up) get every provider. */}
-                      {plan.tier === 'free' && j === 2 && (
-                        <span className="pricing-feature-models">
-                          {FREE_FEATURE_MODELS.map((m) => (
-                            <img
-                              key={m.label}
-                              className="pricing-feature-model-icon"
-                              src={`${import.meta.env.BASE_URL}${m.logo}`}
-                              alt={m.label}
-                              title={m.label}
-                            />
-                          ))}
-                          <span className="pricing-feature-model-more-wrap" tabIndex={0}>
-                            <span className="pricing-feature-model-more">+{FREE_FEATURE_MODELS_REST.length}</span>
-                            <div className="pricing-feature-model-tooltip" role="tooltip">
-                              {FREE_FEATURE_MODELS_REST.map((m) => m.label).join(', ')}
-                            </div>
+                <button type="button" className={`pricing-cta${plan.popular ? ' primary' : ''}`} onClick={() => handleSelectPlan(plan)}>
+                  {isCurrentPlan ? p.currentPlanCta : plan.cta} {ARROW_ICON}
+                </button>
+                <ul className="pricing-card-features">
+                  {plan.features.map((f, j) => (
+                    <li key={j}>
+                      {CHECK_ICON}
+                      <span>
+                        {plan.featureTooltips?.[j] ? (
+                          <span className="pricing-feature-info-wrap" tabIndex={0}>
+                            {f}
+                            <span className="pricing-feature-info-tooltip" role="tooltip">{plan.featureTooltips[j]}</span>
                           </span>
-                        </span>
-                      )}
-                      {plan.tier === 'starter' && j === 2 && (
-                        <span className="pricing-feature-models">
-                          {MODELS.map((m) => (
-                            <img
-                              key={m.label}
-                              className="pricing-feature-model-icon"
-                              src={`${import.meta.env.BASE_URL}${m.logo}`}
-                              alt={m.label}
-                              title={m.label}
-                            />
-                          ))}
-                        </span>
-                      )}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <button type="button" className="pricing-cta" onClick={() => handleSelectPlan(plan)}>{isCurrentPlan ? p.currentPlanCta : plan.cta} {ARROW_ICON}</button>
-            </div>
+                        ) : f}
+                        {/* 3rd feature on Free ("10 providers") and Starter
+                            ("Access to all API models"): Free gets a 5-logo
+                            teaser plus a "+N" chip, Starter every provider. */}
+                        {plan.tier === 'free' && j === 2 && (
+                          <span className="pricing-feature-models">
+                            {FREE_FEATURE_MODELS.map(modelIcon)}
+                            <span className="pricing-feature-model-more-wrap" tabIndex={0}>
+                              <span className="pricing-feature-model-more">+{FREE_FEATURE_MODELS_REST.length}</span>
+                              <span className="pricing-feature-model-tooltip" role="tooltip">
+                                {FREE_FEATURE_MODELS_REST.map((m) => m.label).join(', ')}
+                              </span>
+                            </span>
+                          </span>
+                        )}
+                        {plan.tier === 'starter' && j === 2 && (
+                          <span className="pricing-feature-models">{MODELS.map(modelIcon)}</span>
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             );
           })}
+          {/* Nothing is priced behind Custom in Stripe, so its CTA books
+              a call instead of opening checkout. */}
+          <div id="pricing-card-custom" className={`pricing-card${highlightTier === 'custom' ? ' calc-highlight' : ''}`}>
+            <div className="pricing-plan-head">
+              <div className="pricing-plan-name">{p.customPlan.name}</div>
+            </div>
+            <p className="pricing-card-desc">{p.customPlan.desc}</p>
+            <div className="pricing-card-price">
+              <span className="pricing-card-amount pricing-card-amount--word">{p.customPlan.price}</span>
+            </div>
+            <div className="pricing-card-meter">
+              <div className="pricing-card-meter-head">
+                <span>{p.cards.custom.meter}</span>
+                <span className="pricing-card-meter-tag">{p.cards.custom.meterTag}</span>
+              </div>
+              <div className="pricing-card-meter-bar is-open"><span /></div>
+            </div>
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="pricing-cta">
+              {p.customPlan.cta} {ARROW_ICON}
+            </a>
+            <ul className="pricing-card-features">
+              {p.customPlan.features.map((f) => <li key={f}>{CHECK_ICON}<span>{f}</span></li>)}
+            </ul>
+          </div>
         </div>
 
         <div className="pricing-foot-note">
@@ -815,184 +924,121 @@ export default function PricingPage() {
         <CreditCalculatorPanel
           c={p.calculator}
           plans={plans}
-          agencyLabel={p.compare.agencyLabel}
+          agencyLabel={p.customPlan.name}
           onRecommend={scrollToPlan}
         />
+          </>
+        )}
 
         {/* ============ COMPARISON TABLE ============ */}
         <div className="pricing-compare-wrap">
 
-          <div id="pricing-agency-banner" className={`pricing-agency-banner${highlightTier === 'agency' ? ' calc-highlight' : ''}`}>
-            <div className="pricing-agency-left">
-              <div className="pricing-agency-eyebrow">{p.agency.eyebrow}</div>
-              <h3 className="pricing-agency-title">{p.agency.title}</h3>
-              <p className="pricing-agency-desc">{p.agency.desc}</p>
-              <p className="pricing-agency-price">{p.agency.priceAnchor}</p>
-              <a href={`/${lang}/demo`} className="pricing-agency-cta">{p.agency.cta} {ARROW_ICON}</a>
-            </div>
-            <div className="pricing-agency-right">
-              <div className="pricing-agency-everything">{p.agency.everythingIn}</div>
-              <div className="pricing-agency-tiles">
-                {p.agency.features.map((f, i) => (
-                  <div key={i} className="pricing-agency-tile">
-                    <span className="pricing-agency-tile-icon">{AGENCY_ICONS[i]}</span>
-                    <span className="pricing-agency-tile-label">{f}</span>
-                  </div>
-                ))}
+          {agencyView && (
+            <div className="pricing-agency-pack">
+              <div className="pricing-agency-pack-head">
+                <h2 className="pricing-agency-pack-title">{p.agencyView.packTitle}</h2>
+                <div className="pricing-agency-pack-price">
+                  <span className="pricing-price">{symbol}{packPrice}</span>
+                  <span className="pricing-price-period">{p.agencyView.perMonth}</span>
+                </div>
               </div>
+              <p className="pricing-agency-pack-desc">{p.agencyView.packDesc}</p>
+              <div className="pricing-agency-pack-included">{p.agencyView.includedTitle}</div>
+              <ul className="pricing-agency-pack-list">
+                {p.agencyView.includes.map((item, i) => (
+                  <li key={i}>
+                    {CHECK_ICON}
+                    <span>
+                      {item}
+                      {i === AGENCY_COMING_SOON_INDEX && (
+                        <span className="pricing-soon-chip">{p.agencyView.comingSoon}</span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {/* Agency accounts are opened by a partner, never self-serve,
+                  so booking a call is the only action on this page. */}
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="pricing-cta pricing-agency-pack-cta">
+                {p.agencyView.cta} {ARROW_ICON}
+              </a>
             </div>
-          </div>
+          )}
 
           <div className="pricing-compare-heading">
             <h2>{p.compare.title}</h2>
             <p>{p.compare.subtitle}</p>
           </div>
 
-          <div className="pricing-compare-table">
+          <div
+            className={`pricing-compare-table${agencyView ? ' pricing-compare-table--agency' : ''}`}
+            style={{ '--pr-cols': cols.length }}
+          >
 
             <div className="pricing-compare-heading-row">
               <div className="pricing-col-label">{p.compare.coreFeatures}</div>
-              {plans.map((plan) => (
-                <div key={plan.name} className="pricing-plan-col-head">{plan.name} <span className="pricing-dot">•</span> <b>{symbol}{priceFor(plan, false)}</b>/mo</div>
-              ))}
-              <div className="pricing-plan-col-head">{p.compare.agencyLabel} <span className="pricing-dot">•</span> <b>{p.compare.agencyPrice}</b></div>
-            </div>
-
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.modelsLabel}<small>{p.compare.modelsSub}</small></div>
-              <ModelCell webModels={FREE_MODELS} apiModels={[]} c={p.compare} />
-              {[1, 2, 3, 4].map((i) => (
-                <ModelCell key={i} webModels={WEB_INTERFACE_MODELS} apiModels={API_INTEGRATION_MODELS} c={p.compare} />
-              ))}
-            </div>
-
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.promptsTrackedLabel}<small>{p.compare.promptsTrackedSub}</small></div>
-              {['10', '100', '500', '1,000', p.compare.custom].map((v, i) => (
-                <div key={i} className="pricing-cell">{v}</div>
-              ))}
-            </div>
-
-            <CompareSection title={p.compare.volumeTitle}>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.creditsLabel}</div>
-                {['—', '300', '1,500', '3,000', p.compare.custom].map((v, i) => (
-                  <div key={i} className="pricing-cell">
-                    {v === '—' ? <span className="pricing-check-dash">—</span> : v}
+              {agencyView ? (
+                agencyTiers.map((tier) => (
+                  <div key={tier.name} className="pricing-plan-col-head">
+                    {tier.name} <span className="pricing-dot">•</span> <b>{symbol}{tier.price}</b>{p.agencyView.perClientShort}
                   </div>
-                ))}
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.modelsCountLabel}</div>
-                <div className="pricing-cell">2</div>
-                {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCombination}</div>)}
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.projectsLabel}</div>
-                <div className="pricing-cell">1</div>
-                {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
-                <div className="pricing-cell">{p.compare.unlimited}</div>
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.zonesLabel}</div>
-                <div className="pricing-cell">{p.compare.zonesFree}</div>
-                {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
-                <div className="pricing-cell">{p.compare.unlimited}</div>
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.cadenceLabel}</div>
-                <div className="pricing-cell">{p.compare.daily}</div>
-                {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCadence}</div>)}
-              </div>
-              <CheckRow label={p.compare.premiumModelLabel} values={[false, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.platformTitle}>
-              <CheckRow label={p.compare.enginesLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.languagesLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.teamMembersLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.exportsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.dashboardTitle}>
-              <CheckRow label={p.compare.overviewLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.geoMatrixLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.benchmarkingLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.monitorTitle}>
-              <CheckRow label={p.compare.promptTrackingLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.responseAnalysisLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.mentionsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.sourceExplorerLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.insightsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.analyzeTitle}>
-              <CheckRow label={p.compare.sentimentScoreLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.perceptionLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.actTitle}>
-              <CheckRow label={p.compare.contentOppsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.backlinkOppsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.contentStudioLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.auditTitle}>
-              <CheckRow label={p.compare.siteReadinessLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.siteDiagnosticsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.measureTitle}>
-              <CheckRow label={p.compare.gscLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.pagePerfLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.crawlerAnalyticsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.integrationsTitle}>
-              <CheckRow label={p.compare.virtualTeamsLabel} values={[false, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.supportTitle}>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.supportChannelsLabel}</div>
-                <div className="pricing-cell">{p.compare.chatsOnly}</div>
-                <div className="pricing-cell">{p.compare.chatsEmail}</div>
-                <div className="pricing-cell">{p.compare.chatsEmail}</div>
-                <div className="pricing-cell">{p.compare.dedicated}</div>
-                <div className="pricing-cell">{p.compare.dedicatedManager}</div>
-              </div>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.slackLabel}</div>
-                {[false, true, true, true, true].map((yes, i) => (
-                  <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-                ))}
-              </div>
-            </CompareSection>
-
-            <div className="pricing-compare-buttons-row">
-              <div />
-              {plans.map((plan) => (
-                <button
-                  key={plan.name}
-                  type="button"
-                  className={`pricing-plan-btn${plan.popular ? ' popular' : ''}`}
-                  onClick={() => handleSelectPlan(plan)}
-                >
-                  {plan.tier === currentTier ? p.currentPlanCta : plan.tableCta} {ARROW_ICON}
-                </button>
-              ))}
-              <a href={`/${lang}/demo`} className="pricing-plan-btn">
-                {p.compare.agencyCta} {ARROW_ICON}
-              </a>
+                ))
+              ) : (
+                <>
+                  {plans.map((plan) => (
+                    <div key={plan.name} className="pricing-plan-col-head">{plan.name} <span className="pricing-dot">•</span> <b>{symbol}{priceFor(plan, false)}</b>/mo</div>
+                  ))}
+                  <div className="pricing-plan-col-head">{p.customPlan.name} <span className="pricing-dot">•</span> <b>{p.compare.custom}</b></div>
+                </>
+              )}
             </div>
+
+            {compareRows.map((entry, i) => (entry.section ? (
+              <CompareSection key={i} title={entry.section}>
+                {entry.rows.map((row, j) => <CompareRow key={j} row={row} cols={cols} c={p.compare} />)}
+              </CompareSection>
+            ) : (
+              <CompareRow key={i} row={entry} cols={cols} c={p.compare} />
+            )))}
+
+            {/* Agency tiers carry no CTA of their own: they are unlocked by a
+                partner, so the card's "Book a call" is the only action. */}
+            {!agencyView && (
+              <div className="pricing-compare-buttons-row">
+                <div />
+                {plans.map((plan) => (
+                  <button
+                    key={plan.name}
+                    type="button"
+                    className={`pricing-plan-btn${plan.popular ? ' popular' : ''}`}
+                    onClick={() => handleSelectPlan(plan)}
+                  >
+                    {plan.tier === currentTier ? p.currentPlanCta : plan.tableCta} {ARROW_ICON}
+                  </button>
+                ))}
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="pricing-plan-btn">
+                  {p.customPlan.cta} {ARROW_ICON}
+                </a>
+              </div>
+            )}
 
           </div>
+
+          {agencyView ? (
+            <div className="pricing-agency-notes">
+              <p>{p.agencyView.perClientNote}</p>
+              {/* No annual agency pricing exists yet, so the Annual switch
+                  leaves these prices alone and says so. */}
+              {annual && <p className="pricing-agency-monthly-note">{p.agencyView.monthlyOnly}</p>}
+            </div>
+          ) : (
+            <p className="pricing-agency-link-line">
+              {p.agencyLink.text}{' '}
+              <button type="button" className="pricing-agency-link-btn" onClick={() => setAudience('agencies')}>
+                {p.agencyLink.cta}
+              </button>
+            </p>
+          )}
         </div>
 
         {/* ============ FAQ ============ */}

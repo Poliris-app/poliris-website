@@ -38,14 +38,14 @@ export default {
 
   home: {
     hero: {
-      eyebrow: 'Built for the AI era',
-      // Rendered as titlePre + highlighted titleHl + titlePost, wrapping
-      // where it falls — so the split decides only what gets highlighted.
-      titlePre: 'The',
-      titleHl: 'Search Intelligence',
-      titlePost: 'Platform',
+      eyebrow: 'AI brand management, beyond monitoring',
+      // Rendered as titlePre, a line break, then highlighted titleHl +
+      // titlePost — so the split decides both the break and the highlight.
+      titlePre: 'Take control of how',
+      titleHl: 'AI sees',
+      titlePost: 'your brand',
       audience: 'For in-house brand teams, agencies, and enterprise marketing managers.',
-      lead: 'See where your products show up in search and AI answers, why competitors get picked instead, and what to fix first, all in one place.',
+      lead: 'Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
       note: 'No technical expertise required',
@@ -1941,6 +1941,51 @@ export default {
     ],
   },
   pricing: {
+    audience: {
+      label: 'Who is this for',
+      brands: 'For brands',
+      agencies: 'For agencies',
+    },
+    // The enterprise column and card. Priced on request, so its CTA books
+    // a call rather than opening checkout.
+    customPlan: {
+      name: 'Custom',
+      price: 'Let’s talk',
+      desc: 'For larger teams and bespoke requirements.',
+      coverageLabel: 'Tailored to your volume',
+      features: [
+        'Unlimited projects and trading zones',
+        'Custom credit volume',
+        'All AI models, any combination',
+        'Dedicated account manager',
+        'Priority support with a Slack channel',
+      ],
+      cta: 'Book a call',
+    },
+    agencyLink: {
+      text: 'Running an agency?',
+      cta: 'See agency pricing',
+    },
+    // The agencies view. Tier names are placeholders - rename them here.
+    agencyView: {
+      packTitle: 'Agency Pack',
+      packDesc: 'Run Poliris as your own platform, with every client workspace under one roof.',
+      perMonth: '/month',
+      includedTitle: "What's included",
+      includes: [
+        'Real white label with your logo and colours',
+        'Custom domain hosting',
+        'Centralized billing, one invoice for all your clients',
+        'Agency Management',
+        'Client access controls',
+      ],
+      comingSoon: 'Coming soon',
+      cta: 'Book a call with a partner',
+      tiers: ['Essential', 'Growth', 'Scale'],
+      perClientShort: '/client/mo',
+      perClientNote: 'Billed to your agency for each client workspace, on top of the Agency Pack.',
+      monthlyOnly: 'Agency plans are billed monthly.',
+    },
     hero: {
       eyebrow: 'Pricing',
       titlePre: 'Own how AI talks about your brand,',
@@ -1951,10 +1996,31 @@ export default {
       note: 'No credit card required',
       trialDetail: 'In 14 days, you can run your first AI audit, see how ChatGPT, Claude, and Gemini describe your brand, and benchmark yourself against your competitors.',
     },
-    billing: { monthly: 'Monthly', annual: 'Annual', save: 'Save 20%', billedAnnually: 'Billed {amount} annually' },
+    billing: {
+      label: 'Billing period',
+      monthly: 'Monthly',
+      annual: 'Annual',
+      save: 'Save 20%',
+      saveShort: '-20%',
+      billedAnnually: 'Billed {amount} annually',
+      currencyNote: 'Switch plans or cancel anytime. Prices in {code}',
+      switchCurrency: 'Switch to {code}',
+    },
+    // Plan card meters under the overview table. Free's meter
+    // reads plans[0].coverageLabel; the paid meters show their credits.
+    cards: {
+      credits: '{n} credits',
+      bonus: '+{n} bonus',
+      custom: {
+        meter: 'Tailored volume',
+        meterTag: 'Any size',
+      },
+    },
     flexibilityNote: 'Switch plans or cancel anytime. No lock-in, no hassle.',
     coverage: 'Coverage',
     mostPopular: 'Most popular',
+    plansLabel: 'Plans',
+    popularShort: 'Popular',
     currentPlan: 'Current plan',
     currentPlanCta: 'Manage plan',
     bonusCredits: 'Bonus credits',
@@ -2095,6 +2161,8 @@ export default {
       anyCadence: 'Any cadence',
       anyCombination: 'Any combination',
       multipleCreditLimited: 'Multiple (credit-limited)',
+      multipleZones: 'Multiple trading zones',
+      multipleProjects: 'Multiple projects',
       volumeTitle: 'Usage & limits',
       workspacesLabel: 'Workspaces',
       boostLabel: 'Priority monitoring',
