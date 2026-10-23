@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /* Shared maths and timing for the four hero feature windows.
    Ported from the "Hero Feature Scroll v4" reference: every window runs on
@@ -55,23 +55,20 @@ const STILL = '(prefers-reduced-motion: reduce)';
 
 // The hero's own reveal distance — HeroOnboarding drives --p over the same
 // span, so the windows and the dashboard move on one curve.
+// The windows read the raw scroll position, as the dashboard does, so they
+// move and stop together; a damped copy kept the windows gliding on for a
+// second after the dashboard had settled.
 const REVEAL_PX = 480;
-// How far past the reveal the drift keeps running.
-const DRIFT_PX = 900;
-/**
- * The scroll position the windows follow is damped rather than read raw,
- * which is what makes them glide out instead of tracking the wheel notch
- * for notch. Per frame it closes 12% of the remaining distance (corrected
- * for frame time, so it behaves the same at 60 and 120Hz) — the same
- * smoothing the reference uses.
- */
-const SCROLL_DAMP = 0.12;
 
 /**
  * One requestAnimationFrame loop for all four windows: the shared demo
  * clock and the scroll progress that flies them out. It runs only while
  * the hero is on screen, so the landing page is not repainting 60 times a
- * second once the reader has scrolled past it. Reduced motion freezes the
+ * second once the reader has scrolled past it. Within that, the demos
+ * play by the dashboard's own rule (HeroOnboarding): only while at least
+ * half the dashboard is on screen. Below that the clock is held where it
+ * is and the windows stop re-rendering, and the demos pick up from the
+ * same frame when the dashboard comes back. Reduced motion freezes the
  * clock on a frame where every window shows its finished state, with the
  * windows already in place.
  */
@@ -89,16 +86,18 @@ export const CARD_H = [214, 300, 236, 236];
  * mid-scroll, so they hold their places instead of drifting while it shrinks.
  *
  * On a laptop-width screen it settles smaller, from .825 at 1700px down to
- * .70 at 1200px, to leave the windows some room either side.
+ * .66 at 1200px, to leave the windows room either side.
  */
 export const DASH_REST_SCALE = 0.825;
-export const restScale = (vw) => Math.max(0.7, Math.min(DASH_REST_SCALE, 0.7 + ((vw - 1200) / 500) * 0.125));
-/** Room kept clear between the outermost windows and the viewport edge. */
-const EDGE = 12;
+export const restScale = (vw) => Math.max(0.66, Math.min(DASH_REST_SCALE, 0.66 + ((vw - 1200) / 500) * 0.165));
+/** Room kept clear between the outermost windows and the viewport edge:
+ * 2.5% of the width, 24-48px, so the windows never crowd the screen edge. */
+const edgeFor = (vw) => Math.max(24, Math.min(48, vw * 0.025));
 /** The reference scales the cards from .82 at 1180px up to 1 at 1920px. */
 export const cardScale = (vw) => Math.max(0.82, Math.min(1, 0.82 + ((vw - 1180) / 740) * 0.18));
-/** ...and opens the gap beside the dashboard from 40px to 72px. */
-export const cardGap = (vw) => Math.max(40, Math.min(72, 40 + (vw - 1180) / 16));
+/** ...and the gap beside the dashboard closes from 72px at 1700px to 28px
+ * at 1200px, keeping the windows near the dashboard on laptops. */
+export const cardGap = (vw) => Math.max(28, Math.min(72, 28 + ((vw - 1200) / 500) * 44));
 
 /**
  * Where each window sits, given the dashboard box, the viewport width, and
@@ -118,7 +117,7 @@ export function cardLayout(box, vw, origin = { x: 0, y: 0 }) {
   // `z` is applied as CSS zoom on the window's contents, so they scale down
   // as a piece rather than reflowing into a narrower box.
   const need = cardGap(vw) + Math.max(...CARD_W) * cs + 16;
-  const fit = Math.max(0.4, Math.min(1, (Math.min(L, vw - R) - EDGE) / need));
+  const fit = Math.max(0.4, Math.min(1, (Math.min(L, vw - R) - edgeFor(vw)) / need));
   const gap = cardGap(vw) * fit;
   // The contents always lay out at the card's full design size and are
   // zoomed down from there — squeezed into a narrower box they clip.
@@ -147,10 +146,9 @@ export function useHeroWindows(ref, { still = 6000 } = {}) {
   // windows never render a frame they then have to correct.
   const [frame, setFrame] = useState(() => (
     typeof window !== 'undefined' && window.matchMedia?.(STILL).matches
-      ? { now: still, p: 1, q: 0, vw: document.documentElement.clientWidth, box: null }
-      : { now: 0, p: 0, q: 0, vw: 0, box: null }
+      ? { now: still, p: 1, vw: document.documentElement.clientWidth, box: null }
+      : { now: 0, p: 0, vw: 0, box: null }
   ));
-  const t0 = useRef(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -188,7 +186,7 @@ export function useHeroWindows(ref, { still = 6000 } = {}) {
     // Reduced motion gets no loop, so it is measured once, on its own and
     // on resize, with everything already in place.
     if (window.matchMedia?.(STILL).matches) {
-      const settle = () => setFrame({ now: still, p: 1, q: 0, vw: document.documentElement.clientWidth, box: measure() });
+      const settle = () => setFrame({ now: still, p: 1, vw: document.documentElement.clientWidth, box: measure() });
       settle();
       window.addEventListener('resize', settle);
       return () => window.removeEventListener('resize', settle);
@@ -201,34 +199,36 @@ export function useHeroWindows(ref, { still = 6000 } = {}) {
 
     let raf = 0;
     let visible = false;
-    let eased = null;
-    let lastT = 0;
+    let playing = false;
+    // The demo clock only advances while playing, so pausing holds the
+    // windows on their current frame rather than skipping ahead.
+    let clock = 0;
+    let lastTs = 0;
+    let last = null;
 
     const tick = (ts) => {
-      if (!t0.current) t0.current = ts;
-      const dt = Math.min(64, ts - (lastT || ts));
-      lastT = ts;
+      // Capped, so a frame after a long gap (a background tab, a pause)
+      // can't jump the demos forward.
+      const dt = lastTs ? Math.min(100, ts - lastTs) : 0;
+      lastTs = ts;
+      if (playing) clock += dt;
 
       const y = window.scrollY;
-      // The windows chase the scroll rather than being pinned to it.
-      const a = 1 - Math.pow(1 - SCROLL_DAMP, dt / 16.67);
-      eased = eased == null ? y : eased + (y - eased) * a;
-      if (Math.abs(y - eased) < 0.15) eased = y;
-
-      // Measured against the live scroll, since the rect is live too.
       const start = Math.max(0, el.getBoundingClientRect().top + y - window.innerHeight);
-      setFrame({
-        now: ts - t0.current,
-        p: easeOut(clamp((eased - start) / REVEAL_PX)),
-        // Keeps rising after the windows have landed, for the slow drift
-        // that gives the group some depth as the reader scrolls on.
-        q: clamp((eased - start - REVEAL_PX) / DRIFT_PX),
+      const next = {
+        now: clock,
+        p: easeOut(clamp((y - start) / REVEAL_PX)),
         vw: document.documentElement.clientWidth,
         box: measure(),
-      });
+      };
+      // Paused and nothing moved: skip the render altogether.
+      const same = last && !playing && next.p === last.p && next.vw === last.vw
+        && next.box?.left === last.box?.left && next.box?.top === last.box?.top
+        && next.box?.right === last.box?.right && next.box?.bottom === last.box?.bottom;
+      if (!same) { last = next; setFrame(next); }
       raf = requestAnimationFrame(tick);
     };
-    const start = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const start = () => { if (!raf) { lastTs = 0; raf = requestAnimationFrame(tick); } };
     const stop = () => { cancelAnimationFrame(raf); raf = 0; };
 
     const io = new IntersectionObserver((entries) => {
@@ -237,10 +237,29 @@ export function useHeroWindows(ref, { still = 6000 } = {}) {
     }, { threshold: 0 });
     io.observe(el);
 
+    // Same threshold the dashboard's own demo uses to play and pause. The
+    // windows' CSS animations (spinners) are paused with it via
+    // data-paused on the layer.
+    const dash = el.parentElement?.querySelector('.hreveal__dash');
+    const setPlaying = (on) => {
+      playing = on;
+      el.toggleAttribute('data-paused', !on);
+    };
+    setPlaying(false);
+    const playIo = new IntersectionObserver(([e]) => {
+      setPlaying(e.intersectionRatio >= 0.5);
+    }, { threshold: [0, 0.5, 1] });
+    if (dash) playIo.observe(dash); else setPlaying(true);
+
     const onVisibility = () => { if (document.hidden) stop(); else if (visible) start(); };
     document.addEventListener('visibilitychange', onVisibility);
 
-    return () => { io.disconnect(); document.removeEventListener('visibilitychange', onVisibility); stop(); };
+    return () => {
+      io.disconnect();
+      playIo.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      stop();
+    };
   }, [ref, still]);
 
   return frame;

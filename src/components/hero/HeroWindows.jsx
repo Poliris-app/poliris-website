@@ -15,8 +15,8 @@ import WinImplementation from './WinImplementation';
    They are painted behind the dashboard, so the reveal plays as each one
    being drawn out from underneath it: a window starts tucked in behind the
    frame, slightly low and tipped towards it, and slides out to its place,
-   one after another. Once they have landed they keep drifting up a little,
-   the far column faster than the near one, for a sense of depth.
+   one after another. Once they have landed they stay put, like the
+   dashboard, while the reader scrolls on.
 
    They need clear room either side of the dashboard, so they only appear
    from laptop widths up; on laptops they shrink to fit (see cardLayout).
@@ -32,10 +32,10 @@ const WIDE = '(min-width: 1200px)';
  * they pull the eye away from the page.
  */
 const WINDOWS = [
-  { key: 'vis', label: 'Visibility', dir: -1, drift: 16, speed: 1.6, Body: WinVisibility },
-  { key: 'chat', label: 'AI Assistant', dir: -1, drift: 26, speed: 1.6, icon: 'hero-chatgpt-mark.png', Body: WinAskPoli },
-  { key: 'map', label: 'Trading Zone Map', dir: 1, drift: 24, speed: 1.4, Body: WinMap },
-  { key: 'impl', label: 'Implementation', dir: 1, drift: 14, speed: 1.65, Body: WinImplementation },
+  { key: 'vis', label: 'Visibility', dir: -1, speed: 1.6, Body: WinVisibility },
+  { key: 'chat', label: 'AI Assistant', dir: -1, speed: 1.6, icon: 'hero-chatgpt-mark.png', Body: WinAskPoli },
+  { key: 'map', label: 'Trading Zone Map', dir: 1, speed: 1.4, Body: WinMap },
+  { key: 'impl', label: 'Implementation', dir: 1, speed: 1.65, Body: WinImplementation },
 ];
 
 // Eased both ends, so a window neither jumps away from the dashboard nor
@@ -48,7 +48,7 @@ const flyEase = (x) => {
 export default function HeroWindows() {
   const layerRef = useRef(null);
   const [wide, setWide] = useState(false);
-  const { now, p, q, vw, box } = useHeroWindows(layerRef);
+  const { now, p, vw, box } = useHeroWindows(layerRef);
 
   useEffect(() => {
     const mq = window.matchMedia(WIDE);
@@ -80,7 +80,7 @@ export default function HeroWindows() {
         // its edge. Rounded, because a fractional offset on a composited
         // layer is what makes the card look blurry once it has settled.
         const x = Math.round(-w.dir * place.tuck * back);
-        const y = Math.round(22 * back - q * w.drift);
+        const y = Math.round(22 * back);
         const settled = k >= 1;
         const Body = w.Body;
         return (

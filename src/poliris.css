@@ -8591,6 +8591,9 @@ button { cursor: pointer; border: none; background: none; }
   z-index: 0;
   pointer-events: none;
 }
+/* Set while the dashboard is less than half on screen (useHeroWindows):
+   the demos' clock is held, and so are their CSS spinners. */
+.hfw-layer[data-paused] * { animation-play-state: paused; }
 
 /* Painting order inside .hreveal is DOM order: rings, glow, then the
    windows, then the stage with the dashboard. A z-index on the rings
@@ -8601,7 +8604,7 @@ button { cursor: pointer; border: none; background: none; }
 /* The dashboard opens oversized and eases down to --rest as the hero is
    scrolled — 82.5% on wide screens, the same 990px the reference settles
    on, which opens the margins the windows need. On laptops it settles
-   smaller (down to 70%) to leave them room. --rest is set by HeroWindows
+   smaller (down to 66%) to leave them room. --rest is set by HeroWindows
    from restScale in heroWindowUtils.js, which is what the windows are
    positioned against. */
 @media (min-width: 1200px) {
