@@ -634,7 +634,7 @@ export default {
       h2Hl: 'passer à l\'action',
       lead: 'D\'un site lisible par tous, jusqu\'à un correctif livré pour vous.',
       cards: [
-        { n: '01', h4: 'Une analyse technique approfondie',      p: '140 vérifications par page, avec des résultats structurés autour de trois axes clés.',           href: '#p1' },
+        { n: '01', h4: 'Une analyse technique approfondie',      p: '150 vérifications par page, avec des résultats structurés autour de trois axes clés.',           href: '#p1' },
         { n: '02', h4: 'Une vision centralisée de vos outils ', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog en une seule plateforme.',href: '#p2' },
         { n: '03', h4: 'Des corrections directement intégrées',     p: 'Approuvez les corrections proposées et déployez-les directement sur votre site.',            href: '#p3' },
         { n: '04', h4: 'Un accompagnement sur mesure', p: 'Tom analyse vos résultats et vous guide dans la mise en œuvre des corrections prioritaires.',                href: '#p4' },
@@ -644,8 +644,8 @@ export default {
       tag: '01 Simplifié',
       h3Pre: 'Un audit technique',
       h3Hl: 'complet et accessible',
-      p: 'Chaque page fait l’objet de 140 vérifications techniques, dont les résultats sont organisés autour de trois axes clés pour faciliter leur compréhension et identifier les corrections prioritaires.',
-      testsLabel: 'Ce que nous exécutons · 140 tests par page',
+      p: 'Chaque page fait l’objet de 150 vérifications techniques, dont les résultats sont organisés autour de trois axes clés pour faciliter leur compréhension et identifier les corrections prioritaires.',
+      testsLabel: 'Ce que nous exécutons · 150 tests par page',
       testsMore: '…et plus, sur chaque URL analysée',
       simplify: 'nous simplifions',
       pipelineLabel: 'Ce que vous lisez · un pipeline de santé du site',
@@ -723,7 +723,7 @@ export default {
       h2Pre: 'Chaque signal cassé est une',
       h2Hl: 'recommandation IA manquée.',
       stats: [
-        { n: '140+',  d: "tests automatisés derrière chaque score d'audit" },
+        { n: '150+',  d: "tests automatisés derrière chaque score d'audit" },
         { n: '4',     d: 'niveaux de gravité, pour que rien de critique ne passe inaperçu' },
         { n: '1 clic', d: 'pour approuver un correctif et le publier directement sur votre site' },
         { n: '0',     d: 'ticket développeur, 0 copier-coller' },

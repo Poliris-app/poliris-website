@@ -637,7 +637,7 @@ export default {
       h2Hl: 'turn insights into action',
       lead: 'From a site anyone can read, to a fix shipped for you.',
       cards: [
-        { n: '01', h4: 'Detailed Technical Audit',  p: '140 checks per page, with results organized into three key areas.',             href: '#p1' },
+        { n: '01', h4: 'Detailed Technical Audit',  p: '150 checks per page, with results organized into three key areas.',             href: '#p1' },
         { n: '02', h4: 'All Your Tools in One Place', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog all in a single platform.', href: '#p2' },
         { n: '03', h4: 'Built-In Fixes',    p: 'Review and deploy recommended fixes directly to your website.',              href: '#p3' },
         { n: '04', h4: 'Personalized Guidance',    p: 'Tom analyzes your results and guides you through implementing the most important fixes.',                      href: '#p4' },
@@ -647,8 +647,8 @@ export default {
       tag: '01 Made simple',
       h3Pre: 'A Comprehensive and',
       h3Hl: 'Accessible Technical Audit',
-      p: 'Each page undergoes 140 technical checks, with results organized into three key areas to make them easier to understand and identify priority fixes.',
-      testsLabel: 'What we run · 140 tests on every page',
+      p: 'Each page undergoes 150 technical checks, with results organized into three key areas to make them easier to understand and identify priority fixes.',
+      testsLabel: 'What we run · 150 tests on every page',
       testsMore: '…and more, on every URL we crawl',
       simplify: 'we simplify',
       pipelineLabel: 'What you read · one Site Health Pipeline',
@@ -726,7 +726,7 @@ export default {
       h2Pre: 'Every broken signal is a missed',
       h2Hl: 'AI recommendation.',
       stats: [
-        { n: '140+',   d: 'automated tests run behind every audit score' },
+        { n: '150+',   d: 'automated tests run behind every audit score' },
         { n: '4',      d: "severity levels tracked, so nothing critical gets buried" },
         { n: '1 click', d: 'to approve a fix and ship it straight to your live site' },
         { n: '0',      d: 'dev tickets, no copy-paste required' },
