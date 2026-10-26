@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import { trackEvent } from '../../lib/analytics';
@@ -68,13 +68,7 @@ export default function SeoGeoCornerstonePage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Why SEO is the Cornerstone of GEO Success | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
-        <meta name="description" content="GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here is why and what to fix first." />
-      </Head>
+      <Seo page="blog/why-seo-is-the-cornerstone-of-geo-success" type="article" title="Why SEO is the Cornerstone of GEO Success | Poliris" description="GEO needs SEO. Without solid technical foundations, even the best generative engine strategy collapses. Here is why and what to fix first." />
       <Navbar />
 
       <div className="bp-layout">
@@ -184,7 +178,7 @@ export default function SeoGeoCornerstonePage() {
             <p><strong>Generative engine optimization (GEO) refers to the practice of structuring content so AI-powered search engines can accurately interpret, cite, and surface it in generated responses.</strong> Unlike traditional ranking, GEO isn't about keyword density. It's about making your content trustworthy and machine-readable enough that an AI engine picks it over a competitor's. That distinction matters because <strong>AI technologies</strong> are now the first stop for millions of professional queries.</p>
             <p>A procurement manager searching for vendor comparisons, or a financial analyst looking for market benchmarks, may never scroll past an AI-generated summary. If your content isn't cited in that summary, you don't exist for that user. This is where GEO's <strong>visibility reach</strong> diverges from classic SEO logic. Traditional SEO earns you a blue link. GEO earns you a citation inside the answer itself. The difference in click-through behavior is significant.</p>
             <p>How does GEO impact traditional SEO? It doesn't replace it. It amplifies the parts that AI engines already reward: clear structure, authoritative signals, and crawlable architecture. Search practitioners note this convergence firsthand, repeatedly circling back to technical foundations as the prerequisite for any AI visibility gain.</p>
-            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.png`} alt="Diagram: SEO to GEO signal flow" loading="lazy" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.webp`} alt="Diagram: SEO to GEO signal flow" loading="lazy" width="1408" height="768" />
             <p className="bp-img-caption">Fig. 1 — How technical SEO signals cascade into AI citation outcomes</p>
             <div className="bp-note">
               <div className="bp-note-label">Expert Tip</div>
@@ -199,7 +193,7 @@ export default function SeoGeoCornerstonePage() {
               <h2>How AI Crawlers Scrape Websites</h2>
             </div>
             <p><strong>AI web crawlers don't read your content the way a human does.</strong> They parse structure, follow directives, and extract meaning from signals you may not even see. Understanding this changes how you build for visibility. <strong>AI web crawlers</strong> are automated programs that fetch web pages, process their content, and feed that data into large language models. Unlike traditional search bots, they don't just index keywords. They assess semantic context, heading hierarchy, and machine-readable markup to decide what a page actually means.</p>
-            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-2.png`} alt="Illustration: AI crawler parsing page structure" loading="lazy" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-2.webp`} alt="Illustration: AI crawler parsing page structure" loading="lazy" width="1406" height="651" />
             <p className="bp-img-caption">Fig. 2 — What an AI crawler sees vs. what a browser renders</p>
             <h3>How This Affects GEO Indexing and Ranking</h3>
             <p><strong>GEO indexing</strong> works differently from standard search indexing. AI engines don't just store a URL. They extract claims, entities, and facts, then rank them by credibility and clarity. <strong>AI ranking impact</strong> depends heavily on how well your page is structured for extraction. A page buried in JavaScript or missing clean heading tags is essentially invisible to these systems. Consider two competing blog posts on the same topic: the one with explicit H2 definitions and schema markup gets cited by Perplexity. The one without gets ignored entirely. In practice, crawlability is a precondition for AI citation. That's why GEO needs SEO as its technical foundation, not as an afterthought.</p>

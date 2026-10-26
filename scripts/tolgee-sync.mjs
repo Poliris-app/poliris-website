@@ -157,4 +157,14 @@ const fixed = { en: reconstructArrays(live.en), fr: reconstructArrays(live.fr) }
 await syncOne('en.js', 'en', fixed.en);
 await syncOne('fr.js', 'fr', fixed.fr);
 
+// The documentation is far too large to sit in the bundled locale files, so it
+// lives in its own file per language, src/locales/docs/<lang>.js, keyed by
+// chapter slug. Same Tolgee namespace (docs.<slug>.*), same AST-safe rewrite;
+// docs.index stays in the main locale file and is skipped here because the
+// docs file has no "index" entry.
+for (const lang of ['en', 'fr']) {
+  const docs = fixed[lang]?.docs;
+  if (docs) await syncOne(path.join('docs', `${lang}.js`), lang, docs);
+}
+
 console.log(`Done. ${changedCount} total string(s) synced from Tolgee.`);

@@ -2365,4 +2365,14 @@ export default {
       queuedLead: "L'audit d'un nouveau site prend environ 10 minutes. Vous recevrez votre audit de visibilité IA par email dès qu'il sera prêt. N'hésitez pas à fermer cette fenêtre et à revenir plus tard.",
     },
   },
+  docs: {
+    index: {
+      eyebrow: 'Documentation',
+      title: 'Documentation Poliris',
+      lead: 'Comment mesurer la façon dont les assistants IA décrivent votre marque, rendre votre site facile à lire pour eux, et transformer vos constats en actions concrètes.',
+      search: 'Rechercher un chapitre',
+      open: 'Lire',
+      chapters: 'chapitres',
+    },
+  },
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -67,13 +67,7 @@ export default function DeathOfTraditionalSearchPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>The Death of Traditional Search: Why GEO Is Your New Priority | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
-        <meta name="description" content="Generative engine optimization (GEO) is the practice of structuring content so AI answer engines extract and cite it directly. Here's why it's your new priority." />
-      </Head>
+      <Seo page="blog/death-of-traditional-search-geo-priority" type="article" title="The Death of Traditional Search: Why GEO Is Your Priority" description="Generative engine optimization (GEO) structures content so AI answer engines can extract and cite it directly. Here's why it comes first." />
       <Navbar />
 
       <div className="bp-layout">

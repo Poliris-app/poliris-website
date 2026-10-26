@@ -114,7 +114,7 @@ export default function Navbar() {
     <nav className={`nav${stuck ? ' nav--stuck' : ''}`}>
       <div className="nav__inner">
         <Link to={`/${lang}/`} className="nav__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
+          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" width="218" height="54" />
         </Link>
 
         <div className="nav__links">

@@ -98,7 +98,7 @@ function VisibilityVis() {
           {BRANDS.map((b) => (
             <div key={b.name} className="vheat__row">
               <div className="vheat__brand">
-                <img src={b.logo} alt={b.name} className="vheat__brand-logo" />
+                <img src={b.logo} alt={b.name} className="vheat__brand-logo" width="25" height="25" />
                 <span className="vheat__brand-name">{b.name}</span>
                 {b.isYou && <span className="vheat__you-tag">{vv.you}</span>}
               </div>
@@ -114,7 +114,7 @@ function VisibilityVis() {
             <div className="vheat__cells">
               {MODELS.map((m) => (
                 <div key={m.label} className="vheat__col-label">
-                  {m.icon && <img src={m.icon} alt={m.label} className="vheat__col-icon" />}
+                  {m.icon && <img src={m.icon} alt={m.label} className="vheat__col-icon" width="14" height="14" />}
                   <span>{m.label}</span>
                 </div>
               ))}
@@ -288,7 +288,7 @@ function SentimentVis() {
             onClick={() => toggleBrand(b.name)}
           >
             <span className="srad__chip-dot" style={{ background: b.color }} />
-            <img src={b.logo} alt={b.name} className="srad__chip-logo" />
+            <img src={b.logo} alt={b.name} className="srad__chip-logo" width="16" height="16" />
             <span className="srad__chip-name">{b.name}</span>
             {b.isYou && <span className="srad__chip-you">{sv.you}</span>}
           </button>
@@ -359,7 +359,7 @@ function SentimentVis() {
                 <div className="srad__rtip-title">{sv.webScore}</div>
                 <div className="srad__rtip-brand-row">
                   <span className="srad__rtip-dot" style={{ background: tooltip.singleBrand.color }} />
-                  <img src={tooltip.singleBrand.logo} alt={tooltip.singleBrand.name} className="srad__rtip-logo" />
+                  <img src={tooltip.singleBrand.logo} alt={tooltip.singleBrand.name} className="srad__rtip-logo" width="16" height="16" />
                   <span className="srad__rtip-brand">{tooltip.singleBrand.name}</span>
                   <span className="srad__rtip-badge" style={TIER_STYLE[tooltip.singleBrand.overall]}>
                     {sv.tiers[tooltip.singleBrand.overall]}
@@ -386,7 +386,7 @@ function SentimentVis() {
                     return (
                       <div key={b.name} className="srad__rtip-row">
                         <span className="srad__rtip-dot" style={{ background: b.color }} />
-                        <img src={b.logo} alt={b.name} className="srad__rtip-logo" />
+                        <img src={b.logo} alt={b.name} className="srad__rtip-logo" width="16" height="16" />
                         <span className="srad__rtip-brand">{b.name}</span>
                         <span className="srad__rtip-badge" style={TIER_STYLE[tier]}>{sv.tiers[tier]}</span>
                       </div>
@@ -495,7 +495,7 @@ export function AuditVis({ showStages = true } = {}) {
               <div className="pipeline-stage-item" key={s.key}>
                 <span className="pipeline-stage-num" style={{ background: s.color }}>{i + 1}</span>
                 <div className="pipeline-stage-copy">
-                  <h4>{s.question}</h4>
+                  <h3>{s.question}</h3>
                   <p>{s.desc}</p>
                 </div>
               </div>

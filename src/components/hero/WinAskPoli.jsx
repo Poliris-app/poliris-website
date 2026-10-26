@@ -184,7 +184,7 @@ export default function WinAskPoli({ now }) {
 
               <div className="hfw-chat__answer" style={{ height: `${b.aH}px` }}>
                 <div className="hfw-chat__answer-row" style={{ opacity: b.aO }}>
-                  <span className="hfw-chat__avatar"><img src={avatar} alt="" /></span>
+                  <span className="hfw-chat__avatar"><img src={avatar} alt="ChatGPT" width="12" height="12" /></span>
                   {b.thinking ? (
                     <span className="hfw-chat__dots">
                       {b.dots.map((d, i) => (

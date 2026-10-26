@@ -77,6 +77,20 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 { font-family: var(--manrope); margin: 0; }
+
+/* Text for screen readers and crawlers only, e.g. the context that makes a
+   short visible link ("Learn more") descriptive. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 p  { margin: 0; }
 a  { text-decoration: none; }
 ul { list-style: none; padding: 0; margin: 0; }
@@ -3004,8 +3018,8 @@ button { cursor: pointer; border: none; background: none; }
   z-index: 99;
   min-width: 90px;
 }
-/* Edge-aware anchoring — see the qtipEdgeX/Y logic in HeroDashboard.jsx.
-   Anchors to the dot's own edge instead of centering on it, so a dot near
+/* Edge-aware anchoring for the quadrant tooltip (its only user, the old
+   HeroDashboard component, has been removed). Anchors to the dot's own edge instead of centering on it, so a dot near
    the chart's border (e.g. any high-visibility "Leader") doesn't push the
    tooltip out past the card. */
 .hdash__qtip--right { left: auto; right: -8px; transform: none; }
@@ -4908,7 +4922,7 @@ button { cursor: pointer; border: none; background: none; }
   color: #fff;
   margin-top: 1px;
 }
-.pipeline-stage-copy h4 {
+.pipeline-stage-copy h3 {
   font-family: var(--manrope);
   font-weight: 600;
   font-size: 13.5px;

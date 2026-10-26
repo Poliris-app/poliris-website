@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -60,13 +60,7 @@ export default function HighVisibilityContentFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Le plan directeur pour un contenu à forte visibilité : mise en forme, lisibilité et optimisation pour l'IA | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <meta name="description" content="Le principe fondamental pour l'emporter dans ce nouveau paysage : structurer chaque page avec une hiérarchie de titres HTML stricte, des paragraphes courts, et des citations explicites en ligne." />
-      </Head>
+      <Seo page="blog/blueprint-for-high-visibility-content" type="article" title="Contenu à forte visibilité : le plan directeur pour l'IA" description="Structurez chaque page avec une hiérarchie de titres stricte, des paragraphes courts et des citations explicites pour gagner en visibilité IA." />
       <Navbar />
 
       <div className="bp-layout">

@@ -6,7 +6,9 @@
   "homepage": "https://www.poliris.io",
   "scripts": {
     "dev": "vite",
-    "build": "vite-react-ssg build && node scripts/format-dist.mjs",
+    "build": "vite-react-ssg build && node scripts/format-dist.mjs && node scripts/seo-check.mjs",
+    "seo:check": "node scripts/seo-check.mjs",
+    "build:standalone": "vite build --config vite.standalone.config.js && node scripts/build-standalone.mjs",
     "lint": "eslint .",
     "preview": "vite preview --outDir dist"
   },

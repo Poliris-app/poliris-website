@@ -118,7 +118,7 @@ const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) =
 function ModelBadge({ model }) {
   return (
     <span className="pricing-model-badge">
-      <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt="" />
+      <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt={model.label} width="17" height="17" />
       {model.label}
     </span>
   );
@@ -396,7 +396,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                   aria-pressed={modelIds.includes(m.id)}
                   onClick={() => toggleModel(m.id)}
                 >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
+                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} width="18" height="18" />
                   {m.label}
                 </button>
               ))}
@@ -412,7 +412,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                   aria-pressed={modelIds.includes(m.id)}
                   onClick={() => toggleModel(m.id)}
                 >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
+                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} width="18" height="18" />
                   {m.label}
                 </button>
               ))}
@@ -598,6 +598,8 @@ const modelIcon = (m) => (
     src={`${import.meta.env.BASE_URL}${m.logo}`}
     alt={m.label}
     title={m.label}
+    width="16"
+    height="16"
   />
 );
 

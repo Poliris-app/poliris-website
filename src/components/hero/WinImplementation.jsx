@@ -120,7 +120,7 @@ export default function WinImplementation({ now }) {
                 </>
               )}
               {nd.kind === 'poliris' && (
-                <img className="hfw-impl__mark" src={`${import.meta.env.BASE_URL}Poliris-Logo-Frame.png`} alt="" />
+                <img className="hfw-impl__mark" src={`${import.meta.env.BASE_URL}Poliris-Logo-Frame.png`} alt="Poliris" width="54" height="54" />
               )}
               {nd.kind === 'site' && (
                 <>

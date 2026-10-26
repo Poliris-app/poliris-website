@@ -161,7 +161,7 @@ export default function SiteOverviewMockup() {
             </div>
           </div>
           <div className="som-thumb">
-            <img src="/sony_landingpage.png" alt="Sony landing page" className="som-thumb-img" />
+            <img src="/sony_landingpage.webp" alt="Sony landing page" className="som-thumb-img" width="1903" height="1079" />
           </div>
         </div>
 

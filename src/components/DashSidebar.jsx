@@ -60,14 +60,14 @@ export default function DashSidebar({ product = 0 }) {
     <aside className="dsb2" aria-hidden="true">
       <div className="dsb2__inner">
         <div className="dsb2__header">
-          <img className="dsb2__logo" src={`${base}Logo-Poliris-1.png`} alt="" />
+          <img className="dsb2__logo" src={`${base}Logo-Poliris-1.png`} alt="Poliris" width="218" height="54" />
           <Icon name="panel-left" size={15} className="dsb2__toggle" />
         </div>
 
         <div className="dsb2__dotted" />
         <div className="dsb2__proj-row">
           <div className="dsb2__proj">
-            <img className="dsb2__proj-logo" src={`${base}sony-com-logo.png`} alt="" />
+            <img className="dsb2__proj-logo" src={`${base}sony-com-logo.png`} alt="Sony" width="256" height="256" />
             <div className="dsb2__proj-meta">
               <div className="dsb2__proj-name">Sony</div>
               <div className="dsb2__proj-sub">{s.activeProject}</div>

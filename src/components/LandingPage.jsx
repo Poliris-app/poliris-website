@@ -11,12 +11,16 @@ import { useLang } from '../contexts/LangContext';
 
 /* ── Agent avatar illustrations (see public/Illustrations/) ──── */
 const AVATARS = {
-  Leo: `${import.meta.env.BASE_URL}Illustrations/leo.png`,
-  Nora: `${import.meta.env.BASE_URL}Illustrations/nora.png`,
-  Tom: `${import.meta.env.BASE_URL}Illustrations/tom.png`,
-  Kate: `${import.meta.env.BASE_URL}Illustrations/kate.png`,
-  Ivy: `${import.meta.env.BASE_URL}Illustrations/ivy.png`,
-  Emma: `${import.meta.env.BASE_URL}Illustrations/emma.png`,
+  Leo: `${import.meta.env.BASE_URL}Illustrations/leo.webp`,
+  Nora: `${import.meta.env.BASE_URL}Illustrations/nora.webp`,
+  Tom: `${import.meta.env.BASE_URL}Illustrations/tom.webp`,
+  Kate: `${import.meta.env.BASE_URL}Illustrations/kate.webp`,
+  Ivy: `${import.meta.env.BASE_URL}Illustrations/ivy.webp`,
+  Emma: `${import.meta.env.BASE_URL}Illustrations/emma.webp`,
+};
+// Pixel size of each file above, for the <img> width/height attributes.
+const AVATAR_SIZES = {
+  Leo: [421, 480], Nora: [480, 480], Tom: [421, 480], Kate: [391, 480], Ivy: [404, 480], Emma: [413, 480],
 };
 
 /* ── Highlight span ──────────────────────────────────────────── */
@@ -474,11 +478,9 @@ const PC_QUADRANTS = [
   { key: 'atRisk', top: 50, left: 0, bg: '#FEFBEA', labelKey: 'quadAtRisk', edge: 'right' },
   { key: 'visibility', top: 50, left: 50, bg: '#F8FBFC', labelKey: 'quadVisibilityWeak', edge: '' },
 ];
-// Same x/y story as HeroDashboard's own QUAD_POS (x = visibility%, used
-// directly as `left`; y here is already "distance from top", i.e. the
-// inverted sentiment value HeroDashboard computes via `100 - sentimentY`
-// before it ever reaches CSS) — converted 1:1 from QUAD_POS so this card
-// and the hero dashboard's quadrant plot agree on where every brand sits.
+// x = visibility%, used directly as `left`; y is already "distance from
+// top", i.e. the inverted sentiment value (`100 - sentimentY`), so it can
+// go straight into CSS.
 const PC_BRANDS = [
   // Sony, Samsung, Bose, JBL and Anker all ship as square opaque logo tiles
   // with their own brand-colored background baked in (no transparency), so
@@ -508,7 +510,7 @@ function PcDot({ brand }) {
       <span className="pc-dot__label">{brand.name}</span>
       <span className={`pc-dot__badge${brand.cover ? ' pc-dot__badge--cover' : ''}`} style={{ background: brand.bg }}>
         {brand.logo
-          ? <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt="" />
+          ? <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} width="22" height="22" />
           : <span style={{ color: brand.bg === '#ffffff' ? '#0d0d0d' : '#fff' }}>{brand.initial}</span>}
       </span>
     </div>
@@ -517,8 +519,7 @@ function PcDot({ brand }) {
 
 /* ── "Analysis" tab — Visibility (left) + Sentiment (right), each a
    compact recreation of VisibilityAnalysis2.tsx / SentimentAnalysis2.tsx ── */
-// Same per-platform numbers as HeroDashboard's own Visibility Analysis
-// panel, so the two don't disagree about Sony's actual scores.
+// Sony's per-platform visibility scores in the demo.
 const PC_VIS_ROWS = [
   { name: 'Gemini', icon: 'gemini-ai-logo.png', pct: 97 },
   { name: 'ChatGPT', icon: 'chatgpt-com-logo.png', pct: 92 },
@@ -535,7 +536,7 @@ const SENT_TIER_STYLE = {
   Weak: { color: 'var(--tier-w-color)', bg: 'var(--tier-w-bg)' },
   'Very Weak': { color: 'var(--tier-vw-color)', bg: 'var(--tier-vw-bg)' },
 };
-// Matches HeroDashboard's Sentiment Analysis axes/tiers exactly.
+// Sentiment Analysis axes and tiers for the demo.
 const PC_SENT_ROWS = [
   { name: 'Brand Awareness', tier: 'Very Strong' },
   { name: 'Performance', tier: 'Strong' },
@@ -563,7 +564,7 @@ function PcAnalysis() {
             <div key={r.name} className="pc-an__bar-row">
               <div className="pc-an__bar-head">
                 <span className="pc-an__bar-name">
-                  <img src={`${import.meta.env.BASE_URL}${r.icon}`} alt="" />
+                  <img src={`${import.meta.env.BASE_URL}${r.icon}`} alt={r.name} width="13" height="13" />
                   {r.name}
                 </span>
                 <span className="pc-an__bar-pct">{r.pct}%</span>
@@ -772,6 +773,7 @@ function PositionChartDemo() {
 const ATD_CYCLE = 15000;
 const ATD_ACTS = [[0, 5300], [5300, 10200], [10200, 15000]];
 const ATD_LOGO = (file) => `${import.meta.env.BASE_URL}${file}`;
+const ATD_NAMES = { chatgpt: 'ChatGPT', claude: 'Claude', gemini: 'Gemini', mistral: 'Mistral', perplexity: 'Perplexity', grok: 'Grok' };
 const ATD_LOGOS = {
   chatgpt: ATD_LOGO('chatgpt-com-logo.png'),
   claude: ATD_LOGO('claudeai-com-logo.png'),
@@ -906,10 +908,10 @@ function EngineTrustCard() {
         const b = pop(st + 1050, 0.7, 280);
         blkO = b.o * atdClamp((2700 - dt) / 400); blkS = b.s;
         const px = 2 + 25 * atdOut(dt / 1000);
-        return { src: L[k], y: laneY(y, px), x: px, shake: sh, outline: hit ? '2px solid #EF4444' : '1px solid #e2e8f0', o: atdClamp(dt / 200) * atdClamp((2600 - dt) / 400) };
+        return { src: L[k], name: ATD_NAMES[k], y: laneY(y, px), x: px, shake: sh, outline: hit ? '2px solid #EF4444' : '1px solid #e2e8f0', o: atdClamp(dt / 200) * atdClamp((2600 - dt) / 400) };
       }
       const p = atdClamp(dt / 2700), px = 2 + 91 * atdInOut(p);
-      return { src: L[k], y: laneY(y, px), x: px, shake: 0, outline: '1px solid #e2e8f0', o: dt <= 0 ? 0 : atdClamp(p / 0.08) * atdClamp((1 - p) / 0.1) };
+      return { src: L[k], name: ATD_NAMES[k], y: laneY(y, px), x: px, shake: 0, outline: '1px solid #e2e8f0', o: dt <= 0 ? 0 : atdClamp(p / 0.08) * atdClamp((1 - p) / 0.1) };
     });
 
   /* ── Act 3 · Fix ── */
@@ -1038,7 +1040,7 @@ function EngineTrustCard() {
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, paddingRight: 3 }}>
                   {bots.map((b) => (
                     <div key={b.name} style={{ position: 'relative', width: 24, height: 24, borderRadius: 7, background: b.bg, border: `1px solid ${b.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: b.o, transform: `scale(${b.s})` }}>
-                      <img src={b.src} alt={b.name} style={{ width: 14, height: 14, objectFit: 'contain' }} />
+                      <img src={b.src} alt={b.name} style={{ width: 14, height: 14, objectFit: 'contain' }} width="14" height="14" />
                       <span style={{ position: 'absolute', right: -5, bottom: -5, width: 13, height: 13, borderRadius: '50%', background: b.dot, color: '#fff', fontSize: 7.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1.5px solid #fff', opacity: b.dotO, transform: `scale(${b.dotS})` }}>{b.mark}</span>
                     </div>
                   ))}
@@ -1089,7 +1091,7 @@ function EngineTrustCard() {
             </svg>
             {icons.map((i, idx) => (
               <div key={idx} style={{ position: 'absolute', left: `${i.x}%`, top: `${i.y}%`, width: 26, height: 26, margin: '-13px 0 0 -13px', transform: `translateX(${i.shake}px)`, borderRadius: 8, background: '#fff', boxShadow: '0 4px 12px rgba(15,23,42,.18)', outline: i.outline, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: i.o }}>
-                <img src={i.src} alt="" style={{ width: 16, height: 16, objectFit: 'contain' }} />
+                <img src={i.src} alt={i.name} style={{ width: 16, height: 16, objectFit: 'contain' }} width="16" height="16" />
               </div>
             ))}
             <div style={{ position: 'absolute', left: '27%', top: `${laneY(68, 27)}%`, transform: `translate(-50%,20px) scale(${blkS})`, opacity: blkO, display: 'flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: '#FEE2E2', color: '#DC2626', fontSize: 9.5, fontWeight: 700, whiteSpace: 'nowrap', boxShadow: '0 2px 8px rgba(15,23,42,.12)' }}>{d.blockedByRobots}</div>
@@ -1190,7 +1192,7 @@ function EngineTrustCard() {
               <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {access.map((c) => (
                   <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '4px 7px', borderRadius: 8, background: c.bg, border: `1px solid ${c.border}`, opacity: c.o, transform: `translateX(${c.x}px)` }}>
-                    <img src={c.src} alt="" style={{ width: 13, height: 13, objectFit: 'contain' }} />
+                    <img src={c.src} alt={c.name} style={{ width: 13, height: 13, objectFit: 'contain' }} width="13" height="13" />
                     <span style={{ flex: 1, fontSize: 11, fontWeight: 500, color: '#3F3F46' }}>{c.name}</span>
                     <span style={{ fontSize: 8.5, fontWeight: 700, padding: '2px 7px', borderRadius: 999, background: c.sBg, color: c.sColor }}>{c.status}</span>
                   </div>
@@ -1791,7 +1793,9 @@ function CitRow({ row, buyBtnRef, buyClicked, buyZoomed }) {
             <span className="cit-favicon__fallback">{row.domain[0].toUpperCase()}</span>
             <img
               src={`https://www.google.com/s2/favicons?sz=64&domain=${row.domain}`}
-              alt=""
+              alt={row.domain}
+              width="32"
+              height="32"
               className="cit-favicon__img"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
@@ -2078,7 +2082,13 @@ function EngineCitationsCard() {
 
 const ENGINE_VISUALS = { 0: PositionChartDemo, 1: EngineTrustCard, 2: EngineRoadmapCard, 3: ContentGenDemo, 4: EngineCitationsCard };
 
+// The engine cards' hrefs in the locale files are bare ("/visibility"); a
+// bare path only reaches the page through a temporary redirect to the EN
+// version, so the link is prefixed with the current language here.
+const localeHref = (href, lang) => (href.startsWith('/') && !/^\/(en|fr)(\/|$)/.test(href) ? `/${lang}${href}` : href);
+
 function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everRevealed }) {
+  const { lang } = useLang();
   const reverse = index % 2 === 1;
   const tinted = index % 2 === 0;
   const Visual = ENGINE_VISUALS[index] || EnginePlaceholder;
@@ -2106,8 +2116,9 @@ function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everReve
               {card.tags.map((tag) => <span key={tag} className="engine-tag">{tag}</span>)}
             </div>
             {card.href && (
-              <Link to={card.href} className="engine-row__link">
+              <Link to={localeHref(card.href, lang)} className="engine-row__link">
                 {learnMore}
+                <span className="sr-only">: {card.title}</span>
                 <span className="engine-row__link-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
                     <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
@@ -2164,6 +2175,7 @@ const ENGINE_ICONS = [
 const ENGINE_CARD_TAGS = [[0, 1, 2], [0, 1], [0, 1, 2], [1, 2, 3], [1, 2]];
 
 function EngineCardFace({ card, index, learnMore, pressed, highlight, interactive }) {
+  const { lang } = useLang();
   const title = <span className={highlight ? 'engine-row__title--tour-active' : undefined}>{card.title}</span>;
   return (
     <>
@@ -2192,6 +2204,7 @@ function EngineCardFace({ card, index, learnMore, pressed, highlight, interactiv
         const inner = (
           <>
             {learnMore}
+            <span className="sr-only">: {card.title}</span>
             <span className="engine-row__link-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
                 <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
@@ -2200,7 +2213,7 @@ function EngineCardFace({ card, index, learnMore, pressed, highlight, interactiv
           </>
         );
         return interactive
-          ? <Link to={card.href} className="engine-row__link engine-card__link">{inner}</Link>
+          ? <Link to={localeHref(card.href, lang)} className="engine-row__link engine-card__link">{inner}</Link>
           : <span className="engine-row__link engine-card__link">{inner}</span>;
       })()}
     </>
@@ -2560,6 +2573,8 @@ function AgentCard({ agent }) {
           <img
             src={AVATARS[agent.name]}
             alt={agent.name}
+            width={AVATAR_SIZES[agent.name]?.[0]}
+            height={AVATAR_SIZES[agent.name]?.[1]}
             style={{ width: agent.avatarScale, height: agent.avatarScale }}
           />
         </div>

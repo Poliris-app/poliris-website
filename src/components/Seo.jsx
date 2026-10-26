@@ -14,10 +14,15 @@ const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 // Per-page <head>: title, description, canonical, hreflang alternates,
 // Open Graph and Twitter cards. Also sets <html lang> for the current page.
-// Drop <Seo page="..." /> at the top of each route component.
-export default function Seo({ page }) {
+// Drop <Seo page="..." /> at the top of each route component. Blog posts pass
+// type="article" so Open Graph presents them as articles.
+export default function Seo({ page, title: titleOverride, description: descriptionOverride, type = 'website' }) {
   const { lang } = useLang();
-  const { title, description } = getMeta(lang, page);
+  // Pages generated from content (documentation chapters, blog posts) carry
+  // their own title and description rather than having an entry in src/seo.js.
+  const meta = getMeta(lang, page);
+  const title = titleOverride || meta.title;
+  const description = descriptionOverride || meta.description;
   const canonical = canonicalUrl(lang, page);
   const ogLocale = lang === 'fr' ? 'fr_FR' : 'en_US';
 
@@ -36,7 +41,7 @@ export default function Seo({ page }) {
 
       {/* Open Graph */}
       <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={type} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonical} />

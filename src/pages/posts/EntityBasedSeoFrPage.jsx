@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -59,13 +59,7 @@ export default function EntityBasedSeoFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>SEO Orienté Entités : Des Chaînes de Caractères aux Choses | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/entity-based-seo" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/entity-based-seo" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/entity-based-seo" />
-        <meta name="description" content="Arrêtez de suivre la densité de mots-clés. Apprenez à relier votre contenu à des nœuds du Knowledge Graph, à passer les frameworks NER, et à sécuriser des citations RAG à l'ère de l'IA." />
-      </Head>
+      <Seo page="blog/entity-based-seo" type="article" title="SEO orienté entités : des chaînes aux choses | Poliris" description="Oubliez la densité de mots-clés : reliez votre contenu au Knowledge Graph, passez les modèles NER et obtenez des citations RAG grâce à l'IA." />
       <Navbar />
 
       <div className="bp-layout">

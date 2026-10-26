@@ -77,7 +77,7 @@ export default function CtaBand({
         <div className="cta-model-track">
           {tripled.map((m, i) => (
             <span key={i} className="cta-model-item">
-              {m.logo && <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" className="cta-model-logo" />}
+              {m.logo && <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.name} className="cta-model-logo" width="18" height="18" />}
               <span>{m.name}</span>
             </span>
           ))}

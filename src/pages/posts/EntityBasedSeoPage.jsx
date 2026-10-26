@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -59,13 +59,7 @@ export default function EntityBasedSeoPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Entity-Based SEO: Moving from Strings to Things | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/entity-based-seo" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/entity-based-seo" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/entity-based-seo" />
-        <meta name="description" content="Stop tracking keyword density. Learn how to map content to Knowledge Graph nodes, pass NER frameworks, and secure RAG citations in the AI era." />
-      </Head>
+      <Seo page="blog/entity-based-seo" type="article" title="Entity-Based SEO: Moving from Strings to Things | Poliris" description="Stop tracking keyword density. Learn how to map content to Knowledge Graph nodes, pass NER frameworks, and secure RAG citations in the AI era." />
       <Navbar />
 
       <div className="bp-layout">

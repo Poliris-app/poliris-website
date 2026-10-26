@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import { trackEvent } from '../../lib/analytics';
@@ -68,13 +68,7 @@ export default function SeoGeoCornerstoneFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Pourquoi le SEO est la pierre angulaire du succès GEO | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/why-seo-is-the-cornerstone-of-geo-success" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/why-seo-is-the-cornerstone-of-geo-success" />
-        <meta name="description" content="Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et par où commencer." />
-      </Head>
+      <Seo page="blog/why-seo-is-the-cornerstone-of-geo-success" type="article" title="Le SEO, pierre angulaire du succès GEO | Poliris" description="Le GEO a besoin du SEO. Sans fondations techniques solides, même la meilleure stratégie GEO s'effondre. Voici pourquoi et par où commencer." />
       <Navbar />
 
       <div className="bp-layout">
@@ -184,7 +178,7 @@ export default function SeoGeoCornerstoneFrPage() {
             <p><strong>L'optimisation des moteurs génératifs désigne la pratique consistant à structurer le contenu pour que les moteurs de recherche alimentés par l'IA puissent l'interpréter avec précision, le citer et le faire émerger dans les réponses générées.</strong> Contrairement au classement traditionnel, le GEO n'est pas une question de densité de mots-clés. Il s'agit de rendre votre contenu suffisamment fiable et lisible par les machines pour qu'un moteur IA le choisisse plutôt que celui d'un concurrent. Cette distinction importe car les <strong>technologies IA</strong> sont désormais le premier arrêt pour des millions de requêtes professionnelles.</p>
             <p>Un responsable des achats cherchant des comparaisons de fournisseurs, ou un analyste financier cherchant des benchmarks de marché, ne défilera peut-être jamais au-delà d'un résumé généré par l'IA. Si votre contenu n'est pas cité dans ce résumé, vous n'existez pas pour cet utilisateur. C'est là que la <strong>portée de visibilité</strong> du GEO diverge de la logique SEO classique. Le SEO traditionnel vous vaut un lien bleu. Le GEO vous vaut une citation dans la réponse elle-même. La différence de comportement en termes de taux de clic est significative.</p>
             <p>Comment le GEO impacte-t-il le SEO traditionnel ? Il ne le remplace pas. Il amplifie les parties que les moteurs IA récompensent déjà : une structure claire, des signaux d'autorité et une architecture crawlable. Les praticiens de la recherche notent cette convergence directement, revenant constamment aux fondements techniques comme prérequis pour tout gain de visibilité IA.</p>
-            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.png`} alt="Diagramme : flux de signaux SEO vers GEO" loading="lazy" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-1.webp`} alt="Diagramme : flux de signaux SEO vers GEO" loading="lazy" width="1408" height="768" />
             <p className="bp-img-caption">Fig. 1 — Comment les signaux SEO techniques se répercutent sur les résultats de citation IA</p>
             <div className="bp-note">
               <div className="bp-note-label">Note d'expert</div>
@@ -199,7 +193,7 @@ export default function SeoGeoCornerstoneFrPage() {
               <h2>Comment les crawlers IA analysent les sites web</h2>
             </div>
             <p><strong>Les crawlers web IA ne lisent pas votre contenu comme un humain.</strong> Ils analysent la structure, suivent les directives et extraient le sens à partir de signaux que vous ne voyez peut-être même pas. Comprendre cela change la façon dont vous construisez pour la visibilité. <strong>Les crawlers web IA</strong> sont des programmes automatisés qui récupèrent des pages web, traitent leur contenu et alimentent ces données dans des grands modèles de langage. Contrairement aux robots de recherche traditionnels, ils n'indexent pas seulement les mots-clés. Ils évaluent le contexte sémantique, la hiérarchie des titres et les balises lisibles par machine pour décider de ce que signifie réellement une page.</p>
-            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-2.png`} alt="Illustration : crawler IA analysant la structure d'une page" loading="lazy" />
+            <img className="bp-img" src={`${import.meta.env.BASE_URL}Blogs/Blog-1/fig-2.webp`} alt="Illustration : crawler IA analysant la structure d'une page" loading="lazy" width="1406" height="651" />
             <p className="bp-img-caption">Fig. 2 — Ce que voit un crawler IA vs. ce qu'un navigateur affiche</p>
             <h3>Comment cela affecte l'indexation et le classement GEO</h3>
             <p><strong>L'indexation GEO</strong> fonctionne différemment de l'indexation de recherche standard. Les moteurs IA ne stockent pas seulement une URL. Ils extraient des affirmations, des entités et des faits, puis les classent par crédibilité et clarté. <strong>L'impact sur le classement IA</strong> dépend fortement de la structure de votre page pour l'extraction. Une page enfouie dans du JavaScript ou sans balises de titres propres est essentiellement invisible pour ces systèmes. Considérez deux articles de blog concurrents sur le même sujet : celui avec des définitions H2 explicites et des balises schema est cité par Perplexity. Celui sans est complètement ignoré. En pratique, la crawlabilité est une condition préalable à la citation IA. C'est pourquoi le GEO a besoin du SEO comme fondation technique, et non comme une réflexion après coup.</p>

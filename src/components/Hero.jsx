@@ -105,8 +105,10 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
                   >
                     <img
                       src={s.logoUrl || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.domain)}&sz=64`}
-                      alt=""
+                      alt={s.domain}
                       aria-hidden="true"
+                      width="28"
+                      height="28"
                       className="hero-website-form__suggestion-logo"
                       onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
                     />
@@ -142,7 +144,7 @@ function AiBand() {
     <section className="ai-band">
       <div className="ai-band__track">
         {doubled.map((l, i) => (
-          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" />
+          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" width="3600" height="777" />
         ))}
       </div>
     </section>

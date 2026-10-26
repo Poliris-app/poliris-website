@@ -22,27 +22,6 @@ const ChevronIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11"><path d="m6 9 6 6 6-6"/></svg>
 );
 
-/* Favicon marks for source domains we don't have a saved logo file for. */
-const TomsGuideIcon = () => (
-  <svg viewBox="0 0 22 22" width="22" height="22"><rect width="22" height="22" rx="6" fill="#1f6fe5"/><path d="M8 6h6M11 6v10" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/></svg>
-);
-const GoogleGIcon = () => (
-  <svg viewBox="0 0 48 48" width="16" height="16">
-    <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
-    <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.11-7.45 2.11-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
-    <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/>
-    <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
-  </svg>
-);
-const ShopeeIcon = () => (
-  <svg viewBox="0 0 22 22" width="22" height="22">
-    <rect width="22" height="22" rx="6" fill="#ee4d2d"/>
-    <path d="M8 9.5c0-1.93 1.34-3.5 3-3.5s3 1.57 3 3.5" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
-    <path d="M6.7 9h8.6l-.72 7.13c-.1.96-.91 1.7-1.88 1.7H9.3c-.97 0-1.78-.74-1.88-1.7L6.7 9z" fill="#fff"/>
-  </svg>
-);
-const SOURCE_FAVICONS = { tomsguide: TomsGuideIcon, google: GoogleGIcon, shopee: ShopeeIcon };
-
 /* Competitor pill color is keyed by brand, not row position — the same
    brand always reads the same color wherever it's cited. */
 const COMPETITOR_COLORS = ['teal', 'purple', 'pink', 'blue'];
@@ -59,22 +38,24 @@ function competitorColor(name) {
   return COMPETITOR_COLORS[hash % COMPETITOR_COLORS.length];
 }
 
+// Real articles about Sony's WF-1000XM6 earbuds; each `logo` is a file in
+// public/Source Intelligence/.
 const SOURCE_ROWS = [
-  { domain: 'youtube.com', logo: 'youtube-com-logo.png', typeKey: 'social', authority: 'high', citation: 'mention',
-    url: 'https://www.youtube.com/watch?v=pJmxeHjZYcs',
-    competitors: ['Apple', 'Samsung', 'Google', 'Skullcandy', 'Anker', 'Bose', 'JBL'] },
-  { domain: 'soundguys.com', typeKey: 'media', authority: 'high', citation: 'uncited',
-    url: 'https://www.soundguys.com/best-wireless-earbuds-2026',
-    competitors: ['Apple', 'Skullcandy', 'Anker'] },
-  { domain: 'tomsguide.com', icon: 'tomsguide', typeKey: 'news', authority: 'high', citation: 'mention',
-    url: 'https://www.tomsguide.com/wellness/audio/we-asked-toms-guide-readers-what-brand-of-wireless-earbuds-they-wear-and-there-was-a-clear-winner?utm_source=chatgpt.com',
-    competitors: ['Apple', 'Samsung', 'Google', 'Bose', 'JBL', 'Sennheiser', 'Skullcandy', 'Anker'] },
-  { domain: 'sites.google.com', icon: 'google', iconBordered: true, typeKey: 'industry', authority: 'high', citation: 'mention',
-    url: 'https://sites.google.com/view/quantitative-insights-lab/home/insights-lab/top-wireless-earbuds-companies-how-to-compare-them-2026',
-    competitors: ['Apple', 'Samsung', 'Google', 'Bose', 'Xiaomi', 'Anker'] },
-  { domain: 'shopee.ph', icon: 'shopee', typeKey: 'marketplace', authority: 'high', citation: 'mention',
-    url: 'https://shopee.ph/blog/affordable-wireless-earbuds-philippines/',
-    competitors: ['Xiaomi', 'Skullcandy', 'Anker', 'Apple', 'Samsung', 'Google'] },
+  { domain: 'engadget.com', logo: 'Engadget.png', typeKey: 'media', authority: 'high', citation: 'mention',
+    url: 'https://engadget.com/audio/headphones/sony-wf-1000xm6-review-facing-tougher-competition-160000652.html',
+    competitors: ['Apple', 'Bose', 'Samsung', 'Google'] },
+  { domain: 'techradar.com', logo: 'TechRadar.png', typeKey: 'media', authority: 'high', citation: 'mention',
+    url: 'https://www.techradar.com/audio/earbuds-airpods/sony-wf-1000xm6-review',
+    competitors: ['Apple', 'Bose', 'Samsung', 'Sennheiser', 'JBL'] },
+  { domain: 'whathifi.com', logo: 'What Hi-Fi.png', typeKey: 'media', authority: 'high', citation: 'uncited',
+    url: 'https://www.whathifi.com/headphones/wireless-earbuds/sony-wf-1000xm6',
+    competitors: ['Apple', 'Bose', 'Sennheiser'] },
+  { domain: 'business-standard.com', logo: 'Business Standard.png', typeKey: 'news', authority: 'high', citation: 'mention',
+    url: 'https://www.business-standard.com/technology/tech-news/sony-wf-1000xm6-earbuds-launch-confirmed-on-feb-12-what-to-expect-126020900230_1.html',
+    competitors: ['Apple', 'Samsung', 'Bose'] },
+  { domain: 'androidauthority.com', logo: 'Android Authority.png', typeKey: 'news', authority: 'high', citation: 'mention',
+    url: 'https://www.androidauthority.com/sony-wf-1000xm6-launch-date-confirmed-3638553',
+    competitors: ['Apple', 'Samsung', 'Google', 'Bose', 'Anker'] },
 ];
 
 /* Splits a question into 3 lines balanced by character length (not
@@ -379,16 +360,9 @@ export default function VisibilityPage() {
                         <div className="sit-source-top">
                           {row.logo ? (
                             <span className="fav">
-                              <img src={`${import.meta.env.BASE_URL}Source%20Intelligence/${row.logo}`} alt="" />
+                              <img src={`${import.meta.env.BASE_URL}Source%20Intelligence/${encodeURIComponent(row.logo)}`} alt={row.domain} width="22" height="22" />
                             </span>
-                          ) : SOURCE_FAVICONS[row.icon] ? (() => {
-                            const Icon = SOURCE_FAVICONS[row.icon];
-                            return (
-                              <span className={`fav${row.iconBordered ? ' fav--bordered' : ''}`}>
-                                <Icon />
-                              </span>
-                            );
-                          })() : (
+                          ) : (
                             <span className="fav fav--letter" style={{ background: row.letterBg || '#6c6c7c' }}>
                               {row.domain.charAt(0).toUpperCase()}
                             </span>
@@ -440,7 +414,7 @@ export default function VisibilityPage() {
                   <div className="vis-agent-body">
                     <div className="agent-pill">
                       <span className="sp">
-                        <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
+                        <img src={`${import.meta.env.BASE_URL}Illustrations/nora.webp`} alt="Nora" width="1254" height="1254" />
                       </span>
                       {t('visibility.nora.agentPill')}
                     </div>
@@ -475,7 +449,7 @@ export default function VisibilityPage() {
                       <div className="chat-hdr-v2">
                         <div className="chat-hdr-left">
                           <span className="av av--nora-v2">
-                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
+                            <img src={`${import.meta.env.BASE_URL}Illustrations/nora.webp`} alt="Nora" width="1254" height="1254" />
                           </span>
                           <div className="chat-hdr-info">
                             <span className="chat-hdr-name">Nora</span>
@@ -499,7 +473,7 @@ export default function VisibilityPage() {
                             ) : (
                               <>
                                 <span className="av av--nora-v2 av--sm">
-                                  <img src={`${import.meta.env.BASE_URL}Illustrations/nora.png`} alt="Nora" />
+                                  <img src={`${import.meta.env.BASE_URL}Illustrations/nora.webp`} alt="Nora" width="1254" height="1254" />
                                 </span>
                                 <div className="bub bot" dangerouslySetInnerHTML={{ __html: bub.text }} />
                               </>

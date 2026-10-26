@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -69,13 +69,7 @@ export default function BeyondKeywordsFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Au-delà des mots-clés : générer du contenu optimisé pour l'IA et les moteurs de réponse | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/beyond-keywords-ai-content-generation" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/beyond-keywords-ai-content-generation" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
-        <meta name="description" content="Une stratégie de génération de contenu par IA, c'est comment les marques B2B contrôlent ce que les moteurs de réponse IA disent d'elles. Un cadre pratique pour combler l'écart de visibilité." />
-      </Head>
+      <Seo page="blog/beyond-keywords-ai-content-generation" type="article" title="Au-delà des mots-clés : du contenu optimisé pour l'IA" description="Une stratégie de contenu IA permet aux marques B2B de maîtriser ce que les moteurs de réponse disent d'elles. Un cadre pratique pour agir." />
       <Navbar />
 
       <div className="bp-layout">

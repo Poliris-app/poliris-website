@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -60,13 +60,7 @@ export default function HighVisibilityContentPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>The Blueprint for High-Visibility Content: Formatting, Readability & AI Optimization | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <meta name="description" content="The core principle for winning in this new landscape is simple but rigorous: structure every single page with strict HTML heading hierarchies, highly constrained short paragraphs, and explicit inline citations." />
-      </Head>
+      <Seo page="blog/blueprint-for-high-visibility-content" type="article" title="The Blueprint for High-Visibility Content in AI Search" description="Structure every page with a strict heading hierarchy, short paragraphs and explicit inline citations to win visibility in AI answers." />
       <Navbar />
 
       <div className="bp-layout">

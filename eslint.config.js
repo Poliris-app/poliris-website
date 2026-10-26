@@ -5,7 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // dist-standalone holds the generated single-file export (see
+  // scripts/build-standalone.mjs) - a minified bundle, not source.
+  globalIgnores(['dist', 'dist-standalone']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

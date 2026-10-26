@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -67,13 +67,7 @@ export default function DeathOfTraditionalSearchFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>La mort de la recherche traditionnelle : pourquoi le GEO est votre priorité | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/death-of-traditional-search-geo-priority" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/death-of-traditional-search-geo-priority" />
-        <meta name="description" content="Le GEO consiste à structurer votre contenu pour que les moteurs de réponse IA puissent l'extraire et le citer directement. Voici pourquoi c'est votre nouvelle priorité." />
-      </Head>
+      <Seo page="blog/death-of-traditional-search-geo-priority" type="article" title="Fin de la recherche traditionnelle : priorité au GEO" description="Le GEO structure votre contenu pour que les moteurs de réponse IA puissent l'extraire et le citer. Voici pourquoi c'est votre priorité." />
       <Navbar />
 
       <div className="bp-layout">

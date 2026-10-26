@@ -54,8 +54,8 @@ export default function WinMap({ now }) {
   return (
     <div className="hfw__body hfw-map">
       <div className="hfw-map__plate">
-        <img className="hfw-map__layer" src={`${base}hero-map-base.svg`} alt="" />
-        <img className="hfw-map__layer" src={`${base}hero-map-lit.svg`} alt="" style={mask(true)} />
+        <img className="hfw-map__layer" src={`${base}hero-map-base.svg`} alt="World map" width="720" height="276" />
+        <img className="hfw-map__layer" src={`${base}hero-map-lit.svg`} alt="Markets where your brand is tracked" style={mask(true)} width="720" height="276" />
 
         {CITIES.map((c) => (
           <span

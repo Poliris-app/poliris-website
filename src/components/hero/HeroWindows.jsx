@@ -110,7 +110,7 @@ export default function HeroWindows() {
                 <i className="hfw__dot hfw__dot--y" />
                 <i className="hfw__dot hfw__dot--g" />
                 <span className="hfw__name">
-                  {w.icon && <img className="hfw__name-icon" src={`${import.meta.env.BASE_URL}${w.icon}`} alt="" />}
+                  {w.icon && <img className="hfw__name-icon" src={`${import.meta.env.BASE_URL}${w.icon}`} alt={w.label} width="11" height="11" />}
                   {w.label}
                 </span>
               </div>

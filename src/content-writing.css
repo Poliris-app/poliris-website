@@ -1444,7 +1444,9 @@
   border-radius: 50%;
   background: #5B7BFB;
 }
-.cw-page .mbw-body h6 {
+/* The title of the mock article: a paragraph, since it is part of an
+   illustration rather than the outline of this page. */
+.cw-page .mbw-body .mbw-title {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 21px;

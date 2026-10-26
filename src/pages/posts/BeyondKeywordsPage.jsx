@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -69,13 +69,7 @@ export default function BeyondKeywordsPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Beyond Keywords: Generating Content Optimized for AI and Answer Engines | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/beyond-keywords-ai-content-generation" />
-        <meta name="description" content="An AI content generation strategy is how B2B brands control what AI-powered answer engines say about them. A practical framework for closing the visibility gap." />
-      </Head>
+      <Seo page="blog/beyond-keywords-ai-content-generation" type="article" title="Beyond Keywords: Content Optimized for AI Answer Engines" description="An AI content generation strategy is how B2B brands control what AI answer engines say about them. A practical framework to close the gap." />
       <Navbar />
 
       <div className="bp-layout">

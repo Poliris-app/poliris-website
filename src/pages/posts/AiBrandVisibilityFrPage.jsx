@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -69,14 +69,7 @@ export default function AiBrandVisibilityFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Libérer la visibilité de marque IA : les stratégies efficaces révélées</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/ai-brand-visibility-strategies" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/ai-brand-visibility-strategies" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
-        <meta name="description" content="Découvrez des stratégies de visibilité de marque IA pour renforcer la reconnaissance et la visibilité sur les plateformes de recherche pilotées par l'IA. Boostez la présence IA de votre marque dès aujourd'hui." />
-      </Head>
+      <Seo page="blog/ai-brand-visibility-strategies" type="article" title="Visibilité de marque IA : les stratégies qui marchent" description="Des stratégies concrètes pour renforcer la visibilité de votre marque dans les moteurs de recherche IA et les réponses des assistants." />
       <Navbar />
 
       <div className="bp-layout">

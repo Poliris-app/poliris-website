@@ -2373,4 +2373,14 @@ export default {
       queuedLead: 'Auditing a new website takes about 10 minutes. You’ll receive your AI Visibility Audit by email as soon as it’s done. Feel free to close this and check back later.',
     },
   },
+  docs: {
+    index: {
+      eyebrow: 'Documentation',
+      title: 'Poliris documentation',
+      lead: 'How to measure the way AI assistants describe your brand, make your site easy for them to read, and turn what you find into work you can ship.',
+      search: 'Search chapters',
+      open: 'Read',
+      chapters: 'chapters',
+    },
+  },
 };

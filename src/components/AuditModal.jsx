@@ -168,7 +168,7 @@ export default function AuditModal({ open, onClose }) {
               <div className="promo-modal-logos">
                 {AI_LOGOS.map((logo) => (
                   <div key={logo.alt} className="promo-modal-logo-chip">
-                    <img src={logo.src} alt={logo.alt} title={logo.alt} />
+                    <img src={logo.src} alt={logo.alt} title={logo.alt} width="3600" height="777" />
                   </div>
                 ))}
               </div>

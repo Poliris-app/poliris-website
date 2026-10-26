@@ -147,7 +147,10 @@ export function LangWrapper() {
     navigate(`/${newLang}${rest}${location.search}`);
   }
 
-  const value = useMemo(() => ({ lang, t, switchLang }), [lang, location.pathname, tolgeeOverrides]);
+  // tolgee: the raw live values, for content that is too large to live in the
+  // bundled locale files and so is loaded separately — see
+  // src/content/docs-content.js, which merges them itself.
+  const value = useMemo(() => ({ lang, t, switchLang, tolgee: tolgeeOverrides }), [lang, location.pathname, tolgeeOverrides]);
 
   if (!VALID_LANGS.includes(lang)) {
     return <Navigate to={`/en${location.pathname}${location.search}`} replace />;

@@ -303,6 +303,11 @@
 }
 .bp-img {
   width: 100%;
+  /* The figures carry width/height attributes so the browser can reserve
+     their box before they load. Those attributes are presentational hints,
+     so without height:auto the height one would win here and stretch the
+     image to its full pixel height. */
+  height: auto;
   display: block;
   border-radius: 10px;
   border: 1.5px solid #e4e8f2;

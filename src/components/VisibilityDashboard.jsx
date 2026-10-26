@@ -117,7 +117,7 @@ function ScoreBreakdown() {
           <div key={bar.id} className="hdash__sb-bar-card">
             <div className="hdash__sb-bar-card-top">
               <span className="hdash__sb-bar-card-name">
-                {bar.icon && <img src={bar.icon} alt={bar.name} className="hdash__sb-bar-card-icon" />}
+                {bar.icon && <img src={bar.icon} alt={bar.name} className="hdash__sb-bar-card-icon" width="14" height="14" />}
                 {bar.name}
               </span>
               <span className="hdash__sb-bar-card-right">
@@ -167,7 +167,7 @@ export default function VisibilityDashboard() {
           <div className="hdash__v2-brand-row">
             <div className="hdash__v2-brand-left">
               <div className="hdash__v2-brand-logo">
-                <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
+                <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" width="256" height="256" />
               </div>
               <div>
                 <div className="hdash__v2-brand-name">Sony</div>

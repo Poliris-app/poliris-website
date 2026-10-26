@@ -11,7 +11,6 @@ import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import FaqsPage from './pages/FaqsPage';
 import GlossaryPage from './pages/GlossaryPage';
-import DocsPage from './pages/DocsPage';
 import AuditPage from './pages/AuditPage';
 import GetaDemoPage from './pages/GetaDemoPage';
 import PricingPage from './pages/PricingPage';
@@ -44,7 +43,11 @@ export const routes = [
       { path: 'blog/:slug', element: <BlogPostPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       { path: 'glossary', element: <GlossaryPage /> },
-      { path: 'docs', element: <DocsPage /> },
+      // The documentation carries ~470 KB of copy per language. Loading it
+      // lazily keeps all of it out of the bundle every other page pays for,
+      // while still prerendering to real HTML (ssgOptions.includedRoutes).
+      { path: 'docs', lazy: () => import('./pages/DocsPage').then((m) => ({ Component: m.default })) },
+      { path: 'docs/:chapter', lazy: () => import('./pages/DocsChapterPage').then((m) => ({ Component: m.default })) },
       { path: 'audit/:slug', element: <AuditPage /> },
       { path: 'demo', element: <GetaDemoPage /> },
       { path: 'pricing', element: <PricingPage /> },
