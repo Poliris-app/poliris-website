@@ -38,10 +38,10 @@ export default {
 
   home: {
     hero: {
-      eyebrow: 'AI brand management, beyond monitoring',
-      titlePre: 'Take control of how',
-      titleHl: 'AI sees',
-      titlePost: 'your brand',
+      eyebrow: 'Built for the AI era',
+      titlePre: 'The',
+      titleHl: 'Search Intelligence',
+      titlePost: 'Platform',
       audience: 'For in-house brand teams, agencies, and enterprise marketing managers.',
       lead: 'Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan.',
       primaryCta: 'Start your free trial',
