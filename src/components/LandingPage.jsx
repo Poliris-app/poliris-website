@@ -43,8 +43,6 @@ export function LandingTop() {
   const h = t('home.hero');
 
   useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
-    if (!els.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
@@ -56,8 +54,28 @@ export function LandingTop() {
       // The small positive margin starts the fade just before it enters.
       { threshold: 0, rootMargin: '0px 0px 5% 0px' }
     );
-    els.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    // Not only the .reveal elements present now: React can replace one
+    // after mount (a language switch, or Tolgee's live text arriving, gives
+    // the How it works steps new keys) or rewrite its className and drop
+    // "visible". Such an element would sit at opacity 0 for good, so watch
+    // the DOM and observe every .reveal that isn't visible yet.
+    const watch = (node) => {
+      if (node.nodeType !== 1) return;
+      if (node.matches('.reveal:not(.visible)')) observer.observe(node);
+      node.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+    };
+    watch(document.body);
+    const mutations = new MutationObserver((records) => {
+      records.forEach((r) => {
+        if (r.type === 'childList') r.addedNodes.forEach(watch);
+        else if (r.target.matches('.reveal:not(.visible)')) observer.observe(r.target);
+      });
+    });
+    mutations.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    return () => {
+      observer.disconnect();
+      mutations.disconnect();
+    };
   }, []);
 
   return (
@@ -274,7 +292,9 @@ function HowItWorks() {
         </div>
         <ol ref={listRef} className="how__steps" style={{ '--how-cols': stepCount }}>
           {hw.steps.map((step, i) => (
-            <li key={step.title} className={`how__step reveal reveal--d${i + 1}`}>
+            // Keyed by position, not title: new text (a language switch,
+            // Tolgee) updates the step in place instead of replacing it.
+            <li key={i} className={`how__step reveal reveal--d${i + 1}`}>
               {i < stepCount - 1 && (
                 <span className={`how__link${lineClass(i)}`} aria-hidden="true" />
               )}
