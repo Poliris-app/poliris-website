@@ -60,18 +60,18 @@ export default {
       secondaryCta: 'Book a demo',
       note: 'No technical expertise required',
       websitePlaceholder: 'your-website.com',
-      websiteCta: 'Start free trial',
+      websiteCta: 'Start Free',
       websiteError: 'Enter a valid website, like your-website.com',
     },
     howItWorks: {
       eyebrow: 'How it works',
-      h2Pre: 'Three steps to get',
-      h2Hl: 'AI to recommend you.',
-      lead: 'Poliris finds where AI leaves you out, tells you why, and helps you fix it.',
+      h2Pre: 'Three steps to rank on Google',
+      h2Hl: 'and get recommended by AI.',
+      lead: 'Poliris shows where your brand is missing across search and AI, explains why, and helps you close the gap.',
       steps: [
-        { title: 'Analyze', desc: 'See where AI and search engines name your products and your rivals, in every engine and every market, and how it changes over time.' },
-        { title: 'Decide', desc: 'Get a clear, prioritized roadmap of what stops AI from finding, trusting and recommending you.' },
-        { title: 'Act', desc: 'Fix technical issues, publish the content AI needs with Kate, and earn citations on the sites AI trusts.' },
+        { title: 'Analyze', desc: 'See how Google and AI models present your brand and your competitors, in every market, and how that changes over time.' },
+        { title: 'Decide', desc: 'Get a clear, prioritized roadmap of what’s holding your brand back, from search rankings to AI recommendations.' },
+        { title: 'Act', desc: 'Resolve technical issues, publish AI-ready contents, and earn citations from the sources search engines and AI models.' },
       ],
     },
     faq: {
@@ -179,12 +179,12 @@ export default {
           rising: '↑ Rising',
           stable: '→ Stable',
           scoreByPlatform: 'Score by platform',
-          visInsight: 'Claude coverage is weakest, highest opportunity to improve mention rate here.',
+          visInsight: 'Claude coverage is weakest — highest opportunity to improve mention rate here.',
           details: 'Details',
           sentTitle: 'Sentiment Analysis',
           sentSub: 'How your product is described by AI',
           // Written to two rows in the insight box — see .pc-an__insight.
-          sentInsight: 'All platforms are performing well, with Quality the strongest.',
+          sentInsight: 'All platforms are performing well. Quality leads with the strongest sentiment coverage.',
         },
         trust: {
           // Step chips and the three acts of the card's animation.

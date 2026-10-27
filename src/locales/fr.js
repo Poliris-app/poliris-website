@@ -48,11 +48,11 @@ export default {
 
   home: {
     hero: {
-      eyebrow: "Conçu pour l'ère de l'IA",
+      eyebrow: 'Gestion de marque IA, au-delà du monitoring',
       // Voir en.js : titlePre + titleHl surligné + titlePost, sur une ligne.
-      titlePre: 'La plateforme',
-      titleHl: 'd’intelligence de recherche',
-      titlePost: '',
+      titlePre: 'Prenez en main',
+      titleHl: 'votre SEO',
+      titlePost: 'grâce à l’IA',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
       lead: 'Comprenez et gérez votre visibilité sur l\'IA et le web, produit par produit, avec une équipe d\'agents qui transforme les insights en plan d\'action.',
       primaryCta: "Commencer l'essai gratuit",
@@ -124,7 +124,7 @@ export default {
           href: '/visibility',
         },
         {
-          title: 'Audit SEO technique',
+          title: 'Confiance IA',
           desc: 'Évaluez la santé technique de votre site pour les IA, identifiez ce qui limite votre visibilité et obtenez les correctifs prioritaires pour chaque problème.',
           tags: ['Crawl & Indexation', 'Statut des pages', 'Vitesse des pages', 'Score de santé global', 'Test du sitemap', 'Test du robots.txt'],
           url: 'poliris.io/dashboard/audit/sony',
@@ -177,12 +177,12 @@ export default {
           rising: '↑ En hausse',
           stable: '→ Stable',
           scoreByPlatform: 'Score par plateforme',
-          visInsight: "La couverture Claude est la plus faible, la meilleure opportunité pour améliorer le taux de mention.",
+          visInsight: 'La couverture Claude est la plus faible — la meilleure opportunité pour améliorer le taux de mention.',
           details: 'Détails',
           sentTitle: 'Analyse de sentiment',
           sentSub: "Comment votre produit est décrit par l'IA",
           // Tient en deux lignes dans l'encadré — voir .pc-an__insight.
-          sentInsight: 'Toutes les plateformes performent bien, Design en tête.',
+          sentInsight: 'Toutes les plateformes performent bien. Design mène avec la couverture de sentiment la plus forte.',
         },
         trust: {
           // Pastilles d'étape et les trois actes de l'animation.
