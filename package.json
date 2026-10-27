@@ -6,7 +6,9 @@
   "homepage": "https://www.poliris.io",
   "scripts": {
     "dev": "vite",
-    "build": "vite-react-ssg build && node scripts/format-dist.mjs",
+    "build": "vite-react-ssg build && node scripts/format-dist.mjs && node scripts/seo-check.mjs",
+    "seo:check": "node scripts/seo-check.mjs",
+    "build:standalone": "vite build --config vite.standalone.config.js && node scripts/build-standalone.mjs",
     "lint": "eslint .",
     "preview": "vite preview --outDir dist"
   },
@@ -15,6 +17,7 @@
     "clsx": "^2.1.1",
     "cobe": "^2.0.1",
     "d3-geo": "^3.1.1",
+    "lottie-web": "^5.13.0",
     "mapbox-gl": "^3.26.0",
     "posthog-js": "^1.396.5",
     "react": "^19.2.6",

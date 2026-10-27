@@ -46,12 +46,12 @@ const META = {
     visibility: {
       title: 'AI Share of Voice & GEO Visibility Analytics | Poliris',
       description:
-        "Track your brand's share of voice across ChatGPT, Claude, Perplexity, and Gemini. Analyze sources shaping AI answers, benchmark competitors, and win citations.",
+        "Track your brand's share of voice in ChatGPT, Claude, Perplexity and Gemini. See the sources behind AI answers and benchmark competitors.",
     },
     sentiment: {
       title: 'AI Brand Sentiment & Reputation Analytics | Poliris',
       description:
-        'Analyze how AI describes your brand across ChatGPT, Perplexity, Gemini, & DeepSeek. Track AI brand sentiment, monitor reputation, and fix perception gaps.',
+        'See how ChatGPT, Perplexity, Gemini and DeepSeek describe your brand. Track AI sentiment, monitor your reputation and fix perception gaps.',
     },
     'technical-audit': {
       title: 'AI Technical SEO Audit & Automated Site Fixes | Poliris',
@@ -69,99 +69,99 @@ const META = {
         'Explore field notes, frameworks, and strategies on AI visibility, GEO, and AI SEO. Learn how to optimize your brand for ChatGPT, Perplexity, and Gemini.',
     },
     faqs: {
-      title: 'FAQs | Poliris',
+      title: 'Poliris FAQs: AI Visibility, GEO & Pricing Questions',
       description:
         "Common questions about Poliris, Kate and managing your brand's visibility in AI.",
     },
     glossary: {
-      title: 'Glossary | Poliris',
+      title: 'AI Search & GEO Glossary: Key Terms Explained | Poliris',
       description:
         'Key terms in AI search and Generative Engine Optimisation (GEO), clearly explained.',
     },
     demo: {
-      title: 'Get a Demo | Poliris',
+      title: 'Book a Live Demo of the AI Visibility Platform | Poliris',
       description:
         'Book a 1-hour live demo, run a free GEO audit, or reach out about agency partnership. We reply in under 4 hours.',
     },
     pricing: {
-      title: 'Pricing | Poliris',
+      title: 'Pricing & Plans for AI Visibility Tracking | Poliris',
       description:
         'Choose how much AI visibility coverage you need. Every plan includes sentiment tracking, competitor benchmarking, and real-time GEO scoring.',
     },
     docs: {
-      title: 'Documentation | Poliris',
-      description: 'Poliris platform documentation — guides, references and how-tos.',
+      title: 'Poliris Documentation: Guides for AI Visibility & GEO',
+      description: 'Guides and reference for Poliris: set up AI visibility audits, run technical SEO audits, plan your roadmap and connect your website.',
     },
     privacy: {
-      title: 'Privacy Policy | Poliris',
+      title: 'Privacy Policy: How Poliris Protects Your Data',
       description: 'How Poliris collects, uses, and protects personal data across the website, platform, and WordPress plugin.',
     },
     terms: {
-      title: 'Terms of Service | Poliris',
+      title: 'Terms of Service for Using the Poliris Platform',
       description: 'The terms governing access to and use of the Poliris platform and WordPress plugin.',
     },
     // English translation of the French legal notice — the French version
     // at /fr/mentions-legales remains the legally operative one (LCEN is a
     // French-language disclosure requirement); this is informational.
     'mentions-legales': {
-      title: 'Legal Notice | Poliris',
-      description: "Legal notice for poliris.io, published by POLIRIS.",
+      title: 'Legal Notice: Publisher & Hosting Details | Poliris',
+      description: 'Legal notice for poliris.io: publisher, publication director, hosting provider, intellectual property and governing law.',
     },
   },
   fr: {
     home: {
-      title: 'Visibilité dans la recherche IA, outil GEO & SEO IA | Poliris',
+      title: "Visibilité IA, outil GEO et SEO pour l'IA | Poliris",
       description:
-        "Comprenez et pilotez la façon dont l'IA voit votre marque. Suivez votre visibilité sur les moteurs IA, auditez votre site et déployez les correctifs — produit par produit.",
+        'Suivez la visibilité de votre marque dans les moteurs IA, auditez votre site et déployez les correctifs, produit par produit.',
     },
     visibility: {
-      title: 'Visibilité IA | Poliris',
+      title: 'Visibilité IA et part de voix dans les réponses IA | Poliris',
       description:
         'Suivez où votre marque apparaît dans les réponses IA (ChatGPT, Gemini, Perplexity…) et repérez où vous perdez du terrain.',
     },
     sentiment: {
-      title: 'Sentiment IA | Poliris',
+      title: 'Sentiment IA : la réputation de votre marque | Poliris',
       description:
         "Surveillez la façon dont les moteurs IA parlent de votre marque et détectez tout propos erroné, prudent ou nuisible.",
     },
     'technical-audit': {
-      title: 'Audit Technique | Poliris',
+      title: 'Audit technique SEO et IA, correctifs en un clic | Poliris',
       description:
         "Identifiez et corrigez les problèmes techniques qui empêchent les moteurs IA de lire et recommander votre site.",
     },
     'content-writing': {
-      title: 'Rédaction IA | Poliris',
+      title: 'Rédaction IA pour le GEO et le SEO | Poliris',
       description:
         "Générez des pages optimisées pour l'IA et des données structurées pour faire recommander votre marque par les moteurs IA.",
     },
     blog: {
-      title: 'Blog | Poliris',
+      title: 'Blog GEO et SEO IA : stratégies de visibilité | Poliris',
       description:
         'Insights, guides et stratégie sur la visibilité IA et le Generative Engine Optimisation (GEO).',
     },
     faqs: {
-      title: 'FAQ | Poliris',
+      title: 'FAQ Poliris : visibilité IA, GEO et tarifs',
       description:
         'Questions courantes sur Poliris, Kate et la gestion de la visibilité de votre marque dans l\'IA.',
     },
     glossary: {
-      title: 'Glossaire | Poliris',
+      title: 'Glossaire de la recherche IA et du GEO | Poliris',
       description:
         'Les termes clés de la recherche IA et du Generative Engine Optimisation (GEO), expliqués simplement.',
     },
     demo: {
-      title: 'Obtenir une démo | Poliris',
+      title: 'Demander une démo de Poliris, plateforme GEO',
       description:
         "Réservez une démo d'1 heure, lancez un audit GEO gratuit ou contactez-nous pour un partenariat agence. Nous répondons en moins de 4 heures.",
     },
     pricing: {
-      title: 'Tarifs | Poliris',
+      title: 'Tarifs et forfaits de suivi de la visibilité IA | Poliris',
       description:
-        'Choisissez le niveau de couverture de visibilité IA dont vous avez besoin. Chaque forfait inclut le suivi de sentiment, le benchmark concurrentiel et le score GEO en temps réel.',
+        'Choisissez votre couverture de visibilité IA. Chaque forfait inclut le suivi du sentiment, le benchmark concurrentiel et le score GEO.',
     },
     docs: {
-      title: 'Documentation | Poliris',
-      description: 'Documentation de la plateforme Poliris — guides, références et tutoriels.',
+      title: 'Documentation Poliris : guides de visibilité IA et GEO',
+      description: "Guides et référence de Poliris : configurer les audits de visibilité IA, lancer l'audit technique, planifier la roadmap, connecter votre site.",
     },
     privacy: {
       title: 'Politique de confidentialité | Poliris',
@@ -172,8 +172,8 @@ const META = {
       description: "Les conditions régissant l'accès à la plateforme Poliris et au plugin WordPress.",
     },
     'mentions-legales': {
-      title: 'Mentions légales | Poliris',
-      description: "Mentions légales du site poliris.io, édité par POLIRIS.",
+      title: 'Mentions légales : éditeur et hébergement | Poliris',
+      description: 'Mentions légales de poliris.io : éditeur, directeur de la publication, hébergeur, propriété intellectuelle et droit applicable.',
     },
   },
 };
@@ -186,9 +186,9 @@ export function getMeta(lang, pageKey) {
 // Builds the canonical URL for a (lang, pageKey) pair.
 // Home keeps a trailing slash (/en/); sub-pages have none (/en/visibility).
 export function canonicalUrl(lang, pageKey) {
-  // /:lang/docs only iframes the static docs, so the real content lives at
-  // /docs/:lang/ — point search engines there instead of the near-empty shell.
-  if (pageKey === 'docs') return `${SITE_URL}/docs/${lang}/`;
+  // Documentation chapters ("docs/<chapter>") and blog posts ("blog/<slug>")
+  // are real routes with the same slug in every language, so the path is the key.
+  if (typeof pageKey === 'string' && /^(docs|blog)\//.test(pageKey)) return `${SITE_URL}/${lang}/${pageKey}`;
   const slug = PAGE_SLUGS[pageKey] ?? '';
   return slug ? `${SITE_URL}/${lang}/${slug}` : `${SITE_URL}/${lang}/`;
 }

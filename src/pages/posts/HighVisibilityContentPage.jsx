@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -60,13 +60,7 @@ export default function HighVisibilityContentPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>The Blueprint for High-Visibility Content: Formatting, Readability & AI Optimization | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <meta name="description" content="The core principle for winning in this new landscape is simple but rigorous: structure every single page with strict HTML heading hierarchies, highly constrained short paragraphs, and explicit inline citations." />
-      </Head>
+      <Seo page="blog/blueprint-for-high-visibility-content" type="article" title="The Blueprint for High-Visibility Content in AI Search" description="Structure every page with a strict heading hierarchy, short paragraphs and explicit inline citations to win visibility in AI answers." />
       <Navbar />
 
       <div className="bp-layout">
@@ -264,7 +258,7 @@ export default function HighVisibilityContentPage() {
               <li><strong>Cite Inline:</strong> Name the source of every stat, number, and outside claim right in the text.</li>
               <li><strong>Keep Dates Fresh:</strong> Check that the "Last Updated" date is current and shows both on the page and in the schema.</li>
             </ul>
-            <p>To see how these steps affect your whole site, track your <Link to={`/${lang}/visibility`}>AI visibility metrics</Link> with <Link to={`/${lang}`}>Poliris</Link>.</p>
+            <p>To see how these steps affect your whole site, track your <Link to={`/${lang}/visibility`}>AI visibility metrics</Link> with <Link to={`/${lang}/`}>Poliris</Link>.</p>
           </section>
 
           {/* 07 */}

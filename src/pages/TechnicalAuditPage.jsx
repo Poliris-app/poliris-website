@@ -178,7 +178,6 @@ export default function TechnicalAuditPage() {
           primaryCta={hero.primaryCta}
           secondaryCta={hero.secondaryCta}
           note={hero.note}
-          showDashboard={false}
           showAiBand={false}
         />
 
@@ -311,6 +310,8 @@ export default function TechnicalAuditPage() {
                       <img
                         src={`${import.meta.env.BASE_URL}${tool.logo}`}
                         alt={tool.name}
+                        width="32"
+                        height="32"
                       />
                     )}
                   </div>
@@ -416,7 +417,7 @@ export default function TechnicalAuditPage() {
                 <div>
                   <div className="ta-agent-pill">
                     <span className="ta-av ta-av--tom">
-                      <img src={`${import.meta.env.BASE_URL}Illustrations/tom.png`} alt="Tom" />
+                      <img src={`${import.meta.env.BASE_URL}Illustrations/tom.webp`} alt="Tom" width="828" height="945" />
                     </span>
                     {p4.agentPill}
                   </div>
@@ -447,7 +448,7 @@ export default function TechnicalAuditPage() {
                     <div className="ta-chat-hdr">
                       <div className="ta-chat-hdr-left">
                         <span className="ta-av ta-av--tom">
-                          <img src={`${import.meta.env.BASE_URL}Illustrations/tom.png`} alt="Tom" />
+                          <img src={`${import.meta.env.BASE_URL}Illustrations/tom.webp`} alt="Tom" width="828" height="945" />
                         </span>
                         <div className="ta-chat-hdr-info">
                           <span className="ta-chat-hdr-name">Tom</span>
@@ -471,7 +472,7 @@ export default function TechnicalAuditPage() {
                           ) : (
                             <>
                               <span className="ta-av ta-av--tom ta-av--sm">
-                                <img src={`${import.meta.env.BASE_URL}Illustrations/tom.png`} alt="Tom" />
+                                <img src={`${import.meta.env.BASE_URL}Illustrations/tom.webp`} alt="Tom" width="828" height="945" />
                               </span>
                               <div className="ta-bub tom" dangerouslySetInnerHTML={{ __html: bub.text }} />
                             </>

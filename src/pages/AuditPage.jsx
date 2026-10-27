@@ -78,6 +78,8 @@ export default function AuditPage() {
                 src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`}
                 alt="Poliris"
                 style={{ height: 28, opacity: 0.5 }}
+                width="218"
+                height="54"
               />
             </div>
           )}

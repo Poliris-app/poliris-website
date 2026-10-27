@@ -72,7 +72,6 @@ export default function BlogPage() {
           lead={bh.lead}
           primaryCta={bh.primaryCta}
           secondaryCta={bh.secondaryCta}
-          showDashboard={false}
           showAiBand={false}
         />
 
@@ -125,7 +124,12 @@ export default function BlogPage() {
                   <Link key={post.id} to={post.slug ? `/${lang}/blog/${post.slug}` : '#'} className="blog-card">
                     <Thumb gradient={post.gradient} label={post.label} className="blog-card-thumb" />
                     <div className="blog-card-body">
-                      <h3 className="blog-card-title">{post.title}</h3>
+                      {/* h2, not h3: each card is a top-level item of the
+                          list under the page's h1. As an h3 the page ran
+                          h1 -> h3 with no h2 between them, which is the
+                          "H2: Non-Sequential" flag. Size comes from the
+                          class, so this changes the outline only. */}
+                      <h2 className="blog-card-title">{post.title}</h2>
                       <p className="blog-card-desc">{post.desc}</p>
                       <span className="blog-card-date">{post.date}</span>
                     </div>

@@ -3,7 +3,9 @@ import { useLang } from '../contexts/LangContext';
 // Products/For teams/How-it-works are anchors into homepage sections, so
 // they need the /{lang}/ prefix to work from any page, not just Home.
 const FOOTER_HREFS = (lang) => [
-  `/${lang}/#products`,
+  // The product carousel (#products) is hidden for now; the engine section
+  // is where the homepage presents the products.
+  `/${lang}/#engine`,
   `/${lang}/#team`,
   `/${lang}/docs`,
   `/${lang}/demo`,
@@ -35,7 +37,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <a href={`/${lang}/`} className="footer__logo">
-          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" />
+          <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" width="218" height="54" />
         </a>
         <nav className="footer__nav">
           {links.map((label, i) => (

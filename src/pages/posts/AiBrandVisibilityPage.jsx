@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -69,14 +69,7 @@ export default function AiBrandVisibilityPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Unlocking AI Brand Visibility: Effective Strategies Revealed</title>
-        <link rel="canonical" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
-        <link rel="alternate" hrefLang="en" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/ai-brand-visibility-strategies" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/ai-brand-visibility-strategies" />
-        <meta name="description" content="Learn AI brand visibility strategies to enhance recognition and visibility across AI-driven search platforms. Boost your brand's AI presence today." />
-      </Head>
+      <Seo page="blog/ai-brand-visibility-strategies" type="article" title="Unlocking AI Brand Visibility: Effective Strategies Revealed" description="Learn AI brand visibility strategies to enhance recognition and visibility across AI-driven search platforms. Boost your brand's AI presence today." />
       <Navbar />
 
       <div className="bp-layout">

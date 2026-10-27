@@ -146,7 +146,7 @@ function SentimentBreakdown() {
             <div key={item.id} className="hdash__sb-bar-card">
               <div className="hdash__sb-bar-card-top">
                 <span className="hdash__sb-bar-card-name">
-                  {item.icon && <img src={item.icon} alt={item.name} className="hdash__sb-bar-card-icon" />}
+                  {item.icon && <img src={item.icon} alt={item.name} className="hdash__sb-bar-card-icon" width="14" height="14" />}
                   {displayName}
                 </span>
                 <span className="hdash__sb-bar-card-right">
@@ -319,7 +319,6 @@ export default function SentimentPage() {
           primaryCta={t('sentiment.hero.primaryCta')}
           secondaryCta={t('sentiment.hero.secondaryCta')}
           note={t('sentiment.hero.note')}
-          showDashboard={false}
           showAiBand={false}
         />
 
@@ -341,7 +340,7 @@ export default function SentimentPage() {
                   <div className="hdash__v2-brand-row">
                     <div className="hdash__v2-brand-left">
                       <div className="hdash__v2-brand-logo">
-                        <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" />
+                        <img src={`${import.meta.env.BASE_URL}sony-com-logo.png`} alt="Sony" width="256" height="256" />
                       </div>
                       <div>
                         <div className="hdash__v2-brand-name">Sony</div>
@@ -689,7 +688,7 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}gemini-ai-logo.png`} alt="Gemini" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <img src={`${import.meta.env.BASE_URL}gemini-ai-logo.png`} alt="Gemini" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} width="490" height="490" />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Gemini</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gemini-3.1-pro-preview</span>
@@ -709,7 +708,7 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}chatgpt-com-logo.png`} alt="ChatGPT" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <img src={`${import.meta.env.BASE_URL}chatgpt-com-logo.png`} alt="ChatGPT" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} width="256" height="256" />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>ChatGPT</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>gpt-4o-mini</span>
@@ -729,7 +728,7 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}mistral-ai-logo.png`} alt="Mistral" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <img src={`${import.meta.env.BASE_URL}mistral-ai-logo.png`} alt="Mistral" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} width="256" height="256" />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Mistral</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>mistral-7b-instruct-v0.2</span>
@@ -749,7 +748,7 @@ export default function SentimentPage() {
                   <div className="hdash__sb-bar-card">
                     <div className="hdash__sb-bar-card-top">
                       <span className="hdash__sb-bar-card-name" style={{ alignItems: 'flex-start' }}>
-                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="Claude" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} />
+                        <img src={`${import.meta.env.BASE_URL}claudeai-com-logo.png`} alt="Claude" className="hdash__sb-bar-card-icon" style={{ marginTop: '2px' }} width="256" height="256" />
                         <span style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                           <span style={{ lineHeight: '1.3' }}>Claude</span>
                           <span style={{ fontSize: '10px', color: '#9a9aa0', fontWeight: 400, lineHeight: '1.3' }}>claude-haiku-4-5-20251001</span>
@@ -925,7 +924,7 @@ export default function SentimentPage() {
                   <div className="vis-agent-body">
                     <div className="agent-pill">
                       <span className="sp" style={{ background: '#F0F2FA', borderColor: '#6B83D0' }}>
-                        <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                        <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.webp`} alt="IVY" width="780" height="927" />
                       </span>
                       {t('sentiment.ivy.agentPill')}
                     </div>
@@ -960,7 +959,7 @@ export default function SentimentPage() {
                       <div className="chat-hdr-v2">
                         <div className="chat-hdr-left">
                           <span className="av av--ivy">
-                            <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                            <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.webp`} alt="IVY" width="780" height="927" />
                           </span>
                           <div className="chat-hdr-info">
                             <span className="chat-hdr-name">IVY</span>
@@ -984,7 +983,7 @@ export default function SentimentPage() {
                             ) : (
                               <>
                                 <span className="av av--ivy av--sm">
-                                  <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.png`} alt="IVY" />
+                                  <img src={`${import.meta.env.BASE_URL}Illustrations/ivy.webp`} alt="IVY" width="780" height="927" />
                                 </span>
                                 <div className="bub bot" dangerouslySetInnerHTML={{ __html: bub.text }} />
                               </>
@@ -1041,7 +1040,7 @@ export default function SentimentPage() {
                 <div key={c.name} className={`cmpx-row${c.you ? ' you' : ''}`}>
                   <div className="brand">
                     <span className="bd" style={{ background: c.bd }} />
-                    {c.logo && <img src={c.logo} alt={c.name} className="cmpx-brand-logo" />}
+                    {c.logo && <img src={c.logo} alt={c.name} className="cmpx-brand-logo" width="22" height="22" />}
                     {c.name}
                     {c.you && <span className="yt">{t('sentiment.competitive.you')}</span>}
                   </div>

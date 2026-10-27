@@ -1,0 +1,111 @@
+<!doctype html>
+<!--
+  Served by Vercel, with a real 404 status, for any URL that is not a built
+  page or one of the client-only routes in vercel.json's "rewrites". Without
+  it unknown URLs fell back to the homepage with a 200, which Search Console
+  reports as soft 404s. Standalone on purpose: it must render without the app.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Page not found | Poliris</title>
+  <link rel="icon" type="image/png" href="/Poliris-Logo-Frame.png" />
+  <style>
+    :root { --blue: #0062FF; --blue-soft: #eef4ff; --ink: #0b0b0c; --fg: #404046; --muted: #737373; --border: #e9ebf1; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      color: var(--fg);
+      background:
+        radial-gradient(640px 320px at 20% 0, rgba(0, 98, 255, .10), transparent 70%),
+        radial-gradient(520px 300px at 90% 10%, rgba(122, 173, 255, .16), transparent 70%),
+        #fff;
+    }
+    header { padding: 20px 24px; }
+    header img { height: 34px; width: auto; display: block; }
+    main { display: grid; place-items: center; padding: 24px 16px 64px; }
+    .card { max-width: 560px; width: 100%; text-align: center; }
+    .code {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      border: 1px solid #d6e5ff;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .1em;
+      color: var(--blue);
+    }
+    h1 { margin: 0 0 12px; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; letter-spacing: -.02em; color: var(--ink); }
+    p { margin: 0 0 28px; font-size: 16.5px; line-height: 1.6; }
+    .primary {
+      display: inline-block;
+      padding: 13px 24px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 10px 24px -10px rgba(0, 98, 255, .6);
+    }
+    .primary:hover { background: #0050d6; }
+    nav { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    nav a {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--fg);
+      font-size: 14px;
+      text-decoration: none;
+    }
+    nav a:hover { border-color: var(--blue); color: var(--blue); }
+  </style>
+</head>
+<body>
+  <header><a href="/en/" data-home><img src="/Logo-Poliris-1.png" alt="Poliris" width="218" height="54" /></a></header>
+  <main>
+    <div class="card">
+      <span class="code">404</span>
+      <h1 data-t="title">This page doesn’t exist</h1>
+      <p data-t="lead">The link may be old, or the address mistyped. Here are the main places to go instead.</p>
+      <a class="primary" href="/en/" data-home data-t="home">Back to the homepage</a>
+      <nav>
+        <a href="/en/visibility" data-path="visibility" data-t="visibility">AI Visibility</a>
+        <a href="/en/technical-audit" data-path="technical-audit" data-t="audit">Technical Audit</a>
+        <a href="/en/docs" data-path="docs" data-t="docs">Documentation</a>
+        <a href="/en/blog" data-path="blog" data-t="blog">Blog</a>
+        <a href="/en/demo" data-path="demo" data-t="demo">Get a demo</a>
+      </nav>
+    </div>
+  </main>
+  <script>
+    // French copy and /fr/ links when the missing URL was under /fr/.
+    (function () {
+      if (!/^\/fr(\/|$)/.test(location.pathname)) return;
+      var fr = {
+        title: 'Cette page n’existe pas',
+        lead: 'Le lien est peut-être ancien, ou l’adresse mal saisie. Voici les principales pages à consulter.',
+        home: 'Retour à l’accueil',
+        visibility: 'Visibilité IA',
+        audit: 'Audit technique',
+        docs: 'Documentation',
+        blog: 'Blog',
+        demo: 'Demander une démo',
+      };
+      document.documentElement.lang = 'fr';
+      document.title = 'Page introuvable | Poliris';
+      document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = fr[el.dataset.t]; });
+      document.querySelectorAll('[data-home]').forEach(function (el) { el.setAttribute('href', '/fr/'); });
+      document.querySelectorAll('[data-path]').forEach(function (el) { el.setAttribute('href', '/fr/' + el.dataset.path); });
+    })();
+  </script>
+</body>
+</html>

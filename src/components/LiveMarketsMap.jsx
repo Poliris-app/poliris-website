@@ -74,7 +74,9 @@ export default function LiveMarketsMap() {
       const d = pathGen(f);
       if (!d) return;
       const tier = LIVE_COUNTRIES.includes(name) ? 'live' : 'base';
-      byTier[tier].push({ id: f.id, d });
+      // A few world-atlas features (Kosovo, N. Cyprus, Somaliland) have no
+      // numeric id, so fall back to the name to keep React keys unique.
+      byTier[tier].push({ id: f.id ?? f.properties.name, d });
     });
 
     // One flat marker per "already live" market. Anchored on the largest

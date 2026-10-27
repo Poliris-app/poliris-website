@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Head } from 'vite-react-ssg';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -60,13 +60,7 @@ export default function HighVisibilityContentFrPage() {
 
   return (
     <div className="bp-page">
-      <Head>
-        <title>Le plan directeur pour un contenu à forte visibilité : mise en forme, lisibilité et optimisation pour l'IA | Poliris</title>
-        <link rel="canonical" href="https://poliris.io/fr/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="fr" href="https://poliris.io/fr/blog/blueprint-for-high-visibility-content" />
-        <link rel="alternate" hrefLang="x-default" href="https://poliris.io/en/blog/blueprint-for-high-visibility-content" />
-        <meta name="description" content="Le principe fondamental pour l'emporter dans ce nouveau paysage : structurer chaque page avec une hiérarchie de titres HTML stricte, des paragraphes courts, et des citations explicites en ligne." />
-      </Head>
+      <Seo page="blog/blueprint-for-high-visibility-content" type="article" title="Contenu à forte visibilité : le plan directeur pour l'IA" description="Structurez chaque page avec une hiérarchie de titres stricte, des paragraphes courts et des citations explicites pour gagner en visibilité IA." />
       <Navbar />
 
       <div className="bp-layout">
@@ -264,7 +258,7 @@ export default function HighVisibilityContentFrPage() {
               <li><strong>Formater les citations en ligne :</strong> s'assurer que toutes les statistiques, données chiffrées et affirmations externes sont explicitement attribuées directement dans le texte.</li>
               <li><strong>Mettre à jour les signaux de fraîcheur :</strong> vérifier que l'horodatage « Dernière mise à jour » est à jour et visible à la fois dans l'interface front-end et dans le schéma back-end.</li>
             </ul>
-            <p>Pour une perspective plus large sur l'impact de ces tâches sur votre performance à l'échelle du site, pensez à suivre l'ensemble de vos <Link to={`/${lang}/visibility`}>indicateurs de visibilité IA</Link> sur <Link to={`/${lang}`}>Poliris</Link>.</p>
+            <p>Pour une perspective plus large sur l'impact de ces tâches sur votre performance à l'échelle du site, pensez à suivre l'ensemble de vos <Link to={`/${lang}/visibility`}>indicateurs de visibilité IA</Link> sur <Link to={`/${lang}/`}>Poliris</Link>.</p>
           </section>
 
           {/* 07 */}

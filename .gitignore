@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-standalone
 *.local
 
 # Environment variables
@@ -30,3 +31,6 @@ dist-ssr
 
 # Claude Code personal settings (machine-specific permissions) — keep local
 .claude/settings.local.json
+
+# Local safety copies taken before risky changes — never committed
+.backups/

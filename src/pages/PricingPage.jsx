@@ -129,7 +129,7 @@ const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) =
 function ModelBadge({ model }) {
   return (
     <span className="pricing-model-badge">
-      <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt="" />
+      <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt={model.label} aria-hidden="true" width="17" height="17" />
       {model.label}
     </span>
   );
@@ -353,7 +353,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                   aria-pressed={modelIds.includes(m.id)}
                   onClick={() => toggleModel(m.id)}
                 >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
+                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} aria-hidden="true" width="18" height="18" />
                   {m.label}
                 </button>
               ))}
@@ -369,7 +369,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
                   aria-pressed={modelIds.includes(m.id)}
                   onClick={() => toggleModel(m.id)}
                 >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" />
+                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} aria-hidden="true" width="18" height="18" />
                   {m.label}
                 </button>
               ))}
@@ -768,6 +768,8 @@ export default function PricingPage() {
                               src={`${import.meta.env.BASE_URL}${m.logo}`}
                               alt={m.label}
                               title={m.label}
+                              width="16"
+                              height="16"
                             />
                           ))}
                           <span className="pricing-feature-model-more-wrap" tabIndex={0}>
@@ -787,6 +789,8 @@ export default function PricingPage() {
                               src={`${import.meta.env.BASE_URL}${m.logo}`}
                               alt={m.label}
                               title={m.label}
+                              width="16"
+                              height="16"
                             />
                           ))}
                         </span>
@@ -825,7 +829,7 @@ export default function PricingPage() {
           <div id="pricing-agency-banner" className={`pricing-agency-banner${highlightTier === 'agency' ? ' calc-highlight' : ''}`}>
             <div className="pricing-agency-left">
               <div className="pricing-agency-eyebrow">{p.agency.eyebrow}</div>
-              <h3 className="pricing-agency-title">{p.agency.title}</h3>
+              <h2 className="pricing-agency-title">{p.agency.title}</h2>
               <p className="pricing-agency-desc">{p.agency.desc}</p>
               <p className="pricing-agency-price">{p.agency.priceAnchor}</p>
               <a href={`/${lang}/demo`} className="pricing-agency-cta">{p.agency.cta} {ARROW_ICON}</a>

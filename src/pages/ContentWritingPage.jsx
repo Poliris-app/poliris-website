@@ -452,7 +452,7 @@ function InternalLinkingBoard({ cwLink }) {
           <h2>{cwLink.yourArticle}</h2>
           <div className="ilnk-attribution">
             <span className="ilnk-avatar">
-              <img src={`${import.meta.env.BASE_URL}Illustrations/kate.png`} alt="Kate" />
+              <img src={`${import.meta.env.BASE_URL}Illustrations/kate.webp`} alt="Kate" width="756" height="927" />
             </span>
             {cwLink.linkedByKate}
           </div>
@@ -710,7 +710,6 @@ export default function ContentWritingPage() {
           primaryCta={cwHero.primaryCta}
           secondaryCta={cwHero.secondaryCta}
           note={cwHero.note}
-          showDashboard={false}
           showAiBand={false}
         />
 
@@ -747,7 +746,7 @@ export default function ContentWritingPage() {
 
                   <div className="hcenter">
                     <span className="kw-av">
-                      <img src={`${import.meta.env.BASE_URL}Illustrations/kate.png`} alt="Kate" />
+                      <img src={`${import.meta.env.BASE_URL}Illustrations/kate.webp`} alt="Kate" width="756" height="927" />
                     </span>
                     <div className="hc-n">Kate</div>
                     <div className="hc-s">{t('contentWriting.dataSynergy.kateSub')}</div>
@@ -759,7 +758,7 @@ export default function ContentWritingPage() {
                       {HUB_MATCHED_ICONS[i] ? (
                         <div className="hicon-badge">{HUB_MATCHED_ICONS[i]}</div>
                       ) : (
-                        <img src={`${import.meta.env.BASE_URL}Groupe%20477.svg`} alt="" />
+                        <img src={`${import.meta.env.BASE_URL}Groupe%20477.svg`} alt={node.title} width="95" height="95" />
                       )}
                     </div>
                   ))}
@@ -954,7 +953,7 @@ export default function ContentWritingPage() {
                     <div className="mbw-meta"><span className="mbw-pin"/>{cwImpl.mockup.meta}</div>
                     <span className="mbw-cat-pill">{cwImpl.mockup.category}</span>
                   </div>
-                  <h6>{cwImpl.mockup.h6}</h6>
+                  <p className="mbw-title">{cwImpl.mockup.h6}</p>
                   <p className="mbw-p">
                     {cwImpl.mockup.p}{' '}
                     <span className="lk">{cwImpl.mockup.linkText}</span>.
@@ -966,9 +965,9 @@ export default function ContentWritingPage() {
               </div>
 
               <div className="mbw-cms">
-                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}wordpress.png`} alt="WordPress" /></span>
-                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}wix.png`} alt="Wix" /></span>
-                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}shopify.png`} alt="Shopify" /></span>
+                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}wordpress.png`} alt="WordPress" width="512" height="512" /></span>
+                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}wix.png`} alt="Wix" width="512" height="512" /></span>
+                <span className="mbw-cms-ic"><img src={`${import.meta.env.BASE_URL}shopify.png`} alt="Shopify" width="512" height="512" /></span>
               </div>
 
               <div className="impl-toast">

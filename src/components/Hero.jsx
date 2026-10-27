@@ -105,8 +105,10 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
                   >
                     <img
                       src={s.logoUrl || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.domain)}&sz=64`}
-                      alt=""
+                      alt={s.domain}
                       aria-hidden="true"
+                      width="28"
+                      height="28"
                       className="hero-website-form__suggestion-logo"
                       onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
                     />
@@ -142,7 +144,7 @@ function AiBand() {
     <section className="ai-band">
       <div className="ai-band__track">
         {doubled.map((l, i) => (
-          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" />
+          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" width="3600" height="777" />
         ))}
       </div>
     </section>
@@ -178,7 +180,7 @@ function ScrollHint() {
   );
 }
 
-export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = true, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
+export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = false, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
   const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
@@ -195,7 +197,10 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
   return (
     <>
       <ScrollHint />
-      <header id="top" className={`hero${dark ? ' hero--dark' : ''}`}>
+      {/* hero--fr: the French headline is wider than the English one and
+          needs its own type scale to hold one line. <html lang> isn't
+          updated client-side, so :lang(fr) can't be relied on here. */}
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${lang === 'fr' ? ' hero--fr' : ''}${showDashboard ? ' hero--dashboard' : ''}`}>
         <div className="hero__glow" aria-hidden="true" />
         <div className="hero__inner">
           <div className="eyebrow">{eyebrow}</div>
@@ -220,7 +225,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
                 {primaryCta}
                 {!dark && (
                   <span className="btn__icon btn__icon--dark">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--poliris-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
                       <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                     </svg>
                   </span>

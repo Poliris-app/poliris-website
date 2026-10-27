@@ -2,8 +2,8 @@ import { useLang } from '../contexts/LangContext';
 
 /**
  * Sidebar for the dashboard mockups, matching the app's current sidebar
- * (the one in the hero onboarding demo, public/onboarding-flow.html) at
- * ~0.82× its real size. Only the top of it is drawn — logo, project,
+ * (as it was in the hero onboarding demo, now on the archive/hero-dashboard
+ * branch) at ~0.82× its real size. Only the top of it is drawn — logo, project,
  * Dashboard/Poli AI switch, Roadmap, MEASURE and ACTION — and it's clipped
  * to the dashboard's height like the app's scrolling sidebar, so it never
  * makes the card taller.
@@ -23,7 +23,6 @@ const ICONS = {
   plus: <><path d="M5 12h14" /><path d="M12 5v14" /></>,
   eye: <><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></>,
   'chevron-right': <path d="m9 18 6-6-6-6" />,
-  search: <><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></>,
   globe: <><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></>,
   pencil: <><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></>,
   rocket: <><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></>,
@@ -61,14 +60,14 @@ export default function DashSidebar({ product = 0 }) {
     <aside className="dsb2" aria-hidden="true">
       <div className="dsb2__inner">
         <div className="dsb2__header">
-          <img className="dsb2__logo" src={`${base}Logo-Poliris-1.png`} alt="" />
+          <img className="dsb2__logo" src={`${base}Logo-Poliris-1.png`} alt="Poliris" width="218" height="54" />
           <Icon name="panel-left" size={15} className="dsb2__toggle" />
         </div>
 
         <div className="dsb2__dotted" />
         <div className="dsb2__proj-row">
           <div className="dsb2__proj">
-            <img className="dsb2__proj-logo" src={`${base}sony-com-logo.png`} alt="" />
+            <img className="dsb2__proj-logo" src={`${base}sony-com-logo.png`} alt="Sony" width="256" height="256" />
             <div className="dsb2__proj-meta">
               <div className="dsb2__proj-name">Sony</div>
               <div className="dsb2__proj-sub">{s.activeProject}</div>
@@ -100,7 +99,6 @@ export default function DashSidebar({ product = 0 }) {
                 </div>
               ))}
             </div>
-            <FoldRow icon="search" label={s.keywords} />
             <FoldRow icon="globe" label={s.sites} />
           </div>
 

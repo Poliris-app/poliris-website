@@ -1,7 +1,23 @@
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 
-const MODELS = ['ChatGPT', 'Gemini', 'Perplexity', 'Claude', 'Mistral', 'DeepSeek', 'Grok', 'Copilot'];
+/* The marquee of engines, each with its mark. Logos live in public/ and
+   are drawn in white on the blue band (see .cta-model-logo), the same
+   treatment the dark hero uses. The white filter needs a transparent
+   background, otherwise the mark becomes a solid block, hence the
+   *-transparent.png files. */
+// The square marks, not the *-logo-2.svg wordmarks: those already carry
+// the brand name, so the strip read "Claude Claude".
+const MODELS = [
+  { name: 'ChatGPT', logo: 'chatgpt-transparent.png' },
+  { name: 'Gemini', logo: 'gemini-transparent.png' },
+  { name: 'Perplexity', logo: 'perplexity-ai-logo.png' },
+  { name: 'Claude', logo: 'claudeai-com-logo.png' },
+  { name: 'Mistral', logo: 'mistral-transparent.png' },
+  { name: 'DeepSeek', logo: 'deepseek.png' },
+  { name: 'Grok', logo: 'grok-com-logo.png' },
+  { name: 'Copilot', logo: 'copilot-transparent.png' },
+];
 const tripled = [...MODELS, ...MODELS, ...MODELS];
 
 const TRIAL_URL = 'https://app.poliris.io';
@@ -60,7 +76,10 @@ export default function CtaBand({
       <div className="cta-model-strip">
         <div className="cta-model-track">
           {tripled.map((m, i) => (
-            <span key={i} className="cta-model-item">{m}</span>
+            <span key={i} className="cta-model-item">
+              {m.logo && <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.name} className="cta-model-logo" width="18" height="18" />}
+              <span>{m.name}</span>
+            </span>
           ))}
         </div>
       </div>

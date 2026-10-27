@@ -1,0 +1,46 @@
+// The <title> of each documentation chapter, per language. The chapter's own
+// title ("FAQ", "Content") is too short for a results page, so each one gets
+// a fuller name here, between 30 and 60 characters (see src/lib/serpWidth.js).
+// A chapter missing from this list falls back to "<title> | Poliris Docs".
+export const DOC_SEO_TITLES = {
+  en: {
+    'introduction': 'Welcome to Poliris | Poliris Docs',
+    'getting-started': 'Getting Started | Poliris Docs',
+    'key-concepts': 'Key Concepts: Projects, Prompts & Credits | Poliris Docs',
+    'credits': 'Credits and Plans | Poliris Docs',
+    'ai-reputation': 'AI Reputation: Visibility & Sentiment | Poliris Docs',
+    'technical-audit': 'Technical Audit | Poliris Docs',
+    'test-reference': 'Technical Audit Test Reference | Poliris Docs',
+    'roadmap': 'Roadmap: Your Week-by-Week SEO Plan | Poliris Docs',
+    'content': 'Content: AI Writing & Optimization | Poliris Docs',
+    'implementation': 'Implementation: Technical Fixes | Poliris Docs',
+    'citations': 'Citations: Get Cited by AI Assistants | Poliris Docs',
+    'poli-ai': 'Poli AI: Your AI SEO Assistant | Poliris Docs',
+    'site-connection': 'Site Connection: Pixel, WordPress, Webflow | Poliris Docs',
+    'settings': 'Account, Workspace & Project Settings | Poliris Docs',
+    'glossary': 'GEO & AI Search Glossary | Poliris Docs',
+    'faq': 'Frequently Asked Questions | Poliris Docs',
+    'support': 'Support: Contact the Poliris Team | Poliris Docs',
+    'whats-new': 'What’s New: Product Updates | Poliris Docs',
+  },
+  fr: {
+    'introduction': 'Bienvenue sur Poliris | Poliris Docs',
+    'getting-started': 'Premiers pas avec Poliris | Poliris Docs',
+    'key-concepts': 'Notions clés : projets, prompts, crédits | Poliris Docs',
+    'credits': 'Crédits et forfaits | Poliris Docs',
+    'ai-reputation': 'Réputation IA : visibilité et sentiment | Poliris Docs',
+    'technical-audit': 'Audit technique | Poliris Docs',
+    'test-reference': 'Référence des tests de l’audit technique | Poliris Docs',
+    'roadmap': 'Roadmap : votre plan SEO hebdomadaire | Poliris Docs',
+    'content': 'Contenu : rédaction et optimisation IA | Poliris Docs',
+    'implementation': 'Implémentation : corrections techniques | Poliris Docs',
+    'citations': 'Citations : se faire citer par les IA | Poliris Docs',
+    'poli-ai': 'Poli AI : votre assistant SEO IA | Poliris Docs',
+    'site-connection': 'Connexion du site : pixel, WordPress, Webflow | Poliris Docs',
+    'settings': 'Paramètres du compte et du projet | Poliris Docs',
+    'glossary': 'Glossaire GEO et recherche IA | Poliris Docs',
+    'faq': 'Questions fréquentes | Poliris Docs',
+    'support': 'Support : contacter l’équipe Poliris | Poliris Docs',
+    'whats-new': 'Nouveautés : mises à jour du produit | Poliris Docs',
+  },
+};
