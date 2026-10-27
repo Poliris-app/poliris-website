@@ -72,7 +72,6 @@ export default function BlogPage() {
           lead={bh.lead}
           primaryCta={bh.primaryCta}
           secondaryCta={bh.secondaryCta}
-          showDashboard={false}
           showAiBand={false}
         />
 

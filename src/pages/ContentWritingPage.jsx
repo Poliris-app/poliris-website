@@ -710,7 +710,6 @@ export default function ContentWritingPage() {
           primaryCta={cwHero.primaryCta}
           secondaryCta={cwHero.secondaryCta}
           note={cwHero.note}
-          showDashboard={false}
           showAiBand={false}
         />
 

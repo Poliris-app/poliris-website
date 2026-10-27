@@ -611,30 +611,77 @@ const CURRENCIES = { usd: { symbol: '$', label: 'USD', code: 'USD' }, eur: { sym
 /* ── Agency pricing ────────────────────────────────────────────────
    Everything about agency pricing is set here.
 
-   AGENCY_DISCOUNT is the single value to change: each agency tier is
-   the matching brand tier's monthly price less this share, in whichever
-   currency is showing. At 0.25 that is $21.75 / $74.25 / $141.75 and
-   €20.25 / €69 / €131.25.
+   AGENCY_PRICES copies the active prices of the agency products in
+   Stripe ("Poliris Agency Pack" and "Poliris Agency Client - Starter /
+   Growth / Pro"): the monthly price and the yearly total, per currency.
+   The yearly total is shown as its monthly equivalent (total / 12) with
+   "Billed … annually" under it, like the brand cards. Keep this in step
+   with Stripe when prices change.
 
    The tier NAMES are copy, not code — pricing.agencyView.tiers in
    src/locales/en.js and fr.js. AGENCY_TIER_SOURCE only says which brand
    tier each one mirrors for its credits and feature rows.
 
-   Agency plans are not self-serve: there are no Stripe prices behind
-   them and no checkout, which is why nothing here feeds
-   PlanCheckoutModal. They are unlocked by Poliris partners and admins,
-   so the only action is booking a call. */
-const AGENCY_DISCOUNT = 0.25;
+   Agency plans are not self-serve: there is no checkout here, which is
+   why nothing feeds PlanCheckoutModal. They are unlocked by Poliris
+   partners and admins, so the only action is booking a call. */
+const AGENCY_PRICES = {
+  pack:    { usd: { monthly: 69,     yearly: 662.40 },  eur: { monthly: 64,     yearly: 614.40 } },
+  starter: { usd: { monthly: 21.75,  yearly: 208.80 },  eur: { monthly: 20.25,  yearly: 194.40 } },
+  growth:  { usd: { monthly: 74.25,  yearly: 712.80 },  eur: { monthly: 69,     yearly: 662.40 } },
+  pro:     { usd: { monthly: 141.75, yearly: 1360.80 }, eur: { monthly: 131.25, yearly: 1260 } },
+};
 const AGENCY_TIER_SOURCE = ['starter', 'growth', 'pro'];
-// The Agency Pack's own monthly price, on top of the per-client tiers.
-const AGENCY_PACK_PRICE = { usd: 69, eur: 64 };
-const AGENCY_COMING_SOON_INDEX = 1;
 // Same booking link the hero and the CTA band use.
 const BOOKING_URL = 'https://cal.com/team/poliris/discovery-call';
 
-// Brand prices are whole numbers; the agency discount makes fractions, and
-// the page shows exactly what gets billed — so .25 stays, .00 does not.
-const formatPrice = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
+// Brand prices are whole numbers; agency prices have cents, and the page
+// shows exactly what gets billed — so .25 stays, .00 does not.
+const formatPrice = (n) => {
+  const cents = Math.round(n * 100) / 100;
+  return Number.isInteger(cents) ? String(cents) : cents.toFixed(2);
+};
+
+// Displayed monthly and annual (per month) prices for one agency product,
+// in both currencies, as PriceRoll takes them.
+const agencyRollPrices = (key) => Object.fromEntries(
+  Object.entries(AGENCY_PRICES[key]).map(([cur, { monthly, yearly }]) => (
+    [cur, { monthly: formatPrice(monthly), annual: formatPrice(yearly / 12) }]
+  )),
+);
+
+/* Rolling price, two rolls one inside the other. Outer: the USD and EUR
+   prices stacked in a one-line window; switching currency rolls it to the
+   other row. Inner: within each row, monthly over annual; the Annual
+   switch rolls that stack up to the annual price and back down.
+   prices: { usd: { monthly, annual }, eur: { monthly, annual } }.
+   alignEnd: for a right-aligned price, each line carries its own sign and
+   the lines align right, so a shorter price leaves no gap before "/mo". */
+function PriceRoll({ prices, currency, annual, alignEnd = false }) {
+  return (
+    <span className={`pricing-card-roll pricing-card-roll--currency${currency === 'eur' ? ' is-alt' : ''}${alignEnd ? ' pricing-card-roll--end' : ''}`}>
+      <span className="pricing-card-roll-track">
+        {Object.keys(CURRENCIES).map((cur) => {
+          const sign = CURRENCIES[cur].symbol;
+          const { monthly, annual: yearly } = prices[cur];
+          return (
+            <span key={cur} aria-hidden={cur !== currency}>
+              {!alignEnd && sign}
+              {monthly === yearly ? (alignEnd ? `${sign}${monthly}` : monthly) : (
+                <span className={`pricing-card-roll${annual ? ' is-annual' : ''}`}>
+                  <span className="pricing-card-roll-track">
+                    <span aria-hidden={annual}>{alignEnd && sign}{monthly}</span>
+                    <span aria-hidden={!annual}>{alignEnd && sign}{yearly}</span>
+                  </span>
+                </span>
+              )}
+            </span>
+          );
+        })}
+      </span>
+    </span>
+  );
+}
 
 export default function PricingPage() {
   const { lang, t } = useLang();
@@ -649,6 +696,13 @@ export default function PricingPage() {
   const [highlightTier, setHighlightTier] = useState(null);
   const highlightTimeoutRef = useRef(null);
   const p = t('pricing');
+
+  // The FAQ list differs per audience, so an open item would point at a
+  // different question after switching: close it.
+  const switchAudience = (key) => {
+    setAudience(key);
+    setOpenFaq(null);
+  };
 
   // Scrolls to and briefly pulses the matching plan card — used by the
   // calculator's "Get {plan}" CTA so the recommendation is a click, not
@@ -678,19 +732,24 @@ export default function PricingPage() {
   const cols = agencyView ? AGENCY_COLS : BRAND_COLS;
   const compareRows = buildCompareRows(p.compare);
 
-  // Each agency tier is the brand tier it mirrors, less AGENCY_DISCOUNT,
-  // in the currency on screen. Monthly only — there is no annual agency
-  // price yet, so the Annual switch leaves these alone.
-  const agencyTiers = AGENCY_TIER_SOURCE.map((tier, i) => {
-    const base = PLAN_META.find((m) => m.tier === tier);
-    const full = currency === 'eur' ? base.eurMonthly : base.monthly;
-    return { name: p.agencyView.tiers[i], price: formatPrice(full * (1 - AGENCY_DISCOUNT)) };
-  });
-  const packPrice = AGENCY_PACK_PRICE[currency];
-  const priceFor = (plan, isAnnual) => {
-    if (currency === 'eur') return isAnnual ? plan.eurAnnual : plan.eurMonthly;
+  // Agency prices in the currency and billing on screen; annual shows the
+  // monthly equivalent of the yearly price.
+  const agencyPriceFor = (key) => {
+    const { monthly, yearly } = AGENCY_PRICES[key][currency];
+    return formatPrice(annual ? yearly / 12 : monthly);
+  };
+  const agencyTiers = AGENCY_TIER_SOURCE.map((tier, i) => (
+    { name: p.agencyView.tiers[i], price: agencyPriceFor(tier) }
+  ));
+  const packYearly = formatPrice(AGENCY_PRICES.pack[currency].yearly);
+  const priceFor = (plan, isAnnual, cur = currency) => {
+    if (cur === 'eur') return isAnnual ? plan.eurAnnual : plan.eurMonthly;
     return isAnnual ? plan.annual : plan.monthly;
   };
+  const rollPricesFor = (plan) => ({
+    usd: { monthly: plan.monthly, annual: plan.annual },
+    eur: { monthly: plan.eurMonthly, annual: plan.eurAnnual },
+  });
   // The displayed monthly-equivalent x12 — matches what checkout actually
   // charges once for annual billing (see the backend's *_annual_eq * 12
   // Stripe prices), not a separately-set number.
@@ -734,7 +793,7 @@ export default function PricingPage() {
               role="tab"
               aria-selected={audience === key}
               className={`pricing-audience-btn${audience === key ? ' active' : ''}`}
-              onClick={() => setAudience(key)}
+              onClick={() => switchAudience(key)}
             >
               {label}
             </button>
@@ -767,7 +826,7 @@ export default function PricingPage() {
 
         {/* Two currencies, so the switch is just a link to the other one. */}
         <p className="pricing-currency-note">
-          {p.billing.currencyNote.replace('{code}', CURRENCIES[currency].code)}
+          {(agencyView ? p.agencyView.currencyNote : p.billing.currencyNote).replace('{code}', CURRENCIES[currency].code)}
           {' · '}
           {Object.entries(CURRENCIES).filter(([code]) => code !== currency).map(([code, c]) => (
             <button key={code} type="button" className="pricing-currency-link" onClick={() => setCurrency(code)}>
@@ -804,23 +863,9 @@ export default function PricingPage() {
                 </div>
                 <p className="pricing-card-desc">{plan.desc}</p>
                 <div className="pricing-card-price">
-                  {/* Both numbers are stacked, monthly over annual, in a
-                      one-line window after the currency sign, which stays
-                      put; the Annual switch rolls the stack up to the
-                      annual price and back down for monthly. */}
-                  {priceFor(plan, false) === priceFor(plan, true) ? (
-                    <span className="pricing-card-amount">{symbol}{priceFor(plan, false)}</span>
-                  ) : (
-                    <span className="pricing-card-amount">
-                      {symbol}
-                      <span className={`pricing-card-roll${annual ? ' is-annual' : ''}`}>
-                        <span className="pricing-card-roll-track">
-                          <span aria-hidden={annual}>{priceFor(plan, false)}</span>
-                          <span aria-hidden={!annual}>{priceFor(plan, true)}</span>
-                        </span>
-                      </span>
-                    </span>
-                  )}
+                  <span className="pricing-card-amount">
+                    <PriceRoll prices={rollPricesFor(plan)} currency={currency} annual={annual} />
+                  </span>
                   <span className="pricing-price-period">/mo</span>
                   {/* Always rendered (blank when monthly) so the cards don't
                       jump in height when the Annual switch is flipped. */}
@@ -940,8 +985,15 @@ export default function PricingPage() {
               <div className="pricing-agency-pack-head">
                 <h2 className="pricing-agency-pack-title">{p.agencyView.packTitle}</h2>
                 <div className="pricing-agency-pack-price">
-                  <span className="pricing-price">{symbol}{packPrice}</span>
+                  <span className="pricing-price">
+                    <PriceRoll prices={agencyRollPrices('pack')} currency={currency} annual={annual} alignEnd />
+                  </span>
                   <span className="pricing-price-period">{p.agencyView.perMonth}</span>
+                  {/* Always rendered (blank when monthly) so the card
+                      doesn't jump when the Annual switch is flipped. */}
+                  <span className="pricing-agency-pack-billed">
+                    {annual ? p.billing.billedAnnually.replace('{amount}', `${symbol}${packYearly}`) : ' '}
+                  </span>
                 </div>
               </div>
               <p className="pricing-agency-pack-desc">{p.agencyView.packDesc}</p>
@@ -950,12 +1002,7 @@ export default function PricingPage() {
                 {p.agencyView.includes.map((item, i) => (
                   <li key={i}>
                     {CHECK_ICON}
-                    <span>
-                      {item}
-                      {i === AGENCY_COMING_SOON_INDEX && (
-                        <span className="pricing-soon-chip">{p.agencyView.comingSoon}</span>
-                      )}
-                    </span>
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
@@ -1029,14 +1076,13 @@ export default function PricingPage() {
           {agencyView ? (
             <div className="pricing-agency-notes">
               <p>{p.agencyView.perClientNote}</p>
-              {/* No annual agency pricing exists yet, so the Annual switch
-                  leaves these prices alone and says so. */}
-              {annual && <p className="pricing-agency-monthly-note">{p.agencyView.monthlyOnly}</p>}
+              <p>{p.agencyView.ownPlanNote}</p>
+              <p>{p.agencyView.billingNote}</p>
             </div>
           ) : (
             <p className="pricing-agency-link-line">
               {p.agencyLink.text}{' '}
-              <button type="button" className="pricing-agency-link-btn" onClick={() => setAudience('agencies')}>
+              <button type="button" className="pricing-agency-link-btn" onClick={() => switchAudience('agencies')}>
                 {p.agencyLink.cta}
               </button>
             </p>
@@ -1047,7 +1093,7 @@ export default function PricingPage() {
         <div className="pricing-faq-wrap">
           <h2 className="pricing-faq-title">{p.faqTitle}</h2>
           <div className="pricing-faq-list">
-            {p.faq.map((item, i) => (
+            {(agencyView ? p.agencyView.faq : p.faq).map((item, i) => (
               <PricingFaqItem
                 key={i}
                 item={item}

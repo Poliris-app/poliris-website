@@ -2,8 +2,8 @@ import { useLang } from '../contexts/LangContext';
 
 /**
  * Sidebar for the dashboard mockups, matching the app's current sidebar
- * (the one in the hero onboarding demo, public/onboarding-flow.html) at
- * ~0.82× its real size. Only the top of it is drawn — logo, project,
+ * (as it was in the hero onboarding demo, now on the archive/hero-dashboard
+ * branch) at ~0.82× its real size. Only the top of it is drawn — logo, project,
  * Dashboard/Poli AI switch, Roadmap, MEASURE and ACTION — and it's clipped
  * to the dashboard's height like the app's scrolling sidebar, so it never
  * makes the card taller.

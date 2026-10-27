@@ -1,5 +1,15 @@
 export default {
   scroll: 'défiler',
+  film: {
+    label: 'Film de présentation Poliris',
+    play: 'Lire',
+    pause: 'Pause',
+    soundOn: 'Activer le son',
+    soundOff: 'Couper le son',
+    captionsOn: 'Afficher les sous-titres',
+    captionsOff: 'Masquer les sous-titres',
+    volume: 'Volume',
+  },
   nav: {
     products: 'Produits',
     resources: 'Ressources',
@@ -38,11 +48,11 @@ export default {
 
   home: {
     hero: {
-      eyebrow: "Gestion de marque IA, au-delà du monitoring",
-      // Voir en.js : titlePre + titleHl surligné + titlePost.
-      titlePre: 'Prenez en main',
-      titleHl: 'votre SEO',
-      titlePost: 'grâce à l’IA',
+      eyebrow: "Conçu pour l'ère de l'IA",
+      // Voir en.js : titlePre + titleHl surligné + titlePost, sur une ligne.
+      titlePre: 'La plateforme',
+      titleHl: 'd’intelligence de recherche',
+      titlePost: '',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
       lead: "Comprenez et gérez votre visibilité sur l'IA et le web, produit par produit, avec une équipe d'agents qui transforme les insights en plan d'action.",
       primaryCta: "Commencer l'essai gratuit",
@@ -1970,13 +1980,24 @@ export default {
         'Facturation centralisée, une seule facture pour tous vos clients',
         "Gestion d'agence",
         'Contrôle des accès clients',
+        'Espaces prospects gratuits, avec 200 crédits pendant 30 jours chacun',
       ],
-      comingSoon: 'Bientôt disponible',
       cta: 'Réserver un appel avec un partenaire',
-      tiers: ['Essential', 'Growth', 'Scale'],
+      tiers: ['Starter', 'Growth', 'Pro'],
       perClientShort: '/client/mois',
       perClientNote: 'Facturé à votre agence pour chaque espace client, en plus du Pack Agence.',
-      monthlyOnly: 'Les offres agence sont facturées mensuellement.',
+      ownPlanNote: "L'espace de votre agence est facturé à part, sur son propre forfait, qui démarre en Free.",
+      billingNote: "Les nouveaux clients et les montées en gamme sont facturés au prorata sur votre prochaine facture. Les baisses de gamme s'appliquent au renouvellement. Retirer un client coupe son accès immédiatement, sans remboursement.",
+      currencyNote: 'Ajoutez ou retirez des clients à tout moment. Prix en {code}',
+      faq: [
+        { q: 'Qui paie les espaces clients ?', a: "Votre agence. Chaque client est facturé au tarif agence de son forfait, sur la même facture que votre Pack Agence. Vos clients ne voient jamais de page de facturation." },
+        { q: 'Les clients ont-ils les mêmes crédits que les forfaits marques ?', a: 'Oui. Chaque forfait inclut les mêmes crédits mensuels que le forfait marque correspondant : 300 pour Starter, 1 500 pour Growth et 3 000 pour Pro.' },
+        { q: "Qu'est-ce qu'un espace prospect ?", a: "Un espace gratuit pour montrer à un client potentiel ce que Poliris trouve sur sa marque. Il inclut 200 crédits pendant 30 jours et n'est facturé qu'une fois que vous lui attribuez un forfait payant." },
+        { q: 'Comment fonctionnent les changements de forfait ?', a: "Les montées en gamme s'appliquent immédiatement et sont facturées au prorata sur votre prochaine facture. Les baisses de gamme s'appliquent à votre prochain renouvellement, et le client garde son forfait et ses crédits actuels jusque-là." },
+        { q: 'Que se passe-t-il quand je retire un client ?', a: "Son accès prend fin immédiatement et il disparaît de votre prochaine facture. Les paiements déjà effectués ne sont pas remboursés." },
+        { q: 'Le suivi de ma propre agence est-il inclus ?', a: "Non. Le Pack Agence couvre la plateforme et vos espaces clients. L'espace de votre agence a son propre forfait, qui démarre en Free." },
+        { q: 'Puis-je combiner facturation mensuelle et annuelle ?', a: 'Non. Votre Pack Agence et tous vos clients partagent une même période de facturation, mensuelle ou annuelle. L’annuel vous fait économiser 20 %.' },
+      ],
     },
     hero: {
       eyebrow: 'Tarifs',

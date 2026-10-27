@@ -133,7 +133,6 @@ export default function FaqsPage() {
           lead={fh.lead}
           primaryCta={fh.primaryCta}
           secondaryCta={fh.secondaryCta}
-          showDashboard={false}
           showAiBand={false}
           bottom={
             <div className="faq-hero-bottom">

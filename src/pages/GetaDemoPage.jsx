@@ -98,7 +98,6 @@ export default function GetaDemoPage() {
           lead={d.hero.lead}
           primaryCta={d.hero.primaryCta}
           secondaryCta={d.hero.secondaryCta}
-          showDashboard={false}
           showAiBand={false}
         />
 

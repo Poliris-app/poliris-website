@@ -178,7 +178,6 @@ export default function TechnicalAuditPage() {
           primaryCta={hero.primaryCta}
           secondaryCta={hero.secondaryCta}
           note={hero.note}
-          showDashboard={false}
           showAiBand={false}
         />
 

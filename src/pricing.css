@@ -407,6 +407,14 @@
 }
 .pricing-card-roll-track > span { line-height: 1.1em; height: 1.1em; }
 .pricing-card-roll.is-annual .pricing-card-roll-track { transform: translateY(-50%); }
+/* The currency roll wraps the billing roll; `>` keeps each switch moving
+   only its own track. Rows are nowrap so sign and number stay together. */
+.pricing-card-roll--currency.is-alt > .pricing-card-roll-track { transform: translateY(-50%); }
+.pricing-card-roll--currency > .pricing-card-roll-track > span { display: inline-flex; white-space: nowrap; }
+/* Right-aligned price (Agency Pack): every line carries its own sign and
+   lines align right, so a shorter price leaves no gap before "/month". */
+.pricing-card-roll--end .pricing-card-roll-track { align-items: flex-end; }
+.pricing-card-roll--end > .pricing-card-roll-track > span { justify-content: flex-end; }
 @media (prefers-reduced-motion: reduce) {
   .pricing-card-roll-track { transition: none; }
 }
@@ -1074,7 +1082,13 @@ a.pricing-cta { text-decoration: none; }
   font-weight: 800;
   color: var(--pr-navy);
 }
-.pricing-agency-pack-price { display: flex; align-items: baseline; gap: 4px; }
+.pricing-agency-pack-price { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 4px; }
+/* "Billed … annually" on its own line under the price, kept one line tall
+   even when empty so the card doesn't jump. */
+.pricing-agency-pack-billed {
+  flex-basis: 100%; min-height: 18px; text-align: right;
+  font-size: 12px; line-height: 18px; color: var(--pr-text-faint);
+}
 .pricing-agency-pack-desc {
   margin: 8px 0 20px;
   font-size: 14.5px;
@@ -1118,22 +1132,6 @@ a.pricing-cta { text-decoration: none; }
 }
 .pricing-agency-pack-cta { width: fit-content; min-width: 190px; align-self: center; }
 
-/* Drop this rule when custom domain hosting ships - see
-   AGENCY_COMING_SOON_INDEX in PricingPage.jsx. */
-.pricing-soon-chip {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 8px;
-  padding: 2px 8px;
-  border-radius: 100px;
-  background: #eef2fb;
-  border: 1px solid var(--pr-border);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--pr-text-muted);
-  white-space: nowrap;
-}
-
 /* ── Notes under the agency table ─────────────────────────────── */
 
 .pricing-agency-notes {
@@ -1143,7 +1141,15 @@ a.pricing-cta { text-decoration: none; }
   color: var(--pr-text-muted);
 }
 .pricing-agency-notes p { margin: 0; }
-.pricing-agency-monthly-note { margin-top: 6px; color: var(--pr-text-faint); font-size: 12.5px; }
+
+/* On phones the pack price wraps under the title on the left, so align
+   it (and its rolling lines) left there. */
+@media (max-width: 480px) {
+  .pricing-agency-pack-price { justify-content: flex-start; }
+  .pricing-agency-pack-billed { text-align: left; }
+  .pricing-card-roll--end .pricing-card-roll-track { align-items: flex-start; }
+  .pricing-card-roll--end > .pricing-card-roll-track > span { justify-content: flex-start; }
+}
 
 /* ── Narrow screens ───────────────────────────────────────────── */
 @media (max-width: 860px) {

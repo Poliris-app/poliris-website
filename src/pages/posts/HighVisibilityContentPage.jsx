@@ -258,7 +258,7 @@ export default function HighVisibilityContentPage() {
               <li><strong>Cite Inline:</strong> Name the source of every stat, number, and outside claim right in the text.</li>
               <li><strong>Keep Dates Fresh:</strong> Check that the "Last Updated" date is current and shows both on the page and in the schema.</li>
             </ul>
-            <p>To see how these steps affect your whole site, track your <Link to={`/${lang}/visibility`}>AI visibility metrics</Link> with <Link to={`/${lang}`}>Poliris</Link>.</p>
+            <p>To see how these steps affect your whole site, track your <Link to={`/${lang}/visibility`}>AI visibility metrics</Link> with <Link to={`/${lang}/`}>Poliris</Link>.</p>
           </section>
 
           {/* 07 */}

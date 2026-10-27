@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import HeroOnboarding from './HeroOnboarding';
+import HeroFilm from './HeroFilm';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { APP_URL } from '../lib/appUrl';
@@ -180,7 +180,7 @@ function ScrollHint() {
   );
 }
 
-export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = true, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
+export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showFilm = false, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
   const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
@@ -200,7 +200,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
       {/* hero--fr: the French headline is wider than the English one and
           needs its own type scale to hold one line. <html lang> isn't
           updated client-side, so :lang(fr) can't be relied on here. */}
-      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${lang === 'fr' ? ' hero--fr' : ''}`}>
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${lang === 'fr' ? ' hero--fr' : ''}${showFilm ? ' hero--film' : ''}`}>
         <div className="hero__glow" aria-hidden="true" />
         <div className="hero__inner">
           <div className="eyebrow">{eyebrow}</div>
@@ -247,7 +247,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
 
           {showAiBand && <AiBand />}
 
-          {showDashboard && <HeroOnboarding />}
+          {showFilm && <HeroFilm />}
         </div>
       </header>
     </>

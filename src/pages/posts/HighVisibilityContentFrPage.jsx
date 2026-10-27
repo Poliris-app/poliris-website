@@ -258,7 +258,7 @@ export default function HighVisibilityContentFrPage() {
               <li><strong>Formater les citations en ligne :</strong> s'assurer que toutes les statistiques, données chiffrées et affirmations externes sont explicitement attribuées directement dans le texte.</li>
               <li><strong>Mettre à jour les signaux de fraîcheur :</strong> vérifier que l'horodatage « Dernière mise à jour » est à jour et visible à la fois dans l'interface front-end et dans le schéma back-end.</li>
             </ul>
-            <p>Pour une perspective plus large sur l'impact de ces tâches sur votre performance à l'échelle du site, pensez à suivre l'ensemble de vos <Link to={`/${lang}/visibility`}>indicateurs de visibilité IA</Link> sur <Link to={`/${lang}`}>Poliris</Link>.</p>
+            <p>Pour une perspective plus large sur l'impact de ces tâches sur votre performance à l'échelle du site, pensez à suivre l'ensemble de vos <Link to={`/${lang}/visibility`}>indicateurs de visibilité IA</Link> sur <Link to={`/${lang}/`}>Poliris</Link>.</p>
           </section>
 
           {/* 07 */}

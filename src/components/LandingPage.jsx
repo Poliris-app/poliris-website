@@ -64,8 +64,8 @@ export function LandingTop() {
     <>
       <Hero
         eyebrow={h.eyebrow}
-        // Two rows: "Take control of how" / "AI sees your brand".
-        title={<>{h.titlePre}<br /><HL>{h.titleHl}</HL> {h.titlePost}</>}
+        // One row: "The Search Intelligence Platform" (see .hero__oneline).
+        title={<span className="hero__oneline">{h.titlePre} <HL>{h.titleHl}</HL>{h.titlePost && ` ${h.titlePost}`}</span>}
         audience={h.audience}
         lead={h.lead}
         primaryCta={h.primaryCta}
@@ -77,6 +77,7 @@ export function LandingTop() {
           errorText: h.websiteError,
         }}
         showAiBand={false}
+        showFilm
       />
       <HowItWorks />
     </>

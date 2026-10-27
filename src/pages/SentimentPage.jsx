@@ -319,7 +319,6 @@ export default function SentimentPage() {
           primaryCta={t('sentiment.hero.primaryCta')}
           secondaryCta={t('sentiment.hero.secondaryCta')}
           note={t('sentiment.hero.note')}
-          showDashboard={false}
           showAiBand={false}
         />
 

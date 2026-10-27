@@ -125,7 +125,6 @@ export default function VisibilityPage() {
           primaryCta={t('visibility.hero.primaryCta')}
           secondaryCta={t('visibility.hero.secondaryCta')}
           note={t('visibility.hero.note')}
-          showDashboard={false}
           showAiBand={false}
         />
 

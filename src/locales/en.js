@@ -1,5 +1,15 @@
 export default {
   scroll: 'scroll',
+  film: {
+    label: 'Poliris product film',
+    play: 'Play',
+    pause: 'Pause',
+    soundOn: 'Turn sound on',
+    soundOff: 'Mute',
+    captionsOn: 'Show captions',
+    captionsOff: 'Hide captions',
+    volume: 'Volume',
+  },
   nav: {
     products: 'Products',
     resources: 'Resources',
@@ -38,12 +48,12 @@ export default {
 
   home: {
     hero: {
-      eyebrow: 'AI brand management, beyond monitoring',
-      // Rendered as titlePre, a line break, then highlighted titleHl +
-      // titlePost — so the split decides both the break and the highlight.
-      titlePre: 'Take control of how',
-      titleHl: 'AI sees',
-      titlePost: 'your brand',
+      eyebrow: 'Built for the AI era',
+      // Rendered on one row as titlePre, highlighted titleHl, titlePost —
+      // so the split decides the highlight.
+      titlePre: 'The',
+      titleHl: 'Search Intelligence',
+      titlePost: 'Platform',
       audience: 'For in-house brand teams, agencies, and enterprise marketing managers.',
       lead: 'Understand and manage your visibility across AI and the web, product by product, with a team of agents that turns insight into a plan.',
       primaryCta: 'Start your free trial',
@@ -1966,7 +1976,8 @@ export default {
       text: 'Running an agency?',
       cta: 'See agency pricing',
     },
-    // The agencies view. Tier names are placeholders - rename them here.
+    // The agencies view. Tier names match the app and the Stripe invoices
+    // (Starter / Growth / Pro), so keep them in step with those.
     agencyView: {
       packTitle: 'Agency Pack',
       packDesc: 'Run Poliris as your own platform, with every client workspace under one roof.',
@@ -1978,13 +1989,27 @@ export default {
         'Centralized billing, one invoice for all your clients',
         'Agency Management',
         'Client access controls',
+        'Free prospect workspaces, with 200 credits for 30 days each',
       ],
-      comingSoon: 'Coming soon',
       cta: 'Book a call with a partner',
-      tiers: ['Essential', 'Growth', 'Scale'],
+      tiers: ['Starter', 'Growth', 'Pro'],
       perClientShort: '/client/mo',
       perClientNote: 'Billed to your agency for each client workspace, on top of the Agency Pack.',
-      monthlyOnly: 'Agency plans are billed monthly.',
+      ownPlanNote: "Your agency's own workspace is billed separately on its own plan, starting on Free.",
+      billingNote: 'New clients and upgrades are prorated onto your next bill. Downgrades apply at renewal. Removing a client ends its access right away, with no refund.',
+      // Replaces billing.currencyNote in this view: agency changes follow
+      // the rules in billingNote, not "cancel anytime".
+      currencyNote: 'Add or remove clients anytime. Prices in {code}',
+      // Shown instead of the brand FAQ in this view.
+      faq: [
+        { q: 'Who pays for client workspaces?', a: "Your agency does. Each client is billed at its tier's agency price, on the same invoice as your Agency Pack. Clients never see a billing page." },
+        { q: 'Do clients get the same credits as the brand plans?', a: 'Yes. Each tier comes with the same monthly credits as the matching brand plan: 300 for Starter, 1,500 for Growth and 3,000 for Pro.' },
+        { q: 'What is a prospect workspace?', a: 'A free workspace to show a potential client what Poliris finds about their brand. It comes with 200 credits for 30 days and is only billed once you give it a paid tier.' },
+        { q: 'How do tier changes work?', a: 'Upgrades apply right away and are prorated onto your next bill. Downgrades apply at your next renewal, and the client keeps its current tier and credits until then.' },
+        { q: 'What happens when I remove a client?', a: 'Its access ends right away and it comes off your next bill. Payments already made are not refunded.' },
+        { q: "Is my agency's own tracking included?", a: "No. The Agency Pack covers the platform and your client workspaces. Your agency's own workspace has its own plan, starting on Free." },
+        { q: 'Can I mix monthly and annual billing?', a: 'No. Your Agency Pack and all your clients share one billing period, monthly or annual. Annual saves 20%.' },
+      ],
     },
     hero: {
       eyebrow: 'Pricing',

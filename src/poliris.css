@@ -942,7 +942,15 @@ button { cursor: pointer; border: none; background: none; }
   overflow: hidden;
   background: var(--surface1);
 }
-.hero__glow {
+/* With the film, the orbit rings run on past the hero's bottom edge into
+   How it works (same background) and fade out there (.hfilm__orbit mask)
+   rather than stopping on a hard line. z-index keeps them above that
+   section's background. */
+.hero--film {
+  z-index: 1;
+  overflow-x: clip;
+  overflow-y: visible;
+}.hero__glow {
   pointer-events: none;
   position: absolute;
   left: 50%;
@@ -984,6 +992,18 @@ button { cursor: pointer; border: none; background: none; }
 /* Same reason for the lead: the French sentence needs ~860px a line to
    land on two, where the English one needs ~666px. */
 .hero--fr .hero__lead { max-width: 940px; }
+/* Landing headline on one row ("The Search Intelligence Platform" / "La
+   plateforme d'intelligence de recherche"): 66px at most in English, 56px
+   (.hero--fr's own top size) in French. The size falls off a little faster
+   than .hero__h1's so the line never outgrows narrower screens. Phones wrap. */
+.hero__h1 .hero__oneline {
+  white-space: nowrap;
+  font-size: clamp(30px, 5.6vw, 66px);
+}
+.hero--fr .hero__h1 .hero__oneline { font-size: clamp(28px, 4.5vw, 56px); }
+@media (max-width: 640px) {
+  .hero__h1 .hero__oneline { white-space: normal; }
+}
 .hero__audience {
   font-family: var(--chivo);
   font-style: italic;
@@ -1357,14 +1377,6 @@ button { cursor: pointer; border: none; background: none; }
   opacity: 0.5;
 }
 
-/* Onboarding flow demo — "tilt with tracing light + orbit" reveal around
-   the iframe of public/onboarding-flow.html. HeroOnboarding.jsx drives --p
-   (0→1) from scroll; everything below derives its motion from it. */
-@property --angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 180deg;
-}
 /* ================================================================
    HOW IT WORKS — three numbered steps joined by a line
    ================================================================ */
@@ -1561,44 +1573,52 @@ button { cursor: pointer; border: none; background: none; }
   .how { padding: 48px 0; }
 }
 
-.hreveal {
+/* ── Hero product film (HeroFilm.jsx) ──────────────────────────────
+   Light ring, white mat, deep blue shadow, revealed on scroll. Controls fade in on hover;
+   the sound button stays visible while muted, since it's the way in. */
+.hfilm {
   --p: 0;
   --t: 0;
   position: relative;
-  /* Below the logo strip/text (hero__inner is the stacking context), so
-     the orbit rings that rise above the frame pass behind them. */
+  /* Below the hero text (hero__inner is the stacking context), so the
+     orbit rings that rise above the frame pass behind the copy and form. */
   z-index: -1;
-  /* Full-bleed so the 1200px frame and 1500px glow can exceed the 1110px
-     hero column; clip sideways only — the rings extend above. */
+  /* Full-bleed, so the 1240px frame and its glow can exceed the 1110px
+     hero column; clip sideways only — the rings extend above and below. */
   width: 100vw;
-  margin: 50px calc(50% - 50vw) 0;
+  /* The bottom margin leaves the lower arcs of the orbit room to show
+     between the film and How it works. */
+  margin: 64px calc(50% - 50vw) 150px;
   padding: 0 24px;
   box-sizing: border-box;
   overflow-x: clip;
   overflow-y: visible;
+  text-align: left;
 }
-/* No vertical lift while tilted: the frame tilts from its top edge
-   (transform-origin 50% 0), so the gap above it stays the same from the
-   tilted start to the flat end. */
-.hreveal__stage {
+.hfilm__stage {
   position: relative;
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  perspective: 2400px;
 }
-.hreveal__orbit {
+/* Sized from the stage: the rings sit around the frame in the same
+   proportions they had around the old, narrower dashboard. */
+.hfilm__orbit {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 1680px;
-  height: 1040px;
-  margin: -520px 0 0 -840px;
+  width: 150%;
+  height: auto;
+  aspect-ratio: 1680 / 1040;
   overflow: visible;
   pointer-events: none;
-  transform: scale(calc(.9 + .15 * var(--p)));
+  transform: translate(-50%, -50%) scale(calc(.9 + .15 * var(--p)));
   opacity: calc(1 - .35 * var(--p));
+  /* Only the very bottom of the outer ring dissolves, so nothing ends on
+     a hard line where How it works begins. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
 }
-.hreveal__glow {
+.hfilm__glow {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -1608,18 +1628,17 @@ button { cursor: pointer; border: none; background: none; }
   background: radial-gradient(closest-side, rgba(41, 97, 246, .24), transparent);
   pointer-events: none;
 }
-.hreveal__frame {
+.hfilm__frame {
   position: relative;
   padding: 2px;
   border-radius: 24px;
   box-shadow: 0 60px 140px -50px rgba(22, 50, 141, .6);
   transform-origin: 50% 0;
-  /* No tilt: the dashboard only eases up to full size. */
-  transform: scale(calc(.9 + .1 * var(--t)));
+  transform: scale(calc(.95 + .05 * var(--t)));
 }
-.hreveal[data-done] .hreveal__frame { transform: none; }
-/* Tracing light: a 2px conic ring masked down to the border area. */
-.hreveal__frame::before {
+.hfilm[data-done] .hfilm__frame { transform: none; }
+/* Tracing light: a 2px conic ring masked down to the border, turned by scroll. */
+.hfilm__frame::before {
   --angle: calc(180deg + 360deg * var(--p));
   content: "";
   position: absolute;
@@ -1636,35 +1655,289 @@ button { cursor: pointer; border: none; background: none; }
           mask-composite: exclude;
   pointer-events: none;
 }
-.hreveal__mat {
+.hfilm__mat {
+  position: relative;
   padding: 9px;
   border-radius: 22px;
   background: rgba(255, 255, 255, .82);
 }
-.hreveal__dash {
+.hfilm__screen {
   position: relative;
-  aspect-ratio: 1120 / 730;
+  aspect-ratio: 16 / 9;
   border-radius: 14px;
   overflow: hidden;
-  background: #fff;
+  background: #0d1630;
   box-shadow: 0 0 0 1px #E1E7EF;
+  isolation: isolate;
 }
-.hreveal__iframe {
-  position: absolute;
-  inset: 0;
+.hfilm__video {
+  display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+/* Bottom scrim so the controls and captions hold on light footage. */
+.hfilm__screen::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 34%;
+  background: linear-gradient(to top, rgba(8, 14, 34, .42), transparent);
+  opacity: 0;
+  transition: opacity .35s var(--ease-out);
+  pointer-events: none;
+}
+.hfilm__screen:hover::after,
+.hfilm__screen:focus-within::after { opacity: 1; }
+
+.hfilm__bigplay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .72);
+  color: var(--poliris-blue);
+  box-shadow: 0 18px 50px -12px rgba(0, 40, 140, .45);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+          backdrop-filter: blur(14px) saturate(1.4);
+  cursor: pointer;
+  transition: background .3s var(--ease-out);
+}
+.hfilm__bigplay svg { width: 30px; height: 30px; margin-left: 4px; }
+.hfilm__bigplay:hover { background: #fff; }
+
+.hfilm__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 72px;
+  z-index: 2;
+  width: max-content;
+  max-width: min(78%, 760px);
+  margin: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: pre-line;
+  pointer-events: none;
+}
+.hfilm__caption span {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(10, 16, 36, .66);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  color: #fff;
+  font-family: var(--manrope);
+  font-size: clamp(13px, 1.45vw, 18px);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  animation: hfilm-cue .28s var(--ease-out);
+}
+@keyframes hfilm-cue {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hfilm__controls {
+  position: absolute;
+  inset: auto 16px 16px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.hfilm__controls-end { display: flex; gap: 8px; }
+.hfilm__btn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 50%;
+  background: rgba(12, 20, 44, .48);
+  color: #fff;
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+          backdrop-filter: blur(12px) saturate(1.3);
+  cursor: pointer;
+  pointer-events: auto;
+  /* Fixed box and no transform, in every state: a click must never shift
+     a button or its neighbours. Only opacity and colour change. */
+  position: relative;
+  flex: none;
+  padding: 0;
+  opacity: 0;
+  transition: opacity .3s var(--ease-out), background .2s, color .2s;
+}
+.hfilm__btn:hover { background: rgba(12, 20, 44, .7); }
+.hfilm__btn:focus { outline: none; }
+.hfilm__btn:focus-visible { outline: 2px solid var(--poliris-blue-300); outline-offset: 2px; }
+.hfilm__btn.is-on { background: rgba(255, 255, 255, .9); color: var(--poliris-black); }
+.hfilm__screen:hover .hfilm__btn,
+.hfilm__screen:focus-within .hfilm__btn,
+.hfilm__btn--sound.is-muted { opacity: 1; }
+/* Muted: solid brand button with a soft ping inviting the click. */
+.hfilm__btn--sound.is-muted {
+  border-color: transparent;
+  background: var(--poliris-blue);
+  box-shadow: 0 10px 28px -8px rgba(0, 98, 255, .7);
+}
+.hfilm__btn--sound.is-muted:hover { background: #1a72ff; }
+.hfilm__btn--sound.is-muted::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 2px solid var(--poliris-blue);
+  animation: hfilm-ping 2.4s var(--ease-out) infinite;
+  pointer-events: none;
+}
+/* Volume: a slider that pops up above the sound button on hover or
+   keyboard focus. Absolutely placed, so opening it moves nothing. */
+.hfilm__vol { position: relative; }
+.hfilm__vol-pop {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  width: 42px;
+  height: 124px;
+  margin-left: -21px;
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 21px;
+  background: rgba(12, 20, 44, .55);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+          backdrop-filter: blur(12px) saturate(1.3);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .2s var(--ease-out), visibility 0s .2s;
+}
+/* Bridges the gap so the pointer can travel from button to slider. */
+.hfilm__vol-pop::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 12px;
+}
+.hfilm__vol:focus-within .hfilm__vol-pop {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .2s var(--ease-out);
+}
+@media (hover: hover) {
+  .hfilm__vol:hover .hfilm__vol-pop {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity .2s var(--ease-out);
+  }
+}
+/* A horizontal range turned upright: works the same in every browser. */
+.hfilm__vol-range {
+  --vol: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 92px;
+  height: 22px;
+  margin: -11px 0 0 -46px;
+  transform: rotate(-90deg);
+  -webkit-appearance: none;
+          appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.hfilm__vol-range:focus { outline: none; }
+.hfilm__vol-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #fff var(--vol), rgba(255, 255, 255, .28) var(--vol));
+}
+.hfilm__vol-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+}
+.hfilm__vol-range::-moz-range-track {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .28);
+}
+.hfilm__vol-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 4px;
+  background: #fff;
+}
+.hfilm__vol-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
   border: 0;
-  color-scheme: light;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+}
+.hfilm__vol-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--poliris-blue-300); }
+.hfilm__vol-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--poliris-blue-300); }
+@keyframes hfilm-ping {
+  0%   { transform: scale(1);   opacity: .7; }
+  70%, 100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Touch screens have no hover: keep the controls up. */
+@media (hover: none) {
+  .hfilm__btn { opacity: 1; }
+}
+@media (max-width: 860px) {
+  .hfilm { margin-top: 44px; margin-bottom: 96px; }
 }
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
-  .hreveal { --p: 1; --t: 1; }
-  .hreveal__frame { transform: none; }
+  .hfilm { --p: 1; --t: 1; }
+  .hfilm__frame { transform: none; }
 }
-/* The fixed 1500×760 glow dwarfs a phone-sized frame and gets cut off by
-   the hero's bottom edge; size it to the frame instead. */
 @media (max-width: 768px) {
-  .hreveal__glow { width: calc(100% + 160px); height: calc(100% + 160px); }
+  .hfilm__glow { width: calc(100% + 160px); height: calc(100% + 160px); }
+}
+@media (max-width: 640px) {
+  .hfilm__frame { padding: 1.5px; border-radius: 18px; }
+  .hfilm__mat { padding: 5px; border-radius: 16.5px; }
+  .hfilm__screen { border-radius: 12px; }
+  .hfilm__controls { inset: auto 10px 10px; }
+  .hfilm__btn { width: 36px; height: 36px; }
+  .hfilm__bigplay { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+  .hfilm__bigplay svg { width: 24px; height: 24px; }
+  .hfilm__caption { bottom: 56px; max-width: 88%; }
+  .hfilm__caption span { padding: 5px 10px; border-radius: 8px; }
+}
+/* Phones: the video is only ~200px tall, so keep the controls small
+   enough to leave most of the picture clear. */
+@media (max-width: 480px) {
+  .hfilm__controls { inset: auto 8px 8px; }
+  .hfilm__controls-end { gap: 6px; }
+  .hfilm__btn { width: 30px; height: 30px; }
+  .hfilm__btn svg { width: 15px; height: 15px; }
+  .hfilm__bigplay { width: 48px; height: 48px; margin: -24px 0 0 -24px; }
+  .hfilm__bigplay svg { width: 20px; height: 20px; margin-left: 3px; }
+  .hfilm__caption { bottom: 44px; }
+  .hfilm__caption span { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hfilm__btn--sound.is-muted::after { animation: none; }
 }
 
 /* Dashboard mockup */
@@ -6060,7 +6333,7 @@ button { cursor: pointer; border: none; background: none; }
 .hero__note       { animation: hero-fade-up 0.60s cubic-bezier(0.16,1,0.3,1) 0.74s both; }
 .ai-band          { animation: hero-fade-up 0.70s cubic-bezier(0.16,1,0.3,1) 0.86s both; }
 .hero__dashboard  { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
-.hreveal          { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
+.hfilm            { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 0.92s both; }
 
 /* Hero glow ambient pulse */
 .hero__glow { animation: glow-breathe 9s ease-in-out infinite; }
@@ -6164,7 +6437,7 @@ button { cursor: pointer; border: none; background: none; }
   /* Hero */
   .hero__inner { padding: 80px 28px 32px; }
   .hero__dashboard { margin: 36px 28px 0; }
-  .hreveal { padding: 0 28px; }
+  .hfilm { padding: 0 28px; }
 
   /* Value chain */
   .vchain-frame  { padding: 20px 20px 28px; }
@@ -6192,7 +6465,7 @@ button { cursor: pointer; border: none; background: none; }
     padding: 52px 20px 20px;
   }
   .hero__lead  { max-width: 100%; }
-  .hreveal { padding: 0 20px; margin-top: 48px; }
+  .hfilm { padding: 0 20px; margin-top: 48px; }
   .hero__dashboard {
     margin: 24px 20px 0;
     overflow-x: auto;
@@ -6270,7 +6543,7 @@ button { cursor: pointer; border: none; background: none; }
   .hero-website-form { width: 100%; }
   .hero__note { font-size: 12.5px; margin-top: 14px; }
   .hero__dashboard { margin: 16px 16px 0; }
-  .hreveal { padding: 0 16px; margin-top: 32px; }
+  .hfilm { padding: 0 16px; margin-top: 32px; margin-bottom: 28px; }
 
   /* Eyebrow / sec typography */
   .eyebrow { font-size: 11px; margin-bottom: 12px; }
@@ -8589,620 +8862,3 @@ button { cursor: pointer; border: none; background: none; }
 .cw-panel .cstudio-draft-outline .cstudio-draft-section { font-size: 12.5px; }
 .cw-publish-btn { display: inline-flex; align-items: center; gap: 6px; transition: background .2s ease; }
 .cw-publish-btn--done, .cw-publish-btn--done:hover { background: #16a34a; }
-
-/* ════════════════════════════════════════════════════════════════
-   Hero feature windows
-   Four small product windows around the hero dashboard, ported from
-   the "Hero Feature Scroll v4" reference. They start stacked on the
-   dashboard and fly out to their corners as the hero scrolls; each
-   then runs its own looping demo. Shown only where there is room
-   beside the 1200px dashboard — see HeroWindows.jsx.
-   ════════════════════════════════════════════════════════════════ */
-
-.hfw-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-/* Set while the dashboard is less than half on screen (useHeroWindows):
-   the demos' clock is held, and so are their CSS spinners. */
-.hfw-layer[data-paused] * { animation-play-state: paused; }
-
-/* Painting order inside .hreveal is DOM order: rings, glow, then the
-   windows, then the stage with the dashboard. A z-index on the rings
-   would not have worked — .hreveal__stage has a perspective, so it is a
-   stacking context and everything inside it paints with it. They are
-   outside the stage now (see HeroOnboarding.jsx). */
-
-/* The dashboard opens oversized and eases down to --rest as the hero is
-   scrolled — 82.5% on wide screens, the same 990px the reference settles
-   on, which opens the margins the windows need. On laptops it settles
-   smaller (down to 66%) to leave them room. --rest is set by HeroWindows
-   from restScale in heroWindowUtils.js, which is what the windows are
-   positioned against. */
-@media (min-width: 1200px) {
-  .hreveal__frame,
-  .hreveal[data-done] .hreveal__frame {
-    transform: scale(calc(var(--rest, .825) + .255 * (1 - var(--p))));
-  }
-}
-
-.hfw {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 0 0 1px #e3e7ee, 0 18px 40px -20px rgba(22, 50, 141, .32);
-  /* The reference sets these windows in Geist; the card rules below read
-     these two properties, so redefining them here restyles the lot. */
-  --font-display: 'Geist', Arial, sans-serif;
-  --font-body: 'Geist', system-ui, sans-serif;
-  font-family: var(--font-body);
-  color: #0a0a0b;
-  /* The hero centres its text — these windows read left, like the app. */
-  text-align: left;
-  /* No filter: a filter layer re-rasterises the card and softens it. The
-     windows are kept on whole page pixels in HeroWindows for the same
-     reason — see cardLayout. */
-  will-change: transform, opacity;
-}
-
-
-/* ── Window chrome ───────────────────────────────────────────── */
-
-.hfw__bar {
-  flex: none;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0 10px;
-  background: #f7f8fa;
-  border-bottom: 1px solid #eef0f3;
-}
-.hfw__dot { width: 8px; height: 8px; border-radius: 50%; }
-.hfw__dot--r { background: #ff5f57; }
-.hfw__dot--y { background: #febc2e; }
-.hfw__dot--g { background: #28c840; }
-.hfw__name {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 10px;
-  font-weight: 500;
-  color: #8a94a6;
-}
-.hfw__name-icon { width: 11px; height: 11px; object-fit: contain; }
-
-/* Carries the shrink-to-fit zoom on laptop widths; otherwise transparent
-   to the window's own column layout. */
-.hfw__zoom {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.hfw__body {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.hfw__row { display: flex; align-items: center; gap: 8px; }
-.hfw__row--between { justify-content: space-between; }
-.hfw__stack { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.hfw__title { font-size: 12.5px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
-.hfw__sub { font-size: 10.5px; color: #6a768a; white-space: nowrap; }
-.hfw__pill {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  height: 20px;
-  padding: 0 7px;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.hfw__pill--num { font-variant-numeric: tabular-nums; transition: background .3s, color .3s; }
-
-/* ── Visibility ──────────────────────────────────────────────── */
-
-.hfw-vis__act {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px;
-}
-.hfw-vis__rows {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.hfw-vis__scan {
-  position: absolute;
-  left: -6px;
-  right: -6px;
-  height: 25%;
-  border-radius: 7px;
-  background: rgba(59, 130, 246, .07);
-  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, .25);
-  transition: top .3s cubic-bezier(.3, .7, .2, 1);
-}
-.hfw-vis__row { position: relative; display: flex; align-items: center; gap: 8px; height: 25%; }
-.hfw-vis__ai {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  background: #f3f5f8;
-  color: #8a94a6;
-  font-size: 9px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hfw-vis__q {
-  flex: 1;
-  min-width: 0;
-  font-size: 10.5px;
-  color: #3f4654;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.hfw-vis__verdict {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  height: 18px;
-  padding: 0 6px;
-  border-radius: 999px;
-  font-size: 9.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.hfw-vis__legend { display: flex; align-items: center; gap: 10px; font-size: 10.5px; color: #6a768a; white-space: nowrap; }
-.hfw-vis__legend-you {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 18px;
-  padding: 0 7px;
-  border-radius: 999px;
-  background: #EAF2FF;
-  color: #1d4ed8;
-  font-weight: 600;
-}
-.hfw-vis__legend-you i { width: 7px; height: 7px; border-radius: 50%; background: #3b82f6; }
-.hfw-vis__legend-rival { display: inline-flex; align-items: center; gap: 5px; }
-.hfw-vis__legend-rival i { width: 12px; height: 0; border-top: 1.5px dashed #b4bccb; }
-.hfw-vis__chart { position: relative; flex: 1; min-height: 0; }
-.hfw-vis__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.hfw-vis__head {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  margin: -3.5px 0 0 -3.5px;
-  border-radius: 50%;
-  background: #0062FF;
-  box-shadow: 0 0 0 2px #fff, 0 0 10px rgba(0, 98, 255, .8);
-}
-.hfw-vis__end { position: absolute; left: 98%; width: 0; height: 0; }
-.hfw-vis__end-pulse,
-.hfw-vis__end-dot { position: absolute; border-radius: 50%; background: #0062FF; }
-.hfw-vis__end-pulse { left: -9px; top: -9px; width: 18px; height: 18px; }
-.hfw-vis__end-dot {
-  left: -4.5px;
-  top: -4.5px;
-  width: 9px;
-  height: 9px;
-  box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0, 98, 255, .45);
-}
-/* The level the competitor average settles at, against the right edge. */
-.hfw-vis__comp {
-  position: absolute;
-  right: 0;
-  transform: translateY(4px);
-  font-size: 9.5px;
-  font-weight: 600;
-  color: #8a94a6;
-  font-variant-numeric: tabular-nums;
-}
-.hfw-vis__end-label {
-  position: absolute;
-  left: 98%;
-  transform-origin: right bottom;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 20px;
-  padding: 0 8px;
-  border-radius: 7px;
-  background: #0B1533;
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 600;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  box-shadow: 0 8px 18px -8px rgba(11, 21, 51, .5);
-}
-.hfw-vis__months {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: #8a94a6;
-}
-
-/* ── Trading Zone Map ────────────────────────────────────────── */
-
-.hfw-map { gap: 8px; padding: 10px 12px; }
-.hfw-map__plate {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f6f8fc;
-  box-shadow: inset 0 0 0 1px #e8edf5;
-}
-.hfw-map__layer { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.hfw-map__dot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1.5px #fff;
-}
-.hfw-map__veil { position: absolute; inset: 0; background: rgba(246, 248, 252, .45); }
-.hfw-map__lens {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  margin: -30px 0 0 -30px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 55%);
-  transition: box-shadow .3s;
-}
-.hfw-map__readout {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 9px;
-  box-shadow: 0 0 0 1px #e6e9ef;
-}
-.hfw-map__city { font-size: 12px; font-weight: 600; white-space: nowrap; }
-/* The city takes the free space, which puts the score hard right. */
-.hfw-map__readout .hfw__stack { flex: 1; gap: 2px; }
-/* The map's rank line runs a touch smaller than the shared sub style. */
-.hfw-map__readout .hfw__sub { font-size: 10px; }
-.hfw-map__score {
-  flex: none;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -.02em;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── Implementation ──────────────────────────────────────────── */
-
-.hfw-impl { padding: 10px 12px; }
-.hfw-impl__flow { position: relative; flex: none; width: 228px; max-width: 100%; height: 96px; margin: 0 auto; }
-.hfw-impl__track { position: absolute; left: 30px; width: 168px; top: 22px; height: 0; border-top: 1.5px dashed #d5dbe6; }
-.hfw-impl__fill {
-  position: absolute;
-  left: 30px;
-  top: 21px;
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #9cbcff, #0062FF);
-}
-.hfw-impl__node {
-  position: absolute;
-  top: 0;
-  width: 60px;
-  margin-left: -30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-.hfw-impl__tile {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-}
-.hfw-impl__ring { position: absolute; inset: -5px; border-radius: 16px; border: 2px solid transparent; }
-.hfw-impl__glyph--doc {
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  background: linear-gradient(140deg, #f6f7f9, #e3e7ee);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #3f4654;
-}
-.hfw-impl__mark { width: 30px; height: 30px; object-fit: contain; }
-/* The sony.com node shows a small product shot rather than an icon. */
-.hfw-impl__thumb {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  overflow: hidden;
-  background: linear-gradient(140deg, #f4f5f7, #dfe2e8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hfw-impl__thumb-case {
-  width: 15px;
-  height: 11px;
-  border-radius: 6px;
-  background: linear-gradient(140deg, #fbfaf8, #c9c4bb);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, .14);
-}
-.hfw-impl__thumb-bud {
-  width: 10px;
-  height: 10px;
-  margin-left: -3px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #fff, #d3cec6);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, .14);
-}
-/* The green wash when the fix lands, inside the thumbnail. */
-.hfw-impl__flash { position: absolute; inset: 0; }
-.hfw-impl__badge {
-  position: absolute;
-  right: -5px;
-  bottom: -5px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 8.5px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 2px #fff;
-}
-.hfw-impl__badge--alert { background: #EF4444; font-size: 9px; font-weight: 800; }
-.hfw-impl__badge--w { background: #21759b; }
-.hfw-impl__label { font-size: 10px; font-weight: 600; color: #3f4654; white-space: nowrap; }
-.hfw-impl__dot {
-  position: absolute;
-  top: 22px;
-  width: 9px;
-  height: 9px;
-  margin: -4.5px 0 0 -4.5px;
-  border-radius: 50%;
-}
-.hfw-impl__token {
-  position: absolute;
-  top: 84px;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 20px;
-  padding: 0 8px;
-  border-radius: 999px;
-  color: #fff;
-  font-size: 9.5px;
-  font-weight: 600;
-  white-space: nowrap;
-  box-shadow: 0 6px 14px -6px rgba(15, 23, 42, .5);
-}
-.hfw-impl__spin {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, .4);
-  border-top-color: #fff;
-  animation: hfw-spin .7s linear infinite;
-}
-@keyframes hfw-spin { to { transform: rotate(360deg); } }
-.hfw-impl__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #eef1f5;
-}
-.hfw-impl__head-label { font-size: 9.5px; font-weight: 600; letter-spacing: .08em; color: #8a94a6; }
-.hfw-impl__head-total { font-size: 10.5px; font-weight: 700; color: #15803d; font-variant-numeric: tabular-nums; }
-.hfw-impl__log {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent);
-  mask-image: linear-gradient(180deg, #000 70%, transparent);
-}
-.hfw-impl__log-row { flex: none; height: 25px; display: flex; align-items: center; gap: 7px; }
-.hfw-impl__check {
-  flex: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #16A34A;
-  color: #fff;
-  font-size: 8px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hfw-impl__log-text { flex: 1; min-width: 0; font-size: 10.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hfw-impl__log-when { flex: none; font-size: 9.5px; color: #8a94a6; white-space: nowrap; }
-
-/* ── AI Assistant ────────────────────────────────────────────── */
-
-.hfw-chat__thread-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 26px);
-  mask-image: linear-gradient(180deg, transparent 0, #000 26px);
-}
-.hfw-chat__greet {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -.02em;
-}
-.hfw-chat__thread { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; padding: 0 12px 4px; }
-.hfw-chat__ask { flex: none; overflow: hidden; display: flex; justify-content: flex-end; align-items: flex-end; }
-.hfw-chat__bubble {
-  max-width: 86%;
-  font-size: 11px;
-  line-height: 15px;
-  color: #202124;
-  background: #f1f3f7;
-  border-radius: 12px;
-  padding: 7px 10px;
-  white-space: nowrap;
-}
-.hfw-chat__answer { flex: none; overflow: hidden; display: flex; align-items: flex-end; }
-.hfw-chat__answer-row { display: flex; align-items: center; gap: 8px; width: 100%; height: 20px; }
-.hfw-chat__avatar {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid #e4e7ef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hfw-chat__avatar img { width: 12px; height: 12px; object-fit: contain; }
-.hfw-chat__dots { display: inline-flex; align-items: center; gap: 4px; }
-.hfw-chat__dots span { width: 5px; height: 5px; border-radius: 999px; background: #1e3893; }
-.hfw-chat__intro { min-width: 0; font-size: 11px; line-height: 16px; color: #3c4257; white-space: nowrap; }
-.hfw-chat__caret {
-  display: inline-block;
-  width: 1.5px;
-  height: 11px;
-  margin-left: 1px;
-  vertical-align: -1px;
-  background: #1e3893;
-}
-.hfw-chat__line { flex: none; overflow: hidden; display: flex; align-items: flex-end; padding-left: 28px; }
-.hfw-chat__line-inner { display: flex; align-items: center; gap: 7px; height: 19px; }
-.hfw-chat__bullet { flex: none; width: 4px; height: 4px; border-radius: 999px; background: #9aa0ad; }
-.hfw-chat__line-text { min-width: 0; font-size: 11px; line-height: 17px; color: #3c4257; white-space: nowrap; }
-.hfw-chat__brand {
-  display: inline-block;
-  font-weight: 600;
-  font-size: 10.5px;
-  line-height: 15px;
-  border-radius: 4px;
-  padding: 0 5px;
-}
-.hfw-chat__verdict-wrap { flex: none; overflow: hidden; display: flex; align-items: flex-end; }
-.hfw-chat__verdict {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: calc(100% - 2px);
-  height: 44px;
-  margin: 0 1px 1px;
-  padding: 0 8px 0 9px;
-  border-radius: 10px;
-}
-.hfw-chat__verdict-icon {
-  flex: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-}
-/* overflow:hidden so neither line can run on underneath the Fix pill —
-   they are clipped with an ellipsis at the edge of the text column. */
-.hfw-chat__verdict-text {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.hfw-chat__verdict-text span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hfw-chat__verdict-text span:first-child { font-size: 11px; font-weight: 700; }
-.hfw-chat__verdict-text span:last-child { font-size: 9.5px; color: #5f6368; }
-.hfw-chat__fix {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  height: 22px;
-  padding: 0 9px;
-  border-radius: 999px;
-  background: #152a6b;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.hfw-chat__input-wrap { flex: none; padding: 6px 10px 10px; }
-.hfw-chat__input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 34px;
-  padding: 0 4px 0 13px;
-  border-radius: 999px;
-  border: 1px solid #e4e7ef;
-}
-.hfw-chat__input-text { flex: 1; min-width: 0; font-size: 11px; white-space: nowrap; overflow: hidden; }
-.hfw-chat__send {
-  flex: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hfw-chat__send .hfw-chat__spin {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  border: 1.6px solid rgba(255, 255, 255, .45);
-  border-top-color: #fff;
-  animation: hfw-spin .7s linear infinite;
-}

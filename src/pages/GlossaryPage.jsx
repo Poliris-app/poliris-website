@@ -73,7 +73,6 @@ export default function GlossaryPage() {
           lead={gh.lead}
           primaryCta={gh.primaryCta}
           secondaryCta={gh.secondaryCta}
-          showDashboard={false}
           showAiBand={false}
         />
 
