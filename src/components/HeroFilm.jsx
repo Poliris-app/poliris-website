@@ -149,8 +149,11 @@ export default function HeroFilm() {
   const nearWindow = useRef(false);
   const loadFilm = useRef(null);
 
-  const [painted, setPainted] = useState(false);
-  const [started, setStarted] = useState(false);
+  // The language whose film has painted / started playing. A language switch
+  // swaps in a new player, so the poster covers it again until it plays.
+  const [painted, setPainted] = useState(null);
+  const [started, setStarted] = useState(null);
+  const filmShown = painted === lang && started === lang;
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
   const [captionsOn, setCaptionsOn] = useState(false);
@@ -306,9 +309,9 @@ export default function HeroFilm() {
 
   useEffect(() => {
     const player = playerRef.current;
-    const onPlay = () => setStarted(true);
+    const onPlay = () => setStarted(lang);
     const onReady = () => steadyCamera(player);
-    const onPainted = () => { steadyCamera(player); setPainted(true); };
+    const onPainted = () => { steadyCamera(player); setPainted(lang); };
     const onTime = (e) => {
       const at = e.detail?.currentTime ?? player.currentTime ?? 0;
       const active = cues.current.find((c) => at >= c.start && at < c.end);
@@ -428,15 +431,19 @@ export default function HeroFilm() {
                 key={lang}
                 ref={playerRef}
                 className="hfilm__player"
+                // The poster covers the film while it loads; the player's own
+                // black "Loading assets" screen would only show through it.
+                assets-loading-ui="none"
               />
 
               {/* Held over the film until it first plays (and has painted a
                   frame), so the block shows the poster rather than the film's
                   opening frame standing still; then it fades out over the
-                  playing film. */}
+                  playing film. Back at once on a language switch, while the
+                  new film loads. */}
               <img
-                className={`hfilm__poster${painted && started ? ' is-gone' : ''}`}
-                aria-hidden={painted && started}
+                className={`hfilm__poster${filmShown ? ' is-gone' : ''}`}
+                aria-hidden={filmShown}
                 src={`${FILM}/${FILM_DIR[lang]}/poster.webp`}
                 alt={f.label}
                 width="1920"
