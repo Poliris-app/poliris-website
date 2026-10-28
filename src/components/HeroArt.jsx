@@ -11,13 +11,23 @@
  * (140 x 76 in act 2, 210 x 118 in act 3) and letterboxing either would
  * show the card's grey through the gap.
  */
+import { useLang } from '../contexts/LangContext';
+
 const SRC = `${import.meta.env.BASE_URL}hero-anc.webp`;
 
+// Not alt="": scripts/seo-check.mjs (Screaming Frog's rule) fails the build
+// on an empty alt, even for a decorative image.
+const ALT = {
+  en: 'Wireless earbuds with active noise cancellation',
+  fr: 'Écouteurs sans fil à réduction de bruit active',
+};
+
 export default function HeroArt({ style }) {
+  const { lang } = useLang();
   return (
     <img
       src={SRC}
-      alt=""
+      alt={ALT[lang] ?? ALT.en}
       width="1200"
       height="654"
       loading="lazy"
