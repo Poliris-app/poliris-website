@@ -106,6 +106,10 @@
 /* ── Main content ───────────────────────────────────────── */
 .bp-main {
   padding: 0 0 7rem 3rem;
+  /* A grid item won't shrink below its content's width by default, so a
+     wide table would stretch the column and scroll the whole page sideways.
+     min-width: 0 lets the table scroll inside its own wrapper instead. */
+  min-width: 0;
 }
 
 /* ── Hero ───────────────────────────────────────────────── */

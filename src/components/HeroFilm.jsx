@@ -19,9 +19,10 @@ import { useLang } from '../contexts/LangContext';
  *
  * Scroll reveal: --p eases 0→1 over REVEAL_PX of scroll from the moment
  * the section enters the viewport and drives the tracing light; --t
- * finishes at FLAT_AT and scales the frame up to full size (it reaches
- * exactly 1 so the film isn't left resampled and soft). --p also opens
- * the orbit rings around the frame. Phones and reduced motion pin both to 1.
+ * finishes at FLAT_AT and eases the frame down from its arrival size to its
+ * natural one (it reaches exactly 1 so the film isn't left resampled and
+ * soft). --p also opens the orbit rings around the frame. Phones and reduced
+ * motion pin both to 1.
  *
  * The film holds its own light background and the player keeps the iframe
  * borderless and transparent: nothing is drawn around or behind it.
@@ -37,7 +38,10 @@ const FLAT_AT = 0.85;
 const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 // How many px of the film may sit off screen and still count as "fits".
-const FIT_SLACK = 24;
+// The film keeps playing while any of it is still on screen; it stops
+// once this little of it is left, so a sliver at the edge doesn't have
+// it starting and stopping as the visitor scrolls past the boundary.
+const OFF_SCREEN_SLACK = 8;
 // The composition's own length, used for the scrub bar until the player
 // reports the real duration.
 const FILM_SECONDS = 122.6;
@@ -156,7 +160,7 @@ export default function HeroFilm() {
   const rampRef = useRef(0);
   const rampDone = useRef(0);
   const ramping = useRef(false);
-  const fitting = useRef(false);
+  const onScreen = useRef(false);
   const cues = useRef([]);
   // The player is a custom element: until its script has run, the <hyperframes-player>
   // in the page is an inert unknown element with none of the API on it.
@@ -180,10 +184,10 @@ export default function HeroFilm() {
   // The composition's length until the player reports its own.
   const [duration, setDuration] = useState(FILM_SECONDS);
 
-  // Start playback on its own. The film plays while it fits on screen and
-  // pauses when scrolled away; a pause the visitor chose outranks that until
-  // they press play again. Reduced motion never autoplays. Sound is never
-  // forced here: browsers only allow a muted start.
+  // Start playback on its own. The film plays while any of it is on screen
+  // and pauses once it has been scrolled past; a pause the visitor chose
+  // outranks that until they press play again. Reduced motion never
+  // autoplays. Sound is never forced here: browsers only allow a muted start.
   function autoPlay() {
     const player = playerRef.current;
     if (!live.current || !player || userPaused.current) return;
@@ -209,10 +213,11 @@ export default function HeroFilm() {
       // At full size the frame drops its transform so the film isn't resampled.
       el.toggleAttribute('data-done', t >= 1);
 
-      // Play only while the film fits on screen, between the fixed navbar
-      // and the bottom of the window; when the window is too short for all
-      // of it, while it fills what's visible. Act on changes only, so a
-      // pause or play the visitor chose isn't overridden mid-view.
+      // Play while any part of the film is on screen, between the fixed
+      // navbar and the bottom of the window — not only while all of it is.
+      // Scrolling past the frame is what stops it, nothing less. Act on
+      // changes only, so a pause or play the visitor chose isn't
+      // overridden mid-view.
       const screen = el.querySelector('.hfilm__screen').getBoundingClientRect();
       // Fetch the film once the block comes within 300px of the window: a
       // visitor who never scrolls this far downloads none of it.
@@ -222,10 +227,10 @@ export default function HeroFilm() {
       }
       const top = document.querySelector('.nav')?.getBoundingClientRect().bottom ?? 0;
       const shown = Math.min(screen.bottom, window.innerHeight) - Math.max(screen.top, top);
-      const fits = shown >= Math.min(screen.height, window.innerHeight - top) - FIT_SLACK;
-      if (fits !== fitting.current) {
-        fitting.current = fits;
-        if (fits) autoPlay();
+      const seen = shown > OFF_SCREEN_SLACK;
+      if (seen !== onScreen.current) {
+        onScreen.current = seen;
+        if (seen) autoPlay();
         else if (live.current) playerRef.current.pause();
       }
     }
@@ -272,7 +277,7 @@ export default function HeroFilm() {
       if (nearWindow.current) load();
       // The scroll pass may already have found the film on screen while the
       // player was still an inert element; start it now that it can play.
-      if (fitting.current) autoPlay();
+      if (onScreen.current) autoPlay();
     }).catch(() => {});
 
     return () => { current = false; live.current = false; loadFilm.current = null; };
@@ -309,7 +314,7 @@ export default function HeroFilm() {
   // A language switch swaps in a new player: start it if the film is
   // already in view.
   useEffect(() => {
-    if (fitting.current) autoPlay();
+    if (onScreen.current) autoPlay();
   }, [lang]);
 
   // Captions: the player has no text track, so read the cues ourselves off
@@ -558,9 +563,6 @@ export default function HeroFilm() {
                   />
                 </div>
                 <span className="hfilm__time">{clock(time)}</span>
-              </div>
-
-              <div className="hfilm__controls">
                 <div className="hfilm__controls-end">
                   <button
                     type="button"

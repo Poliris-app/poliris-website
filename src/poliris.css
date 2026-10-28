@@ -1536,6 +1536,19 @@ button { cursor: pointer; border: none; background: none; }
 .hfilm {
   --p: 0;
   --t: 0;
+  /* How much bigger the frame sits before the page is scrolled. It eases
+     back to 1 as --t runs, so the film ends at its natural size and
+     [data-done] can drop the transform — a film left scaled is a film left
+     resampled, which is what that rule exists to avoid. */
+  --hfilm-zoom: 1.14;
+  /* One gutter for the padding and for the size cap below, so the two can't
+     drift apart; the breakpoints override this, not the padding. */
+  --hfilm-gutter: 24px;
+  /* Vertical room kept clear above and below the enlarged frame. */
+  --hfilm-reserve: 190px;
+  /* The round controls. The seek bar stops short of the pair on the
+     right, so its inset is derived from this rather than guessed. */
+  --hfilm-btn: 27px;
   position: relative;
   /* Below the hero text (hero__inner is the stacking context), so the
      orbit rings that rise above the frame pass behind the copy and form. */
@@ -1546,7 +1559,7 @@ button { cursor: pointer; border: none; background: none; }
   /* The bottom margin leaves the lower arcs of the orbit room to show
      between the film and How it works. */
   margin: 64px calc(50% - 50vw) 150px;
-  padding: 0 24px;
+  padding: 0 var(--hfilm-gutter);
   box-sizing: border-box;
   overflow-x: clip;
   overflow-y: visible;
@@ -1554,7 +1567,16 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hfilm__stage {
   position: relative;
-  max-width: 1240px;
+  /* Capped on both axes and divided by the zoom, because a transform ignores
+     the padding: at 1240px the enlarged frame is ~1410px wide and would run
+     past the gutter — off the side of a 1366px laptop entirely. The height
+     term is what keeps short, wide screens in order, where it is the
+     viewport's height and not its width that binds. */
+  max-width: min(
+    1240px,
+    calc((100vw - 2 * var(--hfilm-gutter)) / var(--hfilm-zoom)),
+    calc((100vh - var(--hfilm-reserve)) * 16 / 9 / var(--hfilm-zoom))
+  );
   margin: 0 auto;
 }
 /* Sized from the stage: the rings sit around the frame in the same
@@ -1592,7 +1614,10 @@ button { cursor: pointer; border: none; background: none; }
 .hfilm__frame {
   position: relative;
   transform-origin: 50% 0;
-  transform: scale(calc(.95 + .05 * var(--t)));
+  /* Big on arrival, easing down to its natural size as the page is scrolled:
+     1.14 at --t 0, exactly 1 at --t 1, which is where [data-done] takes the
+     transform off entirely. */
+  transform: scale(calc(var(--hfilm-zoom) - (var(--hfilm-zoom) - 1) * var(--t)));
   /* The film is live HTML, not one video texture: scaling it on scroll would
      redraw the whole composition every frame. Composite the reveal instead,
      and drop both the layer and the transform once it's at full size. */
@@ -1703,11 +1728,17 @@ button { cursor: pointer; border: none; background: none; }
   /* stops short of the CC and sound buttons, which keep the right-hand end
      and stay put: the sound button has to remain visible while muted, since
      it is the way in to the voice */
-  inset: auto 112px 14px 14px;
+  /* One centred cluster. Split across the two bottom corners the controls
+     left a wide empty gap between them and read as two unrelated things;
+     together they are a single small object the eye can skip. The row spans
+     the film so it can centre in it, while the seek line below keeps its
+     own width — nothing here stretches. */
+  inset: auto 12px 12px 12px;
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 9px;
   opacity: 0;
   transition: opacity .3s var(--ease-out);
   pointer-events: none;
@@ -1717,15 +1748,23 @@ button { cursor: pointer; border: none; background: none; }
    button, and :focus-within would then pin the controls up after the
    pointer has left the film. */
 .hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; pointer-events: auto; }
+/* Visible but understated while the pointer is merely over the film; it
+   comes up to full only when you go for it. */
+.hfilm__screen:hover .hfilm__bar { opacity: .66; }
+.hfilm__bar:hover,
+.hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; }
 
 .hfilm__btn--play { flex: none; opacity: 1; }
 
 .hfilm__seek {
   position: relative;
-  flex: 1;
-  height: 3px;
-  border-radius: 3px;
-  background: rgba(12, 20, 44, .18);
+  /* Was flex: 1 and stretched to whatever was left; now it is its own size,
+     so the cluster stays compact however wide the film gets. */
+  flex: 0 1 auto;
+  width: min(32%, 320px);
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(12, 20, 44, .13);
   -webkit-backdrop-filter: blur(6px);
           backdrop-filter: blur(6px);
 }
@@ -1735,7 +1774,7 @@ button { cursor: pointer; border: none; background: none; }
   top: 0;
   bottom: 0;
   border-radius: inherit;
-  background: var(--poliris-blue);
+  background: rgba(12, 20, 44, .4);
   pointer-events: none;
 }
 /* The real control sits over the line, invisible: a taller hit area than a
@@ -1756,23 +1795,23 @@ button { cursor: pointer; border: none; background: none; }
 .hfilm__seek-range::-webkit-slider-runnable-track { height: 20px; background: transparent; }
 .hfilm__seek-range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 11px;
-  height: 11px;
-  margin-top: 4.5px;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
   opacity: 0;
   transition: opacity .2s var(--ease-out);
 }
 .hfilm__seek-range::-moz-range-track { height: 20px; background: transparent; }
 .hfilm__seek-range::-moz-range-thumb {
-  width: 11px;
-  height: 11px;
+  width: 8px;
+  height: 8px;
   border: 0;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
   opacity: 0;
 }
 .hfilm__screen:hover .hfilm__seek-range::-webkit-slider-thumb,
@@ -1782,32 +1821,25 @@ button { cursor: pointer; border: none; background: none; }
 
 .hfilm__time {
   flex: none;
-  min-width: 34px;
+  min-width: 30px;
   font-family: var(--manrope);
-  font-size: 11.5px;
+  font-size: 10px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: rgba(12, 20, 44, .65);
+  color: rgba(12, 20, 44, .5);
 }
 
-.hfilm__controls {
-  position: absolute;
-  inset: auto 14px 14px;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-.hfilm__controls-end { display: flex; gap: 6px; }
+/* The CC and sound buttons, now sitting in the same row as the play button
+   and the seek line rather than in the opposite corner. */
+.hfilm__controls-end { display: flex; align-items: center; gap: 6px; }
 /* Kept quiet on purpose: small, see-through, and hidden until the pointer
    is over the film (or a key focuses them), so they don't pull the eye from
    the film itself. */
 .hfilm__btn {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: var(--hfilm-btn);
+  height: var(--hfilm-btn);
   border: 1px solid rgba(255, 255, 255, .28);
   border-radius: 50%;
   /* Dark enough to carry a white glyph over the film's own light UI. These
@@ -1828,7 +1860,7 @@ button { cursor: pointer; border: none; background: none; }
   opacity: 0;
   transition: opacity .3s var(--ease-out), background .2s, color .2s;
 }
-.hfilm__btn svg { width: 15px; height: 15px; }
+.hfilm__btn svg { width: 12px; height: 12px; }
 .hfilm__btn:hover { background: rgba(12, 20, 44, .72); }
 .hfilm__btn:focus { outline: none; }
 .hfilm__btn:focus-visible { outline: 2px solid var(--poliris-blue-300); outline-offset: 2px; }
@@ -1937,28 +1969,30 @@ button { cursor: pointer; border: none; background: none; }
   .hfilm { margin-top: 44px; margin-bottom: 96px; }
 }
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
-  .hfilm { --p: 1; --t: 1; }
+  /* No reveal here, so there is no enlarged state for the size cap to leave
+     room for: a zoom of 1 lets the stage use the full gutter-to-gutter width
+     rather than 1/1.14 of it. */
+  .hfilm { --p: 1; --t: 1; --hfilm-zoom: 1; }
   .hfilm__frame { transform: none; }
 }
 @media (max-width: 768px) {
   .hfilm__glow { width: calc(100% + 160px); height: calc(100% + 160px); }
 }
 @media (max-width: 640px) {
-  .hfilm__frame { padding: 1.5px; border-radius: 18px; }
-  .hfilm__mat { padding: 5px; border-radius: 16.5px; }
   .hfilm__screen { border-radius: 12px; }
-  .hfilm__controls { inset: auto 10px 10px; }
-  .hfilm__btn { width: 32px; height: 32px; }
+  .hfilm { --hfilm-btn: 30px; }
+  .hfilm__bar { inset: auto 10px 10px 10px; }
   .hfilm__caption { bottom: 56px; max-width: 88%; }
   .hfilm__caption span { padding: 5px 10px; border-radius: 8px; }
 }
 /* Phones: the video is only ~200px tall, so keep the controls small
    enough to leave most of the picture clear. */
 @media (max-width: 480px) {
-  .hfilm__controls { inset: auto 8px 8px; }
+  .hfilm__bar { inset: auto 8px 8px 8px; gap: 7px; }
   .hfilm__controls-end { gap: 6px; }
-  .hfilm__btn { width: 30px; height: 30px; }
-  .hfilm__btn svg { width: 15px; height: 15px; }
+  .hfilm { --hfilm-btn: 28px; }
+  .hfilm__btn svg { width: 12px; height: 12px; }
+  .hfilm__seek { width: min(40%, 200px); }
   .hfilm__caption { bottom: 44px; }
   .hfilm__caption span { font-size: 12px; }
 }
@@ -6460,7 +6494,7 @@ button { cursor: pointer; border: none; background: none; }
   /* Hero */
   .hero__inner { padding: 80px 28px 32px; }
   .hero__dashboard { margin: 36px 28px 0; }
-  .hfilm { padding: 0 28px; }
+  .hfilm { --hfilm-gutter: 28px; }
 
   /* Value chain */
   .vchain-frame  { padding: 20px 20px 28px; }
@@ -6488,7 +6522,7 @@ button { cursor: pointer; border: none; background: none; }
     padding: 52px 20px 20px;
   }
   .hero__lead  { max-width: 100%; }
-  .hfilm { padding: 0 20px; margin-top: 48px; }
+  .hfilm { --hfilm-gutter: 20px; margin-top: 48px; }
   .hero__dashboard {
     margin: 24px 20px 0;
     overflow-x: auto;
@@ -6566,7 +6600,7 @@ button { cursor: pointer; border: none; background: none; }
   .hero-website-form { width: 100%; }
   .hero__note { font-size: 12.5px; margin-top: 14px; }
   .hero__dashboard { margin: 16px 16px 0; }
-  .hfilm { padding: 0 16px; margin-top: 32px; margin-bottom: 28px; }
+  .hfilm { --hfilm-gutter: 16px; margin-top: 32px; margin-bottom: 28px; }
 
   /* Eyebrow / sec typography */
   .eyebrow { font-size: 11px; margin-bottom: 12px; }
@@ -7253,10 +7287,16 @@ button { cursor: pointer; border: none; background: none; }
 .pc-an__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
 .pc-an__divider { width: 1px; flex: none; background: #e5e7eb; }
 
+/* .pc-panel is half of a two-panel scroll, so its 349px cannot grow: the
+   column has to fit that in every language. English filled 348 of it — one
+   pixel spare — and French, whose sub wraps to two lines and whose stat
+   labels ("Position moyenne") wrap where English does not, came to 365 and
+   was clipped top and bottom. The rhythm below is tightened to leave both
+   some room rather than to rescue one. */
 .pc-an__title { font-size: 13px; font-weight: 700; color: #09090b; margin: 0; }
-.pc-an__sub { font-size: 10.5px; color: #6B6E72; margin: 2px 0 8px; line-height: 1.4; }
+.pc-an__sub { font-size: 10.5px; color: #6B6E72; margin: 2px 0 6px; line-height: 1.4; }
 
-.pc-an__stats { display: flex; gap: 6px; margin-bottom: 10px; }
+.pc-an__stats { display: flex; gap: 6px; margin-bottom: 8px; }
 .pc-an__stat {
   flex: 1 1 0;
   min-width: 0;
@@ -7265,15 +7305,15 @@ button { cursor: pointer; border: none; background: none; }
   gap: 3px;
   border: 1px solid #e5e7eb;
   border-radius: 7px;
-  padding: 6px 8px;
+  padding: 5px 8px;
 }
 .pc-an__stat span { font-size: 9.5px; color: #6B6E72; }
 .pc-an__stat strong { font-size: 12px; font-weight: 700; color: #09090b; }
 .pc-an__stat strong.pc-an__stat--muted { color: #6b7280; font-weight: 600; }
 .pc-an__stat strong.pc-an__stat--up { color: #16A34A; font-weight: 700; }
 
-.pc-an__label { font-size: 10.5px; color: #9aa1ac; margin: 0 0 8px; }
-.pc-an__bars { display: flex; flex-direction: column; gap: 11px; margin-bottom: 8px; }
+.pc-an__label { font-size: 10.5px; color: #9aa1ac; margin: 0 0 6px; }
+.pc-an__bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
 .pc-an__bar-row { display: flex; flex-direction: column; gap: 4px; }
 .pc-an__bar-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .pc-an__bar-name { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #09090b; min-width: 0; }
@@ -7290,7 +7330,7 @@ button { cursor: pointer; border: none; background: none; }
   margin-top: auto;
   background: #FAFAFA;
   border-left: 3px solid #E1F3FE;
-  padding: 6px 10px;
+  padding: 5px 10px;
   font-size: 10px;
   line-height: 1.45;
   color: #09090b;

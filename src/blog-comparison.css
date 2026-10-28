@@ -1,0 +1,594 @@
+/* ============================================================
+   COMPARISON POST — components layered on blog-post.css
+   (tables, stat tiles, cost breakdown, price bars, plans).
+   Same tokens as the rest of the post: ink #0d1020, body #3a3f52,
+   muted #9aa0ab, hairline #e4e8f2, surface #f7f8fb, --poliris-blue.
+   ============================================================ */
+
+/* ── Section label above each numbered heading ─────────── */
+.bpc-eyebrow {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aa0ab;
+  margin: 3.5rem 0 0.5rem;
+}
+.bp-section-header.bpc-section-header { margin-top: 0; }
+
+.bpc-hero-ctas { margin: 1.5rem 0 0.5rem; }
+.bpc-tag {
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--poliris-blue);
+  margin-bottom: 0.75rem;
+}
+
+/* "Poliris · 6 modules" label over the module grid */
+.bpc-frame-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.6rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--poliris-blue);
+}
+.bpc-frame-h b { font-family: var(--manrope); font-size: 0.8rem; letter-spacing: 0; text-transform: none; }
+.bpc-frame-h span { padding-left: 8px; border-left: 1px solid #e4e8f2; }
+
+/* ── Stat tiles ─────────────────────────────────────────── */
+.bpc-kpis-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--poliris-blue);
+  margin: 1.75rem 0 0.75rem;
+}
+.bpc-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+.bpc-kpis-label + .bpc-kpis { margin-top: 0; }
+.bpc-kpis--3 { grid-template-columns: repeat(3, 1fr); }
+.bpc-kpi {
+  border: 1.5px solid #e4e8f2;
+  border-radius: 10px;
+  padding: 0.9rem 1rem 0.85rem;
+}
+.bpc-kpi small {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aa0ab;
+  margin-bottom: 0.45rem;
+}
+.bpc-kpi b {
+  display: block;
+  font-family: var(--manrope);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--poliris-blue);
+}
+.bpc-kpi span {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #3a3f52;
+}
+
+/* ── Comparison table ───────────────────────────────────── */
+/* Scroll shadow on the right edge while more columns are hidden
+   (background-attachment: local covers it once scrolled to the end). */
+.bpc-tw {
+  /* Containing block for the cells' .sr-only labels (position: absolute);
+     without it they escape the scroll box and widen the whole page. */
+  position: relative;
+  overflow-x: auto;
+  border: 1.5px solid #e4e8f2;
+  border-radius: 12px;
+  margin: 1.5rem 0 0;
+  -webkit-overflow-scrolling: touch;
+  background:
+    linear-gradient(to left, #fff 40%, rgba(255,255,255,0)) right / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 100% 50%, rgba(13,16,32,0.12), transparent) right / 12px 100% no-repeat scroll,
+    #fff;
+}
+.bpc-tw:focus-visible { outline: 2px solid var(--poliris-blue); outline-offset: 2px; }
+.bpc-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 0.84rem;
+}
+.bpc-col-label { width: 210px; }
+.bpc-table th,
+.bpc-table td {
+  padding: 0.7rem 0.6rem;
+  border-bottom: 1px solid #e4e8f2;
+  text-align: center;
+  vertical-align: middle;
+}
+.bpc-table thead th {
+  font-family: var(--manrope);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #0d1020;
+  background: #f7f8fb;
+  padding: 0.85rem 0.6rem;
+  border-bottom: 1.5px solid #e4e8f2;
+}
+/* Sticky first column, so the criterion stays visible while scrolling. */
+.bpc-table th[scope='row'],
+.bpc-table thead .bpc-rowh {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  padding-left: 1.1rem;
+}
+.bpc-table th[scope='row'] {
+  background: #fff;
+  font-family: var(--chivo);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #0d1020;
+}
+.bpc-table thead .bpc-rowh {
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aa0ab;
+}
+.bpc-table tbody tr:last-child th,
+.bpc-table tbody tr:last-child td { border-bottom: none; }
+
+/* Poliris column */
+.bpc-table thead th.bpc-pol {
+  background: var(--poliris-blue);
+  color: #fff;
+  border-bottom-color: var(--poliris-blue);
+}
+.bpc-table td.bpc-pol {
+  background: #f2f6ff;
+  box-shadow: inset 2px 0 0 var(--poliris-blue), inset -2px 0 0 var(--poliris-blue);
+}
+
+/* Column-group row (overview table) */
+.bpc-table thead tr.bpc-colgroups th,
+.bpc-table thead tr.bpc-colgroups td {
+  background: #fff;
+  border-bottom: none;
+  padding: 0.8rem 0.35rem 0.4rem;
+}
+.bpc-table thead tr.bpc-colgroups td:first-child { position: sticky; left: 0; z-index: 1; }
+.bpc-colgroups th span {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aa0ab;
+  border-bottom: 1.5px solid #e4e8f2;
+  padding-bottom: 0.45rem;
+}
+
+/* Section rows inside a table */
+.bpc-table tr.bpc-grp th {
+  background: #f7f8fb;
+  padding: 0.5rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid #e4e8f2;
+}
+.bpc-table tr.bpc-grp th span {
+  position: sticky;
+  left: 1.1rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #3a3f52;
+}
+
+/* Cell content */
+.bpc-c {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.bpc-c small {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  color: #9aa0ab;
+}
+.bpc-t {
+  font-size: 0.84rem;
+  line-height: 1.35;
+  color: #3a3f52;
+}
+.bpc-pol .bpc-t {
+  font-family: var(--manrope);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--poliris-blue);
+}
+.bpc-pol .bpc-c small { color: var(--poliris-blue); font-weight: 600; }
+.bpc-ic { width: 22px; height: 22px; flex: 0 0 22px; }
+
+.bpc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 0.9rem;
+  font-size: 0.75rem;
+  color: #3a3f52;
+}
+.bpc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.bpc-legend .bpc-ic { width: 16px; height: 16px; flex-basis: 16px; }
+.bpc-swipe {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: #9aa0ab;
+}
+.bpc-fine {
+  font-size: 0.75rem !important;
+  line-height: 1.6 !important;
+  color: #9aa0ab !important;
+  margin-top: 0.9rem;
+}
+
+/* ── "What Poliris does" ────────────────────────────────── */
+.bpc-does {
+  border: 1.5px solid #e4e8f2;
+  border-radius: 12px;
+  padding: 1.2rem 1.35rem 1.3rem;
+  margin: 1.75rem 0;
+}
+.bpc-does-label {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--poliris-blue);
+  margin-bottom: 1rem;
+}
+.bpc-does ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.75rem;
+}
+.bpc-does li { display: flex; gap: 10px; align-items: flex-start; }
+.bpc-does li > svg { flex: 0 0 18px; width: 18px; height: 18px; margin-top: 2px; }
+.bpc-does li b {
+  display: block;
+  font-family: var(--manrope);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #0d1020;
+}
+.bpc-does li p {
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #3a3f52;
+  margin: 0.2rem 0 0;
+}
+
+/* ── Cost breakdown: one tool per workstream vs Poliris ─── */
+.bpc-cost {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 1.75rem 0 0;
+  align-items: stretch;
+}
+.bpc-panel {
+  border: 1.5px solid #e4e8f2;
+  border-radius: 12px;
+  padding: 1.2rem 1.2rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+}
+.bpc-panel--pol { border-color: var(--poliris-blue); }
+.bpc-panel-tag {
+  align-self: flex-start;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #3a3f52;
+  background: #f7f8fb;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  margin-bottom: 1rem;
+}
+.bpc-panel--pol .bpc-panel-tag { background: var(--poliris-blue); color: #fff; }
+
+.bpc-bill-h,
+.bpc-bill-r {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 64px;
+  gap: 8px;
+  align-items: center;
+}
+.bpc-bill-h {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aa0ab;
+  padding-bottom: 0.5rem;
+}
+.bpc-bill-h span:last-child,
+.bpc-bill-r span:last-child { text-align: right; }
+.bpc-bill-r {
+  padding: 0.6rem 0;
+  border-top: 1px solid #e4e8f2;
+  font-size: 0.84rem;
+  color: #3a3f52;
+}
+.bpc-bill-r b { font-family: var(--manrope); font-weight: 700; color: #0d1020; }
+.bpc-bill-r span:last-child { font-family: var(--manrope); font-weight: 800; color: #0d1020; white-space: nowrap; }
+.bpc-bill-note {
+  margin-top: 0.4rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  color: #3a3f52;
+  text-align: center;
+}
+
+.bpc-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 2px solid #0d1020;
+}
+.bpc-total span { font-family: var(--manrope); font-size: 0.86rem; font-weight: 700; color: #0d1020; }
+.bpc-total strong {
+  font-family: var(--manrope);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0d1020;
+  white-space: nowrap;
+}
+.bpc-panel--pol .bpc-total { border-top-color: var(--poliris-blue); }
+.bpc-panel--pol .bpc-total strong { color: var(--poliris-blue); }
+
+.bpc-mods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.bpc-mod {
+  background: #f2f6ff;
+  border-radius: 8px;
+  padding: 0.55rem 0.5rem;
+  text-align: center;
+}
+.bpc-mod b {
+  display: block;
+  font-family: var(--manrope);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--poliris-blue);
+}
+.bpc-mod span { display: block; margin-top: 2px; font-size: 0.68rem; color: #3a3f52; }
+
+/* Vertical flow: modules -> one dataset -> Poli AI -> your team */
+.bpc-flow { display: flex; flex-direction: column; align-items: center; }
+.bpc-flow-line { width: 1.5px; height: 14px; background: var(--poliris-blue); }
+.bpc-flow-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--poliris-blue);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+}
+.bpc-node {
+  width: 100%;
+  border: 1.5px solid #e4e8f2;
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  text-align: center;
+}
+.bpc-node b { display: block; font-family: var(--manrope); font-size: 0.84rem; font-weight: 700; color: #0d1020; }
+.bpc-node p { margin: 0.2rem 0 0; font-size: 0.76rem; line-height: 1.5; color: #3a3f52; }
+.bpc-node--dark { background: #0d1020; border-color: #0d1020; }
+.bpc-node--dark b { color: #fff; }
+.bpc-node--dark p { color: rgba(255,255,255,0.75); }
+
+.bpc-stats {
+  list-style: none;
+  padding: 0;
+  margin: auto 0 0;
+  padding-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.bpc-stats li {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #3a3f52;
+  background: #f7f8fb;
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+}
+.bpc-panel--pol .bpc-stats li { color: var(--poliris-blue); background: #f2f6ff; }
+
+/* ── Engines ────────────────────────────────────────────── */
+.bpc-chips {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.bpc-chips li {
+  font-family: var(--manrope);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--poliris-blue);
+  background: #f2f6ff;
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+}
+
+/* ── Price bars ─────────────────────────────────────────── */
+.bpc-bars {
+  margin: 1.5rem 0 0;
+  border: 1.5px solid #e4e8f2;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem 1.2rem;
+  display: grid;
+  gap: 10px;
+}
+.bpc-bars figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.bpc-bars figcaption b { font-family: var(--manrope); font-size: 0.9rem; font-weight: 700; color: #0d1020; }
+.bpc-bars figcaption span { font-size: 0.72rem; color: #9aa0ab; }
+.bpc-bar {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.bpc-bar-l b { display: block; font-size: 0.84rem; font-weight: 600; line-height: 1.3; color: #0d1020; }
+.bpc-bar-l span { display: block; font-size: 0.72rem; color: #9aa0ab; }
+.bpc-bar-t { display: flex; align-items: center; gap: 8px; }
+.bpc-bar-t i { display: block; flex: none; height: 18px; border-radius: 4px; background: #d5dae6; }
+.bpc-bar-t em {
+  font-family: var(--manrope);
+  font-style: normal;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #3a3f52;
+  white-space: nowrap;
+}
+.bpc-bar--own .bpc-bar-l b { color: var(--poliris-blue); font-weight: 700; }
+.bpc-bar--own .bpc-bar-t i { background: var(--poliris-blue); }
+.bpc-bar--own .bpc-bar-t em { color: var(--poliris-blue); font-weight: 800; }
+
+/* ── Plans ──────────────────────────────────────────────── */
+.bpc-plans {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 1.5rem 0 0;
+}
+.bpc-plan {
+  border: 1.5px solid #e4e8f2;
+  border-radius: 12px;
+  padding: 1rem 1rem 1.1rem;
+}
+.bpc-plan--hl { border-color: var(--poliris-blue); }
+.bpc-plan > b { font-family: var(--manrope); font-size: 0.86rem; font-weight: 800; color: #0d1020; }
+.bpc-plan-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; margin-top: 0.35rem; }
+.bpc-plan-price strong {
+  font-family: var(--manrope);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--poliris-blue);
+}
+.bpc-plan-price span { font-size: 0.72rem; color: #9aa0ab; }
+.bpc-plan ul { list-style: none; padding: 0; margin: 0.75rem 0 0; display: grid; gap: 4px; }
+.bpc-plan li { position: relative; padding-left: 14px; font-size: 0.8rem; color: #3a3f52; }
+.bpc-plan li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--poliris-blue);
+}
+
+/* ── Sources ────────────────────────────────────────────── */
+.bpc-sources {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.bpc-sources a {
+  display: inline-block;
+  font-size: 0.76rem;
+  color: #3a3f52;
+  background: #f7f8fb;
+  border: 1px solid #e4e8f2;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  text-decoration: none;
+  transition: color 0.15s, border-color 0.15s;
+}
+.bpc-sources a:hover { color: var(--poliris-blue); border-color: var(--poliris-blue); }
+
+.bpc-cta-actions { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+.bpc-cta-btn--ghost {
+  background: #fff;
+  color: #0d1020;
+  box-shadow: inset 0 0 0 1.5px #0d1020;
+}
+.bpc-cta-btn--ghost:hover { background: #fff; color: var(--poliris-blue); box-shadow: inset 0 0 0 1.5px var(--poliris-blue); }
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1080px) {
+  .bpc-kpis { grid-template-columns: repeat(2, 1fr); }
+  .bpc-plans { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 860px) {
+  .bpc-swipe { display: block; }
+}
+@media (max-width: 720px) {
+  .bpc-cost { grid-template-columns: 1fr; }
+  .bpc-does ul { grid-template-columns: 1fr; }
+  .bpc-bar { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (max-width: 560px) {
+  .bpc-kpis--3 { grid-template-columns: 1fr 1fr; }
+  .bpc-kpis--3 .bpc-kpi:last-child { grid-column: span 2; }
+  .bpc-col-label { width: 140px; }
+  .bpc-table th[scope='row'],
+  .bpc-table thead .bpc-rowh { padding-left: 0.8rem; }
+  .bpc-table th[scope='row'] { font-size: 0.8rem; }
+  .bpc-mods { grid-template-columns: 1fr 1fr; }
+  .bpc-bill-h, .bpc-bill-r { grid-template-columns: 1fr 1fr 56px; font-size: 0.78rem; }
+}

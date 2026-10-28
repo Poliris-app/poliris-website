@@ -210,7 +210,7 @@ export default function ContentGenDemo() {
               <div
                 key={idea.title}
                 style={{
-                  ...css('position:absolute;display:flex;flex-direction:column;gap:6px;border-radius:10px;background:#fff;padding:11px 12px;transform-origin:center center'),
+                  ...css('position:absolute;display:flex;flex-direction:column;gap:6px;border-radius:10px;background:#fff;padding:11px 12px;overflow:hidden;transform-origin:center center'),
                   left: 16 + i * (CGD_IDEA_W + CGD_IDEA_GAP),
                   top: CGD_IDEA_TOP,
                   width: CGD_IDEA_W,
@@ -226,8 +226,16 @@ export default function ContentGenDemo() {
                   color: idea.priority === 'HIGH' ? '#DC2626' : '#D97706',
                   background: idea.priority === 'HIGH' ? '#FEE2E2' : '#FEF3C7',
                 }}>{idea.priority === 'HIGH' ? d.priorityHigh : d.priorityMedium}</span>
-                <span style={css('font-size:12px;font-weight:700;line-height:1.3;color:#0d111a')}>{idea.title}</span>
-                <span style={css('font-size:10.5px;line-height:1.45;color:#6B6E72')}>{idea.desc}</span>
+                {/* The card is a fixed 159 x 186, so the copy has to fit it
+                    rather than the other way round: 162px of content box, less
+                    the badge and two gaps, leaves 132px for these two. Three
+                    title lines (47) and five of description (76) come to 123,
+                    which holds in both languages — French runs 20-30% longer
+                    than English and was pushing the text out of the card.
+                    Clamping ends an over-long one with an ellipsis, which is
+                    what the real product UI would do anyway. */}
+                <span style={css('font-size:12px;font-weight:700;line-height:1.3;color:#0d111a;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden')}>{idea.title}</span>
+                <span style={css('font-size:10.5px;line-height:1.45;color:#6B6E72;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden')}>{idea.desc}</span>
               </div>
             ))}
           </div>

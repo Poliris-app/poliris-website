@@ -1118,6 +1118,13 @@ export default {
         date: 'Oct 13, 2026', dateValue: '2026-10-13',
         slug: 'ai-brand-visibility-strategies',
       },
+      {
+        id: 17, label: 'COMPARISON', category: 'GEO',
+        title: 'Poliris Comparison: Technical Audit, Keywords and AI Visibility',
+        desc: 'How Poliris compares with Semrush, Ahrefs, Search Atlas, Screaming Frog, Peec AI, Qwairy and 12 other SEO and GEO tools, feature by feature and price by price.',
+        date: 'Oct 27, 2026', dateValue: '2026-10-27',
+        slug: 'poliris-comparison',
+      },
     ],
     cta: {
       heading: 'Want updates from the team?',

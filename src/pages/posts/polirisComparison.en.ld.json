@@ -1,0 +1,132 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Poliris comparison: technical audit, keywords and AI visibility",
+    "description": "Poliris compared with Semrush, Ahrefs, Search Atlas, Screaming Frog, Profound, Peec AI, Qwairy, Otterly.AI, Surfer and SE Ranking, based on their public pages.",
+    "inLanguage": "en",
+    "datePublished": "2026-10-27",
+    "dateModified": "2026-10-27",
+    "author": {
+      "@type": "Organization",
+      "name": "Poliris",
+      "url": "https://poliris.io"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Poliris",
+      "url": "https://poliris.io",
+      "logo": "https://poliris.io/Logo-Poliris-1.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "contact@poliris.io",
+        "contactType": "customer support"
+      }
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Poliris",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://poliris.io",
+    "description": "Search visibility platform for Google and AI engines: technical audit with AI crawler checks, Google keywords, links, content, tracking of 10 AI engines, live fixes and a dated action plan.",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Free",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Starter",
+        "price": "29",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Growth",
+        "price": "99",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro",
+        "price": "189",
+        "priceCurrency": "USD"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can Poliris replace Screaming Frog?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For auditing and fixing a site, yes. Poliris crawls the whole site, checks its accessibility for Google and AI crawlers, prioritizes issues and pushes fixes live, which Screaming Frog does not do. For crawling millions of pages or running custom extractions, Screaming Frog remains a useful complement."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can Poliris replace Semrush or Ahrefs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For bringing keywords, rankings, links and AI visibility together, yes. Poliris adds live fixes and an action plan that covers technical work, content and links. For in-depth backlink profile analysis, Semrush and Ahrefs remain useful complements."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Poliris an AI visibility tracker like Peec AI or Profound?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, and it goes further. Poliris tracks 10 AI engines using prompts built from your offers, measures sentiment by buying criterion and identifies cited sources. It then acts on these results with the audit, live fixes, content, links and the action plan."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does Poli AI add compared with a general-purpose AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Poli AI and its six agents work inside Poliris, on a single dataset and with the same method: audit, rankings, AI answers, links and content. A general-purpose AI, or one connected to several separate tools, only sees part of this data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which AI engines does Poliris track?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ChatGPT, Gemini, Perplexity, Claude, Microsoft Copilot, Grok, Mistral, DeepSeek, Google AI Overviews and Google AI Mode, on every paid plan."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Poliris suited to agencies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The white label covers the whole platform on the agency's domain, with unlimited users and one workspace per client. The agency pack costs $69 a month."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a free plan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The free plan tracks 10 prompts on two AI engines."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this comparison biased toward Poliris?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This comparison is written by Poliris, which chose the criteria it considers important, as every vendor does on its comparison pages. All competitor data comes from each vendor's public pages, listed in the sources. Each section also states where other tools go further. For any correction request: contact@poliris.io."
+        }
+      }
+    ]
+  }
+]

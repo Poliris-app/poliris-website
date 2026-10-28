@@ -1,0 +1,132 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Comparatif Poliris : audit technique, mots-clés et visibilité IA",
+    "description": "Poliris comparé à Semrush, Ahrefs, Search Atlas, Screaming Frog, Profound, Peec AI, Qwairy, Otterly.AI, Surfer et SE Ranking, à partir de leurs pages publiques.",
+    "inLanguage": "fr",
+    "datePublished": "2026-10-27",
+    "dateModified": "2026-10-27",
+    "author": {
+      "@type": "Organization",
+      "name": "Poliris",
+      "url": "https://poliris.io"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Poliris",
+      "url": "https://poliris.io",
+      "logo": "https://poliris.io/Logo-Poliris-1.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "contact@poliris.io",
+        "contactType": "customer support"
+      }
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Poliris",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://poliris.io",
+    "description": "Plateforme de référencement sur Google et dans les moteurs IA : audit technique avec contrôle des robots des IA, mots-clés Google, liens, contenus, suivi de 10 moteurs IA, corrections mises en ligne et plan d'action daté.",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Gratuit",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Starter",
+        "price": "29",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Growth",
+        "price": "99",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro",
+        "price": "189",
+        "priceCurrency": "USD"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Poliris peut-il remplacer Screaming Frog ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pour auditer et corriger un site, oui. Poliris explore l'ensemble du site, contrôle son accessibilité pour Google et pour les robots des IA, priorise les anomalies et met les corrections en ligne, ce que Screaming Frog ne fait pas. Pour explorer plusieurs millions de pages ou réaliser des extractions sur mesure, Screaming Frog reste un complément utile."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Poliris peut-il remplacer Semrush ou Ahrefs ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pour réunir mots-clés, positions, liens et visibilité dans les IA, oui. Poliris y ajoute la mise en ligne des corrections et un plan d'action qui couvre la technique, les contenus et les liens. Pour analyser un profil de liens entrants en profondeur, Semrush et Ahrefs restent des compléments utiles."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Poliris est-il un outil de suivi IA comme Peec AI ou Profound ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, et il va plus loin. Poliris suit 10 moteurs IA à partir de questions tirées de vos offres, mesure le sentiment par critère d'achat et identifie les sources citées. Il agit ensuite sur ces résultats avec l'audit, les corrections, les contenus, les liens et le plan d'action."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Qu'apporte Poli AI par rapport à une IA généraliste ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Poli AI et ses six agents travaillent dans Poliris, sur un même jeu de données et selon la même méthode : audit, positions, réponses des IA, liens et contenus. Une IA généraliste, ou connectée à plusieurs outils séparés, n'accède qu'à une partie de ces données."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quels moteurs IA Poliris suit-il ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ChatGPT, Gemini, Perplexity, Claude, Microsoft Copilot, Grok, Mistral, DeepSeek, Google AI Overviews et Google AI Mode, dans toutes les offres payantes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Poliris convient-il aux agences ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui. La marque blanche couvre toute la plateforme, sur le domaine de l'agence, avec un nombre illimité d'utilisateurs et un espace par client. Le pack agence coûte 69 $ par mois."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Existe-t-il une offre gratuite ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui. L'offre gratuite permet de suivre 10 questions sur deux moteurs IA."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ce comparatif favorise-t-il Poliris ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ce comparatif est rédigé par Poliris, qui a retenu les critères qu'il juge importants, comme tout éditeur sur ses pages comparatives. Chaque donnée concurrente provient des pages publiques de l'éditeur concerné, listées dans les sources. Chaque section précise aussi les points sur lesquels d'autres outils vont plus loin. Pour toute demande de correction : contact@poliris.io."
+        }
+      }
+    ]
+  }
+]

@@ -34,6 +34,7 @@ export const BLOG_POST_SLUGS = [
   'beyond-keywords-ai-content-generation',
   'blueprint-for-high-visibility-content',
   'ai-brand-visibility-strategies',
+  'poliris-comparison',
 ];
 
 const META = {
