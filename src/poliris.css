@@ -1756,6 +1756,11 @@ button { cursor: pointer; border: none; background: none; }
 .hfilm__screen:hover .hfilm__bar { opacity: .66; }
 .hfilm__bar:hover,
 .hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; }
+/* Phones and tablets show the poster only (POSTER_ONLY_QUERY in
+   HeroFilm.jsx), so there is nothing for the controls to drive. */
+@media (pointer: coarse), (max-width: 768px) {
+  .hfilm__bar { display: none; }
+}
 
 .hfilm__btn--play { flex: none; opacity: 1; }
 
