@@ -1,5 +1,4 @@
 export default {
-  scroll: 'scroll',
   film: {
     label: 'Poliris product film',
     play: 'Play',
@@ -9,6 +8,7 @@ export default {
     captionsOn: 'Show captions',
     captionsOff: 'Hide captions',
     volume: 'Volume',
+    seek: 'Seek',
   },
   nav: {
     products: 'Products',

@@ -1220,49 +1220,6 @@ button { cursor: pointer; border: none; background: none; }
   background: #e8eaed;
 }
 
-/* ── Scroll hint (fixed, vertically centred, scroll-reactive) ── */
-.scroll-hint {
-  position: fixed;
-  right: 36px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 100;
-  animation: hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 1.4s both;
-}
-.scroll-hint__label {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-family: var(--manrope);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: #9ca3af;
-  text-transform: lowercase;
-  user-select: none;
-}
-.scroll-hint__line {
-  width: 1px;
-  height: 80px;
-  background: #e5e7eb;
-  position: relative;
-}
-.scroll-hint__travel {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #1d1d22;
-  transition: top 0.12s linear;
-}
-@media (max-width: 768px) { .scroll-hint { display: none; } }
-
 /* Shared button styles */
 .btn {
   display: inline-flex;
@@ -1737,6 +1694,102 @@ button { cursor: pointer; border: none; background: none; }
   to   { opacity: 1; transform: none; }
 }
 
+/* ── the bar: play/pause, a line to drag, the elapsed time ─────────
+   Kept quiet on purpose. Nothing shows until the pointer is over the film
+   (or something inside has keyboard focus), and even then it is a hairline
+   rather than a panel — the film has no frame to hang a player off. */
+.hfilm__bar {
+  position: absolute;
+  /* stops short of the CC and sound buttons, which keep the right-hand end
+     and stay put: the sound button has to remain visible while muted, since
+     it is the way in to the voice */
+  inset: auto 112px 14px 14px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity .3s var(--ease-out);
+  pointer-events: none;
+}
+.hfilm__screen:hover .hfilm__bar,
+/* Keyboard focus only (:focus-visible): a mouse click leaves focus on the
+   button, and :focus-within would then pin the controls up after the
+   pointer has left the film. */
+.hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; pointer-events: auto; }
+
+.hfilm__btn--play { flex: none; opacity: 1; }
+
+.hfilm__seek {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(12, 20, 44, .18);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+}
+.hfilm__seek-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: var(--poliris-blue);
+  pointer-events: none;
+}
+/* The real control sits over the line, invisible: a taller hit area than a
+   3px bar, so it can actually be grabbed. */
+.hfilm__seek-range {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 20px;
+  margin: -10px 0 0;
+  -webkit-appearance: none;
+          appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.hfilm__seek-range:focus { outline: none; }
+.hfilm__seek-range::-webkit-slider-runnable-track { height: 20px; background: transparent; }
+.hfilm__seek-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: 4.5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+  opacity: 0;
+  transition: opacity .2s var(--ease-out);
+}
+.hfilm__seek-range::-moz-range-track { height: 20px; background: transparent; }
+.hfilm__seek-range::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+  opacity: 0;
+}
+.hfilm__screen:hover .hfilm__seek-range::-webkit-slider-thumb,
+.hfilm__seek-range:focus-visible::-webkit-slider-thumb { opacity: 1; }
+.hfilm__screen:hover .hfilm__seek-range::-moz-range-thumb,
+.hfilm__seek-range:focus-visible::-moz-range-thumb { opacity: 1; }
+
+.hfilm__time {
+  flex: none;
+  min-width: 34px;
+  font-family: var(--manrope);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: rgba(12, 20, 44, .65);
+}
+
 .hfilm__controls {
   position: absolute;
   inset: auto 14px 14px;
@@ -1755,10 +1808,14 @@ button { cursor: pointer; border: none; background: none; }
   place-items: center;
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(255, 255, 255, .22);
+  border: 1px solid rgba(255, 255, 255, .28);
   border-radius: 50%;
-  background: rgba(12, 20, 44, .22);
-  color: rgba(255, 255, 255, .92);
+  /* Dark enough to carry a white glyph over the film's own light UI. These
+     used to sit on a framed screen with a scrim behind them; with the frame
+     gone they are over a pale page, where .22 left the icon at about 1.75:1
+     and effectively invisible. */
+  background: rgba(12, 20, 44, .55);
+  color: #fff;
   -webkit-backdrop-filter: blur(10px) saturate(1.2);
           backdrop-filter: blur(10px) saturate(1.2);
   cursor: pointer;
@@ -1772,12 +1829,12 @@ button { cursor: pointer; border: none; background: none; }
   transition: opacity .3s var(--ease-out), background .2s, color .2s;
 }
 .hfilm__btn svg { width: 15px; height: 15px; }
-.hfilm__btn:hover { background: rgba(12, 20, 44, .45); }
+.hfilm__btn:hover { background: rgba(12, 20, 44, .72); }
 .hfilm__btn:focus { outline: none; }
 .hfilm__btn:focus-visible { outline: 2px solid var(--poliris-blue-300); outline-offset: 2px; }
 .hfilm__btn.is-on { background: rgba(255, 255, 255, .85); color: var(--poliris-black); }
 .hfilm__screen:hover .hfilm__btn,
-.hfilm__screen:focus-within .hfilm__btn { opacity: 1; }
+.hfilm__screen:has(:focus-visible) .hfilm__btn { opacity: 1; }
 /* Volume: a slider that pops up above the sound button on hover or
    keyboard focus. Absolutely placed, so opening it moves nothing. */
 .hfilm__vol { position: relative; }
@@ -1807,7 +1864,7 @@ button { cursor: pointer; border: none; background: none; }
   top: 100%;
   height: 12px;
 }
-.hfilm__vol:focus-within .hfilm__vol-pop {
+.hfilm__vol:has(:focus-visible) .hfilm__vol-pop {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;

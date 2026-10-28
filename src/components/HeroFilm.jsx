@@ -38,6 +38,14 @@ const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 // How many px of the film may sit off screen and still count as "fits".
 const FIT_SLACK = 24;
+// The composition's own length, used for the scrub bar until the player
+// reports the real duration.
+const FILM_SECONDS = 122.6;
+
+const clock = (s) => {
+  const whole = Math.max(0, Math.floor(s || 0));
+  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
+};
 
 // Orbit rings share one centre — the frame's — so the outer ones wrap it
 // and rise above and below it. The viewBox is scaled to the stage width
@@ -50,6 +58,11 @@ const RINGS = [
 ];
 
 const Icon = {
+  play: <path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor" stroke="none" />,
+  pause: <>
+    <rect x="7" y="5" width="3.6" height="14" rx="1" fill="currentColor" stroke="none" />
+    <rect x="13.4" y="5" width="3.6" height="14" rx="1" fill="currentColor" stroke="none" />
+  </>,
   muted: <><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" /><path d="m22 9-6 6" /><path d="m16 9 6 6" /></>,
   sound: <><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M18.5 5.5a9 9 0 0 1 0 13" /></>,
   soundLow: <><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /></>,
@@ -135,7 +148,11 @@ export default function HeroFilm() {
   const f = t('film');
   const ref = useRef(null);
   const playerRef = useRef(null);
-  const heardSound = useRef(false);
+  // A pause the visitor asked for sticks: scrolling the film back into view
+  // must not start it again behind them.
+  const userPaused = useRef(false);
+  // While a thumb is down, the bar follows the pointer rather than the film.
+  const scrubbing = useRef(false);
   const rampRef = useRef(0);
   const rampDone = useRef(0);
   const ramping = useRef(false);
@@ -158,14 +175,18 @@ export default function HeroFilm() {
   const [volume, setVolume] = useState(1);
   const [captionsOn, setCaptionsOn] = useState(false);
   const [cue, setCue] = useState('');
+  const [playing, setPlaying] = useState(false);
+  const [time, setTime] = useState(0);
+  // The composition's length until the player reports its own.
+  const [duration, setDuration] = useState(FILM_SECONDS);
 
-  // Start playback on its own. There's no play/pause control: the film plays
-  // while it fits on screen and pauses when scrolled away. Reduced motion
-  // never autoplays. Sound is never forced here: browsers only allow a muted
-  // start.
+  // Start playback on its own. The film plays while it fits on screen and
+  // pauses when scrolled away; a pause the visitor chose outranks that until
+  // they press play again. Reduced motion never autoplays. Sound is never
+  // forced here: browsers only allow a muted start.
   function autoPlay() {
     const player = playerRef.current;
-    if (!live.current || !player) return;
+    if (!live.current || !player || userPaused.current) return;
     if (window.matchMedia(REDUCED_QUERY).matches) return;
     player.play();
   }
@@ -316,18 +337,70 @@ export default function HeroFilm() {
       const at = e.detail?.currentTime ?? player.currentTime ?? 0;
       const active = cues.current.find((c) => at >= c.start && at < c.end);
       setCue(active ? active.text : '');
+      // while a thumb is down the bar is the visitor's, not the film's
+      if (!scrubbing.current) setTime(at);
     };
+    const onPlaying = () => setPlaying(true);
+    const onPaused = () => setPlaying(false);
+    const onDuration = () => { if (player.duration > 0) setDuration(player.duration); };
     player.addEventListener('play', onPlay);
+    player.addEventListener('play', onPlaying);
+    player.addEventListener('pause', onPaused);
+    player.addEventListener('durationchange', onDuration);
+    player.addEventListener('ready', onDuration);
     player.addEventListener('ready', onReady);
     player.addEventListener('painted', onPainted);
     player.addEventListener('timeupdate', onTime);
     return () => {
       player.removeEventListener('play', onPlay);
+      player.removeEventListener('play', onPlaying);
+      player.removeEventListener('pause', onPaused);
+      player.removeEventListener('durationchange', onDuration);
+      player.removeEventListener('ready', onDuration);
       player.removeEventListener('ready', onReady);
       player.removeEventListener('painted', onPainted);
       player.removeEventListener('timeupdate', onTime);
     };
   }, [lang]);
+
+  function togglePlay() {
+    const player = playerRef.current;
+    if (!live.current || !player) return;
+    if (player.paused) {
+      userPaused.current = false;
+      player.play();
+    } else {
+      userPaused.current = true;
+      player.pause();
+    }
+  }
+
+  // The bar follows the pointer while it's down, and the film follows the
+  // bar. Seeking a paused film leaves it paused, so scrubbing back to look
+  // at something doesn't start it again.
+  function scrub(e) {
+    const player = playerRef.current;
+    const at = Number(e.target.value);
+    setTime(at);
+    if (live.current && player) player.seek(at);
+  }
+
+  // The player's seek() stops the film, so a film that was playing would sit
+  // frozen after a scrub. Note whether it was playing when the thumb goes
+  // down, and start it again once it's let go.
+  const playAfterScrub = useRef(false);
+  function startScrub() {
+    if (scrubbing.current) return;
+    scrubbing.current = true;
+    const player = playerRef.current;
+    playAfterScrub.current = !!(live.current && player && !player.paused);
+  }
+  function endScrub() {
+    if (!scrubbing.current) return;
+    scrubbing.current = false;
+    if (playAfterScrub.current && live.current) playerRef.current.play();
+    playAfterScrub.current = false;
+  }
 
   function stopFade() {
     cancelAnimationFrame(rampRef.current);
@@ -335,16 +408,15 @@ export default function HeroFilm() {
     ramping.current = false;
   }
 
-  // Sound on at `target` volume. The first time, the film restarts so the
-  // voiceover is heard from its first line.
+  // Sound on at `target` volume, from wherever the film has got to. It used
+  // to jump back to 0:00 the first time so the voiceover was heard from its
+  // first line, but that threw away whatever the visitor was watching; the
+  // scrub bar is there if they want the start.
   function unmute(target, fade) {
     const player = playerRef.current;
-    if (!heardSound.current) {
-      heardSound.current = true;
-      player.seek(0);
-    }
     player.muted = false;
     setMuted(false);
+    userPaused.current = false;
     player.play();
     if (!fade) {
       player.volume = target;
@@ -455,6 +527,38 @@ export default function HeroFilm() {
                   <span>{cue}</span>
                 </p>
               )}
+
+              {/* Quiet until the pointer is over the film: a line of elapsed
+                  time, a play/pause, and a thumb to drag back. */}
+              <div className="hfilm__bar">
+                <button
+                  type="button"
+                  className="hfilm__btn hfilm__btn--play"
+                  onClick={togglePlay}
+                  aria-label={playing ? f.pause : f.play}
+                >
+                  <Svg>{playing ? Icon.pause : Icon.play}</Svg>
+                </button>
+                <div className="hfilm__seek">
+                  <span className="hfilm__seek-fill" style={{ width: `${(time / duration) * 100}%` }} />
+                  <input
+                    type="range"
+                    className="hfilm__seek-range"
+                    min="0"
+                    max={duration}
+                    step="0.05"
+                    value={Math.min(time, duration)}
+                    onChange={scrub}
+                    onPointerDown={startScrub}
+                    onPointerUp={endScrub}
+                    onPointerCancel={endScrub}
+                    onKeyDown={startScrub}
+                    onKeyUp={endScrub}
+                    aria-label={f.seek}
+                  />
+                </div>
+                <span className="hfilm__time">{clock(time)}</span>
+              </div>
 
               <div className="hfilm__controls">
                 <div className="hfilm__controls-end">

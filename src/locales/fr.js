@@ -1,5 +1,4 @@
 export default {
-  scroll: 'défiler',
   film: {
     label: 'Film de présentation Poliris',
     play: 'Lire',
@@ -9,6 +8,7 @@ export default {
     captionsOn: 'Afficher les sous-titres',
     captionsOff: 'Masquer les sous-titres',
     volume: 'Volume',
+    seek: 'Avancer ou reculer',
   },
   nav: {
     products: 'Produits',
