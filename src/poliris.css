@@ -1738,24 +1738,28 @@ button { cursor: pointer; border: none; background: none; }
 
 .hfilm__controls {
   position: absolute;
-  inset: auto 16px 16px;
+  inset: auto 14px 14px;
   z-index: 3;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   pointer-events: none;
 }
-.hfilm__controls-end { display: flex; gap: 8px; }.hfilm__btn {
+.hfilm__controls-end { display: flex; gap: 6px; }
+/* Kept quiet on purpose: small, see-through, and hidden until the pointer
+   is over the film (or a key focuses them), so they don't pull the eye from
+   the film itself. */
+.hfilm__btn {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255, 255, 255, .35);
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, .22);
   border-radius: 50%;
-  background: rgba(12, 20, 44, .48);
-  color: #fff;
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
-          backdrop-filter: blur(12px) saturate(1.3);
+  background: rgba(12, 20, 44, .22);
+  color: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+          backdrop-filter: blur(10px) saturate(1.2);
   cursor: pointer;
   pointer-events: auto;
   /* Fixed box and no transform, in every state: a click must never shift
@@ -1766,29 +1770,13 @@ button { cursor: pointer; border: none; background: none; }
   opacity: 0;
   transition: opacity .3s var(--ease-out), background .2s, color .2s;
 }
-.hfilm__btn:hover { background: rgba(12, 20, 44, .7); }
+.hfilm__btn svg { width: 15px; height: 15px; }
+.hfilm__btn:hover { background: rgba(12, 20, 44, .45); }
 .hfilm__btn:focus { outline: none; }
 .hfilm__btn:focus-visible { outline: 2px solid var(--poliris-blue-300); outline-offset: 2px; }
-.hfilm__btn.is-on { background: rgba(255, 255, 255, .9); color: var(--poliris-black); }
+.hfilm__btn.is-on { background: rgba(255, 255, 255, .85); color: var(--poliris-black); }
 .hfilm__screen:hover .hfilm__btn,
-.hfilm__screen:focus-within .hfilm__btn,
-.hfilm__btn--sound.is-muted { opacity: 1; }
-/* Muted: solid brand button with a soft ping inviting the click. */
-.hfilm__btn--sound.is-muted {
-  border-color: transparent;
-  background: var(--poliris-blue);
-  box-shadow: 0 10px 28px -8px rgba(0, 98, 255, .7);
-}
-.hfilm__btn--sound.is-muted:hover { background: #1a72ff; }
-.hfilm__btn--sound.is-muted::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 50%;
-  border: 2px solid var(--poliris-blue);
-  animation: hfilm-ping 2.4s var(--ease-out) infinite;
-  pointer-events: none;
-}
+.hfilm__screen:focus-within .hfilm__btn { opacity: 1; }
 /* Volume: a slider that pops up above the sound button on hover or
    keyboard focus. Absolutely placed, so opening it moves nothing. */
 .hfilm__vol { position: relative; }
@@ -1796,12 +1784,12 @@ button { cursor: pointer; border: none; background: none; }
   position: absolute;
   left: 50%;
   bottom: calc(100% + 10px);
-  width: 42px;
-  height: 124px;
-  margin-left: -21px;
-  border: 1px solid rgba(255, 255, 255, .3);
-  border-radius: 21px;
-  background: rgba(12, 20, 44, .55);
+  width: 34px;
+  height: 116px;
+  margin-left: -17px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 17px;
+  background: rgba(12, 20, 44, .4);
   -webkit-backdrop-filter: blur(12px) saturate(1.3);
           backdrop-filter: blur(12px) saturate(1.3);
   opacity: 0;
@@ -1882,14 +1870,10 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hfilm__vol-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--poliris-blue-300); }
 .hfilm__vol-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--poliris-blue-300); }
-@keyframes hfilm-ping {
-  0%   { transform: scale(1);   opacity: .7; }
-  70%, 100% { transform: scale(1.55); opacity: 0; }
-}
 
-/* Touch screens have no hover: keep the controls up. */
+/* Touch screens have no hover: keep the controls a little clearer. */
 @media (hover: none) {
-  .hfilm__btn { opacity: 1; }
+  .hfilm__btn { opacity: .75; }
 }
 @media (max-width: 860px) {
   .hfilm { margin-top: 44px; margin-bottom: 96px; }
@@ -1906,7 +1890,7 @@ button { cursor: pointer; border: none; background: none; }
   .hfilm__mat { padding: 5px; border-radius: 16.5px; }
   .hfilm__screen { border-radius: 12px; }
   .hfilm__controls { inset: auto 10px 10px; }
-  .hfilm__btn { width: 36px; height: 36px; }
+  .hfilm__btn { width: 32px; height: 32px; }
   .hfilm__caption { bottom: 56px; max-width: 88%; }
   .hfilm__caption span { padding: 5px 10px; border-radius: 8px; }
 }
@@ -1919,9 +1903,6 @@ button { cursor: pointer; border: none; background: none; }
   .hfilm__btn svg { width: 15px; height: 15px; }
   .hfilm__caption { bottom: 44px; }
   .hfilm__caption span { font-size: 12px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hfilm__btn--sound.is-muted::after { animation: none; }
 }
 
 /* Dashboard mockup */

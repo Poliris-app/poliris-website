@@ -50,8 +50,6 @@ const RINGS = [
 ];
 
 const Icon = {
-  play: <path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor" stroke="none" />,
-  pause: <><rect x="7" y="5" width="3.6" height="14" rx="1" fill="currentColor" stroke="none" /><rect x="13.4" y="5" width="3.6" height="14" rx="1" fill="currentColor" stroke="none" /></>,
   muted: <><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" /><path d="m22 9-6 6" /><path d="m16 9 6 6" /></>,
   sound: <><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M18.5 5.5a9 9 0 0 1 0 13" /></>,
   soundLow: <><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /></>,
@@ -137,7 +135,6 @@ export default function HeroFilm() {
   const f = t('film');
   const ref = useRef(null);
   const playerRef = useRef(null);
-  const userPaused = useRef(false);
   const heardSound = useRef(false);
   const rampRef = useRef(0);
   const rampDone = useRef(0);
@@ -152,7 +149,6 @@ export default function HeroFilm() {
   const nearWindow = useRef(false);
   const loadFilm = useRef(null);
 
-  const [playing, setPlaying] = useState(false);
   const [painted, setPainted] = useState(false);
   const [started, setStarted] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -160,12 +156,13 @@ export default function HeroFilm() {
   const [captionsOn, setCaptionsOn] = useState(false);
   const [cue, setCue] = useState('');
 
-  // Start playback on its own (not from a click). A pause the visitor asked
-  // for sticks until they press play again; reduced motion never autoplays.
-  // Sound is never forced here: browsers only allow a muted start.
+  // Start playback on its own. There's no play/pause control: the film plays
+  // while it fits on screen and pauses when scrolled away. Reduced motion
+  // never autoplays. Sound is never forced here: browsers only allow a muted
+  // start.
   function autoPlay() {
     const player = playerRef.current;
-    if (!live.current || !player || userPaused.current) return;
+    if (!live.current || !player) return;
     if (window.matchMedia(REDUCED_QUERY).matches) return;
     player.play();
   }
@@ -309,8 +306,7 @@ export default function HeroFilm() {
 
   useEffect(() => {
     const player = playerRef.current;
-    const onPlay = () => { setPlaying(true); setStarted(true); };
-    const onPause = () => setPlaying(false);
+    const onPlay = () => setStarted(true);
     const onReady = () => steadyCamera(player);
     const onPainted = () => { steadyCamera(player); setPainted(true); };
     const onTime = (e) => {
@@ -319,30 +315,16 @@ export default function HeroFilm() {
       setCue(active ? active.text : '');
     };
     player.addEventListener('play', onPlay);
-    player.addEventListener('pause', onPause);
     player.addEventListener('ready', onReady);
     player.addEventListener('painted', onPainted);
     player.addEventListener('timeupdate', onTime);
     return () => {
       player.removeEventListener('play', onPlay);
-      player.removeEventListener('pause', onPause);
       player.removeEventListener('ready', onReady);
       player.removeEventListener('painted', onPainted);
       player.removeEventListener('timeupdate', onTime);
     };
   }, [lang]);
-
-  function togglePlay() {
-    const player = playerRef.current;
-    if (!live.current) return;
-    if (player.paused) {
-      userPaused.current = false;
-      player.play();
-    } else {
-      userPaused.current = true;
-      player.pause();
-    }
-  }
 
   function stopFade() {
     cancelAnimationFrame(rampRef.current);
@@ -360,7 +342,6 @@ export default function HeroFilm() {
     }
     player.muted = false;
     setMuted(false);
-    userPaused.current = false;
     player.play();
     if (!fade) {
       player.volume = target;
@@ -447,7 +428,6 @@ export default function HeroFilm() {
                 key={lang}
                 ref={playerRef}
                 className="hfilm__player"
-                onClick={togglePlay}
               />
 
               {/* Held over the film until it first plays (and has painted a
@@ -470,9 +450,6 @@ export default function HeroFilm() {
               )}
 
               <div className="hfilm__controls">
-                <button type="button" className="hfilm__btn" onClick={togglePlay} aria-label={playing ? f.pause : f.play}>
-                  <Svg>{playing ? Icon.pause : Icon.play}</Svg>
-                </button>
                 <div className="hfilm__controls-end">
                   <button
                     type="button"
