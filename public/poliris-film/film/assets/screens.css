@@ -1,0 +1,66 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   The app screens, as stills plus a patch for every frame that changes.
+
+   These replace the screen recordings that used to sit in #win as <video>
+   layers. Each layer is a base still — the recording's first frame — with a
+   patch stacked over it for every frame the recording changes on, cut to the
+   tight rectangle of what moved. The timeline turns each patch on at its own
+   moment and leaves it on, because the pixels it carries are the screen from
+   then until something else covers them. Nothing is sampled or averaged:
+   played forward or scrubbed back, the window shows the recording frame for
+   frame.
+
+   Everything sits in the live app window's own space — 1120 x 730, the same
+   space #ov's tints, chips and cursor are positioned in — so an overlay that
+   pointed at a spot on the recording still points at the same spot. The
+   clips are 2240 x 1460, exactly 2x, so a patch is cut at 2x and drawn at
+   half size and stays sharp on a retina screen.
+
+   Overlay layers cover the workspace only (x >= 218): the app's sidebar
+   comes from the base layer underneath, which is what .ovw.ws always
+   arranged. Only `central` is full width.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.scr { position: absolute; inset: 0; }
+
+/* The recording's first frame. Everything else is drawn on top of it. */
+.sh-base {
+  position: absolute;
+  left: 218px;
+  top: 0;
+  width: 902px;
+  height: 730px;
+  display: block;
+}
+.sh-base--full { left: 0; width: 1120px; }
+
+/* One frame's worth of change. Its rectangle is written inline, in window
+   coordinates, by tools/film-html/bin/patch-all.cjs. */
+.sh-p {
+  position: absolute;
+  display: block;
+  opacity: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   The composition uses the class name `.st` for two unrelated things: the
+   workflow rail's step chips at the top, and the small status dot in an
+   agent card (Kate, Tom, Nora). The rail's rule carries
+   `padding: 0 15px 0 6px`; the dot only declares its 16x16 size, so it
+   inherits that padding and the green tick is drawn as a 37x16 oval
+   instead of a circle. Scoping the padding away from the dots fixes it —
+   the tick and the spinner inside are both `inset`-positioned, so they
+   follow the box back to a circle.
+   ───────────────────────────────────────────────────────────────────────── */
+.ag-r .st { padding: 0; }
+
+/* The tick reads small against the row's 12px text, so give it a little more
+   presence. The tick and the spinner are both inset-positioned inside .st,
+   so sizing the box carries them both; the glyph is scaled to match.
+
+   These need .ag in front: the composition sets the 16px size on .ag-r .st
+   itself, and its inline <style> comes after this file in the head, so an
+   equally specific rule here would lose. */
+.ag .ag-r .st { width: 21px; height: 21px; }
+.ag .ag-r .ok { font-size: 12px; }
+.ag .ag-r .sp { border-width: 2.5px; }

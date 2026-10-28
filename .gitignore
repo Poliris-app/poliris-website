@@ -34,3 +34,7 @@ dist-standalone
 
 # Local safety copies taken before risky changes — never committed
 .backups/
+
+# Film stills from the HTML-screens experiment: 24 MB, regenerated from the
+# clips by tools/film-html/bin — kept on disk, not in the repo.
+tools/film-html/assets/screens/

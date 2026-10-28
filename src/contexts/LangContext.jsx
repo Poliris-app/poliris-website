@@ -99,6 +99,66 @@ function useTolgeeOverrides() {
   return overrides;
 }
 
+// After a refresh (or back/forward into the site), bring the visitor back to
+// where they were with a smooth scroll instead of the browser's instant jump.
+// The browser's own restore is turned off; the position is saved as the page
+// unloads, keyed by path, and only restored once per document load.
+const SCROLL_KEY = 'poliris:scroll';
+let scrollRestored = false;
+
+function saveScroll() {
+  try {
+    sessionStorage.setItem(SCROLL_KEY, JSON.stringify({ path: location.pathname, y: Math.round(window.scrollY) }));
+  } catch { /* storage blocked: the page simply opens at the top */ }
+}
+
+function savedScroll(pathname) {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(SCROLL_KEY) || 'null');
+    return saved && saved.path === pathname && saved.y > 0 ? saved.y : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function forgetScroll() {
+  scrollRestored = true;
+  try { sessionStorage.removeItem(SCROLL_KEY); } catch { /* nothing to clear */ }
+}
+
+// Waits for the page to settle (web fonts in) so the target position
+// is measured on the final layout, then glides there. Any scroll input from
+// the visitor before that cancels it. Cancelled by an effect cleanup (dev
+// mode runs effects twice), it stays armed for the next run.
+function restoreScroll(pathname) {
+  const nav = performance.getEntriesByType?.('navigation')[0];
+  const y = nav && (nav.type === 'reload' || nav.type === 'back_forward') ? savedScroll(pathname) : 0;
+  if (!y) {
+    forgetScroll();
+    return () => {};
+  }
+
+  let cancelled = false;
+  const cancel = () => { cancelled = true; detach(); };
+  // The visitor scrolled first: leave them where they are.
+  const takeOver = () => { cancel(); forgetScroll(); };
+  const inputs = ['wheel', 'touchstart', 'keydown', 'mousedown'];
+  const detach = () => inputs.forEach((e) => window.removeEventListener(e, takeOver));
+  inputs.forEach((e) => window.addEventListener(e, takeOver, { passive: true, once: true }));
+
+  // Not the load event: that waits on the film and analytics, seconds later.
+  Promise.resolve(document.fonts?.ready)
+    .then(() => new Promise((r) => setTimeout(r, 150)))
+    .then(() => {
+      if (cancelled) return;
+      detach();
+      forgetScroll();
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: y, behavior: reduced ? 'instant' : 'smooth' });
+    });
+  return cancel;
+}
+
 export function LangWrapper() {
   const { lang } = useParams();
   const navigate = useNavigate();
@@ -108,6 +168,13 @@ export function LangWrapper() {
   // Identify visitor from ph_id param (runs once on first mount)
   useEffect(() => {
     identifyUser();
+  }, []);
+
+  // Take over scroll restoration from the browser (see restoreScroll).
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('pagehide', saveScroll);
+    return () => window.removeEventListener('pagehide', saveScroll);
   }, []);
 
   // Reset scroll + capture SPA pageview on every route change.
@@ -123,12 +190,18 @@ export function LangWrapper() {
     const samePage = prevPathname.current === location.pathname;
     prevPathname.current = location.pathname;
 
+    let cancelRestore = () => {};
     if (location.hash) {
+      // The hash decides where the page opens; no restore after it.
+      forgetScroll();
       document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: samePage ? 'smooth' : 'instant', block: 'start' });
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' });
+      // First render of this document only: a refresh glides back down.
+      if (!scrollRestored) cancelRestore = restoreScroll(location.pathname);
     }
     trackPageview();
+    return () => cancelRestore();
   }, [location.pathname, location.hash]);
 
   // Merged once per render (not per t() call — a page can call t() 100+ times).

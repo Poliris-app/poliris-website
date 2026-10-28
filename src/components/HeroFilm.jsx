@@ -154,6 +154,7 @@ export default function HeroFilm() {
 
   const [playing, setPlaying] = useState(false);
   const [painted, setPainted] = useState(false);
+  const [started, setStarted] = useState(false);
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
   const [captionsOn, setCaptionsOn] = useState(false);
@@ -232,7 +233,9 @@ export default function HeroFilm() {
     function load() {
       if (!current || !live.current || player.hasAttribute('src')) return;
       player.setAttribute('runtime-src', new URL(`${FILM}/player/hyperframe.runtime.iife.js`, location.href).href);
-      player.setAttribute('src', new URL(`${FILM}/${FILM_DIR[lang]}/index.html`, location.href).href);
+      // ?bg=transparent turns the composition's own backdrop off so the film
+      // sits on the page rather than in a box of its own (see LISEZ-MOI).
+      player.setAttribute('src', new URL(`${FILM}/${FILM_DIR[lang]}/index.html?bg=transparent`, location.href).href);
     }
     // Before the player's script lands, load() is a no-op; the call after it
     // lands catches up.
@@ -306,7 +309,7 @@ export default function HeroFilm() {
 
   useEffect(() => {
     const player = playerRef.current;
-    const onPlay = () => setPlaying(true);
+    const onPlay = () => { setPlaying(true); setStarted(true); };
     const onPause = () => setPlaying(false);
     const onReady = () => steadyCamera(player);
     const onPainted = () => { steadyCamera(player); setPainted(true); };
@@ -447,17 +450,18 @@ export default function HeroFilm() {
                 onClick={togglePlay}
               />
 
-              {/* Held over the film until the first frame is painted, so the
-                  block never shows an empty screen. */}
-              {!painted && (
-                <img
-                  className="hfilm__poster"
-                  src={`${FILM}/${FILM_DIR[lang]}/poster.webp`}
-                  alt={f.label}
-                  width="1920"
-                  height="1080"
-                />
-              )}
+              {/* Held over the film until it first plays (and has painted a
+                  frame), so the block shows the poster rather than the film's
+                  opening frame standing still; then it fades out over the
+                  playing film. */}
+              <img
+                className={`hfilm__poster${painted && started ? ' is-gone' : ''}`}
+                aria-hidden={painted && started}
+                src={`${FILM}/${FILM_DIR[lang]}/poster.webp`}
+                alt={f.label}
+                width="1920"
+                height="1080"
+              />
 
               {captionsOn && cue && (
                 <p className="hfilm__caption" aria-hidden="true">

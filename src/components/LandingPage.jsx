@@ -2162,8 +2162,12 @@ function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everReve
 // ENGINE_DESKTOP_MQ the section keeps the alternating EngineRow layout.
 const ENGINE_DESKTOP_MQ = '(min-width: 1025px)';
 
+// null until mounted: the pre-rendered HTML has no window to measure, so it
+// carries both layouts and CSS shows the one that fits the screen. Once
+// mounted, the other one is dropped — it was hidden already, so the page
+// doesn't change height on load.
 function useEngineDesktop() {
-  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(ENGINE_DESKTOP_MQ).matches);
+  const [matches, setMatches] = useState(null);
   useEffect(() => {
     const mql = window.matchMedia(ENGINE_DESKTOP_MQ);
     const onChange = () => setMatches(mql.matches);
@@ -2509,9 +2513,10 @@ function PlatformEngine() {
           <p className="sec-lead">{pe.lead}</p>
         </div>
       </div>
-      {isDesktop ? (
+      {isDesktop !== false && (
         <EngineShowcase cards={pe.cards} learnMore={pe.learnMore} />
-      ) : (
+      )}
+      {isDesktop !== true && (
         <div className="engine-rows">
           {/* Keyed by index, not card.title — the title changes on EN↔FR
               switch, which would remount the row with fresh DOM the observer

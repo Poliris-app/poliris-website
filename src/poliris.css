@@ -1628,11 +1628,12 @@ button { cursor: pointer; border: none; background: none; }
   background: radial-gradient(closest-side, rgba(41, 97, 246, .24), transparent);
   pointer-events: none;
 }
+/* No frame, no mat, no ring: the film sits straight on the page, so the
+   cards and the app window read as part of it rather than as something
+   playing inside a box. The composition is loaded with ?bg=transparent
+   (HeroFilm.jsx) so its own backdrop is off and the page shows through. */
 .hfilm__frame {
   position: relative;
-  padding: 2px;
-  border-radius: 24px;
-  box-shadow: 0 60px 140px -50px rgba(22, 50, 141, .6);
   transform-origin: 50% 0;
   transform: scale(calc(.95 + .05 * var(--t)));
   /* The film is live HTML, not one video texture: scaling it on scroll would
@@ -1641,42 +1642,17 @@ button { cursor: pointer; border: none; background: none; }
   will-change: transform;
 }
 .hfilm[data-done] .hfilm__frame { transform: none; will-change: auto; }
-/* Tracing light: a 2px conic ring masked down to the border, turned by scroll. */
-.hfilm__frame::before {
-  --angle: calc(180deg + 360deg * var(--p));
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: inherit;
-  background: conic-gradient(from var(--angle),
-    rgba(99, 137, 248, .18) 0 250deg,
-    #6389F8 300deg, #fff 320deg, #6389F8 340deg,
-    rgba(99, 137, 248, .18) 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask-composite: exclude;
-  pointer-events: none;
-}
-.hfilm__mat {
-  position: relative;
-  padding: 9px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, .82);
-}
+.hfilm__mat { position: relative; }
 .hfilm__screen {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: 14px;
   overflow: hidden;
-  background: #F7F9FD;
-  box-shadow: 0 0 0 1px #E1E7EF;
   isolation: isolate;
 }
 /* The film itself: the HyperFrames composition, played live in the page.
-   No border and nothing painted behind it — the player's own black backdrop
-   is cleared and the composition carries its own light background.
+   Nothing is painted behind it — the player's own black backdrop is cleared
+   and the composition is loaded with ?bg=transparent, so the page's own
+   ground shows through and the film has no edge of its own.
    Held 1px proud of the screen on every side: the player fits a 1920x1080
    frame to whole-pixel offsets, so a hair of the screen could otherwise show
    as a line down one edge. .hfilm__screen clips the overhang. */
@@ -1687,6 +1663,25 @@ button { cursor: pointer; border: none; background: none; }
   background: transparent;
   border: 0;
   cursor: pointer;
+  /* The film is 16:9 and the camera moves inside it, so when it zooms in the
+     composition is wider than the stage and gets cut at the edge. With no
+     frame to explain it, that dead-straight cut reads as one. Fade the last
+     few per cent instead, and the film ends without an edge.
+     The mask is on the film alone: the controls and captions sit outside it
+     and stay crisp. */
+  --hfilm-fade: 2.6%;
+  /* Shorter at the top: the step rail sits 22px down in a 1080 stage, and a
+     fade that deep would leave its chips translucent. 1.6% ends at 17px,
+     clear of them. */
+  --hfilm-fade-top: 1.6%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--hfilm-fade), #000 calc(100% - var(--hfilm-fade)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--hfilm-fade-top), #000 calc(100% - var(--hfilm-fade)), transparent);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, transparent, #000 var(--hfilm-fade), #000 calc(100% - var(--hfilm-fade)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--hfilm-fade-top), #000 calc(100% - var(--hfilm-fade)), transparent);
+          mask-composite: intersect;
 }
 /* The composition's first frame, held over it until the film has painted. */
 .hfilm__poster {
@@ -1698,20 +1693,15 @@ button { cursor: pointer; border: none; background: none; }
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  transition: opacity .8s var(--ease-out);
 }
-/* Bottom scrim so the controls and captions hold on light footage. */
-.hfilm__screen::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  background: linear-gradient(to top, rgba(8, 14, 34, .42), transparent);
-  opacity: 0;
-  transition: opacity .35s var(--ease-out);
-  pointer-events: none;
+.hfilm__poster.is-gone { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hfilm__poster { transition: none; }
 }
-.hfilm__screen:hover::after,
-.hfilm__screen:focus-within::after { opacity: 1; }
+/* No scrim. It existed to keep the controls legible over light footage
+   inside a framed screen; with the frame gone it would paint a dark band
+   across the page itself on hover. The buttons carry their own backdrop. */
 
 .hfilm__caption {
   position: absolute;
@@ -7966,6 +7956,10 @@ button { cursor: pointer; border: none; background: none; }
   padding-top: 56px;
   padding-bottom: 56px;
 }
+/* Until PlatformEngine mounts, the pre-rendered page holds both layouts;
+   show only the one for this width, so nothing jumps when the other goes. */
+@media (max-width: 1024px) { .engine-showcase { display: none; } }
+@media (min-width: 1025px) { .engine-rows { display: none; } }
 .engine-showcase__col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
 .engine-showcase__col--left   { grid-column: 1; grid-row: 1; }
 .engine-showcase__col--center { grid-column: 2; grid-row: 1; }
