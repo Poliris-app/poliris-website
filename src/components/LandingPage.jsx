@@ -95,7 +95,7 @@ export function LandingTop() {
           errorText: h.websiteError,
         }}
         showAiBand={false}
-        showDashboard
+        showFilm
       />
       <HowItWorks />
     </>
@@ -793,6 +793,11 @@ function PositionChartDemo() {
    out mid-animation. ── */
 const ATD_CYCLE = 15000;
 const ATD_ACTS = [[0, 5300], [5300, 10200], [10200, 15000]];
+/* The step rail floats over the acts at top right, so their headers have to
+   stop before it: the widest it gets is the named step plus two numbered
+   ones, which is about 150px in French, and 16px of offset. Without this the
+   titles ran under the pills — worst in French, but present in English too. */
+const ATD_RAIL_GUTTER = 176;
 const ATD_LOGO = (file) => `${import.meta.env.BASE_URL}${file}`;
 const ATD_NAMES = { chatgpt: 'ChatGPT', claude: 'Claude', gemini: 'Gemini', mistral: 'Mistral', perplexity: 'Perplexity', grok: 'Grok' };
 const ATD_LOGOS = {
@@ -866,7 +871,7 @@ function EngineTrustCard() {
   const steps = [d.stepCrawl, d.stepScore, d.stepFix].map((label, i) => {
     const [s, e] = ATD_ACTS[i], on = t >= s && t < e, done = t >= e;
     return {
-      label, mark: done ? '✓' : String(i + 1), prog: on ? atdClamp((t - s) / (e - s)) * 100 : 0,
+      label, on, mark: done ? '✓' : String(i + 1), prog: on ? atdClamp((t - s) / (e - s)) * 100 : 0,
       bg: on ? '#EEF4FF' : 'transparent', color: on ? '#0047b8' : done ? '#3F3F46' : '#9aa1ac',
       numBg: on ? 'rgb(0,98,255)' : done ? '#DCFCE7' : '#EEF1F6', numColor: on ? '#fff' : done ? '#16A34A' : '#9aa1ac',
     };
@@ -972,12 +977,17 @@ function EngineTrustCard() {
     <div ref={rootRef} className="atd-frame" style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column', background: '#fff', fontFamily: 'var(--manrope)', color: '#09090b', overflow: 'hidden' }}>
       <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
 
-        {/* Crawl · Score · Fix, each filling as its act plays. */}
+        {/* Crawl · Score · Fix, each filling as its act plays.
+            Only the running step is named. Spelled out, the three labels take
+            247px of a 354px frame in French ("Exploration", "Correction" are
+            about twice their English words) and the rail ran straight over
+            every act's title — which it did in English too, by 35-92px, just
+            less visibly. Naming one step keeps it inside ATD_RAIL_GUTTER. */}
         <div style={{ position: 'absolute', top: 14, right: 16, zIndex: 3, display: 'flex', gap: 4 }}>
           {steps.map((s) => (
-            <div key={s.label} style={{ position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', gap: 5, height: 22, padding: '0 9px 0 5px', borderRadius: 999, background: s.bg, color: s.color, fontSize: 10.5, fontWeight: 600, transition: 'background .3s, color .3s' }}>
-              <span style={{ width: 14, height: 14, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8.5, fontWeight: 700, background: s.numBg, color: s.numColor, transition: 'background .3s, color .3s' }}>{s.mark}</span>
-              <span>{s.label}</span>
+            <div key={s.label} title={s.label} style={{ position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', gap: s.on ? 5 : 0, height: 22, padding: s.on ? '0 9px 0 5px' : '0 5px', borderRadius: 999, background: s.bg, color: s.color, fontSize: 10.5, fontWeight: 600, transition: 'background .3s, color .3s' }}>
+              <span style={{ width: 14, height: 14, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8.5, fontWeight: 700, background: s.numBg, color: s.numColor, transition: 'background .3s, color .3s' }}>{s.mark}</span>
+              {s.on && <span style={{ whiteSpace: 'nowrap' }}>{s.label}</span>}
               <span style={{ position: 'absolute', left: 0, bottom: 0, height: 2, width: `${s.prog}%`, background: 'rgb(0,98,255)' }} />
             </div>
           ))}
@@ -985,7 +995,7 @@ function EngineTrustCard() {
 
         {/* ── Act 1 · Crawl ── */}
         <div style={actStyle(a1)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3, paddingRight: ATD_RAIL_GUTTER }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <span style={{ position: 'relative', width: 8, height: 8, flex: 'none' }}>
                 <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#16A34A', transform: `scale(${1 + 1.6 * pulse})`, opacity: 0.5 * (1 - pulse) }} />
@@ -1073,7 +1083,7 @@ function EngineTrustCard() {
 
         {/* ── Act 2 · Score ── */}
         <div style={actStyle(a2)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3, paddingRight: ATD_RAIL_GUTTER }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{d.pipelineTitle}</span>
             <span style={muted}>{d.pipelineSub}</span>
           </div>
@@ -1131,7 +1141,7 @@ function EngineTrustCard() {
 
         {/* ── Act 3 · Fix ── */}
         <div style={actStyle(a3)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3, paddingRight: ATD_RAIL_GUTTER }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{d.issuesTitle}</span>
             <span style={muted}>{d.issuesGenerated}</span>
           </div>
@@ -2162,8 +2172,12 @@ function EngineRow({ index, card, learnMore, innerRef, everHighlighted, everReve
 // ENGINE_DESKTOP_MQ the section keeps the alternating EngineRow layout.
 const ENGINE_DESKTOP_MQ = '(min-width: 1025px)';
 
+// null until mounted: the pre-rendered HTML has no window to measure, so it
+// carries both layouts and CSS shows the one that fits the screen. Once
+// mounted, the other one is dropped — it was hidden already, so the page
+// doesn't change height on load.
 function useEngineDesktop() {
-  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(ENGINE_DESKTOP_MQ).matches);
+  const [matches, setMatches] = useState(null);
   useEffect(() => {
     const mql = window.matchMedia(ENGINE_DESKTOP_MQ);
     const onChange = () => setMatches(mql.matches);
@@ -2509,9 +2523,10 @@ function PlatformEngine() {
           <p className="sec-lead">{pe.lead}</p>
         </div>
       </div>
-      {isDesktop ? (
+      {isDesktop !== false && (
         <EngineShowcase cards={pe.cards} learnMore={pe.learnMore} />
-      ) : (
+      )}
+      {isDesktop !== true && (
         <div className="engine-rows">
           {/* Keyed by index, not card.title — the title changes on EN↔FR
               switch, which would remount the row with fresh DOM the observer

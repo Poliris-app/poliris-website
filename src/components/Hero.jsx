@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import HeroOnboarding from './HeroOnboarding';
+import { useState } from 'react';
+import HeroFilm from './HeroFilm';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { APP_URL } from '../lib/appUrl';
@@ -151,36 +151,7 @@ function AiBand() {
   );
 }
 
-function ScrollHint() {
-  const { t } = useLang();
-  const travelRef = useRef(null);
-
-  useEffect(() => {
-    const LINE_H = 80;
-    const onScroll = () => {
-      const scrolled = window.scrollY;
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
-      if (travelRef.current) {
-        travelRef.current.style.top = `${progress * LINE_H}px`;
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  return (
-    <div className="scroll-hint" aria-hidden="true">
-      <span className="scroll-hint__label">{t('scroll')}</span>
-      <span className="scroll-hint__line">
-        <span className="scroll-hint__travel" ref={travelRef} />
-      </span>
-    </div>
-  );
-}
-
-export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showDashboard = false, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
+export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showFilm = false, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
   const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
@@ -196,11 +167,10 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
 
   return (
     <>
-      <ScrollHint />
       {/* hero--fr: the French headline is wider than the English one and
           needs its own type scale to hold one line. <html lang> isn't
           updated client-side, so :lang(fr) can't be relied on here. */}
-      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${lang === 'fr' ? ' hero--fr' : ''}${showDashboard ? ' hero--dashboard' : ''}`}>
+      <header id="top" className={`hero${dark ? ' hero--dark' : ''}${lang === 'fr' ? ' hero--fr' : ''}${showFilm ? ' hero--film' : ''}`}>
         <div className="hero__glow" aria-hidden="true" />
         <div className="hero__inner">
           <div className="eyebrow">{eyebrow}</div>
@@ -247,7 +217,7 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
 
           {showAiBand && <AiBand />}
 
-          {showDashboard && <HeroOnboarding />}
+          {showFilm && <HeroFilm />}
         </div>
       </header>
     </>

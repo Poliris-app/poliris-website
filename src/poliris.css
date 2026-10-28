@@ -942,12 +942,11 @@ button { cursor: pointer; border: none; background: none; }
   overflow: hidden;
   background: var(--surface1);
 }
-/* With the film or the dashboard, the orbit rings run on past the hero's
-   bottom edge into How it works (same background) and fade out there
-   (.hfilm__orbit / .hreveal__orbit mask) rather than stopping on a hard
-   line. z-index keeps them above that section's background. */
-.hero--film,
-.hero--dashboard {
+/* With the film, the orbit rings run on past the hero's bottom edge into
+   How it works (same background) and fade out there (.hfilm__orbit mask)
+   rather than stopping on a hard line. z-index keeps them above that
+   section's background. */
+.hero--film {
   z-index: 1;
   overflow-x: clip;
   overflow-y: visible;
@@ -1220,49 +1219,6 @@ button { cursor: pointer; border: none; background: none; }
 .hero-website-form--dark .hero-website-form__submit:hover {
   background: #e8eaed;
 }
-
-/* ── Scroll hint (fixed, vertically centred, scroll-reactive) ── */
-.scroll-hint {
-  position: fixed;
-  right: 36px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 100;
-  animation: hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 1.4s both;
-}
-.scroll-hint__label {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-family: var(--manrope);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: #9ca3af;
-  text-transform: lowercase;
-  user-select: none;
-}
-.scroll-hint__line {
-  width: 1px;
-  height: 80px;
-  background: #e5e7eb;
-  position: relative;
-}
-.scroll-hint__travel {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #1d1d22;
-  transition: top 0.12s linear;
-}
-@media (max-width: 768px) { .scroll-hint { display: none; } }
 
 /* Shared button styles */
 .btn {
@@ -1580,6 +1536,19 @@ button { cursor: pointer; border: none; background: none; }
 .hfilm {
   --p: 0;
   --t: 0;
+  /* How much bigger the frame sits before the page is scrolled. It eases
+     back to 1 as --t runs, so the film ends at its natural size and
+     [data-done] can drop the transform — a film left scaled is a film left
+     resampled, which is what that rule exists to avoid. */
+  --hfilm-zoom: 1.14;
+  /* One gutter for the padding and for the size cap below, so the two can't
+     drift apart; the breakpoints override this, not the padding. */
+  --hfilm-gutter: 24px;
+  /* Vertical room kept clear above and below the enlarged frame. */
+  --hfilm-reserve: 190px;
+  /* The round controls. The seek bar stops short of the pair on the
+     right, so its inset is derived from this rather than guessed. */
+  --hfilm-btn: 27px;
   position: relative;
   /* Below the hero text (hero__inner is the stacking context), so the
      orbit rings that rise above the frame pass behind the copy and form. */
@@ -1590,7 +1559,7 @@ button { cursor: pointer; border: none; background: none; }
   /* The bottom margin leaves the lower arcs of the orbit room to show
      between the film and How it works. */
   margin: 64px calc(50% - 50vw) 150px;
-  padding: 0 24px;
+  padding: 0 var(--hfilm-gutter);
   box-sizing: border-box;
   overflow-x: clip;
   overflow-y: visible;
@@ -1598,7 +1567,16 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hfilm__stage {
   position: relative;
-  max-width: 1240px;
+  /* Capped on both axes and divided by the zoom, because a transform ignores
+     the padding: at 1240px the enlarged frame is ~1410px wide and would run
+     past the gutter — off the side of a 1366px laptop entirely. The height
+     term is what keeps short, wide screens in order, where it is the
+     viewport's height and not its width that binds. */
+  max-width: min(
+    1240px,
+    calc((100vw - 2 * var(--hfilm-gutter)) / var(--hfilm-zoom)),
+    calc((100vh - var(--hfilm-reserve)) * 16 / 9 / var(--hfilm-zoom))
+  );
   margin: 0 auto;
 }
 /* Sized from the stage: the rings sit around the frame in the same
@@ -1629,91 +1607,84 @@ button { cursor: pointer; border: none; background: none; }
   background: radial-gradient(closest-side, rgba(41, 97, 246, .24), transparent);
   pointer-events: none;
 }
+/* No frame, no mat, no ring: the film sits straight on the page, so the
+   cards and the app window read as part of it rather than as something
+   playing inside a box. The composition is loaded with ?bg=transparent
+   (HeroFilm.jsx) so its own backdrop is off and the page shows through. */
 .hfilm__frame {
   position: relative;
-  padding: 2px;
-  border-radius: 24px;
-  box-shadow: 0 60px 140px -50px rgba(22, 50, 141, .6);
   transform-origin: 50% 0;
-  transform: scale(calc(.95 + .05 * var(--t)));
+  /* Big on arrival, easing down to its natural size as the page is scrolled:
+     1.14 at --t 0, exactly 1 at --t 1, which is where [data-done] takes the
+     transform off entirely. */
+  transform: scale(calc(var(--hfilm-zoom) - (var(--hfilm-zoom) - 1) * var(--t)));
+  /* The film is live HTML, not one video texture: scaling it on scroll would
+     redraw the whole composition every frame. Composite the reveal instead,
+     and drop both the layer and the transform once it's at full size. */
+  will-change: transform;
 }
-.hfilm[data-done] .hfilm__frame { transform: none; }
-/* Tracing light: a 2px conic ring masked down to the border, turned by scroll. */
-.hfilm__frame::before {
-  --angle: calc(180deg + 360deg * var(--p));
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: inherit;
-  background: conic-gradient(from var(--angle),
-    rgba(99, 137, 248, .18) 0 250deg,
-    #6389F8 300deg, #fff 320deg, #6389F8 340deg,
-    rgba(99, 137, 248, .18) 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask-composite: exclude;
-  pointer-events: none;
-}
-.hfilm__mat {
-  position: relative;
-  padding: 9px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, .82);
-}
+.hfilm[data-done] .hfilm__frame { transform: none; will-change: auto; }
+.hfilm__mat { position: relative; }
 .hfilm__screen {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: 14px;
   overflow: hidden;
-  background: #0d1630;
-  box-shadow: 0 0 0 1px #E1E7EF;
   isolation: isolate;
 }
-.hfilm__video {
+/* The film itself: the HyperFrames composition, played live in the page.
+   Nothing is painted behind it — the player's own black backdrop is cleared
+   and the composition is loaded with ?bg=transparent, so the page's own
+   ground shows through and the film has no edge of its own.
+   Held 1px proud of the screen on every side: the player fits a 1920x1080
+   frame to whole-pixel offsets, so a hair of the screen could otherwise show
+   as a line down one edge. .hfilm__screen clips the overhang. */
+.hfilm__player {
+  position: absolute;
+  inset: -1px;
+  display: block;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  /* The film is 16:9 and the camera moves inside it, so when it zooms in the
+     composition is wider than the stage and gets cut at the edge. With no
+     frame to explain it, that dead-straight cut reads as one. Fade the last
+     few per cent instead, and the film ends without an edge.
+     The mask is on the film alone: the controls and captions sit outside it
+     and stay crisp. */
+  --hfilm-fade: 2.6%;
+  /* Shorter at the top: the step rail sits 22px down in a 1080 stage, and a
+     fade that deep would leave its chips translucent. 1.6% ends at 17px,
+     clear of them. */
+  --hfilm-fade-top: 1.6%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--hfilm-fade), #000 calc(100% - var(--hfilm-fade)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--hfilm-fade-top), #000 calc(100% - var(--hfilm-fade)), transparent);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, transparent, #000 var(--hfilm-fade), #000 calc(100% - var(--hfilm-fade)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--hfilm-fade-top), #000 calc(100% - var(--hfilm-fade)), transparent);
+          mask-composite: intersect;
+}
+/* The composition's first frame, held over it until the film has painted. */
+.hfilm__poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  cursor: pointer;
-}
-/* Bottom scrim so the controls and captions hold on light footage. */
-.hfilm__screen::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  background: linear-gradient(to top, rgba(8, 14, 34, .42), transparent);
-  opacity: 0;
-  transition: opacity .35s var(--ease-out);
   pointer-events: none;
 }
-.hfilm__screen:hover::after,
-.hfilm__screen:focus-within::after { opacity: 1; }
-
-.hfilm__bigplay {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 84px;
-  height: 84px;
-  margin: -42px 0 0 -42px;
-  border: 1px solid rgba(255, 255, 255, .55);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .72);
-  color: var(--poliris-blue);
-  box-shadow: 0 18px 50px -12px rgba(0, 40, 140, .45);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-          backdrop-filter: blur(14px) saturate(1.4);
-  cursor: pointer;
-  transition: background .3s var(--ease-out);
+/* Fades out only; on a language switch it's back at once over the new
+   player, which has nothing to show until its film loads. */
+.hfilm__poster.is-gone { opacity: 0; transition: opacity .8s var(--ease-out); }
+@media (prefers-reduced-motion: reduce) {
+  .hfilm__poster.is-gone { transition: none; }
 }
-.hfilm__bigplay svg { width: 30px; height: 30px; margin-left: 4px; }
-.hfilm__bigplay:hover { background: #fff; }
+/* No scrim. It existed to keep the controls legible over light footage
+   inside a framed screen; with the frame gone it would paint a dark band
+   across the page itself on hover. The buttons carry their own backdrop. */
 
 .hfilm__caption {
   position: absolute;
@@ -1748,27 +1719,137 @@ button { cursor: pointer; border: none; background: none; }
   to   { opacity: 1; transform: none; }
 }
 
-.hfilm__controls {
+/* ── the bar: play/pause, a line to drag, the elapsed time ─────────
+   Kept quiet on purpose. Nothing shows until the pointer is over the film
+   (or something inside has keyboard focus), and even then it is a hairline
+   rather than a panel — the film has no frame to hang a player off. */
+.hfilm__bar {
   position: absolute;
-  inset: auto 16px 16px;
+  /* stops short of the CC and sound buttons, which keep the right-hand end
+     and stay put: the sound button has to remain visible while muted, since
+     it is the way in to the voice */
+  /* One centred cluster. Split across the two bottom corners the controls
+     left a wide empty gap between them and read as two unrelated things;
+     together they are a single small object the eye can skip. The row spans
+     the film so it can centre in it, while the seek line below keeps its
+     own width — nothing here stretches. */
+  inset: auto 12px 12px 12px;
   z-index: 3;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 9px;
+  opacity: 0;
+  transition: opacity .3s var(--ease-out);
   pointer-events: none;
 }
-.hfilm__controls-end { display: flex; gap: 8px; }
+.hfilm__screen:hover .hfilm__bar,
+/* Keyboard focus only (:focus-visible): a mouse click leaves focus on the
+   button, and :focus-within would then pin the controls up after the
+   pointer has left the film. */
+.hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; pointer-events: auto; }
+/* Visible but understated while the pointer is merely over the film; it
+   comes up to full only when you go for it. */
+.hfilm__screen:hover .hfilm__bar { opacity: .66; }
+.hfilm__bar:hover,
+.hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; }
+
+.hfilm__btn--play { flex: none; opacity: 1; }
+
+.hfilm__seek {
+  position: relative;
+  /* Was flex: 1 and stretched to whatever was left; now it is its own size,
+     so the cluster stays compact however wide the film gets. */
+  flex: 0 1 auto;
+  width: min(32%, 320px);
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(12, 20, 44, .13);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+}
+.hfilm__seek-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: rgba(12, 20, 44, .4);
+  pointer-events: none;
+}
+/* The real control sits over the line, invisible: a taller hit area than a
+   3px bar, so it can actually be grabbed. */
+.hfilm__seek-range {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 20px;
+  margin: -10px 0 0;
+  -webkit-appearance: none;
+          appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.hfilm__seek-range:focus { outline: none; }
+.hfilm__seek-range::-webkit-slider-runnable-track { height: 20px; background: transparent; }
+.hfilm__seek-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+  opacity: 0;
+  transition: opacity .2s var(--ease-out);
+}
+.hfilm__seek-range::-moz-range-track { height: 20px; background: transparent; }
+.hfilm__seek-range::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+  opacity: 0;
+}
+.hfilm__screen:hover .hfilm__seek-range::-webkit-slider-thumb,
+.hfilm__seek-range:focus-visible::-webkit-slider-thumb { opacity: 1; }
+.hfilm__screen:hover .hfilm__seek-range::-moz-range-thumb,
+.hfilm__seek-range:focus-visible::-moz-range-thumb { opacity: 1; }
+
+.hfilm__time {
+  flex: none;
+  min-width: 30px;
+  font-family: var(--manrope);
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: rgba(12, 20, 44, .5);
+}
+
+/* The CC and sound buttons, now sitting in the same row as the play button
+   and the seek line rather than in the opposite corner. */
+.hfilm__controls-end { display: flex; align-items: center; gap: 6px; }
+/* Kept quiet on purpose: small, see-through, and hidden until the pointer
+   is over the film (or a key focuses them), so they don't pull the eye from
+   the film itself. */
 .hfilm__btn {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255, 255, 255, .35);
+  width: var(--hfilm-btn);
+  height: var(--hfilm-btn);
+  border: 1px solid rgba(255, 255, 255, .28);
   border-radius: 50%;
-  background: rgba(12, 20, 44, .48);
+  /* Dark enough to carry a white glyph over the film's own light UI. These
+     used to sit on a framed screen with a scrim behind them; with the frame
+     gone they are over a pale page, where .22 left the icon at about 1.75:1
+     and effectively invisible. */
+  background: rgba(12, 20, 44, .55);
   color: #fff;
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
-          backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+          backdrop-filter: blur(10px) saturate(1.2);
   cursor: pointer;
   pointer-events: auto;
   /* Fixed box and no transform, in every state: a click must never shift
@@ -1779,29 +1860,13 @@ button { cursor: pointer; border: none; background: none; }
   opacity: 0;
   transition: opacity .3s var(--ease-out), background .2s, color .2s;
 }
-.hfilm__btn:hover { background: rgba(12, 20, 44, .7); }
+.hfilm__btn svg { width: 12px; height: 12px; }
+.hfilm__btn:hover { background: rgba(12, 20, 44, .72); }
 .hfilm__btn:focus { outline: none; }
 .hfilm__btn:focus-visible { outline: 2px solid var(--poliris-blue-300); outline-offset: 2px; }
-.hfilm__btn.is-on { background: rgba(255, 255, 255, .9); color: var(--poliris-black); }
+.hfilm__btn.is-on { background: rgba(255, 255, 255, .85); color: var(--poliris-black); }
 .hfilm__screen:hover .hfilm__btn,
-.hfilm__screen:focus-within .hfilm__btn,
-.hfilm__btn--sound.is-muted { opacity: 1; }
-/* Muted: solid brand button with a soft ping inviting the click. */
-.hfilm__btn--sound.is-muted {
-  border-color: transparent;
-  background: var(--poliris-blue);
-  box-shadow: 0 10px 28px -8px rgba(0, 98, 255, .7);
-}
-.hfilm__btn--sound.is-muted:hover { background: #1a72ff; }
-.hfilm__btn--sound.is-muted::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 50%;
-  border: 2px solid var(--poliris-blue);
-  animation: hfilm-ping 2.4s var(--ease-out) infinite;
-  pointer-events: none;
-}
+.hfilm__screen:has(:focus-visible) .hfilm__btn { opacity: 1; }
 /* Volume: a slider that pops up above the sound button on hover or
    keyboard focus. Absolutely placed, so opening it moves nothing. */
 .hfilm__vol { position: relative; }
@@ -1809,12 +1874,12 @@ button { cursor: pointer; border: none; background: none; }
   position: absolute;
   left: 50%;
   bottom: calc(100% + 10px);
-  width: 42px;
-  height: 124px;
-  margin-left: -21px;
-  border: 1px solid rgba(255, 255, 255, .3);
-  border-radius: 21px;
-  background: rgba(12, 20, 44, .55);
+  width: 34px;
+  height: 116px;
+  margin-left: -17px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 17px;
+  background: rgba(12, 20, 44, .4);
   -webkit-backdrop-filter: blur(12px) saturate(1.3);
           backdrop-filter: blur(12px) saturate(1.3);
   opacity: 0;
@@ -1831,7 +1896,7 @@ button { cursor: pointer; border: none; background: none; }
   top: 100%;
   height: 12px;
 }
-.hfilm__vol:focus-within .hfilm__vol-pop {
+.hfilm__vol:has(:focus-visible) .hfilm__vol-pop {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -1895,173 +1960,43 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hfilm__vol-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--poliris-blue-300); }
 .hfilm__vol-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--poliris-blue-300); }
-@keyframes hfilm-ping {
-  0%   { transform: scale(1);   opacity: .7; }
-  70%, 100% { transform: scale(1.55); opacity: 0; }
-}
 
-/* Touch screens have no hover: keep the controls up. */
+/* Touch screens have no hover: keep the controls a little clearer. */
 @media (hover: none) {
-  .hfilm__btn { opacity: 1; }
+  .hfilm__btn { opacity: .75; }
 }
 @media (max-width: 860px) {
   .hfilm { margin-top: 44px; margin-bottom: 96px; }
 }
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
-  .hfilm { --p: 1; --t: 1; }
+  /* No reveal here, so there is no enlarged state for the size cap to leave
+     room for: a zoom of 1 lets the stage use the full gutter-to-gutter width
+     rather than 1/1.14 of it. */
+  .hfilm { --p: 1; --t: 1; --hfilm-zoom: 1; }
   .hfilm__frame { transform: none; }
 }
 @media (max-width: 768px) {
   .hfilm__glow { width: calc(100% + 160px); height: calc(100% + 160px); }
 }
 @media (max-width: 640px) {
-  .hfilm__frame { padding: 1.5px; border-radius: 18px; }
-  .hfilm__mat { padding: 5px; border-radius: 16.5px; }
   .hfilm__screen { border-radius: 12px; }
-  .hfilm__controls { inset: auto 10px 10px; }
-  .hfilm__btn { width: 36px; height: 36px; }
-  .hfilm__bigplay { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
-  .hfilm__bigplay svg { width: 24px; height: 24px; }
+  .hfilm { --hfilm-btn: 30px; }
+  .hfilm__bar { inset: auto 10px 10px 10px; }
   .hfilm__caption { bottom: 56px; max-width: 88%; }
   .hfilm__caption span { padding: 5px 10px; border-radius: 8px; }
 }
 /* Phones: the video is only ~200px tall, so keep the controls small
    enough to leave most of the picture clear. */
 @media (max-width: 480px) {
-  .hfilm__controls { inset: auto 8px 8px; }
+  .hfilm__bar { inset: auto 8px 8px 8px; gap: 7px; }
   .hfilm__controls-end { gap: 6px; }
-  .hfilm__btn { width: 30px; height: 30px; }
-  .hfilm__btn svg { width: 15px; height: 15px; }
-  .hfilm__bigplay { width: 48px; height: 48px; margin: -24px 0 0 -24px; }
-  .hfilm__bigplay svg { width: 20px; height: 20px; margin-left: 3px; }
+  .hfilm { --hfilm-btn: 28px; }
+  .hfilm__btn svg { width: 12px; height: 12px; }
+  .hfilm__seek { width: min(40%, 200px); }
   .hfilm__caption { bottom: 44px; }
   .hfilm__caption span { font-size: 12px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hfilm__btn--sound.is-muted::after { animation: none; }
-}
 
-/* Onboarding flow demo — "tilt with tracing light + orbit" reveal around
-   the iframe of public/onboarding-flow.html. HeroOnboarding.jsx drives --p
-   (0→1) from scroll; everything below derives its motion from it. */
-@property --angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 180deg;
-}
-.hreveal {
-  --p: 0;
-  --t: 0;
-  position: relative;
-  /* Below the logo strip/text (hero__inner is the stacking context), so
-     the orbit rings that rise above the frame pass behind them. */
-  z-index: -1;
-  /* Full-bleed so the 1200px frame and 1500px glow can exceed the 1110px
-     hero column; clip sideways only — the rings extend above and below. */
-  width: 100vw;
-  /* The bottom margin leaves the lower arcs of the orbit room to show
-     between the dashboard and How it works. */
-  margin: 50px calc(50% - 50vw) 70px;
-  padding: 0 24px;
-  box-sizing: border-box;
-  overflow-x: clip;
-  overflow-y: visible;
-}
-/* No vertical lift while tilted: the frame tilts from its top edge
-   (transform-origin 50% 0), so the gap above it stays the same from the
-   tilted start to the flat end. */
-.hreveal__stage {
-  position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
-  perspective: 2400px;
-}
-.hreveal__orbit {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1680px;
-  height: 1040px;
-  margin: -520px 0 0 -840px;
-  overflow: visible;
-  pointer-events: none;
-  transform: scale(calc(.9 + .15 * var(--p)));
-  opacity: calc(1 - .35 * var(--p));
-  /* Only the very bottom of the outer ring dissolves, so nothing ends on
-     a hard line where How it works begins. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
-}
-.hreveal__glow {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1500px;
-  height: 760px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, rgba(41, 97, 246, .24), transparent);
-  pointer-events: none;
-}
-.hreveal__frame {
-  position: relative;
-  padding: 2px;
-  border-radius: 24px;
-  box-shadow: 0 60px 140px -50px rgba(22, 50, 141, .6);
-  transform-origin: 50% 0;
-  transform: rotateX(calc(26deg * (1 - var(--t)))) scale(calc(.9 + .1 * var(--t)));
-}
-.hreveal[data-done] .hreveal__frame { transform: none; }
-/* Tracing light: a 2px conic ring masked down to the border area. */
-.hreveal__frame::before {
-  --angle: calc(180deg + 360deg * var(--p));
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: inherit;
-  background: conic-gradient(from var(--angle),
-    rgba(99, 137, 248, .18) 0 250deg,
-    #6389F8 300deg, #fff 320deg, #6389F8 340deg,
-    rgba(99, 137, 248, .18) 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask-composite: exclude;
-  pointer-events: none;
-}
-.hreveal__mat {
-  padding: 9px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, .82);
-}
-.hreveal__dash {
-  position: relative;
-  aspect-ratio: 1120 / 730;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 0 0 1px #E1E7EF;
-}
-.hreveal__iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  color-scheme: light;
-}
-@media (max-width: 860px) {
-  .hreveal { margin-bottom: 56px; }
-}
-@media (max-width: 768px), (prefers-reduced-motion: reduce) {
-  .hreveal { --p: 1; --t: 1; }
-  .hreveal__frame { transform: none; }
-}
-/* The fixed 1500×760 glow dwarfs a phone-sized frame and gets cut off by
-   the hero's bottom edge; size it to the frame instead. */
-@media (max-width: 768px) {
-  .hreveal__glow { width: calc(100% + 160px); height: calc(100% + 160px); }
-}
 /* Dashboard mockup */
 .hero__dashboard {
   max-width: 1120px;
@@ -6455,7 +6390,6 @@ button { cursor: pointer; border: none; background: none; }
 .hero__note       { animation: hero-fade-up 0.60s cubic-bezier(0.16,1,0.3,1) 0.74s both; }
 .ai-band          { animation: hero-fade-up 0.70s cubic-bezier(0.16,1,0.3,1) 0.86s both; }
 .hero__dashboard  { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
-.hreveal          { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
 .hfilm            { animation: hero-fade-up 0.90s cubic-bezier(0.16,1,0.3,1) 0.92s both; }
 
 /* Hero glow ambient pulse */
@@ -6560,8 +6494,7 @@ button { cursor: pointer; border: none; background: none; }
   /* Hero */
   .hero__inner { padding: 80px 28px 32px; }
   .hero__dashboard { margin: 36px 28px 0; }
-  .hreveal { padding: 0 28px; }
-  .hfilm { padding: 0 28px; }
+  .hfilm { --hfilm-gutter: 28px; }
 
   /* Value chain */
   .vchain-frame  { padding: 20px 20px 28px; }
@@ -6589,8 +6522,7 @@ button { cursor: pointer; border: none; background: none; }
     padding: 52px 20px 20px;
   }
   .hero__lead  { max-width: 100%; }
-  .hreveal { padding: 0 20px; margin-top: 48px; }
-  .hfilm { padding: 0 20px; margin-top: 48px; }
+  .hfilm { --hfilm-gutter: 20px; margin-top: 48px; }
   .hero__dashboard {
     margin: 24px 20px 0;
     overflow-x: auto;
@@ -6668,8 +6600,7 @@ button { cursor: pointer; border: none; background: none; }
   .hero-website-form { width: 100%; }
   .hero__note { font-size: 12.5px; margin-top: 14px; }
   .hero__dashboard { margin: 16px 16px 0; }
-  .hreveal { padding: 0 16px; margin-top: 32px; margin-bottom: 28px; }
-  .hfilm { padding: 0 16px; margin-top: 32px; margin-bottom: 28px; }
+  .hfilm { --hfilm-gutter: 16px; margin-top: 32px; margin-bottom: 28px; }
 
   /* Eyebrow / sec typography */
   .eyebrow { font-size: 11px; margin-bottom: 12px; }
@@ -7356,10 +7287,16 @@ button { cursor: pointer; border: none; background: none; }
 .pc-an__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
 .pc-an__divider { width: 1px; flex: none; background: #e5e7eb; }
 
+/* .pc-panel is half of a two-panel scroll, so its 349px cannot grow: the
+   column has to fit that in every language. English filled 348 of it — one
+   pixel spare — and French, whose sub wraps to two lines and whose stat
+   labels ("Position moyenne") wrap where English does not, came to 365 and
+   was clipped top and bottom. The rhythm below is tightened to leave both
+   some room rather than to rescue one. */
 .pc-an__title { font-size: 13px; font-weight: 700; color: #09090b; margin: 0; }
-.pc-an__sub { font-size: 10.5px; color: #6B6E72; margin: 2px 0 8px; line-height: 1.4; }
+.pc-an__sub { font-size: 10.5px; color: #6B6E72; margin: 2px 0 6px; line-height: 1.4; }
 
-.pc-an__stats { display: flex; gap: 6px; margin-bottom: 10px; }
+.pc-an__stats { display: flex; gap: 6px; margin-bottom: 8px; }
 .pc-an__stat {
   flex: 1 1 0;
   min-width: 0;
@@ -7368,15 +7305,15 @@ button { cursor: pointer; border: none; background: none; }
   gap: 3px;
   border: 1px solid #e5e7eb;
   border-radius: 7px;
-  padding: 6px 8px;
+  padding: 5px 8px;
 }
 .pc-an__stat span { font-size: 9.5px; color: #6B6E72; }
 .pc-an__stat strong { font-size: 12px; font-weight: 700; color: #09090b; }
 .pc-an__stat strong.pc-an__stat--muted { color: #6b7280; font-weight: 600; }
 .pc-an__stat strong.pc-an__stat--up { color: #16A34A; font-weight: 700; }
 
-.pc-an__label { font-size: 10.5px; color: #9aa1ac; margin: 0 0 8px; }
-.pc-an__bars { display: flex; flex-direction: column; gap: 11px; margin-bottom: 8px; }
+.pc-an__label { font-size: 10.5px; color: #9aa1ac; margin: 0 0 6px; }
+.pc-an__bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
 .pc-an__bar-row { display: flex; flex-direction: column; gap: 4px; }
 .pc-an__bar-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .pc-an__bar-name { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #09090b; min-width: 0; }
@@ -7393,7 +7330,7 @@ button { cursor: pointer; border: none; background: none; }
   margin-top: auto;
   background: #FAFAFA;
   border-left: 3px solid #E1F3FE;
-  padding: 6px 10px;
+  padding: 5px 10px;
   font-size: 10px;
   line-height: 1.45;
   color: #09090b;
@@ -8098,6 +8035,10 @@ button { cursor: pointer; border: none; background: none; }
   padding-top: 56px;
   padding-bottom: 56px;
 }
+/* Until PlatformEngine mounts, the pre-rendered page holds both layouts;
+   show only the one for this width, so nothing jumps when the other goes. */
+@media (max-width: 1024px) { .engine-showcase { display: none; } }
+@media (min-width: 1025px) { .engine-rows { display: none; } }
 .engine-showcase__col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
 .engine-showcase__col--left   { grid-column: 1; grid-row: 1; }
 .engine-showcase__col--center { grid-column: 2; grid-row: 1; }

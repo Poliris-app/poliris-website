@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLang } from '../contexts/LangContext';
+import HeroArt from './HeroArt';
 
 /* Card 04 (Content Generation & Optimization) demo — a port of the
    ContentGenDemo design component ("Content Generation Card.html"): one
@@ -123,30 +124,6 @@ function vals(t, d) {
   };
 }
 
-// Product shot / hero image, shared by acts 2 and 3 (ids prefixed so they
-// can't collide with other SVGs on the page).
-function HeroArt({ id, style }) {
-  return (
-    <svg viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice" style={style}>
-      <defs>
-        <linearGradient id={`${id}bg`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#0a1330" /><stop offset=".55" stopColor="#14286b" /><stop offset="1" stopColor="#2b59d9" /></linearGradient>
-        <radialGradient id={`${id}gl`} cx=".5" cy=".55" r=".45"><stop offset="0" stopColor="#7fa6ff" stopOpacity=".55" /><stop offset="1" stopColor="#7fa6ff" stopOpacity="0" /></radialGradient>
-        <linearGradient id={`${id}A`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fbfaf8" /><stop offset=".55" stopColor="#dcd8d1" /><stop offset="1" stopColor="#b3ada3" /></linearGradient>
-        <radialGradient id={`${id}F`} cx=".4" cy=".35" r=".7"><stop offset="0" stopColor="#fff" /><stop offset=".6" stopColor="#e7e4de" /><stop offset="1" stopColor="#c4bfb6" /></radialGradient>
-      </defs>
-      <rect width="1200" height="630" fill={`url(#${id}bg)`} />
-      <rect width="1200" height="630" fill={`url(#${id}gl)`} />
-      <g fill="none" stroke="#fff"><circle cx="600" cy="330" r="210" strokeOpacity=".12" strokeWidth="3" /><circle cx="600" cy="330" r="290" strokeOpacity=".07" strokeWidth="3" /></g>
-      <g transform="translate(330 110) scale(3.6)">
-        <ellipse cx="34" cy="50" rx="10" ry="12.5" transform="rotate(-18 34 50)" fill="#9c968c" />
-        <path d="M38 44c6-14 30-16 40-2 8 11 5 30-9 37-13 6-29 1-33-12-2-7-1-16 2-23z" fill={`url(#${id}A)`} />
-        <circle cx="101" cy="58" r="24" fill={`url(#${id}A)`} />
-        <circle cx="101" cy="58" r="17.5" fill={`url(#${id}F)`} />
-        <circle cx="109" cy="50" r="2.2" fill="#8d877d" />
-      </g>
-    </svg>
-  );
-}
 
 const bar = (w, bg = '#EEF1F6', extra = '') => <span style={css(`${extra}height:6px;width:${w};border-radius:4px;background:${bg}`)} />;
 
@@ -233,7 +210,7 @@ export default function ContentGenDemo() {
               <div
                 key={idea.title}
                 style={{
-                  ...css('position:absolute;display:flex;flex-direction:column;gap:6px;border-radius:10px;background:#fff;padding:11px 12px;transform-origin:center center'),
+                  ...css('position:absolute;display:flex;flex-direction:column;gap:6px;border-radius:10px;background:#fff;padding:11px 12px;overflow:hidden;transform-origin:center center'),
                   left: 16 + i * (CGD_IDEA_W + CGD_IDEA_GAP),
                   top: CGD_IDEA_TOP,
                   width: CGD_IDEA_W,
@@ -249,8 +226,16 @@ export default function ContentGenDemo() {
                   color: idea.priority === 'HIGH' ? '#DC2626' : '#D97706',
                   background: idea.priority === 'HIGH' ? '#FEE2E2' : '#FEF3C7',
                 }}>{idea.priority === 'HIGH' ? d.priorityHigh : d.priorityMedium}</span>
-                <span style={css('font-size:12px;font-weight:700;line-height:1.3;color:#0d111a')}>{idea.title}</span>
-                <span style={css('font-size:10.5px;line-height:1.45;color:#6B6E72')}>{idea.desc}</span>
+                {/* The card is a fixed 159 x 186, so the copy has to fit it
+                    rather than the other way round: 162px of content box, less
+                    the badge and two gaps, leaves 132px for these two. Three
+                    title lines (47) and five of description (76) come to 123,
+                    which holds in both languages — French runs 20-30% longer
+                    than English and was pushing the text out of the card.
+                    Clamping ends an over-long one with an ellipsis, which is
+                    what the real product UI would do anyway. */}
+                <span style={css('font-size:12px;font-weight:700;line-height:1.3;color:#0d111a;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden')}>{idea.title}</span>
+                <span style={css('font-size:10.5px;line-height:1.45;color:#6B6E72;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden')}>{idea.desc}</span>
               </div>
             ))}
           </div>
@@ -290,7 +275,7 @@ export default function ContentGenDemo() {
                 <span style={css('font-size:9px;font-weight:700;letter-spacing:.05em;color:#9aa1ac')}>{d.heroImage}</span>
                 <div style={css('position:relative;height:76px;border-radius:7px;overflow:hidden;background:#EEF1F6')}>
                   <div style={{ ...css('position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 70%);background-size:220% 100%'), backgroundPosition: `${v.shimmer}% 0`, opacity: v.shimO }} />
-                  <HeroArt id="cgd-h1" style={{ ...css('position:absolute;inset:0;width:100%;height:100%'), opacity: v.heroO, transform: `scale(${v.heroS})` }} />
+                  <HeroArt style={{ ...css('position:absolute;inset:0;width:100%;height:100%'), opacity: v.heroO, transform: `scale(${v.heroS})` }} />
                 </div>
               </div>
               <div style={css('border:1px solid #e3e6ec;border-radius:12px;padding:9px 10px;display:flex;flex-direction:column;gap:7px')}>
@@ -324,7 +309,7 @@ export default function ContentGenDemo() {
               </div>
               <div style={css('display:flex;gap:14px;padding:14px')}>
                 <div style={css('width:210px;height:118px;flex:none;border-radius:8px;overflow:hidden')}>
-                  <HeroArt id="cgd-h2" style={css('display:block;width:100%;height:100%')} />
+                  <HeroArt style={css('display:block;width:100%;height:100%')} />
                 </div>
                 <div style={css('flex:1;min-width:0;display:flex;flex-direction:column;gap:6px')}>
                   <span style={css('font-size:9.5px;font-weight:700;letter-spacing:.05em;color:#0062FF')}>{d.guide}</span>
