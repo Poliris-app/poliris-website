@@ -2050,7 +2050,7 @@ export default {
       bannerCtaOpen: 'Open the calculator',
       bannerCtaClose: 'Hide the calculator',
       title: 'Estimate your credits',
-      subtitle: 'Four inputs — the estimate follows you down the page.',
+      subtitle: 'The estimate follows you down the page.',
       presetSoloLabel: 'Solo',
       presetSoloDesc: 'One brand, two flagship AI models, weekly checks.',
       presetTeamLabel: 'Team',

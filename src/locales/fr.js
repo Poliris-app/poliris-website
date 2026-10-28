@@ -2042,7 +2042,7 @@ export default {
       bannerCtaOpen: 'Ouvrir le calculateur',
       bannerCtaClose: 'Masquer le calculateur',
       title: 'Estimez vos crédits',
-      subtitle: "Quatre réglages — l'estimation vous suit tout au long de la page.",
+      subtitle: 'L\'estimation vous suit tout au long de la page.',
       presetSoloLabel: 'Solo',
       presetSoloDesc: 'Une marque, deux modèles IA phares, vérifications hebdomadaires.',
       presetTeamLabel: 'Équipe',
