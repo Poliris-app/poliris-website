@@ -1544,8 +1544,9 @@ button { cursor: pointer; border: none; background: none; }
   /* One gutter for the padding and for the size cap below, so the two can't
      drift apart; the breakpoints override this, not the padding. */
   --hfilm-gutter: 24px;
-  /* Vertical room kept clear above and below the enlarged frame. */
-  --hfilm-reserve: 190px;
+  /* Vertical room kept clear for the sticky header and a margin, so the
+     frame at its natural size still fits the screen. */
+  --hfilm-reserve: 150px;
   /* The round controls. The seek bar stops short of the pair on the
      right, so its inset is derived from this rather than guessed. */
   --hfilm-btn: 27px;
@@ -1553,7 +1554,7 @@ button { cursor: pointer; border: none; background: none; }
   /* Below the hero text (hero__inner is the stacking context), so the
      orbit rings that rise above the frame pass behind the copy and form. */
   z-index: -1;
-  /* Full-bleed, so the 1240px frame and its glow can exceed the 1110px
+  /* Full-bleed, so the 1320px frame and its glow can exceed the 1110px
      hero column; clip sideways only — the rings extend above and below. */
   width: 100vw;
   /* The bottom margin leaves the lower arcs of the orbit room to show
@@ -1567,15 +1568,17 @@ button { cursor: pointer; border: none; background: none; }
 }
 .hfilm__stage {
   position: relative;
-  /* Capped on both axes and divided by the zoom, because a transform ignores
-     the padding: at 1240px the enlarged frame is ~1410px wide and would run
-     past the gutter — off the side of a 1366px laptop entirely. The height
-     term is what keeps short, wide screens in order, where it is the
-     viewport's height and not its width that binds. */
+  /* The width term is divided by the zoom, because a transform ignores the
+     padding: undivided, the enlarged frame would run past the gutter — off
+     the side of a 1366px laptop entirely. The height term isn't: the zoom is
+     only there while the frame sits low on the screen, and dividing by it
+     left the film at ~720px on that same laptop. It fits the frame at its
+     natural size to the screen's height, which is what binds on short, wide
+     screens. */
   max-width: min(
-    1240px,
+    1320px,
     calc((100vw - 2 * var(--hfilm-gutter)) / var(--hfilm-zoom)),
-    calc((100vh - var(--hfilm-reserve)) * 16 / 9 / var(--hfilm-zoom))
+    calc((100vh - var(--hfilm-reserve)) * 16 / 9)
   );
   margin: 0 auto;
 }
