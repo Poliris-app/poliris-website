@@ -1976,7 +1976,7 @@ export default {
         name: 'Free',
         desc: 'Set up your account and explore the platform, no credits needed to get started.',
         coverageLabel: '2 LLMs',
-        features: ['1 brand, 1 offer', 'Any 1 of 240+ countries', '10 providers', '10 prompts per audit'],
+        features: ['1 brand, 1 product', 'Any 1 of 240+ countries', '10 providers', '10 prompts per audit'],
         featureTooltips: [
           'One brand and one product tracked.',
           'Pick one country or market to track.',

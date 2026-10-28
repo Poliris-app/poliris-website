@@ -1968,7 +1968,7 @@ export default {
         name: 'Free',
         desc: 'Configurez votre compte et explorez la plateforme, aucun crédit nécessaire pour démarrer.',
         coverageLabel: '2 LLM',
-        features: ['1 marque, 1 offre', "1 pays au choix parmi 240+", '10 fournisseurs', '10 prompts par audit'],
+        features: ['1 marque, 1 produit', "1 pays au choix parmi 240+", '10 fournisseurs', '10 prompts par audit'],
         featureTooltips: [
           'Une marque et un produit suivis.',
           'Choisissez un pays ou un marché à suivre.',
