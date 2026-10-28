@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Poliris workflow</title>
+<link rel="icon" href="data:," />
+<script>/* ?bg=ffffff or ?bg=transparent: the film on the page's own ground */(function () {
+  var b = new URLSearchParams(location.search).get("bg"); if (!b) return;
+  var c = b === "transparent" ? "transparent" : "#" + b.replace(/[^0-9a-fA-F]/g, "").slice(0, 8);
+  document.documentElement.style.setProperty("--film-bg", c); document.documentElement.classList.add("film-bg");
+})();</script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="../player/hyperframe.runtime.iife.js"></script>
+<script src="assets/clock.js"></script>
+<link rel="stylesheet" href="assets/widgets.css" />
+<style>
+  @font-face { font-family: "Geist"; font-weight: 400; src: url("assets/fonts/Geist-400.woff2") format("woff2"); }
+  @font-face { font-family: "Geist"; font-weight: 500; src: url("assets/fonts/Geist-500.woff2") format("woff2"); }
+  @font-face { font-family: "Geist"; font-weight: 600; src: url("assets/fonts/Geist-600.woff2") format("woff2"); }
+  @font-face { font-family: "Geist"; font-weight: 700; src: url("assets/fonts/Geist-700.woff2") format("woff2"); }
+  @font-face { font-family: "Geist"; font-weight: 800; src: url("assets/fonts/Geist-800.woff2") format("woff2"); }
+
+  body { margin: 0; background: #f3f6fb; font-family: "Geist", system-ui, sans-serif; }
+  #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f3f6fb; }
+  .hfw, .hfw * { transition: none !important; animation: none !important; }
+
+  /* ── ground (embed: html.film-bg takes the page's colour, see ?bg=) ── */
+  html.film-bg, html.film-bg body, html.film-bg #root, html.film-bg #endc { background: var(--film-bg); }
+  html.film-bg #bg { display: none; }
+  #bg { position: absolute; inset: 0;
+        background:
+          radial-gradient(900px 520px at 50% 45%, rgba(0, 98, 255, .10), rgba(0, 98, 255, 0) 70%),
+          radial-gradient(700px 420px at 88% 70%, rgba(99, 102, 241, .07), rgba(99, 102, 241, 0) 70%),
+          linear-gradient(180deg, #f8fafd 0%, #eef2f8 100%); }
+
+  /* ── the live app window, in mockup coordinates (1120 x 730), moved by the camera ── */
+  #cam { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; transform-origin: 0 0; }
+  #win, .card { border-radius: 14px; overflow: hidden; background: #fff;
+         box-shadow: 0 0 0 1px #dfe4ec, 0 50px 100px -50px rgba(15, 23, 42, .42), 0 2px 6px rgba(15, 23, 42, .05); }
+  #win { position: absolute; inset: 0; }
+  #win video { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; object-fit: fill; display: block; }
+  /* the film's own screens: full window (onboarding, Poli AI) or the workspace only, the sidebar stays the app's */
+  .ovw { position: absolute; inset: 0; opacity: 0; }
+  .ovw.ws { clip-path: inset(0 0 0 218px); }
+  #ov { position: absolute; inset: 0; pointer-events: none; }
+  .ov-tint { position: absolute; border-radius: 8px; background: rgba(0, 98, 255, .10); opacity: 0;
+             box-shadow: 0 0 0 1.5px rgba(0, 98, 255, .55); }
+  .ov-tint--red { background: rgba(239, 68, 68, .08); box-shadow: 0 0 0 1.5px rgba(239, 68, 68, .6); }
+  .ov-frame { position: absolute; border-radius: 12px; opacity: 0; box-shadow: 0 0 0 2px #0062ff, 0 18px 40px -18px rgba(0, 62, 170, .55); }
+  .ov-launched { position: absolute; border-radius: 8px; background: #16a34a; color: #fff; font-size: 13px; font-weight: 600;
+                 display: flex; align-items: center; justify-content: center; gap: 6px; opacity: 0; }
+  .ov-chip { position: absolute; height: 24px; padding: 0 10px; border-radius: 999px; background: #eef4ff; border: 1px solid #bfd3ff;
+             color: #0047b8; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap; opacity: 0;
+             box-shadow: 0 6px 14px -8px rgba(0, 98, 255, .45); }
+  .ov-chip img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; object-position: top; margin-left: -6px; background: #eef1f5; }
+  .ov-chip.ok { background: #effbf3; border-color: #b7e6c6; color: #15803d; box-shadow: 0 6px 14px -8px rgba(22, 163, 74, .45); }
+  /* the film's own cursor: same drawing and size as the mockup's, handed over at the same spot */
+  #cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
+  #cur-a, #cur-s { position: absolute; inset: 0; }
+  #cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
+  #rip { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+         border: 2px solid rgba(59, 130, 246, .75); background: rgba(59, 130, 246, .12); opacity: 0; box-sizing: border-box; }
+
+  /* a second live window: Page Explorer crawling beside Site Overview (base image + the same overlay video) */
+  #cam2 { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; opacity: 0; transform-origin: 50% 50%; border-radius: 14px; overflow: hidden; background: #fff;
+          box-shadow: 0 0 0 1px #dfe4ec, 0 50px 100px -50px rgba(15, 23, 42, .42), 0 2px 6px rgba(15, 23, 42, .05); }
+  #cam2 img, #cam2 video { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; display: block; object-fit: fill; }
+  #cam2 .ws2 { position: absolute; inset: 0; clip-path: inset(0 0 0 218px); }
+  /* the end card: the tagline, in the style of the Poliris site */
+  #endc { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px; opacity: 0; background: #fff; }
+  #endc img, #endc h1 span { opacity: 0; }
+  #endc img { height: 52px; }
+  #endc h1 { margin: 0; text-align: center; font-size: 92px; line-height: 98px; font-weight: 700; letter-spacing: -.045em; color: #0a0a0b; }
+  #endc h1 span { display: block; }
+  #endc mark { position: relative; background: none; color: inherit; padding: 0 6px; }
+  #endc mark i { position: absolute; left: 2px; right: 2px; bottom: 16px; height: 36px; background: #d6e4ff; border-radius: 6px; transform-origin: 0 50%; }
+  #endc mark b { position: relative; font-weight: 700; }
+
+  /* ── the screens as cards: they shrink to the side, wait there, and take the focus back ── */
+  .card { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; opacity: 0; transform-origin: 50% 50%; }
+  .card img { display: block; width: 1120px; height: 730px; }
+  .lab { position: absolute; height: 30px; padding: 0 12px 0 5px; border-radius: 999px; background: #fff; opacity: 0;
+         box-shadow: 0 0 0 1px #e3e7ee, 0 10px 24px -14px rgba(22, 50, 141, .45); display: flex; align-items: center; gap: 8px;
+         font-size: 14px; font-weight: 600; color: #0b1533; white-space: nowrap; }
+  .lab .n { width: 22px; height: 22px; border-radius: 50%; background: #0062ff; color: #fff; font-size: 11.5px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; }
+  .lab img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; object-position: top; background: #eef1f5; }
+  .lab em { font-style: normal; font-weight: 500; color: #6a768a; }
+
+  /* ── floating windows, in screen coordinates ── */
+  .wg { position: absolute; opacity: 0; transform-origin: 0 0; }
+  .wg > .hfw { position: relative !important; }
+  .hfw__bar .bar-r { margin-left: auto; font-size: 10px; color: #8a94a6; }
+
+  /* every AI, asked the same buyer questions: a real answer, ranked products, its sources */
+  .ans { padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+  .ans-q { align-self: flex-end; max-width: 84%; background: #f1f4f8; border-radius: 14px 14px 4px 14px; padding: 7px 11px;
+           font-size: 12px; line-height: 16px; color: #0a0a0b; }
+  .ans-a { font-size: 12.5px; line-height: 17.5px; color: #2b3242; display: flex; flex-direction: column; gap: 6px; }
+  .ans-a p { margin: 0; }
+  .ans .rl { opacity: 0; }
+  .ans-a .li { display: flex; gap: 8px; align-items: flex-start; }
+  .ans-a .li u { text-decoration: none; flex: 0 0 auto; width: 18px; height: 18px; border-radius: 5px; background: #f1f4f8;
+                 font-size: 10px; font-weight: 700; color: #6a768a; display: flex; align-items: center; justify-content: center; }
+  .ans-a .li b { font-weight: 600; color: #0a0a0b; }
+  .ans-a .li.me u { background: #0062ff; color: #fff; }
+  .ans-a .li.me b { color: #1d4ed8; }
+  .ans-ft { margin-top: auto; display: flex; align-items: center; gap: 6px; }
+  .src { height: 20px; padding: 0 8px 0 4px; border-radius: 999px; background: #f6f8fb; box-shadow: inset 0 0 0 1px #e6eaf0;
+         display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 500; color: #3c4257; }
+  .src i { width: 13px; height: 13px; border-radius: 4px; font-style: normal; font-size: 7.5px; font-weight: 800; color: #fff;
+           display: flex; align-items: center; justify-content: center; }
+  .ans-v { margin-left: auto; height: 22px; padding: 0 9px; border-radius: 999px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; opacity: 0; }
+  .v-ok { background: #dcfce7; color: #15803d; }
+  .v-ko { background: #fee2e2; color: #b91c1c; }
+  .v-two { background: #eaf2ff; color: #1d4ed8; }
+
+  /* Trading zone map */
+  .map-lit { -webkit-mask-image: radial-gradient(30px at var(--lx) var(--ly), #000 88%, transparent 100%);
+             mask-image: radial-gradient(30px at var(--lx) var(--ly), #000 88%, transparent 100%); }
+  .map-veil { -webkit-mask-image: radial-gradient(30px at var(--lx) var(--ly), transparent 92%, #000 100%);
+              mask-image: radial-gradient(30px at var(--lx) var(--ly), transparent 92%, #000 100%); }
+  .map-lens { left: 0 !important; top: 0 !important; }
+  .readouts { position: relative; height: 46px; flex: 0 0 auto; }
+  .readouts > .hfw-map__readout { position: absolute; inset: 0; opacity: 0; }
+
+  /* the report Nora exports: the Poliris roadmap deck (as the Prestige Cellar roadmap): navy cover, "In short" numbers,
+     the week table; pages scroll in a PDF viewer */
+  .rv { flex: 1; display: flex; min-height: 0; background: #e9edf3; }
+  .rv-side { width: 112px; box-sizing: border-box; flex: 0 0 auto; padding: 14px 10px; display: flex; flex-direction: column; gap: 10px; background: #f6f8fb; border-right: 1px solid #e3e7ee; }
+  .rv-th { position: relative; width: 92px; height: 52px; border-radius: 3px; overflow: hidden; box-shadow: 0 0 0 1px #d8dee8; background: #fff; }
+  .rv-th .pg2 { position: absolute; left: 0; top: 0; transform: scale(.12778); transform-origin: 0 0; box-shadow: none; }
+  .rv-thw em { display: block; font-style: normal; font-size: 9px; color: #8a94a6; margin-top: 3px; }
+  .rv-main { flex: 1; position: relative; overflow: hidden; }
+  #rv-pages { position: absolute; left: 24px; top: 20px; }
+  .pg2 { position: relative; width: 720px; height: 405px; margin-bottom: 16px; background: #fff; overflow: hidden; box-shadow: 0 0 0 1px #dfe4ec, 0 18px 36px -24px rgba(22, 50, 141, .45); color: #0a0a0b; }
+  /* cover */
+  .pg2 { background: #f5f6fa; }
+  .pg2.cv { background: radial-gradient(260px 230px at 530px 200px, #2c5fd9 0%, #1c45a8 32%, rgba(20, 52, 140, 0) 100%), linear-gradient(100deg, #0d1c45 0%, #102657 55%, #163576 100%); color: #fff; }
+  .cv .orb { position: absolute; left: 0; top: 0; width: 720px; height: 405px; }
+  .cv .lg { position: absolute; left: 40px; top: 34px; display: flex; align-items: center; gap: 8px; font-size: 21px; font-weight: 600; letter-spacing: -.02em; }
+  .cv .lg img { width: 24px; height: 24px; }
+  .cv .eb { position: absolute; left: 40px; top: 150px; font-size: 10px; font-weight: 600; letter-spacing: .3em; color: #8fa8f0; }
+  .cv h3 { position: absolute; left: 38px; top: 164px; margin: 0; font-size: 48px; line-height: 54px; font-weight: 700; letter-spacing: -.035em; }
+  .cv .st2 { position: absolute; left: 40px; top: 228px; width: 300px; font-size: 14.5px; line-height: 19px; font-weight: 400; color: #e3e9f8; }
+  .cv .ms { position: absolute; left: 40px; top: 276px; font-size: 10.5px; font-weight: 600; color: #8fb0ff; }
+  .cv .ft { position: absolute; left: 40px; right: 40px; bottom: 30px; display: flex; gap: 120px; font-size: 10px; color: #c6d0e8; }
+  .cv .ft span + span { color: #8e9bbd; }
+  /* inner pages */
+  .pg2 .ey { position: absolute; left: 30px; top: 24px; font-size: 8.5px; font-weight: 700; letter-spacing: .22em; color: #2563eb; }
+  .pg2 .ey i { display: none; }
+  .pg2 h4 { position: absolute; left: 30px; top: 40px; margin: 0; font-size: 26px; line-height: 30px; font-weight: 800; letter-spacing: -.04em; color: #0a0f1f; }
+  .pg2 .sb2 { position: absolute; left: 30px; top: 74px; font-size: 11px; color: #5c6b7f; }
+  .pg2 .pf { position: absolute; left: 30px; right: 30px; bottom: 14px; padding-top: 8px; border-top: 1px solid #eceff4; display: flex; align-items: center; gap: 8px; font-size: 8px; color: #8a94a6; }
+  .pg2 .pf img { height: 11px; }
+  .pg2 .pf b { margin-left: auto; font-weight: 500; color: #8a94a6; }
+  .kp6 { position: absolute; left: 30px; right: 30px; top: 100px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kp6 div { border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0, 0 8px 16px -12px rgba(15, 23, 42, .3); padding: 10px 12px 11px; }
+  .kp6 small { display: block; font-size: 8.5px; color: #5c6b7f; }
+  .kp6 b { display: block; margin-top: 5px; font-size: 25px; line-height: 27px; font-weight: 700; letter-spacing: -.02em; color: #172a5c; }
+  .kp6 b em { font-style: normal; font-size: 13px; font-weight: 600; margin-left: 2px; }
+  .kp6 span { display: block; margin-top: 4px; font-size: 8.5px; line-height: 12px; color: #5c6b7f; }
+  .call { position: absolute; left: 30px; right: 30px; top: 326px; padding: 10px 14px; border-radius: 8px; background: #0f1f40; font-size: 10.5px; color: #fff; }
+  .call b { font-weight: 700; }
+  .wkl { position: absolute; right: 30px; top: 22px; width: 168px; padding: 7px 9px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; font-size: 8.5px; color: #3c4257; }
+  .wkl div { display: flex; align-items: center; gap: 6px; height: 13px; }
+  .wkl div i { width: 6px; height: 6px; border-radius: 50%; }
+  .wkl div b { margin-left: auto; font-weight: 600; }
+  .wkl div.tt { border-top: 1px solid #eceff4; margin-top: 3px; padding-top: 3px; font-weight: 700; }
+  .wt { position: absolute; left: 30px; right: 30px; top: 100px; font-size: 9px; }
+  .wt .hd2, .wt .rw { display: grid; grid-template-columns: 26px 70px 1fr 112px 118px 34px; gap: 8px; align-items: start; }
+  .wt .hd2 { padding: 5px 0; border-bottom: 1.5px solid #172a5c; font-size: 7.5px; font-weight: 700; letter-spacing: .1em; color: #5c6b7f; }
+  .wt .rw { padding: 9px 0; border-bottom: 1px solid #eceff4; }
+  .wt .rw > b:first-child { font-weight: 700; color: #172a5c; }
+  .wt .ch2 { display: inline-flex; height: 15px; padding: 0 6px; border-radius: 3px; color: #fff; font-size: 7.5px; font-weight: 700; align-items: center; }
+  .wt .ac b { display: block; font-size: 9.5px; font-weight: 700; color: #0a0a0b; }
+  .wt .ac span { display: block; margin-top: 2px; font-size: 8px; line-height: 11px; color: #5c6b7f; }
+  .wt .sc { font-size: 8.5px; line-height: 12px; color: #3c4257; }
+  .wt .sc code { display: block; font-family: ui-monospace, monospace; font-size: 7.5px; color: #8a94a6; }
+  .wt .who2 { display: inline-flex; height: 16px; padding: 0 6px; border-radius: 999px; font-size: 7.5px; font-weight: 600; align-items: center; gap: 4px; }
+  .wt .who2 img { width: 12px; height: 12px; border-radius: 50%; object-fit: cover; object-position: top; }
+  .wt .tm { text-align: right; font-size: 9.5px; font-weight: 700; }
+  .gt { position: absolute; left: 30px; right: 30px; top: 100px; font-size: 9px; }
+  .gt .gr { display: grid; grid-template-columns: 150px repeat(8, 1fr); gap: 5px; align-items: center; height: 30px; border-bottom: 1px solid #f1f2f4; }
+  .gt .gr small { display: block; font-size: 7px; letter-spacing: .1em; color: #8a94a6; }
+  .gt .gr b { font-size: 10px; }
+  .gt .gr i { height: 12px; border-radius: 3px; background: #e9edf3; }
+  .gt .gr i.on { background: #2f66e8; }
+
+  /* V12: the inner pages in the style of the Poliris 16-week roadmaps (BrainX Technologies): white pages, a blue eyebrow,
+     cards, the workstreams chart, the weeks, the tables */
+  .pg2:not(.cv) { background: #fff; }
+  .pg2 .ey { display: flex; align-items: center; gap: 6px; }
+  .pg2 .ey i { display: block; width: 14px; height: 1.5px; background: #2563eb; }
+  .d-c3 { position: absolute; left: 30px; right: 30px; top: 92px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .d-card { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 10px 12px; font-size: 8px; line-height: 11px; color: #5c6b7f; }
+  .d-card .n { font-size: 9px; font-weight: 700; color: #2563eb; }
+  .d-card b { display: block; margin: 3px 0 4px; font-size: 10.5px; line-height: 13px; font-weight: 700; color: #0a0f1f; }
+  .d-who { position: absolute; left: 30px; right: 30px; top: 210px; border-radius: 8px; background: #f3f6fc; padding: 10px 12px; }
+  .d-who small, .d-pri small { display: block; font-size: 7px; font-weight: 700; letter-spacing: .14em; color: #8a94a6; margin-bottom: 7px; }
+  .d-who .g { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .d-who .g div { font-size: 7.5px; line-height: 10px; color: #3c4257; }
+  .chip { display: inline-flex; height: 13px; padding: 0 5px; border-radius: 3px; font-size: 6.6px; font-weight: 600; align-items: center; white-space: nowrap; }
+  .d-who .chip { margin-bottom: 3px; }
+  .ch-p { background: #e3ecff; color: #1d4ed8; } .ch-i { background: #ece7ff; color: #5b3fd1; } .ch-y { background: #dcfce7; color: #15803d; }
+  .ch-w { background: #fff1dc; color: #b45309; } .ch-d { background: #ffe4dc; color: #c2410c; }
+  .d-note { position: absolute; left: 30px; top: 318px; font-size: 7.5px; color: #8a94a6; }
+  .d-pri { position: absolute; left: 30px; right: 30px; top: 86px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .d-pri > div { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 9px 11px 6px; }
+  .d-pri p { margin: 0 0 5px; display: flex; gap: 6px; font-size: 8px; line-height: 11px; color: #3c4257; }
+  .d-pri p i { font-style: normal; font-weight: 700; color: #2563eb; }
+  .d-pri p b { color: #0a0f1f; }
+  .d-k { position: absolute; left: 30px; right: 30px; top: 212px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .d-k div { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 9px 10px; font-size: 7.5px; line-height: 10px; color: #5c6b7f; }
+  .d-k b { display: block; font-size: 21px; line-height: 25px; font-weight: 700; letter-spacing: -.02em; color: #1d4ed8; }
+  .d-band { position: absolute; left: 30px; right: 30px; top: 296px; padding: 8px 12px; border-left: 3px solid #2563eb; background: #f3f6fc; font-size: 8.5px; color: #3c4257; }
+  .d-band b { color: #0a0f1f; }
+  .d-g { position: absolute; left: 30px; right: 30px; top: 80px; }
+  .d-g .hd, .d-g .r { display: grid; grid-template-columns: 112px 1fr 230px; gap: 12px; align-items: center; }
+  .d-g .hd { height: 14px; }
+  .d-g .wk { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; }
+  .d-g .hd .wk span { font-size: 6.5px; color: #8a94a6; text-align: center; }
+  .d-g .r { height: 33px; border-bottom: 1px solid #f1f2f4; }
+  .d-g .r small { display: block; font-size: 6.3px; font-weight: 700; letter-spacing: .12em; color: #8a94a6; }
+  .d-g .r b { font-size: 9px; color: #0a0f1f; }
+  .d-g .r .ds { font-size: 7.5px; line-height: 10px; color: #5c6b7f; }
+  .d-g .wk i { height: 10px; border-radius: 3px; background: #e9edf3; }
+  .d-g .wk i.on { background: #2f66e8; }
+  .d-ws { position: absolute; left: 30px; top: 98px; width: 206px; }
+  .d-ws > div { padding: 8px 0; border-bottom: 1px solid #eceff4; font-size: 7.5px; line-height: 10px; color: #5c6b7f; }
+  .d-ws b { display: flex; align-items: center; gap: 6px; font-size: 9.5px; color: #0a0f1f; margin-bottom: 3px; }
+  .d-ws b i { width: 8px; height: 8px; border-radius: 2px; }
+  .d-ws b em { margin-left: auto; font-style: normal; font-weight: 700; }
+  .d-ch { position: absolute; left: 258px; right: 30px; top: 96px; height: 250px; border-radius: 8px; box-shadow: 0 0 0 1px #e6e9f0; background: #fff; }
+  .d-lg { position: absolute; right: 30px; top: 22px; display: flex; gap: 9px; font-size: 6.5px; color: #5c6b7f; }
+  .d-lg span { display: flex; align-items: center; gap: 3px; }
+  .d-lg i { width: 6px; height: 6px; border-radius: 2px; }
+  .d-wks { position: absolute; left: 30px; right: 30px; top: 94px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .d-wk { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 8px 8px 3px; }
+  .d-wk h5 { margin: 0; display: flex; font-size: 9.5px; font-weight: 700; color: #0a0f1f; }
+  .d-wk h5 em { margin-left: auto; font-style: normal; font-weight: 600; font-size: 8px; color: #5c6b7f; }
+  .d-wk > small { display: block; font-size: 7.5px; color: #2563eb; margin: 2px 0 6px; }
+  .d-t { border-radius: 5px; box-shadow: 0 0 0 1px #edf0f5; border-left: 2px solid #3b82f6; padding: 5px 6px; margin-bottom: 6px; font-size: 7.5px; line-height: 10px; font-weight: 600; color: #0a0f1f; }
+  .d-t.tc { border-left-color: #1e3a8a; } .d-t.pc { border-left-color: #469c77; }
+  .d-t div { display: flex; align-items: center; margin-top: 4px; }
+  .d-t div em { margin-left: auto; font-style: normal; font-weight: 600; color: #3c4257; font-size: 7px; }
+  .d-tb { position: absolute; left: 30px; right: 30px; top: 92px; font-size: 7.8px; line-height: 10px; color: #3c4257; }
+  .d-tb .h, .d-tb .r { display: grid; gap: 10px; padding: 5px 0; border-bottom: 1px solid #eceff4; align-items: center; }
+  .d-tb .h { font-size: 6.6px; font-weight: 700; letter-spacing: .12em; color: #5c6b7f; border-bottom: 1.5px solid #172a5c; }
+  .d-tb .r b { color: #0a0f1f; font-weight: 700; }
+  .t8 .h, .t8 .r { grid-template-columns: 28px 200px 1fr 100px; }
+  .t9 .h, .t9 .r { grid-template-columns: 28px 130px 64px 1fr; }
+  .t10 { top: 80px; } .t10 .h, .t10 .r { grid-template-columns: 14px 1fr 70px 140px; padding: 4px 0; }
+  .t11 { top: 80px; } .t11 .h, .t11 .r { grid-template-columns: 1fr 90px 150px; padding: 4.5px 0; }
+  .d-ns { position: absolute; left: 30px; right: 30px; top: 96px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .d-ns div { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 12px; font-size: 8px; line-height: 11px; color: #5c6b7f; }
+  .d-ns i { display: flex; width: 20px; height: 20px; border-radius: 50%; background: #0f1f40; color: #fff; font-style: normal; font-size: 9px; font-weight: 700; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .d-ns b { display: block; font-size: 10px; line-height: 13px; color: #0a0f1f; margin-bottom: 5px; }
+
+  /* agents at work */
+  .ag { padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 9px; }
+  .ag-h { display: flex; align-items: center; gap: 10px; }
+  .ag-h img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: top; background: #eef1f5; }
+  .ag-h b { display: block; font-size: 14px; font-weight: 600; color: #0a0a0b; }
+  .ag-h span { display: block; font-size: 11px; color: #6a768a; margin-top: 1px; }
+  .ag-r { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #3c4257; opacity: 0; }
+  .ag-r .st { position: relative; width: 16px; height: 16px; flex: 0 0 auto; }
+  .ag-r .sp { position: absolute; inset: 1px; border-radius: 50%; border: 2px solid #d9e2f1; border-top-color: #0062ff; box-sizing: border-box; }
+  .ag-r .ok { position: absolute; inset: 0; border-radius: 50%; background: #16a34a; color: #fff; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; opacity: 0; }
+  .ag-r em { font-style: normal; font-weight: 600; color: #0a0a0b; }
+
+  /* ── the workflow rail, at the top ── */
+  #railwrap { position: absolute; left: 0; right: 0; top: 22px; display: flex; justify-content: center; z-index: 10; }
+  #rail { display: flex; gap: 4px; padding: 6px; background: #fff; border-radius: 999px;
+          box-shadow: 0 0 0 1px #e3e7ee, 0 18px 40px -24px rgba(22, 50, 141, .35); }
+  .st { position: relative; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 15px 0 6px; border-radius: 999px;
+        font-size: 16px; font-weight: 500; color: #8a94a6; letter-spacing: -.01em; white-space: nowrap; }
+  .st-bg { position: absolute; inset: 0; border-radius: 999px; background: #eaf2ff; box-shadow: inset 0 0 0 1px #d3e3ff; opacity: 0; }
+  .st-num { position: relative; width: 26px; height: 26px; border-radius: 50%; background: #f1f3f7; flex: 0 0 auto; }
+  .st-numfill { position: absolute; inset: 0; border-radius: 50%; background: #0062ff; opacity: 0; }
+  .st-n, .st-c { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .st-n { color: #6a768a; }
+  .st-n-on { color: #fff; opacity: 0; }
+  .st-c { color: #fff; opacity: 0; }
+  .st-l { position: relative; }
+  .st-l-on { position: absolute; left: 0; top: 0; color: #1d4ed8; opacity: 0; }
+  .st-l-done { position: absolute; left: 0; top: 0; color: #3f4654; opacity: 0; }
+</style>
+</head>
+<body>
+<!-- data-start / data-duration of the clips are written by build-central.py from tools/clock.py -->
+<div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="122.6">
+  <div id="bg"></div>
+  <audio id="mix" src="assets/audio/mix.m4a" data-start="0" data-duration="122.6" data-track-index="9" data-volume="1"></audio>
+
+  <!-- the screens that dock at the left (assets/cards, made by build-central.py on the same seconds) -->
+  <div class="card" id="c-vis"><img alt="" src="assets/cards/vis-end.jpg" /></div>
+  <div class="card" id="c-kwe"><img alt="" src="assets/cards/kw-end.jpg" /></div>
+  <div class="card" id="c-audit"><img alt="" src="assets/cards/audit-end.jpg" /></div>
+  <div class="card" id="c-polie"><img alt="" src="assets/cards/poli-end.jpg" /></div>
+  <div class="card" id="c-content"><img alt="" src="assets/cards/content-end.jpg" /></div>
+  <div class="card" id="c-fixe"><img alt="" src="assets/cards/fix-end.jpg" /></div>
+  <div class="card" id="c-cite"><img alt="" src="assets/cards/cit-end.jpg" /></div>
+
+  <!-- camera + the live app window -->
+  <div id="cam">
+    <div id="win">
+      <video id="central" src="assets/central.mp4" data-start="0" data-duration="122.6" data-track-index="0" muted playsinline></video>
+      <div class="ovw" id="o-onb" style="opacity:1"><video id="v-onb" src="assets/ov-onb.mp4" data-start="0" data-duration="10" data-track-index="1" muted playsinline></video></div>
+      <div class="ovw ws" id="o-vis"><video id="v-vis" src="assets/ov-vis.mp4" data-start="8.8" data-duration="20.5" data-track-index="2" muted playsinline></video></div>
+      <div class="ovw ws" id="o-kw"><video id="v-kw" src="assets/ov-kw.mp4" data-start="30.6" data-duration="7.8" data-track-index="4" muted playsinline></video></div>
+      <div class="ovw ws" id="o-pe"><video id="v-pe" src="assets/ov-pe.mp4" data-start="46.6" data-duration="6.6" data-track-index="5" muted playsinline></video></div>
+      <div class="ovw ws" id="o-pd"><video id="v-pd" src="assets/ov-pd.mp4" data-start="52.85" data-duration="5.4" data-track-index="10" muted playsinline></video></div>
+      <div class="ovw ws" id="o-road"><video id="v-road" src="assets/ov-road.mp4" data-start="76.8" data-duration="10.8" data-track-index="11" muted playsinline></video></div>
+      <div class="ovw" id="o-poli"><video id="v-poli" src="assets/ov-poli.mp4" data-start="60" data-duration="16" data-track-index="3" muted playsinline></video></div>
+      <div class="ovw ws" id="o-fix"><video id="v-fix" src="assets/ov-fix.mp4" data-start="96.3" data-duration="5.8" data-track-index="6" muted playsinline></video></div>
+      <div class="ovw ws" id="o-cit"><video id="v-cit" src="assets/ov-cit.mp4" data-start="102.4" data-duration="8.75" data-track-index="7" muted playsinline></video></div>
+      <div class="ovw ws" id="o-vis2"><video id="v-vis2" src="assets/ov-vis2.mp4" data-start="112.2" data-duration="10.4" data-track-index="8" muted playsinline></video></div>
+      <div id="ov">
+        <span class="ov-tint" id="t-us" style="left:828px;top:43px;width:133px;height:32px;border-radius:10px"></span>
+        <span class="ov-tint" id="t-rank" style="left:708px;top:170px;width:192px;height:64px;border-radius:12px"></span>
+        <span class="ov-tint" id="t-q1" style="left:268px;top:545px;width:236px;height:34px;border-radius:10px"></span>
+        <span class="ov-tint" id="t-q2" style="left:551px;top:545px;width:236px;height:34px;border-radius:10px"></span>
+        <span class="ov-tint" id="t-q3" style="left:822px;top:545px;width:260px;height:34px;border-radius:10px"></span>
+        <span class="ov-tint ov-tint--red" id="t-bat" style="left:229px;top:206px;width:879px;height:52px;border-radius:10px"></span>
+        <span class="ov-chip" id="t-from" style="left:846px;top:189px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>From roadmap · Task #5</span>
+        <span id="rip"></span>
+        <div id="cur"><div id="cur-a"><svg id="cur-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the cards that grow into the live window, or float beside it -->
+  <div class="card" id="c-kws"><img alt="" src="assets/cards/kw-start.jpg" /></div>
+  <div class="card" id="c-sites"><img alt="" src="assets/cards/site-start.jpg" /></div>
+  <div class="card" id="c-site"><img alt="" src="assets/cards/site-side.jpg" /></div>
+  <div id="cam2"><img alt="" src="assets/cards/site-side.jpg" /><div class="ws2"><video id="v-pe2" src="assets/ov-pe.mp4" data-start="46.6" data-duration="6.6" data-track-index="12" muted playsinline></video></div></div>
+  <div class="card" id="c-polis"><img alt="" src="assets/cards/poli-start.jpg" /></div>
+  <div class="card" id="c-roads"><img alt="" src="assets/cards/road-start.jpg" /></div>
+  <div class="card" id="c-roade"><img alt="" src="assets/cards/road-end.jpg" /></div>
+  <div class="card" id="c-contents"><img alt="" src="assets/cards/content-start.jpg" /></div>
+  <div class="card" id="c-fixs"><img alt="" src="assets/cards/fix-start.jpg" /></div>
+  <div class="card" id="c-cits"><img alt="" src="assets/cards/cit-start.jpg" /></div>
+  <div class="card" id="c-vis2"><img alt="" src="assets/cards/vis2-start.jpg" /></div>
+
+  <!-- the labels of the screens waiting at the side -->
+  <div class="lab" id="l1"><span class="n">1</span>AI Visibility</div>
+  <div class="lab" id="l2"><span class="n">2</span>Keywords</div>
+  <div class="lab" id="l3"><span class="n">3</span>Technical Audit</div>
+  <div class="lab" id="ls"><span class="n">3</span>Site Overview <em>· health 73%</em></div>
+  <div class="lab" id="lpe"><span class="n">3</span>Page Explorer <em>· 850 pages crawled</em></div>
+  <div class="lab" id="lp"><img alt="" src="assets/img/agent-nora.png" />Nora <em>· the plan</em></div>
+  <div class="lab" id="lk"><img alt="" src="assets/img/agent-kate.png" />Kate <em>· Content</em></div>
+  <div class="lab" id="lt"><img alt="" src="assets/img/agent-tom.png" />Tom <em>· Technical fixes</em></div>
+  <div class="lab" id="ln"><img alt="" src="assets/img/agent-nora.png" />Nora <em>· Citations</em></div>
+  <div class="lab" id="lr"><span class="n">4</span>Roadmap <em>· task #5 sent to Kate</em></div>
+
+  <!-- every AI, asked the same buyer questions -->
+  <div class="wg" id="w-a1" style="left:44px;top:240px;width:440px;height:312px">
+    <div class="hfw" style="width:440px;height:312px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/engine-chatgpt.png" />ChatGPT</span></div>
+      <div class="hfw__body ans">
+        <div class="ans-q">What wireless earbuds last the longest on a single charge?</div>
+        <div class="ans-a">
+          <p class="rl">For battery life, reviewers keep coming back to three models:</p>
+          <div class="li rl"><u>1</u><span><b>Bose QuietComfort Ultra</b>: about 6 hours with noise cancelling on, 24 with the case.</span></div>
+          <div class="li rl"><u>2</u><span><b>Apple AirPods Pro 2</b>: 6 hours per charge, up to 30 with the case.</span></div>
+          <div class="li rl"><u>3</u><span><b>Samsung Galaxy Buds3 Pro</b>: 6 hours, and a quick top-up in the case.</span></div>
+        </div>
+        <div class="ans-ft rl"><span class="src"><i style="background:#e8590c">R</i>rtings.com</span><span class="src"><i style="background:#0f766e">S</i>soundguys.com</span><span class="ans-v v-ko" id="av1">✗ Sony not mentioned</span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="wg" id="w-a2" style="left:1436px;top:112px;width:440px;height:312px">
+    <div class="hfw" style="width:440px;height:312px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/engine-gemini.png" />Gemini</span></div>
+      <div class="hfw__body ans">
+        <div class="ans-q">Which earbuds have the most advanced noise cancelling technology?</div>
+        <div class="ans-a">
+          <p class="rl">Three models stand out for blocking noise:</p>
+          <div class="li me rl"><u>1</u><span><b>Sony WF-1000XM5</b>: the strongest on low rumble, with two processors and six microphones.</span></div>
+          <div class="li rl"><u>2</u><span><b>Bose QuietComfort Ultra</b>: close behind, with a very comfortable fit.</span></div>
+          <div class="li rl"><u>3</u><span><b>Apple AirPods Pro 2</b>: very good, at their best with an iPhone.</span></div>
+        </div>
+        <div class="ans-ft rl"><span class="src"><i style="background:#e8590c">R</i>rtings.com</span><span class="src"><i style="background:#7c3aed">W</i>whathifi.com</span><span class="ans-v v-ok" id="av2">✓ Sony, #1</span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="wg" id="w-a3" style="left:1436px;top:548px;width:440px;height:312px">
+    <div class="hfw" style="width:440px;height:312px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/engine-claude.png" />Claude</span></div>
+      <div class="hfw__body ans">
+        <div class="ans-q">Which noise cancelling earbuds are really worth the price this year?</div>
+        <div class="ans-a">
+          <p class="rl">It depends on your phone, but for value:</p>
+          <div class="li rl"><u>1</u><span><b>Apple AirPods Pro 2</b>: often on sale, the easy pick for iPhone users.</span></div>
+          <div class="li me rl"><u>2</u><span><b>Sony WF-1000XM5</b>: the best noise cancelling, if you can spend a little more.</span></div>
+          <div class="li rl"><u>3</u><span><b>Samsung Galaxy Buds3 Pro</b>: a good choice on Android.</span></div>
+        </div>
+        <div class="ans-ft rl"><span class="src"><i style="background:#0f766e">S</i>soundguys.com</span><span class="src"><i style="background:#dc2626">C</i>cnet.com</span><span class="ans-v v-two" id="av3">✓ Sony, #2</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Trading zone map: the other markets, one after the other -->
+  <div class="wg" id="w-map" style="left:1436px;top:372px;width:252px;height:236px">
+    <div class="hfw" style="width:252px;height:236px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name">Trading Zone Map</span></div>
+      <div class="hfw__body hfw-map">
+        <div class="hfw-map__plate" id="map-plate" style="--lx:54.7px;--ly:43.8px">
+          <img class="hfw-map__layer" alt="" src="assets/img/map-base.svg" />
+          <img class="hfw-map__layer map-lit" alt="" src="assets/img/map-lit.svg" />
+          <span class="hfw-map__dot" style="left:24%;top:32%;background:#0062ff"></span>
+          <span class="hfw-map__dot" style="left:49.2%;top:20.5%;background:#f59e0b"></span>
+          <span class="hfw-map__dot" style="left:53%;top:23.5%;background:#16a34a"></span>
+          <span class="hfw-map__dot" style="left:88.8%;top:32.1%;background:#16a34a"></span>
+          <span class="hfw-map__dot" style="left:37.06%;top:75%;background:#e8590c"></span>
+          <span class="hfw-map__dot" style="left:92%;top:82.54%;background:#0062ff"></span>
+          <span class="hfw-map__veil map-veil"></span>
+          <span class="hfw-map__lens map-lens" id="map-lens"></span>
+        </div>
+        <div class="readouts">
+          <div class="hfw-map__readout" id="ro-us" style="opacity:1"><div class="hfw__stack"><span class="hfw-map__city">United States</span><span class="hfw__sub">#2 vs competitors</span></div><span class="hfw-map__score" style="color:#0062ff">64%</span></div>
+          <div class="hfw-map__readout" id="ro-uk"><div class="hfw__stack"><span class="hfw-map__city">United Kingdom</span><span class="hfw__sub">#3 vs competitors</span></div><span class="hfw-map__score" style="color:#f59e0b">58%</span></div>
+          <div class="hfw-map__readout" id="ro-de"><div class="hfw__stack"><span class="hfw-map__city">Germany</span><span class="hfw__sub">#1 vs competitors</span></div><span class="hfw-map__score" style="color:#16a34a">71%</span></div>
+          <div class="hfw-map__readout" id="ro-jp"><div class="hfw__stack"><span class="hfw-map__city">Japan</span><span class="hfw__sub">#1 vs competitors</span></div><span class="hfw-map__score" style="color:#16a34a">76%</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- the report Nora exports: the Poliris roadmap deck, as a PDF -->
+  <div class="wg" id="w-rep" style="left:1004px;top:196px;width:880px;height:560px">
+    <div class="hfw" style="width:880px;height:560px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/poliris-mark.png" />sony-battery-roadmap.pdf</span><span class="bar-r">12 pages · Poli AI</span></div>
+      <div class="rv">
+        <div class="rv-side" id="rv-side"></div>
+        <div class="rv-main"><div id="rv-pages">
+          <div class="pg2 cv"><svg class="orb" viewBox="0 0 720 405"><defs><filter id="cvb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs><circle cx="530" cy="202" r="62" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/><circle cx="530" cy="202" r="102" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/><circle cx="530" cy="202" r="142" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1"/><circle cx="530" cy="202" r="182" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/><circle cx="560" cy="54" r="1.8" fill="#dfe6f8"/><circle cx="482" cy="100" r="1.4" fill="#b9c8f0"/><circle cx="660" cy="82" r="1.2" fill="#b9c8f0"/><circle cx="392" cy="220" r="1.6" fill="#4f7df0"/><circle cx="578" cy="280" r="2.0" fill="#3d6cf0"/><circle cx="432" cy="316" r="1.3" fill="#b9c8f0"/><circle cx="618" cy="306" r="1.4" fill="#b9c8f0"/><circle cx="690" cy="160" r="1.1" fill="#dfe6f8"/><circle cx="450" cy="70" r="1.0" fill="#dfe6f8"/><defs><radialGradient id="cvg"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="fh" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="fv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect x="395" y="202" width="270" height="1.2" fill="url(#fh)"/><rect x="530" y="87" width="1.2" height="230" fill="url(#fv)"/><circle cx="530" cy="202" r="46" fill="url(#cvg)" opacity=".55"/><circle cx="530" cy="202" r="31" fill="#fff"/><circle cx="420" cy="106" r="22" fill="#fff" opacity="0.27" filter="url(#cvb)"/><circle cx="420" cy="106" r="16" fill="#fff" opacity="0.90"/><image href="assets/img/engine-perplexity.png" x="412" y="98" width="15" height="15" opacity="0.78"/><circle cx="591" cy="118" r="22" fill="#fff" opacity="0.35" filter="url(#cvb)"/><circle cx="591" cy="118" r="16" fill="#fff" opacity="1.00"/><image href="assets/img/engine-chatgpt.png" x="583" y="110" width="15" height="15" opacity="1.00"/><circle cx="436" cy="238" r="22" fill="#fff" opacity="0.27" filter="url(#cvb)"/><circle cx="436" cy="238" r="16" fill="#fff" opacity="0.90"/><image href="assets/img/engine-claude.png" x="428" y="230" width="15" height="15" opacity="0.78"/><circle cx="660" cy="260" r="22" fill="#fff" opacity="0.35" filter="url(#cvb)"/><circle cx="660" cy="260" r="16" fill="#fff" opacity="1.00"/><image href="assets/img/engine-gemini.png" x="652" y="252" width="15" height="15" opacity="1.00"/><circle cx="499" cy="341" r="22" fill="#fff" opacity="0.27" filter="url(#cvb)"/><circle cx="499" cy="341" r="16" fill="#fff" opacity="0.90"/><image href="assets/img/engine-mistral.png" x="491" y="333" width="15" height="15" opacity="0.78"/><image href="assets/img/poliris-mark.png" x="513" y="185" width="34" height="34"/></svg><div class="lg"><img alt="" src="assets/img/poliris-mark.png" />Poliris</div>
+            <div class="eb">ROADMAP · OCTOBER 2026</div><h3>Sony</h3><div class="st2">8-week roadmap: get cited when buyers ask about your battery</div>
+            <div class="ms">Measured in ChatGPT, Gemini and Claude · United States</div>
+            <div class="ft"><span>sony.com · 8 weeks · 24 tasks · about 9 h of work per week</span><span>poliris.io</span></div></div>
+          <div class="pg2"><div class="ey"><i></i>BEFORE YOU START</div><h4>How to read this roadmap</h4><div class="d-c3"><div class="d-card"><span class="n">01</span><b>Built from the audit</b>Each task answers a finding of the October audit: AI answers in ChatGPT, Gemini and Claude, Google keywords, and the technical audit of 850 pages of sony.com.</div><div class="d-card"><span class="n">02</span><b>Ranked by your priorities</b>The order follows your priorities (products, markets, axes) and the value of each fix relative to the time it takes.</div><div class="d-card"><span class="n">03</span><b>The detail is in Poliris</b>This document gives the main lines. Your Poliris space details each task, page by page, and realigns the roadmap automatically.</div></div><div class="d-who"><small>WHO DOES WHAT</small><div class="g"><div><span class="chip ch-p">Poliris proposes, you approve</span><br>Poliris prepares the change (text, titles, structured data); you review it before it goes live.</div><div><span class="chip ch-i">Poliris identifies, you reach out</span><br>Poliris finds the sites to target and their contacts; you make the approach.</div><div><span class="chip ch-y">You</span><br>An action on your side: a setting, a profile, information to provide.</div><div><span class="chip ch-w">You or your web provider</span><br>Depending on your access: from the site admin, or through your provider.</div><div><span class="chip ch-d">Your web provider</span><br>A change to the hosting or the site code, not doable in Poliris.</div></div></div><div class="d-note">Times are estimates based on Poliris standards; much of the work is prepared by the tool.</div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>2</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>YOUR PRIORITIES</div><h4>A roadmap built on your priorities</h4><div class="d-pri"><div><small>PRODUCTS</small><p><i>1</i><span><b>Wireless Earbuds:</b> cited in 2 of the 9 battery answers</span></p><p><i>2</i><span><b>Consumer Electronics:</b> speaker pages with no battery hours</span></p></div><div><small>MARKETS</small><p><i>1</i><span><b>United States:</b> 64 % of AI answers, #2 behind Apple (71 %)</span></p><p><i>2</i><span><b>United Kingdom:</b> 58 % of AI answers, #3</span></p></div><div><small>AXES</small><p><i>1</i><span><b>Performance:</b> battery life, charging, noise cancelling on</span></p><p><i>2</i><span><b>Quality:</b> build and comfort</span></p><p><i>3</i><span><b>Price &amp; Value:</b> cost per hour of battery</span></p></div></div><div class="d-k"><div><b>8</b>weeks</div><div><b>72 h</b>in total, about 9 h per week</div><div><b>6</b>site pages written or rewritten</div><div><b>12</b>third-party sites and profiles</div><div><b>9</b>audit findings addressed</div></div><div class="d-band">These priorities can be changed in Poliris: <b>the roadmap recalculates at once</b>, without touching completed tasks or the current week.</div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>3</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>YOUR PRIORITIES</div><h4>What the roadmap does for each priority</h4><div class="d-g"><div class="hd"><span></span><span></span><div class="wk"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span></div></div><div class="r"><span><small>PRODUCT</small><b>Wireless Earbuds</b></span><span class="ds">Battery guide and markup (W1), charging case (W2), comparison (W3), lab results (W5)</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i></div></div><div class="r"><span><small>PRODUCT</small><b>Consumer Electronics</b></span><span class="ds">Battery hours and a shared FAQ on the speaker pages (W6)</span><div class="wk"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i></div></div><div class="r"><span><small>MARKET</small><b>United States</b></span><span class="ds">US review sites and best-of lists every week, US pages first</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div><div class="r"><span><small>MARKET</small><b>United Kingdom</b></span><span class="ds">whathifi.com listing (W2), UK versions of the two pages (W8)</span><div class="wk"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i></div></div><div class="r"><span><small>AXIS</small><b>Performance</b></span><span class="ds">Every battery question answered on one page (W1), proof from tests (W5)</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i></div></div><div class="r"><span><small>AXIS</small><b>Quality</b></span><span class="ds">Comfort and build in the guide and the comparison (W3, W6)</span><div class="wk"><i></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div><div class="r"><span><small>AXIS</small><b>Price &amp; Value</b></span><span class="ds">Cost per hour of battery in the comparison (W3, W7)</span><div class="wk"><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i></div></div><div class="r"><span><small>ASSISTANTS</small><b>ChatGPT, Gemini, Claude</b></span><span class="ds">Measured every week; the plan realigns on the results</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>4</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>ORGANISATION</div><h4>Three workstreams run in parallel</h4><div class="sb2">Work time per week and per workstream. The weekly measurements are automatic and take no time.</div><div class="d-ws"><div><b><i style="background:#1e3a8a"></i>Technical and structure<em>18 h</em></b>FAQ and Product markup, redirects, sitemap, speed of the battery pages.</div><div><b><i style="background:#3b82f6"></i>Content<em>30 h</em></b>The battery guide, the charging case, the comparison, the lab results: written by Kate, approved by you.</div><div><b><i style="background:#469c77"></i>Third-party sites<em>24 h</em></b>Links, listings and placements on the 12 sites AI quotes on battery.</div></div><div class="d-ch"><svg width="430" height="250" viewBox="0 0 430 250"><line x1="40" x2="415" y1="220" y2="220" stroke="#eef0f4"/><text x="32" y="223" text-anchor="end" font-size="8" fill="#8a94a6">0 h</text><line x1="40" x2="415" y1="182" y2="182" stroke="#eef0f4"/><text x="32" y="185" text-anchor="end" font-size="8" fill="#8a94a6">2 h</text><line x1="40" x2="415" y1="144" y2="144" stroke="#eef0f4"/><text x="32" y="147" text-anchor="end" font-size="8" fill="#8a94a6">4 h</text><line x1="40" x2="415" y1="106" y2="106" stroke="#eef0f4"/><text x="32" y="109" text-anchor="end" font-size="8" fill="#8a94a6">6 h</text><line x1="40" x2="415" y1="68" y2="68" stroke="#eef0f4"/><text x="32" y="71" text-anchor="end" font-size="8" fill="#8a94a6">8 h</text><line x1="40" x2="415" y1="30" y2="30" stroke="#eef0f4"/><text x="32" y="33" text-anchor="end" font-size="8" fill="#8a94a6">10 h</text><rect x="52" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="52" y="106.0" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="52" y="49.0" width="26" height="56.0" rx="2" fill="#469c77"/><text x="65" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W1</text><rect x="98" y="172.5" width="26" height="46.5" rx="2" fill="#1e3a8a"/><rect x="98" y="96.5" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="98" y="58.5" width="26" height="37.0" rx="2" fill="#469c77"/><text x="111" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W2</text><rect x="144" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="144" y="96.5" width="26" height="84.5" rx="2" fill="#3b82f6"/><rect x="144" y="49.0" width="26" height="46.5" rx="2" fill="#469c77"/><text x="157" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W3</text><rect x="190" y="153.5" width="26" height="65.5" rx="2" fill="#1e3a8a"/><rect x="190" y="77.5" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="190" y="39.5" width="26" height="37.0" rx="2" fill="#469c77"/><text x="203" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W4</text><rect x="236" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="236" y="106.0" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="236" y="49.0" width="26" height="56.0" rx="2" fill="#469c77"/><text x="249" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W5</text><rect x="282" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="282" y="115.5" width="26" height="65.5" rx="2" fill="#3b82f6"/><rect x="282" y="49.0" width="26" height="65.5" rx="2" fill="#469c77"/><text x="295" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W6</text><rect x="328" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="328" y="125.0" width="26" height="56.0" rx="2" fill="#3b82f6"/><rect x="328" y="49.0" width="26" height="75.0" rx="2" fill="#469c77"/><text x="341" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W7</text><rect x="374" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="374" y="125.0" width="26" height="56.0" rx="2" fill="#3b82f6"/><rect x="374" y="49.0" width="26" height="75.0" rx="2" fill="#469c77"/><text x="387" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W8</text><line x1="40" x2="415" y1="49" y2="49" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="4 3"/><text x="413" y="44" text-anchor="end" font-size="8" font-weight="600" fill="#ea580c">Average 9 h a week</text></svg></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>5</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>PHASE 1 · WEEKS 1 TO 4</div><div class="d-lg"><span><i style="background:#1e3a8a"></i>Technical and structure</span><span><i style="background:#3b82f6"></i>Content</span><span><i style="background:#469c77"></i>Third-party sites</span></div><h4>Make the battery facts readable</h4><div class="sb2">The first four weeks put every battery fact on a page AI can read, then on the sites it trusts.</div><div class="d-wks"><div class="d-wk"><h5>Week 1<em>9 h</em></h5><small>The three gaps</small><div class="d-t cc">Publish the WF-1000XM5 battery-life guide<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Add FAQ and Product schema to /support/battery-life<div><span class="chip ch-d">Your web provider</span><em>2 h</em></div></div><div class="d-t pc">Ask soundguys.com, rtings.com and headphonecheck.com for a link<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>3 h</em></div></div></div><div class="d-wk"><h5>Week 2<em>8 h 30</em></h5><small>Charging, explained</small><div class="d-t cc">Rewrite the charging-case page<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Fix 4 redirects to the battery pages<div><span class="chip ch-w">You or your web provider</span><em>2 h 30</em></div></div><div class="d-t pc">Claim the whathifi.com listing<div><span class="chip ch-y">You</span><em>2 h</em></div></div></div><div class="d-wk"><h5>Week 3<em>9 h</em></h5><small>Comparisons AI quotes</small><div class="d-t cc">Publish ‘WF-1000XM5 vs AirPods Pro 2: battery’, with its FAQ<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h 30</em></div></div><div class="d-t tc">Link the guide from the 3 product pages<div><span class="chip ch-p">Poliris proposes, you approve</span><em>2 h</em></div></div><div class="d-t pc">Pitch the battery test to techradar.com<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>2 h 30</em></div></div></div><div class="d-wk"><h5>Week 4<em>9 h 30</em></h5><small>Fast, complete pages</small><div class="d-t cc">Answer ‘how long do Sony earbuds last?’ on the support page<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Compress the images, add the pages to the sitemap<div><span class="chip ch-w">You or your web provider</span><em>3 h 30</em></div></div><div class="d-t pc">Follow up the 7 link requests<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>2 h</em></div></div></div></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>6</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>PHASE 2 · WEEKS 5 TO 8</div><div class="d-lg"><span><i style="background:#1e3a8a"></i>Technical and structure</span><span><i style="background:#3b82f6"></i>Content</span><span><i style="background:#469c77"></i>Third-party sites</span></div><h4>Become the source on battery life</h4><div class="sb2">Proof, lists and reviews: the sites AI reads start quoting Sony’s own numbers.</div><div class="d-wks"><div class="d-wk"><h5>Week 5<em>9 h</em></h5><small>Proof from tests</small><div class="d-t cc">Publish the lab results: 8 h with noise cancelling on<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Add HowTo markup to the charging tips<div><span class="chip ch-p">Poliris proposes, you approve</span><em>2 h</em></div></div><div class="d-t pc">Offer the test data to rtings.com<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>3 h</em></div></div></div><div class="d-wk"><h5>Week 6<em>9 h</em></h5><small>Every product, its hours</small><div class="d-t cc">Battery hours and a shared FAQ on the speaker pages<div><span class="chip ch-p">Poliris proposes, you approve</span><em>3 h 30</em></div></div><div class="d-t tc">Product markup on the 4 speaker pages<div><span class="chip ch-w">You or your web provider</span><em>2 h</em></div></div><div class="d-t pc">Claim 2 best-of listings<div><span class="chip ch-y">You</span><em>3 h 30</em></div></div></div><div class="d-wk"><h5>Week 7<em>9 h</em></h5><small>Reviews and lists</small><div class="d-t cc">Add cost per hour of battery to the comparison<div><span class="chip ch-p">Poliris proposes, you approve</span><em>3 h</em></div></div><div class="d-t tc">Speed up the comparison page<div><span class="chip ch-d">Your web provider</span><em>2 h</em></div></div><div class="d-t pc">Ask cnet.com for a link, buy one placement<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>4 h</em></div></div></div><div class="d-wk"><h5>Week 8<em>9 h</em></h5><small>Measure and adjust</small><div class="d-t cc">Refresh the guide with the week-8 results<div><span class="chip ch-p">Poliris proposes, you approve</span><em>3 h</em></div></div><div class="d-t tc">UK versions of the guide and the comparison<div><span class="chip ch-w">You or your web provider</span><em>2 h</em></div></div><div class="d-t pc">Approach 3 more best-of lists<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>4 h</em></div></div></div></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>7</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>PAGE REWRITES</div><h4>The 6 pages, in order</h4><div class="sb2">Poliris prepares each page from what you provide (specs, tests, support answers); you approve before it goes live.</div><div class="d-tb t8"><div class="h"><span>WEEK</span><span>PAGE</span><span>WHAT IS ADDED</span><span>PRODUCT</span></div><div class="r"><span>W1</span><span><b>/support/battery-guide</b> (new)</span><span>Hours with and without noise cancelling, charging times, tips; FAQ markup</span><span>Wireless Earbuds</span></div><div class="r"><span>W1</span><span><b>/support/battery-life</b></span><span>FAQ and Product markup; the battery facts in plain text, not in images</span><span>Wireless Earbuds</span></div><div class="r"><span>W2</span><span><b>/charging-case</b></span><span>Quick charge, case capacity, wireless charging</span><span>Wireless Earbuds</span></div><div class="r"><span>W3</span><span><b>/compare/wf-1000xm5-vs-airpods-pro</b></span><span>Battery side by side, cost per hour, FAQ</span><span>Wireless Earbuds</span></div><div class="r"><span>W5</span><span><b>/support/battery-tests</b> (new)</span><span>Lab results, test method, HowTo markup</span><span>Wireless Earbuds</span></div><div class="r"><span>W6</span><span><b>/speakers/battery</b></span><span>Hours per model, shared FAQ, Product markup</span><span>Consumer Electronics</span></div></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>8</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>THIRD-PARTY SITES</div><h4>Be present on the sites the assistants read</h4><div class="sb2">Poliris finds these sites in the assistants’ sources, with the contacts to approach; you make the approach.</div><div class="d-tb t9"><div class="h"><span>WEEK</span><span>SITE</span><span>TYPE</span><span>WHY</span></div><div class="r"><span>W1</span><span><b>soundguys.com</b></span><span>Review</span><span>The source AI quotes most on earbuds battery life</span></div><div class="r"><span>W1</span><span><b>rtings.com</b></span><span>Review</span><span>Its battery tests are quoted in 6 of the 9 answers</span></div><div class="r"><span>W1</span><span><b>headphonecheck.com</b></span><span>Review</span><span>Quoted on charging-case capacity</span></div><div class="r"><span>W2</span><span><b>whathifi.com</b></span><span>Listing</span><span>Free listing, quoted by Gemini</span></div><div class="r"><span>W3</span><span><b>techradar.com</b></span><span>Media</span><span>“Best earbuds for battery life”, a list AI repeats</span></div><div class="r"><span>W6</span><span><b>tomsguide.com</b></span><span>Best-of</span><span>“Longest battery life earbuds”</span></div><div class="r"><span>W7</span><span><b>cnet.com</b></span><span>Media</span><span>Quoted by ChatGPT on value for money</span></div><div class="r"><span>W8</span><span><b>3 more lists</b></span><span>Best-of</span><span>Chosen on the week-8 measurements</span></div></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>9</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>LINK WITH THE AUDIT</div><h4>Every audit finding has its week</h4><div class="d-tb t10"><div class="h"><span>#</span><span>AUDIT FINDING</span><span>ADDRESSED IN</span><span>WHO</span></div><div class="r"><span>1</span><span>Cited in 2 of the 9 battery answers</span><span>W1 to W8</span><span><span class="chip ch-i">Poliris identifies, you reach out</span></span></div><div class="r"><span>2</span><span>The battery page scores 45: no FAQ, no product data</span><span>W1</span><span><span class="chip ch-d">Your web provider</span></span></div><div class="r"><span>3</span><span>Content Access 21 %: the battery facts are in images</span><span>W1, W2</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>4</span><span>No page answers “how long does the battery last?”</span><span>W1, W4</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>5</span><span>0 of 3 battery searches in Google’s top 100</span><span>W1, W3</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>6</span><span>4 redirects on the way to the battery pages</span><span>W2</span><span><span class="chip ch-w">You or your web provider</span></span></div><div class="r"><span>7</span><span>Performance rated Weak by AI, below Apple and Bose</span><span>W1 to W8</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>8</span><span>The sources quoted on battery do not mention Sony</span><span>W1, W5, W7</span><span><span class="chip ch-i">Poliris identifies, you reach out</span></span></div><div class="r"><span>9</span><span>Speaker pages without battery hours</span><span>W6</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div></div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>10</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>TRACKING</div><h4>Automatic measurements every week</h4><div class="d-tb t11"><div class="h"><span>INDICATOR</span><span>TODAY</span><span>ROADMAP OBJECTIVE</span></div><div class="r"><span>Battery answers that cite Sony (AI)</span><span><b>2 of 9</b></span><span>8 of 9 by week 8</span></div><div class="r"><span>AI answers that mention Sony (US)</span><span><b>64 %</b></span><span>75 % and over</span></div><div class="r"><span>Battery searches where you rank (Google)</span><span><b>0 of 3</b></span><span>3 of 3 in the top 10</span></div><div class="r"><span>Score of the battery page</span><span><b>45 / 100</b></span><span>85 and over after week 1</span></div><div class="r"><span>Content Access of the battery pages</span><span><b>21 %</b></span><span>80 % after week 2</span></div><div class="r"><span>Pages with FAQ and Product markup</span><span><b>0 of 6</b></span><span>6 of 6</span></div><div class="r"><span>Third-party sites that cite Sony on battery</span><span><b>2 of 12</b></span><span>9 of 12 by week 8</span></div><div class="r"><span>Sentiment on Performance (AI)</span><span><b>Weak</b></span><span>Strong</span></div></div><div class="call" style="top:332px">Poliris reruns <b>every measurement once a week</b>: visibility in the assistants and technical audit. If the results require it, the roadmap is realigned automatically.</div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>11</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>NEXT STEPS</div><h4>To start week 1</h4><div class="d-ns"><div><i>1</i><b>Validate the priorities</b>The order of the products, markets and axes, and the launch of the battery guide.</div><div><i>2</i><b>Gather the facts</b>Battery tests, charging times and support answers, for the guide and the FAQ. Before week 1.</div><div><i>3</i><b>Brief your web developer</b>FAQ and Product markup on /support/battery-life: 2 h, the code is ready in Poliris. Week 1.</div><div><i>4</i><b>Approve Nora’s outreach</b>7 link requests and 1 free listing, drafted and ready to send. Week 1.</div></div><div class="call" style="top:250px"><b>Your priorities stay editable.</b> In Poliris, before you confirm a change, you see which tasks move forward or back; completed tasks and the current week do not move.</div><div class="pf"><img alt="" src="assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>12</b></div></div>
+        </div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- agents at work: Kate (content), Tom (technical fixes), Nora (citations) -->
+  <div class="wg" id="w-kate" style="left:1488px;top:104px;width:320px;height:150px">
+    <div class="hfw" style="width:320px;height:150px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/poliris-mark.png" />Poli AI · agents</span></div>
+      <div class="hfw__body ag">
+        <div class="ag-h"><img alt="" src="assets/img/agent-kate.png" /><div><b>Kate</b><span>Content Studio · roadmap task #5</span></div></div>
+        <div class="ag-r" id="k0"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span>Battery guide written · <em>1,862 words</em></span></div>
+        <div class="ag-r" id="k1"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span>Content score <em>91</em> · ready to publish</span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="wg" id="w-tom" style="left:1488px;top:104px;width:320px;height:150px">
+    <div class="hfw" style="width:320px;height:150px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/poliris-mark.png" />Poli AI · agents</span></div>
+      <div class="hfw__body ag">
+        <div class="ag-h"><img alt="" src="assets/img/agent-tom.png" /><div><b>Tom</b><span>Technical fixes · /support/battery-life</span></div></div>
+        <div class="ag-r" id="t0"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span>FAQPage and Product markup <em>written</em></span></div>
+        <div class="ag-r" id="t1"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span>Ready for your developers · <em>+8 points</em></span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="wg" id="w-nora" style="left:1488px;top:104px;width:320px;height:150px">
+    <div class="hfw" style="width:320px;height:150px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="assets/img/poliris-mark.png" />Poli AI · agents</span></div>
+      <div class="hfw__body ag">
+        <div class="ag-h"><img alt="" src="assets/img/agent-nora.png" /><div><b>Nora</b><span>GEO Analyst · backlinks &amp; outreach</span></div></div>
+        <div class="ag-r" id="n0"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span><em>7</em> link requests drafted</span></div>
+        <div class="ag-r" id="n1"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span><em>1</em> free listing · <em>4</em> placements to buy</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- the end card -->
+  <div id="endc"><img alt="Poliris" src="assets/img/poliris-logo.png" /><h1><span>The Search</span><span><mark><i></i><b>Intelligence</b></mark> Platform</span></h1></div>
+
+  <!-- workflow rail -->
+  <div id="railwrap"><div id="rail">
+    <div class="st" id="st1"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">1</span><span class="st-n st-n-on">1</span><span class="st-c">✓</span></span><span class="st-l">AI Visibility<span class="st-l-on">AI Visibility</span><span class="st-l-done">AI Visibility</span></span></div>
+    <div class="st" id="st2"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">2</span><span class="st-n st-n-on">2</span><span class="st-c">✓</span></span><span class="st-l">Keywords<span class="st-l-on">Keywords</span><span class="st-l-done">Keywords</span></span></div>
+    <div class="st" id="st3"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">3</span><span class="st-n st-n-on">3</span><span class="st-c">✓</span></span><span class="st-l">Technical Audit<span class="st-l-on">Technical Audit</span><span class="st-l-done">Technical Audit</span></span></div>
+    <div class="st" id="st4"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">4</span><span class="st-n st-n-on">4</span><span class="st-c">✓</span></span><span class="st-l">Roadmap<span class="st-l-on">Roadmap</span><span class="st-l-done">Roadmap</span></span></div>
+    <div class="st" id="st5"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">5</span><span class="st-n st-n-on">5</span><span class="st-c">✓</span></span><span class="st-l">Content<span class="st-l-on">Content</span><span class="st-l-done">Content</span></span></div>
+    <div class="st" id="st6"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">6</span><span class="st-n st-n-on">6</span><span class="st-c">✓</span></span><span class="st-l">Implementation<span class="st-l-on">Implementation</span><span class="st-l-done">Implementation</span></span></div>
+    <div class="st" id="st7"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">7</span><span class="st-n st-n-on">7</span><span class="st-c">✓</span></span><span class="st-l">Citations<span class="st-l-on">Citations</span><span class="st-l-done">Citations</span></span></div>
+  </div></div>
+</div>
+
+<script>
+(function () {
+  // Film clock (V12): tools/clock.py → assets/clock.js. Every cue below is a chapter start + an offset, so a new voice take
+  // only moves the chapter durations. No captions: the voice, and the screens alone tell the story.
+  // A onboarding, every AI asked · B Visibility, in the US; every other trading zone · C Prompt Explorer (2 of 9 answers on
+  // the performance of the battery), Sentiment (Performance weak, the radar below the others), one quick beat · T1 → D
+  // Keywords (two battery searches starred) · T2 → E Site Overview (the pipeline), Page Explorer crawling beside it then
+  // full, the battery page (45, Test details) · T3 the three audits land in Nora's composer → F Poli AI: the plan, Export
+  // report (the 12-page deck), Update roadmap · T4 → G the roadmap (lanes by type, Execution board, Launch: sent to Kate)
+  // · T5 the roadmap to the side, Content Studio with the task's brief, Kate's window → H Content Studio · T6 → I
+  // Technical Fixes · T7 → J Citations · T8 everything lands in the next analysis → K 78 %, the Evolution chart; the end card.
+  var tl = gsap.timeline({ paused: true });
+  var CL = window.CLOCK;
+  function at(ch, dt) { return Math.round((CL[ch] + (dt || 0)) * 1000) / 1000; }
+
+  // ── camera: put mockup point (cx, cy) at screen point (fx, fy) with scale S ──
+  var MX = 120, MY = 80;
+  function clampTo(v, size, frame, m) { return size >= frame ? Math.min(m, Math.max(frame - size - m, v)) : Math.max(-m, Math.min(frame - size + m, v)); }
+  // V14: across the frame, the window is centered whenever it fits, and leaves no empty margin on one side when it is
+  // wider (the framing then slides along it); `keep` (6th value) keeps the offset of a framing that makes room for a
+  // window beside the app (the trading zone map, the report)
+  function camState(cx, cy, S, fx, fy, keep) {
+    var w = S * 1120, x = fx - S * cx;
+    x = keep ? clampTo(x, w, 1920, MX) : w <= 1920 ? (1920 - w) / 2 : Math.min(0, Math.max(1920 - w, x));
+    return { x: x, y: clampTo(fy - S * cy, S * 730, 1080, MY), scale: S };
+  }
+  var REST = [560, 365, 1.14, 960, 512];            // whole window, between the rail and the captions
+  function cam(t, d, s, ease) { tl.to("#cam", Object.assign(camState.apply(null, s), { duration: d, ease: ease || "power2.inOut" }), t); }
+
+  // ── cards: [centre x, centre y, scale, rotation Y, opacity] in screen pixels ──
+  var C_REST = [960, 512, 1.14, 0, 1];
+  var L1 = [176, 262, 0.24, 18, 1], L2 = [176, 484, 0.24, 18, 1], L3 = [176, 706, 0.24, 18, 1];     // done, at the left
+  var R1 = [1744, 330, 0.24, -18, 1], R2 = [1744, 552, 0.24, -18, 1];                               // next, at the right
+  var SPL = [500, 560, 0.7, 10, 1], SPR = [1420, 560, 0.7, -10, 1];                               // two screens side by side
+  function cs(st) { return { x: st[0] - 560, y: st[1] - 365, scale: st[2], rotationY: st[3], opacity: st[4], transformPerspective: 1600 }; }
+  function cardSet(id, t, st) { tl.set("#" + id, cs(st), t); }
+  function cardTo(id, t, d, st, ease) { tl.to("#" + id, Object.assign(cs(st), { duration: d, ease: ease || "power3.inOut" }), t); }
+  function fade(st, o) { return [st[0], st[1], st[2], st[3], o]; }
+  // an incoming card shows up small where it waits, just before it grows
+  function cardIn(id, t, st) { cardSet(id, t - 0.3, fade(st, 0)); cardTo(id, t - 0.3, 0.3, fade(st, 1), "power2.out"); }
+  function off(st, dx) { return [st[0] + dx, st[1], st[2] * 0.96, st[3], 0]; }
+  // a docked card comes back to its place for a transition
+  function redock(id, t, st) { cardSet(id, t - 0.05, fade(off(st, st[0] < 960 ? -40 : 40), 0)); cardTo(id, t, 0.4, st, "power2.out"); }
+  // the live window hands over to a card (same image, same place) or takes it back
+  function liveOff(t) { tl.set("#cam", { opacity: 0 }, t); }
+  function liveOn(t) { tl.set("#cam", { opacity: 1 }, t); }
+  // a label above a card at the side
+  function labAt(id, st, t, on) {
+    var y = st[1] - 365 * st[2] - 40;
+    tl.set("#" + id, { x: st[0] - 95, y: y + 6 }, t - 0.01);
+    tl.fromTo("#" + id, { opacity: 0, y: y + 6 }, { opacity: 1, y: y, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+    if (on != null) tl.to("#" + id, { opacity: 0, duration: 0.3 }, on);
+  }
+  ["l1", "l2", "l3", "ls", "lpe", "lp", "lk", "lt", "ln", "lr"].forEach(function (id) { tl.set("#" + id, { opacity: 0 }, 0); });
+
+  // ── floating windows: arrive a little big and blurred, settle; leave faster ──
+  var WS = { "w-map": 1.75, "w-rep": 1.0, "w-kate": 1.0, "w-tom": 1.0, "w-nora": 1.0, "w-a1": 1.0, "w-a2": 1.0, "w-a3": 1.0 };
+  Object.keys(WS).forEach(function (id) { tl.set("#" + id, { scale: WS[id], x: 0, y: 0 }, 0); });
+  function enter(id, t, from) {
+    var s = WS[id], dx = from === "left" ? -70 : 70;
+    tl.fromTo("#" + id, { opacity: 0, x: dx, y: 10, scale: s * 1.08, filter: "blur(8px)" },
+      { opacity: 1, x: 0, y: 0, scale: s, filter: "blur(0px)", duration: 0.7, ease: "power3.out", immediateRender: false }, t);
+  }
+  function leave(id, t, to) {
+    tl.to("#" + id, { opacity: 0, x: to === "left" ? -60 : 60, scale: WS[id] * 0.96, filter: "blur(6px)", duration: 0.4, ease: "power2.in" }, t);
+  }
+  function swap(a, b, t) { tl.to(a, { opacity: 0, duration: 0.2 }, t); tl.to(b, { opacity: 1, duration: 0.25 }, t + 0.05); }
+  function tint(id, t, hold) { tl.to(id, { opacity: 1, duration: 0.3, ease: "power2.out" }, t); tl.to(id, { opacity: 0, duration: 0.45 }, t + (hold || 1)); }
+  function show(id, t) { tl.set(id, { opacity: 1 }, t); }
+  function hide(id, t) { tl.set(id, { opacity: 0 }, t); }
+  function pop(id, t, out) {
+    tl.fromTo(id, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, t);
+    if (out != null) tl.to(id, { opacity: 0, duration: 0.25 }, out);
+  }
+  function step(id, t) {
+    tl.fromTo("#" + id, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+    tl.fromTo("#" + id + " .sp", { rotation: 0 }, { rotation: 540, duration: 0.7, ease: "none", immediateRender: false }, t);
+    tl.to("#" + id + " .sp", { opacity: 0, duration: 0.1 }, t + 0.6);
+    tl.fromTo("#" + id + " .ok", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.6);
+  }
+
+  // ── the film's cursor (mockup coordinates, the same translate as the mockup's own cursor) ──
+  function curShow(t, x, y, fade) { tl.set("#cur", { x: x, y: y }, t); tl.to("#cur", { opacity: 1, duration: fade || 0 }, t); }
+  function curHide(t, fade) { if (fade) tl.to("#cur", { opacity: 0, duration: fade }, t); else tl.set("#cur", { opacity: 0 }, t); }
+  function curMove(t, d, x, y, arc) {
+    tl.to("#cur", { x: x, y: y, duration: d, ease: "power2.inOut" }, t);
+    tl.to("#cur-a", { y: -(arc == null ? 14 : arc), duration: d / 2, ease: "sine.out", yoyo: true, repeat: 1 }, t);
+  }
+  function curClick(t, x, y) {
+    tl.to("#cur-s", { scale: 0.84, duration: 0.08, ease: "power2.in" }, t);
+    tl.to("#cur-s", { scale: 1, duration: 0.2, ease: "power2.out" }, t + 0.1);
+    tl.fromTo("#rip", { x: x + 3, y: y + 3, scale: 0.4, opacity: 1 }, { scale: 1.2, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+  }
+  function clickAt(t0, d, cx, cy, tc, arc) { curMove(t0, d, cx - 3, cy - 3, arc); curClick(tc, cx - 3, cy - 3); }
+
+  // ── rail: idle → active → done ──
+  function railSet(i, state, t, d) {
+    var st = "#st" + i, dur = d == null ? 0.45 : d;
+    var on = state === "on", done = state === "done";
+    tl.to(st + " .st-bg", { opacity: on ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-numfill", { opacity: on || done ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-n-on", { opacity: on ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-c", { opacity: done ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-l-on", { opacity: on ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-l-done", { opacity: done ? 1 : 0, duration: dur }, t);
+    if (on) tl.fromTo(st + " .st-num", { scale: 0.8 }, { scale: 1, duration: 0.45, ease: "back.out(2)", immediateRender: false }, t);
+  }
+  function railTo(i, t) { if (i > 1) railSet(i - 1, "done", t); railSet(i, "on", t); }
+  railSet(1, "on", 0, 0);
+
+
+  // the deck's thumbnails: its own pages, small
+  (function () {
+    var side = document.getElementById("rv-side");
+    Array.prototype.forEach.call(document.querySelectorAll("#rv-pages .pg2"), function (pg, k) {
+      var w = document.createElement("div"); w.className = "rv-thw";
+      w.innerHTML = '<div class="rv-th" id="rvt' + k + '"></div><em>' + (k + 1) + '</em>';
+      w.firstChild.appendChild(pg.cloneNode(true)); side.appendChild(w);
+    });
+  })();
+
+  var t;
+  // ════ A · onboarding: the buyer questions, three on battery performance; every AI asked, every answer read ════
+  t = at("A");
+  tl.set("#cam", camState(560, 400, 1.32, 960, 560), t);
+  cam(t + 0.05, 2.1, [560, 420, 1.37, 960, 560], "sine.inOut");
+  curShow(t + 0.2, 420, 360, 0.25);
+  clickAt(t + 0.25, 0.42, 275.2, 302.4, t + 0.75, 8);
+  clickAt(t + 0.88, 0.38, 275.2, 436.8, t + 1.35, 8);
+  clickAt(t + 1.48, 0.38, 275.2, 504.0, t + 1.95, 8);
+  cam(t + 2.2, 1.0, [600, 560, 1.42, 960, 600]);
+  clickAt(t + 2.35, 0.85, 713.6, 691.2, t + 3.3, 22);
+  curMove(t + 3.55, 0.5, 760, 600, 10);
+  curHide(t + 3.9, 0.25);
+  cam(t + 3.25, 1.15, [600, 590, 1.46, 960, 610], "sine.inOut");
+  cam(t + 4.4, 1.1, [560, 365, 0.8, 960, 560]);        // the window steps back: every AI gets the same questions
+  [["w-a1", 4.9, "left"], ["w-a2", 5.5], ["w-a3", 6.1]].forEach(function (a, k) {
+    var t0 = t + a[1], lines = document.querySelectorAll("#" + a[0] + " .rl");
+    enter(a[0], t0, a[2]);
+    // the answer comes in line by line, as an assistant writes it
+    tl.fromTo(lines, { opacity: 0, y: 4 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.24, immediateRender: false }, t0 + 0.35);
+    tl.fromTo("#av" + (k + 1), { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t0 + 0.35 + lines.length * 0.24 + 0.1);
+  });
+  cam(t + 5.5, 3.2, [560, 365, 0.83, 960, 560], "sine.inOut");
+  // ... and the answers come back into the dashboard (the dashboard over the onboarding first, so nothing else shows)
+  [["#w-a1", 380, 110], ["#w-a2", -440, 170], ["#w-a3", -440, -170]].forEach(function (a, k) {
+    tl.to(a[0], { x: a[1], y: a[2], scale: 0.35, opacity: 0, duration: 0.55, ease: "power2.in" }, t + 8.7 + k * 0.06);
+  });
+  tl.to("#o-vis", { opacity: 1, duration: 0.3, ease: "power1.inOut" }, t + 8.85);
+  tl.to("#o-onb", { opacity: 0, duration: 0.3, ease: "power1.inOut" }, t + 9.15);
+  cam(t + 8.7, 0.8, REST);
+
+  // ════ B · Visibility: in the US, 64 % of the answers; and where you stand in every other trading zone ════
+  t = at("B");
+  cam(t + 0.1, 1.0, [560, 240, 1.4, 960, 450]);          // "Good news": the page, the header
+  cam(t + 1.1, 0.9, [560, 170, 1.55, 960, 350]);         // the header: United States
+  tint("#t-us", t + 1.5, 1.4);
+  cam(t + 2.3, 1.0, [560, 300, 1.5, 960, 540]);          // 64 %: the score, the heatmap
+  cam(t + 3.3, 1.4, [560, 304, 1.53, 960, 540], "sine.inOut");
+  cam(t + 4.7, 0.8, [620, 300, 1.1, 760, 540, 1]);       // room on the right for the trading zones
+  enter("w-map", t + 5.2);
+  tl.set("#map-lens", { x: 54.7, y: 43.8, boxShadow: "0 0 0 1.5px #0062ff, inset 0 0 0 3px rgba(255,255,255,.7), 0 10px 26px -8px rgba(15,23,42,.35)" }, 0);
+  [[112.2, 28.1, "#f59e0b", "#ro-us", "#ro-uk", 6.0], [120.8, 32.2, "#16a34a", "#ro-uk", "#ro-de", 6.6],
+   [202.5, 44.0, "#16a34a", "#ro-de", "#ro-jp", 7.2]].forEach(function (s) {
+    tl.to("#map-lens", { x: s[0], y: s[1], duration: 0.5, ease: "power2.inOut" }, t + s[5]);
+    tl.to("#map-plate", { "--lx": s[0] + "px", "--ly": s[1] + "px", duration: 0.5, ease: "power2.inOut" }, t + s[5]);
+    tl.to("#map-lens", { boxShadow: "0 0 0 1.5px " + s[2] + ", inset 0 0 0 3px rgba(255,255,255,.7), 0 10px 26px -8px rgba(15,23,42,.35)", duration: 0.3 }, t + s[5] + 0.3);
+    swap(s[3], s[4], t + s[5] + 0.25);
+  });
+  cam(t + 5.5, 2.7, [624, 302, 1.12, 760, 540, 1], "sine.inOut");
+  leave("w-map", t + 8.1);
+  // Prompt Explorer, the Performance topic: the questions on the battery
+  cam(t + 8.25, 0.9, [700, 330, 1.45, 960, 560]);
+  curShow(t + 8.35, 980, 330, 0.2);
+  clickAt(t + 8.45, 0.95, 888.8, 188.0, at("C", 1.2), 12);
+
+  // ════ C · the performance of your battery: 2 of 9 answers; Sentiment: Performance weak, the radar below the others ════
+  t = at("C");
+  cam(t + 1.25, 4.1, [690, 330, 1.5, 960, 560], "sine.inOut");
+  clickAt(t + 5.45, 0.95, 386.4, 130.6, t + 6.4, 18);    // Sentiment
+  cam(t + 6.45, 0.8, [520, 300, 1.55, 900, 560]);      // the breakdown: Performance, Weak
+  curMove(t + 6.6, 0.7, 520, 250, 10);
+  curHide(t + 7.3, 0.3);
+  cam(t + 7.25, 1.05, [526, 304, 1.58, 900, 560], "sine.inOut");
+  cam(t + 8.35, 0.8, [480, 390, 1.75, 880, 580]);      // the radar: AI rates you below your competitors
+  cam(t + 9.15, 1.05, [484, 392, 1.8, 880, 580], "sine.inOut");
+  cam(t + 10.2, 0.6, REST);
+
+  // ════ T1 · "On Google": AI Visibility to the side, Keywords comes in ════
+  t = at("T1");
+  cardSet("c-vis", 0, fade(C_REST, 0)); cardSet("c-kws", 0, [1744, 560, 0.24, -18, 0]);
+  liveOff(t); show("#c-vis", t);
+  cardTo("c-vis", t + 0.05, 0.75, L1); labAt("l1", L1, t + 0.7);
+  cardIn("c-kws", t + 0.3, [1744, 560, 0.3, -18]);
+  cardTo("c-kws", t + 0.3, 1.0, C_REST);
+  tl.set("#o-vis", { opacity: 0 }, at("D", -0.01)); tl.set("#o-kw", { opacity: 1 }, at("D", -0.01));
+  railTo(2, t + 0.4);
+  liveOn(at("D")); hide("#c-kws", at("D"));
+  cardTo("c-vis", at("D", 0.0), 0.5, off(L1, -40)); tl.to("#l1", { opacity: 0, duration: 0.3 }, at("D", 0.0));
+
+  // ════ D · Keywords on Google: the battery searches, gaps; the two of them starred, tracked every week ════
+  t = at("D");
+  cam(t + 0.05, 1.0, [650, 330, 1.32, 900, 520]);
+  cam(t + 1.05, 1.4, [655, 335, 1.36, 900, 520], "sine.inOut");
+  curShow(t + 1.0, 520, 300, 0.2);
+  clickAt(t + 1.05, 0.7, 330, 116, t + 1.8, 12);       // the Keywords tab
+  cam(t + 1.9, 0.9, [640, 450, 1.45, 960, 520]);
+  cam(t + 2.8, 2.4, [648, 458, 1.49, 960, 520], "sine.inOut");
+  clickAt(t + 3.6, 0.65, 442.4, 398.6, t + 4.3, 10);   // earbuds battery life
+  clickAt(t + 4.4, 0.45, 442.4, 518.6, t + 4.9, 8);    // earbuds with long battery life
+  curMove(t + 5.1, 0.6, 520, 600, 8);
+  curHide(t + 5.6, 0.25);
+  cam(t + 5.25, 0.7, [760, 560, 1.35, 960, 640]);      // the toast: 2 battery searches tracked every week
+  cam(t + 5.95, 0.9, [764, 562, 1.37, 960, 640], "sine.inOut");
+  cam(t + 6.9, 0.6, REST);
+
+  // ════ T2 · "Your website": Keywords to the side, Site Overview comes in ════
+  t = at("T2");
+  cardSet("c-kwe", 0, fade(C_REST, 0)); cardSet("c-sites", 0, [1744, 560, 0.24, -18, 0]);
+  liveOff(t); show("#c-kwe", t);
+  redock("c-vis", t, L1); labAt("l1", L1, t + 0.1);
+  cardTo("c-kwe", t + 0.05, 0.8, L2); labAt("l2", L2, t + 0.7);
+  cardIn("c-sites", t + 0.25, [1744, 560, 0.3, -18]);
+  cardTo("c-sites", t + 0.25, 1.05, C_REST);
+  tl.set("#o-kw", { opacity: 0 }, at("E", -0.01));
+  railTo(3, t + 0.3);
+  liveOn(at("E")); hide("#c-sites", at("E"));
+  ["c-vis", "c-kwe"].forEach(function (c, k) { cardTo(c, at("E", 0.0), 0.5, off([L1, L2][k], -40)); });
+  tl.to(["#l1", "#l2"], { opacity: 0, duration: 0.3 }, at("E", 0.0));
+
+  // ════ E · the site audit: Site Overview (reach, read, trust); Page Explorer crawling beside it, then full; the battery page ════
+  t = at("E");
+  cam(t + 0.05, 0.75, [640, 380, 1.3, 960, 560]);      // the pipeline
+  cam(t + 0.8, 1.4, [644, 384, 1.33, 960, 560], "sine.inOut");
+  cam(t + 2.2, 0.8, [430, 420, 1.85, 820, 560]);       // can AI reach your pages?
+  tint("#t-q1", t + 2.6, 1.8);
+  cam(t + 3.0, 1.55, [440, 422, 1.87, 820, 560], "sine.inOut");
+  cam(t + 4.55, 0.55, [669, 420, 1.85, 960, 560]);     // read them
+  tint("#t-q2", t + 4.7, 0.8);
+  cam(t + 5.2, 0.5, [930, 420, 1.85, 1100, 560]);      // and trust them
+  tint("#t-q3", t + 5.45, 0.8);
+  cam(t + 6.1, 0.66, REST);
+  // two screens: Site Overview to the left, Page Explorer crawling on the right (850 pages, 150 tests)
+  cardSet("c-site", 0, fade(C_REST, 0)); tl.set("#cam2", cs(fade(off(SPR, 120), 0)), 0);
+  liveOff(t + 6.8); show("#c-site", t + 6.8);
+  cardTo("c-site", t + 6.82, 0.8, SPL, "power3.inOut"); labAt("ls", SPL, t + 7.4, t + 9.8);
+  tl.to("#cam2", Object.assign(cs(SPR), { duration: 0.8, ease: "power3.out" }), t + 6.9); labAt("lpe", SPR, t + 7.5, t + 9.8);
+  tl.to("#cam2", Object.assign(cs([1424, 558, 0.71, -10, 1]), { duration: 2.1, ease: "sine.inOut" }), t + 7.7);
+  // Page Explorer takes the whole place
+  cardTo("c-site", t + 9.9, 0.6, off([300, 556, 0.5, 14, 1], -80), "power2.in");
+  tl.to("#cam2", Object.assign(cs(C_REST), { duration: 0.9, ease: "power3.inOut" }), t + 9.9);
+  tl.set("#o-pe", { opacity: 1 }, t + 10.79);
+  liveOn(t + 10.8); tl.set("#cam2", { opacity: 0 }, t + 10.8);
+  // "Your battery page scores just 45": its row; then Details, straight to its Test details
+  cam(t + 10.85, 0.8, [760, 260, 1.4, 960, 500]);
+  cam(t + 11.65, 1.5, [770, 264, 1.45, 960, 500], "sine.inOut");
+  tint("#t-bat", t + 11.0, 1.9);
+  curShow(t + 11.8, 900, 330, 0.2);
+  clickAt(t + 12.15, 0.7, 1092.8, 232.3, t + 13.0, 10); // Details
+  tl.to("#o-pd", { opacity: 1, duration: 0.25, ease: "power1.inOut" }, t + 13.15);
+  tl.set("#o-pe", { opacity: 0 }, t + 13.45);
+  curMove(t + 13.2, 0.6, 900, 330, 8);
+  curHide(t + 13.7, 0.25);
+  // Test details: no FAQ, no product data (Recommended Schema Presence failed); AI can barely read it (Content Access)
+  cam(t + 13.15, 0.8, [780, 420, 1.38, 1000, 560]);
+  cam(t + 13.95, 1.6, [786, 424, 1.41, 1000, 560], "sine.inOut");
+  cam(t + 15.55, 0.7, [560, 380, 1.25, 900, 560]);     // Content Access, Implement Fix
+  cam(t + 16.25, 1.5, [562, 382, 1.27, 900, 560], "sine.inOut");
+  cam(t + 17.75, 0.55, REST);
+
+  // ════ T3 · "So you ask Nora": the three audits land in Poli AI, as the attachments of the question ════
+  t = at("T3");
+  cardSet("c-audit", 0, fade(C_REST, 0)); cardSet("c-polis", 0, [1744, 560, 0.3, -18, 0]);
+  tl.set(["#c-vis", "#c-kwe", "#c-audit"], { zIndex: 4 }, t - 0.1);
+  liveOff(t); show("#c-audit", t);
+  redock("c-vis", t, L1); labAt("l1", L1, t + 0.1, t + 1.3);
+  redock("c-kwe", t, L2); labAt("l2", L2, t + 0.1, t + 1.3);
+  cardTo("c-audit", t + 0.05, 0.75, L3); labAt("l3", L3, t + 0.6, t + 1.3);
+  railTo(4, t + 0.3);
+  cardIn("c-polis", t + 0.5, [1744, 560, 0.3, -18]);
+  cardTo("c-polis", t + 0.5, 1.1, C_REST);
+  // into the composer's chips (AI Visibility, Keywords, Site audit), as they appear in it
+  [["c-vis", 877.6], ["c-kwe", 1054.4], ["c-audit", 1207.5]].forEach(function (c, k) {
+    cardTo(c[0], t + 1.65 + k * 0.3, 0.6, [c[1], 819, 0.05, 0, 0], "power2.in");
+  });
+  tl.set("#o-pd", { opacity: 0 }, at("F", -0.01)); tl.set("#o-poli", { opacity: 1 }, at("F", -0.01));
+  liveOn(at("F")); hide("#c-polis", at("F"));
+
+  // ════ F · Poli AI: the question, Nora's steps, her findings and plan; Export report (the deck); Update roadmap ════
+  t = at("F");
+  cam(t + 0.05, 0.8, [669, 600, 1.5, 960, 640]);       // the composer: three audits attached, the question typed
+  cam(t + 0.85, 2.6, [669, 610, 1.53, 960, 640], "sine.inOut");
+  cam(t + 3.5, 0.8, [669, 200, 1.6, 960, 430]);        // sent: Nora answers, her steps
+  cam(t + 4.3, 0.9, [669, 360, 1.42, 960, 540]);       // her findings: AI answers, Google, your site; then the plan
+  cam(t + 5.2, 3.6, [672, 400, 1.38, 960, 560], "sine.inOut");
+  cam(t + 8.85, 0.7, [700, 470, 1.45, 960, 580]);      // the plan's two outcomes
+  curShow(t + 9.2, 860, 640, 0.2);
+  clickAt(t + 9.25, 0.75, 745.6, 570.1, t + 10.1, 10); // Export report
+  cam(t + 10.15, 0.9, [560, 365, 0.95, 590, 540, 1]);  // room for the report
+  enter("w-rep", t + 10.4);
+  // the deck, page after page: the cover, the priorities, the three workstreams, the first four weeks
+  tl.set("#rv-pages", { y: 0 }, 0);
+  tl.to("#rv-pages", { y: -842, duration: 0.65, ease: "power2.inOut" }, t + 11.25);
+  tl.to("#rv-pages", { y: -1684, duration: 0.65, ease: "power2.inOut" }, t + 12.35);
+  tl.to("#rv-pages", { y: -2105, duration: 0.5, ease: "power2.inOut" }, t + 13.4);
+  tl.set(".rv-th", { boxShadow: "0 0 0 1px #d8dee8" }, 0); tl.set("#rvt0", { boxShadow: "0 0 0 2px #0062ff" }, 0);
+  [[0, 2, 11.25], [2, 4, 12.35], [4, 5, 13.4]].forEach(function (h) {
+    tl.to("#rvt" + h[0], { boxShadow: "0 0 0 1px #d8dee8", duration: 0.2 }, t + h[2]);
+    tl.to("#rvt" + h[1], { boxShadow: "0 0 0 2px #0062ff", duration: 0.2 }, t + h[2]);
+  });
+  clickAt(t + 13.6, 0.8, 885.6, 570.1, t + 14.5, 10);  // Update roadmap
+  curMove(t + 14.75, 0.4, 940, 640, 6);
+  curHide(t + 15.05, 0.2);
+  leave("w-rep", t + 14.75);
+  cam(t + 14.7, 0.65, REST);
+
+  // ════ T4 · the plan to the side, the roadmap comes in ════
+  t = at("T4");
+  cardSet("c-polie", 0, fade(C_REST, 0)); cardSet("c-roads", 0, [1744, 560, 0.3, -18, 0]);
+  liveOff(t); show("#c-polie", t);
+  cardTo("c-polie", t + 0.05, 0.75, L1); labAt("lp", L1, t + 0.7);
+  cardIn("c-roads", t + 0.3, [1744, 560, 0.3, -18]);
+  cardTo("c-roads", t + 0.3, 0.9, C_REST);
+  tl.set("#o-poli", { opacity: 0 }, at("G", -0.01)); tl.set("#o-road", { opacity: 1 }, at("G", -0.01));
+  liveOn(at("G")); hide("#c-roads", at("G"));
+  cardTo("c-polie", at("G", 0.0), 0.5, off(L1, -40)); tl.to("#lp", { opacity: 0, duration: 0.3 }, at("G", 0.0));
+
+  // ════ G · the roadmap, updated by Nora: a lane per type of work; Execution board: the drag, Launch task ════
+  t = at("G");
+  cam(t + 0.05, 0.8, [600, 240, 1.4, 960, 470]);       // the timeline: Nora's three tasks come in
+  cam(t + 0.85, 3.0, [604, 244, 1.43, 960, 470], "sine.inOut");
+  cam(t + 3.9, 0.8, [600, 290, 1.3, 960, 520]);        // the lanes: technical fixes, content, citations
+  cam(t + 4.7, 1.7, [602, 292, 1.32, 960, 520], "sine.inOut");
+  cam(t + 6.9, 0.8, [560, 330, 1.3, 960, 540]);       // down to the Execution board, below the timeline
+  curShow(t + 7.1, 560, 380, 0.2);
+  curMove(t + 7.15, 0.5, 379.4, 231.5, 6);
+  // the drag: the battery guide from Backlog to In progress (the screen moves the card on the same path)
+  tl.to("#cur-s", { scale: 0.86, duration: 0.1, ease: "power2.in" }, t + 7.6);
+  tl.to("#cur", { x: 379.4 + 286.4, y: 231.5, duration: 1.0, ease: "power2.inOut" }, t + 7.7);
+  tl.to("#cur-s", { scale: 1, duration: 0.15, ease: "power2.out" }, t + 8.7);
+  clickAt(t + 8.9, 0.6, 668.8, 389.0, t + 9.6, 8);     // Launch task: sent to Kate
+  railTo(5, t + 9.7);
+  cam(t + 9.7, 0.62, REST);
+  curHide(at("T5"));
+
+  // ════ T5 · "Launch the battery guide, and Kate takes it from there": the roadmap (task #5 sent to Kate) to the side,
+  //      Content Studio comes in with the task's brief, Kate's window opens ════
+  t = at("T5");
+  cardSet("c-roade", 0, fade(C_REST, 0)); cardSet("c-contents", 0, [1744, 560, 0.3, -18, 0]);
+  cardSet("c-fixs", 0, fade(R1, 0)); cardSet("c-cits", 0, fade(R2, 0));
+  liveOff(t); show("#c-roade", t);
+  tl.set("#o-road", { opacity: 0 }, t + 0.1);
+  cardTo("c-roade", t + 0.05, 0.75, L1); labAt("lr", L1, t + 0.7);
+  cardIn("c-contents", t + 0.3, [1744, 560, 0.3, -18]);
+  cardTo("c-contents", t + 0.3, 1.0, C_REST);
+  enter("w-kate", t + 1.0);
+  tl.set("#o-fix", { opacity: 0 }, 0);
+  // the card has landed: the live window takes over at once (same image), the camera goes into the brief
+  liveOn(t + 1.35); hide("#c-contents", t + 1.35);
+  cardTo("c-roade", t + 1.6, 0.45, off(L1, -40)); tl.to("#lr", { opacity: 0, duration: 0.3 }, t + 1.6);
+  cam(t + 1.95, 1.1, [690, 360, 1.3, 860, 540]);
+  pop("#t-from", t + 2.1, at("H", 1.6));
+
+  // ════ H · Content Studio, pre-filled by the task: Kate writes the guide, scores it; the article (no cover) ════
+  t = at("H");
+  curShow(t + 0.02, 900, 380, 0.15);
+  curMove(t + 0.03, 0.4, 1008.8, 289.8, 6);
+  curClick(t + 0.45, 1008.8, 289.8);                   // Start writing
+  curHide(t + 0.75, 0.2);
+  cam(t + 0.05, 2.85, [700, 360, 1.36, 860, 540], "sine.inOut");
+  step("k0", t + 2.4);
+  cam(t + 2.95, 0.7, [736, 163, 1.75, 900, 420]);      // the score: 91
+  step("k1", t + 3.4);
+  cam(t + 3.65, 0.9, [740, 168, 1.78, 900, 420], "sine.inOut");
+  cam(t + 4.6, 0.6, [736, 330, 1.35, 900, 520]);       // down to the article
+  cam(t + 5.2, 0.45, [740, 336, 1.38, 900, 520], "sine.inOut");
+  leave("w-kate", t + 5.3);
+  cam(t + 5.65, 0.55, REST);
+
+  // ════ T6 · Content to the side, Tom's fixes come in ════
+  t = at("T6");
+  cardSet("c-content", 0, fade(C_REST, 0));
+  liveOff(t); show("#c-content", t);
+  cardSet("c-fixs", t - 0.08, fade(off(R1, 40), 0)); cardTo("c-fixs", t - 0.06, 0.2, R1, "power2.out");
+  cardSet("c-cits", t - 0.08, fade(off(R2, 40), 0)); cardTo("c-cits", t - 0.06, 0.3, R2, "power2.out");
+  cardTo("c-content", t + 0.05, 0.8, L1); labAt("lk", L1, t + 0.7);
+  cardTo("c-fixs", t + 0.15, 0.85, C_REST);
+  tl.set("#o-fix", { opacity: 1 }, at("I", -0.01));
+  railTo(6, t + 0.3);
+  liveOn(at("I")); hide("#c-fixs", at("I"));
+  cardTo("c-content", at("I", 0.0), 0.5, off(L1, -40)); tl.to("#lk", { opacity: 0, duration: 0.3 }, at("I", 0.0));
+  cardTo("c-cits", at("I", 0.0), 0.5, off(R2, 40));
+
+  // ════ I · Technical Fixes: Tom writes the markup for the battery page ════
+  t = at("I");
+  cam(t + 0.05, 0.6, [700, 330, 1.25, 960, 520]);
+  curShow(t + 0.05, 640, 470, 0.15);
+  clickAt(t + 0.1, 0.4, 500.8, 353.0, t + 0.55, 10);
+  curMove(t + 0.7, 0.8, 640, 470, 8);
+  curHide(t + 1.5, 0.25);
+  enter("w-tom", t + 0.3);
+  cam(t + 0.75, 1.0, [860, 500, 1.6, 900, 560]);
+  cam(t + 1.75, 2.2, [865, 505, 1.64, 900, 560], "sine.inOut");
+  step("t0", t + 1.2);
+  step("t1", t + 2.6);
+  leave("w-tom", t + 3.95);
+  cam(t + 3.95, 0.6, REST);
+
+  // ════ T7 · the fixes to the side, Nora's citations come in ════
+  t = at("T7");
+  cardSet("c-fixe", 0, fade(C_REST, 0));
+  liveOff(t); show("#c-fixe", t);
+  redock("c-content", t, L1); labAt("lk", L1, t + 0.1);
+  cardSet("c-cits", t - 0.08, fade(off(R2, 40), 0)); cardTo("c-cits", t - 0.06, 0.18, R2, "power2.out");
+  cardTo("c-fixe", t + 0.05, 0.8, L2); labAt("lt", L2, t + 0.7);
+  cardTo("c-cits", t + 0.15, 0.85, C_REST);
+  tl.set("#o-fix", { opacity: 0 }, at("J", -0.01)); tl.set("#o-cit", { opacity: 1 }, at("J", -0.01));
+  railTo(7, t + 0.3);
+  liveOn(at("J")); hide("#c-cits", at("J"));
+  ["c-content", "c-fixe"].forEach(function (c, k) { cardTo(c, at("J", 0.0), 0.5, off([L1, L2][k], -40)); });
+  tl.to(["#lk", "#lt"], { opacity: 0, duration: 0.3 }, at("J", 0.0));
+
+  // ════ J · Citations: Review (ask for a link), then Acquire (claim a listing, buy a placement), all inside Poliris ════
+  t = at("J");
+  cam(t + 0.05, 0.9, [660, 420, 1.35, 900, 560]);
+  cam(t + 0.95, 1.9, [690, 432, 1.42, 900, 560], "sine.inOut");
+  enter("w-nora", t + 0.3);
+  step("n0", t + 2.9);
+  cam(t + 2.85, 0.8, [420, 470, 1.25, 700, 560]);      // the sidebar in view: Citations › Acquire
+  curShow(t + 3.0, 420, 600, 0.2);
+  clickAt(t + 3.05, 0.9, 88, 569, t + 3.95, 14);
+  cam(t + 4.1, 0.6, [720, 420, 1.42, 900, 560]);
+  step("n1", t + 4.6);
+  cam(t + 4.7, 0.9, [930, 470, 1.7, 1000, 560]);
+  cam(t + 5.6, 0.6, [935, 475, 1.74, 1000, 560], "sine.inOut");
+  curMove(t + 4.2, 0.8, 520, 610, 10);
+  curHide(t + 5.1, 0.25);
+  leave("w-nora", t + 6.2);
+  cam(t + 6.25, 0.8, [560, 365, 1.06, 960, 520]);      // all without leaving Poliris: the whole app
+  cam(t + 7.05, 1.15, REST, "sine.inOut");
+
+  // ════ T8 · everything lands in the next analysis ════
+  t = at("T8");
+  cardSet("c-cite", 0, fade(C_REST, 0)); cardSet("c-vis2", 0, [960, 560, 0.5, 0, 0]);
+  liveOff(t); show("#c-cite", t);
+  redock("c-content", t, L1); labAt("lk", L1, t + 0.05, t + 0.8);
+  redock("c-fixe", t, L2); labAt("lt", L2, t + 0.05, t + 0.8);
+  cardTo("c-cite", t + 0.05, 0.7, L3); labAt("ln", L3, t + 0.5, t + 0.8);
+  cardIn("c-vis2", t + 0.55, [960, 540, 0.5, 0]);
+  cardTo("c-vis2", t + 0.55, 1.05, C_REST);
+  [["c-content", 0], ["c-cite", 1], ["c-fixe", 2]].forEach(function (c) {
+    cardTo(c[0], t + 0.8 + c[1] * 0.08, 0.6, [960 + (c[1] - 1) * 160, 520, 0.1, 0, 0], "power2.in");
+  });
+  [2, 3, 4, 5, 6, 7].forEach(function (k) { railSet(k, "done", t + 0.1); }); railSet(1, "on", t + 0.1);
+  tl.set("#o-cit", { opacity: 0 }, at("K", -0.01)); tl.set("#o-vis2", { opacity: 1 }, at("K", -0.01));
+  liveOn(at("K")); hide("#c-vis2", at("K"));
+
+  // ════ K · the next analysis: Rerun, 64 → 78 %, #1; the Evolution chart: Sony passes Apple; the end card ════
+  t = at("K");
+  curShow(t - 0.25, 980, 170, 0.2);
+  clickAt(t - 0.2, 0.25, 1074.8, 59.2, t + 0.1, 6);    // Rerun
+  curMove(t + 0.4, 0.7, 990, 260, 8);
+  curHide(t + 1.1, 0.3);
+  cam(t + 0.05, 0.8, [880, 150, 1.6, 960, 430]);
+  cam(t + 0.85, 1.9, [870, 160, 1.66, 960, 440], "sine.inOut");
+  cam(t + 2.8, 0.9, [668, 300, 1.6, 960, 600]);        // the Evolution chart: the new run, 78 %
+  cam(t + 3.7, 2.1, [690, 300, 1.75, 960, 600], "sine.inOut");
+  // the end card: the window steps back and fades out first; then a clean white page, the logo, the tagline
+  tl.to("#cam", Object.assign(camState(560, 365, 0.9, 960, 540), { opacity: 0, duration: 0.6, ease: "power2.in" }), t + 5.5);
+  tl.to("#railwrap", { opacity: 0, y: -10, duration: 0.5, ease: "power2.in" }, t + 5.5);
+  tl.to("#endc", { opacity: 1, duration: 0.35, ease: "power1.inOut" }, t + 6.0);
+  tl.fromTo("#endc img", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, t + 6.2);
+  tl.fromTo("#endc h1 span", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.14, immediateRender: false }, t + 6.4);
+  tl.fromTo("#endc mark i", { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power2.inOut", immediateRender: false }, t + 7.0);
+  tl.set("#endc mark i", { scaleX: 0 }, 0);
+
+  tl.set({}, {}, CL.TOTAL);                            // the timeline lasts the whole film (the web player reads its length)
+  window.__timelines = window.__timelines || {};      // the web player injects its runtime after the page has run
+  window.__timelines["main"] = tl;
+})();
+</script>
+</body>
+</html>
