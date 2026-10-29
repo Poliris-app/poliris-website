@@ -119,6 +119,7 @@ export default function LandingPage() {
       {/* <ProductCarousel /> */}
       <PlatformEngine />
       <Agents />
+      <CompareCard />
       {/* ComparisonTable hidden for now — restore by uncommenting. */}
       {/* <ComparisonTable /> */}
       <Stakes />
@@ -2621,6 +2622,119 @@ function AgentCard({ agent }) {
       </div>
       <p className="agent-card__desc">{agent.desc}</p>
     </div>
+  );
+}
+
+/* ================================================================
+   COMPARE CARD — compact Poliris vs four tools table after the Team
+   section, linking to the full comparison post.
+   ================================================================ */
+const CC_ICONS = {
+  y: (
+    <svg className="cc__ic" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill="#dcfce7" />
+      <path d="M7.6 12.4l3 3 5.8-6" fill="none" stroke="#15803d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  p: (
+    <svg className="cc__ic" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill="#fef3c7" />
+      <circle cx="12" cy="12" r="6.2" fill="none" stroke="#b45309" strokeWidth="2" />
+      <path d="M12 5.8a6.2 6.2 0 0 1 0 12.4z" fill="#b45309" />
+    </svg>
+  ),
+  n: (
+    <svg className="cc__ic" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill="#eef0f4" />
+      <path d="M9.2 9.2l5.6 5.6M14.8 9.2l-5.6 5.6" stroke="#6c6c7c" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+  // Poliris column: solid blue check.
+  pol: (
+    <svg className="cc__ic cc__ic--lg" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="12" fill="var(--poliris-blue)" />
+      <path d="M7.6 12.4l3 3 5.8-6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+};
+
+function CompareCardCell({ value, status, pol }) {
+  const [s, note] = Array.isArray(value) ? value : [value, null];
+  return (
+    <div className={`cc__c cc__c--${s}`}>
+      {pol && s === 'y' ? CC_ICONS.pol : CC_ICONS[s]}
+      <span className="sr-only">{note ? `${status[s]}, ${note}` : status[s]}</span>
+      {note && <small aria-hidden="true">{note}</small>}
+    </div>
+  );
+}
+
+function CompareCard() {
+  const { t, lang } = useLang();
+  const d = t('home.compareCard');
+  return (
+    <section className="cc" id="compare">
+      <div className="container">
+        {/* Same centred header as the Stakes section: eyebrow, heading with
+            the second line highlighted, lead below. */}
+        <div className="sec-head reveal">
+          <Eyebrow>{d.eyebrow}</Eyebrow>
+          <h2 className="sec-h2">{d.h2} <HL>{d.h2Blue}</HL></h2>
+          <p className="sec-lead">{d.lead}</p>
+        </div>
+
+        <div className="cc__card reveal">
+          <div className="cc__tw" role="region" aria-label={`${d.h2} ${d.h2Blue}`} tabIndex={0}>
+            <table className="cc__t">
+              <thead>
+                <tr>
+                  <th scope="col" className="cc__rh">{d.corner}</th>
+                  <th scope="col" className="cc__pol">
+                    <img src={`${import.meta.env.BASE_URL}Logo-Poliris-1.png`} alt="Poliris" width="90" height="22" />
+                  </th>
+                  {d.cols.map(([name, kind]) => (
+                    <th key={name} scope="col">{name}<small>{kind}</small></th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {d.rows.map((row) => (
+                  <tr key={row.label}>
+                    <th scope="row">{row.label}</th>
+                    {row.cells.map((v, i) => (
+                      <td key={i} className={i === 0 ? 'cc__pol' : undefined}>
+                        <CompareCardCell value={v} status={d.status} pol={i === 0} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                <tr className="cc__price">
+                  <th scope="row">{d.price.label}<small>{d.price.sub}</small></th>
+                  <td className="cc__pol">
+                    <div className="cc__pp"><small>{d.price.pre}</small><b>{d.price.pol}</b></div>
+                  </td>
+                  {d.price.others.map((v) => <td key={v}><span className="cc__x">{v}</span></td>)}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="cc__sw">{d.swipe}</p>
+
+          <div className="cc__foot">
+            <div>
+              <div className="cc__lg">
+                {['y', 'p', 'n'].map((k) => <span key={k}>{CC_ICONS[k]}{d.status[k]}</span>)}
+              </div>
+              <p className="cc__n">{d.note}</p>
+            </div>
+            <Link to={`/${lang}/blog/poliris-comparison`} className="cc__cta">
+              {d.cta}
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

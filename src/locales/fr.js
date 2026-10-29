@@ -408,6 +408,31 @@ export default {
         { name: 'Emma', role: 'Intelligence Concurrentielle', desc: 'Identifie vos véritables concurrents sur chaque marché et montre où ils vous devancent dans les réponses des IA.' },
       ],
     },
+    // Carte comparatif compacte après la section Équipe ; renvoie vers
+    // l'article comparatif complet. Mêmes codes de cellules que en.js.
+    compareCard: {
+      eyebrow: 'Comparatif 2026',
+      h2: 'Le SEO et la visibilité IA',
+      h2Blue: 'dans une seule plateforme',
+      lead: "Poliris réunit les fonctionnalités clés de Screaming Frog, Semrush, Peec AI et Surfer. L'audit, les mots-clés, les liens, les contenus et la visibilité IA reposent sur des données centralisées et alimentent un plan d'action unique.",
+      cta: 'Voir le comparatif complet',
+      corner: 'Fonctionnalité',
+      cols: [['Screaming Frog', 'Crawler'], ['Semrush', 'Suite SEO'], ['Peec AI', 'Suivi IA'], ['Surfer', 'Contenus']],
+      rows: [
+        { label: 'Audit technique du site',              cells: ['y', 'y', 'y', 'n', ['p', 'Contenus']] },
+        { label: 'Contrôle des robots des IA',           cells: ['y', ['p', 'Partiel'], ['p', 'Option'], 'y', 'n'] },
+        { label: 'Corrections mises en ligne',           cells: ['y', 'n', 'n', 'n', 'n'] },
+        { label: 'Mots-clés et positions Google',        cells: ['y', 'n', 'y', 'n', ['p', 'Partiel']] },
+        { label: 'Liens sur les sites cités par les IA', cells: ['y', 'n', ['p', 'Option'], ['p', 'Partiel'], 'n'] },
+        { label: 'Visibilité dans les IA',               cells: [['y', '10 moteurs'], 'n', ['p', 'Option'], ['y', '3 moteurs'], ['p', 'Offre supérieure']] },
+        { label: 'Rédaction de contenus',                cells: ['y', 'n', ['p', 'Option'], ['p', 'Optimisation'], 'y'] },
+        { label: "Plan d'action daté",                   cells: ['y', 'n', ['p', 'Partiel'], ['p', 'Partiel'], 'n'] },
+      ],
+      price: { label: 'Prix mensuel', sub: 'Un utilisateur, prix publics', pre: 'dès', pol: '29 $', others: ['23 $', '139 $', '95 $', '59 $'] },
+      status: { y: 'Inclus', p: 'Partiel ou en option', n: 'Non mentionné' },
+      swipe: 'Faites glisser pour voir tous les outils',
+      note: 'Prix publics mensuels, un utilisateur, octobre 2026 ; licence annuelle de Screaming Frog ramenée au mois. Détail et sources dans le comparatif complet.',
+    },
     comparison: {
       eyebrow: 'Une plateforme, pas une multitude d’outils',
       h2: 'Remplacez toute votre pile d\'outils.',

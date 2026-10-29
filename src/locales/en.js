@@ -406,6 +406,32 @@ export default {
         { name: 'Emma', role: 'Competitor Intelligence',     desc: "Maps your real rivals in each zone and shows where they're beating you in AI." },
       ],
     },
+    // Compact comparison card after the Team section; links to the full
+    // comparison post. Cells: 'y' included, 'p' partial / add-on, 'n' not
+    // mentioned; ['p', 'note'] adds a note.
+    compareCard: {
+      eyebrow: '2026 comparison',
+      h2: 'SEO and AI visibility',
+      h2Blue: 'in a single platform',
+      lead: 'Poliris brings together the key features of Screaming Frog, Semrush, Peec AI and Surfer. Audit, keywords, links, content and AI visibility run on centralized data and feed a single action plan.',
+      cta: 'See the full comparison',
+      corner: 'Feature',
+      cols: [['Screaming Frog', 'Crawler'], ['Semrush', 'SEO suite'], ['Peec AI', 'AI tracker'], ['Surfer', 'Content']],
+      rows: [
+        { label: 'Technical site audit',         cells: ['y', 'y', 'y', 'n', ['p', 'Content only']] },
+        { label: 'AI crawler checks',            cells: ['y', ['p', 'Partial'], ['p', 'Add-on'], 'y', 'n'] },
+        { label: 'Fixes pushed live',            cells: ['y', 'n', 'n', 'n', 'n'] },
+        { label: 'Google keywords and rankings', cells: ['y', 'n', 'y', 'n', ['p', 'Partial']] },
+        { label: 'Links on AI-cited sites',      cells: ['y', 'n', ['p', 'Add-on'], ['p', 'Partial'], 'n'] },
+        { label: 'AI visibility',                cells: [['y', '10 engines'], 'n', ['p', 'Add-on'], ['y', '3 engines'], ['p', 'Higher plan']] },
+        { label: 'Content writing',              cells: ['y', 'n', ['p', 'Add-on'], ['p', 'Optimization'], 'y'] },
+        { label: 'Dated action plan',            cells: ['y', 'n', ['p', 'Partial'], ['p', 'Partial'], 'n'] },
+      ],
+      price: { label: 'Monthly price', sub: 'One user, public pricing', pre: 'from', pol: '$29', others: ['$23', '$139', '$95', '$59'] },
+      status: { y: 'Included', p: 'Partial or add-on', n: 'Not mentioned' },
+      swipe: 'Swipe to see every tool',
+      note: 'Public monthly prices, one user, October 2026; Screaming Frog annual license shown per month. Details and sources in the full comparison.',
+    },
     comparison: {
       eyebrow: 'One platform, not a stack',
       h2: 'Replace your whole toolstack.',

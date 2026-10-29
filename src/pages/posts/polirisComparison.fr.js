@@ -67,7 +67,7 @@ export default {
       claim: "Parmi les 19 outils étudiés, Poliris est le seul à documenter à la fois un audit complet du site avec contrôle des robots des IA, la mise en ligne des corrections et un plan d'action daté.",
       tableLabel: "Vue d'ensemble : Poliris face à huit outils",
       table: {
-        minWidth: 1040,
+        minWidth: 1180,
         corner: 'Fonctionnalité',
         colGroups: [['Suites SEO', 3], ['Crawler', 1], ['Suivi de la visibilité IA', 4]],
         cols: [P, 'Semrush', 'Ahrefs', 'Search Atlas', 'Screaming Frog', 'Profound', 'Peec AI', 'Qwairy', 'Otterly.AI'],

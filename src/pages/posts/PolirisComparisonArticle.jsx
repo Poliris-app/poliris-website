@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
 import Navbar from '../../components/Navbar';
 import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
-import { trackEvent } from '../../lib/analytics';
 import '../../blog-post.css';
 import '../../blog-comparison.css';
 
@@ -15,15 +14,13 @@ import '../../blog-comparison.css';
 // a row added to one table can't drift out of step with the other language.
 
 export const SLUG = 'poliris-comparison';
-const TRIAL_URL = 'https://app.poliris.io';
-const DEMO_URL = 'https://cal.com/team/poliris/discovery-call';
 
 // Table cell statuses: included, partial / add-on, not mentioned, not disclosed.
 const ICONS = {
   y: (
     <svg className="bpc-ic" viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="12" cy="12" r="11" fill="#dcfce7" />
-      <path d="M7.2 12.4l3.1 3.1 6.5-6.6" fill="none" stroke="#15803d" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.2 12.4l3.1 3.1 6.5-6.6" fill="none" stroke="#15803d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   p: (
@@ -36,7 +33,7 @@ const ICONS = {
   n: (
     <svg className="bpc-ic" viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="12" cy="12" r="11" fill="#eef0f4" />
-      <path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" stroke="#8a91a0" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" stroke="#8a91a0" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
   d: (
@@ -53,6 +50,21 @@ const CHECK = (
     <path d="M5.8 10.3l2.7 2.7 5.6-5.7" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+const LOGO_SRC = `${import.meta.env.BASE_URL}Logo-Poliris-1.png`;
+
+// `light` inverts the logo to white, for the blue Poliris table header.
+function Logo({ height, light }) {
+  return (
+    <img
+      className={`bpc-logo${light ? ' bpc-logo--light' : ''}`}
+      src={LOGO_SRC}
+      alt="Poliris"
+      width={Math.round(height * (218 / 54))}
+      height={height}
+    />
+  );
+}
 
 const BACK_ICON = (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -86,10 +98,60 @@ function Cell({ value, ui }) {
 
 function CompareTable({ table, label, ui }) {
   const span = table.cols.length + 1;
+  const wrapRef = useRef(null);
+  const drag = useRef(null);
+  const [scrollable, setScrollable] = useState(false);
+  const [dragging, setDragging] = useState(false);
+
+  // Only offer drag-to-scroll (grab cursor) when the table actually overflows.
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return undefined;
+    const measure = () => setScrollable(wrap.scrollWidth > wrap.clientWidth + 1);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, []);
+
+  // Mouse drag pans the table sideways; touch keeps its native swipe.
+  function onPointerDown(e) {
+    if (!scrollable || e.pointerType !== 'mouse' || e.button !== 0) return;
+    drag.current = { x: e.clientX, left: wrapRef.current.scrollLeft, moved: false };
+  }
+  function onPointerMove(e) {
+    const d = drag.current;
+    if (!d) return;
+    const dx = e.clientX - d.x;
+    if (!d.moved && Math.abs(dx) < 4) return;
+    if (!d.moved) {
+      d.moved = true;
+      setDragging(true);
+      wrapRef.current.setPointerCapture(e.pointerId);
+    }
+    wrapRef.current.scrollLeft = d.left - dx;
+  }
+  function onPointerUp() {
+    drag.current = null;
+    setDragging(false);
+  }
+
+  const wrapCls = ['bpc-tw', scrollable && 'bpc-tw--drag', dragging && 'bpc-tw--dragging'].filter(Boolean).join(' ');
+
   return (
     <>
-      <div className="bpc-tw" role="region" aria-label={label} tabIndex={0}>
-        <table className="bpc-table" style={{ minWidth: table.minWidth ?? 760 }}>
+      <div
+        ref={wrapRef}
+        className={wrapCls}
+        role="region"
+        aria-label={label}
+        tabIndex={0}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        <table className="bpc-table" style={{ '--bpc-min': `${table.minWidth ?? 760}px` }}>
           <caption className="sr-only">{label}</caption>
           {/* table-layout: fixed sizes columns from the first row, which in the
               overview is the empty column-group row, so the widths go here. */}
@@ -101,7 +163,7 @@ function CompareTable({ table, label, ui }) {
             {table.colGroups && (
               <tr className="bpc-colgroups">
                 <td />
-                <td />
+                <td className="bpc-pol-gap" />
                 {table.colGroups.map(([name, cols]) => (
                   <th key={name} colSpan={cols} scope="colgroup"><span>{name}</span></th>
                 ))}
@@ -110,7 +172,11 @@ function CompareTable({ table, label, ui }) {
             <tr>
               <th scope="col" className="bpc-rowh">{table.corner}</th>
               {table.cols.map((col, i) => (
-                <th key={col} scope="col" className={i === 0 ? 'bpc-pol' : undefined}>{col}</th>
+                i === 0 ? (
+                  <th key={col} scope="col" className="bpc-pol"><Logo height={18} light /></th>
+                ) : (
+                  <th key={col} scope="col">{col}</th>
+                )
               ))}
             </tr>
           </thead>
@@ -190,53 +256,41 @@ function SectionHeader({ n, eyebrow, title }) {
   );
 }
 
-function CtaButtons({ ui }) {
-  return (
-    <div className="bpc-cta-actions">
-      <a href={TRIAL_URL} target="_blank" rel="noopener noreferrer" className="bp-cta-btn" onClick={() => trackEvent('trial_cta_clicked')}>
-        {ui.trial}
-      </a>
-      <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="bp-cta-btn bpc-cta-btn--ghost" onClick={() => trackEvent('demo_cta_clicked')}>
-        {ui.demo}
-      </a>
-    </div>
-  );
-}
-
 function CostBreakdown({ cost }) {
   const { before, after } = cost;
   return (
     <div className="bpc-cost">
       <div className="bpc-panel">
         <div className="bpc-panel-tag">{before.tag}</div>
-        <div className="bpc-bill-h">{before.head.map((h) => <span key={h}>{h}</span>)}</div>
-        {before.rows.map(([workstream, tool, price]) => (
-          <div key={workstream} className="bpc-bill-r">
-            <span>{workstream}</span><b>{tool}</b><span>{price}</span>
-          </div>
-        ))}
-        <div className="bpc-bill-note">{before.note}</div>
-        <div className="bpc-total"><span>{before.totalLabel}</span><strong>{before.total}</strong></div>
+        <div className="bpc-bill">
+          <div className="bpc-bill-h">{before.head.map((h) => <span key={h}>{h}</span>)}</div>
+          {before.rows.map(([workstream, tool, price]) => (
+            <div key={workstream} className="bpc-bill-r">
+              <span>{workstream}</span><b>{tool}</b><span>{price}</span>
+            </div>
+          ))}
+          <div className="bpc-bill-note">{before.note}</div>
+          <div className="bpc-total"><span>{before.totalLabel}</span><strong>{before.total}</strong></div>
+        </div>
         <ul className="bpc-stats">{before.stats.map((s) => <li key={s}>{s}</li>)}</ul>
       </div>
 
       <div className="bpc-panel bpc-panel--pol">
         <div className="bpc-panel-tag">{after.tag}</div>
-        <div className="bpc-flow">
-          <div className="bpc-frame-h"><b>Poliris</b><span>{after.modulesLabel}</span></div>
-          <div className="bpc-mods" style={{ width: '100%' }}>
+        <div className="bpc-frame">
+          <div className="bpc-frame-h"><Logo height={16} /><span>{after.modulesLabel}</span></div>
+          <div className="bpc-mods">
             {after.modules.map(([name, detail]) => (
               <div key={name} className="bpc-mod"><b>{name}</b><span>{detail}</span></div>
             ))}
           </div>
-          <div className="bpc-flow-line" />
-          <div className="bpc-flow-pill">{after.dataset}</div>
-          <div className="bpc-flow-line" />
-          <div className="bpc-node bpc-node--dark"><b>{after.ai.b}</b><p>{after.ai.p}</p></div>
-          <div className="bpc-flow-line" />
-          <div className="bpc-node"><b>{after.team.b}</b><p>{after.team.p}</p></div>
         </div>
-        <div className="bpc-total"><span>{after.totalLabel}</span><strong>{after.total}</strong></div>
+        {/* Bracket joining the modules into one dataset, then a line down to Poli AI */}
+        <div className="bpc-merge"><em>{after.dataset}</em></div>
+        <div className="bpc-node bpc-node--dark"><b>{after.ai.b}</b><p>{after.ai.p}</p></div>
+        <div className="bpc-arrow" />
+        <div className="bpc-node"><b>{after.team.b}</b><p>{after.team.p}</p></div>
+        <div className="bpc-total bpc-total--pol"><span>{after.totalLabel}</span><strong>{after.total}</strong></div>
         <ul className="bpc-stats">{after.stats.map((s) => <li key={s}>{s}</li>)}</ul>
       </div>
     </div>
@@ -278,7 +332,7 @@ function Plans({ plans }) {
 export default function PolirisComparisonArticle({ content: c }) {
   const { lang } = useLang();
   const { ui } = c;
-  const [openFaq, setOpenFaq] = useState(0);
+  const [openFaq, setOpenFaq] = useState(null);
   const [activeSection, setActiveSection] = useState('');
   const [progress, setProgress] = useState(0);
 
@@ -310,7 +364,7 @@ export default function PolirisComparisonArticle({ content: c }) {
     overview: (s) => (
       <>
         <p>{s.lede}</p>
-        <div className="bp-pull-quote"><p>{s.claim}</p></div>
+        <div className="bp-pull-quote bpc-claim"><p>{s.claim}</p></div>
         <CompareTable table={s.table} label={s.tableLabel} ui={ui} />
         <div className="bpc-legend">
           {['y', 'p', 'n', 'd'].map((k) => <span key={k}>{ICONS[k]}{ui.legend[k]}</span>)}
@@ -437,7 +491,6 @@ export default function PolirisComparisonArticle({ content: c }) {
             <h1 className="bp-title">{c.hero.title}</h1>
             {/* First line is the source's tagline (blue italic, no full stop). */}
             {c.hero.deck.map((p, i) => <p key={p} className={i === 0 ? 'bpc-tag' : 'bp-deck'}>{p}</p>)}
-            <div className="bpc-hero-ctas"><CtaButtons ui={ui} /></div>
             <Kpis items={c.hero.kpis} label={c.hero.kpisLabel} />
           </header>
 
@@ -447,14 +500,6 @@ export default function PolirisComparisonArticle({ content: c }) {
               {(body[s.id] ?? standard)(s)}
             </section>
           ))}
-
-          <div className="bp-cta-box">
-            <div>
-              <p className="bp-cta-heading">{c.cta.heading}</p>
-              <p>{c.cta.text}</p>
-            </div>
-            <CtaButtons ui={ui} />
-          </div>
 
         </main>
       </div>

@@ -12,7 +12,7 @@
   margin: 0 auto;
   padding: 74px 32px 0;
   display: grid;
-  grid-template-columns: 230px 1fr;
+  grid-template-columns: 180px 1fr;
   align-items: start;
 }
 
@@ -22,7 +22,7 @@
   top: 74px;
   max-height: calc(100vh - 74px);
   overflow-y: auto;
-  padding: 2.5rem 1.75rem 2.5rem 0;
+  padding: 2.5rem 1.25rem 2.5rem 0;
   border-right: 1px solid #e4e8f2;
   scrollbar-width: none;
 }
@@ -105,7 +105,7 @@
 
 /* ── Main content ───────────────────────────────────────── */
 .bp-main {
-  padding: 0 0 7rem 3rem;
+  padding: 0 0 7rem 35px;
   /* A grid item won't shrink below its content's width by default, so a
      wide table would stretch the column and scroll the whole page sideways.
      min-width: 0 lets the table scroll inside its own wrapper instead. */
@@ -256,7 +256,7 @@
 /* ── Note / tip ─────────────────────────────────────────── */
 .bp-note {
   background: #f7f8fb;
-  border-top: 2px solid #0d1020;
+  border-top: 2px solid rgba(0, 98, 255, 0.3);
   padding: 1rem 1.2rem;
   margin: 1.75rem 0;
   border-radius: 0 0 6px 6px;
@@ -496,9 +496,13 @@
   position: absolute;
   background: currentColor;
   border-radius: 1px;
+  /* Centred on the circle's inner box (border-box sizing), not fixed offsets. */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.bp-faq-icon::before { width: 10px; height: 1.5px; top: 12px; left: 8px; }
-.bp-faq-icon::after  { width: 1.5px; height: 10px; top: 8px; left: 12px; }
+.bp-faq-icon::before { width: 10px; height: 1.5px; }
+.bp-faq-icon::after  { width: 1.5px; height: 10px; }
 .bp-faq-btn:hover .bp-faq-icon {
   border-color: var(--poliris-blue);
   color: var(--poliris-blue);

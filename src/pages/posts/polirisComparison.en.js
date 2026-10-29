@@ -71,7 +71,7 @@ export default {
       claim: 'Of the 19 tools reviewed, Poliris is the only one that documents a full-site audit with AI crawler checks, fixes pushed live and a dated action plan.',
       tableLabel: 'Overview: Poliris vs eight tools',
       table: {
-        minWidth: 1040,
+        minWidth: 1180,
         corner: 'Feature',
         colGroups: [['SEO suites', 3], ['Crawler', 1], ['AI visibility trackers', 4]],
         cols: [P, 'Semrush', 'Ahrefs', 'Search Atlas', 'Screaming Frog', 'Profound', 'Peec AI', 'Qwairy', 'Otterly.AI'],

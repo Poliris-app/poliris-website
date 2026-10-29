@@ -342,6 +342,10 @@ button { cursor: pointer; border: none; background: none; }
    the shared 680px cap broke it over two lines and the heading ran to
    three. Widened here only; the lead keeps the narrower measure. */
 #engine .sec-head { max-width: 800px; }
+/* The compare heading runs on one line (~830px in English) and its longer
+   lead on two lines; both need more room than the shared 680px cap. */
+#compare .sec-head { max-width: 960px; }
+#compare .sec-lead { max-width: 940px; margin-left: auto; margin-right: auto; }
 #engine .sec-lead { max-width: 680px; margin-left: auto; margin-right: auto; }
 
 .sec-h2 {
@@ -4289,6 +4293,131 @@ button { cursor: pointer; border: none; background: none; }
 /* ================================================================
    STAKES
    ================================================================ */
+/* ── Compare card (after Team) ─────────────────────────────── */
+.cc {
+  padding: 96px 0 40px;
+  background: #fff;
+}
+.cc__card { margin-top: 32px; }
+.cc__cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--poliris-blue);
+  background: var(--poliris-blue);
+  color: #fff;
+  font-family: var(--chivo);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.cc__cta:hover { background: #fff; color: var(--poliris-blue); transform: translateY(-1px); }
+.cc__cta svg { width: 14px; height: 14px; }
+
+.cc__tw {
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(13, 17, 26, 0.04), 0 12px 32px -8px rgba(13, 17, 26, 0.10), 0 32px 64px -32px rgba(0, 98, 255, 0.18);
+  -webkit-overflow-scrolling: touch;
+}
+.cc__t { width: 100%; min-width: 760px; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 13px; }
+.cc__t th,
+.cc__t td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: center; vertical-align: middle; }
+
+/* Header: white, tool name over its category */
+.cc__t thead th {
+  padding: 11px 8px 9px;
+  font-family: var(--manrope);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--fg-1);
+  background: #fff;
+}
+.cc__t thead th small { display: block; margin-top: 2px; font-family: var(--chivo); font-size: 11px; font-weight: 400; color: var(--fg-4); }
+.cc__t thead th.cc__pol { background: var(--poliris-blue); color: #fff; border-radius: 12px 12px 0 0; border-bottom-color: var(--poliris-blue); }
+.cc__t thead th.cc__pol img { display: block; height: auto; width: 80px; max-width: 100%; margin: 0 auto; filter: brightness(0) invert(1); }
+
+/* Sticky criterion column */
+.cc__t th.cc__rh,
+.cc__t tbody th { position: sticky; left: 0; z-index: 1; background: #fff; text-align: left; width: 26%; padding-left: 16px; }
+.cc__t th.cc__rh {
+  font-family: var(--manrope);
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-4);
+}
+.cc__t tbody th { font-family: var(--chivo); font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--fg-1); }
+
+/* Poliris column */
+.cc__t td.cc__pol { background: #f2f6ff; box-shadow: inset 2px 0 0 var(--poliris-blue), inset -2px 0 0 var(--poliris-blue); }
+
+/* Cells */
+.cc__c { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+/* Notes as on the blog comparison tables: small, regular weight, muted grey. */
+.cc__c small { font-size: 11px; font-weight: 400; line-height: 1.3; color: #9aa0ab; }
+.cc__pol .cc__c small { color: var(--poliris-blue); font-weight: 500; }
+.cc__ic { display: block; width: 20px; height: 20px; flex: 0 0 20px; }
+.cc__ic--lg { width: 22px; height: 22px; flex-basis: 22px; }
+
+/* Price row */
+.cc__t tr.cc__price th,
+.cc__t tr.cc__price td { background: #f7f8fb; border-bottom: 0; padding-top: 8px; padding-bottom: 8px; }
+.cc__t tr.cc__price th { font-family: var(--manrope); font-weight: 700; }
+.cc__t tr.cc__price th small { display: block; margin-top: 2px; font-family: var(--chivo); font-size: 11px; font-weight: 400; color: var(--fg-4); }
+.cc__t tr.cc__price td.cc__pol {
+  background: var(--poliris-blue);
+  box-shadow: none;
+  border-radius: 0 0 12px 12px;
+}
+.cc__pp { display: flex; flex-direction: column; align-items: center; color: #fff; line-height: 1; }
+.cc__pp small { font-size: 11px; font-weight: 500; opacity: 0.9; }
+.cc__pp b { margin-top: 3px; font-family: var(--manrope); font-size: 19px; font-weight: 700; letter-spacing: -0.02em; }
+.cc__x { font-family: var(--manrope); font-size: 15px; font-weight: 700; color: var(--fg-1); }
+
+.cc__lg { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; line-height: 1.3; color: var(--fg-2); }
+.cc__lg span { display: inline-flex; align-items: center; gap: 7px; }
+.cc__lg .cc__ic { width: 18px; height: 18px; flex-basis: 18px; }
+.cc__n { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--fg-4); }
+.cc__sw { display: none; margin: 8px 0 0; font-size: 12px; color: var(--fg-4); }
+
+.cc__foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px 32px; margin-top: 20px; padding: 0 4px; }
+.cc__foot > div { flex: 1 1 420px; }
+.cc__foot .cc__n { margin-top: 10px; }
+
+@media (max-width: 900px) {
+  .cc__sw { display: block; }
+}
+@media (max-width: 640px) {
+  .cc { padding: 64px 0 24px; }
+  /* Poliris stays pinned next to the 130px criterion column while the
+     other tools scroll, as on the blog comparison. */
+  .cc__t .cc__pol { position: sticky; left: 130px; z-index: 1; }
+  .cc__t { min-width: 600px; font-size: 12.5px; }
+  .cc__t th.cc__rh,
+  .cc__t tbody th { width: 130px; padding-left: 12px; font-size: 12.5px; }
+  /* The French corner label must fit the 130px sticky column. */
+  .cc__t th.cc__rh { font-size: 9.5px; letter-spacing: 0.06em; }
+  .cc__t th,
+  .cc__t td { padding: 9px 6px; }
+  .cc__t thead th { font-size: 12.5px; }
+  .cc__c small { font-size: 10.5px; }
+  .cc__pp b { font-size: 19px; }
+  .cc__x { font-size: 14px; }
+  .cc__cta { width: 100%; justify-content: center; }
+}
+
 .stakes {
   padding: 96px 0;
   background: #fff;
