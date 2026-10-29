@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Poliris film · Start (onboarding)</title>
+<link rel="icon" href="data:," />
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     START · chapter A of the film, 0 → 9.6 s
+
+     The buyer questions are picked, every AI is asked the same ones, and the
+     answers come back into the dashboard.
+
+     Nothing here is a screenshot. The app was recorded at 1400 x 912.5 and
+     drawn into the film's window at 1120 x 730 — exactly 0.8x — so the screen
+     below is written at the app's own size, in the app's own numbers (a 760px
+     content column, 15px body text, 75px cards), and `.app` scales it by 0.8
+     into the window. Change a value and it reads as the app's value.
+
+     The camera, the cursor and the floating windows keep the film's own
+     coordinates, so every cue is the one film/index.html already used.
+
+     Open it as it is to watch it. `?t=4.9` freezes a moment, `?bare=1` drops
+     the review bar, `?screen=onb` draws the screen alone at 2x — the size of
+     the old `ov-onb-base.webp` — for comparing against the frames it replaces.
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Geist"; font-weight: 400; font-display: block; src: url("../film/assets/fonts/Geist-400.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 500; font-display: block; src: url("../film/assets/fonts/Geist-500.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 600; font-display: block; src: url("../film/assets/fonts/Geist-600.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 700; font-display: block; src: url("../film/assets/fonts/Geist-700.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 800; font-display: block; src: url("../film/assets/fonts/Geist-800.woff2") format("woff2"); }
+
+:root {
+  --primary: #0062ff;
+  --ink: #0a0a0b;
+  --line: #e5e5e5;          /* the onboarding's hairline */
+  --muted: #71717a;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0b0f17; }
+body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
+
+/* ── the 1920 x 1080 stage, fitted to the viewport ── */
+#fit { position: fixed; inset: 0; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 50% 50%; background: #f3f6fb; }
+#bg { position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 520px at 50% 45%, rgba(0, 98, 255, .10), rgba(0, 98, 255, 0) 70%),
+        radial-gradient(700px 420px at 88% 70%, rgba(99, 102, 241, .07), rgba(99, 102, 241, 0) 70%),
+        linear-gradient(180deg, #f8fafd 0%, #eef2f8 100%); }
+
+/* ── the live app window, in mockup coordinates ── */
+#cam { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; transform-origin: 0 0; }
+#win { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; background: #fff;
+       box-shadow: 0 0 0 1px #dfe4ec, 0 50px 100px -50px rgba(15, 23, 42, .42), 0 2px 6px rgba(15, 23, 42, .05); }
+.scr { position: absolute; inset: 0; overflow: hidden; }
+.app { position: absolute; left: 0; top: 0; width: 1400px; height: 912.5px;
+       transform: scale(.8); transform-origin: 0 0; background: #fff;
+       font-size: 15px; line-height: 1.5; color: var(--ink);
+       -webkit-font-smoothing: antialiased; }
+
+/* ══ the onboarding screen ════════════════════════════════════════════════
+   A 760px column centred in 1400, a fixed footer bar, and the list of
+   prompts between them.                                                     */
+.onb { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.onb__col { width: 760px; margin: 0 auto; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* brand + language */
+.onb__head { display: flex; align-items: center; justify-content: space-between; padding-top: 30px; height: 66px; }
+/* the brand lockup is the one asset that stays an asset: it is the logo file
+   the site already ships, and its 218 x 54 is exactly the 107 x 26.5 drawn here */
+.onb__logo { display: block; width: 107px; height: 26.5px; }
+.onb__lang { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px;
+             border: 1px solid var(--line); border-radius: 8px; background: #fff;
+             font-size: 13.5px; font-weight: 500; color: var(--ink); }
+.onb__lang svg { width: 15px; height: 15px; }
+.onb__lang .cv { width: 13px; height: 13px; opacity: .8; }
+
+/* step 4 of 4 */
+.onb__step { margin-top: 20.5px; font-size: 13px; line-height: 18px; color: #6b7280; }
+.onb__prog { margin-top: 6px; display: flex; gap: 8px; }
+.onb__prog i { flex: 1; height: 4.5px; border-radius: 999px; background: var(--primary); }
+
+/* title + Add Prompt */
+.onb__title-row { margin-top: 23px; height: 36px; display: flex; align-items: flex-start; justify-content: space-between; }
+.onb__h1 { margin: 3.7px 0 0; font-size: 23.5px; line-height: 30px; font-weight: 700; letter-spacing: -.025em; }
+.onb__add { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 10.1px; margin-top: 5.7px;
+            border: 1px solid var(--line); border-radius: 8px; background: #fff;
+            font-size: 13.5px; font-weight: 500; color: var(--ink); }
+.onb__add svg { width: 14px; height: 14px; }
+.onb__sub { margin-top: 4px; font-size: 13.9px; line-height: 20px; color: #6b7280; }
+
+/* "9 questions selected" · the filter chips */
+.onb__meta { margin-top: 18px; display: flex; align-items: flex-start; justify-content: space-between; }
+.onb__count { font-size: 13.8px; line-height: 20px; font-weight: 600; }
+.onb__deselect { display: block; margin-top: 2px; font-size: 12px; line-height: 17px; color: #2563eb; text-decoration: underline; text-underline-offset: 2px; }
+.onb__filters { display: flex; align-items: center; height: 32.5px; padding: 3.1px; margin-top: 2px;
+                border-radius: 10px; background: #f4f4f4; }
+.onb__chip { display: inline-flex; align-items: center; gap: 5px; height: 26.3px; padding: 0 9.2px; border-radius: 7px;
+             font-size: 13px; font-weight: 500; color: #52525b; white-space: nowrap; }
+.onb__chip b { font-weight: 500; color: #a1a1aa; }
+.onb__chip--on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.07), 0 0 0 .5px rgba(0,0,0,.04); }
+.onb__chip--on b { color: var(--primary); }
+
+/* the prompts */
+.onb__list { margin-top: 16px; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+
+.pc { position: relative; flex: 0 0 auto; height: 75px; border-radius: 10px; background: #fff;
+      box-shadow: 0 0 0 1px var(--line); display: flex; align-items: flex-start; padding: 12px 16px; gap: 10px; }
+/* the selected look, faded in rather than swapped, so a scrub shows it mid-way */
+.pc__on { position: absolute; inset: 0; border-radius: 10px; background: #f9f9ff;
+          box-shadow: 0 0 0 1px var(--primary); opacity: 0; }
+.pc__box { position: relative; flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px; }
+.pc__ring { position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 1.5px #d4d4d8; }
+.pc__tick { position: absolute; inset: 0; border-radius: 50%; background: var(--primary); opacity: 0;
+            display: grid; place-items: center; }
+.pc__tick svg { width: 12px; height: 12px; stroke: #fff; }
+.pc__body { position: relative; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.pc__q { font-size: 14px; line-height: 22px; letter-spacing: -.08px; color: var(--ink); white-space: nowrap; }
+.pc__tag { align-self: flex-start; height: 21px; padding: 0 7.1px; border-radius: 999px;
+           font-size: 12.2px; line-height: 21px; font-weight: 500; }
+.t-price { background: #ede9ff; color: #5b21b6; }
+.t-perf  { background: #fceac8; color: #92400e; }
+.t-qual  { background: #dbf9e6; color: #15803d; }
+.t-innov { background: #fde1e3; color: #b91c1c; }
+
+/* the strength meter at the right of a card */
+.pc__sig { position: absolute; right: 16px; bottom: 13px; display: flex; align-items: flex-end; gap: 2px; }
+.pc__sig i { width: 3.5px; border-radius: 999px; background: #d4d4d8; }
+.pc__sig i:nth-child(1) { height: 6px; }
+.pc__sig i:nth-child(2) { height: 9.5px; }
+.pc__sig i:nth-child(3) { height: 14px; }
+.sig-hi i { background: #2563eb; }
+.sig-md i:nth-child(1), .sig-md i:nth-child(2) { background: #f59e0b; }
+.sig-lo i:nth-child(1) { background: #dc2626; }
+
+/* the footer bar */
+.onb__foot { flex: 0 0 auto; border-top: 1px solid var(--line); }
+.onb__foot-col { width: 747.5px; margin-left: 328px; padding: 17.2px 0 25px; }
+.onb__hint { font-size: 12.92px; line-height: 17px; color: #6b7280; }
+.onb__btns { margin-top: 11.7px; display: flex; gap: 13px; }
+.onb__btn { flex: 1; height: 44px; border-radius: 9px; display: grid; place-items: center;
+            font-size: 13.2px; font-weight: 600; }
+.onb__btn--back { background: #f5f5f5; box-shadow: 0 0 0 1px #ececec; color: var(--ink); }
+.onb__btn--go { position: relative; background: var(--primary); color: #fff; }
+/* the two labels sit on top of each other and cross-fade */
+.onb__btn--go span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.onb__spin { width: 16px; height: 16px; border-radius: 50%;
+             border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; }
+
+/* a number that counts up by cross-fade (6 → 7 → 8 → 9), so scrubbing works */
+.cnt { position: relative; display: inline-block; vertical-align: top; }
+.cnt b { font-weight: inherit; }
+.cnt b + b { position: absolute; left: 0; top: 0; opacity: 0; }
+
+/* ── overlay: cursor and ripple, in window coordinates ── */
+#ov { position: absolute; inset: 0; pointer-events: none; }
+#cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
+#cur-a, #cur-s { position: absolute; inset: 0; }
+#cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
+#rip { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+       border: 2px solid rgba(59, 130, 246, .75); background: rgba(59, 130, 246, .12); opacity: 0; }
+
+/* ══ the AI answer windows (the film's own, unchanged) ════════════════════ */
+.wg { position: absolute; opacity: 0; transform-origin: 0 0; }
+.hfw { --font-body: "Geist", system-ui, sans-serif; font-family: var(--font-body); color: #0a0a0b; text-align: left;
+       background: #fff; border-radius: 12px; flex-direction: column; display: flex; position: relative; overflow: hidden;
+       box-shadow: rgb(227, 231, 238) 0 0 0 1px, rgba(22, 50, 141, .32) 0 18px 40px -20px; }
+.hfw__zoom { flex-direction: column; flex: 1; min-height: 0; display: flex; }
+.hfw__bar { background: #f7f8fa; border-bottom: 1px solid #eef0f3; flex: 0 0 auto; align-items: center; gap: 5px; height: 24px; padding: 0 10px; display: flex; }
+.hfw__dot { border-radius: 50%; width: 8px; height: 8px; }
+.hfw__dot--g { background: #28c840; } .hfw__dot--r { background: #ff5f57; } .hfw__dot--y { background: #febc2e; }
+.hfw__name { color: #8a94a6; align-items: center; gap: 4px; margin-left: auto; font-size: 10px; font-weight: 500; display: inline-flex; }
+.hfw__name-icon { object-fit: contain; width: 11px; height: 11px; }
+.hfw__body { flex-direction: column; flex: 1; min-height: 0; display: flex; position: relative; }
+
+.ans { padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.ans-q { align-self: flex-end; max-width: 84%; background: #f1f4f8; border-radius: 14px 14px 4px 14px; padding: 7px 11px;
+         font-size: 12px; line-height: 16px; color: #0a0a0b; }
+.ans-a { font-size: 12.5px; line-height: 17.5px; color: #2b3242; display: flex; flex-direction: column; gap: 6px; }
+.ans-a p { margin: 0; }
+.ans .rl { opacity: 0; }
+.ans-a .li { display: flex; gap: 8px; align-items: flex-start; }
+.ans-a .li u { text-decoration: none; flex: 0 0 auto; width: 18px; height: 18px; border-radius: 5px; background: #f1f4f8;
+               font-size: 10px; font-weight: 700; color: #6a768a; display: flex; align-items: center; justify-content: center; }
+.ans-a .li b { font-weight: 600; color: #0a0a0b; }
+.ans-a .li.me u { background: #0062ff; color: #fff; }
+.ans-a .li.me b { color: #1d4ed8; }
+.ans-ft { margin-top: auto; display: flex; align-items: center; gap: 6px; }
+.src { height: 20px; padding: 0 8px 0 4px; border-radius: 999px; background: #f6f8fb; box-shadow: inset 0 0 0 1px #e6eaf0;
+       display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 500; color: #3c4257; }
+.src i { width: 13px; height: 13px; border-radius: 4px; font-style: normal; font-size: 7.5px; font-weight: 800; color: #fff;
+         display: flex; align-items: center; justify-content: center; }
+.ans-v { margin-left: auto; height: 22px; padding: 0 9px; border-radius: 999px; font-size: 11px; font-weight: 700;
+         display: inline-flex; align-items: center; gap: 5px; opacity: 0; }
+.v-ok { background: #dcfce7; color: #15803d; }
+.v-ko { background: #fee2e2; color: #b91c1c; }
+.v-two { background: #eaf2ff; color: #1d4ed8; }
+
+/* ── review bar ── */
+#ctl { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 50;
+       display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px;
+       background: rgba(14, 20, 32, .82); backdrop-filter: blur(8px); color: #fff;
+       font: 500 12.5px/1 "Geist", system-ui, sans-serif; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .6); }
+#ctl button { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; color: #0b0f17; font-size: 12px; cursor: pointer; }
+#ctl input { width: 340px; accent-color: #4d8dff; cursor: pointer; }
+#ctl span { font-variant-numeric: tabular-nums; opacity: .85; min-width: 76px; }
+body.bare #ctl { display: none; }
+
+/* ── `?screen=onb`: the screen alone, at 2x, to compare with the old frames ── */
+body.shot { background: #fff; }
+body.shot #fit { display: block; }
+body.shot #stage { width: 1120px; height: 730px; transform: scale(2); transform-origin: 0 0; background: #fff; }
+body.shot #bg, body.shot #ov, body.shot .wg, body.shot #ctl { display: none; }
+body.shot #cam { transform: none !important; opacity: 1 !important; }
+body.shot #win { border-radius: 0; box-shadow: none; }
+</style>
+</head>
+
+<body>
+<div id="fit"><div id="stage">
+  <div id="bg"></div>
+
+  <!-- camera + the live app window -->
+  <div id="cam">
+    <div id="win">
+
+      <div class="scr" id="s-onb"><div class="app"><div class="onb">
+        <div class="onb__col">
+
+          <div class="onb__head">
+            <img class="onb__logo" src="../../Logo-Poliris-1.png" width="218" height="54" alt="Poliris" />
+            <span class="onb__lang">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              EN
+              <svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </span>
+          </div>
+
+          <div class="onb__step">Step 4 of 4</div>
+          <div class="onb__prog"><i></i><i></i><i></i><i></i></div>
+
+          <div class="onb__title-row">
+            <h1 class="onb__h1">Prompts</h1>
+            <span class="onb__add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Add Prompt
+            </span>
+          </div>
+          <div class="onb__sub">Select 5-10 questions to run the audit for Wireless Earbuds.</div>
+
+          <div class="onb__meta">
+            <div>
+              <div class="onb__count"><span class="cnt" id="n1"><b>6</b><b>7</b><b>8</b><b>9</b></span> questions selected</div>
+              <span class="onb__deselect">Deselect all (<span class="cnt" id="n2"><b>6</b><b>7</b><b>8</b><b>9</b></span>)</span>
+            </div>
+            <div class="onb__filters">
+              <span class="onb__chip onb__chip--on">All <b>20</b></span>
+              <span class="onb__chip">Quality <b>5</b></span>
+              <span class="onb__chip">Performance <b>6</b></span>
+              <span class="onb__chip">Price &amp; Value <b>4</b></span>
+              <span class="onb__chip">Innovation <b>5</b></span>
+            </div>
+          </div>
+
+          <div class="onb__list">
+            <!-- 1 · already picked when the film opens -->
+            <div class="pc" id="pc1">
+              <span class="pc__on" style="opacity:1"></span>
+              <span class="pc__box"><span class="pc__ring"></span><span class="pc__tick" style="opacity:1"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></span>
+              <span class="pc__body">
+                <span class="pc__q">Which noise cancelling earbuds are really worth the price this year?</span>
+                <span class="pc__tag t-price">Price &amp; Value</span>
+              </span>
+              <span class="pc__sig sig-hi"><i></i><i></i><i></i></span>
+            </div>
+            <!-- 2 · picked on screen -->
+            <div class="pc" id="pc2">
+              <span class="pc__on"></span>
+              <span class="pc__box"><span class="pc__ring"></span><span class="pc__tick"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></span>
+              <span class="pc__body">
+                <span class="pc__q">What wireless earbuds last the longest on a single charge?</span>
+                <span class="pc__tag t-perf">Performance</span>
+              </span>
+              <span class="pc__sig sig-hi"><i></i><i></i><i></i></span>
+            </div>
+            <!-- 3 · left alone -->
+            <div class="pc" id="pc3">
+              <span class="pc__on"></span>
+              <span class="pc__box"><span class="pc__ring"></span><span class="pc__tick"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></span>
+              <span class="pc__body">
+                <span class="pc__q">Which earbuds have the most durable charging case?</span>
+                <span class="pc__tag t-qual">Quality</span>
+              </span>
+              <span class="pc__sig sig-lo"><i></i><i></i><i></i></span>
+            </div>
+            <!-- 4 · picked on screen -->
+            <div class="pc" id="pc4">
+              <span class="pc__on"></span>
+              <span class="pc__box"><span class="pc__ring"></span><span class="pc__tick"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></span>
+              <span class="pc__body">
+                <span class="pc__q">How many hours of battery do noise cancelling earbuds really get with ANC on?</span>
+                <span class="pc__tag t-perf">Performance</span>
+              </span>
+              <span class="pc__sig sig-md"><i></i><i></i><i></i></span>
+            </div>
+            <!-- 5 · picked on screen -->
+            <div class="pc" id="pc5">
+              <span class="pc__on"></span>
+              <span class="pc__box"><span class="pc__ring"></span><span class="pc__tick"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></span>
+              <span class="pc__body">
+                <span class="pc__q">Which earbuds charge the fastest in their case before a trip?</span>
+                <span class="pc__tag t-perf">Performance</span>
+              </span>
+              <span class="pc__sig sig-hi"><i></i><i></i><i></i></span>
+            </div>
+            <!-- 6 · already picked when the film opens -->
+            <div class="pc" id="pc6">
+              <span class="pc__on" style="opacity:1"></span>
+              <span class="pc__box"><span class="pc__ring"></span><span class="pc__tick" style="opacity:1"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></span>
+              <span class="pc__body">
+                <span class="pc__q">Which earbuds have the most advanced noise cancelling technology?</span>
+                <span class="pc__tag t-innov">Innovation</span>
+              </span>
+              <span class="pc__sig sig-md"><i></i><i></i><i></i></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="onb__foot"><div class="onb__foot-col">
+          <div class="onb__hint">You can select up to 10 questions.</div>
+          <div class="onb__btns">
+            <span class="onb__btn onb__btn--back">Back</span>
+            <span class="onb__btn onb__btn--go">
+              <span id="go-idle">Start analysis</span>
+              <span id="go-busy" style="opacity:0"><i class="onb__spin" id="go-spin"></i>Starting analysis…</span>
+            </span>
+          </div>
+        </div></div>
+      </div></div></div>
+
+      <div id="ov">
+        <span id="rip"></span>
+        <div id="cur"><div id="cur-a"><svg id="cur-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- every AI, asked the same buyer questions -->
+  <div class="wg" id="w-a1" style="left:44px;top:240px;width:440px;height:312px">
+    <div class="hfw" style="width:440px;height:312px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="../film/assets/img/engine-chatgpt.png" />ChatGPT</span></div>
+      <div class="hfw__body ans">
+        <div class="ans-q">What wireless earbuds last the longest on a single charge?</div>
+        <div class="ans-a">
+          <p class="rl">For battery life, reviewers keep coming back to three models:</p>
+          <div class="li rl"><u>1</u><span><b>Bose QuietComfort Ultra</b>: about 6 hours with noise cancelling on, 24 with the case.</span></div>
+          <div class="li rl"><u>2</u><span><b>Apple AirPods Pro 2</b>: 6 hours per charge, up to 30 with the case.</span></div>
+          <div class="li rl"><u>3</u><span><b>Samsung Galaxy Buds3 Pro</b>: 6 hours, and a quick top-up in the case.</span></div>
+        </div>
+        <div class="ans-ft rl"><span class="src"><i style="background:#e8590c">R</i>rtings.com</span><span class="src"><i style="background:#0f766e">S</i>soundguys.com</span><span class="ans-v v-ko" id="av1">✗ Sony not mentioned</span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="wg" id="w-a2" style="left:1436px;top:112px;width:440px;height:312px">
+    <div class="hfw" style="width:440px;height:312px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="../film/assets/img/engine-gemini.png" />Gemini</span></div>
+      <div class="hfw__body ans">
+        <div class="ans-q">Which earbuds have the most advanced noise cancelling technology?</div>
+        <div class="ans-a">
+          <p class="rl">Three models stand out for blocking noise:</p>
+          <div class="li me rl"><u>1</u><span><b>Sony WF-1000XM5</b>: the strongest on low rumble, with two processors and six microphones.</span></div>
+          <div class="li rl"><u>2</u><span><b>Bose QuietComfort Ultra</b>: close behind, with a very comfortable fit.</span></div>
+          <div class="li rl"><u>3</u><span><b>Apple AirPods Pro 2</b>: very good, at their best with an iPhone.</span></div>
+        </div>
+        <div class="ans-ft rl"><span class="src"><i style="background:#e8590c">R</i>rtings.com</span><span class="src"><i style="background:#7c3aed">W</i>whathifi.com</span><span class="ans-v v-ok" id="av2">✓ Sony, #1</span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="wg" id="w-a3" style="left:1436px;top:548px;width:440px;height:312px">
+    <div class="hfw" style="width:440px;height:312px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="../film/assets/img/engine-claude.png" />Claude</span></div>
+      <div class="hfw__body ans">
+        <div class="ans-q">Which noise cancelling earbuds are really worth the price this year?</div>
+        <div class="ans-a">
+          <p class="rl">It depends on your phone, but for value:</p>
+          <div class="li rl"><u>1</u><span><b>Apple AirPods Pro 2</b>: often on sale, the easy pick for iPhone users.</span></div>
+          <div class="li me rl"><u>2</u><span><b>Sony WF-1000XM5</b>: the best noise cancelling, if you can spend a little more.</span></div>
+          <div class="li rl"><u>3</u><span><b>Samsung Galaxy Buds3 Pro</b>: a good choice on Android.</span></div>
+        </div>
+        <div class="ans-ft rl"><span class="src"><i style="background:#0f766e">S</i>soundguys.com</span><span class="src"><i style="background:#dc2626">C</i>cnet.com</span><span class="ans-v v-two" id="av3">✓ Sony, #2</span></div>
+      </div>
+    </div></div>
+  </div>
+</div></div>
+
+<div id="ctl">
+  <button id="pp" aria-label="Play or pause">❚❚</button>
+  <input id="sc" type="range" min="0" max="9.6" step="0.01" value="0" />
+  <span id="tt">0.00 / 9.60</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DUR = 9.6;                       // chapter A, from tools/clock.py
+  var q = new URLSearchParams(location.search);
+
+  // ── the stage is 1920 x 1080; fit it to whatever it is being viewed in ──
+  var stage = document.getElementById("stage");
+  function fit() {
+    if (document.body.classList.contains("shot")) return;
+    var d = document.documentElement;
+    var s = Math.min(d.clientWidth / 1920, d.clientHeight / 1080);
+    stage.style.transform = "translate(-50%, -50%) scale(" + s + ")";
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);  // page zoom
+  if (document.fonts) document.fonts.ready.then(fit);
+  fit();
+
+  var tl = gsap.timeline({ paused: true });
+
+  // ── camera: put mockup point (cx, cy) at screen point (fx, fy) at scale S ──
+  var MX = 120, MY = 80;
+  function clampTo(v, size, frame, m) { return size >= frame ? Math.min(m, Math.max(frame - size - m, v)) : Math.max(-m, Math.min(frame - size + m, v)); }
+  function camState(cx, cy, S, fx, fy, keep) {
+    var w = S * 1120, x = fx - S * cx;
+    x = keep ? clampTo(x, w, 1920, MX) : w <= 1920 ? (1920 - w) / 2 : Math.min(0, Math.max(1920 - w, x));
+    return { x: x, y: clampTo(fy - S * cy, S * 730, 1080, MY), scale: S };
+  }
+  var REST = [560, 365, 1.14, 960, 512];
+  function cam(t, d, s, ease) { tl.to("#cam", Object.assign(camState.apply(null, s), { duration: d, ease: ease || "power2.inOut" }), t); }
+
+  // ── the cursor, in mockup coordinates ──
+  function curShow(t, x, y, fade) { tl.set("#cur", { x: x, y: y }, t); tl.to("#cur", { opacity: 1, duration: fade || 0 }, t); }
+  function curHide(t, fade) { if (fade) tl.to("#cur", { opacity: 0, duration: fade }, t); else tl.set("#cur", { opacity: 0 }, t); }
+  function curMove(t, d, x, y, arc) {
+    tl.to("#cur", { x: x, y: y, duration: d, ease: "power2.inOut" }, t);
+    tl.to("#cur-a", { y: -(arc == null ? 14 : arc), duration: d / 2, ease: "sine.out", yoyo: true, repeat: 1 }, t);
+  }
+  function curClick(t, x, y) {
+    tl.to("#cur-s", { scale: 0.84, duration: 0.08, ease: "power2.in" }, t);
+    tl.to("#cur-s", { scale: 1, duration: 0.2, ease: "power2.out" }, t + 0.1);
+    tl.fromTo("#rip", { x: x + 3, y: y + 3, scale: 0.4, opacity: 1 }, { scale: 1.2, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+  }
+  function clickAt(t0, d, cx, cy, tc, arc) { curMove(t0, d, cx - 3, cy - 3, arc); curClick(tc, cx - 3, cy - 3); }
+
+  // ── floating windows: arrive a little big and blurred, settle ──
+  ["w-a1", "w-a2", "w-a3"].forEach(function (id) { tl.set("#" + id, { scale: 1, x: 0, y: 0 }, 0); });
+  function enter(id, t, from) {
+    var dx = from === "left" ? -70 : 70;
+    tl.fromTo("#" + id, { opacity: 0, x: dx, y: 10, scale: 1.08, filter: "blur(8px)" },
+      { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out", immediateRender: false }, t);
+  }
+
+  // ── a prompt card takes the tick ──
+  function pick(id, t) {
+    tl.to("#" + id + " .pc__on", { opacity: 1, duration: 0.28, ease: "power2.out" }, t);
+    tl.fromTo("#" + id + " .pc__tick", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(2.4)", immediateRender: false }, t);
+  }
+  // ── the counters step up: one stacked digit fades in over the last ──
+  function count(k, t) {
+    ["#n1", "#n2"].forEach(function (n) {
+      tl.to(n + " b:nth-child(" + k + ")", { opacity: 1, duration: 0.2 }, t);
+      tl.to(n + " b:nth-child(" + (k - 1) + ")", { opacity: 0, duration: 0.2 }, t);
+    });
+  }
+
+  // ════ A · onboarding: the buyer questions, three on battery performance;
+  //        every AI asked, every answer read ════
+  var t = 0;
+  tl.set("#cam", camState(560, 400, 1.32, 960, 560), t);
+  cam(t + 0.05, 2.1, [560, 420, 1.37, 960, 560], "sine.inOut");
+  curShow(t + 0.2, 420, 360, 0.25);
+
+  clickAt(t + 0.25, 0.42, 275.2, 302.4, t + 0.75, 8);   // the 2nd question
+  pick("pc2", t + 0.78); count(2, t + 0.78);
+  clickAt(t + 0.88, 0.38, 275.2, 436.8, t + 1.35, 8);   // the 4th
+  pick("pc4", t + 1.38); count(3, t + 1.38);
+  clickAt(t + 1.48, 0.38, 275.2, 504.0, t + 1.95, 8);   // the 5th
+  pick("pc5", t + 1.98); count(4, t + 1.98);
+
+  cam(t + 2.2, 1.0, [600, 560, 1.42, 960, 600]);
+  clickAt(t + 2.35, 0.85, 713.6, 691.2, t + 3.3, 22);   // Start analysis
+  tl.to("#go-idle", { opacity: 0, duration: 0.2 }, t + 3.32);
+  tl.to("#go-busy", { opacity: 1, duration: 0.2 }, t + 3.32);
+  tl.fromTo("#go-spin", { rotation: 0 }, { rotation: 1080, duration: 3.0, ease: "none", immediateRender: false }, t + 3.32);
+  curMove(t + 3.55, 0.5, 760, 600, 10);
+  curHide(t + 3.9, 0.25);
+  cam(t + 3.25, 1.15, [600, 590, 1.46, 960, 610], "sine.inOut");
+
+  // the window steps back: every AI gets the same questions
+  cam(t + 4.4, 1.1, [560, 365, 0.8, 960, 560]);
+  [["w-a1", 4.9, "left"], ["w-a2", 5.5], ["w-a3", 6.1]].forEach(function (a, k) {
+    var t0 = t + a[1], lines = document.querySelectorAll("#" + a[0] + " .rl");
+    enter(a[0], t0, a[2]);
+    // the answer comes in line by line, as an assistant writes it
+    tl.fromTo(lines, { opacity: 0, y: 4 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.24, immediateRender: false }, t0 + 0.35);
+    tl.fromTo("#av" + (k + 1), { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t0 + 0.35 + lines.length * 0.24 + 0.1);
+  });
+  cam(t + 5.5, 3.2, [560, 365, 0.83, 960, 560], "sine.inOut");
+
+  // ... and the answers come back into the dashboard
+  [["#w-a1", 380, 110], ["#w-a2", -440, 170], ["#w-a3", -440, -170]].forEach(function (a, k) {
+    tl.to(a[0], { x: a[1], y: a[2], scale: 0.35, opacity: 0, duration: 0.55, ease: "power2.in" }, t + 8.7 + k * 0.06);
+  });
+  cam(t + 8.7, 0.8, REST);
+
+  // ── the review bar ──
+  var pp = document.getElementById("pp"), sc = document.getElementById("sc"), tt = document.getElementById("tt");
+  function paint() {
+    sc.value = tl.time().toFixed(2);
+    tt.textContent = tl.time().toFixed(2) + " / " + DUR.toFixed(2);
+    pp.textContent = tl.paused() ? "▶" : "❚❚";
+  }
+  tl.eventCallback("onUpdate", paint);
+  pp.onclick = function () { if (tl.paused()) { if (tl.time() >= DUR - 0.02) tl.time(0); tl.play(); } else tl.pause(); paint(); };
+  sc.oninput = function () { tl.pause(); tl.time(parseFloat(sc.value)); paint(); };
+
+  // ── the ways in ──
+  if (q.has("bare")) document.body.classList.add("bare");
+
+  if (q.has("screen")) {                       // one screen, alone, at 2x
+    document.body.classList.add("shot");
+    var fitEl = document.getElementById("fit");
+    fitEl.style.cssText = "position:absolute;left:0;top:0;width:2240px;height:1460px;display:block";
+    stage.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;overflow:hidden;" +
+                          "background:#fff;transform:scale(2);transform-origin:0 0";
+    document.getElementById("cam").style.cssText =
+      "position:absolute;left:0;top:0;width:1120px;height:730px;transform:none;opacity:1";
+    tl.time(parseFloat(q.get("t") || "0"));
+    tl.pause();
+    document.getElementById("cam").style.transform = "none";
+  } else if (q.has("t")) {
+    tl.time(parseFloat(q.get("t"))); tl.pause(); paint();
+  } else {
+    document.fonts.ready.then(function () { tl.play(); });
+  }
+
+  window.__tl = tl;                            // for the snapshot harness
+})();
+</script>
+</body>
+</html>
