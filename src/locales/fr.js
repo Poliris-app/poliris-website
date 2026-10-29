@@ -48,13 +48,13 @@ export default {
 
   home: {
     hero: {
-      eyebrow: "Conçu pour l'ère de l'IA",
+      eyebrow: 'Gestion de marque IA, au-delà du monitoring',
       // Voir en.js : titlePre + titleHl surligné + titlePost, sur une ligne.
-      titlePre: 'La plateforme',
-      titleHl: 'd’intelligence de recherche',
-      titlePost: '',
+      titlePre: 'Prenez en main',
+      titleHl: 'votre SEO',
+      titlePost: 'grâce à l’IA',
       audience: 'Pour les équipes de marque internes, les agences et les responsables marketing d’entreprise.',
-      lead: "Comprenez et gérez votre visibilité sur l'IA et le web, produit par produit, avec une équipe d'agents qui transforme les insights en plan d'action.",
+      lead: 'Comprenez et gérez votre visibilité sur l\'IA et le web, produit par produit, avec une équipe d\'agents qui transforme les insights en plan d\'action.',
       primaryCta: "Commencer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       note: 'Aucune compétence technique requise.',
@@ -124,7 +124,7 @@ export default {
           href: '/visibility',
         },
         {
-          title: 'Audit SEO technique',
+          title: 'Confiance IA',
           desc: 'Évaluez la santé technique de votre site pour les IA, identifiez ce qui limite votre visibilité et obtenez les correctifs prioritaires pour chaque problème.',
           tags: ['Crawl & Indexation', 'Statut des pages', 'Vitesse des pages', 'Score de santé global', 'Test du sitemap', 'Test du robots.txt'],
           url: 'poliris.io/dashboard/audit/sony',
@@ -177,12 +177,12 @@ export default {
           rising: '↑ En hausse',
           stable: '→ Stable',
           scoreByPlatform: 'Score par plateforme',
-          visInsight: "La couverture Claude est la plus faible, la meilleure opportunité pour améliorer le taux de mention.",
+          visInsight: 'La couverture Claude est la plus faible — la meilleure opportunité pour améliorer le taux de mention.',
           details: 'Détails',
           sentTitle: 'Analyse de sentiment',
           sentSub: "Comment votre produit est décrit par l'IA",
           // Tient en deux lignes dans l'encadré — voir .pc-an__insight.
-          sentInsight: 'Toutes les plateformes performent bien, Design en tête.',
+          sentInsight: 'Toutes les plateformes performent bien. Design mène avec la couverture de sentiment la plus forte.',
         },
         trust: {
           // Pastilles d'étape et les trois actes de l'animation.
@@ -773,7 +773,7 @@ export default {
       h2Hl: 'passer à l\'action',
       lead: 'D\'un site lisible par tous, jusqu\'à un correctif livré pour vous.',
       cards: [
-        { n: '01', h4: 'Une analyse technique approfondie',      p: '140 vérifications par page, avec des résultats structurés autour de trois axes clés.',           href: '#p1' },
+        { n: '01', h4: 'Une analyse technique approfondie',      p: '150 vérifications par page, avec des résultats structurés autour de trois axes clés.',           href: '#p1' },
         { n: '02', h4: 'Une vision centralisée de vos outils ', p: 'GSC, Analytics, Matomo, SearchAtlas, Screaming Frog en une seule plateforme.',href: '#p2' },
         { n: '03', h4: 'Des corrections directement intégrées',     p: 'Approuvez les corrections proposées et déployez-les directement sur votre site.',            href: '#p3' },
         { n: '04', h4: 'Un accompagnement sur mesure', p: 'Tom analyse vos résultats et vous guide dans la mise en œuvre des corrections prioritaires.',                href: '#p4' },
@@ -783,8 +783,8 @@ export default {
       tag: '01 Simplifié',
       h3Pre: 'Un audit technique',
       h3Hl: 'complet et accessible',
-      p: 'Chaque page fait l’objet de 140 vérifications techniques, dont les résultats sont organisés autour de trois axes clés pour faciliter leur compréhension et identifier les corrections prioritaires.',
-      testsLabel: 'Ce que nous exécutons · 140 tests par page',
+      p: 'Chaque page fait l’objet de 150 vérifications techniques, dont les résultats sont organisés autour de trois axes clés pour faciliter leur compréhension et identifier les corrections prioritaires.',
+      testsLabel: 'Ce que nous exécutons · 150 tests par page',
       testsMore: '…et plus, sur chaque URL analysée',
       simplify: 'nous simplifions',
       pipelineLabel: 'Ce que vous lisez · un pipeline de santé du site',
@@ -862,7 +862,7 @@ export default {
       h2Pre: 'Chaque signal cassé est une',
       h2Hl: 'recommandation IA manquée.',
       stats: [
-        { n: '140+',  d: "tests automatisés derrière chaque score d'audit" },
+        { n: '150+',  d: "tests automatisés derrière chaque score d'audit" },
         { n: '4',     d: 'niveaux de gravité, pour que rien de critique ne passe inaperçu' },
         { n: '1 clic', d: 'pour approuver un correctif et le publier directement sur votre site' },
         { n: '0',     d: 'ticket développeur, 0 copier-coller' },
@@ -1950,62 +1950,6 @@ export default {
     ],
   },
   pricing: {
-    audience: {
-      label: 'Pour qui',
-      brands: 'Pour les marques',
-      agencies: 'Pour les agences',
-    },
-    // The enterprise column and card. Priced on request, so its CTA books
-    // a call rather than opening checkout.
-    customPlan: {
-      name: 'Sur mesure',
-      price: 'Parlons-en',
-      desc: 'Pour les grandes équipes et les besoins spécifiques.',
-      coverageLabel: 'Adapté à votre volume',
-      features: [
-        'Projets et zones de marché illimités',
-        'Volume de crédits sur mesure',
-        'Tous les modèles IA, dans toutes les combinaisons',
-        'Responsable de compte dédié',
-        'Support prioritaire avec un canal Slack',
-      ],
-      cta: 'Réserver un appel',
-    },
-    agencyLink: {
-      text: 'Vous dirigez une agence ?',
-      cta: 'Voir les tarifs agence',
-    },
-    // The agencies view. Tier names are placeholders - rename them here.
-    agencyView: {
-      packTitle: 'Pack Agence',
-      packDesc: 'Exploitez Poliris comme votre propre plateforme, avec tous vos espaces clients au même endroit.',
-      perMonth: '/mois',
-      includedTitle: 'Ce qui est inclus',
-      includes: [
-        'Marque blanche complète avec votre logo et vos couleurs',
-        'Hébergement sur domaine personnalisé',
-        'Facturation centralisée, une seule facture pour tous vos clients',
-        "Gestion d'agence",
-        'Contrôle des accès clients',
-        'Espaces prospects gratuits, avec 200 crédits pendant 30 jours chacun',
-      ],
-      cta: 'Réserver un appel avec un partenaire',
-      tiers: ['Starter', 'Growth', 'Pro'],
-      perClientShort: '/client/mois',
-      perClientNote: 'Facturé à votre agence pour chaque espace client, en plus du Pack Agence.',
-      ownPlanNote: "L'espace de votre agence est facturé à part, sur son propre forfait, qui démarre en Free.",
-      billingNote: "Les nouveaux clients et les montées en gamme sont facturés au prorata sur votre prochaine facture. Les baisses de gamme s'appliquent au renouvellement. Retirer un client coupe son accès immédiatement, sans remboursement.",
-      currencyNote: 'Ajoutez ou retirez des clients à tout moment. Prix en {code}',
-      faq: [
-        { q: 'Qui paie les espaces clients ?', a: "Votre agence. Chaque client est facturé au tarif agence de son forfait, sur la même facture que votre Pack Agence. Vos clients ne voient jamais de page de facturation." },
-        { q: 'Les clients ont-ils les mêmes crédits que les forfaits marques ?', a: 'Oui. Chaque forfait inclut les mêmes crédits mensuels que le forfait marque correspondant : 300 pour Starter, 1 500 pour Growth et 3 000 pour Pro.' },
-        { q: "Qu'est-ce qu'un espace prospect ?", a: "Un espace gratuit pour montrer à un client potentiel ce que Poliris trouve sur sa marque. Il inclut 200 crédits pendant 30 jours et n'est facturé qu'une fois que vous lui attribuez un forfait payant." },
-        { q: 'Comment fonctionnent les changements de forfait ?', a: "Les montées en gamme s'appliquent immédiatement et sont facturées au prorata sur votre prochaine facture. Les baisses de gamme s'appliquent à votre prochain renouvellement, et le client garde son forfait et ses crédits actuels jusque-là." },
-        { q: 'Que se passe-t-il quand je retire un client ?', a: "Son accès prend fin immédiatement et il disparaît de votre prochaine facture. Les paiements déjà effectués ne sont pas remboursés." },
-        { q: 'Le suivi de ma propre agence est-il inclus ?', a: "Non. Le Pack Agence couvre la plateforme et vos espaces clients. L'espace de votre agence a son propre forfait, qui démarre en Free." },
-        { q: 'Puis-je combiner facturation mensuelle et annuelle ?', a: 'Non. Votre Pack Agence et tous vos clients partagent une même période de facturation, mensuelle ou annuelle. L’annuel vous fait économiser 20 %.' },
-      ],
-    },
     hero: {
       eyebrow: 'Tarifs',
       titlePre: "Maîtrisez ce que l'IA dit de votre marque,",
@@ -2016,31 +1960,10 @@ export default {
       note: 'Aucune carte bancaire requise',
       trialDetail: "En 14 jours, lancez votre premier audit IA, découvrez comment ChatGPT, Claude et Gemini décrivent votre marque, et comparez-vous à vos concurrents.",
     },
-    billing: {
-      label: 'Période de facturation',
-      monthly: 'Mensuel',
-      annual: 'Annuel',
-      save: '-20%',
-      saveShort: '-20%',
-      billedAnnually: 'Facturé {amount} par an',
-      currencyNote: 'Changez de forfait ou annulez à tout moment. Prix en {code}',
-      switchCurrency: 'Passer en {code}',
-    },
-    // Plan card meters under the overview table. Free's meter
-    // reads plans[0].coverageLabel; the paid meters show their credits.
-    cards: {
-      credits: '{n} crédits',
-      bonus: '+{n} bonus',
-      custom: {
-        meter: 'Volume adapté',
-        meterTag: 'Toute taille',
-      },
-    },
+    billing: { monthly: 'Mensuel', annual: 'Annuel', save: '-20%', billedAnnually: 'Facturé {amount} par an' },
     flexibilityNote: 'Changez de forfait ou annulez à tout moment. Sans engagement, sans tracas.',
     coverage: 'Couverture',
     mostPopular: 'Le plus populaire',
-    plansLabel: 'Offres',
-    popularShort: 'Populaire',
     currentPlan: 'Plan actuel',
     currentPlanCta: 'Gérer le plan',
     bonusCredits: 'Crédits bonus',
@@ -2052,7 +1975,7 @@ export default {
         name: 'Free',
         desc: 'Configurez votre compte et explorez la plateforme, aucun crédit nécessaire pour démarrer.',
         coverageLabel: '2 LLM',
-        features: ['1 marque, 1 offre', "1 pays au choix parmi 240+", '10 fournisseurs', '10 prompts par audit'],
+        features: ['1 marque, 1 produit', "1 pays au choix parmi 240+", '10 fournisseurs', '10 prompts par audit'],
         featureTooltips: [
           'Une marque et un produit suivis.',
           'Choisissez un pays ou un marché à suivre.',
@@ -2126,7 +2049,7 @@ export default {
       bannerCtaOpen: 'Ouvrir le calculateur',
       bannerCtaClose: 'Masquer le calculateur',
       title: 'Estimez vos crédits',
-      subtitle: "Quatre réglages — l'estimation vous suit tout au long de la page.",
+      subtitle: 'L\'estimation vous suit tout au long de la page.',
       presetSoloLabel: 'Solo',
       presetSoloDesc: 'Une marque, deux modèles IA phares, vérifications hebdomadaires.',
       presetTeamLabel: 'Équipe',
@@ -2181,8 +2104,6 @@ export default {
       anyCadence: 'Toute cadence',
       anyCombination: 'Toute combinaison',
       multipleCreditLimited: 'Plusieurs (limité par les crédits)',
-      multipleZones: 'Plusieurs zones de marché',
-      multipleProjects: 'Plusieurs projets',
       volumeTitle: 'Usage & limites',
       workspacesLabel: 'Espaces de travail',
       boostLabel: 'Suivi prioritaire',

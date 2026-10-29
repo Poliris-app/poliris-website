@@ -25,42 +25,64 @@
   max-width: 560px; margin: 14px auto 0; text-align: center;
   font-size: 14px; color: var(--pr-text-faint); line-height: 1.55;
 }
+.pricing-flexibility-note { text-align: center; font-size: 13px; color: var(--pr-text-faint); margin: 14px 0 0; }
 
 /* ---------- Billing toggle ---------- */
-/* Segmented control: a grey track with the active period lifted out of
-   it as a white pill. */
-.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; margin: 28px 0 0; }
+.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; margin: 36px 0 8px; }
+
+.pricing-switcher-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid var(--pr-border);
+  border-radius: 100px;
+  padding: 8px 10px 8px 16px;
+  flex-wrap: wrap;
+}
+.pricing-switcher-divider { width: 1px; align-self: stretch; background: var(--pr-border); }
 
 .pricing-billing-switch {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
-  background: #eceef3;
-  border-radius: 100px;
+  gap: 10px;
 }
-.pricing-billing-opt {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
+.pricing-billing-label {
   font-family: var(--manrope);
   font-size: 14px;
   font-weight: 600;
-  color: var(--pr-text-muted);
+  color: var(--pr-text-faint);
   background: none;
   border: none;
-  border-radius: 100px;
+  padding: 0;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+  transition: color .15s ease;
 }
-.pricing-billing-opt:hover { color: var(--pr-navy); }
-.pricing-billing-opt.active {
+.pricing-billing-label.active { color: var(--pr-navy); font-weight: 700; }
+
+.pricing-switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+  background: #dfe3ee;
+  border: none;
+  border-radius: 100px;
+  padding: 0;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.pricing-switch.on { background: var(--pr-navy); }
+.pricing-switch__knob {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
   background: #fff;
-  color: var(--pr-navy);
-  font-weight: 700;
-  box-shadow: 0 1px 2px rgba(13,27,62,0.08), 0 2px 8px rgba(13,27,62,0.06);
+  box-shadow: 0 1px 3px rgba(13,27,62,0.25);
+  transition: transform .2s ease;
 }
+.pricing-switch.on .pricing-switch__knob { transform: translateX(18px); }
 
 .pricing-save-badge {
   display: inline-flex;
@@ -68,38 +90,61 @@
   font-family: var(--manrope);
   font-size: 11.5px; font-weight: 700; letter-spacing: 0.01em; line-height: 1;
   color: #16a34a;
-  background: #dcf7e6;
+  background: #e9f9ef;
+  border: 1px solid rgba(34,197,94,0.3);
   border-radius: 100px;
-  padding: 4px 8px;
+  padding: 5px 9px;
 }
 
-/* ---------- Currency note ---------- */
-.pricing-currency-note {
-  margin: 18px 0;
-  text-align: center;
-  font-size: 13.5px;
-  color: var(--pr-text-faint);
+/* ---------- Currency switcher ---------- */
+.pricing-currency-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
-.pricing-currency-link {
-  padding: 0;
-  font: inherit;
-  color: var(--pr-blue);
+.pricing-currency-btn {
+  font-family: var(--manrope);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pr-text-faint);
   background: none;
   border: none;
+  border-radius: 100px;
+  padding: 8px 16px;
   cursor: pointer;
+  transition: background .15s ease, color .15s ease;
 }
-.pricing-currency-link:hover { text-decoration: underline; }
+.pricing-currency-btn.active {
+  background: var(--pr-navy);
+  color: #fff;
+  font-weight: 700;
+}
 
 /* ---------- Cards grid ---------- */
-.pricing-plan-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; margin: 2px 0 4px; min-height: 26px; }
-.pricing-badge-popular {
-  display: inline-flex; align-items: center; height: 20px;
-  background: var(--poliris-blue);
-  color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: .02em;
-  padding: 0 8px; border-radius: 999px; white-space: nowrap;
-  font-family: var(--manrope);
+.pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 70px; align-items: stretch; }
+.pricing-card {
+  background: var(--pr-card); border: 1px solid var(--pr-border); border-radius: var(--pr-radius);
+  padding: 26px; display: flex; flex-direction: column;
+  position: relative;
+  min-width: 0;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.pricing-plan-name { font-size: 19px; font-weight: 700; color: var(--pr-navy); font-family: var(--manrope); }
+.pricing-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px -20px rgba(13,27,62,0.25); }
+.pricing-card.popular {
+  border: 1.5px solid var(--poliris-blue);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f8ff 100%);
+  box-shadow: 0 20px 48px -22px var(--poliris-blue);
+}
+.pricing-badge-popular {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--poliris-blue);
+  color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: .03em;
+  padding: 6px 16px; border-radius: 100px; white-space: nowrap;
+  box-shadow: 0 6px 16px -4px rgba(0,98,255,0.55);
+  font-family: var(--manrope);
+  z-index: 1;
+}
+.pricing-plan-name { font-size: 19px; font-weight: 700; color: var(--pr-navy); margin: 2px 0 4px; font-family: var(--manrope); }
 .pricing-plan-desc { font-size: 13px; color: var(--pr-text-faint); min-height: 59px; line-height: 1.5; margin-bottom: 18px; }
 
 .pricing-price-row { display: flex; align-items: flex-start; gap: 6px; padding: 6px 0; margin-bottom: 0; }
@@ -322,8 +367,8 @@
 
 .pricing-cta {
   display: flex; align-items: center; justify-content: center; gap: 7px;
-  width: 100%; align-self: stretch;
-  padding: 11px 16px; border-radius: 999px;
+  width: fit-content; min-width: 190px; align-self: center;
+  padding: 12px 16px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: var(--chivo);
   border: 1px solid var(--pr-border); background: #fff; color: var(--pr-navy);
   cursor: pointer; transition: all .15s ease;
@@ -346,125 +391,6 @@
 }
 .pricing-cta svg { width: 14px; height: 14px; transition: transform .2s ease; }
 .pricing-cta:hover svg { transform: translateX(3px); }
-
-/* ---------- Plan cards ---------- */
-/* One rounded panel split into five columns. The 1px gap over a border-
-   coloured background draws the dividers, so they stay right however
-   the columns wrap on narrower screens. */
-.pricing-cards {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1px;
-  margin-top: 40px;
-  background: #eef1f5;
-  border-radius: 20px;
-  box-shadow: 0 0 0 1px #e3e7ee, 0 24px 60px -36px rgba(22,50,141,0.3);
-}
-/* No overflow:hidden on the panel — it would clip the feature tooltips in
-   the outer columns — so the corner cards carry the rounding themselves,
-   per layout. */
-.pricing-card:first-child { border-radius: 20px 0 0 20px; }
-.pricing-card:last-child { border-radius: 0 20px 20px 0; }
-/* Each card spans six rows of the panel (name, description, price,
-   meter, CTA, features) and shares them through subgrid, so a description
-   that wraps to an extra line moves that row down in every card at once
-   and prices, meters and buttons stay level across the panel. */
-.pricing-card {
-  display: grid;
-  grid-row: span 6;
-  grid-template-rows: subgrid;
-  row-gap: 0;
-  align-content: start;
-  padding: 26px 18px 28px;
-  background: #fff;
-}
-.pricing-card.popular { background: #f5f8ff; }
-.pricing-card .pricing-plan-head { flex-wrap: nowrap; margin: 0 0 6px; }
-.pricing-card .pricing-plan-name { font-size: 17px; white-space: nowrap; }
-.pricing-card-desc { margin: 0; font-size: 13px; line-height: 1.55; color: var(--pr-text-faint); }
-
-.pricing-card-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; margin: 18px 0 14px; }
-/* Its own line under the price, kept one line tall even when empty. */
-.pricing-card-billed { flex-basis: 100%; min-height: 18px; font-size: 12px; line-height: 18px; color: var(--pr-text-faint); }
-.pricing-card-amount { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--pr-navy); font-family: var(--manrope); }
-.pricing-card-amount--word { font-size: 32px; white-space: nowrap; }
-/* Rolling price: a one-line window over a two-line stack (monthly, then
-   annual). clip-path rather than overflow:hidden, because overflow would
-   move the window's baseline to its bottom edge and drop "/mo" out of
-   line; as an inline-flex box it keeps the baseline of its first line. */
-.pricing-card-roll {
-  display: inline-flex;
-  height: 1.1em;
-  clip-path: inset(0 -0.2em);
-}
-.pricing-card-roll-track {
-  display: flex;
-  flex-direction: column;
-  /* Natural two-line height, not stretched to the window, so -50% is
-     exactly one line. */
-  align-self: flex-start;
-  transition: transform .5s cubic-bezier(.22, .9, .3, 1);
-}
-.pricing-card-roll-track > span { line-height: 1.1em; height: 1.1em; }
-.pricing-card-roll.is-annual .pricing-card-roll-track { transform: translateY(-50%); }
-/* The currency roll wraps the billing roll; `>` keeps each switch moving
-   only its own track. Rows are nowrap so sign and number stay together. */
-.pricing-card-roll--currency.is-alt > .pricing-card-roll-track { transform: translateY(-50%); }
-.pricing-card-roll--currency > .pricing-card-roll-track > span { display: inline-flex; white-space: nowrap; }
-/* Right-aligned price (Agency Pack): every line carries its own sign and
-   lines align right, so a shorter price leaves no gap before "/month". */
-.pricing-card-roll--end .pricing-card-roll-track { align-items: flex-end; }
-.pricing-card-roll--end > .pricing-card-roll-track > span { justify-content: flex-end; }
-@media (prefers-reduced-motion: reduce) {
-  .pricing-card-roll-track { transition: none; }
-}
-
-.pricing-card-meter {
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: 12px 10px 10px; margin-bottom: 14px; border-radius: 12px; background: #f3f5f9;
-}
-.pricing-card.popular .pricing-card-meter { background: #e9f0fd; }
-/* Credits and bonus share one line; sized so "1,500 credits +1,500 bonus"
-   fits the narrowest five-column card (see the 1180px breakpoint). */
-.pricing-card-meter-head {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
-  font-size: 13px; font-weight: 700; color: var(--pr-navy); white-space: nowrap;
-}
-.pricing-card-meter-tag { font-size: 11px; font-weight: 700; color: #1f56d6; }
-.pricing-card-meter-bar { display: flex; height: 6px; margin-top: 8px; border-radius: 99px; background: #e1e6ef; overflow: hidden; }
-.pricing-card-meter-bar span { display: block; height: 100%; border-radius: 99px; background: var(--pr-blue); }
-/* Base and bonus sit flush — square off the touching edges so the two
-   read as one pill. */
-.pricing-card-meter-bar span:has(+ .is-bonus) { border-radius: 99px 0 0 99px; }
-.pricing-card-meter-bar span.is-bonus { background: #bcd4ff; border-radius: 0 99px 99px 0; }
-/* Custom has no ceiling, so its bar is full and striped. */
-.pricing-card-meter-bar.is-open span {
-  width: 100%;
-  background: repeating-linear-gradient(-45deg, var(--pr-blue) 0 6px, #8fb6ff 6px 9px);
-}
-
-.pricing-card .pricing-cta { margin-bottom: 22px; }
-.pricing-card-features { display: flex; flex-direction: column; gap: 16px; margin: 4px 0 0; padding: 0; list-style: none; }
-.pricing-card-features li { display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; line-height: 1.55; color: #2b303a; }
-.pricing-card-features li > span { min-width: 0; }
-.pricing-card-features .pricing-check { flex: none; width: 15px; height: 15px; margin-top: 3px; color: #16a34a; }
-/* Starter's ten logos don't fit one line in a card column; let them wrap
-   rather than push the card wider. */
-.pricing-card-features .pricing-feature-models { flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-
-@media (max-width: 1179px) {
-  .pricing-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .pricing-card:first-child { border-radius: 20px 0 0 0; }
-  .pricing-card:nth-child(3) { border-radius: 0 20px 0 0; }
-  .pricing-card:nth-child(4) { border-radius: 0 0 0 20px; }
-  .pricing-card:last-child { border-radius: 0; }
-}
-@media (max-width: 760px) {
-  .pricing-cards { grid-template-columns: minmax(0, 1fr); }
-  .pricing-card:first-child { border-radius: 20px 20px 0 0; }
-  .pricing-card:nth-child(3), .pricing-card:nth-child(4) { border-radius: 0; }
-  .pricing-card:last-child { border-radius: 0 0 20px 20px; }
-}
 
 /* ---------- footer strip ---------- */
 .pricing-foot-note { display: flex; justify-content: center; margin-top: 44px; }
@@ -749,13 +675,6 @@
   50% { box-shadow: 0 0 0 10px rgba(0,98,255,0); }
 }
 .calc-highlight { animation: calc-highlight-pulse 1s ease-out 2; border-color: var(--pr-blue) !important; }
-/* Plan cards sit flush in one panel, so an outer glow would run under
-   their neighbours — pulse an inset ring instead. */
-@keyframes pt-highlight-pulse {
-  0%, 100% { box-shadow: inset 0 0 0 0 rgba(0,98,255,0); }
-  50% { box-shadow: inset 0 0 0 2px rgba(0,98,255,0.9); }
-}
-.pricing-card.calc-highlight { animation: pt-highlight-pulse 1s ease-out 2; }
 
 @media (max-width: 900px) {
   .pricing-calc-head { padding: 24px; }
@@ -859,7 +778,7 @@
 .pricing-plan-col-head:nth-child(4) b { color: var(--pr-blue); }
 
 .pricing-compare-heading-row {
-  display: grid; grid-template-columns: 200px repeat(var(--pr-cols, 5), 1fr); gap: 20px;
+  display: grid; grid-template-columns: 200px repeat(5,1fr); gap: 20px;
   padding: 16px 20px 14px; border-bottom: 1px solid var(--pr-border);
   background: #fafbfc;
 }
@@ -884,7 +803,7 @@ button.pricing-compare-section-title {
 .pricing-compare-chevron.closed { transform: rotate(-90deg); }
 
 .pricing-compare-row {
-  display: grid; grid-template-columns: 200px repeat(var(--pr-cols, 5), 1fr); gap: 20px;
+  display: grid; grid-template-columns: 200px repeat(5,1fr); gap: 20px;
   padding: 16px 20px; border-bottom: 1px solid var(--pr-border);
   font-size: 13.5px; color: var(--pr-text);
 }
@@ -921,7 +840,7 @@ button.pricing-compare-section-title {
 .pricing-check-no { background: #fdecec; color: #e0463c; }
 .pricing-check-yes svg, .pricing-check-no svg { width: 11px; height: 11px; }
 
-.pricing-compare-buttons-row { display: grid; grid-template-columns: 200px repeat(var(--pr-cols, 5), 1fr); gap: 20px; padding: 20px; }
+.pricing-compare-buttons-row { display: grid; grid-template-columns: 200px repeat(5,1fr); gap: 20px; padding: 20px; }
 .pricing-plan-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700;
@@ -948,11 +867,15 @@ button.pricing-compare-section-title {
 }
 
 @media (max-width: 900px) {
-  .pricing-compare-heading-row, .pricing-compare-row, .pricing-compare-buttons-row { grid-template-columns: 160px repeat(var(--pr-cols, 5), minmax(104px, 1fr)); }
+  .pricing-compare-heading-row, .pricing-compare-row, .pricing-compare-buttons-row { grid-template-columns: 160px repeat(4, minmax(90px,1fr)); overflow-x: auto; }
   .pricing-compare-table { overflow-x: auto; }
+}
+@media (max-width: 980px) {
+  .pricing-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 620px) {
   .pricing-wrap { padding: 100px 18px 80px; }
+  .pricing-grid { grid-template-columns: 1fr; }
 }
 
 /* ---------- FAQ accordion ---------- */
@@ -977,186 +900,4 @@ button.pricing-compare-section-title {
 .pricing-faq-a { margin: 0; padding: 0 20px 16px; font-size: 13.5px; color: var(--pr-text-faint); line-height: 1.6; }
 @media (max-width: 620px) {
   .pricing-faq-wrap { margin-top: 64px; }
-}
-
-/* ════════════════════════════════════════════════════════════════
-   Brands / agencies split
-   The audience switch, the Custom plan card and column, and the
-   agencies view (Agency Pack card + per-client tier table).
-   ════════════════════════════════════════════════════════════════ */
-
-/* Large text tabs; the active one is underlined in brand blue. */
-.pricing-audience-switch {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-  margin: 22px auto 0;
-}
-.pricing-audience-btn {
-  padding: 0 0 10px;
-  border: none;
-  border-bottom: 3px solid transparent;
-  background: none;
-  font-family: 'Geist', system-ui, sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: #9aa1ad;
-  cursor: pointer;
-  transition: color .15s ease, border-color .15s ease;
-}
-.pricing-audience-btn:hover { color: var(--pr-text-muted); }
-.pricing-audience-btn.active { color: var(--pr-navy); border-bottom-color: var(--pr-blue); }
-
-/* ── Custom plan card ─────────────────────────────────────────── */
-
-/* "Custom" is a word, not a figure, so it does not need the numeral size. */
-.pricing-price--word { font-size: 34px; }
-
-/* The card's CTA is a link (it books a call) rather than a checkout
-   button, so it needs the button's own box back. */
-a.pricing-cta { text-decoration: none; }
-
-/* The popular column is the 4th grid child in the brand table (label,
-   Free, Starter, Growth) but the 3rd in the agency one (label,
-   Essential, Growth). */
-.pricing-compare-table--agency .pricing-compare-heading-row > *:nth-child(4),
-.pricing-compare-table--agency .pricing-compare-row > *:nth-child(4) {
-  background: none; margin: 0; padding: 0;
-}
-.pricing-compare-table--agency .pricing-plan-col-head:nth-child(4) b { color: var(--pr-navy); }
-.pricing-compare-table--agency .pricing-compare-heading-row > *:nth-child(3) {
-  background: rgba(0,98,255,0.06);
-  margin: -16px -10px -14px; padding: 16px 10px 14px;
-}
-.pricing-compare-table--agency .pricing-compare-row > *:nth-child(3) {
-  background: rgba(0,98,255,0.06);
-  margin: -16px -10px; padding: 16px 10px;
-}
-.pricing-compare-table--agency .pricing-plan-col-head:nth-child(3) b { color: var(--pr-blue); }
-
-/* ── "Running an agency?" line under the brand table ──────────── */
-
-.pricing-agency-link-line {
-  margin: 18px 0 0;
-  text-align: center;
-  font-size: 14px;
-  color: var(--pr-text-muted);
-}
-.pricing-agency-link-btn {
-  border: none;
-  background: none;
-  padding: 0;
-  font-family: var(--chivo);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--pr-blue);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.pricing-agency-link-btn:hover { color: var(--pr-blue-dark, #0047b8); }
-
-/* ── Agency Pack card ─────────────────────────────────────────── */
-
-.pricing-agency-pack {
-  border: 1px solid var(--pr-border);
-  border-radius: 14px;
-  background: #fff;
-  padding: 28px 30px;
-  margin-bottom: 28px;
-  box-shadow: 0 10px 30px -22px rgba(20, 30, 80, .35);
-}
-.pricing-agency-pack-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.pricing-agency-pack-title {
-  margin: 0;
-  font-family: var(--manrope);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--pr-navy);
-}
-.pricing-agency-pack-price { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 4px; }
-/* "Billed … annually" on its own line under the price, kept one line tall
-   even when empty so the card doesn't jump. */
-.pricing-agency-pack-billed {
-  flex-basis: 100%; min-height: 18px; text-align: right;
-  font-size: 12px; line-height: 18px; color: var(--pr-text-faint);
-}
-.pricing-agency-pack-desc {
-  margin: 8px 0 20px;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--pr-text-muted);
-  max-width: 620px;
-}
-.pricing-agency-pack-included {
-  font-family: var(--manrope);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: var(--pr-text-faint);
-  margin-bottom: 12px;
-}
-.pricing-agency-pack-list {
-  list-style: none;
-  margin: 0 0 24px;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 24px;
-}
-.pricing-agency-pack-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--pr-text);
-}
-/* The tick is an inline SVG with no intrinsic size - same sizing the plan
-   feature lists give it. */
-.pricing-agency-pack-list li .pricing-check {
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  margin-top: 2px;
-  color: var(--pr-good);
-}
-.pricing-agency-pack-cta { width: fit-content; min-width: 190px; align-self: center; }
-
-/* ── Notes under the agency table ─────────────────────────────── */
-
-.pricing-agency-notes {
-  margin-top: 16px;
-  text-align: center;
-  font-size: 13.5px;
-  color: var(--pr-text-muted);
-}
-.pricing-agency-notes p { margin: 0; }
-
-/* On phones the pack price wraps under the title on the left, so align
-   it (and its rolling lines) left there. */
-@media (max-width: 480px) {
-  .pricing-agency-pack-price { justify-content: flex-start; }
-  .pricing-agency-pack-billed { text-align: left; }
-  .pricing-card-roll--end .pricing-card-roll-track { align-items: flex-start; }
-  .pricing-card-roll--end > .pricing-card-roll-track > span { justify-content: flex-start; }
-}
-
-/* ── Narrow screens ───────────────────────────────────────────── */
-@media (max-width: 860px) {
-  .pricing-agency-pack-list { grid-template-columns: 1fr; }
-  .pricing-agency-pack { padding: 22px 20px; }
-}
-@media (max-width: 620px) {
-  .pricing-audience-switch { gap: 20px; }
-  .pricing-audience-btn { font-size: 22px; }
 }

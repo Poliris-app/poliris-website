@@ -36,6 +36,11 @@ const REDUCED_QUERY = '(prefers-reduced-motion: reduce)';
 const REVEAL_PX = 480;
 const FLAT_AT = 0.85;
 const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
+// Phones and tablets get the poster, not the film. The film loads every one
+// of its ~2,000 screen images at once, several GB once decoded, and iOS
+// Safari kills a tab long before that ("A problem repeatedly occurred").
+// Keep in step with the matching rule in poliris.css that hides the controls.
+const POSTER_ONLY_QUERY = '(pointer: coarse), (max-width: 768px)';
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 // How many px of the film may sit off screen and still count as "fits".
 // The film keeps playing while any of it is still on screen; it stops
@@ -184,6 +189,83 @@ export default function HeroFilm() {
   // The composition's length until the player reports its own.
   const [duration, setDuration] = useState(FILM_SECONDS);
 
+  // The slider's volume, for fades started from callbacks set up on an
+  // older render.
+  const volumeRef = useRef(volume);
+
+  // With the sound on, pause and play fade the volume rather than cut it:
+  // the film's audio stops dead on pause, and a voice cut off mid-word
+  // comes out of the speakers as a click or a stutter.
+  const pausing = useRef(false);
+  function softPause() {
+    const player = playerRef.current;
+    if (player.paused || pausing.current) return;
+    setPlaying(false);
+    if (player.muted || player.volume === 0) {
+      player.pause();
+      return;
+    }
+    fadeVolume(0, 160);
+    // Set after the fade starts, since starting one ends any pause in progress.
+    pausing.current = true;
+  }
+  function softPlay() {
+    const player = playerRef.current;
+    setPlaying(true);
+    // Pressed again while still fading out: it never stopped, so fade back.
+    if (pausing.current) {
+      pausing.current = false;
+      fadeVolume(volumeRef.current, 160);
+      return;
+    }
+    if (!player.paused) return;
+    if (player.muted) {
+      player.play();
+      return;
+    }
+    stopFade();
+    player.volume = 0;
+    player.play();
+    fadeVolume(volumeRef.current, 220);
+  }
+
+  // Ease the volume from where it is to `to` over `ms`.
+  function fadeVolume(to, ms) {
+    const player = playerRef.current;
+    stopFade();
+    ramping.current = true;
+    const from = player.volume;
+    const t0 = performance.now();
+    const finish = () => {
+      player.volume = to;
+      stopFade();
+    };
+    const ramp = (now) => {
+      const k = Math.min(1, (now - t0) / ms);
+      player.volume = from + (to - from) * k;
+      if (k < 1) rampRef.current = requestAnimationFrame(ramp);
+      else finish();
+    };
+    rampRef.current = requestAnimationFrame(ramp);
+    // Frames don't run in a background tab; make sure the fade still lands.
+    rampDone.current = setTimeout(finish, ms + 150);
+  }
+
+  // Ending a fade-out, whether it ran its course or a volume change cut it
+  // short, completes the pause it was for. The volume stays at zero: the
+  // film's audio stops a moment after pause() returns, and putting the
+  // volume back straight away lets a burst of it through. Playing again
+  // fades it back up.
+  function stopFade() {
+    cancelAnimationFrame(rampRef.current);
+    clearTimeout(rampDone.current);
+    ramping.current = false;
+    if (pausing.current) {
+      pausing.current = false;
+      playerRef.current.pause();
+    }
+  }
+
   // Start playback on its own. The film plays while any of it is on screen
   // and pauses once it has been scrolled past; a pause the visitor chose
   // outranks that until they press play again. Reduced motion never
@@ -192,7 +274,7 @@ export default function HeroFilm() {
     const player = playerRef.current;
     if (!live.current || !player || userPaused.current) return;
     if (window.matchMedia(REDUCED_QUERY).matches) return;
-    player.play();
+    softPlay();
   }
 
   useLayoutEffect(() => {
@@ -231,7 +313,7 @@ export default function HeroFilm() {
       if (seen !== onScreen.current) {
         onScreen.current = seen;
         if (seen) autoPlay();
-        else if (live.current) playerRef.current.pause();
+        else if (live.current) softPause();
       }
     }
     function schedule() { if (!raf) raf = requestAnimationFrame(update); }
@@ -253,6 +335,8 @@ export default function HeroFilm() {
   // the runtime into the film's own frame, where a relative path would point
   // elsewhere.
   useEffect(() => {
+    // Poster only: neither the player's script nor the film is fetched.
+    if (window.matchMedia(POSTER_ONLY_QUERY).matches) return;
     const player = playerRef.current;
     let current = true;
 
@@ -286,12 +370,15 @@ export default function HeroFilm() {
 
   // The sound button and volume slider are the source of truth. A new player
   // (a language switch, key={lang}, or a hot reload in dev) starts muted, so
-  // re-apply the setting after every render rather than at set moments.
+  // re-apply the setting after every render rather than at set moments. The
+  // volume is left alone while paused: a soft pause parks it at zero, and
+  // playing again fades it back (softPlay).
   useEffect(() => {
+    volumeRef.current = volume;
     if (!live.current) return;
     const player = playerRef.current;
     if (player.muted !== muted) player.muted = muted;
-    if (!ramping.current && player.volume !== volume) player.volume = volume;
+    if (!ramping.current && !player.paused && player.volume !== volume) player.volume = volume;
   });
 
   // Switching language swaps in a new player, which starts at 0:00. Both
@@ -371,14 +458,15 @@ export default function HeroFilm() {
   function togglePlay() {
     const player = playerRef.current;
     if (!live.current || !player) return;
-    if (player.paused) {
+    if (player.paused || pausing.current) {
       userPaused.current = false;
-      player.play();
+      softPlay();
     } else {
       userPaused.current = true;
-      player.pause();
+      softPause();
     }
   }
+
 
   // The bar follows the pointer while it's down, and the film follows the
   // bar. Seeking a paused film leaves it paused, so scrubbing back to look
@@ -407,11 +495,7 @@ export default function HeroFilm() {
     playAfterScrub.current = false;
   }
 
-  function stopFade() {
-    cancelAnimationFrame(rampRef.current);
-    clearTimeout(rampDone.current);
-    ramping.current = false;
-  }
+
 
   // Sound on at `target` volume, from wherever the film has got to. It used
   // to jump back to 0:00 the first time so the voiceover was heard from its
@@ -422,27 +506,17 @@ export default function HeroFilm() {
     player.muted = false;
     setMuted(false);
     userPaused.current = false;
+    // Unmuted mid fade-out: it plays on rather than finishing the pause.
+    pausing.current = false;
+    setPlaying(true);
     player.play();
     if (!fade) {
       player.volume = target;
       return;
     }
     // Ease the volume in rather than switching it on.
-    ramping.current = true;
     player.volume = 0;
-    const t0 = performance.now();
-    const ramp = (now) => {
-      const k = Math.min(1, (now - t0) / 450);
-      player.volume = k * target;
-      if (k < 1) rampRef.current = requestAnimationFrame(ramp);
-      else ramping.current = false;
-    };
-    rampRef.current = requestAnimationFrame(ramp);
-    // Frames don't run in a background tab; make sure the fade still lands.
-    rampDone.current = setTimeout(() => {
-      stopFade();
-      player.volume = target;
-    }, 600);
+    fadeVolume(target, 450);
   }
 
   function toggleSound() {
