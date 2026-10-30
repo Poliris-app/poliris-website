@@ -134,19 +134,70 @@ function loadPlayerScript() {
  * layer once, at the scale it has when the layer is made, and then only
  * stretches that bitmap: every zoom in read soft, and the moment Chrome
  * finally re-rastered it sharp showed as a small jump. So no will-change: the
- * camera is re-rastered at each scale and stays crisp. The 3D tilt stays, and
- * keeps the motion's sub-pixel precision; it goes on every window — 04 to 08
- * call theirs .win, not #win, and 04 and 05 have a second camera. */
+ * camera is re-rastered at each scale and stays crisp.
+ * The 3D tilt on the window went for the same reason. A 3D transform makes the
+ * window a layer of its own, rastered at the section's 1920px size and then
+ * shrunk by the player into the hero as a bitmap — every screen of the film
+ * read smeared next to the same section opened on its own (measured: same
+ * frame, with and without the tilt). Without it the text is drawn straight at
+ * the size it is shown — but redrawn at a new size every frame of a camera
+ * move, the glyphs snap to the pixel grid each time and the text shakes.
+ * Keeping the tilt only while the camera moved didn't help: the camera is
+ * nearly always drifting, so it was nearly always on.
+ * What does both: the tilt on .app (the app screen, already scale(.8)), with
+ * the app drawn K times denser. A tilted layer is rastered once, at one pixel
+ * per CSS pixel of its own, whatever it is shown at; zoom: K makes those
+ * pixels K times finer and scale(.8 / K) brings the app back to its size. The
+ * camera then only moves and scales that bitmap — smooth — and it holds
+ * enough pixels for the closest push-in. Measured on frames stepped at 60 fps
+ * (02, 13.5 → 14.4 s): sharpness 917 against 841 untilted and 156 with the
+ * tilt on #win; per-patch shake 0.031px against 0.070 untilted. Layout is
+ * unchanged across the film (only anti-aliasing differs). The bitmap ignores
+ * the screen's pixel ratio, so K follows it: 2, and up to 3 on a retina
+ * screen.
+ * A window shown small is the exception: shrunk to under about half size
+ * (05's chat and PDF at 0.49, 04's Page Explorer at 0.25–0.4, the docked
+ * cards) the bitmap is cut down four times and more and the letters break
+ * up — unreadable. Those are drawn flat, the way the sections draw them on
+ * their own: crisp, and the camera barely moves on them. Each app is
+ * measured every frame and switches at 0.55 / 0.6 of its size, so it does not
+ * flicker between the two on the line. */
+const SMALL = 0.55;
+const LARGE = 0.6;
 const STEADY_CSS = `
-  #win, .win { transform: perspective(1000px) rotateX(0.001deg); }
+  .app:not([data-hfilm-flat]) { zoom: var(--hfilm-k); transform: perspective(1000px) rotateX(0.001deg) scale(var(--hfilm-s)); }
   #cam img, #cam2 img { backface-visibility: hidden; }
 `;
 function steadyDoc(doc) {
-  if (!doc || doc.getElementById('hfilm-steady')) return;
+  const view = doc?.defaultView;
+  if (!view || doc.getElementById('hfilm-steady')) return;
   const style = doc.createElement('style');
   style.id = 'hfilm-steady';
   style.textContent = STEADY_CSS;
   (doc.head || doc.documentElement).appendChild(style);
+  const k = Math.min(3, Math.max(2, 1.5 * (view.devicePixelRatio || 1)));
+  doc.documentElement.style.setProperty('--hfilm-k', k);
+  doc.documentElement.style.setProperty('--hfilm-s', (0.8 / k).toFixed(5));
+  const apps = [...doc.querySelectorAll('.app')];
+  const frame = view.frameElement;                       // the section's layer in the composition
+  const film = frame?.ownerDocument.defaultView.frameElement;   // the composition in the player
+  if (!apps.length || !frame || !film) return;
+  const fit = () => {
+    if (frame.parentElement?.style.visibility !== 'hidden' && frame.offsetWidth && film.offsetWidth) {
+      const outer = (frame.getBoundingClientRect().width / frame.offsetWidth) *
+        (film.getBoundingClientRect().width / film.offsetWidth);
+      apps.forEach((app) => {
+        const box = app.parentElement;                   // unzoomed, and moved by the camera with the app
+        if (!box?.offsetWidth) return;
+        const size = outer * (box.getBoundingClientRect().width / box.offsetWidth) * 0.8;
+        const flat = app.hasAttribute('data-hfilm-flat');
+        if (!flat && size < SMALL) app.setAttribute('data-hfilm-flat', '');
+        else if (flat && size > LARGE) app.removeAttribute('data-hfilm-flat');
+      });
+    }
+    view.requestAnimationFrame(fit);
+  };
+  view.requestAnimationFrame(fit);
 }
 function steadyCamera(player) {
   const doc = player.iframeElement?.contentDocument;

@@ -406,6 +406,10 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 #ov { position: absolute; inset: 0; pointer-events: none; }
 .ov-tint { position: absolute; border-radius: 8px; background: rgba(0, 98, 255, .10); opacity: 0;
            box-shadow: 0 0 0 1.5px rgba(0, 98, 255, .55); }
+/* a line the film adds over the screen, as "From roadmap · Task #5" in 06 */
+.ov-chip { position: absolute; height: 24px; padding: 0 10px; border-radius: 999px; background: #eef4ff; border: 1px solid #bfd3ff; opacity: 0;
+           display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1d4ed8; white-space: nowrap;
+           box-shadow: 0 6px 14px -8px rgba(37, 99, 235, .45); transform-origin: 100% 50%; }
 #cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
 #cur-a, #cur-s { position: absolute; inset: 0; }
 #cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
@@ -582,7 +586,7 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                     <span class="seg"><a class="on">Topics</a><a>AI Models</a></span>
                     <span class="gauge">
                       <svg viewBox="0 0 58.8 58.8"><circle cx="29.4" cy="29.4" r="26.5" fill="none" stroke="#eceaf6" stroke-width="5"/><circle id="g-arc" cx="29.4" cy="29.4" r="26.5" fill="none" stroke="#0062ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="166.5" stroke-dashoffset="166.5"/></svg>
-                      <span><b id="g-num">0</b><em>/100</em></span>
+                      <span><b id="g-num">—</b><em>/100</em></span>
                     </span>
                   </div>
                   <div class="trow"><div class="trow__top"><span class="trow__n">Quality</span><span class="pill p-green">Very Strong</span><span class="trow__v">82%</span></div><div class="trow__bar"><i class="bar" data-w="82"></i></div></div>
@@ -632,16 +636,16 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                   </div>
                   <div class="va__tiles">
                     <div class="tile"><div class="tile__k"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0062ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Visibility Rank</div><div class="tile__v" id="v-rank" style="opacity:0">#2</div></div>
-                    <div class="tile"><div class="tile__k"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0062ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Visibility Score</div><div class="tile__v"><span id="v-score">0%</span></div></div>
+                    <div class="tile"><div class="tile__k"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0062ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Visibility Score</div><div class="tile__v"><span id="v-score">—</span></div></div>
                   </div>
                 </div>
 
                 <div class="va__body">
                   <div class="va__left">
-                    <div class="va__brow"><img src="../../sony-com-logo.png" alt="" /><span class="va__name"><b>Sony</b><span class="p-you" style="margin:0">You</span></span><span class="va__track"><i class="vbar" data-w="64" style="background:#18181b"></i></span><span class="va__pct"><span class="vp" data-v="64">0%</span></span></div>
-                    <div class="va__brow"><img class="logo-inv" src="../../apple-com-logo.png" alt="" /><span class="va__name"><b>Apple</b></span><span class="va__track"><i class="vbar" data-w="71" style="background:#8e8e93"></i></span><span class="va__pct"><span class="vp" data-v="71">0%</span></span></div>
-                    <div class="va__brow"><img src="../../bose-com-logo.png" alt="" /><span class="va__name"><b>Bose</b></span><span class="va__track"><i class="vbar" data-w="52" style="background:#2f9e74"></i></span><span class="va__pct"><span class="vp" data-v="52">0%</span></span></div>
-                    <div class="va__brow"><img src="../../samsung-com-logo.png" alt="" /><span class="va__name"><b>Samsung</b></span><span class="va__track"><i class="vbar" data-w="38" style="background:#2563eb"></i></span><span class="va__pct"><span class="vp" data-v="38">0%</span></span></div>
+                    <div class="va__brow"><img src="../../sony-com-logo.png" alt="" /><span class="va__name"><b>Sony</b><span class="p-you" style="margin:0">You</span></span><span class="va__track"><i class="vbar" data-w="64" style="background:#18181b"></i></span><span class="va__pct"><span class="vp" data-v="64">—</span></span></div>
+                    <div class="va__brow"><img class="logo-inv" src="../../apple-com-logo.png" alt="" /><span class="va__name"><b>Apple</b></span><span class="va__track"><i class="vbar" data-w="71" style="background:#8e8e93"></i></span><span class="va__pct"><span class="vp" data-v="71">—</span></span></div>
+                    <div class="va__brow"><img src="../../bose-com-logo.png" alt="" /><span class="va__name"><b>Bose</b></span><span class="va__track"><i class="vbar" data-w="52" style="background:#2f9e74"></i></span><span class="va__pct"><span class="vp" data-v="52">—</span></span></div>
+                    <div class="va__brow"><img src="../../samsung-com-logo.png" alt="" /><span class="va__name"><b>Samsung</b></span><span class="va__track"><i class="vbar" data-w="38" style="background:#2563eb"></i></span><span class="va__pct"><span class="vp" data-v="38">—</span></span></div>
                   </div>
                   <div class="va__right">
                     <div class="llm-tabs">
@@ -828,6 +832,7 @@ body.shot #win { border-radius: 0; box-shadow: none; }
 
       <div id="ov">
         <span class="ov-tint" id="t-us" style="left:828px;top:43px;width:133px;height:32px;border-radius:10px"></span>
+        <span class="ov-chip" id="t-seen" style="left:512px;top:187px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Seen in 64% of AI answers</span>
         <span class="ov-tint" id="t-rank" style="left:708px;top:170px;width:192px;height:64px;border-radius:12px"></span>
         <!-- The three battery questions carried a tint each here. The rows
              already say it - Gemini answered one, ChatGPT the other, and the
@@ -1081,8 +1086,9 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   // ── a number that counts, written back on every tick, so a scrub is exact ──
   function countTo(el, to, t, d, suffix) {
     var o = { v: 0 };
+    // a dash until the number lands: a "0%" on screen reads as the result
     tl.to(o, { v: to, duration: d, ease: "power2.out",
-      onUpdate: function () { el.textContent = Math.round(o.v) + (suffix || ""); } }, t);
+      onUpdate: function () { el.textContent = o.v < 0.5 ? "—" : Math.round(o.v) + (suffix || ""); } }, t);
   }
 
   // ════ B · Visibility: in the US, 64 % of the answers; and where you stand
@@ -1112,9 +1118,14 @@ body.shot #win { border-radius: 0; box-shadow: none; }
 
   // the page comes down to Visibility Analysis before the map arrives
   tl.to("#pane-ov", { y: -372, duration: 1.1, ease: "power2.inOut" }, t + 1.7);
-  cam(t + 2.3, 1.0, [560, 180, 1.5, 960, 540]);          // 64 %: the score, the heatmap
-  cam(t + 3.3, 1.4, [560, 184, 1.53, 960, 540], "sine.inOut");
-  cam(t + 4.7, 0.8, [620, 180, 1.1, 760, 540, 1]);       // room on the right for the trading zones
+  cam(t + 2.3, 0.7, [560, 180, 1.5, 960, 540]);          // 64 %: the score, the heatmap
+  // then in close on #2 and 64 % for "you show up in 64% of answers" (12.6 →
+  // 14.4 in the film), with the line it proves under them
+  cam(t + 3.0, 0.9, [901, 210, 2.3, 960, 540]);
+  cam(t + 3.9, 0.95, [898, 212, 2.34, 960, 540], "sine.inOut");
+  tl.fromTo("#t-seen", { opacity: 0, x: 10, scale: 0.9 }, { opacity: 1, x: 0, scale: 1, duration: 0.35, ease: "back.out(1.6)", immediateRender: false }, t + 3.5);
+  tl.to("#t-seen", { opacity: 0, duration: 0.25 }, t + 4.75);
+  cam(t + 4.85, 0.7, [620, 180, 1.1, 760, 540, 1]);      // room on the right for the trading zones
   enter("w-map", t + 5.2);
   tl.set("#map-lens", { x: 54.7, y: 43.8, boxShadow: "0 0 0 1.5px #0062ff, inset 0 0 0 3px rgba(255,255,255,.7), 0 10px 26px -8px rgba(15,23,42,.35)" }, 0);
   [[112.2, 28.1, "#f59e0b", "#ro-us", "#ro-uk", 6.0], [120.8, 32.2, "#16a34a", "#ro-uk", "#ro-de", 6.6],
@@ -1174,21 +1185,23 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   // marked Not cited. Each row used to be tinted in turn as well, which read
   // as three separate claims over a line that makes one.
   cam(t + 1.25, 4.1, [690, 330, 1.5, 960, 560], "sine.inOut");
-  clickAt(t + 6.05, 0.95, 386.4, 130.6, t + 7.0, 18);    // Sentiment, clicked at 15.9
-  tabOn("tab-se", t + 7.1);                              // 16.00
-  tl.to("#pane-ov", { opacity: 0, duration: 0.25 }, t + 7.1);
-  tl.to("#pane-se", { opacity: 1, duration: 0.25 }, t + 7.15);
-  gsap.utils.toArray(".sbar2").forEach(function (b, i) {      // 16.05 -> 16.80
+  clickAt(t + 5.45, 0.95, 386.4, 130.6, t + 6.4, 18);    // Sentiment, clicked at 15.3 (film 24.9, on the click sound)
+  tabOn("tab-se", t + 6.5);                              // 15.40
+  tl.to("#pane-ov", { opacity: 0, duration: 0.25 }, t + 6.5);
+  tl.to("#pane-se", { opacity: 1, duration: 0.25 }, t + 6.55);
+  gsap.utils.toArray(".sbar2").forEach(function (b, i) {      // 15.45 -> 16.20
     tl.fromTo(b, { width: 0 }, { width: b.dataset.w + "%", duration: 0.9, ease: "power2.out", immediateRender: false },
-      t + 7.15 + i * 0.12);
+      t + 6.55 + i * 0.12);
   });
-  tl.set("#pane-ov", { y: 0 }, t + 7.35);
-  cam(t + 7.1, 0.8, [520, 300, 1.55, 900, 560]);         // the breakdown: Performance, Weak
-  // Performance is flagged at 16.80 and stays flagged, as the clip does
-  tl.to("#s-perf .srow__flag", { opacity: 1, duration: 0.35, ease: "power2.out" }, t + 7.9);
-  curMove(t + 7.25, 0.7, 520, 250, 10);
-  curHide(t + 7.95, 0.3);
-  cam(t + 7.9, 1.05, [526, 304, 1.58, 900, 560], "sine.inOut");
+  tl.set("#pane-ov", { y: 0 }, t + 6.75);
+  cam(t + 6.5, 0.8, [430, 380, 1.7, 900, 560]);          // the breakdown
+  // in close on Performance, Weak, and held there until the radar (26.1 → 27.6)
+  cam(t + 7.6, 0.7, [373, 439, 2.1, 860, 560]);
+  // Performance is flagged at 16.45 and stays flagged, as the clip does
+  tl.to("#s-perf .srow__flag", { opacity: 1, duration: 0.35, ease: "power2.out" }, t + 7.55);   // 26.05
+  curMove(t + 6.6, 0.7, 520, 250, 10);
+  curHide(t + 7.3, 0.3);
+  cam(t + 8.3, 0.85, [376, 441, 2.14, 860, 560], "sine.inOut");
   // the trend in the Sentiment trend card draws before the competitors' do
   tl.to("#se-trend", { strokeDashoffset: 0, duration: 1.1, ease: "power2.out" }, t + 7.7);
   tl.to("#se-fill", { opacity: 1, duration: 0.8, ease: "power2.out" }, t + 7.9);
