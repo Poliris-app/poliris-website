@@ -2035,6 +2035,18 @@ button { cursor: pointer; border: none; background: none; }
   .hfilm__caption { bottom: 44px; }
   .hfilm__caption span { font-size: 12px; }
 }
+/* Phones (PHONE_QUERY in HeroFilm.jsx): the film just plays. Pinching it
+   made iOS Safari draw it again at the zoomed size, more than the tab is
+   allowed, and the page crashed ("A problem repeatedly occurred") — so pinch
+   and double-tap zoom are off over the film (pan-y keeps the page scrolling
+   past it), and there is no play button or seek line to work it with. CC
+   and sound stay. */
+@media (max-width: 767px), (pointer: coarse) and (max-height: 500px) {
+  .hfilm { touch-action: pan-y; }
+  .hfilm__btn--play,
+  .hfilm__seek,
+  .hfilm__time { display: none; }
+}
 
 /* Dashboard mockup */
 .hero__dashboard {

@@ -52,7 +52,8 @@ const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
 // steadied (steadyCamera draws each app screen up to 3x over, ~46 MB a
 // screen on a retina phone). Together they were more than iOS Safari allows a
 // tab, and it crashed again with "A problem repeatedly occurred". Desktop and
-// laptop screens never match this and play the film as they did.
+// laptop screens never match this and play the film as they did. poliris.css
+// repeats this query to turn pinch-zoom and the play/seek controls off.
 const PHONE_QUERY = '(max-width: 767px), (pointer: coarse) and (max-height: 500px)';
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 // How many px of the film may sit off screen and still count as "fits".
@@ -375,6 +376,17 @@ export default function HeroFilm() {
     if (next) touchUiTimer.current = window.setTimeout(() => setTouchUi(false), 3500);
   }
   useEffect(() => () => window.clearTimeout(touchUiTimer.current), []);
+
+  // Phones: no pinch-zoom over the film (see the PHONE_QUERY block in
+  // poliris.css). touch-action: pan-y does it in current Safari; gesturestart
+  // is Safari's own pinch event, for the versions that ignore touch-action.
+  useEffect(() => {
+    const el = ref.current;
+    const phone = window.matchMedia(PHONE_QUERY);
+    const block = (e) => { if (phone.matches) e.preventDefault(); };
+    el.addEventListener('gesturestart', block, { passive: false });
+    return () => el.removeEventListener('gesturestart', block);
+  }, []);
 
   // Start playback on its own. The film plays while any of it is on screen
   // and pauses once it has been scrolled past; a pause the visitor chose
