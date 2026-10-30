@@ -161,11 +161,16 @@ function loadPlayerScript() {
  * up — unreadable. Those are drawn flat, the way the sections draw them on
  * their own: crisp, and the camera barely moves on them. Each app is
  * measured every frame and switches at 0.55 / 0.6 of its size, so it does not
- * flicker between the two on the line. */
+ * flicker between the two on the line.
+ * Flat, the app keeps its zoom: K (and draws just as sharp at it). Only the
+ * tilt comes and goes. Dropping the zoom with it laid the whole app out again
+ * at the switch — the text shifted by a fraction of a pixel and a slower
+ * machine skipped a frame, as each window grew in (31, 50.8, 89.6 s). */
 const SMALL = 0.55;
 const LARGE = 0.6;
 const STEADY_CSS = `
-  .app:not([data-hfilm-flat]) { zoom: var(--hfilm-k); transform: perspective(1000px) rotateX(0.001deg) scale(var(--hfilm-s)); }
+  .app { zoom: var(--hfilm-k); transform: scale(var(--hfilm-s)); }
+  .app:not([data-hfilm-flat]) { transform: perspective(1000px) rotateX(0.001deg) scale(var(--hfilm-s)); }
   #cam img, #cam2 img { backface-visibility: hidden; }
 `;
 function steadyDoc(doc) {

@@ -1563,7 +1563,7 @@ button { cursor: pointer; border: none; background: none; }
   width: 100vw;
   /* The bottom margin leaves the lower arcs of the orbit room to show
      between the film and How it works. */
-  margin: 64px calc(50% - 50vw) 150px;
+  margin: 64px calc(50% - 50vw) 100px;
   padding: 0 var(--hfilm-gutter);
   box-sizing: border-box;
   overflow-x: clip;
