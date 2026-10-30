@@ -41,11 +41,12 @@ const REDUCED_QUERY = '(prefers-reduced-motion: reduce)';
 const REVEAL_PX = 480;
 const FLAT_AT = 0.85;
 const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
-// Phones and tablets get the poster, not the film. The film loads every one
-// of its ~2,000 screen images at once, several GB once decoded, and iOS
-// Safari kills a tab long before that ("A problem repeatedly occurred").
-// Keep in step with the matching rule in poliris.css that hides the controls.
-const POSTER_ONLY_QUERY = '(pointer: coarse), (max-width: 768px)';
+// Phones and tablets used to get the poster and nothing else: the film was
+// ~2,000 screen images, several GB once decoded, and iOS Safari killed the tab
+// long before they finished ("A problem repeatedly occurred"). The film is
+// coded HTML now — the images are gone — so it plays everywhere. It still
+// starts muted, which is the only way any browser will autoplay it, and
+// prefers-reduced-motion still means it loads without playing (see autoPlay).
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 // How many px of the film may sit off screen and still count as "fits".
 // The film keeps playing while any of it is still on screen; it stops
@@ -268,6 +269,12 @@ export default function HeroFilm() {
   const [cue, setCue] = useState('');
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
+  // Touch only: with no pointer there is no hover to bring the controls up
+  // with, so a tap on the film does it and they go again a moment later.
+  // They used to stand on the picture the whole time, which on a phone is
+  // most of it.
+  const [touchUi, setTouchUi] = useState(false);
+  const touchUiTimer = useRef(0);
   // The composition's length until the player reports its own.
   const [duration, setDuration] = useState(FILM_SECONDS);
 
@@ -348,6 +355,18 @@ export default function HeroFilm() {
     }
   }
 
+  // A tap on the film shows the controls, and a second one puts them away;
+  // either way they go by themselves after a few seconds, so they are never
+  // left standing on the picture. Only reached on a touch screen: the layer
+  // that calls this is inert wherever there is a pointer to hover with.
+  function toggleTouchUi() {
+    window.clearTimeout(touchUiTimer.current);
+    const next = !touchUi;
+    setTouchUi(next);
+    if (next) touchUiTimer.current = window.setTimeout(() => setTouchUi(false), 3500);
+  }
+  useEffect(() => () => window.clearTimeout(touchUiTimer.current), []);
+
   // Start playback on its own. The film plays while any of it is on screen
   // and pauses once it has been scrolled past; a pause the visitor chose
   // outranks that until they press play again. Reduced motion never
@@ -417,8 +436,6 @@ export default function HeroFilm() {
   // the runtime into the film's own frame, where a relative path would point
   // elsewhere.
   useEffect(() => {
-    // Poster only: neither the player's script nor the film is fetched.
-    if (window.matchMedia(POSTER_ONLY_QUERY).matches) return;
     const player = playerRef.current;
     let current = true;
 
@@ -660,7 +677,7 @@ export default function HeroFilm() {
         </svg>
         <div className="hfilm__frame">
           <div className="hfilm__mat">
-            <div className="hfilm__screen">
+            <div className={`hfilm__screen${touchUi ? ' is-touch-ui' : ''}`}>
               <hyperframes-player
                 key={lang}
                 ref={playerRef}
@@ -683,6 +700,13 @@ export default function HeroFilm() {
                 width="1920"
                 height="1080"
               />
+
+              {/* The film is an iframe, so a tap on it is swallowed by the
+                  film's own document and never reaches this one. This catches
+                  it. It sits over the poster and under the controls, so a tap
+                  on a button is still that button's, and it is inert wherever
+                  there is a pointer — see .hfilm__tap in poliris.css. */}
+              <span className="hfilm__tap" aria-hidden="true" onClick={toggleTouchUi} />
 
               {captionsOn && cue && (
                 <p className="hfilm__caption" aria-hidden="true">

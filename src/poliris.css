@@ -1760,10 +1760,37 @@ button { cursor: pointer; border: none; background: none; }
 .hfilm__screen:hover .hfilm__bar { opacity: .66; }
 .hfilm__bar:hover,
 .hfilm__screen:has(:focus-visible) .hfilm__bar { opacity: 1; }
-/* Phones and tablets show the poster only (POSTER_ONLY_QUERY in
-   HeroFilm.jsx), so there is nothing for the controls to drive. */
-@media (pointer: coarse), (max-width: 768px) {
-  .hfilm__bar { display: none; }
+/* The film plays on phones and tablets now, so the controls have to be
+   reachable there — they were hidden outright while those screens showed the
+   poster alone. There is no hover to bring them up with, so a tap on the film
+   does it (toggleTouchUi), and they stay down until it comes. Standing on the
+   picture permanently is most of a phone's screen. */
+@media (hover: none) {
+  /* visibility, not pointer-events alone: .hfilm__btn sets pointer-events
+     back to auto on itself, so a child would stay tappable under a bar that
+     had only been faded out — an invisible play button sitting over the film,
+     taking the very tap meant to bring the controls up. visibility is
+     inherited and takes the whole bar out of hit-testing with it. Held until
+     the fade has finished, so it does not vanish mid-fade. */
+  .hfilm__bar {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease-out), visibility 0s .3s;
+  }
+  .hfilm__screen.is-touch-ui .hfilm__bar {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity .3s var(--ease-out), visibility 0s;
+  }
+}
+/* Catches the tap the film's own iframe would otherwise swallow. Over the
+   poster (z-index 1), under the controls (3), and only where there is no
+   pointer: with a mouse, hover does this job and this must not sit in the way
+   of the film's own cursor. */
+.hfilm__tap { display: none; }
+@media (hover: none) {
+  .hfilm__tap { position: absolute; inset: 0; z-index: 2; display: block; }
 }
 
 .hfilm__btn--play { flex: none; opacity: 1; }
@@ -4360,8 +4387,9 @@ button { cursor: pointer; border: none; background: none; }
 }
 .cc__t tbody th { font-family: var(--chivo); font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--fg-1); }
 
-/* Poliris column */
-.cc__t td.cc__pol { background: #f2f6ff; box-shadow: inset 2px 0 0 var(--poliris-blue), inset -2px 0 0 var(--poliris-blue); }
+/* Poliris column. The tint alone marks it: the blue rule down each side was
+   drawn per cell as an inset shadow and stacked into two hard vertical lines. */
+.cc__t td.cc__pol { background: #f2f6ff; }
 
 /* Cells */
 .cc__c { display: flex; flex-direction: column; align-items: center; gap: 3px; }
