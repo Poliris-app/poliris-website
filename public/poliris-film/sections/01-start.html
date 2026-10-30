@@ -109,11 +109,17 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 /* the prompts */
 .onb__list { margin-top: 16px; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
 
+/* The rings are `inset`. An outset `0 0 0 1px` paints wholly outside the
+   border box, and a card is exactly as wide as .onb__list — which clips, and
+   has to, since the prompts run on past the bottom of the screen. The sides
+   were being cut away and only the rounded corners survived. Inset also puts
+   the ring where the app's own border sits: against the frames this replaces,
+   the border is the card's outermost pixel, not one beyond it. */
 .pc { position: relative; flex: 0 0 auto; height: 75px; border-radius: 10px; background: #fff;
-      box-shadow: 0 0 0 1px var(--line); display: flex; align-items: flex-start; padding: 12px 16px; gap: 10px; }
+      box-shadow: inset 0 0 0 1px var(--line); display: flex; align-items: flex-start; padding: 12px 16px; gap: 10px; }
 /* the selected look, faded in rather than swapped, so a scrub shows it mid-way */
 .pc__on { position: absolute; inset: 0; border-radius: 10px; background: #f9f9ff;
-          box-shadow: 0 0 0 1px var(--primary); opacity: 0; }
+          box-shadow: inset 0 0 0 1px var(--primary); opacity: 0; }
 .pc__box { position: relative; flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px; }
 .pc__ring { position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 1.5px #d4d4d8; }
 .pc__tick { position: absolute; inset: 0; border-radius: 50%; background: var(--primary); opacity: 0;
@@ -524,6 +530,12 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   sc.oninput = function () { tl.pause(); tl.time(parseFloat(sc.value)); paint(); };
 
   // ── the ways in ──
+  // A paused timeline already sits at 0, and GSAP skips the render when the
+  // playhead does not move — so tl.time(0) on a fresh page leaves everything
+  // the timeline sets at 0 unapplied: the camera untransformed, the window in
+  // the corner, rows visible that should start hidden. The composition loads
+  // every section at ?t=0, so it saw that first frame. Nudge off and back.
+  function seek(t) { tl.time(t + 1e-4); tl.time(t); }
   if (q.has("bare")) document.body.classList.add("bare");
 
   if (q.has("screen")) {                       // one screen, alone, at 2x
@@ -534,11 +546,11 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                           "background:#fff;transform:scale(2);transform-origin:0 0";
     document.getElementById("cam").style.cssText =
       "position:absolute;left:0;top:0;width:1120px;height:730px;transform:none;opacity:1";
-    tl.time(parseFloat(q.get("t") || "0"));
+    seek(parseFloat(q.get("t") || "0"));
     tl.pause();
     document.getElementById("cam").style.transform = "none";
   } else if (q.has("t")) {
-    tl.time(parseFloat(q.get("t"))); tl.pause(); paint();
+    seek(parseFloat(q.get("t"))); tl.pause(); paint();
   } else {
     document.fonts.ready.then(function () { tl.play(); });
   }

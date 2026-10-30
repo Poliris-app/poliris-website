@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Poliris film · 7 Citations</title>
+<link rel="icon" href="data:," />
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     7 · CITATIONS · chapters T7 and J of the film, 101.6 → 110.8 s
+
+     Citations: Review (the sites that mention you; ask them for a link),
+     then Acquire (claim a free listing, buy a placement) — all inside
+     Poliris; Nora drafts the requests.
+
+     Nothing here is a screenshot: the screen is written at the app's own
+     size (1400 x 912.5, drawn at 0.8x), measured off the frames it replaces
+     (ov-cit-*). The sidebar is the one in 02-ai-visibility.html, with
+     Citations open; Nora's window is the film's own. The camera and
+     the cursor keep the film's cues, less the chapter start (T7, 101.6).
+
+     `?t=` freezes a moment, `?bare=1` drops the review bar, `?screen` draws
+     the screen alone at 2x.
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="../film/assets/widgets.css" />
+<style>
+@font-face { font-family: "Geist"; font-weight: 400; font-display: block; src: url("../film/assets/fonts/Geist-400.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 500; font-display: block; src: url("../film/assets/fonts/Geist-500.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 600; font-display: block; src: url("../film/assets/fonts/Geist-600.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 700; font-display: block; src: url("../film/assets/fonts/Geist-700.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 800; font-display: block; src: url("../film/assets/fonts/Geist-800.woff2") format("woff2"); }
+
+:root { --primary: #0062ff; --ink: #0a0a0b; --sb-line: #e3e3eb; --green: #16a34a; --muted: #6b7280; --line: #e4e5ea; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0b0f17; }
+body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
+
+#fit { position: fixed; inset: 0; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 50% 50%; background: #f3f6fb; }
+#bg { position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 520px at 50% 45%, rgba(0, 98, 255, .10), rgba(0, 98, 255, 0) 70%),
+        radial-gradient(700px 420px at 88% 70%, rgba(99, 102, 241, .07), rgba(99, 102, 241, 0) 70%),
+        linear-gradient(180deg, #f8fafd 0%, #eef2f8 100%); }
+#cam { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; transform-origin: 0 0; }
+.win { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; background: #fff;
+       box-shadow: 0 0 0 1px #dfe4ec, 0 50px 100px -50px rgba(15, 23, 42, .42), 0 2px 6px rgba(15, 23, 42, .05); }
+.scr { position: absolute; inset: 0; overflow: hidden; }
+.app { position: absolute; left: 0; top: 0; width: 1400px; height: 912.5px;
+       transform: scale(.8); transform-origin: 0 0; background: #fff;
+       font-size: 14px; line-height: 1.5; color: var(--ink);
+       -webkit-font-smoothing: antialiased; display: flex; }
+.abs { position: absolute; }
+.ico { display: inline-block; flex: 0 0 auto; vertical-align: middle; }
+
+/* ══ the app sidebar ══════════════════════════════════════════════════════ */
+.sb { flex: 0 0 272px; width: 272px; height: 912.5px; border-right: 1px solid var(--sb-line);
+      background: #fff; display: flex; flex-direction: column; overflow: hidden; }
+.sb__head { padding: 13.7px 14px 0; display: flex; align-items: center; justify-content: space-between; }
+.sb__logo { width: 131px; height: 32.5px; display: block; }
+.sb__toggle { color: #8b8b8b; display: flex; }
+.sb__dot { margin: 15px 14px; border-top: 1px dotted #d8d8de; }
+.sb__pad { padding: 0 12px; }
+
+.sb__proj-row { display: flex; gap: 6px; }
+.sb__proj { flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; height: 46px; padding: 0 10px;
+            border: 1px solid #e7e7ec; border-radius: 10px; }
+.sb__proj img { width: 28px; height: 28px; border-radius: 50%; object-fit: contain; padding: 2px;
+                background: #fff; border: .5px solid #e2e2e5; flex: 0 0 auto; }
+.sb__proj-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb__proj-txt b { font-size: 13.5px; font-weight: 600; line-height: 17px; }
+.sb__proj-txt span { font-size: 11.5px; line-height: 15px; color: #8b8b8b; }
+.sb__cog { flex: 0 0 auto; width: 46px; height: 46px; border: 1px solid #e7e7ec; border-radius: 10px;
+           display: grid; place-items: center; color: #5a5a5a; }
+
+.sb__seg { margin-top: 10.8px; display: flex; gap: 2px; height: 36px; padding: 3px; border-radius: 9px; background: #eef0fb; }
+.sb__seg a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; border-radius: 7px;
+             font-size: 13.5px; font-weight: 500; color: #5a5a5a; text-decoration: none; }
+.sb__seg a.on { background: #fff; color: var(--primary); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.07); }
+
+.sb__row { display: flex; align-items: center; gap: 9px; height: 35.5px; padding: 0 9px; border-radius: 8px;
+           font-size: 13.5px; color: var(--ink); }
+.sb__row .ico { color: #5a5a5a; display: flex; flex: 0 0 auto; }
+.sb__row .chev { margin-left: auto; color: #9a9aa2; display: flex; }
+.sb__road { margin-top: 9px; height: 42px; }
+.sb__road .ico { color: var(--primary); }
+.sb__road { border: 1px solid #e7e7ec; border-radius: 10px; font-size: 14px; }
+
+.sb__label { display: flex; align-items: center; justify-content: space-between;
+             padding: 0 9px; height: 29.2px; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: #8b8b8b; }
+.sb__sub { margin-top: 1.8px; margin-bottom: -6.2px; margin-left: 18px; padding-left: 11px; border-left: 1px solid #e7e7ec; }
+.sb__item { display: flex; align-items: center; gap: 9px; height: 33.2px; padding: 0 9px; border-radius: 7px;
+            font-size: 13.5px; color: #3f3f46; }
+.sb__item i { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 5px; background: #6366f1; color: #fff;
+              font-style: normal; font-size: 10.5px; font-weight: 700; display: grid; place-items: center; }
+.sb__item--on { background: #eaf2fe; color: #2563eb; font-weight: 600; }   /* the open page: the app's blue, not purple */
+.sb__item img { width: 19px; height: 19px; border-radius: 50%; object-fit: contain; background: #fff;
+                border: .5px solid #e2e2e5; padding: 1px; }
+.sb__foot { margin-top: auto; padding: 0 12px 12px; }
+.sb__user { display: flex; align-items: center; gap: 9px; height: 44px; }
+.sb__user b { width: 32px; height: 32px; border-radius: 50%; background: #be123c; color: #fff;
+              font-size: 11.5px; font-weight: 700; display: grid; place-items: center; }
+.sb__user-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb__user-txt span:first-child { font-size: 13px; font-weight: 600; line-height: 17px; }
+.sb__user-txt span:last-child { font-size: 11px; line-height: 14px; color: #8b8b8b; display: flex; align-items: center; gap: 4px; }
+
+
+.cit-i { position: relative; }
+.cit-on { position: absolute; inset: 0; display: flex; align-items: center; gap: 9px; padding: 0 9px; border-radius: 7px;
+          background: #eaf2fe; color: #2563eb; font-weight: 600; opacity: 0; }
+#sb-rev .cit-on { opacity: 1; }
+
+/* ══ the workspace: blocks at the app's own coordinates ══════════════════ */
+.ws { position: relative; flex: 1; min-width: 0; background: #fff; overflow: hidden; }
+.ch__t { left: 28px; top: 26px; margin: 0; font-size: 21.6px; line-height: 28px; font-weight: 500; letter-spacing: -.01em; }
+.ch__s { left: 28px; top: 66px; font-size: 13.4px; color: #52525b; }
+.cbody { position: absolute; left: 16px; right: 16px; top: 103px; bottom: 0; background: #f7f7f8; border-top: 1px solid #e8e9ed; }
+.pane { position: absolute; inset: 0; }
+#acq { opacity: 0; }
+.st3 { position: absolute; top: 22px; height: 106px; border: 1px solid #e3e5ea; border-radius: 13px; background: #fff; padding: 16px 17px; }
+.st3 small { display: block; font-size: 10.4px; font-weight: 500; letter-spacing: .06em; color: #2563eb; }
+.st3 b { display: block; margin-top: 4px; font-size: 21px; line-height: 28px; font-weight: 500; }
+.st3 span { display: block; margin-top: 3px; font-size: 11.8px; color: #52525b; }
+.bd { position: absolute; left: 12px; width: 1038px; top: 145px; height: 660px; border: 1px solid #e3e5ea; border-radius: 13px; background: #fff; }
+.bd__t { position: absolute; left: 17px; top: 18px; font-size: 19px; line-height: 26px; font-weight: 500; }
+.bd__s { position: absolute; left: 17px; top: 50px; width: 600px; font-size: 13.2px; line-height: 20px; color: #52525b; }
+.fl3 { position: absolute; top: 102px; height: 35px; border: 1px solid #e3e5ea; border-radius: 8px; display: flex; align-items: center; gap: 9px; padding: 0 13px;
+       font-size: 13.6px; color: #3f3f46; justify-content: space-between; }
+.pl3 { position: absolute; top: 155px; height: 31px; border: 1px solid #e3e5ea; border-radius: 999px; display: flex; align-items: center; gap: 7px; padding: 0 14px;
+       font-size: 12.4px; font-weight: 500; }
+.pl3 em { font-style: normal; font-weight: 400; color: #9ca3af; }
+.pl3--on { border-color: #c6d7f8; background: #eaf1fd; color: #1d4ed8; }
+.pl3--on em { color: #1d4ed8; }
+.bd__hr { position: absolute; left: 0; right: 0; top: 203px; border-top: 1px solid #ececf0; }
+.tb3 { position: absolute; left: 17px; right: 17px; top: 220px; border: 1px solid #e8e9ed; border-radius: 10px; overflow: hidden; }
+.tb3__h { position: relative; height: 40px; background: #fafafb; border-bottom: 1px solid #ececf0; font-size: 10px; letter-spacing: .07em; color: #6b7280; }
+.tb3__h span, .rw > * { position: absolute; top: 0; height: 100%; display: flex; align-items: center; white-space: nowrap; }
+.rw { position: relative; height: 47px; border-bottom: 1px solid #f0f0f3; font-size: 13.6px; }
+.rw:last-child { border-bottom: 0; }
+.fav { width: 22px; height: 22px; border-radius: 5px; color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.rw b { font-weight: 500; }
+.cat { height: 19px; padding: 0 7px; border-radius: 999px; font-size: 11.6px; }
+.cat span { line-height: 19px; }
+.c-rev { background: #fff1e6; color: #ea580c; } .c-med { background: #f3ecfd; color: #7c3aed; } .c-ind { background: #e8f0fe; color: #1d4ed8; } .c-new { background: #fde8e8; color: #dc2626; }
+.pi { width: 16px; height: 16px; border-radius: 50%; background: #8b5cf6; color: #fff; font-size: 8.6px; font-weight: 600; display: inline-flex; align-items: center;
+      justify-content: center; margin-right: 8px; }
+.ab { justify-content: center; }
+.ab i { position: relative; width: 76px; height: 29px; border-radius: 7px; background: var(--primary); color: #fff; font-style: normal; font-size: 12.6px; font-weight: 500;
+        display: flex; align-items: center; justify-content: center; }
+.ab i s { position: absolute; inset: -4px; border-radius: 10px; box-shadow: 0 0 0 2.5px #1d4ed8; opacity: 0; text-decoration: none; }
+/* ══ the film's own: Kate's window, the chip ═════════════════════════════ */
+.wg { position: absolute; opacity: 0; transform-origin: 0 0; }
+.wg > .hfw { position: relative !important; }
+/* the agents' windows keep the film's size; only their text is a little larger, to read sharp */
+.ag-h b { font-size: 15.5px !important; }
+.ag-h span { font-size: 12px !important; }
+.ag-r { font-size: 13.2px !important; }
+#w-kate .hfw__name, #w-tom .hfw__name, #w-nora .hfw__name { font-size: 11px; }
+.ag { padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 9px; }
+.ag-h { display: flex; align-items: center; gap: 10px; }
+.ag-h img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: top; background: #eef1f5; }
+.ag-h b { display: block; font-size: 14px; font-weight: 600; color: #0a0a0b; }
+.ag-h span { display: block; font-size: 11px; color: #6a768a; margin-top: 1px; }
+.ag-r { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #3c4257; opacity: 0; }
+.ag-r .st { position: relative; width: 16px; height: 16px; flex: 0 0 auto; }
+.ag-r .sp { position: absolute; inset: 1px; border-radius: 50%; border: 2px solid #d9e2f1; border-top-color: #0062ff; box-sizing: border-box; }
+.ag-r .ok { position: absolute; inset: 0; border-radius: 50%; background: #16a34a; color: #fff; font-size: 9px; font-weight: 800; font-style: normal;
+            display: flex; align-items: center; justify-content: center; opacity: 0; }
+.ag-r em { font-style: normal; font-weight: 600; color: #0a0a0b; }
+.ov { position: absolute; inset: 0; pointer-events: none; }
+.ov-chip { position: absolute; height: 24px; padding: 0 10px; border-radius: 999px; background: #eef4ff; border: 1px solid #bfd3ff; opacity: 0;
+           display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1d4ed8; white-space: nowrap;
+           box-shadow: 0 6px 14px -8px rgba(37, 99, 235, .45); }
+#cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
+#cur-a, #cur-s { position: absolute; inset: 0; }
+#cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
+#rip { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+       border: 2px solid rgba(59, 130, 246, .75); background: rgba(59, 130, 246, .12); opacity: 0; }
+
+#ctl { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 50;
+       display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px;
+       background: rgba(14, 20, 32, .82); backdrop-filter: blur(8px); color: #fff;
+       font: 500 12.5px/1 "Geist", system-ui, sans-serif; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .6); }
+#ctl button { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; color: #0b0f17; font-size: 12px; cursor: pointer; }
+#ctl input { width: 340px; accent-color: #4d8dff; cursor: pointer; }
+#ctl span { font-variant-numeric: tabular-nums; opacity: .85; min-width: 84px; }
+body.bare #ctl { display: none; }
+body.shot { background: #fff; }
+body.shot #bg, body.shot .ov, body.shot .wg, body.shot #ctl { display: none; }
+body.shot .win { border-radius: 0; box-shadow: none; }
+</style>
+</head>
+
+<body>
+<div id="fit"><div id="stage">
+  <div id="bg"></div>
+
+  <div id="cam">
+    <div class="win">
+      <div class="scr"><div class="app">
+        <aside class="sb">
+          <div class="sb__head">
+            <img class="sb__logo" src="../../Logo-Poliris-1.png" width="218" height="54" alt="Poliris" />
+            <span class="sb__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></span>
+          </div>
+          <div class="sb__dot"></div>
+
+          <div class="sb__pad">
+            <div class="sb__proj-row">
+              <div class="sb__proj">
+                <img src="../../sony-com-logo.png" alt="" />
+                <span class="sb__proj-txt"><b>Sony</b><span>Active project</span></span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </div>
+              <span class="sb__cog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div>
+
+            <div class="sb__seg">
+              <a class="on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</a>
+              <a><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>Poli AI</a>
+            </div>
+
+            <div class="sb__row sb__road"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span>Roadmap</div>
+          </div>
+
+          <div class="sb__dot" style="margin-top:5px"></div>
+
+          <div class="sb__pad">
+            <div class="sb__label">MEASURE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></span>AI Reputation<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub">
+              <div class="sb__item"><i>W</i>Wireless Earbuds</div>
+              <div class="sb__item"><i>G</i>Gaming Consoles</div>
+              <div class="sb__item"><i>C</i>Consumer Electronics</div>
+              <div class="sb__item"><i>P</i>Professional Imaging and …</div>
+            </div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>Keywords<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>Sites<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub"><div class="sb__item"><img src="../../sony-com-logo.png" alt="" />sony.com</div></div>
+          </div>
+
+          <div class="sb__dot" style="margin-top:26.5px"></div>
+
+          <div class="sb__pad">
+            <div class="sb__label">ACTION</div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></span>Content<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>Implementation</div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg></span>Citations<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub" style="margin-bottom:0"><div class="sb__item cit-i" id="sb-rev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>Review Citation<span class="cit-on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>Review Citation</span></div><div class="sb__item cit-i" id="sb-acq"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg>Acquire Citation<span class="cit-on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg>Acquire Citation</span></div></div>
+          </div>
+
+          <div class="sb__dot"></div>
+          <div class="sb__pad">
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>Documentation</div>
+          </div>
+
+          <div class="sb__foot">
+            <div class="sb__dot" style="margin:0 0 8px"></div>
+            <div class="sb__user">
+              <b>SU</b>
+              <span class="sb__user-txt"><span>Sample User</span><span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>1 workspace</span></span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+            </div>
+          </div>
+        </aside>
+        <main class="ws">
+          <h1 class="abs ch__t">Citations</h1>
+          <div class="abs ch__s">Where the AI engines get their answers about your market and what you can do about each source.</div>
+          <div class="cbody">
+            <div class="pane" id="rev">
+              <div class="st3" style="left:12px;width:334px"><small>TO REVIEW</small><b>1</b><span>mentions to check for accuracy</span></div>
+              <div class="st3" style="left:364px;width:334px"><small>TO RECLAIM LINK</small><b>7</b><span>mention you, but don't link to you</span></div>
+              <div class="st3" style="left:716px;width:334px"><small>ALREADY LINKING</small><b>2</b><span>sites that already link to you</span></div>
+              <div class="bd">
+                <div class="bd__t">Review Citation</div>
+                <div class="bd__s">These pages already talk about your products. Make sure they say the right thing and that they link to you.</div>
+                <div class="fl3" style="left:17px;width:204px;justify-content:flex-start;color:#6b7280"><span data-ic="search" data-s="14"></span>Search domain...</div>
+                <div class="fl3" style="left:230px;width:125px">All products<span data-ic="chevron-down" data-s="13"></span></div>
+                <div class="fl3" style="left:365px;width:136px">All categories<span data-ic="chevron-down" data-s="13"></span></div>
+                <div class="pl3 pl3--on" style="left:17px">All <em>8</em></div>
+                <div class="pl3" style="left:81px">Check the mention <em>1</em></div>
+                <div class="pl3" style="left:234px">Ask for a link <em>7</em></div>
+                <div class="bd__hr"></div>
+                <div class="tb3" id="tb-rev"></div>
+              </div>
+            </div>
+            <div class="pane" id="acq">
+              <div class="st3" style="left:12px;width:1038px"><small>WAYS IN</small><b>5</b><span>4 paid · 1 free to claim</span></div>
+              <div class="bd">
+                <div class="bd__t">Acquire Citation</div>
+                <div class="bd__s">Trusted sources the AI engines quote on your prompts, where your products are still absent. Each one has a way in.</div>
+                <div class="fl3" style="left:17px;width:204px;justify-content:flex-start;color:#6b7280"><span data-ic="search" data-s="14"></span>Search domain...</div>
+                <div class="fl3" style="left:230px;width:125px">All products<span data-ic="chevron-down" data-s="13"></span></div>
+                <div class="fl3" style="left:365px;width:136px">All categories<span data-ic="chevron-down" data-s="13"></span></div>
+                <div class="pl3 pl3--on" style="left:17px">All <em>5</em></div>
+                <div class="pl3" style="left:81px">Purchase <em>4</em></div>
+                <div class="pl3" style="left:188px">Free listing <em>1</em></div>
+                <div class="bd__hr"></div>
+                <div class="tb3" id="tb-acq"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div></div>
+      <div class="ov">
+        <span id="rip"></span>
+        <div id="cur"><div id="cur-a"><svg id="cur-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nora at work (film/index.html, #w-nora) -->
+  <div class="wg" id="w-nora" style="left:1488px;top:104px;width:320px;height:150px">
+    <div class="hfw" style="width:320px;height:150px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="../film/assets/img/poliris-mark.png" />Poli AI · agents</span></div>
+      <div class="hfw__body ag">
+        <div class="ag-h"><img alt="" src="../film/assets/img/agent-nora.png" /><div><b>Nora</b><span>GEO Analyst · backlinks &amp; outreach</span></div></div>
+        <div class="ag-r" id="n0"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span><em>7</em> link requests drafted</span></div>
+        <div class="ag-r" id="n1"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span><em>1</em> free listing · <em>4</em> placements to buy</span></div>
+      </div>
+    </div></div>
+  </div>
+</div></div>
+
+<div id="ctl">
+  <button id="pp" aria-label="Play or pause">❚❚</button>
+  <input id="sc" type="range" min="0" max="9.2" step="0.01" value="0" />
+  <span id="tt">0.00 / 9.20</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var DUR = 9.2;
+  var q = new URLSearchParams(location.search);
+  var ICONS = {
+    "search": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    "plus": '<path d="M5 12h14"/><path d="M12 5v14"/>',
+    "clock": '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+    "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    "sparkles": '<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>',
+    "refresh-cw": '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+    "list": '<path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "file": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+    "save": '<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>',
+    "copy": '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    "globe": '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+    "history": '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>',
+    "wand": '<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/>',
+    "share": '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+    "calendar": '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'
+  };
+  function ic(name, size) {
+    return '<svg class="ico" xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
+  }
+
+
+  // the sources, as the frames list them
+  var CAT = { Review: "c-rev", Media: "c-med", Industry: "c-ind", News: "c-new" };
+  var PC = { W: "#8b5cf6", G: "#8b5cf6", C: "#8b5cf6", P: "#8b5cf6" };
+  var REV = [["s", "#8b5cf6", "soundguys.com", "Review", "W", "Wireless Earbuds", "editor@soundguys.com", 74, "Ask"],
+             ["r", "#f97316", "rtings.com", "Review", "W", "Wireless Earbuds", "Oct 21", 79, "Ask"],
+             ["w", "#0ea5e9", "whathifi.com", "Review", "W", "Wireless Earbuds", "Oct 18", 80, "Check"],
+             ["t", "#64748b", "techradar.com", "Media", "G", "Gaming Consoles", "tips@techradar.com", 91, "Ask"],
+             ["t", "#ef4444", "theverge.com", "Media", "W", "Wireless Earbuds", "—", 90, "Ask"],
+             ["t", "#10b981", "tomsguide.com", "Review", "W", "Wireless Earbuds", "Oct 12", 72, "Ask"],
+             ["c", "#18181b", "cnet.com", "Media", "W", "Wireless Earbuds", "—", 92, "Ask"],
+             ["a", "#ec4899", "audioadvice.com", "Industry", "C", "Consumer Electronics", "info@audioadvice.com", 41, "Ask"]];
+  var ACQ = [["p", "#64748b", "pcmag.com", "Review", "W", "Wireless Earbuds", "$189", 88, 84, "Purchase"],
+             ["h", "#ef4444", "headphonecheck.co…", "Review", "W", "Wireless Earbuds", "Free", 62, 79, "Claim it"],
+             ["f", "#10b981", "forbes.com", "News", "C", "Consumer Electronics", "$269", 85, 69, "Purchase"],
+             ["w", "#18181b", "wired.com", "Media", "W", "Wireless Earbuds", "$480", 93, 58, "Purchase"],
+             ["e", "#ec4899", "engadget.com", "News", "P", "Professional Imaging …", "$210", 90, 55, "Purchase"]];
+  function src(r) { return '<span style="left:14px"><i class="fav" style="background:' + r[1] + '">' + r[0] + '</i></span><span style="left:46px"><b>' + r[2] + '</b></span>' +
+                    '<span style="left:194px"><span class="cat ' + CAT[r[3]] + '"><span>' + r[3] + '</span></span></span>'; }
+  function prod(x, r) { return '<span style="left:' + x + 'px"><i class="pi">' + r[4] + '</i>' + r[5] + '</span>'; }
+  function num(cx, v) { return '<span style="left:' + (cx - 30) + 'px;width:60px;justify-content:center">' + v + '</span>'; }
+  function btn(cx, v, id) { return '<span class="ab" style="left:' + (cx - 45) + 'px;width:90px"><i' + (id ? ' id="' + id + '"' : "") + '>' + v + '<s></s></i></span>'; }
+  function head(cols) { return '<div class="tb3__h">' + cols.map(function (c) { return '<span style="left:' + c[1] + 'px' + (c[2] ? ';width:90px;margin-left:-45px;justify-content:center' : "") + '">' + c[0] + '</span>'; }).join("") + '</div>'; }
+  document.getElementById("tb-rev").innerHTML = head([["SOURCE", 14], ["CATEGORY", 194], ["PRODUCT MENTIONED", 315], ["CONTACT / CHECKED", 536], ["DOMAIN RATING", 786, 1], ["ACTION", 917, 1]]) +
+    REV.map(function (r, k) { return '<div class="rw rv" id="rr' + k + '">' + src(r) + prod(315, r) + '<span style="left:536px">' + r[6] + '</span>' + num(786, r[7]) + btn(917, r[8], k ? "" : "ask0") + '</div>'; }).join("");
+  document.getElementById("tb-acq").innerHTML = head([["SOURCE", 14], ["CATEGORY", 194], ["TARGET PRODUCT", 304], ["COST", 494], ["DOMAIN RATING", 649, 1], ["OPPORTUNITY SCORE", 779, 1], ["ACTION", 917, 1]]) +
+    ACQ.map(function (r, k) { return '<div class="rw aq" id="ar' + k + '">' + src(r) + prod(304, r) + '<span style="left:494px">' + r[6] + '</span>' + num(649, r[7]) + num(779, r[8]) + btn(917, r[9], "buy" + k) + '</div>'; }).join("");
+
+  document.querySelectorAll("[data-ic]").forEach(function (el) {
+    el.outerHTML = ic(el.dataset.ic, +el.dataset.s).replace('class="ico"', 'class="ico ' + el.className + '"' + (el.getAttribute("style") ? ' style="' + el.getAttribute("style") + '"' : ""));
+  });
+
+  var stage = document.getElementById("stage");
+  function fit() {
+    if (document.body.classList.contains("shot")) return;
+    var d = document.documentElement;
+    var s = Math.min(d.clientWidth / 1920, d.clientHeight / 1080);
+    stage.style.transform = "translate(-50%, -50%) scale(" + s + ")";
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (document.fonts) document.fonts.ready.then(fit);
+  fit();
+
+  var tl = gsap.timeline({ paused: true });
+  var MX = 120, MY = 80;
+  function clampTo(v, size, frame, m) { return size >= frame ? Math.min(m, Math.max(frame - size - m, v)) : Math.max(-m, Math.min(frame - size + m, v)); }
+  function camState(cx, cy, S, fx, fy, keep) {
+    var w = S * 1120, x = fx - S * cx;
+    x = keep ? clampTo(x, w, 1920, MX) : w <= 1920 ? (1920 - w) / 2 : Math.min(0, Math.max(1920 - w, x));
+    return { x: x, y: clampTo(fy - S * cy, S * 730, 1080, MY), scale: S };
+  }
+  var REST = [560, 365, 1.14, 960, 512];
+  function cam(t, d, s, ease) { tl.to("#cam", Object.assign(camState.apply(null, s), { duration: d, ease: ease || "power2.inOut" }), t); }
+  function enter(id, t) {
+    tl.fromTo("#" + id, { opacity: 0, x: 70, y: 10, scale: 1.08, filter: "blur(8px)" },
+      { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out", immediateRender: false }, t);
+    // a filter left on, even at 0px, keeps the window on a soft layer: drop it once it has landed
+    tl.set("#" + id, { filter: "none" }, t + 0.71);
+  }
+  function leave(id, t) { tl.to("#" + id, { opacity: 0, x: 60, scale: 0.96, filter: "blur(6px)", duration: 0.4, ease: "power2.in" }, t); }
+  function pop(id, t, out) {
+    tl.fromTo(id, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, t);
+    if (out != null) tl.to(id, { opacity: 0, duration: 0.25 }, out);
+  }
+  function step(id, t) {
+    tl.fromTo("#" + id, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+    tl.fromTo("#" + id + " .sp", { rotation: 0 }, { rotation: 540, duration: 0.7, ease: "none", immediateRender: false }, t);
+    tl.to("#" + id + " .sp", { opacity: 0, duration: 0.1 }, t + 0.6);
+    tl.fromTo("#" + id + " .ok", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.6);
+  }
+  function curShow(t, x, y, fade) { tl.set("#cur", { x: x, y: y }, t); tl.to("#cur", { opacity: 1, duration: fade || 0 }, t); }
+  function curHide(t, fade) { tl.to("#cur", { opacity: 0, duration: fade || 0.01 }, t); }
+  function curMove(t, d, x, y, arc) {
+    tl.to("#cur", { x: x, y: y, duration: d, ease: "power2.inOut" }, t);
+    tl.to("#cur-a", { y: -(arc == null ? 14 : arc), duration: d / 2, ease: "sine.out", yoyo: true, repeat: 1 }, t);
+  }
+  function curClick(t, x, y) {
+    tl.to("#cur-s", { scale: 0.84, duration: 0.08, ease: "power2.in" }, t);
+    tl.to("#cur-s", { scale: 1, duration: 0.2, ease: "power2.out" }, t + 0.1);
+    tl.fromTo("#rip", { x: x + 3, y: y + 3, scale: 0.4, opacity: 1 }, { scale: 1.2, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+  }
+  function count(el, to, t, d, suf, ease) {
+    var o = { v: 0 };
+    tl.to(o, { v: to, duration: d, ease: ease || "power2.out", onUpdate: function () { el.textContent = Math.round(o.v) + (suf || ""); } }, t);
+  }
+
+
+  function clickAt(t0, d, cx, cy, tc, arc) { curMove(t0, d, cx - 3, cy - 3, arc); curClick(tc, cx - 3, cy - 3); }
+
+  // ════ T7 · the citations come in; J · Review (ask for a link), then Acquire (claim a listing, buy a placement) ════
+  var t = 0;
+  tl.set("#cam", camState.apply(null, REST), 0);
+  t = 1.0;                                               // J − T7 = 102.6 − 101.6
+  // the review list comes in a row at a time, 102.5 → 103.0 in the frames
+  tl.fromTo(".rv", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out", stagger: 0.07, immediateRender: true }, t - 0.1);
+  // Ask, on soundguys.com: the link request goes out
+  tl.to("#ask0 s", { opacity: 1, duration: 0.2 }, t + 2.95);
+  tl.to("#ask0 s", { opacity: 0, duration: 0.3 }, t + 3.4);
+  cam(t + 0.05, 0.9, [660, 420, 1.35, 900, 560]);
+  cam(t + 0.95, 1.9, [690, 432, 1.42, 900, 560], "sine.inOut");
+  enter("w-nora", t + 0.3);
+  step("n0", t + 2.9);
+  cam(t + 2.85, 0.8, [420, 470, 1.25, 700, 560]);        // the sidebar in view: Citations › Acquire
+  curShow(t + 3.0, 420, 600, 0.2);
+  // the film clicks at (88, 569) on its own sidebar; Acquire Citation sits here
+  clickAt(t + 3.05, 0.9, 88, 612, t + 3.95, 14);
+  tl.to("#sb-rev .cit-on", { opacity: 0, duration: 0.15 }, t + 4.0);
+  tl.to("#sb-acq .cit-on", { opacity: 1, duration: 0.15 }, t + 4.0);
+  tl.to("#rev", { opacity: 0, duration: 0.2 }, t + 4.0);
+  tl.to("#acq", { opacity: 1, duration: 0.2 }, t + 4.05);
+  tl.fromTo(".aq", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out", stagger: 0.1, immediateRender: true }, t + 4.15);
+  // the ways in, picked in the order the voice names them: "claim a listing"
+  // (~107.0 in the film) is Claim it on headphonecheck; "or buy a placement"
+  // (~108.2) runs down the Purchases. The film's recording had Purchase first.
+  tl.to("#buy1 s", { opacity: 1, duration: 0.2 }, t + 4.7);
+  var prev = 1;
+  [0, 2, 3, 4].forEach(function (k, i) {
+    var at = t + 5.8 + 0.3 * i;
+    tl.to("#buy" + prev + " s", { opacity: 0, duration: 0.15 }, at);
+    tl.to("#buy" + k + " s", { opacity: 1, duration: 0.15 }, at);
+    prev = k;
+  });
+  tl.to("#buy4 s", { opacity: 0, duration: 0.3 }, t + 7.1);
+  cam(t + 4.1, 0.6, [720, 420, 1.42, 900, 560]);
+  step("n1", t + 4.6);
+  cam(t + 4.7, 0.9, [930, 470, 1.7, 1000, 560]);
+  cam(t + 5.6, 0.6, [935, 475, 1.74, 1000, 560], "sine.inOut");
+  curMove(t + 4.2, 0.8, 520, 610, 10);
+  curHide(t + 5.1, 0.25);
+  leave("w-nora", t + 6.2);
+  cam(t + 6.25, 0.8, [560, 365, 1.06, 960, 520]);        // all without leaving Poliris: the whole app
+  cam(t + 7.05, 1.15, REST, "sine.inOut");
+
+  var pp = document.getElementById("pp"), sc = document.getElementById("sc"), tt = document.getElementById("tt");
+  function paint() {
+    sc.value = tl.time().toFixed(2);
+    tt.textContent = tl.time().toFixed(2) + " / " + DUR.toFixed(2);
+    pp.textContent = tl.paused() ? "▶" : "❚❚";
+  }
+  tl.eventCallback("onUpdate", paint);
+  pp.onclick = function () { if (tl.paused()) { if (tl.time() >= DUR - 0.02) tl.time(0); tl.play(); } else tl.pause(); paint(); };
+  sc.oninput = function () { tl.pause(); tl.time(parseFloat(sc.value)); paint(); };
+  // A paused timeline already sits at 0, and GSAP skips the render when the
+  // playhead does not move — so tl.time(0) on a fresh page leaves everything
+  // the timeline sets at 0 unapplied: the camera untransformed, the window in
+  // the corner, rows visible that should start hidden. The composition loads
+  // every section at ?t=0, so it saw that first frame. Nudge off and back.
+  function seek(t) { tl.time(t + 1e-4); tl.time(t); }
+  if (q.has("bare")) document.body.classList.add("bare");
+  if (q.has("screen")) {
+    document.body.classList.add("shot");
+    document.getElementById("fit").style.cssText = "position:absolute;left:0;top:0;width:2240px;height:1460px;display:block";
+    stage.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;overflow:hidden;background:#fff;transform:scale(2);transform-origin:0 0";
+    document.fonts.ready.then(function () {
+      seek(parseFloat(q.get("t") || "0")); tl.pause();
+      document.getElementById("cam").style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;transform:none;opacity:1";
+    });
+  } else if (q.has("t")) {
+    document.fonts.ready.then(function () { seek(parseFloat(q.get("t"))); tl.pause(); paint(); });
+  } else {
+    document.fonts.ready.then(function () { tl.play(); });
+  }
+  window.__tl = tl;
+})();
+</script>
+</body>

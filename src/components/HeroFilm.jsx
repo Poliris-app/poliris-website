@@ -31,7 +31,12 @@ const MEDIA = `${import.meta.env.BASE_URL}livraison`;
 const FILM = `${import.meta.env.BASE_URL}poliris-film`;
 // Both language folders sit side by side: film-fr/ carries the French voice and
 // labels only, and shares film/assets/ for the screens, images and fonts.
-const FILM_DIR = { en: 'film', fr: 'film-fr' };
+// The film is one composition now, not one per language: live/ plays the
+// coded sections in ../sections/ and takes ?lang=fr for the French labels and
+// voice (the app screens are the same in both). film/ and film-fr/ still hold
+// what it draws from — the clock, the fonts, the audio, the agent portraits.
+const FILM_LIVE = 'live';
+const FILM_DIR = { en: 'film', fr: 'film-fr' };   // posters and subtitles still live here
 const REDUCED_QUERY = '(prefers-reduced-motion: reduce)';
 const REVEAL_PX = 480;
 const FLAT_AT = 0.85;
@@ -116,22 +121,43 @@ function loadPlayerScript() {
  * #win, which the timeline never animates, makes the transform 3D: the motion
  * keeps its sub-pixel precision and glides. Sharpness was checked unchanged.
  *
- * It costs nothing in sharpness: #cam holds videos and a cursor, no text. The
- * film's own text is drawn outside it and keeps painting normally, crisp at
- * every size. Injected from here rather than edited into the composition, so
- * public/poliris-film/ stays exactly as it was delivered. */
+ * It costs nothing in sharpness: #cam holds the app screen and a cursor, no
+ * text. The film's own text is drawn outside it and keeps painting normally,
+ * crisp at every size. Injected from here rather than edited into the
+ * composition, so public/poliris-film/ stays as it is.
+ *
+ * Since the film became the coded sections, #cam lives inside each section's
+ * own frame rather than in the composition, so this walks into them too —
+ * and again as they arrive, because they load after the composition does. */
+/* Now that the screens are coded, #cam holds the app's live text, and
+ * will-change: transform is what blurred it. Chrome rasters a will-change
+ * layer once, at the scale it has when the layer is made, and then only
+ * stretches that bitmap: every zoom in read soft, and the moment Chrome
+ * finally re-rastered it sharp showed as a small jump. So no will-change: the
+ * camera is re-rastered at each scale and stays crisp. The 3D tilt stays, and
+ * keeps the motion's sub-pixel precision; it goes on every window — 04 to 08
+ * call theirs .win, not #win, and 04 and 05 have a second camera. */
 const STEADY_CSS = `
-  #cam { will-change: transform; }
-  #win { transform: perspective(1000px) rotateX(0.001deg); }
-  #cam video, #cam img { backface-visibility: hidden; }
+  #win, .win { transform: perspective(1000px) rotateX(0.001deg); }
+  #cam img, #cam2 img { backface-visibility: hidden; }
 `;
-function steadyCamera(player) {
-  const doc = player.iframeElement?.contentDocument;
+function steadyDoc(doc) {
   if (!doc || doc.getElementById('hfilm-steady')) return;
   const style = doc.createElement('style');
   style.id = 'hfilm-steady';
   style.textContent = STEADY_CSS;
   (doc.head || doc.documentElement).appendChild(style);
+}
+function steadyCamera(player) {
+  const doc = player.iframeElement?.contentDocument;
+  if (!doc) return;
+  steadyDoc(doc);
+  // the section layers, now and whenever one finishes loading
+  for (const frame of doc.querySelectorAll('iframe.sec')) {
+    const apply = () => steadyDoc(frame.contentDocument);
+    apply();
+    frame.addEventListener('load', apply);
+  }
 }
 
 const cueTime = (stamp) =>
@@ -345,7 +371,8 @@ export default function HeroFilm() {
       player.setAttribute('runtime-src', new URL(`${FILM}/player/hyperframe.runtime.iife.js`, location.href).href);
       // ?bg=transparent turns the composition's own backdrop off so the film
       // sits on the page rather than in a box of its own (see LISEZ-MOI).
-      player.setAttribute('src', new URL(`${FILM}/${FILM_DIR[lang]}/index.html?bg=transparent`, location.href).href);
+      const q = lang === 'fr' ? '?bg=transparent&lang=fr' : '?bg=transparent';
+      player.setAttribute('src', new URL(`${FILM}/${FILM_LIVE}/index.html${q}`, location.href).href);
     }
     // Before the player's script lands, load() is a no-op; the call after it
     // lands catches up.

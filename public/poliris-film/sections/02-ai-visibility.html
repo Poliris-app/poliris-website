@@ -107,7 +107,7 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
             font-size: 13.5px; color: #3f3f46; }
 .sb__item i { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 5px; background: #6366f1; color: #fff;
               font-style: normal; font-size: 10.5px; font-weight: 700; display: grid; place-items: center; }
-.sb__item--on { background: #dadff7; color: #4f46e5; font-weight: 600; }
+.sb__item--on { background: #eaf2fe; color: #2563eb; font-weight: 600; }   /* the open page: the app's blue, not purple */
 .sb__item img { width: 19px; height: 19px; border-radius: 50%; object-fit: contain; background: #fff;
                 border: .5px solid #e2e2e5; padding: 1px; }
 .sb__foot { margin-top: auto; padding: 0 12px 12px; }
@@ -154,7 +154,13 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 #pane-se { opacity: 0; }
 
 /* ══ cards ════════════════════════════════════════════════════════════════ */
-.cd { background: #fff; border: 1px solid var(--card-line); border-radius: 14px; padding: 14.1px 16px 16px; }
+.cd { position: relative; background: #fff; border: 1px solid var(--card-line); border-radius: 14px; padding: 14.1px 16px 16px; }
+/* Innovation is cut here, as it is in the frames. A hairline track on the
+   right says the list goes on rather than leaving it looking broken. */
+.cd__scroll { position: absolute; right: 6px; top: 150px; bottom: 12px; width: 3px;
+              border-radius: 999px; background: #f1f1f4; }
+.cd__scroll i { position: absolute; left: 0; right: 0; top: 0; height: 64%;
+                border-radius: 999px; background: #d4d4d8; }
 .cd__hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .cd__hd > div:first-child { flex: 1; min-width: 0; }
 .cd__t { font-size: 13.8px; font-weight: 700; letter-spacing: -.01em; }
@@ -166,7 +172,11 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .p-violet{ background: #f0e7ff; color: #6d28d9; }
 .p-amber { background: #fff1e0; color: #c2410c; }
 
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; height: 355px; }
+/* 358, not 355: the four topic rows come to 366.6 and the card clips them, so
+   the last one — Innovation — lost its bar. The frames cut that row too, but
+   below the bar rather than through it, which is the three pixels added here.
+   .va gives the same three back so nothing underneath moves. */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; height: 358px; }
 #pane-se .grid3 { height: 392px; }
 .grid3 > .cd { height: 100%; overflow: hidden; }
 
@@ -194,13 +204,24 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .brow { display: flex; align-items: center; gap: 8.8px; height: 45.6px; border-bottom: 1px solid #f0f0f3; }
 .brow:last-child { border-bottom: 0; }
 .brow img, .va__brow img { object-fit: cover; background: #0a0a0b; }
-.brow img { width: 32px; height: 32px; border-radius: 8px; }
-.logo-inv { background: #fff !important; filter: invert(1); }
+/* 26, not 32: the tile measures 41px across in the frames this replaces,
+   which at 2x over the window's 0.8 is 25.6 app pixels. */
+.brow img { width: 26px; height: 26px; border-radius: 8px; }
+/* Apple's file is a black mark on transparent, so it only needs the white
+   tile the others don't have. Inverting it as well turned the tile black and
+   the mark white — the opposite of every frame it is meant to match. The
+   white tile needs an edge the dark ones don't, and the mark sits inside it
+   rather than filling it. */
+.logo-inv { background: #fff !important; border: 1px solid #e4e4e7; padding: 4px; }
 .brow b { font-size: 12.34px; font-weight: 600; }
 .brow em { font-style: normal; font-size: 12.5px; color: #a1a1aa; }
 .brow .pill { margin-left: auto; }
-.p-you { margin-left: auto; height: 23px; padding: 0 10px; border-radius: 999px; border: 1px solid #bfd3ff;
-         color: #1d4ed8; font-size: 12.5px; display: inline-flex; align-items: center; }
+/* Filled, not outlined. The app's own token is --accent #abd3ff26, which
+   over white is about (243, 248, 255) — and that is what the frames show,
+   where this was drawing a white pill with a blue rule around it. */
+.p-you { margin-left: auto; height: 23px; padding: 0 10px; border-radius: 999px; background: #abd3ff26;
+         border: 1px solid #bfd3ff; color: var(--primary); font-size: 12.5px;
+         display: inline-flex; align-items: center; }
 
 /* — Source Intelligence — */
 .src-n { margin-top: 16.4px; font-size: 13.5px; color: #3f3f46; }
@@ -219,7 +240,10 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
            display: grid; place-items: center; font-size: 13.5px; color: #3f3f46; }
 
 /* — Visibility Analysis — */
-.va { margin-top: 17.2px; }
+.va { margin-top: 14.2px; }   /* 17.2 less the 3 .grid3 took, so this stays put */
+/* the card was crowded: the radar and the chart both gained height, and the
+   month labels sit 20px below the chart, so the card needs the room under it */
+#cs { padding-bottom: 44px; }
 .va__hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
 .va__hd > div:first-child { flex: 1; min-width: 0; }
 .va__col { flex: 1; min-width: 0; }
@@ -240,18 +264,20 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .va__name { flex: 0 0 147.4px; display: flex; align-items: center; gap: 10px; }
 .va__name b { font-size: 14.5px; font-weight: 600; }
 .va__track { flex: 0 0 198px; height: 29px; border: 1px solid #e7e7ec; border-radius: 8px; display: flex; align-items: center; padding: 0 9px; }
-.va__track i { display: block; height: 5px; width: 0; border-radius: 999px; }
+.va__track i { display: block; height: 7px; width: 0; border-radius: 999px; }
 .va__pct { flex: 1; min-width: 0; text-align: right; font-size: 13.5px; color: #3f3f46; }
 .va__right { flex: 0 0 614px; min-width: 0; display: flex; flex-direction: column; }
 .llm-tabs { display: flex; gap: 2px; height: 38px; padding: 3px; border-radius: 10px; background: #f4f4f5; }
 .llm-tabs a { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 7px; border-radius: 8px;
               font-size: 13px; color: #52525b; }
-.llm-tabs a.on { background: #fff; color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+/* The picked tab is not bolder in the frames this replaces — it is the white
+   chip and the darker ink that mark it, at the same weight as its neighbours. */
+.llm-tabs a.on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 .llm-tabs img { width: 14px; height: 14px; object-fit: contain; }
 .heat { margin-top: 7px; opacity: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3.8px; }
 .heat i { height: 41px; border-radius: 7px; background: #cfe0ff; }
 .legend { margin-top: 7px; opacity: 0; display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: #71717a; }
-.legend i { flex: 1; height: 4px; border-radius: 999px; background: linear-gradient(90deg, #cfe0ff, #1e2a78); }
+.legend i { flex: 1; height: 4px; border-radius: 999px; background: linear-gradient(90deg, #eff6ff, #93c5fd, #3b82f6, #1d4ed8, #172554); }
 
 /* — Prompt Explorer — */
 .pe { margin-top: 11px; }
@@ -261,10 +287,12 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .pe__filters a .on { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
                      border-radius: 8px; background: #fff; color: var(--ink); font-weight: 600;
                      box-shadow: 0 1px 2px rgba(0,0,0,.08); opacity: 0; }
-.pe__head { margin-top: 13px; display: flex; align-items: center; height: 40px; padding: 0 13px;
+.pe__head { margin-top: 13px; display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 13px;
             border: 1px solid #e7e7ec; border-radius: 10px; font-size: 13.5px; color: #3f3f46; }
-.pe__head .t { margin-left: auto; width: 128px; }
-.pe__head .l { width: 300px; }
+.pe__head > span:first-child { flex: 1; min-width: 0; }
+.pe__head .t { flex: 0 0 68px; }
+.pe__head .l { flex: 0 0 370px; }
+.pe__head .x { flex: 0 0 76px; }   /* stands where the open icon or Not cited does */
 .pe__head em { font-style: italic; color: #a1a1aa; }
 #pe-rows { position: relative; height: 375px; }
 .pe__list { position: absolute; left: 0; right: 0; top: 0; }
@@ -273,11 +301,18 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .pe__row { display: flex; align-items: center; gap: 10px; padding: 13px 13px; border-bottom: 1px solid #f0f0f3; }
 .pe__q { flex: 1; min-width: 0; }
 .pe__q span { font-size: 13.5px; }
-.pe__sig { flex: 0 0 auto; width: 128px; display: flex; align-items: flex-end; gap: 2px; }
+/* one slot wide enough for Not cited, so that row's chips stay in the column
+   with the rest instead of being pushed left by the wider pill; the 60px it
+   takes comes out of Traffic, so the question column keeps its width */
+.pe__end { flex: 0 0 76px; display: flex; align-items: center; }
+.pe__sig { flex: 0 0 auto; width: 68px; display: flex; align-items: flex-end; gap: 2px; }
 .pe__sig i { width: 3.5px; border-radius: 999px; background: #2563eb; }
 .pe__sig i:nth-child(1) { height: 6px; } .pe__sig i:nth-child(2) { height: 9.5px; } .pe__sig i:nth-child(3) { height: 14px; }
-.eng { display: flex; gap: 8px; }
-.eng a { display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 11px; border-radius: 9px;
+.eng { flex: 0 0 370px; display: flex; gap: 8px; }
+/* each chip takes its third of the column, and its two lines never wrap:
+   "Web Interface" broke onto a third line and the name rode up on the border */
+.eng a { flex: 1 1 0; min-width: 0; white-space: nowrap;
+         display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 11px; border-radius: 9px;
          border: 1px solid #cfe0ff; background: #f3f7ff; }
 .eng a.off { border-color: #ededf1; background: #fafafa; }
 .eng img { width: 17px; height: 17px; object-fit: contain; }
@@ -294,16 +329,17 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .t-innov { background: #fde1e3; color: #b91c1c; }
 
 /* ══ Sentiment ════════════════════════════════════════════════════════════ */
-.srow { margin-top: 18.7px; height: 47px; border: 1px solid #ededf1; border-radius: 10px; padding: 8px 11px; }
+.srow { position: relative; margin-top: 18.7px; height: 47px; border: 1px solid #ededf1; border-radius: 10px; padding: 8px 11px; }
 .srow + .srow { margin-top: 18.6px; }
-.srow--weak { border-color: #fb923c; box-shadow: 0 0 0 1px #fb923c; }
+.srow__flag { position: absolute; inset: -1px; border-radius: 11px; opacity: 0; pointer-events: none;
+               box-shadow: 0 0 0 2px #fb923c, 0 0 14px 4px rgba(251, 146, 60, .38); }
 .srow__top { display: flex; align-items: center; gap: 10px; }
 .srow__top .trow__n { flex: 1; }
 .srow__bar { margin-top: 8px; height: 6px; border-radius: 999px; background: #f1f1f4; overflow: hidden; }
 .srow__bar i { display: block; width: 0; height: 100%; border-radius: 999px; }
 
 .tr-chart { position: relative; margin-top: 19px; height: 128px; }
-.tr-chart svg { width: 100%; height: 100%; display: block; }
+.tr-chart svg { width: 100%; height: 100%; display: block; overflow: visible; }   /* the end dot's halo runs past the edge */
 .tr-x { position: absolute; left: 0; right: 0; bottom: -18px; display: flex; justify-content: space-between;
         font-size: 12px; color: #a1a1aa; }
 .tr-range { margin-top: 30px; display: flex; align-items: baseline; gap: 7px; font-size: 13px; }
@@ -311,8 +347,18 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .tr-range span { font-weight: 600; }
 .tr-range em { font-style: normal; color: #71717a; }
 .tr-range a { margin-left: auto; color: #52525b; }
-.tr-slider { margin-top: 9px; height: 15px; border-radius: 999px; background: #c7dbff;
-             border-left: 4px solid #2563eb; border-right: 4px solid #2563eb; }
+/* The app's range control: the selected span is a pale wash inside a thin blue
+   outline, with a solid blue handle at each end. Not a solid blue bar — that
+   reads as a progress bar, and here the whole range is selected, so what the
+   control has to show is its two ends. */
+.tr-slider { position: relative; margin: 11px 3px 0; height: 20px; }
+/* the thin blue line runs along the top only, not all the way round */
+.tr-slider i { position: absolute; inset: 0; border-radius: 6px;
+               background: #e8f1fe; box-shadow: inset 0 1.5px 0 #3b82f6; }
+.tr-slider i::before, .tr-slider i::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 7px; border-radius: 4px; background: #3b82f6; }
+.tr-slider i::before { left: 0; }
+.tr-slider i::after { right: 0; }
 .tr-foot { margin-top: 13px; display: flex; align-items: center; gap: 12px; }
 .tr-foot b { margin-left: 6px; font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
 .tr-foot--k { margin-top: 3px; font-size: 11.5px; color: #a1a1aa; gap: 22px; }
@@ -346,21 +392,20 @@ body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
 .cs__eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; color: #8b8b8b; }
 .cs__date { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px;
             border: 1px solid #e7e7ec; border-radius: 9px; font-size: 12.5px; color: #3f3f46; }
-.radar { width: 486px; height: 268px; display: block; margin: 6px auto 0; }
+.radar { width: 486px; height: 300px; display: block; margin: 6px auto 0; }
 .r-l { font: 500 13px "Geist", system-ui, sans-serif; fill: #71717a; }
 .r-l--on { fill: #ea580c; font-weight: 600; }
-.cs__chart { position: relative; margin-top: 6px; height: 300px; }
+.cs__chart { position: relative; margin-top: 6px; height: 332px; }
 .cs__chart svg { width: 100%; height: 100%; display: block; }
 .tl { fill: none; stroke-width: 2.4; stroke-linecap: round; }
 .cs__yl { position: absolute; left: 0; font-size: 12px; font-weight: 500; transform: translateY(-50%); }
-.cs__xl { position: absolute; left: 56px; right: 0; bottom: -20px; display: flex; justify-content: space-between;
-          font-size: 12px; color: #a1a1aa; }
+.cs__xl { position: absolute; left: 0; right: 0; bottom: -20px; height: 14px; font-size: 12px; color: #a1a1aa; }
+.cs__xl span { position: absolute; top: 0; transform: translateX(-50%); }
 
 /* ══ overlay: tints, cursor ═══════════════════════════════════════════════ */
 #ov { position: absolute; inset: 0; pointer-events: none; }
 .ov-tint { position: absolute; border-radius: 8px; background: rgba(0, 98, 255, .10); opacity: 0;
            box-shadow: 0 0 0 1.5px rgba(0, 98, 255, .55); }
-.ov-tint--red { background: rgba(239, 68, 68, .08); box-shadow: 0 0 0 1.5px rgba(239, 68, 68, .6); }
 #cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
 #cur-a, #cur-s { position: absolute; inset: 0; }
 #cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
@@ -528,6 +573,7 @@ body.shot #win { border-radius: 0; box-shadow: none; }
 
                 <!-- Score Breakdown -->
                 <div class="cd">
+                  <span class="cd__scroll"><i></i></span>
                   <div class="cd__hd">
                     <div><div class="cd__t">Score Breakdown</div><div class="cd__s">Quick read of what lifts or limits visibility</div></div>
                     <span class="pill p-green">Strong</span>
@@ -616,7 +662,7 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                   <div><div class="cd__t">Prompt Explorer</div><div class="cd__s">How AI platforms respond to prompts about your industry</div></div>
                   <span class="pe__filters"><a id="f-all">All Topics<span class="on" style="opacity:1">All Topics</span></a><a>Quality</a><a id="f-perf">Performance<span class="on">Performance</span></a><a>Price &amp; Value</a><a>Innovation</a></span>
                 </div>
-                <div class="pe__head"><span>Prompts</span><span class="t">Traffic</span><span class="l">LLMs <em>— click to view answer</em></span></div>
+                <div class="pe__head"><span>Prompts</span><span class="t">Traffic</span><span class="l">LLMs <em>— click to view answer</em></span><span class="x"></span></div>
                 <div id="pe-rows"><div class="pe__list" id="pe-all"></div><div class="pe__list" id="pe-perf" style="opacity:0"></div></div>
               </div>
             </div>
@@ -635,7 +681,7 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                   <div class="srow"><div class="srow__top"><span class="trow__n">Quality</span><span class="pill p-green">Very Strong</span></div><div class="srow__bar"><i class="sbar2" data-w="85" style="background:#15803d"></i></div></div>
                   <div class="srow"><div class="srow__top"><span class="trow__n">Innovation</span><span class="pill p-green">Strong</span></div><div class="srow__bar"><i class="sbar2" data-w="72" style="background:#22c55e"></i></div></div>
                   <div class="srow"><div class="srow__top"><span class="trow__n">Price &amp; Value</span><span class="pill" style="background:#fef3c7;color:#92400e">Moderate</span></div><div class="srow__bar"><i class="sbar2" data-w="55" style="background:#eab308"></i></div></div>
-                  <div class="srow srow--weak" id="s-perf"><div class="srow__top"><span class="trow__n">Performance</span><span class="pill" style="background:#ffedd5;color:#c2410c">Weak</span></div><div class="srow__bar"><i class="sbar2" data-w="28" style="background:#f97316"></i></div></div>
+                  <div class="srow" id="s-perf"><span class="srow__flag"></span><div class="srow__top"><span class="trow__n">Performance</span><span class="pill" style="background:#ffedd5;color:#c2410c">Weak</span></div><div class="srow__bar"><i class="sbar2" data-w="28" style="background:#f97316"></i></div></div>
                 </div>
 
                 <!-- Sentiment trend -->
@@ -646,13 +692,36 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                   </div>
                   <div class="tr-chart">
                     <svg viewBox="0 0 324 128" preserveAspectRatio="none">
-                      <g stroke="#f1f1f4" stroke-width="1">
+                      <defs>
+                        <!-- the app's wash: light blue under the line, near white at the axis -->
+                        <linearGradient id="se-grad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0" stop-color="#dbe8fd"/>
+                          <stop offset="1" stop-color="#f8fbff"/>
+                        </linearGradient>
+                      </defs>
+                      <!-- the line, the wash under it and both end dots are all
+                           drawn from the six runs in script, so they cannot drift
+                           apart; see SE_V -->
+                      <path id="se-fill" fill="url(#se-grad)" opacity="0"/>
+                      <!-- the grid shows through the wash, as it does in the app -->
+                      <g stroke="#e4ecf8" stroke-width="1" vector-effect="non-scaling-stroke">
                         <line x1="0" y1="32" x2="324" y2="32"/><line x1="0" y1="64" x2="324" y2="64"/>
                         <line x1="0" y1="96" x2="324" y2="96"/><line x1="0" y1="127" x2="324" y2="127"/>
                       </g>
-                      <path d="M4 14 C 60 16, 120 24, 180 32 S 280 44, 320 50 L320 128 L4 128 Z" fill="#f4f7ff"/>
-                      <path d="M4 14 C 60 16, 120 24, 180 32 S 280 44, 320 50" fill="none" stroke="#2f5fe0" stroke-width="2.2" stroke-linecap="round"/>
-                      <circle cx="4" cy="14" r="4" fill="#fff" stroke="#9aa6c4" stroke-width="2"/>
+                      <path id="se-trend" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round"/>
+                      <!-- dots as round caps on a non-scaling stroke: a <circle>
+                           is squashed by preserveAspectRatio="none". The first run
+                           is a hollow ring like the last, not a solid blob. -->
+                      <g id="se-dot0">
+                        <path stroke="#2563eb" stroke-width="8" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                        <path stroke="#fff" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                      </g>
+                      <!-- the active point: a white dot in a heavy blue ring, with a soft halo -->
+                      <g id="se-trend-dot" opacity="0">
+                        <path stroke="rgba(59,130,246,.2)" stroke-width="20" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                        <path stroke="#2563eb" stroke-width="12" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                        <path stroke="#fff" stroke-width="5.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                      </g>
                     </svg>
                     <div class="tr-x"><span>Jun 2</span><span>Oct 25</span></div>
                   </div>
@@ -726,25 +795,27 @@ body.shot #win { border-radius: 0; box-shadow: none; }
                     </div>
                     <div class="cs__chart">
                       <svg viewBox="0 0 640 300" preserveAspectRatio="none" id="trend">
+                        <!-- five even levels, y = 20 + 65 × level; the labels sit
+                             on these lines (they used to float ~30px above them) -->
                         <g stroke="#f1f1f4" stroke-width="1">
-                          <line x1="56" y1="20" x2="640" y2="20"/><line x1="56" y1="90" x2="640" y2="90"/>
-                          <line x1="56" y1="160" x2="640" y2="160"/><line x1="56" y1="230" x2="640" y2="230"/>
-                          <line x1="56" y1="282" x2="640" y2="282"/>
+                          <line x1="104" y1="20" x2="640" y2="20"/><line x1="104" y1="85" x2="640" y2="85"/>
+                          <line x1="104" y1="150" x2="640" y2="150"/><line x1="104" y1="215" x2="640" y2="215"/>
+                          <line x1="104" y1="280" x2="640" y2="280"/>
                         </g>
-                        <path class="tl" id="tl-sony"  d="M60 24 C 180 34, 300 70, 420 92 S 560 112, 612 118" stroke="#2563eb"/>
-                        <path class="tl" id="tl-apple" d="M60 92 C 180 86, 300 66, 420 46 S 560 28, 612 22" stroke="#a1a1aa"/>
-                        <path class="tl" id="tl-bose"  d="M60 166 C 180 162, 300 154, 420 148 S 560 144, 612 144" stroke="#2f9e74"/>
-                        <g>
-                          <circle cx="612" cy="118" r="5" fill="#2563eb"/><circle cx="612" cy="22" r="5" fill="#a1a1aa"/><circle cx="612" cy="144" r="5" fill="#2f9e74"/>
-                          <line x1="612" y1="16" x2="612" y2="286" stroke="#2563eb" stroke-width="1.4" stroke-dasharray="4 4"/>
-                        </g>
+                        <!-- drawn from TREND below -->
+                        <path class="tl" id="tl-sony"  stroke="#2563eb"/>
+                        <path class="tl" id="tl-apple" stroke="#a1a1aa"/>
+                        <path class="tl" id="tl-bose"  stroke="#2f9e74"/>
+                        <line x1="612" y1="14" x2="612" y2="286" stroke="#2563eb" stroke-width="1.4" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>
+                        <g id="tl-dots" opacity="0"></g>
                       </svg>
-                      <span class="cs__yl" style="top:0;color:#15803d">Very Strong</span>
-                      <span class="cs__yl" style="top:23.3%;color:#16a34a">Strong</span>
-                      <span class="cs__yl" style="top:46.6%;color:#b45309">Moderate</span>
-                      <span class="cs__yl" style="top:70%;color:#c2410c">Weak</span>
-                      <span class="cs__yl" style="top:87.3%;color:#dc2626">Very Weak</span>
-                      <div class="cs__xl"><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
+                      <span class="cs__yl" style="top:6.67%;color:#15803d">Very Strong</span>
+                      <span class="cs__yl" style="top:28.33%;color:#16a34a">Strong</span>
+                      <span class="cs__yl" style="top:50%;color:#b45309">Moderate</span>
+                      <span class="cs__yl" style="top:71.67%;color:#c2410c">Weak</span>
+                      <span class="cs__yl" style="top:93.33%;color:#dc2626">Very Weak</span>
+                      <!-- at the 1st of each month on the Jun 2 – Oct 25 axis (x 112 → 612) -->
+                      <div class="cs__xl"><span style="left:17.5%">Jun</span><span style="left:33.13%">Jul</span><span style="left:49.84%">Aug</span><span style="left:66.56%">Sep</span><span style="left:82.66%">Oct</span></div>
                     </div>
                   </div>
                 </div>
@@ -758,13 +829,11 @@ body.shot #win { border-radius: 0; box-shadow: none; }
       <div id="ov">
         <span class="ov-tint" id="t-us" style="left:828px;top:43px;width:133px;height:32px;border-radius:10px"></span>
         <span class="ov-tint" id="t-rank" style="left:708px;top:170px;width:192px;height:64px;border-radius:12px"></span>
-        <!-- the three battery questions: Gemini answered one, ChatGPT the other,
-             and the third is not cited at all - 2 of 9 answers -->
-        <span class="ov-tint" id="t-q1" style="left:240px;top:244px;width:858px;height:62px;border-radius:10px"></span>
-        <span class="ov-tint" id="t-q2" style="left:240px;top:305px;width:858px;height:62px;border-radius:10px"></span>
-        <span class="ov-tint" id="t-q3" style="left:240px;top:366px;width:858px;height:62px;border-radius:10px"></span>
+        <!-- The three battery questions carried a tint each here. The rows
+             already say it - Gemini answered one, ChatGPT the other, and the
+             third is marked Not cited - so the tints are gone and the camera
+             holds the list instead. -->
         <!-- Performance, weak, on the sentiment breakdown -->
-        <span class="ov-tint ov-tint--red" id="t-bat" style="left:231px;top:420px;width:376px;height:50px;border-radius:10px"></span>
         <span id="rip"></span>
         <div id="cur"><div id="cur-a"><svg id="cur-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
       </div>
@@ -813,10 +882,13 @@ body.shot #win { border-radius: 0; box-shadow: none; }
 
   // ── the heat grid and the prompt rows are written once, from their data ──
   var HEAT = [[.72,.80,.70,.58],[.86,.92,.82,.84],[.46,.50,.40,.42],[.26,.28,.22,.24]];
+  // the app's SCORE_COLORS (VisibilityAnalysisDetail.tsx): the score rounded
+  // to a 0–10 step, one Tailwind blue per step, blue-50 to blue-950
+  var SCORE_COLORS = ["#eff6ff", "#dbeafe", "#bfdbfe", "#93c5fd", "#60a5fa", "#3b82f6",
+                      "#2563eb", "#1d4ed8", "#1e40af", "#1e3a8a", "#172554"];
   document.getElementById("heat").innerHTML = HEAT.map(function (r) {
     return r.map(function (v) {
-      var c = "rgb(" + Math.round(207 - 177 * v) + "," + Math.round(224 - 182 * v) + "," + Math.round(255 - 135 * v) + ")";
-      return '<i style="background:' + c + '"></i>';
+      return '<i style="background:' + SCORE_COLORS[Math.round(v * 10)] + '"></i>';
     }).join("");
   }).join("");
 
@@ -842,10 +914,10 @@ body.shot #win { border-radius: 0; box-shadow: none; }
         return '<a class="' + (p[3][k] ? "" : "off") + '"><img src="../film/assets/img/' + e[1] + '.png" alt="" />' +
                '<span><b>' + e[0] + '</b><em>Web Interface</em></span></a>';
       }).join("") + '</span>' +
-      (p[3][0] + p[3][1] + p[3][2] === 0
+      '<span class="pe__end">' + (p[3][0] + p[3][1] + p[3][2] === 0
         ? '<span class="pe__nc">Not cited</span>'
         : '<span class="pe__open"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>') +
-      '</div>';
+      '</span></div>';
   }).join(""); }
   document.getElementById("pe-all").innerHTML = rows(PROMPTS);
   document.getElementById("pe-perf").innerHTML = rows(PERF);
@@ -885,11 +957,64 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   }
   radarAt(0);
 
-  // the competitor trend lines draw themselves in
+  // ── the competitors' trend, in levels (0 Very Strong … 4 Very Weak) at the
+  // start of each month and on Oct 25, read off the app's own chart: Sony
+  // slides from Very Strong to Strong, Apple climbs past it in September,
+  // Bose edges up from just above Moderate ──
+  // Sampled every fortnight, not monthly: on six points the curve came out as
+  // three clean arcs, where the app's lines wander — they rise a little before
+  // they fall, flatten for a stretch, then move again. The month ends still
+  // carry the same values, so the story is unchanged: Sony slides from Very
+  // Strong to Strong, Apple climbs past it in September, Bose edges up.
+  var TX = [112, 162, 212, 262, 319, 372, 426, 478, 529, 570, 612];
+  var TREND = {
+    "tl-sony":  ["#2563eb", [.08, .05, .15, .12, .27, .38, .45, .60, .72, .86, .97]],
+    "tl-apple": ["#a1a1aa", [1.08, 1.11, 1.00, .99, .84, .79, .61, .56, .41, .29, .18]],
+    "tl-bose":  ["#2f9e74", [1.78, 1.77, 1.70, 1.71, 1.65, 1.60, 1.56, 1.55, 1.50, 1.49, 1.47]]
+  };
+  function smooth(p) {        // Catmull-Rom through the points, as cubic Béziers
+    var d = "M" + p[0][0] + " " + p[0][1].toFixed(1);
+    for (var i = 0; i < p.length - 1; i++) {
+      var a = p[i - 1] || p[i], b = p[i], c = p[i + 1], e = p[i + 2] || c;
+      d += " C " + (b[0] + (c[0] - a[0]) / 6).toFixed(1) + " " + (b[1] + (c[1] - a[1]) / 6).toFixed(1) + ", " +
+                   (c[0] - (e[0] - b[0]) / 6).toFixed(1) + " " + (c[1] - (e[1] - b[1]) / 6).toFixed(1) + ", " +
+                   c[0] + " " + c[1].toFixed(1);
+    }
+    return d;
+  }
+  document.getElementById("tl-dots").innerHTML = Object.keys(TREND).map(function (id) {
+    var pts = TREND[id][1].map(function (v, i) { return [TX[i], 20 + 65 * v]; });
+    document.getElementById(id).setAttribute("d", smooth(pts));
+    var y = pts[pts.length - 1][1].toFixed(1);
+    // a round cap on a non-scaling stroke stays a circle in the stretched svg
+    return '<path d="M612 ' + y + 'h0" stroke="' + TREND[id][0] + '" stroke-width="10" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+  }).join("");
+
+  // ── Sentiment trend, the small card: the same six runs from Jun 2 to Oct 25.
+  // Strong, and still Strong, so the app draws it high and almost level, waving
+  // as it goes — it drifts about a sixth of the card. It was one smooth swoop
+  // twice that deep, which read as a collapse rather than a drift. ──
+  var SE_X = [4, 67, 130, 194, 257, 320];
+  var SE_Y = [14, 12, 19, 17, 26, 31];
+  (function () {
+    var d = smooth(SE_X.map(function (x, i) { return [x, SE_Y[i]]; }));
+    document.getElementById("se-trend").setAttribute("d", d);
+    document.getElementById("se-fill").setAttribute("d", d + " L320 128 L4 128 Z");
+    var first = "M4 " + SE_Y[0] + "h0", last = "M320 " + SE_Y[SE_Y.length - 1] + "h0";
+    document.querySelectorAll("#se-dot0 path").forEach(function (p) { p.setAttribute("d", first); });
+    document.querySelectorAll("#se-trend-dot path").forEach(function (p) { p.setAttribute("d", last); });
+  })();
+
+  // the trend lines draw themselves in — the competitors' and, in the
+  // Sentiment trend card, the overall one the film also draws
   gsap.utils.toArray(".tl").forEach(function (p) {
     var L = p.getTotalLength();
     p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
   });
+  (function () {
+    var p = document.getElementById("se-trend"), L = p.getTotalLength();
+    p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+  })();
 
   var stage = document.getElementById("stage");
   function fit() {
@@ -968,12 +1093,12 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   cam(t + 1.1, 0.9, [560, 170, 1.55, 960, 350]);         // the header: United States
   tint("#t-us", t + 1.5, 1.4);
 
-  // the scores land while the camera is on them
+  // "Good news": the Score Breakdown loads as the chapter opens, not a beat later
   tabOn("tab-vi", t + 1.2);
-  tl.to("#g-arc", { strokeDashoffset: 166.5 * (1 - 0.64), duration: 1.6, ease: "power2.out" }, t + 1.3);
-  countTo(document.getElementById("g-num"), 64, t + 1.3, 1.6);
+  tl.to("#g-arc", { strokeDashoffset: 166.5 * (1 - 0.64), duration: 1.6, ease: "power2.out" }, t + 0.15);
+  countTo(document.getElementById("g-num"), 64, t + 0.15, 1.6);
   gsap.utils.toArray(".bar").forEach(function (b, i) {
-    tl.to(b, { width: b.dataset.w + "%", duration: 1.0, ease: "power2.out" }, t + 1.4 + i * 0.08);
+    tl.to(b, { width: b.dataset.w + "%", duration: 1.0, ease: "power2.out" }, t + 0.25 + i * 0.08);
   });
   gsap.utils.toArray(".vbar").forEach(function (b, i) {
     tl.to(b, { width: b.dataset.w + "%", duration: 1.1, ease: "power2.out" }, t + 2.0 + i * 0.1);
@@ -985,9 +1110,11 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   tl.to("#heat, .legend", { opacity: 1, duration: 0.5, ease: "power2.out" }, t + 2.1);
   tl.fromTo("#v-rank", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, t + 2.2);
 
-  cam(t + 2.3, 1.0, [560, 300, 1.5, 960, 540]);          // 64 %: the score, the heatmap
-  cam(t + 3.3, 1.4, [560, 304, 1.53, 960, 540], "sine.inOut");
-  cam(t + 4.7, 0.8, [620, 300, 1.1, 760, 540, 1]);       // room on the right for the trading zones
+  // the page comes down to Visibility Analysis before the map arrives
+  tl.to("#pane-ov", { y: -372, duration: 1.1, ease: "power2.inOut" }, t + 1.7);
+  cam(t + 2.3, 1.0, [560, 180, 1.5, 960, 540]);          // 64 %: the score, the heatmap
+  cam(t + 3.3, 1.4, [560, 184, 1.53, 960, 540], "sine.inOut");
+  cam(t + 4.7, 0.8, [620, 180, 1.1, 760, 540, 1]);       // room on the right for the trading zones
   enter("w-map", t + 5.2);
   tl.set("#map-lens", { x: 54.7, y: 43.8, boxShadow: "0 0 0 1.5px #0062ff, inset 0 0 0 3px rgba(255,255,255,.7), 0 10px 26px -8px rgba(15,23,42,.35)" }, 0);
   [[112.2, 28.1, "#f59e0b", "#ro-us", "#ro-uk", 6.0], [120.8, 32.2, "#16a34a", "#ro-uk", "#ro-de", 6.6],
@@ -1000,53 +1127,89 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   cam(t + 5.5, 2.7, [624, 302, 1.12, 760, 540, 1], "sine.inOut");
   leave("w-map", t + 8.1);
 
-  // Prompt Explorer, the Performance topic: the questions about the battery
-  cam(t + 8.25, 0.9, [700, 330, 1.45, 960, 560]);
-  curShow(t + 8.35, 980, 330, 0.2);
-  clickAt(t + 8.45, 0.95, 888.8, 188.0, 10.1, 12);     // the Performance topic
+  // Prompt Explorer, the Performance topic: the questions about the battery.
+  // The voice says "but ask about the performance of your battery" from 18.65
+  // to 21.05 of the film — local 9.05 to 11.45 — with the word "performance"
+  // itself around 9.8 to 10.4. The click lands at 10.10, inside that word.
+  // It used to land at 10.65, after the phrase had moved on, which read as the
+  // picture running behind the voice.
+  // The page still settles on All Topics before the topic is picked, so the
+  // list is seen unfiltered first — 0.4 s of it, as it was.
+  cam(t + 8.0, 0.9, [700, 330, 1.45, 960, 560]);
+  curShow(t + 8.1, 980, 330, 0.2);
+  // The page scrolls down to the Prompt Explorer and comes to rest at 9.70,
+  // in one move: it used to stop half way and finish during chapter C, so the
+  // card was still travelling when the topic was picked. It leaves the map
+  // view at 8.55 — 18.15 of the film — as "every other trading zone" ends.
+  tl.to("#pane-ov", { y: -743, duration: 1.15, ease: "power2.inOut" }, t + 8.55);  // on from -372
+  clickAt(t + 8.85, 0.95, 888.8, 188.0, 10.10, 12);    // the Performance topic
   // the filter takes, and the list becomes the four Performance prompts
   tl.to("#f-all .on",  { opacity: 0, duration: 0.2 }, 10.15);
   tl.to("#f-perf .on", { opacity: 1, duration: 0.2 }, 10.15);
-  tl.to("#pe-all",  { opacity: 0, duration: 0.25 }, 10.15);
-  tl.to("#pe-rows", { height: 300, duration: 0.45, ease: "power2.inOut" }, 10.2);
-  tl.to("#pe-perf", { opacity: 1, duration: 0.25 }, 10.3);
-  tl.fromTo("#pe-perf .pe__row", { opacity: 0, y: 8 },
-    { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.09, immediateRender: false }, 10.3);
-  // the page scrolls down to the Prompt Explorer as it is reached
-  tl.to("#pane-ov", { y: -232, duration: 1.4, ease: "power2.inOut" }, t + 8.3);
+  // The two Performance prompts already on the list stay and slide up into
+  // place; the others drop out and the two new ones come in under them. It
+  // was a crossfade of the whole list, so both lists showed through each other.
+  var allR = document.querySelectorAll("#pe-all .pe__row"), perfR = document.querySelectorAll("#pe-perf .pe__row");
+  tl.set("#pe-perf", { opacity: 1 }, 0);
+  tl.set(perfR, { opacity: 0 }, 0);
+  tl.to([allR[0], allR[2], allR[4]], { opacity: 0, duration: 0.22, ease: "power1.out" }, 10.15);
+  // measured when the tween first runs, after the fonts have set the rows
+  [[1, 0], [3, 1]].forEach(function (m) {
+    tl.to(allR[m[0]], { y: function () { return perfR[m[1]].offsetTop - allR[m[0]].offsetTop; },
+      duration: 0.5, ease: "power2.inOut" }, 10.25);
+  });
+  tl.to("#pe-rows", { height: 300, duration: 0.6, ease: "power2.inOut" }, 10.25);
+  // the moved rows hand over to the same rows of the Performance list
+  tl.set([perfR[0], perfR[1]], { opacity: 1 }, 10.75);
+  tl.set("#pe-all", { opacity: 0 }, 10.75);
+  tl.fromTo([perfR[2], perfR[3]], { opacity: 0, y: 12 },
+    { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.1, immediateRender: false }, 10.55);
 
   // ════ C · the battery questions: 2 of 9 answers; Sentiment: Performance
   //        weak, the radar below the others ════
   t = 8.9;                                               // C − B = 18.5 − 9.6
-  tl.to("#pane-ov", { y: -743, duration: 1.6, ease: "power2.inOut" }, t + 0.1);
+  // the page is already at the Prompt Explorer from 9.70; nothing to scroll.
+  // The camera alone carries "you're cited in just 2 answers out of 9": the
+  // rows say it themselves, in their lit and unlit engine chips and the one
+  // marked Not cited. Each row used to be tinted in turn as well, which read
+  // as three separate claims over a line that makes one.
   cam(t + 1.25, 4.1, [690, 330, 1.5, 960, 560], "sine.inOut");
-  tint("#t-q1", t + 2.1, 1.2); tint("#t-q2", t + 3.4, 1.2); tint("#t-q3", t + 4.6, 0.8);
-  clickAt(t + 5.45, 0.95, 386.4, 130.6, t + 6.4, 18);    // Sentiment
-  tabOn("tab-se", t + 6.45);
-  tl.to("#pane-ov", { opacity: 0, duration: 0.25 }, t + 6.45);
-  tl.to("#pane-se", { opacity: 1, duration: 0.25 }, t + 6.5);
-  gsap.utils.toArray(".sbar2").forEach(function (b, i) {      // the topic bars fill as the tab lands
+  clickAt(t + 6.05, 0.95, 386.4, 130.6, t + 7.0, 18);    // Sentiment, clicked at 15.9
+  tabOn("tab-se", t + 7.1);                              // 16.00
+  tl.to("#pane-ov", { opacity: 0, duration: 0.25 }, t + 7.1);
+  tl.to("#pane-se", { opacity: 1, duration: 0.25 }, t + 7.15);
+  gsap.utils.toArray(".sbar2").forEach(function (b, i) {      // 16.05 -> 16.80
     tl.fromTo(b, { width: 0 }, { width: b.dataset.w + "%", duration: 0.9, ease: "power2.out", immediateRender: false },
-      t + 6.75 + i * 0.12);
+      t + 7.15 + i * 0.12);
   });
-  tl.set("#pane-ov", { y: 0 }, t + 6.7);
-  cam(t + 6.45, 0.8, [520, 300, 1.55, 900, 560]);        // the breakdown: Performance, Weak
-  tint("#t-bat", t + 6.9, 1.4);
-  curMove(t + 6.6, 0.7, 520, 250, 10);
-  curHide(t + 7.3, 0.3);
-  cam(t + 7.25, 1.05, [526, 304, 1.58, 900, 560], "sine.inOut");
-  // the sentiment lines draw, then the radar opens out and Performance is flagged
-  gsap.utils.toArray(".tl").forEach(function (p, i) {
-    tl.to(p, { strokeDashoffset: 0, duration: 1.3, ease: "power2.out" }, t + 6.8 + i * 0.12);
-  });
-  var rk = { v: 0 };
-  tl.to(rk, { v: 1, duration: 1.3, ease: "power3.out", onUpdate: function () { radarAt(rk.v); } }, t + 7.9);
-  tl.fromTo("#r-flag", { opacity: 0, scale: 0.6, transformOrigin: "center" },
-    { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)", immediateRender: false }, t + 9.3);
+  tl.set("#pane-ov", { y: 0 }, t + 7.35);
+  cam(t + 7.1, 0.8, [520, 300, 1.55, 900, 560]);         // the breakdown: Performance, Weak
+  // Performance is flagged at 16.80 and stays flagged, as the clip does
+  tl.to("#s-perf .srow__flag", { opacity: 1, duration: 0.35, ease: "power2.out" }, t + 7.9);
+  curMove(t + 7.25, 0.7, 520, 250, 10);
+  curHide(t + 7.95, 0.3);
+  cam(t + 7.9, 1.05, [526, 304, 1.58, 900, 560], "sine.inOut");
+  // the trend in the Sentiment trend card draws before the competitors' do
+  tl.to("#se-trend", { strokeDashoffset: 0, duration: 1.1, ease: "power2.out" }, t + 7.7);
+  tl.to("#se-fill", { opacity: 1, duration: 0.8, ease: "power2.out" }, t + 7.9);
+  tl.fromTo("#se-trend-dot", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, t + 9.0);
 
-  cam(t + 8.35, 0.8, [480, 390, 1.75, 880, 580]);        // the radar: AI rates you below your competitors
-  cam(t + 9.15, 1.05, [484, 392, 1.8, 880, 580], "sine.inOut");
-  cam(t + 10.2, 0.6, REST);
+  // the page scrolls to Competitor sentiment at 18.20, as the film does —
+  // it was only the camera that moved here, so the card never came up
+  tl.to("#pane-se", { y: -330, duration: 1.0, ease: "power2.inOut" }, t + 9.3);
+  // their trend lines, then the radar opens out and Performance is flagged
+  gsap.utils.toArray(".tl").forEach(function (p, i) {
+    tl.to(p, { strokeDashoffset: 0, duration: 1.05, ease: "power2.out" }, t + 9.4 + i * 0.1);
+  });
+  // the end dots land once the lines reach them, not before they are drawn
+  tl.to("#tl-dots", { opacity: 1, duration: 0.3 }, t + 10.2);
+  var rk = { v: 0 };
+  tl.to(rk, { v: 1, duration: 1.05, ease: "power3.out", onUpdate: function () { radarAt(rk.v); } }, t + 9.4);
+  tl.fromTo("#r-flag", { opacity: 0, scale: 0.6, transformOrigin: "center" },
+    { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, t + 10.25);
+
+  cam(t + 9.3, 0.9, [480, 390, 1.6, 880, 560]);          // the radar: AI rates you below your competitors
+  cam(t + 10.2, 0.6, REST);                              // back on the last frame, 19.70
 
   // ── the review bar ──
   var pp = document.getElementById("pp"), sc = document.getElementById("sc"), tt = document.getElementById("tt");
@@ -1059,6 +1222,12 @@ body.shot #win { border-radius: 0; box-shadow: none; }
   pp.onclick = function () { if (tl.paused()) { if (tl.time() >= DUR - 0.02) tl.time(0); tl.play(); } else tl.pause(); paint(); };
   sc.oninput = function () { tl.pause(); tl.time(parseFloat(sc.value)); paint(); };
 
+  // A paused timeline already sits at 0, and GSAP skips the render when the
+  // playhead does not move — so tl.time(0) on a fresh page leaves everything
+  // the timeline sets at 0 unapplied: the camera untransformed, the window in
+  // the corner, rows visible that should start hidden. The composition loads
+  // every section at ?t=0, so it saw that first frame. Nudge off and back.
+  function seek(t) { tl.time(t + 1e-4); tl.time(t); }
   if (q.has("bare")) document.body.classList.add("bare");
 
   if (q.has("screen")) {
@@ -1067,12 +1236,12 @@ body.shot #win { border-radius: 0; box-shadow: none; }
     fitEl.style.cssText = "position:absolute;left:0;top:0;width:2240px;height:1460px;display:block";
     stage.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;overflow:hidden;" +
                           "background:#fff;transform:scale(2);transform-origin:0 0";
-    tl.time(parseFloat(q.get("t") || "0"));
+    seek(parseFloat(q.get("t") || "0"));
     tl.pause();
     document.getElementById("cam").style.cssText =
       "position:absolute;left:0;top:0;width:1120px;height:730px;transform:none;opacity:1";
   } else if (q.has("t")) {
-    tl.time(parseFloat(q.get("t"))); tl.pause(); paint();
+    seek(parseFloat(q.get("t"))); tl.pause(); paint();
   } else {
     document.fonts.ready.then(function () { tl.play(); });
   }

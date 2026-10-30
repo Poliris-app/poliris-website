@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Poliris film · 6 Implementation</title>
+<link rel="icon" href="data:," />
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     6 · IMPLEMENTATION · chapters T6 and I of the film, 96.0 → 101.6 s
+
+     Technical Fixes: the fixes the audit found, grouped by the act that
+     fixes them; on Rebuild schema.org markup, Tom writes the FAQPage and
+     Product markup for the battery page — +8 points, ready to ship.
+
+     Nothing here is a screenshot: the screen is written at the app's own
+     size (1400 x 912.5, drawn at 0.8x), measured off the frames it replaces
+     (ov-fix-*). The sidebar is the one in 02-ai-visibility.html, with
+     Implementation picked; Tom's window is the film's own. The camera and
+     the cursor keep the film's cues, less the chapter start (T6, 96.0).
+
+     `?t=` freezes a moment, `?bare=1` drops the review bar, `?screen` draws
+     the screen alone at 2x.
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="../film/assets/widgets.css" />
+<style>
+@font-face { font-family: "Geist"; font-weight: 400; font-display: block; src: url("../film/assets/fonts/Geist-400.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 500; font-display: block; src: url("../film/assets/fonts/Geist-500.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 600; font-display: block; src: url("../film/assets/fonts/Geist-600.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 700; font-display: block; src: url("../film/assets/fonts/Geist-700.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 800; font-display: block; src: url("../film/assets/fonts/Geist-800.woff2") format("woff2"); }
+
+:root { --primary: #0062ff; --ink: #0a0a0b; --sb-line: #e3e3eb; --green: #16a34a; --muted: #6b7280; --line: #e4e5ea; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0b0f17; }
+body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
+
+#fit { position: fixed; inset: 0; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 50% 50%; background: #f3f6fb; }
+#bg { position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 520px at 50% 45%, rgba(0, 98, 255, .10), rgba(0, 98, 255, 0) 70%),
+        radial-gradient(700px 420px at 88% 70%, rgba(99, 102, 241, .07), rgba(99, 102, 241, 0) 70%),
+        linear-gradient(180deg, #f8fafd 0%, #eef2f8 100%); }
+#cam { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; transform-origin: 0 0; }
+.win { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; background: #fff;
+       box-shadow: 0 0 0 1px #dfe4ec, 0 50px 100px -50px rgba(15, 23, 42, .42), 0 2px 6px rgba(15, 23, 42, .05); }
+.scr { position: absolute; inset: 0; overflow: hidden; }
+.app { position: absolute; left: 0; top: 0; width: 1400px; height: 912.5px;
+       transform: scale(.8); transform-origin: 0 0; background: #fff;
+       font-size: 14px; line-height: 1.5; color: var(--ink);
+       -webkit-font-smoothing: antialiased; display: flex; }
+.abs { position: absolute; }
+.ico { display: inline-block; flex: 0 0 auto; vertical-align: middle; }
+
+/* ══ the app sidebar ══════════════════════════════════════════════════════ */
+.sb { flex: 0 0 272px; width: 272px; height: 912.5px; border-right: 1px solid var(--sb-line);
+      background: #fff; display: flex; flex-direction: column; overflow: hidden; }
+.sb__head { padding: 13.7px 14px 0; display: flex; align-items: center; justify-content: space-between; }
+.sb__logo { width: 131px; height: 32.5px; display: block; }
+.sb__toggle { color: #8b8b8b; display: flex; }
+.sb__dot { margin: 15px 14px; border-top: 1px dotted #d8d8de; }
+.sb__pad { padding: 0 12px; }
+
+.sb__proj-row { display: flex; gap: 6px; }
+.sb__proj { flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; height: 46px; padding: 0 10px;
+            border: 1px solid #e7e7ec; border-radius: 10px; }
+.sb__proj img { width: 28px; height: 28px; border-radius: 50%; object-fit: contain; padding: 2px;
+                background: #fff; border: .5px solid #e2e2e5; flex: 0 0 auto; }
+.sb__proj-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb__proj-txt b { font-size: 13.5px; font-weight: 600; line-height: 17px; }
+.sb__proj-txt span { font-size: 11.5px; line-height: 15px; color: #8b8b8b; }
+.sb__cog { flex: 0 0 auto; width: 46px; height: 46px; border: 1px solid #e7e7ec; border-radius: 10px;
+           display: grid; place-items: center; color: #5a5a5a; }
+
+.sb__seg { margin-top: 10.8px; display: flex; gap: 2px; height: 36px; padding: 3px; border-radius: 9px; background: #eef0fb; }
+.sb__seg a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; border-radius: 7px;
+             font-size: 13.5px; font-weight: 500; color: #5a5a5a; text-decoration: none; }
+.sb__seg a.on { background: #fff; color: var(--primary); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.07); }
+
+.sb__row { display: flex; align-items: center; gap: 9px; height: 35.5px; padding: 0 9px; border-radius: 8px;
+           font-size: 13.5px; color: var(--ink); }
+.sb__row .ico { color: #5a5a5a; display: flex; flex: 0 0 auto; }
+.sb__row .chev { margin-left: auto; color: #9a9aa2; display: flex; }
+.sb__road { margin-top: 9px; height: 42px; }
+.sb__road .ico { color: var(--primary); }
+.sb__road { border: 1px solid #e7e7ec; border-radius: 10px; font-size: 14px; }
+
+.sb__label { display: flex; align-items: center; justify-content: space-between;
+             padding: 0 9px; height: 29.2px; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: #8b8b8b; }
+.sb__sub { margin-top: 1.8px; margin-bottom: -6.2px; margin-left: 18px; padding-left: 11px; border-left: 1px solid #e7e7ec; }
+.sb__item { display: flex; align-items: center; gap: 9px; height: 33.2px; padding: 0 9px; border-radius: 7px;
+            font-size: 13.5px; color: #3f3f46; }
+.sb__item i { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 5px; background: #6366f1; color: #fff;
+              font-style: normal; font-size: 10.5px; font-weight: 700; display: grid; place-items: center; }
+.sb__item--on { background: #eaf2fe; color: #2563eb; font-weight: 600; }   /* the open page: the app's blue, not purple */
+.sb__item img { width: 19px; height: 19px; border-radius: 50%; object-fit: contain; background: #fff;
+                border: .5px solid #e2e2e5; padding: 1px; }
+.sb__foot { margin-top: auto; padding: 0 12px 12px; }
+.sb__user { display: flex; align-items: center; gap: 9px; height: 44px; }
+.sb__user b { width: 32px; height: 32px; border-radius: 50%; background: #be123c; color: #fff;
+              font-size: 11.5px; font-weight: 700; display: grid; place-items: center; }
+.sb__user-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb__user-txt span:first-child { font-size: 13px; font-weight: 600; line-height: 17px; }
+.sb__user-txt span:last-child { font-size: 11px; line-height: 14px; color: #8b8b8b; display: flex; align-items: center; gap: 4px; }
+
+
+.sb__row--on { background: #eaf2fe; color: #2563eb; font-weight: 600; }
+.sb__row--on .ico, .sb__row--on .chev { color: #2563eb; }
+
+/* ══ the workspace: blocks at the app's own coordinates ══════════════════ */
+.ws { position: relative; flex: 1; min-width: 0; background: #fff; overflow: hidden; }
+.wl { left: 16px; top: 17px; height: 28px; display: flex; align-items: center; gap: 9px; font-size: 12.6px; color: #6b7280; }
+.wc { height: 28px; padding: 0 11px; border: 1px solid #e3e5ea; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-size: 13.8px; color: #27272a; }
+.wc--on { border-color: #cfe0ff; background: #eef4ff; color: #1d4ed8; font-weight: 500; width: 191px; justify-content: space-between; }
+.wc--add { border-style: dashed; color: #52525b; }
+.tf__t { left: 16px; top: 70px; margin: 0; font-size: 24.4px; line-height: 32px; font-weight: 600; letter-spacing: -.015em; }
+.tf__s { left: 16px; top: 108px; font-size: 13.6px; color: #52525b; }
+.tf__rerun { left: 1027px; top: 71px; width: 84px; height: 31px; border-radius: 8px; background: var(--primary); color: #fff;
+             display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 14.2px; font-weight: 500; }
+.arw { position: absolute; top: 173px; width: 27px; height: 27px; border: 1px solid #e3e5ea; border-radius: 7px; display: flex; align-items: center; justify-content: center; color: #52525b; }
+.act { position: absolute; top: 151px; width: 247px; height: 72px; border-radius: 12px; background: #f7f7f8; padding: 12px 14px; }
+.act--on { background: #fff; border: 1.6px solid #2f6ce5; }
+.act b { display: block; font-size: 14.4px; font-weight: 500; }
+.act span { display: block; margin-top: 6px; font-size: 11.8px; color: #6b7280; }
+.act i { position: absolute; right: 13px; top: 15px; font-style: normal; color: #a1a1aa; font-size: 13px; }
+.act--on i { height: 17px; min-width: 17px; padding: 0 5px; border-radius: 4px; background: #e7eefc; color: #2563eb; font-size: 11.4px; font-weight: 600;
+             display: flex; align-items: center; justify-content: center; }
+.act s { position: absolute; left: 14px; right: 14px; bottom: 9px; height: 2px; border-radius: 2px; background: #e8e9ed; }
+
+.scope { position: absolute; left: 16px; top: 235px; width: 225px; height: 660px; border: 1px solid #e3e5ea; border-radius: 14px; }
+.scope__k { position: absolute; left: 13px; right: 13px; top: 12px; display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .05em; color: #52525b; }
+.scope__k em { font-style: normal; letter-spacing: 0; font-size: 11.2px; }
+.fld { position: absolute; left: 13px; right: 12px; height: 31px; border: 1px solid #e3e5ea; border-radius: 7px; padding: 0 10px; display: flex; align-items: center;
+       justify-content: space-between; font-size: 13.2px; }
+.scope__n { position: absolute; left: 13px; right: 12px; top: 211px; font-size: 11.4px; line-height: 16.5px; color: #52525b; }
+.scope__pg { position: absolute; left: 13px; right: 13px; top: 252px; display: flex; justify-content: space-between; font-size: 11.6px; color: #3f3f46; }
+.si { position: absolute; left: 13px; right: 12px; height: 59px; border: 1px solid #e3e5ea; border-radius: 9px; padding: 9px 10px; }
+.si--on { border: 1.6px solid #2f6ce5; background: #f4f7fe; }
+.si b { display: block; font-size: 13px; font-weight: 500; }
+.si span { position: absolute; left: 10px; top: 33px; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #2563eb; }
+.si span > * { transition: none; }
+.si .st2 { position: absolute; left: 10px; top: 33px; display: flex; align-items: center; gap: 6px; font-size: 12px; opacity: 0; }
+.spn { width: 11px; height: 11px; border-radius: 50%; border: 1.6px solid #c7d7f7; border-top-color: #2563eb; }
+
+.wsp { position: absolute; left: 256px; width: 855px; top: 235px; height: 680px; border: 1px solid #e3e5ea; border-radius: 14px; overflow: hidden; background: #fff; }
+.wsp__h { position: absolute; left: 0; right: 0; top: 0; height: 49px; border-bottom: 1px solid #ececf0; background: #fff; z-index: 2; }
+.wsp__h b { position: absolute; left: 16px; top: 13px; font-size: 15.4px; font-weight: 600; }
+.wsp__tom { position: absolute; right: 16px; top: 11px; height: 27px; border-radius: 999px; background: #f4f4f5; padding: 0 10px 0 3px; display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: #3f3f46; }
+.wsp__tom img { width: 23px; height: 26px; object-fit: contain; }
+.wsp__tom em { font-style: normal; font-weight: 600; color: #0a0a0b; }
+.wsp__body { position: absolute; left: 0; right: 0; top: 49px; bottom: 0; overflow: hidden; }
+#wsp-in { position: absolute; left: 0; right: 0; top: 0; }
+.rb__t { position: absolute; left: 17px; top: 18px; font-size: 15.2px; font-weight: 600; }
+.rb__s { position: absolute; left: 17px; top: 42px; font-size: 13px; color: #52525b; }
+.kc { position: absolute; top: 75px; width: 213px; height: 96px; border: 1px solid #e3e5ea; border-radius: 10px; padding: 14px 13px; }
+.kc small { display: flex; align-items: center; gap: 6px; font-size: 10.8px; letter-spacing: .05em; color: #52525b; }
+.kc small i { width: 6px; height: 6px; border-radius: 50%; background: #16a34a; }
+.kc b { display: block; margin-top: 8px; font-size: 21px; line-height: 26px; font-weight: 600; }
+.kc span { display: block; margin-top: 6px; font-size: 12px; color: #52525b; }
+.iss { position: absolute; left: 17px; right: 16px; top: 187px; height: 39px; border: 1px solid #e3e5ea; border-radius: 10px; display: flex; align-items: center;
+       gap: 11px; padding: 0 13px; font-size: 13.6px; font-weight: 500; }
+.mk { position: absolute; left: 17px; right: 16px; top: 237px; height: 173px; border: 1px solid #e3e5ea; border-radius: 10px; }
+.mk__k { position: absolute; left: 13px; top: 20px; font-size: 10.8px; letter-spacing: .05em; color: #52525b; }
+.opt { position: absolute; top: 44px; width: 189px; height: 65px; border: 1px solid #e3e5ea; border-radius: 8px; padding: 9px 10px; }
+.opt--on { border: 1.6px solid #2f6ce5; background: #f4f7fe; }
+.opt b { display: block; font-size: 13px; font-weight: 500; }
+.opt span { display: block; margin-top: 2px; font-size: 11.6px; line-height: 15px; color: #52525b; }
+.gen { position: absolute; left: 13px; top: 122px; width: 135px; height: 32px; border-radius: 7px; background: var(--primary); color: #fff; font-size: 13.4px; font-weight: 500; }
+.gen > span { position: absolute; inset: 0; border-radius: 7px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.gen .b, .gen .c { opacity: 0; }
+.gen .c { background: #9fbcf5; }
+.gen .b .spn { border-color: rgba(255,255,255,.45); border-top-color: #fff; }
+.code { position: absolute; top: 423px; height: 380px; border: 1px solid #e3e5ea; border-radius: 10px; background: #fafafa; overflow: hidden; }
+.code--new { background: #f6fbf8; border-color: #cfe9d9; }
+.code__k { position: absolute; left: 12px; top: 13px; font-size: 10.8px; letter-spacing: .05em; color: #52525b; }
+.code--new .code__k { color: #15803d; }
+.code__ok { position: absolute; right: 9px; top: 9px; height: 18px; padding: 0 7px; border-radius: 999px; background: #dcfce7; color: #15803d; font-size: 10.6px;
+            font-weight: 600; display: flex; align-items: center; opacity: 0; }
+.code__ph { position: absolute; left: 14px; top: 43px; font-size: 13px; font-style: italic; color: #6b7280; }
+.cl { position: absolute; left: 0; right: 0; height: 19.1px; display: flex; align-items: center; font-size: 12.4px; white-space: nowrap; }
+.cl i { width: 37px; padding-right: 12px; text-align: right; font-style: normal; color: #9ca3af; flex: 0 0 auto; }
+.cl--del { background: #fde8e8; color: #b91c1c; }
+.cl--del span { text-decoration: line-through; }
+.cl--add { background: #def4e6; }
+/* ══ the film's own: Kate's window, the chip ═════════════════════════════ */
+.wg { position: absolute; opacity: 0; transform-origin: 0 0; }
+.wg > .hfw { position: relative !important; }
+/* the agents' windows keep the film's size; only their text is a little larger, to read sharp */
+.ag-h b { font-size: 15.5px !important; }
+.ag-h span { font-size: 12px !important; }
+.ag-r { font-size: 13.2px !important; }
+#w-kate .hfw__name, #w-tom .hfw__name, #w-nora .hfw__name { font-size: 11px; }
+.ag { padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 9px; }
+.ag-h { display: flex; align-items: center; gap: 10px; }
+.ag-h img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: top; background: #eef1f5; }
+.ag-h b { display: block; font-size: 14px; font-weight: 600; color: #0a0a0b; }
+.ag-h span { display: block; font-size: 11px; color: #6a768a; margin-top: 1px; }
+.ag-r { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #3c4257; opacity: 0; }
+.ag-r .st { position: relative; width: 16px; height: 16px; flex: 0 0 auto; }
+.ag-r .sp { position: absolute; inset: 1px; border-radius: 50%; border: 2px solid #d9e2f1; border-top-color: #0062ff; box-sizing: border-box; }
+.ag-r .ok { position: absolute; inset: 0; border-radius: 50%; background: #16a34a; color: #fff; font-size: 9px; font-weight: 800; font-style: normal;
+            display: flex; align-items: center; justify-content: center; opacity: 0; }
+.ag-r em { font-style: normal; font-weight: 600; color: #0a0a0b; }
+.ov { position: absolute; inset: 0; pointer-events: none; }
+.ov-chip { position: absolute; height: 24px; padding: 0 10px; border-radius: 999px; background: #eef4ff; border: 1px solid #bfd3ff; opacity: 0;
+           display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1d4ed8; white-space: nowrap;
+           box-shadow: 0 6px 14px -8px rgba(37, 99, 235, .45); }
+#cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
+#cur-a, #cur-s { position: absolute; inset: 0; }
+#cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
+#rip { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+       border: 2px solid rgba(59, 130, 246, .75); background: rgba(59, 130, 246, .12); opacity: 0; }
+
+#ctl { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 50;
+       display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px;
+       background: rgba(14, 20, 32, .82); backdrop-filter: blur(8px); color: #fff;
+       font: 500 12.5px/1 "Geist", system-ui, sans-serif; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .6); }
+#ctl button { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; color: #0b0f17; font-size: 12px; cursor: pointer; }
+#ctl input { width: 340px; accent-color: #4d8dff; cursor: pointer; }
+#ctl span { font-variant-numeric: tabular-nums; opacity: .85; min-width: 84px; }
+body.bare #ctl { display: none; }
+body.shot { background: #fff; }
+body.shot #bg, body.shot .ov, body.shot .wg, body.shot #ctl { display: none; }
+body.shot .win { border-radius: 0; box-shadow: none; }
+</style>
+</head>
+
+<body>
+<div id="fit"><div id="stage">
+  <div id="bg"></div>
+
+  <div id="cam">
+    <div class="win">
+      <div class="scr"><div class="app">
+        <aside class="sb">
+          <div class="sb__head">
+            <img class="sb__logo" src="../../Logo-Poliris-1.png" width="218" height="54" alt="Poliris" />
+            <span class="sb__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></span>
+          </div>
+          <div class="sb__dot"></div>
+
+          <div class="sb__pad">
+            <div class="sb__proj-row">
+              <div class="sb__proj">
+                <img src="../../sony-com-logo.png" alt="" />
+                <span class="sb__proj-txt"><b>Sony</b><span>Active project</span></span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </div>
+              <span class="sb__cog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div>
+
+            <div class="sb__seg">
+              <a class="on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</a>
+              <a><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>Poli AI</a>
+            </div>
+
+            <div class="sb__row sb__road"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span>Roadmap</div>
+          </div>
+
+          <div class="sb__dot" style="margin-top:5px"></div>
+
+          <div class="sb__pad">
+            <div class="sb__label">MEASURE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></span>AI Reputation<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub">
+              <div class="sb__item"><i>W</i>Wireless Earbuds</div>
+              <div class="sb__item"><i>G</i>Gaming Consoles</div>
+              <div class="sb__item"><i>C</i>Consumer Electronics</div>
+              <div class="sb__item"><i>P</i>Professional Imaging and …</div>
+            </div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>Keywords<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>Sites<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub"><div class="sb__item"><img src="../../sony-com-logo.png" alt="" />sony.com</div></div>
+          </div>
+
+          <div class="sb__dot" style="margin-top:26.5px"></div>
+
+          <div class="sb__pad">
+            <div class="sb__label">ACTION</div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></span>Content<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+            <div class="sb__row sb__row--on"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>Implementation</div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg></span>Citations<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+          </div>
+
+          <div class="sb__dot"></div>
+          <div class="sb__pad">
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>Documentation</div>
+          </div>
+
+          <div class="sb__foot">
+            <div class="sb__dot" style="margin:0 0 8px"></div>
+            <div class="sb__user">
+              <b>SU</b>
+              <span class="sb__user-txt"><span>Sample User</span><span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>1 workspace</span></span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+            </div>
+          </div>
+        </aside>
+        <main class="ws">
+          <div class="abs wl">Website<span class="wc">All</span><span style="width:1px;height:18px;background:#e3e5ea"></span>
+            <span class="wc wc--on">www.sony.com<span data-ic="chevron-down" data-s="14"></span></span><span class="wc wc--add">+ Add website</span></div>
+          <h1 class="abs tf__t">Technical Fixes</h1>
+          <div class="abs tf__s">Every issue the audit found, grouped into the act that fixes it. Foundations first — they move every page at once.</div>
+          <div class="abs tf__rerun"><span data-ic="refresh-cw" data-s="15"></span>Rerun</div>
+          <span class="arw" style="left:16px"><span data-ic="chevron-left" data-s="14"></span></span>
+          <div class="act" style="left:54px"><b>Fix robots.txt</b><span>one shot · 15 checks · 1 h</span><i>—</i><s></s></div>
+          <div class="act act--on" style="left:313px"><b>Rebuild schema.org markup</b><span>per template · 4 checks · 2 h</span><i>3</i><s></s></div>
+          <div class="act" style="left:570px"><b>Rewrite the page structure</b><span>per URL · 14 checks · 0 h</span><i>—</i><s></s></div>
+          <div class="act" style="left:827px"><b>Sync social tags</b><span>per URL · 14 checks · 0 h</span><i>—</i><s></s></div>
+          <span class="arw" style="left:1084px"><span data-ic="chevron-right" data-s="14"></span></span>
+
+          <div class="scope">
+            <div class="scope__k">SCOPE<em>per template · 3</em></div>
+            <div class="fld" style="top:40px;color:#9ca3af">Filter 3 links...</div>
+            <div class="fld" style="top:81px">Any type<span data-ic="chevron-down" data-s="14"></span></div>
+            <div class="fld" style="top:122px">Can act<span data-ic="chevron-down" data-s="14"></span></div>
+            <div class="fld" style="top:163px">By importance<span data-ic="chevron-down" data-s="14"></span></div>
+            <div class="scope__n">One fix per template: every page built on it gets the new markup.</div>
+            <div class="scope__pg"><span>‹</span>1–3 of 3<span>›</span></div>
+            <div class="si si--on" style="top:276px"><b>/support/battery-life</b>
+              <span id="si-a"><span data-ic="star" data-s="12"></span>to generate</span>
+              <span class="st2" id="si-b" style="color:#2563eb"><i class="spn"></i>generating</span>
+              <span class="st2" id="si-c" style="color:#2563eb"><span data-ic="star" data-s="12"></span>fix ready</span></div>
+            <div class="si" style="top:342px"><b>/electronics/wf-1000xm5</b><span><span data-ic="star" data-s="12"></span>to generate</span></div>
+            <div class="si" style="top:408px"><b>/electronics/wf-c710n</b><span><span data-ic="star" data-s="12"></span>to generate</span></div>
+          </div>
+
+          <div class="wsp">
+            <div class="wsp__h"><b>Workspace</b><span class="wsp__tom"><img src="../film/assets/img/agent-tom.png" alt="" /><em>Tom</em>Technical fixes</span></div>
+            <div class="wsp__body"><div id="wsp-in">
+              <div class="rb__t">Rebuild schema.org markup</div>
+              <div class="rb__s">We write the exact value; applying it stays yours.</div>
+              <div class="kc" style="left:17px"><small>PAGE HEALTH</small><b style="color:#dc2626">45</b><span>/support/battery-life</span></div>
+              <div class="kc" style="left:241px"><small><i></i>POINTS TO GAIN</small><b style="color:#15803d">+8.00</b><span>FAQ and Product rich results</span></div>
+              <div class="iss"><span data-ic="chevron-right" data-s="14"></span>Issue &amp; findings</div>
+              <div class="mk">
+                <div class="mk__k">MARKUP TO ADD</div>
+                <div class="opt opt--on" style="left:13px"><b>FAQPage</b><span>The questions AI asks, with their answers</span></div>
+                <div class="opt opt--on" style="left:211px"><b>Product</b><span>WF-1000XM5: battery hours, charging</span></div>
+                <div class="opt" style="left:409px"><b>Review</b><span>Ratings from your customers</span></div>
+                <div class="gen" id="gen"><span class="a" id="gen-a"><span data-ic="star" data-s="14"></span>Generate fix</span>
+                  <span class="b" id="gen-b"><i class="spn"></i>Writing the fix</span><span class="c" id="gen-c">Regenerate</span></div>
+              </div>
+              <div class="code" style="left:17px;width:405px"><div class="code__k">LIVE FILE</div><div id="live"></div></div>
+              <div class="code code--new" style="left:433px;width:405px"><div class="code__k">PROPOSED FILE</div>
+                <span class="code__ok" id="ship">✓ Ready to ship</span>
+                <div class="code__ph" id="ph">Generate the fix to see the proposed file.</div><div id="prop"></div></div>
+            </div></div>
+          </div>
+        </main>
+      </div></div>
+      <div class="ov">
+        <span id="rip"></span>
+        <div id="cur"><div id="cur-a"><svg id="cur-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tom at work (film/index.html, #w-tom) -->
+  <div class="wg" id="w-tom" style="left:1488px;top:104px;width:320px;height:150px">
+    <div class="hfw" style="width:320px;height:150px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="../film/assets/img/poliris-mark.png" />Poli AI · agents</span></div>
+      <div class="hfw__body ag">
+        <div class="ag-h"><img alt="" src="../film/assets/img/agent-tom.png" /><div><b>Tom</b><span>Technical fixes · /support/battery-life</span></div></div>
+        <div class="ag-r" id="t0"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span>FAQPage and Product markup <em>written</em></span></div>
+        <div class="ag-r" id="t1"><span class="st"><i class="sp"></i><i class="ok">✓</i></span><span>Ready for your developers · <em>+8 points</em></span></div>
+      </div>
+    </div></div>
+  </div>
+</div></div>
+
+<div id="ctl">
+  <button id="pp" aria-label="Play or pause">❚❚</button>
+  <input id="sc" type="range" min="0" max="5.6" step="0.01" value="0" />
+  <span id="tt">0.00 / 5.60</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var DUR = 5.6;
+  var q = new URLSearchParams(location.search);
+  var ICONS = {
+    "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+    "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+    "star": '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+    "plus": '<path d="M5 12h14"/><path d="M12 5v14"/>',
+    "clock": '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+    "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    "sparkles": '<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>',
+    "refresh-cw": '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+    "list": '<path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "file": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+    "save": '<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>',
+    "copy": '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    "globe": '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+    "history": '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>',
+    "wand": '<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/>',
+    "share": '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+    "calendar": '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'
+  };
+  function ic(name, size) {
+    return '<svg class="ico" xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
+  }
+
+
+  // the battery page's markup today, and the one Tom writes (as the frames show it)
+  var LIVE = [['<script type="application/ld+json">'], ['{'], ['  "@context": "https://schema.org",'], ['  "@type": "WebPage",', "del"],
+              ['  "name": "Battery life FAQ",', "del"], ['  "url": "https://www.sony.com/support/battery-life"', "del"], ['}'], ['<\/script>']];
+  var PROP = [['<script type="application/ld+json">'], ['{'], ['  "@context": "https://schema.org",'], ['  "@type": "FAQPage",', "add"],
+              ['  "mainEntity": [{', "add"], ['    "@type": "Question",', "add"], ['    "name": "How long does the WF-1000XM5 battery last?",', "add"],
+              ['    "acceptedAnswer": { "@type": "Answer",', "add"], ['      "text": "8 hours with noise cancelling on, 24 with the case." }', "add"],
+              ['  }, {', "add"], ['    "@type": "Question",', "add"], ['    "name": "How fast does the case charge?",', "add"],
+              ['    "acceptedAnswer": { "@type": "Answer",', "add"], ['      "text": "A 3-minute charge gives 60 minutes of music." }', "add"],
+              ['  }]', "add"], ['}'], ['<\/script>']];
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function lines(L, id) {
+    return L.map(function (l, k) {
+      return '<div class="cl' + (l[1] ? " cl--" + l[1] : "") + '" id="' + id + k + '" style="top:' + (36 + 19.1 * k).toFixed(1) + 'px"><i>' + (k + 1) + '</i><span>' + esc(l[0]) + '</span></div>';
+    }).join("");
+  }
+  document.getElementById("live").innerHTML = lines(LIVE, "lv");
+  document.getElementById("prop").innerHTML = lines(PROP, "pl");
+
+  document.querySelectorAll("[data-ic]").forEach(function (el) {
+    el.outerHTML = ic(el.dataset.ic, +el.dataset.s).replace('class="ico"', 'class="ico ' + el.className + '"' + (el.getAttribute("style") ? ' style="' + el.getAttribute("style") + '"' : ""));
+  });
+
+  var stage = document.getElementById("stage");
+  function fit() {
+    if (document.body.classList.contains("shot")) return;
+    var d = document.documentElement;
+    var s = Math.min(d.clientWidth / 1920, d.clientHeight / 1080);
+    stage.style.transform = "translate(-50%, -50%) scale(" + s + ")";
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (document.fonts) document.fonts.ready.then(fit);
+  fit();
+
+  var tl = gsap.timeline({ paused: true });
+  var MX = 120, MY = 80;
+  function clampTo(v, size, frame, m) { return size >= frame ? Math.min(m, Math.max(frame - size - m, v)) : Math.max(-m, Math.min(frame - size + m, v)); }
+  function camState(cx, cy, S, fx, fy, keep) {
+    var w = S * 1120, x = fx - S * cx;
+    x = keep ? clampTo(x, w, 1920, MX) : w <= 1920 ? (1920 - w) / 2 : Math.min(0, Math.max(1920 - w, x));
+    return { x: x, y: clampTo(fy - S * cy, S * 730, 1080, MY), scale: S };
+  }
+  var REST = [560, 365, 1.14, 960, 512];
+  function cam(t, d, s, ease) { tl.to("#cam", Object.assign(camState.apply(null, s), { duration: d, ease: ease || "power2.inOut" }), t); }
+  function enter(id, t) {
+    tl.fromTo("#" + id, { opacity: 0, x: 70, y: 10, scale: 1.08, filter: "blur(8px)" },
+      { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out", immediateRender: false }, t);
+    // a filter left on, even at 0px, keeps the window on a soft layer: drop it once it has landed
+    tl.set("#" + id, { filter: "none" }, t + 0.71);
+  }
+  function leave(id, t) { tl.to("#" + id, { opacity: 0, x: 60, scale: 0.96, filter: "blur(6px)", duration: 0.4, ease: "power2.in" }, t); }
+  function pop(id, t, out) {
+    tl.fromTo(id, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, t);
+    if (out != null) tl.to(id, { opacity: 0, duration: 0.25 }, out);
+  }
+  function step(id, t) {
+    tl.fromTo("#" + id, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+    tl.fromTo("#" + id + " .sp", { rotation: 0 }, { rotation: 540, duration: 0.7, ease: "none", immediateRender: false }, t);
+    tl.to("#" + id + " .sp", { opacity: 0, duration: 0.1 }, t + 0.6);
+    tl.fromTo("#" + id + " .ok", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.6);
+  }
+  function curShow(t, x, y, fade) { tl.set("#cur", { x: x, y: y }, t); tl.to("#cur", { opacity: 1, duration: fade || 0 }, t); }
+  function curHide(t, fade) { tl.to("#cur", { opacity: 0, duration: fade || 0.01 }, t); }
+  function curMove(t, d, x, y, arc) {
+    tl.to("#cur", { x: x, y: y, duration: d, ease: "power2.inOut" }, t);
+    tl.to("#cur-a", { y: -(arc == null ? 14 : arc), duration: d / 2, ease: "sine.out", yoyo: true, repeat: 1 }, t);
+  }
+  function curClick(t, x, y) {
+    tl.to("#cur-s", { scale: 0.84, duration: 0.08, ease: "power2.in" }, t);
+    tl.to("#cur-s", { scale: 1, duration: 0.2, ease: "power2.out" }, t + 0.1);
+    tl.fromTo("#rip", { x: x + 3, y: y + 3, scale: 0.4, opacity: 1 }, { scale: 1.2, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+  }
+  function count(el, to, t, d, suf, ease) {
+    var o = { v: 0 };
+    tl.to(o, { v: to, duration: d, ease: ease || "power2.out", onUpdate: function () { el.textContent = Math.round(o.v) + (suf || ""); } }, t);
+  }
+
+
+  function clickAt(t0, d, cx, cy, tc, arc) { curMove(t0, d, cx - 3, cy - 3, arc); curClick(tc, cx - 3, cy - 3); }
+
+  // ════ T6 · the fixes come in; I · Technical Fixes: Tom writes the markup for the battery page ════
+  var t = 0;
+  tl.set("#cam", camState.apply(null, REST), 0);
+  tl.set("#prop .cl", { opacity: 0 }, 0);
+  t = 1.0;                                               // I − T6 = 97.0 − 96.0
+  cam(t + 0.05, 0.6, [700, 330, 1.25, 960, 520]);
+  // the workspace runs down to the markup and the files, 97.3 in the frames
+  tl.to("#wsp-in", { y: -215, duration: 0.45, ease: "power2.inOut" }, t + 0.05);
+  curShow(t + 0.05, 640, 470, 0.15);
+  clickAt(t + 0.1, 0.4, 500.8, 353.0, t + 0.55, 10);      // Generate fix
+  // Tom writes it: the button spins, the page is generating, the lines come in
+  tl.to("#gen-a", { opacity: 0, duration: 0.15 }, t + 0.6); tl.to("#gen-b", { opacity: 1, duration: 0.15 }, t + 0.6);
+  tl.to("#si-a", { opacity: 0, duration: 0.15 }, t + 0.6); tl.to("#si-b", { opacity: 1, duration: 0.15 }, t + 0.6);
+  tl.to("#ph", { opacity: 0, duration: 0.2 }, t + 0.7);
+  tl.to("#prop .cl", { opacity: 1, duration: 0.12, stagger: 2.3 / 17 }, t + 0.75);
+  [".spn", "#gen-b .spn"].forEach(function (s) {
+    tl.fromTo(s, { rotation: 0 }, { rotation: 1080, duration: 2.7, ease: "none", immediateRender: false }, t + 0.6);
+  });
+  // done: ready to ship
+  tl.to("#gen-b", { opacity: 0, duration: 0.2 }, t + 3.3); tl.to("#gen-c", { opacity: 1, duration: 0.2 }, t + 3.3);
+  tl.to("#si-b", { opacity: 0, duration: 0.2 }, t + 3.3); tl.to("#si-c", { opacity: 1, duration: 0.2 }, t + 3.3);
+  tl.fromTo("#ship", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 3.35);
+  curMove(t + 0.7, 0.8, 640, 470, 8);
+  curHide(t + 1.5, 0.25);
+  enter("w-tom", t + 0.3);
+  cam(t + 0.75, 1.0, [860, 500, 1.6, 900, 560]);
+  cam(t + 1.75, 2.2, [865, 505, 1.64, 900, 560], "sine.inOut");
+  step("t0", t + 1.2);
+  step("t1", t + 2.6);
+  leave("w-tom", t + 3.95);
+  cam(t + 3.95, 0.6, REST);
+
+  var pp = document.getElementById("pp"), sc = document.getElementById("sc"), tt = document.getElementById("tt");
+  function paint() {
+    sc.value = tl.time().toFixed(2);
+    tt.textContent = tl.time().toFixed(2) + " / " + DUR.toFixed(2);
+    pp.textContent = tl.paused() ? "▶" : "❚❚";
+  }
+  tl.eventCallback("onUpdate", paint);
+  pp.onclick = function () { if (tl.paused()) { if (tl.time() >= DUR - 0.02) tl.time(0); tl.play(); } else tl.pause(); paint(); };
+  sc.oninput = function () { tl.pause(); tl.time(parseFloat(sc.value)); paint(); };
+  // A paused timeline already sits at 0, and GSAP skips the render when the
+  // playhead does not move — so tl.time(0) on a fresh page leaves everything
+  // the timeline sets at 0 unapplied: the camera untransformed, the window in
+  // the corner, rows visible that should start hidden. The composition loads
+  // every section at ?t=0, so it saw that first frame. Nudge off and back.
+  function seek(t) { tl.time(t + 1e-4); tl.time(t); }
+  if (q.has("bare")) document.body.classList.add("bare");
+  if (q.has("screen")) {
+    document.body.classList.add("shot");
+    document.getElementById("fit").style.cssText = "position:absolute;left:0;top:0;width:2240px;height:1460px;display:block";
+    stage.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;overflow:hidden;background:#fff;transform:scale(2);transform-origin:0 0";
+    document.fonts.ready.then(function () {
+      seek(parseFloat(q.get("t") || "0")); tl.pause();
+      document.getElementById("cam").style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;transform:none;opacity:1";
+    });
+  } else if (q.has("t")) {
+    document.fonts.ready.then(function () { seek(parseFloat(q.get("t"))); tl.pause(); paint(); });
+  } else {
+    document.fonts.ready.then(function () { tl.play(); });
+  }
+  window.__tl = tl;
+})();
+</script>
+</body>

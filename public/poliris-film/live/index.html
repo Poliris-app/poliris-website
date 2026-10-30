@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Poliris workflow</title>
+<link rel="icon" href="data:," />
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     THE FILM, CODED · 0 → 122.6 s, one clock, the voice on it
+
+     The landing page's hero film, with no screen images: every screen is
+     one of the coded sections in ../sections/, played here as a layer and
+     kept in step with this composition's clock. The sections stay the
+     source — edit a section and the film follows; open one on its own to
+     review it.
+
+       01-start          A        0.0 →   9.6
+       02-ai-visibility  B + C    9.6 →  29.3
+       03-keywords       D       30.6 →  38.4
+       04-technical-audit E      39.7 →  58.0
+       05-roadmap        F T4 G  60.2 →  87.2
+       06-content        T5 H    87.2 →  96.0
+       07-implementation T6 I    96.0 → 101.6
+       08-citations      T7 J   101.6 → 110.8
+       09-close          T8 K   110.8 → 122.6
+
+     What this page adds is what sits between the chapters, as film/index.html
+     had it: the workflow rail at the top, the hand-offs (a finished screen
+     docks to the left with its label, the next one comes in from the right),
+     and the voice track. A section's own window rests at the same place the
+     old film's cards did, so a section is its own card: docked, it is held on
+     its last frame; coming in, on its first.
+
+     It is a HyperFrames composition, like the film it replaces: #root and
+     window.__timelines.main are what <hyperframes-player> plays. ?lang=fr
+     gives the French labels and voice (the screens are the same app, in
+     English, in both); ?bg=transparent puts it on the page's ground.
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<script>/* ?bg=ffffff or ?bg=transparent: the film on the page's own ground */(function () {
+  var b = new URLSearchParams(location.search).get("bg"); if (!b) return;
+  var c = b === "transparent" ? "transparent" : "#" + b.replace(/[^0-9a-fA-F]/g, "").slice(0, 8);
+  document.documentElement.style.setProperty("--film-bg", c); document.documentElement.classList.add("film-bg");
+})();</script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="../player/hyperframe.runtime.iife.js"></script>
+<script src="../film/assets/clock.js"></script>
+<style>
+  @font-face { font-family: "Geist"; font-weight: 500; src: url("../film/assets/fonts/Geist-500.woff2") format("woff2"); }
+  @font-face { font-family: "Geist"; font-weight: 600; src: url("../film/assets/fonts/Geist-600.woff2") format("woff2"); }
+  @font-face { font-family: "Geist"; font-weight: 700; src: url("../film/assets/fonts/Geist-700.woff2") format("woff2"); }
+
+  html, body { margin: 0; background: #f3f6fb; font-family: "Geist", system-ui, sans-serif; }
+  #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #f3f6fb; }
+  html.film-bg, html.film-bg body, html.film-bg #root { background: var(--film-bg); }
+  html.film-bg #bg { display: none; }
+  #bg { position: absolute; inset: 0;
+        background:
+          radial-gradient(900px 520px at 50% 45%, rgba(0, 98, 255, .10), rgba(0, 98, 255, 0) 70%),
+          radial-gradient(700px 420px at 88% 70%, rgba(99, 102, 241, .07), rgba(99, 102, 241, 0) 70%),
+          linear-gradient(180deg, #f8fafd 0%, #eef2f8 100%); }
+
+  /* A section: its whole 1920 x 1080 stage, on a transparent ground.
+     It comes in two parts on purpose. The layer carries the move and the
+     tilt — a 3D transform — and the frame inside carries only the scale.
+     Chrome rasters a subtree with a 3D transform on it at full size and then
+     maps that texture, so a card scaled down by a 3D transform arrives
+     smeared; a plain 2D scale is folded into the raster, so the card is drawn
+     at the size it ends up and stays sharp. Splitting them keeps both. */
+  .seclay { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+            visibility: hidden; opacity: 0; pointer-events: none; transform-origin: 960px 512px; }
+  .sec { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; background: transparent;
+         pointer-events: none; transform-origin: 960px 512px; }
+
+  /* ── the workflow rail, at the top ── */
+  #railwrap { position: absolute; left: 0; right: 0; top: 22px; display: flex; justify-content: center; z-index: 10; }
+  #rail { display: flex; gap: 4px; padding: 6px; background: #fff; border-radius: 999px;
+          box-shadow: 0 0 0 1px #e3e7ee, 0 18px 40px -24px rgba(22, 50, 141, .35); }
+  .st { position: relative; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 15px 0 6px; border-radius: 999px;
+        font-size: 16px; font-weight: 500; color: #8a94a6; letter-spacing: -.01em; white-space: nowrap; }
+  .st-bg { position: absolute; inset: 0; border-radius: 999px; background: #eaf2ff; box-shadow: inset 0 0 0 1px #d3e3ff; opacity: 0; }
+  .st-num { position: relative; width: 26px; height: 26px; border-radius: 50%; background: #f1f3f7; flex: 0 0 auto; }
+  .st-numfill { position: absolute; inset: 0; border-radius: 50%; background: #0062ff; opacity: 0; }
+  .st-n, .st-c { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .st-n { color: #6a768a; }
+  .st-n-on { color: #fff; opacity: 0; }
+  .st-c { color: #fff; opacity: 0; }
+  .st-l { position: relative; }
+  .st-l-on { position: absolute; left: 0; top: 0; color: #1d4ed8; opacity: 0; }
+  .st-l-done { position: absolute; left: 0; top: 0; color: #3f4654; opacity: 0; }
+  .lab { position: absolute; height: 30px; padding: 0 12px 0 5px; border-radius: 999px; background: #fff; opacity: 0;
+         box-shadow: 0 0 0 1px #e3e7ee, 0 10px 24px -14px rgba(22, 50, 141, .45); display: flex; align-items: center; gap: 8px;
+         font-size: 14px; font-weight: 600; color: #0b1533; white-space: nowrap; }
+  .lab .n { width: 22px; height: 22px; border-radius: 50%; background: #0062ff; color: #fff; font-size: 11.5px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; }
+  .lab img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; object-position: top; background: #eef1f5; }
+  .lab em { font-style: normal; font-weight: 500; color: #6a768a; }
+  .lab { left: 0; top: 0; z-index: 9; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="122.6">
+  <audio id="mix" src="../film/assets/audio/mix.m4a" data-start="0" data-duration="122.6" data-track-index="9" data-volume="1"></audio>
+  <div id="bg"></div>
+  <div id="secs"></div>
+  <div id="labs"></div>
+  <div id="railwrap"><div id="rail"></div></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var q = new URLSearchParams(location.search);
+  var FR = q.get("lang") === "fr";
+  if (FR) {
+    document.documentElement.lang = "fr";
+    document.getElementById("mix").setAttribute("src", "../film-fr/assets/audio/mix.m4a");
+  }
+  var CL = window.CLOCK;
+  function at(ch, dt) { return Math.round((CL[ch] + (dt || 0)) * 1000) / 1000; }
+
+  // ── the words of the film's own (the screens are the app, in English) ──
+  var T = FR ? {
+    rail: ["Visibilité IA", "Mots-clés", "Audit technique", "Roadmap", "Contenu", "Implémentation", "Citations"],
+    l1: '<span class="n">1</span>Visibilité IA', l2: '<span class="n">2</span>Mots-clés', l3: '<span class="n">3</span>Audit technique',
+    lk: '<img alt="" src="../film/assets/img/agent-kate.png" />Kate <em>· Contenu</em>',
+    lt: '<img alt="" src="../film/assets/img/agent-tom.png" />Tom <em>· Corrections techniques</em>',
+    ln: '<img alt="" src="../film/assets/img/agent-nora.png" />Nora <em>· Citations</em>',
+    lr: '<span class="n">4</span>Roadmap <em>· tâche n° 5 confiée à Kate</em>',
+    // the labels that live inside a section, and the end card
+    inner: { "04-technical-audit": { ls: '<span class="n">3</span>Site Overview <em>· santé 73 %</em>', lpe: '<span class="n">3</span>Page Explorer <em>· 850 pages explorées</em>' },
+             "05-roadmap": { lp: '<img alt="" src="../film/assets/img/agent-nora.png" />Nora <em>· le plan</em>' },
+             "09-close": { endh: '<span>La plateforme de</span><span>Search <mark><i></i><b>Intelligence</b></mark></span>' } }
+  } : {
+    rail: ["AI Visibility", "Keywords", "Technical Audit", "Roadmap", "Content", "Implementation", "Citations"],
+    l1: '<span class="n">1</span>AI Visibility', l2: '<span class="n">2</span>Keywords', l3: '<span class="n">3</span>Technical Audit',
+    lk: '<img alt="" src="../film/assets/img/agent-kate.png" />Kate <em>· Content</em>',
+    lt: '<img alt="" src="../film/assets/img/agent-tom.png" />Tom <em>· Technical fixes</em>',
+    ln: '<img alt="" src="../film/assets/img/agent-nora.png" />Nora <em>· Citations</em>',
+    lr: '<span class="n">4</span>Roadmap <em>· task #5 sent to Kate</em>',
+    inner: {}
+  };
+
+  // ── the rail and the labels, as film/index.html draws them ──
+  document.getElementById("rail").innerHTML = T.rail.map(function (l, k) {
+    var n = k + 1;
+    return '<div class="st" id="st' + n + '"><span class="st-bg"></span><span class="st-num"><span class="st-numfill"></span><span class="st-n">' + n + '</span>' +
+      '<span class="st-n st-n-on">' + n + '</span><span class="st-c">✓</span></span><span class="st-l">' + l + '<span class="st-l-on">' + l + '</span><span class="st-l-done">' + l + '</span></span></div>';
+  }).join("");
+  document.getElementById("labs").innerHTML = ["l1", "l2", "l3", "lk", "lt", "ln", "lr"].map(function (id) {
+    return '<div class="lab" id="' + id + '">' + T[id] + '</div>';
+  }).join("");
+
+  // ── the sections, each a layer of its own, on its own stretch of the clock ──
+  var SECS = [
+    ["01-start", 0, 9.6], ["02-ai-visibility", at("B"), 19.7], ["03-keywords", at("D"), 7.8], ["04-technical-audit", at("E"), 18.3],
+    ["05-roadmap", at("F"), 27.0], ["06-content", at("T5"), 8.8], ["07-implementation", at("T6"), 5.6], ["08-citations", at("T7"), 9.2],
+    ["09-close", at("T8"), 11.8]
+  ];
+  // what a section needs to sit on this page: no ground, no review bar, no backdrop of its own
+  var EMBED_CSS = "html, body, #stage { background: transparent !important; } #bg, #ctl { display: none !important; }" +
+                  " #fit { position: absolute !important; } #endc { background: transparent !important; }";
+  // The end card's lines are animated by 09's own timeline, which holds on to
+  // the elements it found when it was built: swapping the heading's HTML left
+  // the new lines unanimated, and invisible. Only their words change here —
+  // the two line spans and the <mark> highlight stay the same elements.
+  function endCard(d, html) {
+    var h = d.querySelector("#endc h1"); if (!h) return;
+    var tpl = d.createElement("h1"); tpl.innerHTML = html;
+    var lines = h.querySelectorAll(":scope > span"), next = tpl.querySelectorAll(":scope > span");
+    [0, 1].forEach(function (k) {
+      var line = lines[k], src = next[k]; if (!line || !src) return;
+      var mark = line.querySelector("mark");
+      // drop the words, keep the mark
+      Array.prototype.slice.call(line.childNodes).forEach(function (n) { if (n !== mark) line.removeChild(n); });
+      Array.prototype.slice.call(src.childNodes).forEach(function (n) {
+        if (n.nodeName === "MARK") {
+          if (mark) { mark.querySelector("b").textContent = n.textContent; line.appendChild(mark); }
+          else line.appendChild(n.cloneNode(true));
+        } else line.appendChild(d.importNode(n, true));
+      });
+    });
+  }
+  var secs = document.getElementById("secs"), F = {};
+  var ready = 0;
+  SECS.forEach(function (s, k) {
+    var lay = document.createElement("div");
+    lay.className = "seclay"; lay.id = "L" + k; lay.style.zIndex = 1;
+    var f = document.createElement("iframe");
+    f.className = "sec"; f.id = "s" + k; f.setAttribute("aria-hidden", "true"); f.setAttribute("tabindex", "-1");
+    // ?t=0 holds the section on its first frame; it never plays by itself here
+    f.src = "../sections/" + s[0] + ".html?t=0&bare=1";
+    f.addEventListener("load", function () {
+      var d = f.contentDocument, st = d.createElement("style");
+      st.textContent = EMBED_CSS; d.head.appendChild(st);
+      var inner = T.inner[s[0]] || {};
+      Object.keys(inner).forEach(function (id) {
+        if (id === "endh") { endCard(d, inner[id]); return; }
+        var el = d.getElementById(id);
+        if (el) el.innerHTML = inner[id];
+      });
+      var w = f.contentWindow;
+      (w.document.fonts ? w.document.fonts.ready : Promise.resolve()).then(function () {
+        F[k] = { win: w, last: -1 };
+        ready++;
+        sync(true);
+      });
+    });
+    lay.appendChild(f);
+    secs.appendChild(lay);
+  });
+
+  // ── the master clock: each section's own timeline is held at
+  // (film time − its start), between its first and its last frame ──
+  var tl = gsap.timeline({ paused: true });
+  function sync(force) {
+    var now = tl.time();
+    SECS.forEach(function (s, k) {
+      var f = F[k]; if (!f || !f.win.__tl) return;
+      var el = document.getElementById("L" + k);
+      if (el.style.visibility === "hidden" && !force) return;
+      var local = Math.max(0, Math.min(s[2], now - s[1]));
+      if (Math.abs(local - f.last) < 1e-4) return;
+      f.last = local;
+      // GSAP skips the render when the playhead does not move, so asking a
+      // section for the time it is already holding would leave it unposed.
+      var stl = f.win.__tl;
+      if (stl.time() === local) stl.time(local + 1e-4);
+      stl.time(local);
+    });
+  }
+  // the runtime may move the clock without telling the tweens (a seek with
+  // events suppressed), so the sections follow it every frame, not on update
+  var lastT = -1;
+  (function frame() {
+    var now = tl.time();
+    if (now !== lastT) { lastT = now; sync(false); }
+    requestAnimationFrame(frame);
+  })();
+  tl.eventCallback("onUpdate", function () { sync(false); });
+
+  // ── cards: [centre x, centre y, scale, rotation Y, opacity] in screen pixels.
+  // A section's window rests centred on (960, 512) at 1.14; the layer is moved
+  // so that window lands where film/index.html put the card. ──
+  // The docked cards stand 254 apart rather than 222, and the left column sits
+  // 8px further out. A card here is the section's whole window at 0.24, about
+  // 297 x 190 — far wider than the little pictures film/index.html docked — so
+  // at the old spacing the stack nearly touched and crowded the live window.
+  // It does not go further left than this: the card's own left edge is then on
+  // the frame edge and loses its corner and its shadow.
+  var C_REST = [960, 512, 1.14, 0, 1];
+  var L1 = [168, 230, 0.24, 18, 1], L2 = [168, 484, 0.24, 18, 1], L3 = [168, 738, 0.24, 18, 1];
+  var R1 = [1744, 314, 0.24, -18, 1], R2 = [1744, 568, 0.24, -18, 1];
+  // The move, the tilt and the fade go on the layer; the scale goes on the
+  // frame, where it stays a 2D transform and the card is rastered at the size
+  // it is drawn (see .seclay). Together they compose to the same placement.
+  function cs(st) { return { x: st[0] - 960, y: st[1] - 512, rotationY: st[3], autoAlpha: st[4], transformPerspective: 1600 }; }
+  function cf(st) { return { scale: st[2] / 1.14 }; }
+  function sel(k) { return "#s" + k; }
+  function lay(k) { return "#L" + k; }
+  function cardSet(k, t, st) { tl.set(lay(k), cs(st), t); tl.set(sel(k), cf(st), t); }
+  function cardTo(k, t, d, st, ease) {
+    var e = ease || "power3.inOut";
+    tl.to(lay(k), Object.assign(cs(st), { duration: d, ease: e }), t);
+    tl.to(sel(k), Object.assign(cf(st), { duration: d, ease: e }), t);
+  }
+  function fade(st, o) { return [st[0], st[1], st[2], st[3], o]; }
+  function cardIn(k, t, st) { cardSet(k, t - 0.3, fade(st, 0)); cardTo(k, t - 0.3, 0.3, fade(st, 1), "power2.out"); }
+  function off(st, dx) { return [st[0] + dx, st[1], st[2] * 0.96, st[3], 0]; }
+  function redock(k, t, st) { cardSet(k, t - 0.05, fade(off(st, st[0] < 960 ? -40 : 40), 0)); cardTo(k, t, 0.4, st, "power2.out"); }
+  // The live window drops the layer's 3D transform. Even at rest (no tilt, no
+  // move) perspective() keeps it a 3D layer, and Chrome keeps the bitmap it
+  // rastered for the small card it was a moment before: the screen reads
+  // blurred until something forces a re-raster. A 2D identity does not.
+  function live(k, t) {
+    tl.set(lay(k), { x: 0, y: 0, rotationY: 0, transformPerspective: 0, force3D: false, autoAlpha: 1, zIndex: 1 }, t);
+    tl.set(sel(k), Object.assign(cf(C_REST), { force3D: false }), t);
+  }
+  function hide(k, t) { tl.set(lay(k), { autoAlpha: 0 }, t); }
+  function z(k, t, v) { tl.set(lay(k), { zIndex: v }, t); }
+  function labAt(id, st, t, on) {
+    var y = st[1] - 365 * st[2] - 40;
+    tl.set("#" + id, { x: st[0] - 95, y: y + 6 }, t - 0.01);
+    tl.fromTo("#" + id, { opacity: 0, y: y + 6 }, { opacity: 1, y: y, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+    if (on != null) tl.to("#" + id, { opacity: 0, duration: 0.3 }, on);
+  }
+  ["l1", "l2", "l3", "lk", "lt", "ln", "lr"].forEach(function (id) { tl.set("#" + id, { opacity: 0 }, 0); });
+  // Everything but the opening section starts hidden. 01 is left out on
+  // purpose: landing backwards on 0, GSAP renders the zero-duration tweens
+  // sitting there in reverse, so a blanket hide at 0 would beat the live()
+  // below it and the film would open on an empty stage.
+  SECS.forEach(function (s, k) { if (k !== 0) tl.set(lay(k), { autoAlpha: 0 }, 0); });
+
+  // ── rail: idle → active → done ──
+  function railSet(i, state, t, d) {
+    var st = "#st" + i, dur = d == null ? 0.45 : d;
+    var on = state === "on", done = state === "done";
+    tl.to(st + " .st-bg", { opacity: on ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-numfill", { opacity: on || done ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-n-on", { opacity: on ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-c", { opacity: done ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-l-on", { opacity: on ? 1 : 0, duration: dur }, t);
+    tl.to(st + " .st-l-done", { opacity: done ? 1 : 0, duration: dur }, t);
+    if (on) tl.fromTo(st + " .st-num", { scale: 0.8 }, { scale: 1, duration: 0.45, ease: "back.out(2)", immediateRender: false }, t);
+  }
+  function railTo(i, t) { if (i > 1) railSet(i - 1, "done", t); railSet(i, "on", t); }
+  railSet(1, "on", 0, 0);
+
+  var VIS = 1, KW = 2, AUD = 3, POLI = 4, CONT = 5, FIX = 6, CIT = 7, END = 8;
+  var t;
+
+  // ════ A, B, C · onboarding, then AI Visibility: one window, live throughout ════
+  live(0, 0);
+  // the onboarding ends on the dashboard, where B opens: the layers trade places
+  live(VIS, at("B", -0.01)); hide(0, at("B"));
+
+  // ════ T1 · "On Google": AI Visibility to the side, Keywords comes in ════
+  t = at("T1");
+  z(VIS, t, 3);
+  cardTo(VIS, t + 0.05, 0.75, L1); labAt("l1", L1, t + 0.7);
+  cardSet(KW, 0, [1744, 560, 0.24, -18, 0]); z(KW, t, 2);
+  cardIn(KW, t + 0.3, [1744, 560, 0.3, -18]);
+  cardTo(KW, t + 0.3, 1.0, C_REST);
+  railTo(2, t + 0.4);
+  live(KW, at("D"));
+  cardTo(VIS, at("D"), 0.5, off(L1, -40)); tl.to("#l1", { opacity: 0, duration: 0.3 }, at("D"));
+
+  // ════ T2 · "Your website": Keywords to the side, Site Overview comes in ════
+  t = at("T2");
+  z(KW, t, 3);
+  redock(VIS, t, L1); labAt("l1", L1, t + 0.1);
+  cardTo(KW, t + 0.05, 0.8, L2); labAt("l2", L2, t + 0.7);
+  cardSet(AUD, 0, [1744, 560, 0.24, -18, 0]); z(AUD, t, 2);
+  cardIn(AUD, t + 0.25, [1744, 560, 0.3, -18]);
+  cardTo(AUD, t + 0.25, 1.05, C_REST);
+  railTo(3, t + 0.3);
+  live(AUD, at("E"));
+  [VIS, KW].forEach(function (c, k) { cardTo(c, at("E"), 0.5, off([L1, L2][k], -40)); });
+  tl.to(["#l1", "#l2"], { opacity: 0, duration: 0.3 }, at("E"));
+
+  // ════ T3 · "So you ask Nora": the three audits land in Poli AI, as the attachments of the question ════
+  t = at("T3");
+  [VIS, KW, AUD].forEach(function (c) { z(c, t - 0.1, 4); });
+  redock(VIS, t, L1); labAt("l1", L1, t + 0.1, t + 1.3);
+  redock(KW, t, L2); labAt("l2", L2, t + 0.1, t + 1.3);
+  cardTo(AUD, t + 0.05, 0.75, L3); labAt("l3", L3, t + 0.6, t + 1.3);
+  railTo(4, t + 0.3);
+  cardSet(POLI, 0, [1744, 560, 0.3, -18, 0]); z(POLI, t, 2);
+  cardIn(POLI, t + 0.5, [1744, 560, 0.3, -18]);
+  cardTo(POLI, t + 0.5, 1.1, C_REST);
+  // into the composer's chips (AI Visibility, Keywords, Site audit), as they appear in it
+  [[VIS, 877.6], [KW, 1054.4], [AUD, 1207.5]].forEach(function (c, k) {
+    cardTo(c[0], t + 1.65 + k * 0.3, 0.6, [c[1], 819, 0.05, 0, 0], "power2.in");
+  });
+  live(POLI, at("F"));
+
+  // ════ F, T4, G · Poli AI and the roadmap play inside 05; the rail moves on at the launch ════
+  railTo(5, at("G", 9.7));
+
+  // ════ T5 · the roadmap (task #5 sent to Kate) to the side, Content Studio comes in ════
+  t = at("T5");
+  z(POLI, t, 3);
+  cardTo(POLI, t + 0.05, 0.75, L1); labAt("lr", L1, t + 0.7);
+  cardSet(CONT, 0, [1744, 560, 0.3, -18, 0]); z(CONT, t, 2);
+  cardIn(CONT, t + 0.3, [1744, 560, 0.3, -18]);
+  cardTo(CONT, t + 0.3, 1.0, C_REST);
+  live(CONT, t + 1.35);
+  cardTo(POLI, t + 1.6, 0.45, off(L1, -40)); tl.to("#lr", { opacity: 0, duration: 0.3 }, t + 1.6);
+
+  // ════ T6 · Content to the side, Tom's fixes come in ════
+  t = at("T6");
+  z(CONT, t, 3); z(FIX, t, 2); z(CIT, t, 2);
+  cardSet(FIX, t - 0.08, fade(off(R1, 40), 0)); cardTo(FIX, t - 0.06, 0.2, R1, "power2.out");
+  cardSet(CIT, t - 0.08, fade(off(R2, 40), 0)); cardTo(CIT, t - 0.06, 0.3, R2, "power2.out");
+  cardTo(CONT, t + 0.05, 0.8, L1); labAt("lk", L1, t + 0.7);
+  cardTo(FIX, t + 0.15, 0.85, C_REST);
+  railTo(6, t + 0.3);
+  live(FIX, at("I"));
+  cardTo(CONT, at("I"), 0.5, off(L1, -40)); tl.to("#lk", { opacity: 0, duration: 0.3 }, at("I"));
+  cardTo(CIT, at("I"), 0.5, off(R2, 40));
+
+  // ════ T7 · the fixes to the side, Nora's citations come in ════
+  t = at("T7");
+  z(FIX, t, 3); z(CIT, t, 2);
+  redock(CONT, t, L1); labAt("lk", L1, t + 0.1);
+  cardSet(CIT, t - 0.08, fade(off(R2, 40), 0)); cardTo(CIT, t - 0.06, 0.18, R2, "power2.out");
+  cardTo(FIX, t + 0.05, 0.8, L2); labAt("lt", L2, t + 0.7);
+  cardTo(CIT, t + 0.15, 0.85, C_REST);
+  railTo(7, t + 0.3);
+  live(CIT, at("J"));
+  [CONT, FIX].forEach(function (c, k) { cardTo(c, at("J"), 0.5, off([L1, L2][k], -40)); });
+  tl.to(["#lk", "#lt"], { opacity: 0, duration: 0.3 }, at("J"));
+
+  // ════ T8 · everything lands in the next analysis ════
+  t = at("T8");
+  [CONT, FIX, CIT].forEach(function (c) { z(c, t, 3); });
+  cardSet(END, 0, [960, 560, 0.5, 0, 0]); z(END, t, 2);
+  redock(CONT, t, L1); labAt("lk", L1, t + 0.05, t + 0.8);
+  redock(FIX, t, L2); labAt("lt", L2, t + 0.05, t + 0.8);
+  cardTo(CIT, t + 0.05, 0.7, L3); labAt("ln", L3, t + 0.5, t + 0.8);
+  cardIn(END, t + 0.55, [960, 540, 0.5, 0]);
+  cardTo(END, t + 0.55, 1.05, C_REST);
+  [[CONT, 0], [CIT, 1], [FIX, 2]].forEach(function (c) {
+    cardTo(c[0], t + 0.8 + c[1] * 0.08, 0.6, [960 + (c[1] - 1) * 160, 520, 0.1, 0, 0], "power2.in");
+  });
+  [2, 3, 4, 5, 6, 7].forEach(function (k) { railSet(k, "done", t + 0.1); }); railSet(1, "on", t + 0.1);
+  live(END, at("K"));
+
+  // ════ K · the end card: the rail goes with the window (09 draws the rest) ════
+  tl.to("#railwrap", { opacity: 0, y: -10, duration: 0.5, ease: "power2.in" }, at("K", 5.5));
+
+  tl.set({}, {}, CL.TOTAL);                            // the timeline lasts the whole film (the web player reads its length)
+  // Lay down the opening frame now. A paused timeline is already at 0, so the
+  // player seeking to 0 would move nothing and render nothing, and the film
+  // would open on an empty stage.
+  tl.time(1e-4); tl.time(0);
+  window.__timelines = window.__timelines || {};      // the web player injects its runtime after the page has run
+  window.__timelines["main"] = tl;
+  window.__ready = function () { return ready === SECS.length; };
+
+  // Opened on its own (not in the player): play it, or hold a moment with ?t=
+  if (!window.parent || window.parent === window) {
+    var tq = q.get("t");
+    var go = function () {
+      if (ready < SECS.length) { setTimeout(go, 100); return; }
+      if (tq != null) { var T = parseFloat(tq); tl.time(T + 1e-4); tl.time(T); sync(true); } else tl.play();
+    };
+    go();
+  }
+})();
+</script>
+</body>
+</html>

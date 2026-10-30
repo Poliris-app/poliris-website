@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Poliris film · 4 Roadmap</title>
+<link rel="icon" href="data:," />
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     4 · ROADMAP · chapters F, T4 and G of the film, 60.2 → 87.2 s
+
+     F · Poli AI: the three audits attached, the question typed and sent;
+         Nora's steps, her findings (2 of 9 answers, 0 of 3 searches, 45 of
+         100 for the battery page) and the plan in priority order; Export
+         report opens the 12-page deck; Update roadmap.
+     T4 · the chat docks to the left, the roadmap comes in.
+     G · the SEO Plan, updated by Nora: her three tasks land in week 1, a
+         lane per type of work; down to the Execution board, the battery
+         guide is dragged from Backlog to In progress and launched — sent
+         to Kate.
+
+     Nothing here is a screenshot. The app was recorded at 1400 x 912.5 and
+     drawn into the film's window at 1120 x 730 — exactly 0.8x — so the screens
+     are written at the app's own size and `.app` scales them by 0.8. Poli AI
+     has its own sidebar (the conversations); the roadmap has the one in
+     02-ai-visibility.html, with Roadmap picked.
+
+     Both screens are measured off the frames they replace (ov-poli-*,
+     ov-road-*), so blocks sit at the app's own coordinates. The board's task
+     cards and their data come from the #pg-road page of
+     public/poliris-onboarding-flow-v3.html. The report deck is the film's
+     own HTML (film/index.html, #w-rep), as it is.
+
+     Two windows: #cam is Poli AI; #cam2 is the roadmap, which comes in as a
+     card and is the live window from 16.6 on. The camera, the cursor, the
+     cards, the label and the deck keep the film's own coordinates and cues,
+     less the chapter start.
+
+     Open it as it is to watch it. `?t=20` freezes a moment, `?bare=1` drops
+     the review bar, `?screen` draws the live window alone at 2x.
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="../film/assets/widgets.css" />
+<style>
+@font-face { font-family: "Geist"; font-weight: 400; font-display: block; src: url("../film/assets/fonts/Geist-400.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 500; font-display: block; src: url("../film/assets/fonts/Geist-500.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 600; font-display: block; src: url("../film/assets/fonts/Geist-600.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 700; font-display: block; src: url("../film/assets/fonts/Geist-700.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 800; font-display: block; src: url("../film/assets/fonts/Geist-800.woff2") format("woff2"); }
+
+:root {
+  --primary: #0062ff;
+  --ink: #0a0a0b;
+  --sb-line: #e3e3eb;
+  --green: #16a34a;
+  --muted: #f4f4f5;
+  --muted-fg: #6b7280;
+  --border: #e5e7eb;
+  /* the plan's types of work, as the roadmap colours them */
+  --c-tech: #2563eb;
+  --c-opt: #dd9a29;
+  --c-back: #6aaee0;
+  --c-long: #3c9a6e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0b0f17; }
+body { font-family: "Geist", system-ui, sans-serif; overflow: hidden; }
+
+#fit { position: fixed; inset: 0; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 50% 50%; background: #f3f6fb; }
+#bg { position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 520px at 50% 45%, rgba(0, 98, 255, .10), rgba(0, 98, 255, 0) 70%),
+        radial-gradient(700px 420px at 88% 70%, rgba(99, 102, 241, .07), rgba(99, 102, 241, 0) 70%),
+        linear-gradient(180deg, #f8fafd 0%, #eef2f8 100%); }
+
+#cam, #cam2 { position: absolute; left: 0; top: 0; width: 1120px; height: 730px; transform-origin: 0 0; }
+#cam2 { opacity: 0; transform-origin: 50% 50%; }
+.win { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; background: #fff;
+       box-shadow: 0 0 0 1px #dfe4ec, 0 50px 100px -50px rgba(15, 23, 42, .42), 0 2px 6px rgba(15, 23, 42, .05); }
+.scr { position: absolute; inset: 0; overflow: hidden; }
+.app { position: absolute; left: 0; top: 0; width: 1400px; height: 912.5px;
+       transform: scale(.8); transform-origin: 0 0; background: #fff;
+       font-size: 14px; line-height: 1.5; color: var(--ink);
+       -webkit-font-smoothing: antialiased; display: flex; }
+.abs { position: absolute; }
+.ico { display: inline-block; flex: 0 0 auto; vertical-align: middle; }
+.av { border-radius: 50%; object-fit: cover; object-position: top; background: #eef0f4; flex: 0 0 auto; }
+
+/* ══ the app sidebar ══════════════════════════════════════════════════════ */
+.sb { flex: 0 0 272px; width: 272px; height: 912.5px; border-right: 1px solid var(--sb-line);
+      background: #fff; display: flex; flex-direction: column; overflow: hidden; }
+.sb__head { padding: 13.7px 14px 0; display: flex; align-items: center; justify-content: space-between; }
+.sb__logo { width: 131px; height: 32.5px; display: block; }
+.sb__toggle { color: #8b8b8b; display: flex; }
+.sb__dot { margin: 15px 14px; border-top: 1px dotted #d8d8de; }
+.sb__pad { padding: 0 12px; }
+
+.sb__proj-row { display: flex; gap: 6px; }
+.sb__proj { flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; height: 46px; padding: 0 10px;
+            border: 1px solid #e7e7ec; border-radius: 10px; }
+.sb__proj img { width: 28px; height: 28px; border-radius: 50%; object-fit: contain; padding: 2px;
+                background: #fff; border: .5px solid #e2e2e5; flex: 0 0 auto; }
+.sb__proj-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb__proj-txt b { font-size: 13.5px; font-weight: 600; line-height: 17px; }
+.sb__proj-txt span { font-size: 11.5px; line-height: 15px; color: #8b8b8b; }
+.sb__cog { flex: 0 0 auto; width: 46px; height: 46px; border: 1px solid #e7e7ec; border-radius: 10px;
+           display: grid; place-items: center; color: #5a5a5a; }
+
+.sb__seg { margin-top: 10.8px; display: flex; gap: 2px; height: 36px; padding: 3px; border-radius: 9px; background: #eef0fb; }
+.sb__seg a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; border-radius: 7px;
+             font-size: 13.5px; font-weight: 500; color: #5a5a5a; text-decoration: none; }
+.sb__seg a.on { background: #fff; color: var(--primary); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.07); }
+
+.sb__row { display: flex; align-items: center; gap: 9px; height: 35.5px; padding: 0 9px; border-radius: 8px;
+           font-size: 13.5px; color: var(--ink); }
+.sb__row .ico { color: #5a5a5a; display: flex; flex: 0 0 auto; }
+.sb__row .chev { margin-left: auto; color: #9a9aa2; display: flex; }
+.sb__road { margin-top: 9px; height: 42px; }
+.sb__road .ico { color: var(--primary); }
+.sb__road { border: 1px solid #e7e7ec; border-radius: 10px; font-size: 14px; }
+
+.sb__label { display: flex; align-items: center; justify-content: space-between;
+             padding: 0 9px; height: 29.2px; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: #8b8b8b; }
+.sb__sub { margin-top: 1.8px; margin-bottom: -6.2px; margin-left: 18px; padding-left: 11px; border-left: 1px solid #e7e7ec; }
+.sb__item { display: flex; align-items: center; gap: 9px; height: 33.2px; padding: 0 9px; border-radius: 7px;
+            font-size: 13.5px; color: #3f3f46; }
+.sb__item i { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 5px; background: #6366f1; color: #fff;
+              font-style: normal; font-size: 10.5px; font-weight: 700; display: grid; place-items: center; }
+.sb__item--on { background: #eaf2fe; color: #2563eb; font-weight: 600; }   /* the open page: the app's blue, not purple */
+.sb__item img { width: 19px; height: 19px; border-radius: 50%; object-fit: contain; background: #fff;
+                border: .5px solid #e2e2e5; padding: 1px; }
+.sb__foot { margin-top: auto; padding: 0 12px 12px; }
+.sb__user { display: flex; align-items: center; gap: 9px; height: 44px; }
+.sb__user b { width: 32px; height: 32px; border-radius: 50%; background: #be123c; color: #fff;
+              font-size: 11.5px; font-weight: 700; display: grid; place-items: center; }
+.sb__user-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb__user-txt span:first-child { font-size: 13px; font-weight: 600; line-height: 17px; }
+.sb__user-txt span:last-child { font-size: 11px; line-height: 14px; color: #8b8b8b; display: flex; align-items: center; gap: 4px; }
+.sb__road--on { border-color: #cfe0fd; background: #eaf2fe; color: #2563eb; font-weight: 600; }
+
+/* ══ Poli AI: its own sidebar, the conversation ═══════════════════════════ */
+.ps__new { margin: 15px 0 0; height: 40px; border-radius: 9px; background: var(--primary); color: #fff;
+           display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14.6px; font-weight: 500; }
+.ps__k { position: absolute; left: 12px; font-size: 11.6px; font-weight: 500; letter-spacing: .1em; color: #6b7280; }
+.ps__search { position: absolute; left: 12px; width: 246.3px; top: 290.5px; height: 35px; border: 1px solid #e2e4ea; border-radius: 8px;
+              display: flex; align-items: center; gap: 9px; padding: 0 12px; font-size: 14px; color: #8b8f99; }
+.ps__c { position: absolute; left: 7.7px; width: 254.8px; padding: 0 8.4px; border-radius: 9px; }
+.ps__c b { display: block; font-size: 14px; line-height: 19px; font-weight: 500; }
+.ps__c span { display: flex; align-items: center; gap: 7px; margin-top: 4px; font-size: 12.6px; color: #8b8f99; }
+.ps__c span img { width: 13px; height: 15px; object-fit: contain; }
+
+#poli { position: relative; flex: 1; min-width: 0; background: #fff; }
+.ph { position: absolute; left: 0; right: 0; top: 0; height: 63px; border-bottom: 1px solid #ececf0; }
+.ph__avs { position: absolute; left: 16.5px; top: 11.5px; display: flex; }
+.ph__avs img { width: 40px; height: 40px; margin-right: -5.7px; border: 2px solid #fff; }
+/* Nora's avatar in a box of its own size, so the ring sits on its edge */
+.ph__nora { position: relative; z-index: 1; width: 40px; height: 40px; margin-right: -5.7px; }
+.ph__nora img { display: block; margin: 0 !important; }
+.ph__ring { position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 2.4px #f59e0b; opacity: 0; }
+.ph__t { position: absolute; left: 167.8px; top: 9px; font-size: 15.2px; line-height: 22px; font-weight: 500; }
+.ph__s { position: absolute; left: 167.8px; top: 34px; font-size: 12.4px; line-height: 17px; color: #6b7280; }
+.ph__s b { color: #d97706; font-weight: 500; }
+.ph__btn { position: absolute; top: 15.4px; height: 33px; border: 1px solid #e2e4ea; border-radius: 8px; display: flex; align-items: center;
+           justify-content: center; gap: 7px; font-size: 14px; font-weight: 500; }
+
+.chip3 { display: inline-flex; align-items: center; gap: 7px; height: 26.6px; padding: 0 9px 0 6px; border: 1px solid #e3e5ea; border-radius: 7px;
+         background: #fff; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.chip3 i { width: 17px; height: 17px; border-radius: 4px; color: #fff; font-style: normal; font-size: 9px; font-weight: 700;
+           display: flex; align-items: center; justify-content: center; }
+.chip3 em { font-style: normal; font-weight: 400; color: #8b8f99; }
+.bub { position: absolute; left: 373.5px; width: 559.4px; top: 78.4px; height: 128.8px; border-radius: 18px; background: #f1f2f4; opacity: 0; }
+/* two chips on the first row, Site audit on the second, as the frames have them */
+.bub__chips { position: absolute; left: 15.4px; top: 9.8px; display: flex; flex-wrap: wrap; gap: 6.6px; width: 520px; }
+.bub__chips .chip3:nth-child(3) { margin-right: 300px; }
+.bub__chips .chip3:nth-child(2) { margin-right: 60px; }
+.bub__t { position: absolute; left: 15.4px; top: 76px; width: 520px; font-size: 14.2px; line-height: 21px; }
+.bub__acts { position: absolute; left: 892px; top: 216px; display: flex; gap: 12px; color: #8b8f99; opacity: 0; }
+
+.nora { position: absolute; left: 195px; right: 194px; top: 245px; height: 30px; opacity: 0; }
+.nora img { position: absolute; left: 0; top: 2px; width: 22px; height: 26px; object-fit: contain; }
+.nora b { position: absolute; left: 30.8px; top: 4px; font-size: 14.6px; font-weight: 500; }
+.nora .p1, .nora .p2 { position: absolute; top: 3px; height: 23px; border-radius: 5px; padding: 0 7px; display: flex; align-items: center; font-size: 12.6px; }
+.nora .p1 { left: 69.5px; background: #f1f2f4; color: #52525b; }
+.nora .p2 { left: 156.5px; background: #e8f0fe; color: #1d4ed8; }
+.nora .w { position: absolute; right: 0; top: 5px; font-size: 12.6px; color: #8b8f99; }
+.steps { position: absolute; left: 195px; top: 276px; width: 740px; display: flex; flex-wrap: wrap; gap: 6px; }
+.step { position: relative; height: 26px; border-radius: 6px; background: #f6f6f8; display: flex; align-items: center; gap: 7px; padding: 0 9px;
+        font-size: 13.2px; color: #52525b; opacity: 0; }
+.step .sp { width: 11px; height: 11px; border-radius: 50%; border: 1.6px solid #c7d7f7; border-top-color: #2563eb; }
+.step .ok { color: #16a34a; display: none; }
+.steps5 { position: absolute; left: 195px; top: 278px; display: flex; align-items: center; gap: 7px; font-size: 13px; color: #52525b; opacity: 0; }
+.intro { position: absolute; left: 193.5px; top: 308.7px; font-size: 14.2px; line-height: 21px; white-space: nowrap; }
+.intro span { opacity: 0; }
+
+.fc { position: absolute; top: 340px; width: 240.1px; height: 155.6px; border: 1px solid #e3e5ea; border-radius: 12px; background: #fff; opacity: 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.fc__k { position: absolute; left: 12.6px; top: 12.5px; display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 500; }
+.fc__k i { width: 18px; height: 18px; border-radius: 4px; font-style: normal; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.fc__v { position: absolute; left: 12.6px; top: 40px; display: flex; align-items: baseline; gap: 2px; }
+.fc__v b { font-size: 26.6px; line-height: 32px; font-weight: 700; }
+.fc__v span { font-size: 14px; color: #6b7280; }
+.fc__s { position: absolute; left: 12.6px; top: 76px; font-size: 13px; }
+.fc__hr { position: absolute; left: 12.6px; right: 12.6px; top: 103.5px; border-top: 1px solid #ececf0; }
+.fc__f { position: absolute; left: 12.6px; right: 12px; top: 110px; font-size: 11.5px; line-height: 16.2px; color: #6b7280; }
+
+.plan__h { position: absolute; left: 193.5px; top: 509.5px; font-size: 13.6px; font-weight: 600; opacity: 0; }
+.pr { position: absolute; left: 193px; width: 740.5px; height: 40.6px; border: 1px solid #e3e5ea; border-radius: 10px; background: #fff; opacity: 0;
+      display: flex; align-items: center; gap: 9px; padding: 0 10.5px; }
+.pr__n { width: 20.5px; height: 20.5px; border-radius: 50%; color: #fff; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+.pr__tag { height: 23px; padding: 0 9px; border-radius: 999px; display: flex; align-items: center; font-size: 12px; white-space: nowrap; }
+.pr__t { font-size: 13.3px; font-weight: 600; white-space: nowrap; }
+.pr__who { margin-left: auto; height: 23px; padding: 0 8px 0 4px; border-radius: 999px; background: #f4f4f5; display: flex; align-items: center; gap: 6px;
+           font-size: 12px; color: #52525b; white-space: nowrap; }
+.pr__who img { width: 15px; height: 17px; object-fit: contain; }
+.ru { position: absolute; left: 193px; width: 740.5px; top: 681px; height: 65px; border: 1px solid #dfe6f3; border-radius: 12px; background: #f6f8fc; opacity: 0; }
+.ru__i { position: absolute; left: 14.6px; top: 12.6px; width: 39.4px; height: 39.4px; border-radius: 9px; background: #e7eefc; color: #2563eb;
+         display: flex; align-items: center; justify-content: center; }
+.ru__t { position: absolute; left: 66px; top: 10px; font-size: 14.2px; font-weight: 600; }
+.ru__s { position: absolute; left: 66px; top: 33px; font-size: 12.3px; color: #6b7280; }
+.ru__b { position: absolute; top: 14.6px; height: 35.7px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 7px;
+         font-size: 13.6px; font-weight: 500; white-space: nowrap; }
+.ru__b > span { position: absolute; inset: 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; }
+.ru__exp { left: 396.9px; width: 138.6px; }
+.ru__exp .a { border: 1px solid #e2e4ea; background: #fff; color: #27272a; }
+.ru__exp .b { background: #dcfce7; color: #15803d; opacity: 0; }
+.ru__upd { left: 556.5px; width: 170px; }
+.ru__upd .a { background: var(--primary); color: #fff; }
+.ru__upd .b { background: #16a34a; color: #fff; opacity: 0; }
+.spin { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; }
+
+.cmp { position: absolute; left: 224px; width: 679.7px; top: 771.4px; height: 104.3px; border: 1px solid #e2e4ea; border-radius: 14px; background: #fff; }
+.cmp__chips { position: absolute; left: 11px; top: 8.2px; display: flex; gap: 7px; }
+.cmp__chips .chip3 { opacity: 0; }
+.cmp__ph { position: absolute; left: 14.7px; top: 44.5px; font-size: 14.2px; color: #8b8f99; }
+/* as long as the box allows, then it scrolls so the caret stays in view */
+.cmp__tx { position: absolute; left: 14.7px; top: 44.5px; width: 645px; height: 22px; font-size: 14.2px; white-space: nowrap; overflow: hidden; }
+.cmp__tx i { display: inline-block; width: 1.6px; height: 16px; margin-left: 1px; vertical-align: -3px; background: #2563eb; }
+.cmp__b { position: absolute; top: 68.6px; height: 26.6px; border: 1px solid #e2e4ea; border-radius: 7px; display: flex; align-items: center; gap: 6px;
+          padding: 0 9px; font-size: 13.4px; font-weight: 500; }
+.cmp__send { position: absolute; left: 641px; top: 68.6px; width: 28.5px; height: 26.6px; border-radius: 7px; background: #93c5fd; color: #fff;
+             display: flex; align-items: center; justify-content: center; }
+.cmp__send i { position: absolute; inset: 0; border-radius: 7px; background: var(--primary); opacity: 0; }
+.cmp__send svg { position: relative; }
+.pfoot { position: absolute; left: 0; right: 0; top: 885px; text-align: center; font-size: 12.4px; color: #6b7280; }
+
+/* ══ the roadmap ═════════════════════════════════════════════════════════ */
+.ws { position: relative; flex: 1; min-width: 0; background: #fff; overflow: hidden; }
+.rh__t { left: 32px; top: 23px; margin: 0; font-size: 25px; line-height: 32px; font-weight: 700; letter-spacing: -.02em; }
+.rh__s { left: 32px; top: 63.5px; font-size: 13.5px; color: #6b7280; }
+.rh__badge { left: 274px; top: 60px; height: 25.4px; border: 1px solid #a9e2c0; border-radius: 999px; background: #effbf3; color: #15803d;
+             display: flex; align-items: center; gap: 6px; padding: 0 12px 0 4px; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; }
+.rh__badge img { width: 17px; height: 20px; object-fit: contain; }
+.rh__up { right: 33px; top: 20.3px; height: 39.2px; border: 1px solid #e2e4ea; border-radius: 8px; padding: 0 15px; display: flex; align-items: center;
+          gap: 10px; font-size: 15.2px; font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.rh__chips { right: 33px; top: 70px; display: flex; gap: 9px; }
+.rh__chips span { height: 25.2px; border-radius: 999px; background: #f2f3f5; padding: 0 10px; display: flex; align-items: center; gap: 7px;
+                  font-size: 12.6px; color: #3f3f46; }
+.rd-body { position: absolute; left: 0; right: 0; top: 107px; bottom: 0; background: #f5f5f7; border-top: 1px solid #ececf0; overflow: hidden; }
+#rd-scroll { position: absolute; left: 0; right: 0; top: 0; }
+.rcard { position: absolute; left: 15.2px; width: 1096.2px; border: 1px solid #e4e5ea; border-radius: 16px; background: #fff; }
+.rc__t { position: absolute; left: 18.9px; top: 17px; font-size: 20.4px; line-height: 28px; font-weight: 700; letter-spacing: -.01em; }
+.rc__s { position: absolute; left: 18.9px; top: 50.5px; font-size: 13.4px; color: #6b7280; }
+.tl__hint { position: absolute; left: 20px; top: 91px; display: flex; align-items: center; gap: 8px; font-size: 13.2px; color: #2563eb; }
+.tl__tog { position: absolute; left: 799.4px; top: 18.9px; width: 277.9px; height: 40.6px; border-radius: 10px; background: #f2f3f5; }
+.tl__tog span { position: absolute; top: 4px; height: 32.6px; display: flex; align-items: center; gap: 9px; font-size: 15px; color: #6b7280; }
+.tl__tog .on { left: 4.2px; width: 108.5px; justify-content: center; border-radius: 8px; background: #fff; color: #3f3f46; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.tl__done { position: absolute; right: 18.9px; top: 66px; font-size: 13.2px; color: #6b7280; }
+.tl__wk1 { position: absolute; left: 224px; top: 130.1px; width: 366.1px; height: 21.8px; border-radius: 999px; background: #e6eefc; color: #1d4ed8;
+           display: flex; align-items: center; justify-content: center; font-size: 13.6px; font-weight: 600; }
+.tl__w { position: absolute; top: 132px; width: 50px; margin-left: -25px; text-align: center; font-size: 13.4px; color: #6b7280; }
+.tl__hr { position: absolute; left: 18.9px; right: 18.9px; border-top: 1px solid #ececf0; }
+.lane { position: absolute; left: 18.9px; width: 190px; height: 34px; margin-top: -17px; display: flex; align-items: center; gap: 11px; padding-left: 9.8px;
+        font-size: 14.2px; white-space: nowrap; border-radius: 8px; }
+.lane i { width: 8.4px; height: 8.4px; border-radius: 2px; }
+.lane__hl { position: absolute; inset: 0; border-radius: 8px; background: #f5f8ff; box-shadow: 0 0 0 1.4px #c4d4f4; opacity: 0; }
+.lane > :not(.lane__hl) { position: relative; }
+.bar { position: absolute; height: 29.4px; margin-top: -14.7px; border-radius: 999px; }
+.bar--w1 { left: 222.6px; width: 369.6px; display: flex; align-items: center; gap: 9px; padding-left: 4px; color: #fff; font-size: 13.4px; font-weight: 500;
+           white-space: nowrap; opacity: 0; }
+.bar--w1 img { width: 21px; height: 21px; border: 1.5px solid rgba(255,255,255,.8); background: #fff; }
+.bar--dec { border: 1.4px solid #d4d4d8; background: #fff; }
+.bar--dec.bar--w1 { opacity: 1; color: #27272a; font-weight: 400; padding-left: 11px; }
+
+.col { position: absolute; top: 91.7px; width: 343.5px; height: 1200px; border-radius: 14px; background: #f4f5f8; }
+.col__h { position: absolute; left: 19.6px; top: 15.4px; display: flex; align-items: center; gap: 9px; font-size: 11.2px; font-weight: 500; letter-spacing: .1em; }
+.col__h i { width: 7px; height: 7px; border-radius: 50%; }
+.col__h b { height: 21px; min-width: 24px; padding: 0 7px; border-radius: 999px; background: #fff; color: #6b7280; font-weight: 400; letter-spacing: 0;
+            font-size: 12.6px; display: flex; align-items: center; justify-content: center; position: relative; }
+.col__h b span { position: absolute; }
+.slot { position: absolute; left: 12.6px; width: 318.5px; top: 50.4px; height: 250.6px; border-radius: 14px; border: 1.5px dashed #cdd5e3; background: rgba(255,255,255,.4); opacity: 0; }
+
+/* the task cards, as the roadmap page of the onboarding flow draws them */
+.cat-technical{--dot:#0062ff;--bg:#f3f9ff;--fg:#0062ff;--badge:#fff;}
+.cat-content_optimize{--dot:#e69f00;--bg:#fdf3e0;--fg:#8a5f00;--badge:#0a0a0b;}
+.cat-content_create{--dot:#009e73;--bg:#e6f6f1;--fg:#00654a;--badge:#fff;}
+.cat-internal_linking{--dot:#cc79a7;--bg:#f9ecf3;--fg:#8f4a72;--badge:#fff;}
+.cat-backlink{--dot:#56b4e9;--bg:#eaf5fc;--fg:#1f6f96;--badge:#0a0a0b;}
+.cat-decision{--dot:#a3a3a3;--bg:#f5f5f5;--fg:#525252;--badge:#fff;}
+.col__list { position: absolute; left: 12.6px; top: 50.4px; width: 318.5px; display: flex; flex-direction: column; gap: 9px; }
+.ac { position: relative; border-radius: 14px; border: 1px solid #e5e7eb; background: #fff; padding: 14.5px 15.4px 15.4px;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1); display: flex; flex-direction: column; }
+.ac.late { border-color: #fecaca; }
+.ac__hd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ac__hl { display: flex; align-items: center; gap: 8px; }
+.ac__n { width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center;
+         background: var(--dot); color: var(--badge); }
+.ac__cat { padding: 2px 10px; border-radius: 999px; font-size: 12.4px; background: var(--bg); color: var(--fg); white-space: nowrap; }
+.ac__late { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: #fee2e2; color: #b91c1c; font-size: 12.4px; }
+.ac__t { margin: 8px 0 0; font-size: 15px; line-height: 21px; }
+.ac__d { margin: 3px 0 11px; font-size: 13px; line-height: 20.3px; color: #6b7280; }
+.ac__f { display: flex; align-items: center; gap: 8px; border-top: 1px solid #e5e7eb; padding-top: 11.5px; }
+.ac__f img { width: 22px; height: 22px; }
+.ac__o { flex: 1; font-size: 12.6px; color: #6b7280; }
+.ac__pg { display: inline-flex; align-items: center; gap: 4px; font-size: 12.6px; color: #6b7280; }
+.ac__h { display: inline-flex; align-items: center; gap: 4px; background: #f4f4f5; border-radius: 999px; padding: 2px 10px; font-size: 12.6px; }
+.ac__vd { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 8px; margin-top: 8px; font-size: 12.8px; font-weight: 500; color: #6b7280; }
+.ac__btn { position: relative; margin-top: 10px; height: 32.4px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;
+           font-size: 13.6px; font-weight: 500; }
+.ac__btn--go { background: var(--primary); color: #fff; }
+.ac__btn--ok { border: 1px solid #e5e7eb; background: #fff; }
+.ac__sent { position: absolute; inset: 0; border-radius: 8px; background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center;
+            gap: 8px; opacity: 0; }
+
+/* ══ the report Nora exports (film/index.html, as it is) ═════════════════ */
+.wg { position: absolute; opacity: 0; transform-origin: 0 0; }
+.wg > .hfw { position: relative !important; }
+.hfw__bar .bar-r { margin-left: auto; font-size: 10px; color: #8a94a6; }
+  /* the report Nora exports: the Poliris roadmap deck (as the Prestige Cellar roadmap): navy cover, "In short" numbers,
+     the week table; pages scroll in a PDF viewer */
+  .rv { flex: 1; display: flex; min-height: 0; background: #e9edf3; }
+  .rv-side { width: 112px; box-sizing: border-box; flex: 0 0 auto; padding: 14px 10px; display: flex; flex-direction: column; gap: 10px; background: #f6f8fb; border-right: 1px solid #e3e7ee; }
+  .rv-th { position: relative; width: 92px; height: 52px; border-radius: 3px; overflow: hidden; box-shadow: 0 0 0 1px #d8dee8; background: #fff; }
+  .rv-th .pg2 { position: absolute; left: 0; top: 0; transform: scale(.12778); transform-origin: 0 0; box-shadow: none; }
+  .rv-thw em { display: block; font-style: normal; font-size: 9px; color: #8a94a6; margin-top: 3px; }
+  .rv-main { flex: 1; position: relative; overflow: hidden; }
+  #rv-pages { position: absolute; left: 24px; top: 20px; }
+  .pg2 { position: relative; width: 720px; height: 405px; margin-bottom: 16px; background: #fff; overflow: hidden; box-shadow: 0 0 0 1px #dfe4ec, 0 18px 36px -24px rgba(22, 50, 141, .45); color: #0a0a0b; }
+  /* cover */
+  .pg2 { background: #f5f6fa; }
+  .pg2.cv { background: radial-gradient(260px 230px at 530px 200px, #2c5fd9 0%, #1c45a8 32%, rgba(20, 52, 140, 0) 100%), linear-gradient(100deg, #0d1c45 0%, #102657 55%, #163576 100%); color: #fff; }
+  .cv .orb { position: absolute; left: 0; top: 0; width: 720px; height: 405px; }
+  .cv .lg { position: absolute; left: 40px; top: 34px; display: flex; align-items: center; gap: 8px; font-size: 21px; font-weight: 600; letter-spacing: -.02em; }
+  .cv .lg img { width: 24px; height: 24px; }
+  .cv .eb { position: absolute; left: 40px; top: 150px; font-size: 10px; font-weight: 600; letter-spacing: .3em; color: #8fa8f0; }
+  .cv h3 { position: absolute; left: 38px; top: 164px; margin: 0; font-size: 48px; line-height: 54px; font-weight: 700; letter-spacing: -.035em; }
+  .cv .st2 { position: absolute; left: 40px; top: 228px; width: 300px; font-size: 14.5px; line-height: 19px; font-weight: 400; color: #e3e9f8; }
+  .cv .ms { position: absolute; left: 40px; top: 276px; font-size: 10.5px; font-weight: 600; color: #8fb0ff; }
+  .cv .ft { position: absolute; left: 40px; right: 40px; bottom: 30px; display: flex; gap: 120px; font-size: 10px; color: #c6d0e8; }
+  .cv .ft span + span { color: #8e9bbd; }
+  /* inner pages */
+  .pg2 .ey { position: absolute; left: 30px; top: 24px; font-size: 8.5px; font-weight: 700; letter-spacing: .22em; color: #2563eb; }
+  .pg2 .ey i { display: none; }
+  .pg2 h4 { position: absolute; left: 30px; top: 40px; margin: 0; font-size: 26px; line-height: 30px; font-weight: 800; letter-spacing: -.04em; color: #0a0f1f; }
+  .pg2 .sb2 { position: absolute; left: 30px; top: 74px; font-size: 11px; color: #5c6b7f; }
+  .pg2 .pf { position: absolute; left: 30px; right: 30px; bottom: 14px; padding-top: 8px; border-top: 1px solid #eceff4; display: flex; align-items: center; gap: 8px; font-size: 8px; color: #8a94a6; }
+  .pg2 .pf img { height: 11px; }
+  .pg2 .pf b { margin-left: auto; font-weight: 500; color: #8a94a6; }
+  .kp6 { position: absolute; left: 30px; right: 30px; top: 100px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kp6 div { border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0, 0 8px 16px -12px rgba(15, 23, 42, .3); padding: 10px 12px 11px; }
+  .kp6 small { display: block; font-size: 8.5px; color: #5c6b7f; }
+  .kp6 b { display: block; margin-top: 5px; font-size: 25px; line-height: 27px; font-weight: 700; letter-spacing: -.02em; color: #172a5c; }
+  .kp6 b em { font-style: normal; font-size: 13px; font-weight: 600; margin-left: 2px; }
+  .kp6 span { display: block; margin-top: 4px; font-size: 8.5px; line-height: 12px; color: #5c6b7f; }
+  .call { position: absolute; left: 30px; right: 30px; top: 326px; padding: 10px 14px; border-radius: 8px; background: #0f1f40; font-size: 10.5px; color: #fff; }
+  .call b { font-weight: 700; }
+  .wkl { position: absolute; right: 30px; top: 22px; width: 168px; padding: 7px 9px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; font-size: 8.5px; color: #3c4257; }
+  .wkl div { display: flex; align-items: center; gap: 6px; height: 13px; }
+  .wkl div i { width: 6px; height: 6px; border-radius: 50%; }
+  .wkl div b { margin-left: auto; font-weight: 600; }
+  .wkl div.tt { border-top: 1px solid #eceff4; margin-top: 3px; padding-top: 3px; font-weight: 700; }
+  .wt { position: absolute; left: 30px; right: 30px; top: 100px; font-size: 9px; }
+  .wt .hd2, .wt .rw { display: grid; grid-template-columns: 26px 70px 1fr 112px 118px 34px; gap: 8px; align-items: start; }
+  .wt .hd2 { padding: 5px 0; border-bottom: 1.5px solid #172a5c; font-size: 7.5px; font-weight: 700; letter-spacing: .1em; color: #5c6b7f; }
+  .wt .rw { padding: 9px 0; border-bottom: 1px solid #eceff4; }
+  .wt .rw > b:first-child { font-weight: 700; color: #172a5c; }
+  .wt .ch2 { display: inline-flex; height: 15px; padding: 0 6px; border-radius: 3px; color: #fff; font-size: 7.5px; font-weight: 700; align-items: center; }
+  .wt .ac b { display: block; font-size: 9.5px; font-weight: 700; color: #0a0a0b; }
+  .wt .ac span { display: block; margin-top: 2px; font-size: 8px; line-height: 11px; color: #5c6b7f; }
+  .wt .sc { font-size: 8.5px; line-height: 12px; color: #3c4257; }
+  .wt .sc code { display: block; font-family: ui-monospace, monospace; font-size: 7.5px; color: #8a94a6; }
+  .wt .who2 { display: inline-flex; height: 16px; padding: 0 6px; border-radius: 999px; font-size: 7.5px; font-weight: 600; align-items: center; gap: 4px; }
+  .wt .who2 img { width: 12px; height: 12px; border-radius: 50%; object-fit: cover; object-position: top; }
+  .wt .tm { text-align: right; font-size: 9.5px; font-weight: 700; }
+  .gt { position: absolute; left: 30px; right: 30px; top: 100px; font-size: 9px; }
+  .gt .gr { display: grid; grid-template-columns: 150px repeat(8, 1fr); gap: 5px; align-items: center; height: 30px; border-bottom: 1px solid #f1f2f4; }
+  .gt .gr small { display: block; font-size: 7px; letter-spacing: .1em; color: #8a94a6; }
+  .gt .gr b { font-size: 10px; }
+  .gt .gr i { height: 12px; border-radius: 3px; background: #e9edf3; }
+  .gt .gr i.on { background: #2f66e8; }
+
+  /* V12: the inner pages in the style of the Poliris 16-week roadmaps (BrainX Technologies): white pages, a blue eyebrow,
+     cards, the workstreams chart, the weeks, the tables */
+  .pg2:not(.cv) { background: #fff; }
+  .pg2 .ey { display: flex; align-items: center; gap: 6px; }
+  .pg2 .ey i { display: block; width: 14px; height: 1.5px; background: #2563eb; }
+  .d-c3 { position: absolute; left: 30px; right: 30px; top: 92px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .d-card { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 10px 12px; font-size: 8px; line-height: 11px; color: #5c6b7f; }
+  .d-card .n { font-size: 9px; font-weight: 700; color: #2563eb; }
+  .d-card b { display: block; margin: 3px 0 4px; font-size: 10.5px; line-height: 13px; font-weight: 700; color: #0a0f1f; }
+  .d-who { position: absolute; left: 30px; right: 30px; top: 210px; border-radius: 8px; background: #f3f6fc; padding: 10px 12px; }
+  .d-who small, .d-pri small { display: block; font-size: 7px; font-weight: 700; letter-spacing: .14em; color: #8a94a6; margin-bottom: 7px; }
+  .d-who .g { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .d-who .g div { font-size: 7.5px; line-height: 10px; color: #3c4257; }
+  .chip { display: inline-flex; height: 13px; padding: 0 5px; border-radius: 3px; font-size: 6.6px; font-weight: 600; align-items: center; white-space: nowrap; }
+  .d-who .chip { margin-bottom: 3px; }
+  .ch-p { background: #e3ecff; color: #1d4ed8; } .ch-i { background: #ece7ff; color: #5b3fd1; } .ch-y { background: #dcfce7; color: #15803d; }
+  .ch-w { background: #fff1dc; color: #b45309; } .ch-d { background: #ffe4dc; color: #c2410c; }
+  .d-note { position: absolute; left: 30px; top: 318px; font-size: 7.5px; color: #8a94a6; }
+  .d-pri { position: absolute; left: 30px; right: 30px; top: 86px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .d-pri > div { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 9px 11px 6px; }
+  .d-pri p { margin: 0 0 5px; display: flex; gap: 6px; font-size: 8px; line-height: 11px; color: #3c4257; }
+  .d-pri p i { font-style: normal; font-weight: 700; color: #2563eb; }
+  .d-pri p b { color: #0a0f1f; }
+  .d-k { position: absolute; left: 30px; right: 30px; top: 212px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .d-k div { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 9px 10px; font-size: 7.5px; line-height: 10px; color: #5c6b7f; }
+  .d-k b { display: block; font-size: 21px; line-height: 25px; font-weight: 700; letter-spacing: -.02em; color: #1d4ed8; }
+  .d-band { position: absolute; left: 30px; right: 30px; top: 296px; padding: 8px 12px; border-left: 3px solid #2563eb; background: #f3f6fc; font-size: 8.5px; color: #3c4257; }
+  .d-band b { color: #0a0f1f; }
+  .d-g { position: absolute; left: 30px; right: 30px; top: 80px; }
+  .d-g .hd, .d-g .r { display: grid; grid-template-columns: 112px 1fr 230px; gap: 12px; align-items: center; }
+  .d-g .hd { height: 14px; }
+  .d-g .wk { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; }
+  .d-g .hd .wk span { font-size: 6.5px; color: #8a94a6; text-align: center; }
+  .d-g .r { height: 33px; border-bottom: 1px solid #f1f2f4; }
+  .d-g .r small { display: block; font-size: 6.3px; font-weight: 700; letter-spacing: .12em; color: #8a94a6; }
+  .d-g .r b { font-size: 9px; color: #0a0f1f; }
+  .d-g .r .ds { font-size: 7.5px; line-height: 10px; color: #5c6b7f; }
+  .d-g .wk i { height: 10px; border-radius: 3px; background: #e9edf3; }
+  .d-g .wk i.on { background: #2f66e8; }
+  .d-ws { position: absolute; left: 30px; top: 98px; width: 206px; }
+  .d-ws > div { padding: 8px 0; border-bottom: 1px solid #eceff4; font-size: 7.5px; line-height: 10px; color: #5c6b7f; }
+  .d-ws b { display: flex; align-items: center; gap: 6px; font-size: 9.5px; color: #0a0f1f; margin-bottom: 3px; }
+  .d-ws b i { width: 8px; height: 8px; border-radius: 2px; }
+  .d-ws b em { margin-left: auto; font-style: normal; font-weight: 700; }
+  .d-ch { position: absolute; left: 258px; right: 30px; top: 96px; height: 250px; border-radius: 8px; box-shadow: 0 0 0 1px #e6e9f0; background: #fff; }
+  .d-lg { position: absolute; right: 30px; top: 22px; display: flex; gap: 9px; font-size: 6.5px; color: #5c6b7f; }
+  .d-lg span { display: flex; align-items: center; gap: 3px; }
+  .d-lg i { width: 6px; height: 6px; border-radius: 2px; }
+  .d-wks { position: absolute; left: 30px; right: 30px; top: 94px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .d-wk { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 8px 8px 3px; }
+  .d-wk h5 { margin: 0; display: flex; font-size: 9.5px; font-weight: 700; color: #0a0f1f; }
+  .d-wk h5 em { margin-left: auto; font-style: normal; font-weight: 600; font-size: 8px; color: #5c6b7f; }
+  .d-wk > small { display: block; font-size: 7.5px; color: #2563eb; margin: 2px 0 6px; }
+  .d-t { border-radius: 5px; box-shadow: 0 0 0 1px #edf0f5; border-left: 2px solid #3b82f6; padding: 5px 6px; margin-bottom: 6px; font-size: 7.5px; line-height: 10px; font-weight: 600; color: #0a0f1f; }
+  .d-t.tc { border-left-color: #1e3a8a; } .d-t.pc { border-left-color: #469c77; }
+  .d-t div { display: flex; align-items: center; margin-top: 4px; }
+  .d-t div em { margin-left: auto; font-style: normal; font-weight: 600; color: #3c4257; font-size: 7px; }
+  .d-tb { position: absolute; left: 30px; right: 30px; top: 92px; font-size: 7.8px; line-height: 10px; color: #3c4257; }
+  .d-tb .h, .d-tb .r { display: grid; gap: 10px; padding: 5px 0; border-bottom: 1px solid #eceff4; align-items: center; }
+  .d-tb .h { font-size: 6.6px; font-weight: 700; letter-spacing: .12em; color: #5c6b7f; border-bottom: 1.5px solid #172a5c; }
+  .d-tb .r b { color: #0a0f1f; font-weight: 700; }
+  .t8 .h, .t8 .r { grid-template-columns: 28px 200px 1fr 100px; }
+  .t9 .h, .t9 .r { grid-template-columns: 28px 130px 64px 1fr; }
+  .t10 { top: 80px; } .t10 .h, .t10 .r { grid-template-columns: 14px 1fr 70px 140px; padding: 4px 0; }
+  .t11 { top: 80px; } .t11 .h, .t11 .r { grid-template-columns: 1fr 90px 150px; padding: 4.5px 0; }
+  .d-ns { position: absolute; left: 30px; right: 30px; top: 96px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .d-ns div { border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px #e6e9f0; padding: 12px; font-size: 8px; line-height: 11px; color: #5c6b7f; }
+  .d-ns i { display: flex; width: 20px; height: 20px; border-radius: 50%; background: #0f1f40; color: #fff; font-style: normal; font-size: 9px; font-weight: 700; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .d-ns b { display: block; font-size: 10px; line-height: 13px; color: #0a0f1f; margin-bottom: 5px; }
+
+/* ══ overlays: the cursor, the label ═════════════════════════════════════ */
+.ov { position: absolute; inset: 0; pointer-events: none; }
+.cur { position: absolute; left: 0; top: 0; width: 22px; height: 28px; opacity: 0; }
+.cur-a, .cur-s { position: absolute; inset: 0; }
+.cur-s { transform-origin: 3px 3px; filter: drop-shadow(0 3px 6px rgba(15, 23, 42, .35)); }
+.rip { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+       border: 2px solid rgba(59, 130, 246, .75); background: rgba(59, 130, 246, .12); opacity: 0; }
+.lab { position: absolute; left: 0; top: 0; height: 30px; padding: 0 12px 0 5px; border-radius: 999px; background: #fff; opacity: 0;
+       box-shadow: 0 0 0 1px #e3e7ee, 0 10px 24px -14px rgba(22, 50, 141, .45); display: flex; align-items: center; gap: 8px;
+       font-size: 14px; font-weight: 600; color: #0b1533; white-space: nowrap; }
+.lab img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; object-position: top; background: #eef1f5; }
+.lab em { font-style: normal; font-weight: 500; color: #6a768a; }
+
+/* ── review bar ── */
+#ctl { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 50;
+       display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px;
+       background: rgba(14, 20, 32, .82); backdrop-filter: blur(8px); color: #fff;
+       font: 500 12.5px/1 "Geist", system-ui, sans-serif; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .6); }
+#ctl button { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; color: #0b0f17; font-size: 12px; cursor: pointer; }
+#ctl input { width: 340px; accent-color: #4d8dff; cursor: pointer; }
+#ctl span { font-variant-numeric: tabular-nums; opacity: .85; min-width: 84px; }
+body.bare #ctl { display: none; }
+body.shot { background: #fff; }
+body.shot #bg, body.shot .ov, body.shot .lab, body.shot .wg, body.shot #ctl { display: none; }
+body.shot .win { border-radius: 0; box-shadow: none; }
+</style>
+</head>
+
+<body>
+<div id="fit"><div id="stage">
+  <div id="bg"></div>
+
+  <!-- ═══ window 1 · Poli AI ═══ -->
+  <div id="cam">
+    <div class="win">
+      <div class="scr"><div class="app">
+        <aside class="sb" style="position:relative">
+          <div class="sb__head">
+            <img class="sb__logo" src="../../Logo-Poliris-1.png" width="218" height="54" alt="Poliris" />
+            <span class="sb__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></span>
+          </div>
+          <div class="sb__dot"></div>
+
+          <div class="sb__pad">
+            <div class="sb__proj-row">
+              <div class="sb__proj">
+                <img src="../../sony-com-logo.png" alt="" />
+                <span class="sb__proj-txt"><b>Sony</b><span>Active project</span></span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </div>
+              <span class="sb__cog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div>
+
+            <div class="sb__seg">
+              <a><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</a>
+              <a class="on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>Poli AI</a>
+            </div>
+
+            </div>
+          <div class="abs" style="left:14px;right:14px;top:187.6px;border-top:1px dotted #d8d8de"></div>
+          <div class="abs ps__new" style="left:12px;width:246.3px;top:202px;margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>New Chat</div>
+          <span class="ps__k" style="top:259.5px">CONVERSATIONS</span>
+          <div class="ps__search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search a conversation</div>
+          <span class="ps__k" style="top:350px;left:14px">TODAY</span>
+          <div class="ps__c" style="top:381.5px;background:#eef0f5;height:54.5px;padding-top:7.3px"><b>Win back the battery answers</b><span><img src="../film/assets/img/agent-nora.png" alt="" />just now</span></div>
+          <div class="ps__c" style="top:446.6px;padding-top:7.3px"><b>Citation plan for sony.com</b><span><img src="../film/assets/img/agent-nora.png" alt="" />2 h ago</span></div>
+          <div class="ps__c" style="top:511.7px;padding-top:7.3px"><b>Schema on the product pages</b><span><img src="../film/assets/img/agent-tom.png" alt="" />5 h ago</span></div>
+          <span class="ps__k" style="top:587.5px;left:14px">YESTERDAY</span>
+          <div class="ps__c" style="top:618.2px;padding-top:7.3px"><b>Content ideas for Consumer<br>Electronics</b><span><img src="../film/assets/img/agent-kate.png" alt="" />1 d ago</span></div>
+          <div class="sb__foot">
+            <div class="sb__dot" style="margin:0 0 8px"></div>
+            <div class="sb__user">
+              <b>SU</b>
+              <span class="sb__user-txt"><span>Sample User</span><span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>1 workspace</span></span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+            </div>
+          </div>
+        </aside>
+        <main id="poli">
+          <div class="ph">
+            <div class="ph__avs">
+              <img class="av" src="../../Illustrations/leo.webp" alt="" />
+              <img class="av" src="../film/assets/img/agent-kate.png" alt="" />
+              <span class="ph__nora"><img class="av" src="../film/assets/img/agent-nora.png" alt="" /><i class="ph__ring" id="ring"></i></span>
+              <img class="av" src="../film/assets/img/agent-tom.png" alt="" />
+            </div>
+            <div class="ph__t">Win back the battery answers</div>
+            <div class="ph__s">Started with <b>Nora</b> · 2 messages · 1 agent joined</div>
+            <span class="ph__btn" style="left:978.8px;width:82px"><span data-ic="share" data-s="16"></span>Share</span>
+            <span class="ph__btn" style="left:1075.5px;width:34px"><span data-ic="dots" data-s="16"></span></span>
+          </div>
+
+          <!-- the question, once it is sent -->
+          <div class="bub" id="bub">
+            <div class="bub__chips" id="bub-chips"></div>
+            <div class="bub__t">Using my AI visibility, keywords and site audit, build a plan so AI cites us when buyers ask about our battery.</div>
+          </div>
+          <div class="bub__acts" id="bub-acts"><span data-ic="copy" data-s="16"></span><span data-ic="pencil" data-s="16"></span></div>
+
+          <!-- Nora -->
+          <div class="nora" id="nora"><img src="../film/assets/img/agent-nora.png" alt="" /><b>Nora</b><span class="p1">GEO Analyst</span><span class="p2">Deep</span><span class="w">just now</span></div>
+          <div class="steps" id="steps"></div>
+          <div class="steps5" id="steps5"><span data-ic="chevron-right" data-s="13"></span>5 steps</div>
+          <div class="intro" id="intro"></div>
+          <div id="fcs"></div>
+          <div class="plan__h" id="plan-h">The plan, in priority order</div>
+          <div id="prs"></div>
+          <div class="ru" id="ru">
+            <span class="ru__i"><span data-ic="map" data-s="20"></span></span>
+            <span class="ru__t">Roadmap update · 3 tasks</span>
+            <span class="ru__s">Kate, Tom and Nora · week 1 · report of 12 pages</span>
+            <span class="ru__b ru__exp"><span class="a" id="exp-a"><span data-ic="download" data-s="15"></span>Export report</span><span class="a" id="exp-s" style="opacity:0"><i class="spin" style="border-color:#d4d4d8;border-top-color:#52525b"></i>Exporting…</span><span class="b" id="exp-b"><span data-ic="check" data-s="15"></span>Exported</span></span>
+            <span class="ru__b ru__upd"><span class="a"><span data-ic="refresh-cw" data-s="15"></span>Update roadmap</span><span class="a" id="upd-s" style="opacity:0"><i class="spin"></i>Updating…</span><span class="b" id="upd-b"><span data-ic="check" data-s="15"></span>Roadmap updated</span></span>
+          </div>
+
+          <!-- the composer: the three audits attached, the question typed -->
+          <div class="cmp" id="cmp">
+            <div class="cmp__chips" id="cmp-chips"></div>
+            <div class="cmp__ph" id="cmp-ph">Ask anything... (type @ to call a specific agent)</div>
+            <div class="cmp__tx" id="cmp-tx" style="opacity:0"><span id="cmp-txt"></span><i></i></div>
+            <span class="cmp__b" style="left:9px;color:#16a34a"><span data-ic="star" data-s="14"></span>Auto</span>
+            <span class="cmp__b" style="left:81.7px"><span data-ic="paperclip" data-s="14"></span>Attach</span>
+            <span class="cmp__b" style="left:165.7px;padding:0 9.5px"><span data-ic="mic" data-s="14"></span></span>
+            <span class="cmp__send"><i id="send-on"></i><span data-ic="send" data-s="15"></span></span>
+          </div>
+          <div class="pfoot">Powered by AI · Poli can make mistakes · always verify critical data</div>
+        </main>
+      </div></div>
+      <div class="ov">
+        <span class="rip" id="rip1"></span>
+        <div class="cur" id="cur1"><div class="cur-a" id="cur1-a"><svg class="cur-s" id="cur1-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ window 2 · the roadmap ═══ -->
+  <div id="cam2">
+    <div class="win">
+      <div class="scr"><div class="app">
+        <aside class="sb">
+          <div class="sb__head">
+            <img class="sb__logo" src="../../Logo-Poliris-1.png" width="218" height="54" alt="Poliris" />
+            <span class="sb__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></span>
+          </div>
+          <div class="sb__dot"></div>
+
+          <div class="sb__pad">
+            <div class="sb__proj-row">
+              <div class="sb__proj">
+                <img src="../../sony-com-logo.png" alt="" />
+                <span class="sb__proj-txt"><b>Sony</b><span>Active project</span></span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+              </div>
+              <span class="sb__cog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div>
+
+            <div class="sb__seg">
+              <a class="on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</a>
+              <a><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>Poli AI</a>
+            </div>
+
+            <div class="sb__row sb__road sb__road--on"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span>Roadmap</div>
+          </div>
+
+          <div class="sb__dot" style="margin-top:5px"></div>
+
+          <div class="sb__pad">
+            <div class="sb__label">MEASURE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></span>AI Reputation<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub">
+              <div class="sb__item"><i>W</i>Wireless Earbuds</div>
+              <div class="sb__item"><i>G</i>Gaming Consoles</div>
+              <div class="sb__item"><i>C</i>Consumer Electronics</div>
+              <div class="sb__item"><i>P</i>Professional Imaging and …</div>
+            </div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>Keywords<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>Sites<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+            <div class="sb__sub"><div class="sb__item"><img src="../../sony-com-logo.png" alt="" />sony.com</div></div>
+          </div>
+
+          <div class="sb__dot" style="margin-top:26.5px"></div>
+
+          <div class="sb__pad">
+            <div class="sb__label">ACTION</div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></span>Content<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>Implementation</div>
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg></span>Citations<span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>
+          </div>
+
+          <div class="sb__dot"></div>
+          <div class="sb__pad">
+            <div class="sb__row"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>Documentation</div>
+          </div>
+
+          <div class="sb__foot">
+            <div class="sb__dot" style="margin:0 0 8px"></div>
+            <div class="sb__user">
+              <b>SU</b>
+              <span class="sb__user-txt"><span>Sample User</span><span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>1 workspace</span></span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9a9aa2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+            </div>
+          </div>
+        </aside>
+        <main class="ws">
+          <h1 class="abs rh__t">SEO Plan</h1>
+          <div class="abs rh__s">Wireless Earbuds · 8-week roadmap</div>
+          <div class="abs rh__badge" id="badge"><img src="../film/assets/img/agent-nora.png" alt="" /><span data-ic="check" data-s="14"></span>Updated by Nora · 3 tasks</div>
+          <div class="abs rh__up"><span data-ic="sliders" data-s="18"></span>Update plan</div>
+          <div class="abs rh__chips"><span><span data-ic="globe" data-s="15"></span>sony.com</span><span><span data-ic="layers" data-s="15"></span>All LLMs</span><span><span data-ic="code" data-s="15"></span>Developer tasks included</span></div>
+          <div class="rd-body"><div id="rd-scroll">
+            <!-- Roadmap timeline -->
+            <div class="rcard" style="top:16.9px;height:470.4px" id="tl">
+              <div class="rc__t">Roadmap timeline</div>
+              <div class="rc__s">8 weeks, 24 tasks.</div>
+              <div class="tl__hint"><span data-ic="wand" data-s="14"></span>Select a task to view its issues and details.</div>
+              <div class="tl__tog"><span class="on"><span data-ic="calendar" data-s="16"></span>Timeline</span><span style="left:128px"><span data-ic="kanban" data-s="16"></span>Execution board</span></div>
+              <div class="tl__done">2 of 24 tasks done</div>
+              <div class="tl__wk1">Week 1</div>
+              <div id="tl-grid"></div>
+            </div>
+            <!-- Execution board -->
+            <div class="rcard" style="top:504.1px;height:1400px" id="eb">
+              <div class="rc__t">Execution board</div>
+              <div class="rc__s" style="top:50px">Every task by status. Drag a card to another column, or open it to launch or complete it.</div>
+              <div class="col" style="left:18.2px" id="col-b"><div class="col__h"><i style="background:#a3a3a3"></i>BACKLOG<b><span id="n-b">4</span></b></div><div class="slot" id="slot"></div></div>
+              <div class="col" style="left:376.6px" id="col-p"><div class="col__h"><i style="background:#0062ff"></i>IN PROGRESS<b><span id="n-p">2</span></b></div></div>
+              <div class="col" style="left:735px" id="col-c"><div class="col__h"><i style="background:#16a34a"></i>COMPLETED<b>2</b></div></div>
+            </div>
+          </div></div>
+        </main>
+      </div></div>
+      <div class="ov">
+        <span class="rip" id="rip2"></span>
+        <div class="cur" id="cur2"><div class="cur-a" id="cur2-a"><svg class="cur-s" id="cur2-s" viewBox="0 0 22 28" width="22" height="28"><path d="M2 2 L2 21.5 L7.2 16.8 L10.8 25 L14.4 23.4 L10.9 15.4 L18 15.4 Z" fill="#0a0a0b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the report Nora exports: the film's own deck -->
+  <div class="wg" id="w-rep" style="left:1004px;top:196px;width:880px;height:560px">
+    <div class="hfw" style="width:880px;height:560px"><div class="hfw__zoom">
+      <div class="hfw__bar"><i class="hfw__dot hfw__dot--r"></i><i class="hfw__dot hfw__dot--y"></i><i class="hfw__dot hfw__dot--g"></i><span class="hfw__name"><img class="hfw__name-icon" alt="" src="../film/assets/img/poliris-mark.png" />sony-battery-roadmap.pdf</span><span class="bar-r">12 pages · Poli AI</span></div>
+      <div class="rv">
+        <div class="rv-side" id="rv-side"></div>
+        <div class="rv-main"><div id="rv-pages">
+          <div class="pg2 cv"><svg class="orb" viewBox="0 0 720 405"><defs><filter id="cvb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs><circle cx="530" cy="202" r="62" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/><circle cx="530" cy="202" r="102" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/><circle cx="530" cy="202" r="142" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1"/><circle cx="530" cy="202" r="182" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/><circle cx="560" cy="54" r="1.8" fill="#dfe6f8"/><circle cx="482" cy="100" r="1.4" fill="#b9c8f0"/><circle cx="660" cy="82" r="1.2" fill="#b9c8f0"/><circle cx="392" cy="220" r="1.6" fill="#4f7df0"/><circle cx="578" cy="280" r="2.0" fill="#3d6cf0"/><circle cx="432" cy="316" r="1.3" fill="#b9c8f0"/><circle cx="618" cy="306" r="1.4" fill="#b9c8f0"/><circle cx="690" cy="160" r="1.1" fill="#dfe6f8"/><circle cx="450" cy="70" r="1.0" fill="#dfe6f8"/><defs><radialGradient id="cvg"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="fh" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="fv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect x="395" y="202" width="270" height="1.2" fill="url(#fh)"/><rect x="530" y="87" width="1.2" height="230" fill="url(#fv)"/><circle cx="530" cy="202" r="46" fill="url(#cvg)" opacity=".55"/><circle cx="530" cy="202" r="31" fill="#fff"/><circle cx="420" cy="106" r="22" fill="#fff" opacity="0.27" filter="url(#cvb)"/><circle cx="420" cy="106" r="16" fill="#fff" opacity="0.90"/><image href="../film/assets/img/engine-perplexity.png" x="412" y="98" width="15" height="15" opacity="0.78"/><circle cx="591" cy="118" r="22" fill="#fff" opacity="0.35" filter="url(#cvb)"/><circle cx="591" cy="118" r="16" fill="#fff" opacity="1.00"/><image href="../film/assets/img/engine-chatgpt.png" x="583" y="110" width="15" height="15" opacity="1.00"/><circle cx="436" cy="238" r="22" fill="#fff" opacity="0.27" filter="url(#cvb)"/><circle cx="436" cy="238" r="16" fill="#fff" opacity="0.90"/><image href="../film/assets/img/engine-claude.png" x="428" y="230" width="15" height="15" opacity="0.78"/><circle cx="660" cy="260" r="22" fill="#fff" opacity="0.35" filter="url(#cvb)"/><circle cx="660" cy="260" r="16" fill="#fff" opacity="1.00"/><image href="../film/assets/img/engine-gemini.png" x="652" y="252" width="15" height="15" opacity="1.00"/><circle cx="499" cy="341" r="22" fill="#fff" opacity="0.27" filter="url(#cvb)"/><circle cx="499" cy="341" r="16" fill="#fff" opacity="0.90"/><image href="../film/assets/img/engine-mistral.png" x="491" y="333" width="15" height="15" opacity="0.78"/><image href="../film/assets/img/poliris-mark.png" x="513" y="185" width="34" height="34"/></svg><div class="lg"><img alt="" src="../film/assets/img/poliris-mark.png" />Poliris</div>
+            <div class="eb">ROADMAP · OCTOBER 2026</div><h3>Sony</h3><div class="st2">8-week roadmap: get cited when buyers ask about your battery</div>
+            <div class="ms">Measured in ChatGPT, Gemini and Claude · United States</div>
+            <div class="ft"><span>sony.com · 8 weeks · 24 tasks · about 9 h of work per week</span><span>poliris.io</span></div></div>
+          <div class="pg2"><div class="ey"><i></i>BEFORE YOU START</div><h4>How to read this roadmap</h4><div class="d-c3"><div class="d-card"><span class="n">01</span><b>Built from the audit</b>Each task answers a finding of the October audit: AI answers in ChatGPT, Gemini and Claude, Google keywords, and the technical audit of 850 pages of sony.com.</div><div class="d-card"><span class="n">02</span><b>Ranked by your priorities</b>The order follows your priorities (products, markets, axes) and the value of each fix relative to the time it takes.</div><div class="d-card"><span class="n">03</span><b>The detail is in Poliris</b>This document gives the main lines. Your Poliris space details each task, page by page, and realigns the roadmap automatically.</div></div><div class="d-who"><small>WHO DOES WHAT</small><div class="g"><div><span class="chip ch-p">Poliris proposes, you approve</span><br>Poliris prepares the change (text, titles, structured data); you review it before it goes live.</div><div><span class="chip ch-i">Poliris identifies, you reach out</span><br>Poliris finds the sites to target and their contacts; you make the approach.</div><div><span class="chip ch-y">You</span><br>An action on your side: a setting, a profile, information to provide.</div><div><span class="chip ch-w">You or your web provider</span><br>Depending on your access: from the site admin, or through your provider.</div><div><span class="chip ch-d">Your web provider</span><br>A change to the hosting or the site code, not doable in Poliris.</div></div></div><div class="d-note">Times are estimates based on Poliris standards; much of the work is prepared by the tool.</div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>2</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>YOUR PRIORITIES</div><h4>A roadmap built on your priorities</h4><div class="d-pri"><div><small>PRODUCTS</small><p><i>1</i><span><b>Wireless Earbuds:</b> cited in 2 of the 9 battery answers</span></p><p><i>2</i><span><b>Consumer Electronics:</b> speaker pages with no battery hours</span></p></div><div><small>MARKETS</small><p><i>1</i><span><b>United States:</b> 64 % of AI answers, #2 behind Apple (71 %)</span></p><p><i>2</i><span><b>United Kingdom:</b> 58 % of AI answers, #3</span></p></div><div><small>AXES</small><p><i>1</i><span><b>Performance:</b> battery life, charging, noise cancelling on</span></p><p><i>2</i><span><b>Quality:</b> build and comfort</span></p><p><i>3</i><span><b>Price &amp; Value:</b> cost per hour of battery</span></p></div></div><div class="d-k"><div><b>8</b>weeks</div><div><b>72 h</b>in total, about 9 h per week</div><div><b>6</b>site pages written or rewritten</div><div><b>12</b>third-party sites and profiles</div><div><b>9</b>audit findings addressed</div></div><div class="d-band">These priorities can be changed in Poliris: <b>the roadmap recalculates at once</b>, without touching completed tasks or the current week.</div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>3</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>YOUR PRIORITIES</div><h4>What the roadmap does for each priority</h4><div class="d-g"><div class="hd"><span></span><span></span><div class="wk"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span></div></div><div class="r"><span><small>PRODUCT</small><b>Wireless Earbuds</b></span><span class="ds">Battery guide and markup (W1), charging case (W2), comparison (W3), lab results (W5)</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i></div></div><div class="r"><span><small>PRODUCT</small><b>Consumer Electronics</b></span><span class="ds">Battery hours and a shared FAQ on the speaker pages (W6)</span><div class="wk"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i></div></div><div class="r"><span><small>MARKET</small><b>United States</b></span><span class="ds">US review sites and best-of lists every week, US pages first</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div><div class="r"><span><small>MARKET</small><b>United Kingdom</b></span><span class="ds">whathifi.com listing (W2), UK versions of the two pages (W8)</span><div class="wk"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i></div></div><div class="r"><span><small>AXIS</small><b>Performance</b></span><span class="ds">Every battery question answered on one page (W1), proof from tests (W5)</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i></div></div><div class="r"><span><small>AXIS</small><b>Quality</b></span><span class="ds">Comfort and build in the guide and the comparison (W3, W6)</span><div class="wk"><i></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div><div class="r"><span><small>AXIS</small><b>Price &amp; Value</b></span><span class="ds">Cost per hour of battery in the comparison (W3, W7)</span><div class="wk"><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i></div></div><div class="r"><span><small>ASSISTANTS</small><b>ChatGPT, Gemini, Claude</b></span><span class="ds">Measured every week; the plan realigns on the results</span><div class="wk"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>4</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>ORGANISATION</div><h4>Three workstreams run in parallel</h4><div class="sb2">Work time per week and per workstream. The weekly measurements are automatic and take no time.</div><div class="d-ws"><div><b><i style="background:#1e3a8a"></i>Technical and structure<em>18 h</em></b>FAQ and Product markup, redirects, sitemap, speed of the battery pages.</div><div><b><i style="background:#3b82f6"></i>Content<em>30 h</em></b>The battery guide, the charging case, the comparison, the lab results: written by Kate, approved by you.</div><div><b><i style="background:#469c77"></i>Third-party sites<em>24 h</em></b>Links, listings and placements on the 12 sites AI quotes on battery.</div></div><div class="d-ch"><svg width="430" height="250" viewBox="0 0 430 250"><line x1="40" x2="415" y1="220" y2="220" stroke="#eef0f4"/><text x="32" y="223" text-anchor="end" font-size="8" fill="#8a94a6">0 h</text><line x1="40" x2="415" y1="182" y2="182" stroke="#eef0f4"/><text x="32" y="185" text-anchor="end" font-size="8" fill="#8a94a6">2 h</text><line x1="40" x2="415" y1="144" y2="144" stroke="#eef0f4"/><text x="32" y="147" text-anchor="end" font-size="8" fill="#8a94a6">4 h</text><line x1="40" x2="415" y1="106" y2="106" stroke="#eef0f4"/><text x="32" y="109" text-anchor="end" font-size="8" fill="#8a94a6">6 h</text><line x1="40" x2="415" y1="68" y2="68" stroke="#eef0f4"/><text x="32" y="71" text-anchor="end" font-size="8" fill="#8a94a6">8 h</text><line x1="40" x2="415" y1="30" y2="30" stroke="#eef0f4"/><text x="32" y="33" text-anchor="end" font-size="8" fill="#8a94a6">10 h</text><rect x="52" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="52" y="106.0" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="52" y="49.0" width="26" height="56.0" rx="2" fill="#469c77"/><text x="65" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W1</text><rect x="98" y="172.5" width="26" height="46.5" rx="2" fill="#1e3a8a"/><rect x="98" y="96.5" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="98" y="58.5" width="26" height="37.0" rx="2" fill="#469c77"/><text x="111" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W2</text><rect x="144" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="144" y="96.5" width="26" height="84.5" rx="2" fill="#3b82f6"/><rect x="144" y="49.0" width="26" height="46.5" rx="2" fill="#469c77"/><text x="157" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W3</text><rect x="190" y="153.5" width="26" height="65.5" rx="2" fill="#1e3a8a"/><rect x="190" y="77.5" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="190" y="39.5" width="26" height="37.0" rx="2" fill="#469c77"/><text x="203" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W4</text><rect x="236" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="236" y="106.0" width="26" height="75.0" rx="2" fill="#3b82f6"/><rect x="236" y="49.0" width="26" height="56.0" rx="2" fill="#469c77"/><text x="249" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W5</text><rect x="282" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="282" y="115.5" width="26" height="65.5" rx="2" fill="#3b82f6"/><rect x="282" y="49.0" width="26" height="65.5" rx="2" fill="#469c77"/><text x="295" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W6</text><rect x="328" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="328" y="125.0" width="26" height="56.0" rx="2" fill="#3b82f6"/><rect x="328" y="49.0" width="26" height="75.0" rx="2" fill="#469c77"/><text x="341" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W7</text><rect x="374" y="182.0" width="26" height="37.0" rx="2" fill="#1e3a8a"/><rect x="374" y="125.0" width="26" height="56.0" rx="2" fill="#3b82f6"/><rect x="374" y="49.0" width="26" height="75.0" rx="2" fill="#469c77"/><text x="387" y="236" text-anchor="middle" font-size="8" fill="#5c6b7f">W8</text><line x1="40" x2="415" y1="49" y2="49" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="4 3"/><text x="413" y="44" text-anchor="end" font-size="8" font-weight="600" fill="#ea580c">Average 9 h a week</text></svg></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>5</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>PHASE 1 · WEEKS 1 TO 4</div><div class="d-lg"><span><i style="background:#1e3a8a"></i>Technical and structure</span><span><i style="background:#3b82f6"></i>Content</span><span><i style="background:#469c77"></i>Third-party sites</span></div><h4>Make the battery facts readable</h4><div class="sb2">The first four weeks put every battery fact on a page AI can read, then on the sites it trusts.</div><div class="d-wks"><div class="d-wk"><h5>Week 1<em>9 h</em></h5><small>The three gaps</small><div class="d-t cc">Publish the WF-1000XM5 battery-life guide<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Add FAQ and Product schema to /support/battery-life<div><span class="chip ch-d">Your web provider</span><em>2 h</em></div></div><div class="d-t pc">Ask soundguys.com, rtings.com and headphonecheck.com for a link<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>3 h</em></div></div></div><div class="d-wk"><h5>Week 2<em>8 h 30</em></h5><small>Charging, explained</small><div class="d-t cc">Rewrite the charging-case page<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Fix 4 redirects to the battery pages<div><span class="chip ch-w">You or your web provider</span><em>2 h 30</em></div></div><div class="d-t pc">Claim the whathifi.com listing<div><span class="chip ch-y">You</span><em>2 h</em></div></div></div><div class="d-wk"><h5>Week 3<em>9 h</em></h5><small>Comparisons AI quotes</small><div class="d-t cc">Publish ‘WF-1000XM5 vs AirPods Pro 2: battery’, with its FAQ<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h 30</em></div></div><div class="d-t tc">Link the guide from the 3 product pages<div><span class="chip ch-p">Poliris proposes, you approve</span><em>2 h</em></div></div><div class="d-t pc">Pitch the battery test to techradar.com<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>2 h 30</em></div></div></div><div class="d-wk"><h5>Week 4<em>9 h 30</em></h5><small>Fast, complete pages</small><div class="d-t cc">Answer ‘how long do Sony earbuds last?’ on the support page<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Compress the images, add the pages to the sitemap<div><span class="chip ch-w">You or your web provider</span><em>3 h 30</em></div></div><div class="d-t pc">Follow up the 7 link requests<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>2 h</em></div></div></div></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>6</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>PHASE 2 · WEEKS 5 TO 8</div><div class="d-lg"><span><i style="background:#1e3a8a"></i>Technical and structure</span><span><i style="background:#3b82f6"></i>Content</span><span><i style="background:#469c77"></i>Third-party sites</span></div><h4>Become the source on battery life</h4><div class="sb2">Proof, lists and reviews: the sites AI reads start quoting Sony’s own numbers.</div><div class="d-wks"><div class="d-wk"><h5>Week 5<em>9 h</em></h5><small>Proof from tests</small><div class="d-t cc">Publish the lab results: 8 h with noise cancelling on<div><span class="chip ch-p">Poliris proposes, you approve</span><em>4 h</em></div></div><div class="d-t tc">Add HowTo markup to the charging tips<div><span class="chip ch-p">Poliris proposes, you approve</span><em>2 h</em></div></div><div class="d-t pc">Offer the test data to rtings.com<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>3 h</em></div></div></div><div class="d-wk"><h5>Week 6<em>9 h</em></h5><small>Every product, its hours</small><div class="d-t cc">Battery hours and a shared FAQ on the speaker pages<div><span class="chip ch-p">Poliris proposes, you approve</span><em>3 h 30</em></div></div><div class="d-t tc">Product markup on the 4 speaker pages<div><span class="chip ch-w">You or your web provider</span><em>2 h</em></div></div><div class="d-t pc">Claim 2 best-of listings<div><span class="chip ch-y">You</span><em>3 h 30</em></div></div></div><div class="d-wk"><h5>Week 7<em>9 h</em></h5><small>Reviews and lists</small><div class="d-t cc">Add cost per hour of battery to the comparison<div><span class="chip ch-p">Poliris proposes, you approve</span><em>3 h</em></div></div><div class="d-t tc">Speed up the comparison page<div><span class="chip ch-d">Your web provider</span><em>2 h</em></div></div><div class="d-t pc">Ask cnet.com for a link, buy one placement<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>4 h</em></div></div></div><div class="d-wk"><h5>Week 8<em>9 h</em></h5><small>Measure and adjust</small><div class="d-t cc">Refresh the guide with the week-8 results<div><span class="chip ch-p">Poliris proposes, you approve</span><em>3 h</em></div></div><div class="d-t tc">UK versions of the guide and the comparison<div><span class="chip ch-w">You or your web provider</span><em>2 h</em></div></div><div class="d-t pc">Approach 3 more best-of lists<div><span class="chip ch-i">Poliris identifies, you reach out</span><em>4 h</em></div></div></div></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>7</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>PAGE REWRITES</div><h4>The 6 pages, in order</h4><div class="sb2">Poliris prepares each page from what you provide (specs, tests, support answers); you approve before it goes live.</div><div class="d-tb t8"><div class="h"><span>WEEK</span><span>PAGE</span><span>WHAT IS ADDED</span><span>PRODUCT</span></div><div class="r"><span>W1</span><span><b>/support/battery-guide</b> (new)</span><span>Hours with and without noise cancelling, charging times, tips; FAQ markup</span><span>Wireless Earbuds</span></div><div class="r"><span>W1</span><span><b>/support/battery-life</b></span><span>FAQ and Product markup; the battery facts in plain text, not in images</span><span>Wireless Earbuds</span></div><div class="r"><span>W2</span><span><b>/charging-case</b></span><span>Quick charge, case capacity, wireless charging</span><span>Wireless Earbuds</span></div><div class="r"><span>W3</span><span><b>/compare/wf-1000xm5-vs-airpods-pro</b></span><span>Battery side by side, cost per hour, FAQ</span><span>Wireless Earbuds</span></div><div class="r"><span>W5</span><span><b>/support/battery-tests</b> (new)</span><span>Lab results, test method, HowTo markup</span><span>Wireless Earbuds</span></div><div class="r"><span>W6</span><span><b>/speakers/battery</b></span><span>Hours per model, shared FAQ, Product markup</span><span>Consumer Electronics</span></div></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>8</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>THIRD-PARTY SITES</div><h4>Be present on the sites the assistants read</h4><div class="sb2">Poliris finds these sites in the assistants’ sources, with the contacts to approach; you make the approach.</div><div class="d-tb t9"><div class="h"><span>WEEK</span><span>SITE</span><span>TYPE</span><span>WHY</span></div><div class="r"><span>W1</span><span><b>soundguys.com</b></span><span>Review</span><span>The source AI quotes most on earbuds battery life</span></div><div class="r"><span>W1</span><span><b>rtings.com</b></span><span>Review</span><span>Its battery tests are quoted in 6 of the 9 answers</span></div><div class="r"><span>W1</span><span><b>headphonecheck.com</b></span><span>Review</span><span>Quoted on charging-case capacity</span></div><div class="r"><span>W2</span><span><b>whathifi.com</b></span><span>Listing</span><span>Free listing, quoted by Gemini</span></div><div class="r"><span>W3</span><span><b>techradar.com</b></span><span>Media</span><span>“Best earbuds for battery life”, a list AI repeats</span></div><div class="r"><span>W6</span><span><b>tomsguide.com</b></span><span>Best-of</span><span>“Longest battery life earbuds”</span></div><div class="r"><span>W7</span><span><b>cnet.com</b></span><span>Media</span><span>Quoted by ChatGPT on value for money</span></div><div class="r"><span>W8</span><span><b>3 more lists</b></span><span>Best-of</span><span>Chosen on the week-8 measurements</span></div></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>9</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>LINK WITH THE AUDIT</div><h4>Every audit finding has its week</h4><div class="d-tb t10"><div class="h"><span>#</span><span>AUDIT FINDING</span><span>ADDRESSED IN</span><span>WHO</span></div><div class="r"><span>1</span><span>Cited in 2 of the 9 battery answers</span><span>W1 to W8</span><span><span class="chip ch-i">Poliris identifies, you reach out</span></span></div><div class="r"><span>2</span><span>The battery page scores 45: no FAQ, no product data</span><span>W1</span><span><span class="chip ch-d">Your web provider</span></span></div><div class="r"><span>3</span><span>Content Access 21 %: the battery facts are in images</span><span>W1, W2</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>4</span><span>No page answers “how long does the battery last?”</span><span>W1, W4</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>5</span><span>0 of 3 battery searches in Google’s top 100</span><span>W1, W3</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>6</span><span>4 redirects on the way to the battery pages</span><span>W2</span><span><span class="chip ch-w">You or your web provider</span></span></div><div class="r"><span>7</span><span>Performance rated Weak by AI, below Apple and Bose</span><span>W1 to W8</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div><div class="r"><span>8</span><span>The sources quoted on battery do not mention Sony</span><span>W1, W5, W7</span><span><span class="chip ch-i">Poliris identifies, you reach out</span></span></div><div class="r"><span>9</span><span>Speaker pages without battery hours</span><span>W6</span><span><span class="chip ch-p">Poliris proposes, you approve</span></span></div></div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>10</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>TRACKING</div><h4>Automatic measurements every week</h4><div class="d-tb t11"><div class="h"><span>INDICATOR</span><span>TODAY</span><span>ROADMAP OBJECTIVE</span></div><div class="r"><span>Battery answers that cite Sony (AI)</span><span><b>2 of 9</b></span><span>8 of 9 by week 8</span></div><div class="r"><span>AI answers that mention Sony (US)</span><span><b>64 %</b></span><span>75 % and over</span></div><div class="r"><span>Battery searches where you rank (Google)</span><span><b>0 of 3</b></span><span>3 of 3 in the top 10</span></div><div class="r"><span>Score of the battery page</span><span><b>45 / 100</b></span><span>85 and over after week 1</span></div><div class="r"><span>Content Access of the battery pages</span><span><b>21 %</b></span><span>80 % after week 2</span></div><div class="r"><span>Pages with FAQ and Product markup</span><span><b>0 of 6</b></span><span>6 of 6</span></div><div class="r"><span>Third-party sites that cite Sony on battery</span><span><b>2 of 12</b></span><span>9 of 12 by week 8</span></div><div class="r"><span>Sentiment on Performance (AI)</span><span><b>Weak</b></span><span>Strong</span></div></div><div class="call" style="top:332px">Poliris reruns <b>every measurement once a week</b>: visibility in the assistants and technical audit. If the results require it, the roadmap is realigned automatically.</div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>11</b></div></div>
+          <div class="pg2"><div class="ey"><i></i>NEXT STEPS</div><h4>To start week 1</h4><div class="d-ns"><div><i>1</i><b>Validate the priorities</b>The order of the products, markets and axes, and the launch of the battery guide.</div><div><i>2</i><b>Gather the facts</b>Battery tests, charging times and support answers, for the guide and the FAQ. Before week 1.</div><div><i>3</i><b>Brief your web developer</b>FAQ and Product markup on /support/battery-life: 2 h, the code is ready in Poliris. Week 1.</div><div><i>4</i><b>Approve Nora’s outreach</b>7 link requests and 1 free listing, drafted and ready to send. Week 1.</div></div><div class="call" style="top:250px"><b>Your priorities stay editable.</b> In Poliris, before you confirm a change, you see which tasks move forward or back; completed tasks and the current week do not move.</div><div class="pf"><img alt="" src="../film/assets/img/poliris-logo.png" />Sony · 8-week roadmap: battery · October 2026<b>12</b></div></div>
+        </div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- agents at work: Kate (content), Tom (technical fixes), Nora (citations) -->
+
+  <div class="lab" id="lp"><img alt="" src="../film/assets/img/agent-nora.png" />Nora <em>· the plan</em></div>
+</div></div>
+
+<div id="ctl">
+  <button id="pp" aria-label="Play or pause">❚❚</button>
+  <input id="sc" type="range" min="0" max="27" step="0.01" value="0" />
+  <span id="tt">0.00 / 27.00</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var DUR = 27.0;                       // F 60.2 → T5 87.2, from tools/clock.py
+  var q = new URLSearchParams(location.search);
+  var IMG = "../film/assets/img/";
+  var ICONS = {
+    "share": '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+    "dots": '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+    "copy": '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    "pencil": '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
+    "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+    "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+    "map": '<path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/>',
+    "download": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "refresh-cw": '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+    "star": '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+    "paperclip": '<path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/>',
+    "mic": '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>',
+    "send": '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
+    "wrench": '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    "sliders": '<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>',
+    "globe": '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+    "layers": '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+    "code": '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    "wand": '<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/>',
+    "calendar": '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    "kanban": '<path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/>',
+    "link": '<path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/>',
+    "clock": '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    "play": '<polygon points="6 3 20 12 6 21 6 3"/>',
+    "search": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    "plus": '<path d="M5 12h14"/><path d="M12 5v14"/>'
+  };
+  function ic(name, size) {
+    return '<svg class="ico" xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
+  }
+
+  // ════ Poli AI ════
+  var ATT = [["AI", "#2563eb", "AI Visibility", "Wireless Earbuds"], ["K", "#7c3aed", "Keywords", "48 searches"], ["S", "#16a34a", "Site audit", "sony.com"]];
+  function chip(a) { return '<span class="chip3"><i style="background:' + a[1] + '">' + a[0] + '</i>' + a[2] + ' <em>· ' + a[3] + '</em></span>'; }
+  document.getElementById("cmp-chips").innerHTML = ATT.map(chip).join("");
+  document.getElementById("bub-chips").innerHTML = ATT.map(chip).join("");
+
+  var STEPS = ["Reading AI visibility", "Reading keywords", "Reading site audit", "Comparing competitors", "Building the plan"];
+  document.getElementById("steps").innerHTML = STEPS.map(function (s, k) {
+    return '<span class="step" id="step' + k + '">' + ic("wrench", 13) + s + '<i class="sp"></i><span class="ok">' + ic("check", 13) + '</span></span>';
+  }).join("");
+  var INTRO = "Here's what keeps AI from citing you on battery questions, and the plan I'd add to your roadmap.";
+  document.getElementById("intro").innerHTML = INTRO.split(" ").map(function (w) { return "<span>" + w + " </span>"; }).join("");
+
+  // her findings: AI answers, Google, your site
+  var FIND = [["AI", "#e8f0fe", "#1d4ed8", "AI answers", 2, "/9", "battery answers cite you", "AI quotes rtings.com and soundguys.com instead"],
+              ["G", "#fff1e0", "#c2410c", "Google", 0, "/3", "battery searches rank", "“earbuds battery life”: not in the top 100"],
+              ["S", "#fde4e4", "#c81e1e", "Your site", 45, "/100", "/support/battery-life", "No FAQ, no product data"]];
+  document.getElementById("fcs").innerHTML = FIND.map(function (f, k) {
+    return '<div class="fc" id="fc' + k + '" style="left:' + (193 + 250 * k).toFixed(1) + 'px">' +
+      '<span class="fc__k"><i style="background:' + f[1] + ';color:' + f[2] + '">' + f[0] + '</i>' + f[3] + '</span>' +
+      '<span class="fc__v"><b id="fv' + k + '">0</b><span>' + f[5] + '</span></span>' +
+      '<span class="fc__s">' + f[6] + '</span><span class="fc__hr"></span><span class="fc__f">' + f[7] + '</span></div>';
+  }).join("");
+
+  // the plan, in priority order
+  var PLAN = [["#16a34a", "#e6f6f1", "#00654a", "Long-term content plan", "Publish a WF-1000XM5 battery-life guide", "kate", "Kate · 4 h"],
+              ["#2563eb", "#eef4ff", "#2563eb", "Technical fixes", "Add FAQ and Product schema to /support/battery-life", "tom", "Tom · 2 h"],
+              ["#56b4e9", "#eaf5fc", "#1f6f96", "Backlinks &amp; outreach", "Get cited by soundguys.com, rtings.com and headphonecheck.com", "nora", "Nora · 3 h"]];
+  document.getElementById("prs").innerHTML = PLAN.map(function (p, k) {
+    return '<div class="pr" id="pr' + k + '" style="top:' + (539 + 47.4 * k).toFixed(1) + 'px"><span class="pr__n" style="background:' + p[0] + '">' + (k + 1) + '</span>' +
+      '<span class="pr__tag" style="background:' + p[1] + ';color:' + p[2] + '">' + p[3] + '</span><span class="pr__t">' + p[4] + '</span>' +
+      '<span class="pr__who"><img src="' + IMG + 'agent-' + p[5] + '.png" alt="" />' + p[6] + '</span></div>';
+  }).join("");
+
+  // ════ the roadmap ════
+  var WX = [630.8, 699.3, 767.8, 837.2, 905.8, 975.1, 1043.8];          // W2 … W8, from the card's left
+  var LANES = [
+    ["Technical fixes", "var(--c-tech)", 186.9, [3, 4, 6, 8], ["tom", "FAQ and Product schema on /support/battery-life"]],
+    ["Content optimization", "var(--c-opt)", 247.1, [2, 3, 5, 6, 7], null],
+    ["Backlinks &amp; outreach", "var(--c-back)", 307.3, [3, 4, 7, 8], ["nora", "Get cited by soundguys, rtings and headphonecheck"]],
+    ["Long-term content plan", "var(--c-long)", 366.8, [2, 3, 5, 6, 8], ["kate", "Publish ‘WF-1000XM5 battery life guide’"]],
+    ["Decisions", "#a3a3a3", 427, [4, 7], "dec"]
+  ];
+  document.getElementById("tl-grid").innerHTML =
+    WX.map(function (x, k) { return '<span class="tl__w" style="left:' + x + 'px">W' + (k + 2) + '</span>'; }).join("") +
+    [156.1, 217.1, 276.5, 336.7, 396.9, 456.4].map(function (y) { return '<span class="tl__hr" style="top:' + y + 'px"></span>'; }).join("") +
+    LANES.map(function (l, k) {
+      var dec = l[4] === "dec";
+      return '<div class="lane" id="lane' + k + '" style="top:' + l[2] + 'px"><span class="lane__hl"></span><i style="background:' + l[1] + '"></i><span>' + l[0] + '</span></div>' +
+        l[3].map(function (w) {
+          return '<span class="bar' + (dec ? ' bar--dec' : '') + '" style="top:' + l[2] + 'px;left:' + (WX[w - 2] - 30.5) + 'px;width:61px;' + (dec ? '' : 'background:' + l[1]) + '"></span>';
+        }).join("") +
+        (dec ? '<span class="bar bar--w1 bar--dec" style="top:' + l[2] + 'px">Confirm target AI engines to track</span>'
+             : l[4] ? '<span class="bar bar--w1" id="w1-' + k + '" style="top:' + l[2] + 'px;background:' + l[1] + '"><img class="av" src="' + IMG + 'agent-' + l[4][0] + '.png" alt="" /><span>' + l[4][1] + '</span></span>' : "");
+    }).join("");
+
+  // the board's cards: TASKS of the onboarding flow's roadmap, with Nora's
+  // battery tasks in the places the frames show them
+  var NAME = { kate: "Kate", tom: "Tom", nora: "Nora", leo: "Leo" };
+  // Leo is not among the film's agents; his portrait is the site's own
+  function face(who) { return who === "leo" ? "../../Illustrations/leo.webp" : IMG + "agent-" + who + ".png"; }
+  var CAT = { technical: "Technical fixes", content_optimize: "Content optimization", content_create: "Long-term content plan",
+              internal_linking: "Internal linking", backlink: "Backlinks &amp; outreach", decision: "Decisions" };
+  var CARDS = {
+    c5: { n: 5, cat: "content_create", owner: "kate", pages: 1, hours: 4, title: "Publish ‘WF-1000XM5 battery life guide’",
+          detail: "Answers the 3 battery prompts where AI cites review sites and skips Sony.", btn: "go" },
+    c6: { n: 6, cat: "internal_linking", owner: "kate", pages: 12, hours: 2, title: "Link product pages to the comparison guide",
+          detail: "Add contextual internal links from every relevant product page back to the new buying guide.", btn: "go" },
+    c7: { n: 7, cat: "content_create", owner: "kate", pages: 1, hours: 8, title: "Publish ‘Wireless Earbuds Buying Guide 2026’",
+          detail: "Long-form guide covering ANC, battery life, fit and price tiers, written to be quotable by AI assistants.", btn: "go" },
+    c8: { n: 8, cat: "backlink", owner: "nora", pages: 0, hours: 3, title: "Get cited by soundguys.com, rtings.com and headphonecheck.com",
+          detail: "Send the battery figures and a briefing doc to the review sites AI quotes most.", btn: "go" },
+    c3: { n: 3, cat: "technical", owner: "tom", pages: 3, hours: 2, late: 1, title: "Add FAQ and Product schema to /support/battery-life",
+          detail: "The battery page scores 45: no FAQ, no product data. Write the markup so AI tools can read the facts.", btn: "ok" },
+    c4: { n: 4, cat: "content_optimize", owner: "kate", pages: 1, hours: 5, title: "Rewrite ‘best wireless earbuds’ comparison page for AI citability",
+          detail: "Restructure the page with clear claims, specs tables and sourced comparisons so LLMs can quote it directly.", btn: "ok" },
+    c1: { n: 1, cat: "technical", owner: "tom", pages: 1, hours: 4, title: "Run full technical SEO/GEO audit",
+          detail: "Crawl the full site, check robots.txt / llms.txt, and confirm every product page is renderable by AI crawlers." },
+    c2: { n: 2, cat: "decision", owner: "leo", pages: 0, hours: 1, title: "Confirm target AI engines to track",
+          detail: "Lock in ChatGPT, Gemini, Claude and Perplexity as the tracked engines for this plan's prompt set." }
+  };
+  function card(id) {
+    var t = CARDS[id];
+    return '<div class="ac cat-' + t.cat + (t.late ? " late" : "") + '" id="' + id + '">' +
+      '<div class="ac__hd"><span class="ac__hl"><span class="ac__n">' + t.n + '</span><span class="ac__cat">' + CAT[t.cat] + '</span></span>' +
+      (t.late ? '<span class="ac__late">' + ic("clock", 12) + 'Late · Week 1</span>' : "") + '</div>' +
+      '<p class="ac__t">' + t.title + '</p><p class="ac__d">' + t.detail + '</p>' +
+      '<div class="ac__f"><img class="av" src="' + face(t.owner) + '" alt="" /><span class="ac__o">' + NAME[t.owner] + '</span>' +
+      (t.pages ? '<span class="ac__pg">' + ic("link", 11) + (t.pages === 1 ? "1 page" : t.pages + " pages") + '</span>' : "") +
+      '<span class="ac__h">' + ic("clock", 11) + t.hours + ' h</span></div>' +
+      '<span class="ac__vd">' + ic("chevron-down", 13) + 'View details</span>' +
+      (t.btn === "go" ? '<span class="ac__btn ac__btn--go">' + ic("play", 13) + 'Launch task' +
+                        (id === "c5" ? '<span class="ac__sent" id="sent">' + ic("check", 14) + 'Sent to Kate</span>' : "") + '</span>'
+       : t.btn === "ok" ? '<span class="ac__btn ac__btn--ok">' + ic("check", 13) + 'Mark accomplished</span>' : "") + '</div>';
+  }
+  // each column stacks its cards; the drag measures them when it runs
+  function list(ids) { return '<div class="col__list">' + ids.map(card).join("") + '</div>'; }
+  document.getElementById("col-b").insertAdjacentHTML("beforeend", list(["c5", "c6", "c7", "c8"]));
+  document.getElementById("col-p").insertAdjacentHTML("beforeend", list(["c3", "c4"]));
+  document.getElementById("col-c").insertAdjacentHTML("beforeend", list(["c1", "c2"]));
+
+  // icons written into the static markup
+  document.querySelectorAll("[data-ic]").forEach(function (el) {
+    el.outerHTML = ic(el.dataset.ic, +el.dataset.s).replace('class="ico"', 'class="ico ' + el.className + '"' + (el.getAttribute("style") ? ' style="' + el.getAttribute("style") + '"' : ""));
+  });
+
+  // the deck's thumbnails: its own pages, small (film/index.html)
+  (function () {
+    var side = document.getElementById("rv-side");
+    Array.prototype.forEach.call(document.querySelectorAll("#rv-pages .pg2"), function (pg, k) {
+      var w = document.createElement("div"); w.className = "rv-thw";
+      w.innerHTML = '<div class="rv-th" id="rvt' + k + '"></div><em>' + (k + 1) + '</em>';
+      w.firstChild.appendChild(pg.cloneNode(true)); side.appendChild(w);
+    });
+  })();
+
+  var stage = document.getElementById("stage");
+  function fit() {
+    if (document.body.classList.contains("shot")) return;
+    var d = document.documentElement;
+    var s = Math.min(d.clientWidth / 1920, d.clientHeight / 1080);
+    stage.style.transform = "translate(-50%, -50%) scale(" + s + ")";
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);  // page zoom
+  if (document.fonts) document.fonts.ready.then(fit);
+  fit();
+
+  var tl = gsap.timeline({ paused: true });
+
+  // ── camera: the live window; #cam until the cards, #cam2 after ──
+  var MX = 120, MY = 80;
+  function clampTo(v, size, frame, m) { return size >= frame ? Math.min(m, Math.max(frame - size - m, v)) : Math.max(-m, Math.min(frame - size + m, v)); }
+  function camState(cx, cy, S, fx, fy, keep) {
+    var w = S * 1120, x = fx - S * cx;
+    x = keep ? clampTo(x, w, 1920, MX) : w <= 1920 ? (1920 - w) / 2 : Math.min(0, Math.max(1920 - w, x));
+    return { x: x, y: clampTo(fy - S * cy, S * 730, 1080, MY), scale: S };
+  }
+  var REST = [560, 365, 1.14, 960, 512];
+  var live = "#cam";
+  function cam(t, d, s, ease) { tl.to(live, Object.assign(camState.apply(null, s), { duration: d, ease: ease || "power2.inOut" }), t); }
+
+  // ── cards: [centre x, centre y, scale, rotation Y, opacity] in screen pixels ──
+  var C_REST = [960, 512, 1.14, 0, 1], L1 = [176, 262, 0.24, 18, 1];
+  function cs(st) { return { x: st[0] - 560, y: st[1] - 365, scale: st[2], rotationY: st[3], opacity: st[4], transformPerspective: 1600 }; }
+  function fade(st, o) { return [st[0], st[1], st[2], st[3], o]; }
+  function off(st, dx) { return [st[0] + dx, st[1], st[2] * 0.96, st[3], 0]; }
+  function cardTo(id, t, d, st, ease) { tl.to(id, Object.assign(cs(st), { duration: d, ease: ease || "power3.inOut" }), t); }
+  function labAt(id, st, t, on) {
+    var y = st[1] - 365 * st[2] - 40;
+    tl.set("#" + id, { x: st[0] - 95, y: y + 6 }, t - 0.01);
+    tl.fromTo("#" + id, { opacity: 0, y: y + 6 }, { opacity: 1, y: y, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+    if (on != null) tl.to("#" + id, { opacity: 0, duration: 0.3 }, on);
+  }
+
+  // ── floating windows: arrive a little big and blurred, settle; leave faster ──
+  function enter(id, t) {
+    tl.fromTo("#" + id, { opacity: 0, x: 70, y: 10, scale: 1.08, filter: "blur(8px)" },
+      { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out", immediateRender: false }, t);
+    // a filter left on, even at 0px, keeps the window on a soft layer: drop it once it has landed
+    tl.set("#" + id, { filter: "none" }, t + 0.71);
+  }
+  function leave(id, t) { tl.to("#" + id, { opacity: 0, x: 60, scale: 0.96, filter: "blur(6px)", duration: 0.4, ease: "power2.in" }, t); }
+
+  // ── the cursor of each window (mockup coordinates) ──
+  var C = "1";
+  function curShow(t, x, y, fade) { tl.set("#cur" + C, { x: x, y: y }, t); tl.to("#cur" + C, { opacity: 1, duration: fade || 0 }, t); }
+  function curHide(t, fade) { if (fade) tl.to("#cur" + C, { opacity: 0, duration: fade }, t); else tl.set("#cur" + C, { opacity: 0 }, t); }
+  function curMove(t, d, x, y, arc) {
+    tl.to("#cur" + C, { x: x, y: y, duration: d, ease: "power2.inOut" }, t);
+    tl.to("#cur" + C + "-a", { y: -(arc == null ? 14 : arc), duration: d / 2, ease: "sine.out", yoyo: true, repeat: 1 }, t);
+  }
+  function curClick(t, x, y) {
+    tl.to("#cur" + C + "-s", { scale: 0.84, duration: 0.08, ease: "power2.in" }, t);
+    tl.to("#cur" + C + "-s", { scale: 1, duration: 0.2, ease: "power2.out" }, t + 0.1);
+    tl.fromTo("#rip" + C, { x: x + 3, y: y + 3, scale: 0.4, opacity: 1 }, { scale: 1.2, opacity: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+  }
+  function clickAt(t0, d, cx, cy, tc, arc) { curMove(t0, d, cx - 3, cy - 3, arc); curClick(tc, cx - 3, cy - 3); }
+  function rise(sel, t, d) { tl.fromTo(sel, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: d || 0.35, ease: "power2.out", immediateRender: false }, t); }
+  function countTo(el, to, t, d) {
+    var o = { v: 0 };
+    tl.to(o, { v: to, duration: d, ease: "power2.out", onUpdate: function () { el.textContent = Math.round(o.v); } }, t);
+  }
+
+  // ════ F · Poli AI: the question, Nora's steps, her findings and plan;
+  //        Export report (the deck); Update roadmap ════
+  // The frames are a recording timed on the film's clock: the audits are
+  // attached 60.3 → 61.1, the question typed 61.3 → 63.6 and sent, Nora's
+  // steps run 64.2 → 65.0, her answer and plan come in 65.3 → 69.9, Export at
+  // 70.3, Update roadmap at 74.7.
+  var t = 0;
+  tl.set("#cam", camState.apply(null, REST), 0);
+  tl.set("#cam2", cs([1744, 560, 0.3, -18, 0]), 0);
+  tl.set("#rv-pages", { y: 0 }, 0);
+  tl.set(".rv-th", { boxShadow: "0 0 0 1px #d8dee8" }, 0); tl.set("#rvt0", { boxShadow: "0 0 0 2px #0062ff" }, 0);
+
+  // the three audits land in the composer, one after the other
+  document.querySelectorAll("#cmp-chips .chip3").forEach(function (c, k) {
+    tl.fromTo(c, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, t + 0.1 + 0.3 * k);
+  });
+  // the question, typed
+  var Q = "Using my AI visibility, keywords and site audit, build a plan so AI cites us when buyers ask about our battery.";
+  var typed = { n: 0 }, txt = document.getElementById("cmp-txt");
+  tl.set("#cmp-ph", { opacity: 0 }, t + 1.07); tl.set("#cmp-tx", { opacity: 1 }, t + 1.07);
+  tl.to(typed, { n: Q.length, duration: 2.3, ease: "none", onUpdate: function () { txt.textContent = Q.slice(0, Math.round(typed.n)); txt.parentNode.scrollLeft = 1e4; } }, t + 1.07);
+  tl.to("#send-on", { opacity: 1, duration: 0.15 }, t + 1.1);
+  // sent: the composer empties, the question goes up into the thread
+  tl.to(["#cmp-chips", "#cmp-tx"], { opacity: 0, duration: 0.2 }, t + 3.5);
+  tl.to("#send-on", { opacity: 0, duration: 0.2 }, t + 3.5);
+  tl.set("#cmp-ph", { opacity: 1 }, t + 3.7);
+  tl.fromTo("#bub", { opacity: 0, y: 420 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, t + 3.53);
+  tl.to("#bub-acts", { opacity: 1, duration: 0.2 }, t + 3.85);
+  // Nora answers: her steps, one by one, then folded away
+  tl.to("#ring", { opacity: 1, duration: 0.3 }, t + 3.83);
+  rise("#nora", t + 3.83, 0.3);
+  STEPS.forEach(function (s, k) {
+    var t0 = t + 4.0 + 0.16 * k;
+    tl.to("#step" + k, { opacity: 1, duration: 0.15 }, t0);
+    tl.set("#step" + k + " .sp", { display: "none" }, t0 + 0.14);
+    tl.set("#step" + k + " .ok", { display: "flex" }, t0 + 0.14);
+  });
+  tl.to("#steps", { opacity: 0, duration: 0.15 }, t + 4.83);
+  tl.to("#steps5", { opacity: 1, duration: 0.2 }, t + 4.85);
+  // her answer: the sentence, the three findings, the plan, the roadmap update
+  tl.to("#intro span", { opacity: 1, duration: 0.08, stagger: 0.46 / 18 }, t + 5.07);
+  [6.33, 7.03, 7.9].forEach(function (d, k) {
+    rise("#fc" + k, t + d, 0.35);
+    countTo(document.getElementById("fv" + k), FIND[k][4], t + d + 0.05, 0.5);
+  });
+  rise("#plan-h", t + 8.37, 0.25);
+  [8.37, 8.6, 8.9].forEach(function (d, k) { rise("#pr" + k, t + d, 0.3); });
+  rise("#ru", t + 9.33, 0.35);
+
+  cam(t + 0.05, 0.8, [669, 600, 1.5, 960, 640]);       // the composer: three audits attached, the question typed
+  cam(t + 0.85, 2.6, [669, 610, 1.53, 960, 640], "sine.inOut");
+  cam(t + 3.5, 0.8, [669, 200, 1.6, 960, 430]);        // sent: Nora answers, her steps
+  cam(t + 4.3, 0.9, [669, 360, 1.42, 960, 540]);       // her findings: AI answers, Google, your site; then the plan
+  cam(t + 5.2, 3.6, [672, 400, 1.38, 960, 560], "sine.inOut");
+  cam(t + 8.85, 0.7, [700, 470, 1.45, 960, 580]);      // the plan's two outcomes
+  curShow(t + 9.2, 860, 640, 0.2);
+  clickAt(t + 9.25, 0.75, 745.6, 570.1, t + 10.1, 10); // Export report
+  tl.to("#exp-a", { opacity: 0, duration: 0.15 }, t + 10.12); tl.to("#exp-s", { opacity: 1, duration: 0.15 }, t + 10.12);
+  tl.to("#exp-s", { opacity: 0, duration: 0.2 }, t + 10.75); tl.to("#exp-b", { opacity: 1, duration: 0.2 }, t + 10.75);
+  cam(t + 10.15, 0.9, [560, 365, 0.95, 590, 540, 1]);  // room for the report
+  enter("w-rep", t + 10.4);
+  // the deck, page after page: the cover, the priorities, the three workstreams, the first four weeks
+  tl.to("#rv-pages", { y: -842, duration: 0.65, ease: "power2.inOut" }, t + 11.25);
+  tl.to("#rv-pages", { y: -1684, duration: 0.65, ease: "power2.inOut" }, t + 12.35);
+  tl.to("#rv-pages", { y: -2105, duration: 0.5, ease: "power2.inOut" }, t + 13.4);
+  [[0, 2, 11.25], [2, 4, 12.35], [4, 5, 13.4]].forEach(function (h) {
+    tl.to("#rvt" + h[0], { boxShadow: "0 0 0 1px #d8dee8", duration: 0.2 }, t + h[2]);
+    tl.to("#rvt" + h[1], { boxShadow: "0 0 0 2px #0062ff", duration: 0.2 }, t + h[2]);
+  });
+  clickAt(t + 13.6, 0.8, 885.6, 570.1, t + 14.5, 10);  // Update roadmap
+  tl.to("#upd-s", { opacity: 1, duration: 0.15 }, t + 14.52);
+  tl.to("#upd-s", { opacity: 0, duration: 0.2 }, t + 14.95); tl.to("#upd-b", { opacity: 1, duration: 0.2 }, t + 14.95);
+  curMove(t + 14.75, 0.4, 940, 640, 6);
+  curHide(t + 15.05, 0.2);
+  leave("w-rep", t + 14.75);
+  cam(t + 14.7, 0.65, REST);
+
+  // ════ T4 · the plan to the side, the roadmap comes in ════
+  t = 15.4;                                              // T4 − F = 75.6 − 60.2
+  tl.set("#cam", Object.assign(cs(C_REST), { transformOrigin: "50% 50%" }), t);
+  cardTo("#cam", t + 0.05, 0.75, L1); labAt("lp", L1, t + 0.7);
+  tl.to("#cam2", Object.assign(cs([1744, 560, 0.3, -18, 1]), { duration: 0.3, ease: "power2.out" }), t);
+  cardTo("#cam2", t + 0.3, 0.9, C_REST);
+  t = 16.6;                                              // G − F = 76.8 − 60.2
+  tl.set("#cam2", Object.assign(camState.apply(null, REST), { transformOrigin: "0 0", rotationY: 0, opacity: 1 }), t);
+  live = "#cam2"; C = "2";
+  cardTo("#cam", t, 0.5, off(L1, -40)); tl.to("#lp", { opacity: 0, duration: 0.3 }, t);
+
+  // ════ G · the roadmap, updated by Nora: a lane per type of work;
+  //        Execution board: the drag, Launch task ════
+  // Nora's three tasks come into week 1 (77.4 → 78.6), a lane after another
+  // is picked (79.8 → 83.5), the page goes down to the board (83.5)
+  // each one grows out from the start of the week, then its owner and its
+  // name settle in, one after the other
+  [[0, 0.55], [2, 0.9], [3, 1.25]].forEach(function (b) {
+    var id = "#w1-" + b[0];
+    tl.fromTo(id, { opacity: 0, scaleX: 0.08, transformOrigin: "0% 50%" },
+      { opacity: 1, scaleX: 1, duration: 0.7, ease: "power3.out", immediateRender: false }, t + b[1]);
+    tl.fromTo(id + " > *", { opacity: 0, x: -8 },
+      { opacity: 1, x: 0, duration: 0.4, ease: "power2.out", stagger: 0.08, immediateRender: true }, t + b[1] + 0.3);
+  });
+  tl.fromTo("#badge", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 1.35);
+  // each lane is lit on its word: "technical fixes" (~80.9 in the film),
+  // "content" (~82.0), "citations" (~82.8); the page goes down at 83.5
+  [[0, 4.1, 5.15], [3, 5.15, 6.0], [2, 6.0, 6.73]].forEach(function (h) {
+    tl.to("#lane" + h[0] + " .lane__hl", { opacity: 1, duration: 0.2 }, t + h[1]);
+    tl.to("#lane" + h[0] + " .lane__hl", { opacity: 0, duration: 0.2 }, t + h[2]);
+  });
+  tl.to("#rd-scroll", { y: -487.2, duration: 0.45, ease: "power2.inOut" }, t + 6.73);
+
+  cam(t + 0.05, 0.8, [600, 240, 1.4, 960, 470]);       // the timeline: Nora's three tasks come in
+  cam(t + 0.85, 3.0, [604, 244, 1.43, 960, 470], "sine.inOut");
+  cam(t + 3.9, 0.8, [600, 290, 1.3, 960, 520]);        // the lanes: technical fixes, content, citations
+  cam(t + 4.7, 1.7, [602, 292, 1.32, 960, 520], "sine.inOut");
+  cam(t + 6.9, 0.8, [560, 330, 1.3, 960, 540]);        // down to the Execution board, below the timeline
+  curShow(t + 7.1, 560, 380, 0.2);
+  curMove(t + 7.15, 0.5, 379.4, 231.5, 6);
+  // the drag: the battery guide from Backlog to In progress (the card moves on the cursor's path)
+  tl.to("#cur2-s", { scale: 0.86, duration: 0.1, ease: "power2.in" }, t + 7.6);
+  tl.to("#c5", { scale: 1.03, rotation: 1.5, boxShadow: "0 18px 40px -12px rgba(15,23,42,.35)", zIndex: 5, duration: 0.15, ease: "power2.out" }, t + 7.6);
+  // the room the card leaves, and the room it takes: its height and the gap
+  var c5 = document.getElementById("c5");
+  function room() { return c5.offsetHeight + 9; }
+  tl.set("#slot", { opacity: 1, height: function () { return c5.offsetHeight; } }, t + 7.7);
+  tl.set("#col-b", { zIndex: 2 }, t + 7.6);
+  tl.to("#cur2", { x: 379.4 + 286.4, y: 231.5, duration: 1.0, ease: "power2.inOut" }, t + 7.7);
+  tl.to("#c5", { x: 358, duration: 1.0, ease: "power2.inOut" }, t + 7.7);
+  // the In progress cards make room as it comes over them
+  tl.to(["#c3", "#c4"], { y: room, duration: 0.35, ease: "power2.inOut" }, t + 8.25);
+  tl.to("#cur2-s", { scale: 1, duration: 0.15, ease: "power2.out" }, t + 8.7);
+  tl.to("#c5", { scale: 1, rotation: 0, boxShadow: "0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1)", duration: 0.2, ease: "power2.out" }, t + 8.7);
+  // dropped: Backlog closes up, the counts follow
+  tl.set("#slot", { opacity: 0 }, t + 8.75);
+  tl.to(["#c6", "#c7", "#c8"], { y: function () { return -room(); }, duration: 0.3, ease: "power2.inOut" }, t + 8.75);
+  var nb = document.getElementById("n-b"), np = document.getElementById("n-p");
+  tl.to({}, { duration: 0.01, onComplete: function () { nb.textContent = "3"; np.textContent = "3"; },
+              onReverseComplete: function () { nb.textContent = "4"; np.textContent = "2"; } }, t + 8.75);
+  clickAt(t + 8.9, 0.6, 668.8, 389.0, t + 9.6, 8);     // Launch task: sent to Kate
+  tl.to("#sent", { opacity: 1, duration: 0.2 }, t + 9.65);
+  cam(t + 9.7, 0.62, REST);
+  curHide(t + 10.4);
+
+  // ── the review bar ──
+  var pp = document.getElementById("pp"), sc = document.getElementById("sc"), tt = document.getElementById("tt");
+  function paint() {
+    sc.value = tl.time().toFixed(2);
+    tt.textContent = tl.time().toFixed(2) + " / " + DUR.toFixed(2);
+    pp.textContent = tl.paused() ? "▶" : "❚❚";
+  }
+  tl.eventCallback("onUpdate", paint);
+  pp.onclick = function () { if (tl.paused()) { if (tl.time() >= DUR - 0.02) tl.time(0); tl.play(); } else tl.pause(); paint(); };
+  sc.oninput = function () { tl.pause(); tl.time(parseFloat(sc.value)); paint(); };
+
+  // A paused timeline already sits at 0, and GSAP skips the render when the
+  // playhead does not move — so tl.time(0) on a fresh page leaves everything
+  // the timeline sets at 0 unapplied: the camera untransformed, the window in
+  // the corner, rows visible that should start hidden. The composition loads
+  // every section at ?t=0, so it saw that first frame. Nudge off and back.
+  function seek(t) { tl.time(t + 1e-4); tl.time(t); }
+  if (q.has("bare")) document.body.classList.add("bare");
+
+  if (q.has("screen")) {
+    // the live window alone at 2x: Poli AI before the cards, the roadmap after
+    document.body.classList.add("shot");
+    var tt0 = parseFloat(q.get("t") || "0");
+    var fitEl = document.getElementById("fit");
+    fitEl.style.cssText = "position:absolute;left:0;top:0;width:2240px;height:1460px;display:block";
+    stage.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;overflow:hidden;" +
+                          "background:#fff;transform:scale(2);transform-origin:0 0";
+    // after the seek, so the camera it sets does not move the window again
+    document.fonts.ready.then(function () {
+      tl.time(tt0); tl.pause();
+      var a = document.getElementById("cam"), b = document.getElementById("cam2");
+      var pick = tt0 < 15.4 ? a : b;
+      (pick === a ? b : a).style.display = "none";
+      pick.style.cssText = "position:absolute;left:0;top:0;width:1120px;height:730px;transform:none;opacity:1";
+    });
+  } else if (q.has("t")) {
+    document.fonts.ready.then(function () { seek(parseFloat(q.get("t"))); tl.pause(); paint(); });
+  } else {
+    document.fonts.ready.then(function () { tl.play(); });
+  }
+
+  window.__tl = tl;
+})();
+</script>
+</body>
