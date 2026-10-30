@@ -47,6 +47,13 @@ const STILL_QUERY = '(max-width: 768px), (prefers-reduced-motion: reduce)';
 // coded HTML now — the images are gone — so it plays everywhere. It still
 // starts muted, which is the only way any browser will autoplay it, and
 // prefers-reduced-motion still means it loads without playing (see autoPlay).
+// Phones (portrait, or a phone turned on its side) get the film in lite mode:
+// only the sections near the playhead are loaded, and the camera is not
+// steadied (steadyCamera draws each app screen up to 3x over, ~46 MB a
+// screen on a retina phone). Together they were more than iOS Safari allows a
+// tab, and it crashed again with "A problem repeatedly occurred". Desktop and
+// laptop screens never match this and play the film as they did.
+const PHONE_QUERY = '(max-width: 767px), (pointer: coarse) and (max-height: 500px)';
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 // How many px of the film may sit off screen and still count as "fits".
 // The film keeps playing while any of it is still on screen; it stops
@@ -257,6 +264,8 @@ export default function HeroFilm() {
   // loadFilm is what it calls once the player exists.
   const nearWindow = useRef(false);
   const loadFilm = useRef(null);
+  // Set when the film is loaded, from PHONE_QUERY; the film keeps it for good.
+  const lite = useRef(false);
 
   // The language whose film has painted / started playing. A language switch
   // swaps in a new player, so the poster covers it again until it plays.
@@ -444,7 +453,8 @@ export default function HeroFilm() {
       player.setAttribute('runtime-src', new URL(`${FILM}/player/hyperframe.runtime.iife.js`, location.href).href);
       // ?bg=transparent turns the composition's own backdrop off so the film
       // sits on the page rather than in a box of its own (see LISEZ-MOI).
-      const q = lang === 'fr' ? '?bg=transparent&lang=fr' : '?bg=transparent';
+      lite.current = window.matchMedia(PHONE_QUERY).matches;
+      const q = (lang === 'fr' ? '?bg=transparent&lang=fr' : '?bg=transparent') + (lite.current ? '&lite=1' : '');
       player.setAttribute('src', new URL(`${FILM}/${FILM_LIVE}/index.html${q}`, location.href).href);
     }
     // Before the player's script lands, load() is a no-op; the call after it
@@ -523,8 +533,8 @@ export default function HeroFilm() {
   useEffect(() => {
     const player = playerRef.current;
     const onPlay = () => setStarted(lang);
-    const onReady = () => steadyCamera(player);
-    const onPainted = () => { steadyCamera(player); setPainted(lang); };
+    const onReady = () => { if (!lite.current) steadyCamera(player); };
+    const onPainted = () => { if (!lite.current) steadyCamera(player); setPainted(lang); };
     const onTime = (e) => {
       const at = e.detail?.currentTime ?? player.currentTime ?? 0;
       const active = cues.current.find((c) => at >= c.start && at < c.end);
