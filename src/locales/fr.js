@@ -408,6 +408,31 @@ export default {
         { name: 'Emma', role: 'Intelligence Concurrentielle', desc: 'Identifie vos véritables concurrents sur chaque marché et montre où ils vous devancent dans les réponses des IA.' },
       ],
     },
+    // Cartes KPI avant la section Plateforme. Les chiffres sont dans
+    // KpiStats.jsx ; ici seulement les mots autour.
+    kpi: {
+      eyebrow: 'Poliris en chiffres',
+      h2Pre: 'Les données derrière',
+      h2Hl: 'chaque recommandation',
+      lead: 'Audits réalisés sur la plateforme Poliris, sur les moteurs IA et les sites web',
+      brands: {
+        label: 'Marques auditées',
+        desc: 'Analysées produit par produit, de la visibilité IA au sentiment',
+        countries: 'pays',
+        offers: 'produits et services',
+      },
+      answers: {
+        label: 'Réponses IA analysées',
+        desc: 'Chaque réponse lue pour les mentions de marque, le sentiment et les sources citées',
+        chips: ['ChatGPT', 'Gemini', 'Claude', 'AI Overviews'],
+      },
+      checks: {
+        label: 'Contrôles techniques effectués',
+        descBefore: 'Sur',
+        descAfter: 'pages explorées, pour voir ce qui bloque Google et les robots des IA',
+        chips: ['Page Access', 'Content Access', 'Content Quality'],
+      },
+    },
     // Carte comparatif compacte après la section Équipe ; renvoie vers
     // l'article comparatif complet. Mêmes codes de cellules que en.js.
     compareCard: {
@@ -1975,11 +2000,16 @@ export default {
     ],
   },
   pricing: {
+    audience: {
+      label: 'Pour qui',
+      brands: 'Pour les marques',
+      agencies: 'Pour les agences',
+    },
     hero: {
       eyebrow: 'Tarifs',
-      titlePre: "Maîtrisez ce que l'IA dit de votre marque,",
-      titleHl: "partout où elle est interrogée.",
-      lead: "Choisissez le niveau de couverture de visibilité dont vous avez besoin sur les modèles IA. Chaque forfait inclut le suivi de sentiment, le benchmark concurrentiel et le score GEO en temps réel, pour toujours savoir où vous en êtes sur la recherche IA.",
+      titlePre: 'Tous les outils inclus.',
+      titleHl: 'Seuls les crédits limitent.',
+      lead: 'Choisissez le volume dont vous avez besoin. Changez de forfait ou annulez à tout moment, sans engagement.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       note: 'Aucune carte bancaire requise',
@@ -2054,19 +2084,10 @@ export default {
     ],
     footNote: "Vous gérez une grande équipe ou plusieurs marques ? Construisons ensemble un forfait adapté.",
     footNoteLink: 'Contactez-nous',
-    agency: {
-      eyebrow: 'PLATEFORME AGENCE',
-      title: 'Agence',
-      desc: "Conçu pour les agences qui gèrent plusieurs marques. Rapports en marque blanche, espaces multi-marques, pool d'usage mutualisé, et un chargé de compte dédié, le tout réuni en un seul endroit.",
-      priceAnchor: "Tarification sur mesure selon votre nombre de marques.",
-      cta: 'Discutons de votre organisation',
-      everythingIn: 'Tout ce qui est inclus dans Pro, plus',
-      features: [
-        'Espaces multi-marques & pool d\'usage mutualisé',
-        'Rapports en marque blanche & domaine personnalisé',
-        'Facturation centralisée sur toutes les marques',
-        'Chargé de compte dédié',
-      ],
+    agencyLink: {
+      title: 'Vous dirigez une agence ?',
+      sub: 'Marque blanche et espaces clients, à partir de {price} par mois.',
+      cta: 'Voir les tarifs agence',
     },
     calculator: {
       bannerTitle: 'Vous ne savez pas combien de crédits il vous faut ?',
@@ -2119,7 +2140,6 @@ export default {
       promptsTrackedSub: '1 crédit = 1 requête sur un modèle IA',
       aiShoppingLabel: 'AI Shopping',
       aiShoppingTag: 'Inclus au lancement',
-      creditsLabel: 'Crédits mensuels',
       modelsCountLabel: 'Nombre de modèles inclus',
       projectsLabel: 'Projets',
       zonesLabel: 'Zones de commerce',
@@ -2203,6 +2223,157 @@ export default {
       { q: 'Les crédits sont-ils reportés au mois suivant ?', a: "Non, les crédits non utilisés sont réinitialisés au début de chaque cycle de facturation et ne sont pas reportés." },
       { q: "Y a-t-il un engagement de longue durée ?", a: "Non. Les forfaits mensuels sont facturés au mois, sans engagement. Les forfaits annuels garantissent un tarif réduit sur 12 mois." },
     ],
+    // Vue marques de la page tarifs. Sous sa propre clé, comme agencyView, pour
+    // que les anciennes valeurs Tolgee de pricing.plans/compare/faq ne s'y appliquent pas.
+    brandView: {
+      perMonth: '/mois',
+      plans: [
+        {
+          name: 'Free',
+          desc: "Une vraie version gratuite, pas un essai. Vos résultats restent disponibles.",
+          credits: 'Un audit, aucun crédit nécessaire',
+          cta: 'Commencer gratuitement',
+          features: ['1 marque, 1 produit', '1 marché parmi plus de 240 pays', '2 modèles IA, interface web', '10 prompts par audit', 'Audit technique de 100 pages'],
+          tooltips: ["Une marque et un produit suivis.", "Choisissez un pays ou une région à suivre.", "Choisissez 2 modèles parmi ChatGPT, Gemini, Perplexity, Google AI Mode et Google AI Overview.", "Jusqu'à 10 questions suivies par analyse.", "Poliris audite gratuitement 100 pages de votre site pendant l'onboarding."],
+        },
+        {
+          name: 'Starter',
+          desc: 'Pour les marques en croissance prêtes à suivre leur visibilité IA sur plusieurs modèles.',
+          credits: '300 crédits par mois',
+          firstMonth: '600 le premier mois',
+          cta: 'Choisir ce forfait',
+          features: ['Accès complet à la plateforme', 'Tous les modèles IA, web et API', '20 prompts rédigés par audit, plus les vôtres', 'Suivi quotidien, hebdomadaire ou mensuel', 'Plusieurs marchés et projets'],
+          tooltips: ["Tous les outils inclus, sans option payante.", "Interrogez tout modèle IA pris en charge, via son interface web ou son API.", "Poliris rédige 20 questions par audit. Gardez-en au moins 5 et ajoutez les vôtres.", "Choisissez la fréquence de relance des audits.", "Suivez plusieurs pays et marques, selon vos crédits."],
+        },
+        {
+          name: 'Growth',
+          desc: "Pour les équipes qui ont besoin d'une couverture plus large et de crédits mensuels flexibles.",
+          credits: '1 500 crédits par mois',
+          firstMonth: '3 000 le premier mois',
+          cta: 'Choisir ce forfait',
+          features: ['Tout le forfait Starter', '5 fois plus de crédits que Starter', "Jusqu'à 500 prompts suivis"],
+          tooltips: ["", "1 500 crédits par mois au lieu de 300.", "Le nombre de questions que vous pouvez suivre avec ce forfait."],
+        },
+        {
+          name: 'Pro',
+          desc: "Pour les marques qui surveillent l'IA à grande échelle.",
+          credits: '3 000 crédits par mois',
+          firstMonth: '6 000 le premier mois',
+          cta: 'Choisir ce forfait',
+          features: ['Tout le forfait Growth', "Jusqu'à 1 000 prompts suivis", 'Support dédié'],
+          tooltips: ["", "Le nombre de questions que vous pouvez suivre avec ce forfait.", "Un support dédié plutôt que le chat et l'e-mail."],
+        },
+      ],
+      custom: {
+        name: 'Sur mesure',
+        desc: "Pour les grandes équipes et les portefeuilles de marques à qui Pro ne suffit plus.",
+        price: 'Sur devis',
+        credits: 'Un volume de crédits adapté à vos marques',
+        cta: 'Contactez-nous',
+        features: ['Tout le forfait Pro', 'Projets et marchés illimités', 'Chargé de compte dédié'],
+        tooltips: ["", "Aucune limite sur le nombre de projets et de marchés.", "Un interlocuteur dédié pour votre compte."],
+      },
+      compare: {
+        title: "Ce qui change d'un forfait à l'autre",
+        lead: 'Seuls le volume et le support. Toutes les fonctionnalités listées sous le tableau sont incluses dans tous les forfaits.',
+        head: 'Usage et limites',
+        onQuote: 'Sur devis',
+        notIncluded: 'Non inclus',
+        included: 'Inclus',
+        creditsLabel: 'Crédits mensuels',
+      },
+      included: {
+        title: 'Inclus dans tous les forfaits',
+        sentimentDashboard: 'Sentiment et tableau de bord',
+      },
+      faqTitle: 'Questions sur les tarifs',
+      faq: [
+        { q: "Qu'est-ce qu'un crédit ?", a: "Sur un modèle IA web, un crédit couvre environ une question. Les modèles API utilisent de 1 à 15 crédits par question, selon le modèle. Une analyse de 10 prompts sur 3 modèles web utilise environ 30 crédits." },
+        { q: 'Que se passe-t-il quand mes crédits sont épuisés ?', a: "Une analyse de visibilité IA nécessite au moins 100 crédits pour démarrer. En dessous, les analyses et les exécutions planifiées s'arrêtent jusqu'au prochain renouvellement mensuel. Pour continuer plus tôt, passez à un forfait supérieur : les crédits supplémentaires sont disponibles immédiatement." },
+        { q: 'Est-ce que cela inclut tous les outils ?', a: "Oui. Chaque forfait vous donne un accès complet à Visibilité IA, Analyse de sentiment, Audit technique et aux outils de rédaction. Sans option payante, sans surcoût." },
+        { q: 'Le forfait Free est-il vraiment gratuit ?', a: "Oui. Votre première analyse (1 produit, 1 marché, 2 modèles IA web, jusqu'à 10 prompts) et un audit technique de 100 pages ne consomment aucun crédit, et vos résultats restent disponibles. Pour en lancer d'autres, passez à un forfait payant." },
+        { q: "Qu'est-ce qu'un marché ?", a: "Un marché, appelé zone commerciale dans l'application, est le pays ou la région où Poliris suit votre visibilité IA. Les réponses des IA changent d'un pays à l'autre : chaque produit est donc audité par marché." },
+        { q: 'Puis-je changer de forfait ?', a: "Oui, à tout moment. Le passage à un forfait supérieur s'applique immédiatement, et la nouvelle enveloppe de crédits est disponible tout de suite. Le passage à un forfait inférieur s'applique à la fin de la période en cours. Vous pouvez aussi résilier quand vous le souhaitez." },
+        { q: 'Les crédits sont-ils reportés au mois suivant ?', a: "Non. Votre enveloppe de crédits est rechargée à chaque renouvellement mensuel, et les crédits non utilisés ne sont pas reportés." },
+        { q: 'Y a-t-il un engagement de longue durée ?', a: "Non. Les forfaits mensuels sont facturés au mois, sans engagement. Les forfaits annuels garantissent un tarif réduit sur 12 mois." },
+      ],
+    },
+    agencyView: {
+      hero: {
+        titlePre: 'Un pack pour votre agence.',
+        titleHl: 'Un forfait par client.',
+        lead: 'Exploitez Poliris sous votre propre marque et ne payez que pour les clients que vous accompagnez.',
+      },
+      step1: 'Étape 1 · Votre espace agence',
+      packTitle: 'Pack agence',
+      perMonth: 'par mois, HT',
+      promo: { strong: '6 premiers mois offerts', rest: 'pour nos premières agences partenaires' },
+      packDesc: 'Un tarif unique pour toute votre équipe, quel que soit le nombre de clients.',
+      cta: 'Réserver un appel avec notre équipe partenaires',
+      ctaNote: "Pas de paiement en ligne : nous ouvrons votre espace agence et le configurons avec vous pendant l'appel.",
+      includedTitle: 'Ce que comprend le pack',
+      includes: [
+        { title: 'Marque blanche', desc: 'Votre logo, vos couleurs et votre domaine, votre nom sur les e-mails. Poliris reste invisible pour vos clients.' },
+        { title: 'Utilisateurs illimités', desc: 'Invitez toute votre équipe. Le prix ne change pas avec le nombre de personnes.' },
+        { title: 'Tous vos clients au même endroit', desc: 'Un espace agence, avec un compte séparé pour chaque client.' },
+        { title: 'Audits gratuits et mini CRM', desc: "Auditez n'importe quel prospect gratuitement, envoyez le résultat et suivez prospects et clients au même endroit." },
+        { title: 'Votre prix, votre marge', desc: 'Vous fixez le prix que vous facturez à vos clients.' },
+        { title: 'Une équipe partenaires', desc: 'Un responsable partenaires dédié, avec la configuration et les premiers audits faits avec vous.' },
+      ],
+      step2: 'Étape 2 · Vos clients',
+      clientsTitle: 'Puis ajoutez un forfait par client',
+      clientsLead: "Un forfait client fonctionne comme un forfait Poliris classique : toute la plateforme, avec les crédits comme seule limite. Choisissez la taille adaptée à chaque client et changez-la quand vous voulez.",
+      perClient: 'par client / mois',
+      tiers: [
+        { name: 'Client S', credits: '300 crédits par mois', features: ["Jusqu'à 100 prompts suivis", 'Tous les outils et tous les modèles IA', 'Suivi quotidien, hebdomadaire ou personnalisé'] },
+        { name: 'Client M', credits: '1 500 crédits par mois', features: ["Jusqu'à 500 prompts suivis", 'Tout ce qui est inclus dans Client S', 'Plusieurs produits et marchés'] },
+        { name: 'Client L', credits: '3 000 crédits par mois', features: ["Jusqu'à 1 000 prompts suivis", 'Tout ce qui est inclus dans Client M', 'Suivi à grand volume'] },
+      ],
+      customTier: {
+        name: 'Client XL',
+        price: 'Sur mesure',
+        credits: 'Volume de crédits sur mesure',
+       
+        features: ['Pour vos plus gros comptes', 'Projets et marchés illimités', 'Devis avec votre responsable partenaires'],
+      },
+      clientsNote: "Prix par mois, HT. Un crédit correspond à une question posée à un modèle IA, et les crédits sont inclus dans chaque forfait client. Après l'onboarding, notre calculateur dimensionne le bon forfait pour chaque client.",
+      modes: {
+        title: 'Deux façons de proposer Poliris, client par client',
+        lead: "Dans chaque compte client, les outils d'action (contenu, mise en œuvre, citations) peuvent être ouverts au client ou réservés à votre agence.",
+        rows: ['Qui fait le travail', 'Le client voit', 'Idéal pour'],
+        items: [
+          { tag: 'Mode 1', title: 'Service agence', desc: 'Votre agence vend la mise en œuvre. Le client suit les résultats.', values: ['Votre agence', 'Audits, feuille de route, Poli AI', 'Les clients qui veulent un service clé en main'] },
+          { tag: 'Mode 2', title: "Revente de l'outil", desc: 'Le client utilise Poliris et fait une partie du travail, avec votre accompagnement.', values: ["L'équipe du client, avec vous", "Tout, outils d'action compris", 'Les clients avec une équipe interne'] },
+        ],
+      },
+      audits: {
+        eyebrow: 'Inclus dans le pack agence',
+        title: 'Gagnez de nouveaux clients avec des audits gratuits',
+        lead: 'Auditez n’importe quel prospect, envoyez les résultats et suivez chaque prospect et client au même endroit, sans surcoût.',
+        steps: [
+          { title: 'Générer', desc: "Un nom de marque et un site suffisent : l'audit gratuit se lance tout seul." },
+          { title: 'Envoyer', desc: "Sous forme d'accès à l'interface, ou d'une courte présentation générée pour le prospect." },
+          { title: 'Suivre', desc: "Un mini CRM pour prospects et clients, de l'audit envoyé au client actif." },
+        ],
+      },
+      start: {
+        title: 'Comment démarrer',
+        steps: [
+          { title: 'Réservez un appel', desc: 'Choisissez un ou plusieurs clients pour démarrer sur des cas réels, avec leurs vraies données.' },
+          { title: 'Nous configurons votre espace', desc: 'Votre logo, vos couleurs et votre domaine, configurés avec vous.' },
+          { title: 'Premiers audits ensemble', desc: 'Audits et feuille de route construits avec notre équipe sur le cas réel de vos clients.' },
+          { title: 'Déploiement', desc: "Service agence ou revente de l'outil, client par client." },
+        ],
+      },
+      faqTitle: 'Questions des agences',
+      faq: [
+        { q: 'Comment démarrer ?', a: "Réservez un appel avec notre équipe partenaires. Il n'y a pas encore d'inscription en ligne pour les agences : nous ouvrons votre espace agence et le configurons avec vous." },
+        { q: 'Nos clients voient-ils la marque Poliris ?', a: 'Non. Avec la marque blanche, votre logo, vos couleurs et votre domaine apparaissent partout, et votre nom figure sur les e-mails. Poliris reste invisible pour vos clients.' },
+        { q: 'Le pack agence inclut-il des crédits ?', a: 'Non. Les crédits sont inclus dans chaque forfait client : 300 pour Client S, 1 500 pour Client M et 3 000 pour Client L, ou un volume sur mesure pour Client XL.' },
+        { q: 'Qui fixe le prix pour nos clients ?', a: 'Vous. Vous fixez le prix que vous facturez à vos clients, et la marge vous revient.' },
+        { q: 'Peut-on changer le forfait d’un client ?', a: 'Oui. Choisissez la taille adaptée à chaque client et changez-la quand vous voulez.' },
+      ],
+    },
   },
   demo: {
     hero: {

@@ -406,6 +406,31 @@ export default {
         { name: 'Emma', role: 'Competitor Intelligence',     desc: "Maps your real rivals in each zone and shows where they're beating you in AI." },
       ],
     },
+    // KPI cards before the Platform section. The numbers live in
+    // KpiStats.jsx (fallback + live RPC); these are only the words around them.
+    kpi: {
+      eyebrow: 'Poliris in numbers',
+      h2Pre: 'The data behind',
+      h2Hl: 'every recommendation',
+      lead: 'Audits run on the Poliris platform, across AI engines and websites',
+      brands: {
+        label: 'Brands audited',
+        desc: 'Mapped product by product, from AI visibility to sentiment',
+        countries: 'countries',
+        offers: 'products and services',
+      },
+      answers: {
+        label: 'AI answers analyzed',
+        desc: 'Each answer read for brand mentions, sentiment and cited sources',
+        chips: ['ChatGPT', 'Gemini', 'Claude', 'AI Overviews'],
+      },
+      checks: {
+        label: 'Technical checks run',
+        descBefore: 'On',
+        descAfter: 'pages crawled, to see what blocks Google and AI crawlers',
+        chips: ['Page Access', 'Content Access', 'Content Quality'],
+      },
+    },
     // Compact comparison card after the Team section; links to the full
     // comparison post. Cells: 'y' included, 'p' partial / add-on, 'n' not
     // mentioned; ['p', 'note'] adds a note.
@@ -1984,11 +2009,16 @@ export default {
     ],
   },
   pricing: {
+    audience: {
+      label: 'Who is it for',
+      brands: 'For brands',
+      agencies: 'For agencies',
+    },
     hero: {
       eyebrow: 'Pricing',
-      titlePre: 'Own how AI talks about your brand,',
-      titleHl: "everywhere it's asked.",
-      lead: 'Choose how much visibility coverage you need across AI models. Every plan includes sentiment tracking, competitor benchmarking, and real-time GEO scoring so you always know where you stand across AI search.',
+      titlePre: 'Every tool included.',
+      titleHl: 'Credits are the only limit.',
+      lead: 'Pick the volume you need. Switch plans or cancel anytime, with no lock-in.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
       note: 'No credit card required',
@@ -2063,19 +2093,10 @@ export default {
     ],
     footNote: "Running a larger team or managing multiple brands? Let's build a plan that fits.",
     footNoteLink: 'Talk to us',
-    agency: {
-      eyebrow: 'AGENCY PLATFORM',
-      title: 'Agency',
-      desc: 'Built for agencies managing multiple brands. White-label reporting, multi-brand workspaces, usage pooling, and a dedicated account manager all under one roof.',
-      priceAnchor: 'Custom pricing based on your number of brands.',
-      cta: 'Discuss your setup',
-      everythingIn: 'Everything in Pro, plus',
-      features: [
-        'Multi-brand workspaces & usage pooling',
-        'White-label reports & custom domain',
-        'Centralized billing across brands',
-        'Dedicated account manager',
-      ],
+    agencyLink: {
+      title: 'Running an agency?',
+      sub: 'White label and client workspaces, from {price} per month.',
+      cta: 'See agency pricing',
     },
     calculator: {
       bannerTitle: 'Not sure how many credits you need?',
@@ -2128,7 +2149,6 @@ export default {
       promptsTrackedSub: '1 credit = 1 AI model query',
       aiShoppingLabel: 'AI Shopping',
       aiShoppingTag: 'Included at launch',
-      creditsLabel: 'Monthly credits',
       modelsCountLabel: 'Number of models included',
       projectsLabel: 'Projects',
       zonesLabel: 'Trading zones',
@@ -2212,6 +2232,159 @@ export default {
       { q: 'Do credits roll over?', a: "No, unused credits reset at the start of each billing cycle and don't carry over to the next month." },
       { q: 'Is there a long-term contract?', a: 'No. Monthly plans are billed month-to-month with no contract. Annual plans lock in a discounted rate for 12 months.' },
     ],
+    // The agencies view: content from the design (Poliris pricing.html).
+    // Prices are in AGENCY_PRICES in PricingPage.jsx.
+    // Brands view of the pricing page. Under its own key, like agencyView, so
+    // older values held in Tolgee for pricing.plans/compare/faq can't land on it.
+    brandView: {
+      perMonth: '/mo',
+      plans: [
+        {
+          name: 'Free',
+          desc: 'A real free version, not a trial. Your results stay available.',
+          credits: 'One audit, no credits needed',
+          cta: 'Start for free',
+          features: ['1 brand, 1 product', '1 market out of 240+ countries', '2 AI models, web interface', '10 prompts per audit', '100-page technical audit'],
+          tooltips: ["One brand and one product tracked.", "Pick one country or region to track.", "Choose 2 of ChatGPT, Gemini, Perplexity, Google AI Mode and Google AI Overview.", "Up to 10 questions tracked per audit run.", "Poliris audits 100 pages of your site for free during onboarding."],
+        },
+        {
+          name: 'Starter',
+          desc: 'For growing brands ready to track AI visibility across multiple models.',
+          credits: '300 credits per month',
+          firstMonth: '600 the first month',
+          cta: 'Select plan',
+          features: ['Full platform access', 'All AI models, web and API', '20 prompts written per audit, plus your own', 'Daily, weekly or monthly tracking', 'Multiple markets and projects'],
+          tooltips: ["Every tool included. No add-ons.", "Query any supported AI model, through its web interface or its API.", "Poliris writes 20 questions per audit. Keep at least 5 and add your own.", "Choose how often audits re-run.", "Track several countries and brands, within your credits."],
+        },
+        {
+          name: 'Growth',
+          desc: 'For teams that need deeper coverage and flexible monthly credits.',
+          credits: '1,500 credits per month',
+          firstMonth: '3,000 the first month',
+          cta: 'Select plan',
+          features: ['Everything in Starter', '5 times the credits of Starter', 'Up to 500 prompts tracked'],
+          tooltips: ["", "1,500 credits a month instead of 300.", "The number of questions you can track on this plan."],
+        },
+        {
+          name: 'Pro',
+          desc: 'For brands running high-volume AI monitoring at scale.',
+          credits: '3,000 credits per month',
+          firstMonth: '6,000 the first month',
+          cta: 'Select plan',
+          features: ['Everything in Growth', 'Up to 1,000 prompts tracked', 'Dedicated support'],
+          tooltips: ["", "The number of questions you can track on this plan.", "Dedicated support instead of chat and email."],
+        },
+      ],
+      custom: {
+        name: 'Custom',
+        desc: 'For enterprise teams and large brand portfolios that need more than Pro.',
+        price: 'Custom',
+        credits: 'Credit volume built around your brands',
+        cta: 'Talk to us',
+        features: ['Everything in Pro', 'Unlimited projects and markets', 'Dedicated account manager'],
+        tooltips: ["", "No limit on the number of projects and markets.", "A dedicated contact for your account."],
+      },
+      compare: {
+        title: 'What changes from one plan to the next',
+        lead: 'Only volume and support. Every feature below the table is in all plans.',
+        head: 'Usage and limits',
+        onQuote: 'On quote',
+        notIncluded: 'Not included',
+        included: 'Included',
+        creditsLabel: 'Monthly credits',
+      },
+      included: {
+        title: 'Included in every plan',
+        sentimentDashboard: 'Sentiment and dashboard',
+      },
+      faqTitle: 'Questions about pricing',
+      faq: [
+        { q: 'What is a credit?', a: 'On a web AI model, one credit covers about one question. API models use 1 to 15 credits per question, depending on the model. A 10-prompt audit run across 3 web models uses about 30 credits.' },
+        { q: 'What happens when credits run out?', a: 'An AI visibility analysis needs at least 100 credits to start, so below that, analyses and scheduled runs stop until your next monthly renewal. To keep going sooner, move to a larger plan: the extra credits are available immediately.' },
+        { q: 'Does this include all tools?', a: 'Yes. Every plan gives you full access to AI Visibility, Sentiment Analysis, Technical Auditing, and Content tools. No add-ons, no upsells.' },
+        { q: 'Is the Free plan really free?', a: 'Yes. Your first analysis (1 product, 1 market, 2 web AI models, up to 10 prompts) and a 100-page technical audit cost no credits, and your results stay available. To run more, move to a paid plan.' },
+        { q: "What's a market?", a: 'A market, called a trading zone in the app, is the country or region where Poliris tracks your AI visibility. AI answers change from one country to another, so each product is audited per market.' },
+        { q: 'Can I switch plans?', a: 'Yes, anytime. An upgrade applies at once and the larger credit pool is available immediately. A downgrade applies at the end of the current period. You can also cancel whenever you need.' },
+        { q: 'Do credits roll over?', a: "No. Your credit pool is refilled at each monthly renewal, and unused credits don't carry over." },
+        { q: 'Is there a long-term contract?', a: 'No. Monthly plans are billed month-to-month with no contract. Annual plans lock in a discounted rate for 12 months.' },
+      ],
+    },
+    agencyView: {
+      hero: {
+        titlePre: 'One pack for your agency.',
+        titleHl: 'One plan per client.',
+        lead: 'Run Poliris under your own brand and pay only for the clients you bring on board.',
+      },
+      step1: 'Step 1 · Your agency space',
+      packTitle: 'Agency pack',
+      perMonth: 'per month, excl. tax',
+      promo: { strong: 'First 6 months free', rest: 'for our first partner agencies' },
+      packDesc: 'One flat fee for your whole team, whatever the number of clients.',
+      cta: 'Book a call with our partner team',
+      ctaNote: 'No self-serve checkout: we open your agency space and set it up with you on the call.',
+      includedTitle: 'What the pack includes',
+      includes: [
+        { title: 'White label', desc: 'Your logo, colors and domain, your name on emails. Poliris stays invisible to your clients.' },
+        { title: 'Unlimited seats', desc: 'Invite your whole team. The price does not change with headcount.' },
+        { title: 'All your clients in one space', desc: 'One agency space, with a separate account for each client.' },
+        { title: 'Free audits and mini CRM', desc: 'Audit any prospect for free, send the result, and follow prospects and clients in one place.' },
+        { title: 'Your price, your margin', desc: 'You set the price you charge your clients.' },
+        { title: 'A partner team', desc: 'A dedicated partner manager, with setup and first audits done with you.' },
+      ],
+      step2: 'Step 2 · Your clients',
+      clientsTitle: 'Then add a plan for each client',
+      clientsLead: 'A client plan works like a standard Poliris plan: the full platform, with credits as the only limit. Pick the size that fits each client and change it whenever you need.',
+      perClient: 'per client / month',
+      tiers: [
+        { name: 'Client S', credits: '300 credits per month', features: ['Up to 100 prompts tracked', 'All tools and all AI models', 'Daily, weekly or custom tracking'] },
+        { name: 'Client M', credits: '1,500 credits per month', features: ['Up to 500 prompts tracked', 'Everything in Client S', 'Several products and markets'] },
+        { name: 'Client L', credits: '3,000 credits per month', features: ['Up to 1,000 prompts tracked', 'Everything in Client M', 'High-volume monitoring'] },
+      ],
+      customTier: {
+        name: 'Client XL',
+        price: 'Custom',
+        credits: 'Custom credit volume',
+       
+        features: ['For your largest accounts', 'Unlimited projects and markets', 'Quoted with your partner manager'],
+      },
+      clientsNote: 'Prices per month, excl. tax. One credit is one question asked to one AI model, and credits come with each client plan. After onboarding, our calculator sizes the right plan for each client.',
+      modes: {
+        title: 'Two ways to offer Poliris, client by client',
+        lead: 'In each client account, the Action tools (content, implementation, citations) can be opened to the client or kept for your agency.',
+        rows: ['Who does the work', 'The client sees', 'Ideal for'],
+        items: [
+          { tag: 'Mode 1', title: 'Agency service', desc: 'Your agency sells the implementation. The client follows the results.', values: ['Your agency', 'Audits, roadmap, Poli AI', 'Clients who want a turnkey service'] },
+          { tag: 'Mode 2', title: 'Tool resale', desc: 'The client uses Poliris and does part of the work, with your support.', values: ["The client's team, with you", 'Everything, Action tools included', 'Clients with an in-house team'] },
+        ],
+      },
+      audits: {
+        eyebrow: 'Included in the agency pack',
+        title: 'Win new clients with free audits',
+        lead: 'Audit any prospect, send the results, and follow every prospect and client in one place, at no extra cost.',
+        steps: [
+          { title: 'Generate', desc: 'A brand name and a website are enough: the free audit runs by itself.' },
+          { title: 'Send', desc: 'As access to the interface, or as a short slide deck generated for the prospect.' },
+          { title: 'Follow', desc: 'A mini CRM for prospects and clients, from audit sent to active client.' },
+        ],
+      },
+      start: {
+        title: 'How to get started',
+        steps: [
+          { title: 'Book a call', desc: 'Pick one or more clients to start on real cases, with their real data.' },
+          { title: 'We set up your space', desc: 'Your logo, colors and domain, configured with you.' },
+          { title: 'First audits together', desc: "Audits and roadmap built with our team on your clients' real case." },
+          { title: 'Roll out', desc: 'Agency service or tool resale, client by client.' },
+        ],
+      },
+      faqTitle: 'Questions from agencies',
+      faq: [
+        { q: 'How do we get started?', a: 'Book a call with our partner team. There is no self-serve sign-up for agencies yet: we open your agency space and set it up with you.' },
+        { q: 'Do our clients see the Poliris brand?', a: 'No. With white label, your logo, colors and domain appear everywhere, and your name is on the emails. Poliris stays invisible to your clients.' },
+        { q: 'Does the agency pack include credits?', a: 'No. Credits come with each client plan: 300 for Client S, 1,500 for Client M and 3,000 for Client L, or a custom volume for Client XL.' },
+        { q: 'Who sets the price for our clients?', a: 'You do. You set the price you charge your clients, and the margin is yours.' },
+        { q: "Can we change a client's plan?", a: 'Yes. Pick the size that fits each client and change it whenever you need.' },
+      ],
+    },
   },
   demo: {
     hero: {

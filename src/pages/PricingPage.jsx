@@ -18,14 +18,6 @@ const ARROW_ICON = (
   <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
 );
 
-const X_ICON = (
-  <svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5 5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-);
-
-const CHEVRON_ICON = (
-  <svg viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-);
-
 const CALCULATOR_ICON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="4" y="2" width="16" height="20" rx="2.5"/>
@@ -34,43 +26,53 @@ const CALCULATOR_ICON = (
   </svg>
 );
 
-// One distinct icon per agency feature — order matches p.agency.features.
-const AGENCY_ICONS = [
-  <svg key="layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>,
-  <svg key="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20Z"/></svg>,
-  <svg key="card" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>,
-  <svg key="manager" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 11 2 2 4-4"/></svg>,
-];
+// The "Available models" row of the plan comparison, grouped by how each model
+// is tracked. A provider can be in both groups. Free has no API access.
+const COMPARE_MODELS = {
+  web: [
+    { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
+    { logo: 'gemini-logo.png', label: 'Gemini' },
+    { logo: 'google-com-logo.png', label: 'AI Mode' },
+    { logo: 'google-com-logo.png', label: 'AI Overviews' },
+    { logo: 'perplexity-ai-logo.png', label: 'Perplexity' },
+  ],
+  api: [
+    { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
+    { logo: 'gemini-logo.png', label: 'Gemini' },
+    { logo: 'claudeai-com-logo.png', label: 'Claude' },
+    { logo: 'mistral-ai-logo.png', label: 'Mistral' },
+    { logo: 'grok-com-logo.png', label: 'Grok' },
+  ],
+};
 
-// Square icon-only marks (see public/*-logo.png). Used by the comparison
-// table below (generic per-provider badges — unrelated to the calculator's
-// own model list, see CALC_MODELS).
-const MODELS = [
-  { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
-  { logo: 'gemini-logo.png', label: 'Gemini' },
-  { logo: 'claudeai-com-logo.png', label: 'Claude' },
-  { logo: 'google-com-logo.png', label: 'AI Mode' },
-  { logo: 'google-com-logo.png', label: 'AI Overviews' },
-  { logo: 'perplexity-ai-logo.png', label: 'Perplexity' },
-  { logo: 'mistral-ai-logo.png', label: 'Mistral' },
-  { logo: 'grok-com-logo.png', label: 'Grok' },
-  { logo: 'deepseek.png', label: 'DeepSeek' },
-];
-const FREE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
-// Teaser icon set for the Free plan's "10 providers" bullet — a marketing
-// preview of the full provider lineup (not FREE_MODELS' actual Free-tier
-// access list), so the duplicate Google entry is swapped for Claude and
-// the rest are collapsed into a "+5" chip instead of wrapping.
-const FREE_FEATURE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[2], MODELS[5]];
-// Whatever's in MODELS but not already shown as an icon above — named in
-// the "+N" chip's tooltip so the count and the list can't drift apart.
-const FREE_FEATURE_MODELS_REST = MODELS.filter((m) => !FREE_FEATURE_MODELS.includes(m));
-// Same generic badges, split by tracking method (see the `modelspecs.web_ui`
-// column) — ChatGPT and Gemini are tracked both ways, so they appear in
-// both groups; Claude/Mistral/Grok are API-only, AI Mode/AI Overviews/
-// Perplexity are web-only.
-const WEB_INTERFACE_MODELS = [MODELS[0], MODELS[1], MODELS[3], MODELS[4], MODELS[5]];
-const API_INTEGRATION_MODELS = [MODELS[0], MODELS[1], MODELS[2], MODELS[6], MODELS[7]];
+// One line of a plan card. Lines with a tooltip show it on hover and on
+// keyboard focus; "Everything in X" lines have none.
+function PlanFeature({ text, tooltip }) {
+  return (
+    <li>
+      {CHECK_ICON}
+      {tooltip ? (
+        <span className="pricing-feature-info-wrap" tabIndex={0}>
+          {text}
+          <span className="pricing-feature-info-tooltip" role="tooltip">{tooltip}</span>
+        </span>
+      ) : <span>{text}</span>}
+    </li>
+  );
+}
+
+function ModelList({ models }) {
+  return (
+    <ul className="pr-model-list">
+      {models.map((m) => (
+        <li key={m.label}>
+          <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} aria-hidden="true" width="17" height="17" loading="lazy" />
+          {m.label}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 // Calculator-only model list — the real, currently-active models, not
 // generic per-provider badges. Pulled live from the `modelspecs` table
@@ -125,50 +127,6 @@ const CALC_API_MODELS_UI = [
 // Every id the picker can show — "Select all" toggles between this and a
 // single fallback so at least one model always stays selected.
 const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) => m.id);
-
-function ModelBadge({ model }) {
-  return (
-    <span className="pricing-model-badge">
-      <img className="pricing-model-img" src={`${import.meta.env.BASE_URL}${model.logo}`} alt={model.label} aria-hidden="true" width="17" height="17" />
-      {model.label}
-    </span>
-  );
-}
-
-// One "Available models" cell, split into its two tracking-method groups
-// (web interface vs API integration) rather than a flat badge list — a
-// provider can appear in both (see WEB_INTERFACE_MODELS/API_INTEGRATION_MODELS).
-function ModelCell({ webModels, apiModels, c }) {
-  return (
-    <div className="pricing-cell models-grouped">
-      <div className="pricing-cell-model-group">
-        <span className="pricing-cell-model-group-label">{c.modelsWebLabel}</span>
-        <div className="pricing-cell models">{webModels.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
-      </div>
-      <div className="pricing-cell-model-group">
-        <span className="pricing-cell-model-group-label">{c.modelsApiLabel}</span>
-        {apiModels.length
-          ? <div className="pricing-cell models">{apiModels.map((m) => <ModelBadge key={m.label} model={m} />)}</div>
-          : <span className="pricing-check-dash">—</span>}
-      </div>
-    </div>
-  );
-}
-
-// Shared renderer for the many "label + 5 checkmarks" comparison rows —
-// `values` is a 5-length boolean array (Free, Starter, Growth, Pro, Agency).
-function CheckRow({ label, values }) {
-  return (
-    <div className="pricing-compare-row">
-      <div className="pricing-row-label">{label}</div>
-      {values.map((yes, i) => (
-        <div key={i} className="pricing-cell">
-          {yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}
-        </div>
-      ))}
-    </div>
-  );
-}
 
 // Calculator formula mirrors the app's real credit estimate (see
 // poliris-frontend/lib/llm-model-credits.ts + ProductSettingsPanel.tsx) —
@@ -451,14 +409,16 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   );
 }
 
-// The calculator starts collapsed behind a one-line teaser banner — click
+// The calculator starts collapsed behind a teaser card, above `children`
+// (the agency strip) — click
 // it to reveal the full CreditCalculator in place (same conditional-render
 // accordion pattern as CompareSection above, just gating a much bigger
 // block so the pricing page isn't dominated by it by default).
-function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend }) {
+function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend, children }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="pricing-calc-panel">
+    <div className="pricing-calc-panel pr-brand-panel">
+      <div className="pr-brand-links">
       <button
         type="button"
         className={`pricing-calc-banner${open ? ' open' : ''}`}
@@ -474,32 +434,12 @@ function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend }) {
           {open ? c.bannerCtaClose : c.bannerCtaOpen} {ARROW_ICON}
         </span>
       </button>
+      {children}
+      </div>
       {open && (
         <CreditCalculator c={c} plans={plans} agencyLabel={agencyLabel} onRecommend={onRecommend} />
       )}
     </div>
-  );
-}
-
-// Collapsible comparison-table section — clicking the uppercase title bar
-// toggles its rows, chevron rotates to point right when closed. Rendered
-// as a Fragment (no wrapping div) so the rows stay flat siblings within
-// .pricing-compare-table and keep their existing border-bottom sequencing.
-function CompareSection({ title, children }) {
-  const [open, setOpen] = useState(true);
-  return (
-    <>
-      <button
-        type="button"
-        className="pricing-compare-section-title"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-      >
-        <span>{title}</span>
-        <span className={`pricing-compare-chevron${open ? '' : ' closed'}`}>{CHEVRON_ICON}</span>
-      </button>
-      {open && children}
-    </>
   );
 }
 
@@ -539,13 +479,10 @@ function PricingFaqItem({ item, isOpen, onToggle }) {
 // bonus matching the base allocation) — kept as separate fields so the
 // badge can spell out "300 + 300 = 600" instead of just the total.
 const PLAN_META = [
-  // coveragePct is a stepped visual tier, not the exact credit ratio — at
-  // true scale (600 vs 6,000) Starter's bar was indistinguishable from Free's
-  // stub. The exact credits are printed right above each bar.
-  { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,   coveragePct: 6,   popular: false },
-  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,  coveragePct: 25,  popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
-  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,  coveragePct: 60,  popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
-  { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, coveragePct: 100, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
+  { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,     popular: false },
+  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,   popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
+  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,   popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
+  { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
 ];
 
 // currency/annual now flow through to checkout (see PlanCheckoutModal) —
@@ -553,22 +490,101 @@ const PLAN_META = [
 // billing_interval), see app/api/v2/public_checkout.py.
 const CURRENCIES = { usd: { symbol: '$', label: 'USD', code: 'USD' }, eur: { symbol: '€', label: 'EUR', code: 'EUR' } };
 
+/* ── Agency pricing ────────────────────────────────────────────────
+   Monthly prices, excl. tax, per currency, as the design shows them:
+   the Agency pack, then one plan per client (Client S / M / L). Client XL
+   is quoted, so it has no price here. The names and copy live in
+   pricing.agencyView in src/locales/en.js and fr.js.
+
+   Agency plans are not self-serve: there is no checkout here, which is
+   why nothing feeds PlanCheckoutModal. They are opened by the partner
+   team, so the only action is booking a call. */
+const AGENCY_PRICES = {
+  pack:    { usd: 69,  eur: 64 },
+  clientS: { usd: 22,  eur: 20 },
+  clientM: { usd: 74,  eur: 69 },
+  clientL: { usd: 142, eur: 131 },
+};
+const AGENCY_TIERS = ['clientS', 'clientM', 'clientL'];
+// Same booking link the hero and the CTA band use.
+const BOOKING_URL = 'https://cal.com/team/poliris/discovery-call';
+
+const AUDIENCE_ICONS = {
+  brands: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+  ),
+  agencies: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+  ),
+};
+
+// One icon per pricing.agencyView.includes item, in the same order.
+const PACK_ICONS = [
+  <svg key="label" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>,
+  <svg key="seats" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  <svg key="space" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>,
+  <svg key="audits" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
+  <svg key="margin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>,
+  <svg key="partner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg>,
+];
+
+const GIFT_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+);
+
+const INFO_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+);
+
+
+// A price in both currencies, stacked in the same spot: switching currency
+// slides the old one up and out while the new one rises in from below
+// (and back down the other way). Only the price on screen is read out.
+function CurrencyRoll({ values, currency }) {
+  return (
+    <span className={`pr-roll${currency === 'eur' ? ' is-eur' : ''}`}>
+      <span className="pr-roll-usd" aria-hidden={currency !== 'usd'}>{values.usd}</span>
+      <span className="pr-roll-eur" aria-hidden={currency !== 'eur'}>{values.eur}</span>
+    </span>
+  );
+}
+
+// A brand plan's price: the currency roll from above inside a second roll for
+// monthly/annual, so either switch moves the number the same way. `.is-eur`
+// only means "the second value is showing" at the outer level.
+function PlanPrice({ plan, annual, currency }) {
+  const roll = (usd, eur) => <CurrencyRoll currency={currency} values={{ usd: `$${usd}`, eur: `€${eur}` }} />;
+  return (
+    <span className={`pr-roll${annual ? ' is-eur' : ''}`}>
+      <span className="pr-roll-usd" aria-hidden={annual}>{roll(plan.monthly, plan.eurMonthly)}</span>
+      <span className="pr-roll-eur" aria-hidden={!annual}>{roll(plan.annual, plan.eurAnnual)}</span>
+    </span>
+  );
+}
+
 export default function PricingPage() {
   const { lang, t } = useLang();
   const [annual, setAnnual] = useState(false);
   const [currency, setCurrency] = useState('usd');
+  // 'brands' is the default view; 'agencies' swaps the plans for the
+  // Agency Pack and its per-client tiers. #agencies opens it directly.
+  const [audience, setAudience] = useState('brands');
   const [checkoutPlan, setCheckoutPlan] = useState(null);
   const [currentTier, setCurrentTier] = useState(null);
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState(0);
   const [highlightTier, setHighlightTier] = useState(null);
   const highlightTimeoutRef = useRef(null);
   const p = t('pricing');
+  const av = p.agencyView;
+  const bv = p.brandView;
+  const agencyView = audience === 'agencies';
+  const hero = agencyView ? av.hero : p.hero;
 
-  // Scrolls to and briefly pulses the matching plan card (or the Agency
-  // banner) — used by the calculator's "Get {plan}" CTA so the
+  // Scrolls to and briefly pulses the matching plan card (the calculator's
+  // 'agency' tier means the Custom card) — used by the calculator's "Get {plan}" CTA so the
   // recommendation is a click, not just a label.
   const scrollToPlan = (tier) => {
-    const el = document.getElementById(tier === 'agency' ? 'pricing-agency-banner' : `pricing-card-${tier}`);
+    const el = document.getElementById(`pricing-card-${tier === 'agency' ? 'custom' : tier}`);
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setHighlightTier(tier);
@@ -581,11 +597,44 @@ export default function PricingPage() {
   // during the initial render would mismatch the static HTML (same
   // reasoning as Navbar.jsx's hasAccount state).
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    /* eslint-disable react-hooks/set-state-in-effect */
     setCurrentTier(currentPlanTierCookie());
+    if (window.location.hash === '#agencies') { setAudience('agencies'); setOpenFaq(null); }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
-  const plans = p.plans.map((plan, i) => ({ ...plan, ...PLAN_META[i] }));
+  const switchAudience = (next) => {
+    setAudience(next);
+    setOpenFaq(next === 'brands' ? 0 : null);
+    const url = `${window.location.pathname}${window.location.search}${next === 'agencies' ? '#agencies' : ''}`;
+    window.history.replaceState(null, '', url);
+  };
+
+  const plans = bv.plans.map((plan, i) => ({ ...plan, ...PLAN_META[i] }));
+  // The plan comparison keeps the wording and values of the earlier table, so
+  // it reads straight from pricing.compare. Only the layout is new.
+  const c = p.compare;
+  const num = (n) => (lang === 'fr' ? n.replace(',', ' ') : n);
+  const compareRows = [
+    { label: bv.compare.creditsLabel, values: [false, '300', num('1,500'), num('3,000'), c.custom] },
+    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: ['10', '100', '500', num('1,000'), c.custom] },
+    { label: c.modelsLabel, sub: c.modelsSub, values: ['modelsWebOnly', 'models', 'models', 'models', 'models'] },
+    { label: c.modelsCountLabel, values: ['2', c.anyCombination, c.anyCombination, c.anyCombination, c.anyCombination] },
+    { label: c.projectsLabel, values: ['1', c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
+    { label: c.zonesLabel, values: [c.zonesFree, c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
+    { label: c.cadenceLabel, values: [c.daily, c.anyCadence, c.anyCadence, c.anyCadence, c.anyCadence] },
+    { label: c.premiumModelLabel, values: [false, true, true, true, true] },
+    { label: c.virtualTeamsLabel, values: [false, true, true, true, true] },
+    { label: c.slackLabel, values: [false, true, true, true, true] },
+    { label: c.supportChannelsLabel, values: [c.chatsOnly, c.chatsEmail, c.chatsEmail, c.dedicated, c.dedicatedManager] },
+  ];
+  const includedGroups = [
+    { title: c.monitorTitle, items: [c.promptTrackingLabel, c.responseAnalysisLabel, c.mentionsLabel, c.sourceExplorerLabel, c.insightsLabel] },
+    { title: bv.included.sentimentDashboard, items: [c.sentimentScoreLabel, c.perceptionLabel, c.overviewLabel, c.geoMatrixLabel, c.benchmarkingLabel] },
+    { title: c.auditTitle, items: [c.siteReadinessLabel, c.siteDiagnosticsLabel, c.crawlerAnalyticsLabel, c.pagePerfLabel, c.gscLabel] },
+    { title: c.actTitle, items: [c.contentOppsLabel, c.contentStudioLabel, c.backlinkOppsLabel] },
+    { title: c.platformTitle, items: [c.enginesLabel, c.languagesLabel, c.teamMembersLabel, c.exportsLabel] },
+  ];
 
   const symbol = CURRENCIES[currency].symbol;
   const priceFor = (plan, isAnnual) => {
@@ -596,6 +645,15 @@ export default function PricingPage() {
   // charges once for annual billing (see the backend's *_annual_eq * 12
   // Stripe prices), not a separately-set number.
   const annualTotalFor = (plan) => priceFor(plan, true) * 12;
+
+  // Agency prices are monthly only. Both currencies are rendered so
+  // CurrencyRoll can slide from one to the other.
+  const agencyRoll = (key) => (
+    <CurrencyRoll
+      currency={currency}
+      values={{ usd: `$${AGENCY_PRICES[key].usd}`, eur: `€${AGENCY_PRICES[key].eur}` }}
+    />
+  );
 
   const handleSelectPlan = (plan) => {
     if (plan.tier === 'free') {
@@ -627,8 +685,36 @@ export default function PricingPage() {
           <h1 className="eyebrow">{p.hero.eyebrow}</h1>
         </div>
 
-        <div className="pricing-toggle-wrap">
+        {/* Title and lead follow the view: the brand copy from pricing.hero,
+            the agency copy from pricing.agencyView.hero. */}
+        <div className="pr-hero">
+          <h2 className="pr-hero-title">{hero.titlePre} <span className="hl">{hero.titleHl}</span></h2>
+          <p className="pr-hero-lead">{hero.lead}</p>
+        </div>
+
+        <div className="pr-audience-wrap">
+          <div className={`pr-audience${agencyView ? ' is-agencies' : ''}`} role="tablist" aria-label={p.audience.label}>
+            {['brands', 'agencies'].map((key) => (
+              <button
+                key={key}
+                type="button"
+                role="tab"
+                aria-selected={audience === key}
+                className={`pr-audience-tab${audience === key ? ' active' : ''}`}
+                onClick={() => switchAudience(key)}
+              >
+                {AUDIENCE_ICONS[key]}
+                {p.audience[key]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className={`pricing-toggle-wrap${agencyView ? ' is-agencies' : ''}`}>
           <div className="pricing-switcher-card">
+            {/* Agency plans are monthly, so the agencies view only has the
+                currency picker. */}
+            {!agencyView && (<>
             <div className="pricing-billing-switch">
               <button type="button" className={`pricing-billing-label${!annual ? ' active' : ''}`} onClick={() => setAnnual(false)}>
                 {p.billing.monthly}
@@ -650,6 +736,7 @@ export default function PricingPage() {
             </div>
 
             <div className="pricing-switcher-divider" />
+            </>)}
 
             <div className="pricing-currency-switch">
               {Object.entries(CURRENCIES).map(([code, c]) => (
@@ -666,346 +753,185 @@ export default function PricingPage() {
           </div>
         </div>
 
-        <p className="pricing-flexibility-note">{p.flexibilityNote}</p>
-
-        <div className="pricing-grid">
+        {!agencyView && (<>
+        <div className="pr-brand-grid">
           {plans.map((plan) => {
             const isCurrentPlan = plan.tier === currentTier;
             return (
             <div
               key={plan.name}
               id={`pricing-card-${plan.tier}`}
-              className={`pricing-card${plan.popular ? ' popular' : ''}${highlightTier === plan.tier ? ' calc-highlight' : ''}`}
+              className={`pr-brand-card${plan.popular ? ' popular' : ''}${highlightTier === plan.tier ? ' calc-highlight' : ''}`}
             >
               {isCurrentPlan ? (
                 <span className="pricing-badge-popular">{p.currentPlan}</span>
               ) : (
                 plan.popular && <span className="pricing-badge-popular">{p.mostPopular}</span>
               )}
-              <div className="pricing-plan-name">{plan.name}</div>
-              <div className="pricing-plan-desc">{plan.desc}</div>
-              <div className={`pricing-price-row${plan.firstMonthCredits ? ' has-first-month-tip' : ''}`} tabIndex={plan.firstMonthCredits ? 0 : undefined}>
-                <span className="pricing-price">{symbol}{priceFor(plan, annual)}</span>
-                <div className="pricing-price-meta">
-                  <span className="pricing-price-period">/mo</span>
-                  {plan.firstMonthCredits && (
-                    <div className="pricing-first-month-tip">
-                      <span className="pricing-first-month-badge">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8"/><path d="M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8"/></svg>
-                        {p.bonusCredits}
-                      </span>
-                      <div className="pricing-first-month-tooltip" role="tooltip">
-                        <div className="pricing-first-month-tooltip-head">
-                          <span className="pricing-first-month-tooltip-x2">×2</span>
-                          <span className="pricing-first-month-tooltip-title">{p.firstMonthTitle}</span>
-                        </div>
-                        <p className="pricing-first-month-tooltip-body">
-                          <span className="pricing-first-month-calc">{p.firstMonthCalc.replaceAll('{base}', plan.monthlyCredits)}</span>{' '}
-                          <span className="pricing-first-month-total">{p.firstMonthTotal.replace('{total}', plan.firstMonthCredits)}</span>
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              {annual && plan.tier !== 'free' ? (
-                <div className="pricing-billed-annually">
-                  {p.billing.billedAnnually.replace('{amount}', `${symbol}${annualTotalFor(plan)}`)}
-                </div>
-              ) : (
-                <div className="pricing-price-annual-note">&nbsp;</div>
-              )}
-              <div className="pricing-coverage">
-                <div className="pricing-coverage-label">
-                  <span>{p.coverage}</span>
-                  {plan.monthlyCredits ? (
-                    <span>
-                      <span className="pricing-coverage-num">{plan.monthlyCredits}</span>
-                      {/* Reuses the same "{base} + {base} bonus" string as the
-                          first-month tooltip (already translated) instead of
-                          a new key — only the first {base} renders bold. */}
-                      <span className="pricing-coverage-bonus">
-                        {p.firstMonthCalc.replace('{base}', '').replaceAll('{base}', plan.monthlyCredits)}
-                      </span>
-                    </span>
-                  ) : (
-                    <span>{plan.coverageLabel}</span>
-                  )}
-                </div>
-                <div className="pricing-coverage-track">
-                  {plan.monthlyCredits ? (
-                    <>
-                      <div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct / 2}%` }} />
-                      <div className="pricing-coverage-fill pricing-coverage-fill--bonus" style={{ width: `${plan.coveragePct / 2}%` }} />
-                    </>
-                  ) : (
-                    <div className="pricing-coverage-fill" style={{ width: `${plan.coveragePct}%` }} />
-                  )}
-                </div>
-              </div>
-              <div className="pricing-divider" />
-              <ul className="pricing-features">
-                {plan.features.map((f, j) => (
-                  <li key={j}>
-                    {CHECK_ICON}
-                    <span>
-                      {plan.featureTooltips?.[j] ? (
-                        <span className="pricing-feature-info-wrap" tabIndex={0}>
-                          {f}
-                          <div className="pricing-feature-info-tooltip" role="tooltip">{plan.featureTooltips[j]}</div>
-                        </span>
-                      ) : f}
-                      {/* 3rd feature on Free ("10 providers") and Starter ("Access to all API models")
-                          — see pricing.plans[0].features / pricing.plans[1].features. Free shows a
-                          5-icon teaser (FREE_FEATURE_MODELS) plus a "+N" chip (N = FREE_FEATURE_MODELS_REST.length)
-                          instead of its real FREE_MODELS access list; Starter (and up) get every provider. */}
-                      {plan.tier === 'free' && j === 2 && (
-                        <span className="pricing-feature-models">
-                          {FREE_FEATURE_MODELS.map((m) => (
-                            <img
-                              key={m.label}
-                              className="pricing-feature-model-icon"
-                              src={`${import.meta.env.BASE_URL}${m.logo}`}
-                              alt={m.label}
-                              title={m.label}
-                              width="16"
-                              height="16"
-                            />
-                          ))}
-                          <span className="pricing-feature-model-more-wrap" tabIndex={0}>
-                            <span className="pricing-feature-model-more">+{FREE_FEATURE_MODELS_REST.length}</span>
-                            <div className="pricing-feature-model-tooltip" role="tooltip">
-                              {FREE_FEATURE_MODELS_REST.map((m) => m.label).join(', ')}
-                            </div>
-                          </span>
-                        </span>
-                      )}
-                      {plan.tier === 'starter' && j === 2 && (
-                        <span className="pricing-feature-models">
-                          {MODELS.map((m) => (
-                            <img
-                              key={m.label}
-                              className="pricing-feature-model-icon"
-                              src={`${import.meta.env.BASE_URL}${m.logo}`}
-                              alt={m.label}
-                              title={m.label}
-                              width="16"
-                              height="16"
-                            />
-                          ))}
-                        </span>
-                      )}
-                    </span>
-                  </li>
+              <h2 className="pr-plan-name">{plan.name}</h2>
+              <p className="pr-brand-desc">{plan.desc}</p>
+              <p className="pr-plan-price">
+                <span className="pr-plan-amount"><PlanPrice plan={plan} annual={annual} currency={currency} /></span>
+                <span className="pr-plan-period">{bv.perMonth}</span>
+              </p>
+              <p className="pr-plan-billed">
+                {annual && plan.tier !== 'free' && p.billing.billedAnnually.split('{amount}').map((part, i) => (
+                  <span key={i}>
+                    {i > 0 && (
+                      <CurrencyRoll currency={currency} values={{ usd: `$${plan.annual * 12}`, eur: `€${plan.eurAnnual * 12}` }} />
+                    )}
+                    {part}
+                  </span>
                 ))}
+              </p>
+              <p className="pr-plan-credits">
+                {plan.credits}
+                {plan.firstMonth && <span>{plan.firstMonth}</span>}
+              </p>
+              <button type="button" className="pr-brand-cta" onClick={() => handleSelectPlan(plan)}>
+                {isCurrentPlan ? p.currentPlanCta : plan.cta}
+              </button>
+              <ul className="pr-plan-features">
+                {plan.features.map((f, j) => <PlanFeature key={f} text={f} tooltip={plan.tooltips[j]} />)}
               </ul>
-              <button type="button" className="pricing-cta" onClick={() => handleSelectPlan(plan)}>{isCurrentPlan ? p.currentPlanCta : plan.cta} {ARROW_ICON}</button>
             </div>
             );
           })}
+          <div id="pricing-card-custom" className={`pr-brand-card custom${highlightTier === 'agency' ? ' calc-highlight' : ''}`}>
+            <h2 className="pr-plan-name">{bv.custom.name}</h2>
+            <p className="pr-brand-desc">{bv.custom.desc}</p>
+            <p className="pr-plan-price">
+              <span className={`pr-plan-amount${bv.custom.price.length > 6 ? ' is-long' : ''}`}>{bv.custom.price}</span>
+            </p>
+            <p className="pr-plan-billed" />
+            <p className="pr-plan-credits">{bv.custom.credits}</p>
+            <a href={`/${lang}/demo`} className="pr-brand-cta">{bv.custom.cta}</a>
+            <ul className="pr-plan-features">
+              {bv.custom.features.map((f, j) => <PlanFeature key={f} text={f} tooltip={bv.custom.tooltips[j]} />)}
+            </ul>
+          </div>
         </div>
 
-        <div className="pricing-foot-note">
-          <span className="pricing-foot-pill">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
-              <path d="M12 2a7 7 0 0 0-7 7v4a2 2 0 0 0 2 2h1v-6H6v-1a6 6 0 0 1 12 0v1h-2v6h1a2 2 0 0 0 2-2v-1a7 7 0 0 0-1-3.6V9a7 7 0 0 0-6-7Z" />
-              <path d="M20 15v1a4 4 0 0 1-4 4h-2" />
-            </svg>
-            {p.footNote} <a href={`/${lang}/demo`} className="pricing-foot-btn">{p.footNoteLink}</a>
-          </span>
-        </div>
-
-        {/* ============ CREDIT CALCULATOR ============ */}
+        {/* ============ CREDIT CALCULATOR + AGENCY LINK ============ */}
         <CreditCalculatorPanel
           c={p.calculator}
           plans={plans}
-          agencyLabel={p.compare.agencyLabel}
+          agencyLabel={bv.custom.name}
           onRecommend={scrollToPlan}
-        />
+        >
+          {/* Leads to the agencies view, starting from its top. */}
+          <button
+            type="button"
+            className="pr-agency-link"
+            onClick={() => { switchAudience('agencies'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          >
+            <span className="pr-agency-link-icon">{AUDIENCE_ICONS.agencies}</span>
+            <span className="pr-agency-link-text">
+              <span className="pr-agency-link-title">{p.agencyLink.title}</span>
+              <span className="pr-agency-link-sub">{p.agencyLink.sub.split('{price}').map((part, i) => (
+                <span key={i}>{i > 0 && agencyRoll('pack')}{part}</span>
+              ))}</span>
+            </span>
+            <span className="pr-agency-link-cta">{p.agencyLink.cta} {ARROW_ICON}</span>
+          </button>
+        </CreditCalculatorPanel>
 
-        {/* ============ COMPARISON TABLE ============ */}
-        <div className="pricing-compare-wrap">
-
-          <div id="pricing-agency-banner" className={`pricing-agency-banner${highlightTier === 'agency' ? ' calc-highlight' : ''}`}>
-            <div className="pricing-agency-left">
-              <div className="pricing-agency-eyebrow">{p.agency.eyebrow}</div>
-              <h2 className="pricing-agency-title">{p.agency.title}</h2>
-              <p className="pricing-agency-desc">{p.agency.desc}</p>
-              <p className="pricing-agency-price">{p.agency.priceAnchor}</p>
-              <a href={`/${lang}/demo`} className="pricing-agency-cta">{p.agency.cta} {ARROW_ICON}</a>
-            </div>
-            <div className="pricing-agency-right">
-              <div className="pricing-agency-everything">{p.agency.everythingIn}</div>
-              <div className="pricing-agency-tiles">
-                {p.agency.features.map((f, i) => (
-                  <div key={i} className="pricing-agency-tile">
-                    <span className="pricing-agency-tile-icon">{AGENCY_ICONS[i]}</span>
-                    <span className="pricing-agency-tile-label">{f}</span>
-                  </div>
-                ))}
-              </div>
+        {/* ============ PLAN COMPARISON ============ */}
+        <section className="pr-section">
+          <div className="pr-section-head">
+            <h2 className="pr-h2">{bv.compare.title}</h2>
+            <p className="pr-lead">{bv.compare.lead}</p>
+          </div>
+          <div className="pr-compare-card">
+            <div className="pr-compare-scroll">
+              <table className="pr-compare">
+                <thead>
+                  <tr>
+                    <th scope="col">{bv.compare.head}</th>
+                    {plans.map((plan) => (
+                      <th key={plan.name} scope="col" className={plan.popular ? 'is-popular' : undefined}>
+                        {plan.name}
+                        <span className="pr-compare-price">
+                          <PlanPrice plan={plan} annual={annual} currency={currency} />
+                          {plan.tier !== 'free' && <small> {bv.perMonth}</small>}
+                        </span>
+                      </th>
+                    ))}
+                    <th scope="col">
+                      {bv.custom.name}
+                      <span className="pr-compare-price">{bv.compare.onQuote}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {compareRows.map((row) => (
+                    <tr key={row.label}>
+                      <th scope="row">
+                        {row.label}
+                        {row.sub && <small>{row.sub}</small>}
+                      </th>
+                      {row.values.map((value, i) => (
+                        <td key={i} className={plans[i]?.popular ? 'is-popular' : undefined}>
+                          {(value === 'models' || value === 'modelsWebOnly') && (
+                            <div className="pr-model-groups">
+                              <div>
+                                <p className="pr-model-group-label">{c.modelsWebLabel}</p>
+                                <ModelList models={COMPARE_MODELS.web} />
+                              </div>
+                              <div>
+                                <p className="pr-model-group-label">{c.modelsApiLabel}</p>
+                                {value === 'models'
+                                  ? <ModelList models={COMPARE_MODELS.api} />
+                                  : <span role="img" aria-label={bv.compare.notIncluded} className="pr-compare-no" />}
+                              </div>
+                            </div>
+                          )}
+                          {value === true && <span role="img" aria-label={bv.compare.included}>{CHECK_ICON}</span>}
+                          {value === false && <span role="img" aria-label={bv.compare.notIncluded} className="pr-compare-no" />}
+                          {typeof value === 'string' && value !== 'models' && value !== 'modelsWebOnly' && value}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td aria-hidden="true" />
+                    {plans.map((plan) => (
+                      <td key={plan.name} className={plan.popular ? 'is-popular' : undefined}>
+                        <button type="button" className={`pr-brand-cta pr-compare-cta${plan.popular ? ' solid' : ''}`} onClick={() => handleSelectPlan(plan)}>
+                          {plan.tier === currentTier ? p.currentPlanCta : p.plans[plans.indexOf(plan)].tableCta}
+                        </button>
+                      </td>
+                    ))}
+                    <td>
+                      <a href={`/${lang}/demo`} className="pr-brand-cta pr-compare-cta">{c.agencyCta}</a>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
           </div>
-
-          <div className="pricing-compare-heading">
-            <h2>{p.compare.title}</h2>
-            <p>{p.compare.subtitle}</p>
+          <div className="pr-included">
+            <h3>{bv.included.title}</h3>
+            <div className="pr-included-grid">
+              {includedGroups.map((group) => (
+                <div key={group.title}>
+                  <p className="pr-included-label">{group.title}</p>
+                  <ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul>
+                </div>
+              ))}
+            </div>
           </div>
-
-          <div className="pricing-compare-table">
-
-            <div className="pricing-compare-heading-row">
-              <div className="pricing-col-label">{p.compare.coreFeatures}</div>
-              {plans.map((plan) => (
-                <div key={plan.name} className="pricing-plan-col-head">{plan.name} <span className="pricing-dot">•</span> <b>{symbol}{priceFor(plan, false)}</b>/mo</div>
-              ))}
-              <div className="pricing-plan-col-head">{p.compare.agencyLabel} <span className="pricing-dot">•</span> <b>{p.compare.agencyPrice}</b></div>
-            </div>
-
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.modelsLabel}<small>{p.compare.modelsSub}</small></div>
-              <ModelCell webModels={FREE_MODELS} apiModels={[]} c={p.compare} />
-              {[1, 2, 3, 4].map((i) => (
-                <ModelCell key={i} webModels={WEB_INTERFACE_MODELS} apiModels={API_INTEGRATION_MODELS} c={p.compare} />
-              ))}
-            </div>
-
-            <div className="pricing-compare-row">
-              <div className="pricing-row-label">{p.compare.promptsTrackedLabel}<small>{p.compare.promptsTrackedSub}</small></div>
-              {['10', '100', '500', '1,000', p.compare.custom].map((v, i) => (
-                <div key={i} className="pricing-cell">{v}</div>
-              ))}
-            </div>
-
-            <CompareSection title={p.compare.volumeTitle}>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.creditsLabel}</div>
-                {['—', '300', '1,500', '3,000', p.compare.custom].map((v, i) => (
-                  <div key={i} className="pricing-cell">
-                    {v === '—' ? <span className="pricing-check-dash">—</span> : v}
-                  </div>
-                ))}
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.modelsCountLabel}</div>
-                <div className="pricing-cell">2</div>
-                {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCombination}</div>)}
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.projectsLabel}</div>
-                <div className="pricing-cell">1</div>
-                {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
-                <div className="pricing-cell">{p.compare.unlimited}</div>
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.zonesLabel}</div>
-                <div className="pricing-cell">{p.compare.zonesFree}</div>
-                {[1, 2, 3].map((i) => <div key={i} className="pricing-cell">{p.compare.multipleCreditLimited}</div>)}
-                <div className="pricing-cell">{p.compare.unlimited}</div>
-              </div>
-
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.cadenceLabel}</div>
-                <div className="pricing-cell">{p.compare.daily}</div>
-                {[1, 2, 3, 4].map((i) => <div key={i} className="pricing-cell">{p.compare.anyCadence}</div>)}
-              </div>
-              <CheckRow label={p.compare.premiumModelLabel} values={[false, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.platformTitle}>
-              <CheckRow label={p.compare.enginesLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.languagesLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.teamMembersLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.exportsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.dashboardTitle}>
-              <CheckRow label={p.compare.overviewLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.geoMatrixLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.benchmarkingLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.monitorTitle}>
-              <CheckRow label={p.compare.promptTrackingLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.responseAnalysisLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.mentionsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.sourceExplorerLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.insightsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.analyzeTitle}>
-              <CheckRow label={p.compare.sentimentScoreLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.perceptionLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.actTitle}>
-              <CheckRow label={p.compare.contentOppsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.backlinkOppsLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.contentStudioLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.auditTitle}>
-              <CheckRow label={p.compare.siteReadinessLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.siteDiagnosticsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.measureTitle}>
-              <CheckRow label={p.compare.gscLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.pagePerfLabel} values={[true, true, true, true, true]} />
-              <CheckRow label={p.compare.crawlerAnalyticsLabel} values={[true, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.integrationsTitle}>
-              <CheckRow label={p.compare.virtualTeamsLabel} values={[false, true, true, true, true]} />
-            </CompareSection>
-
-            <CompareSection title={p.compare.supportTitle}>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.supportChannelsLabel}</div>
-                <div className="pricing-cell">{p.compare.chatsOnly}</div>
-                <div className="pricing-cell">{p.compare.chatsEmail}</div>
-                <div className="pricing-cell">{p.compare.chatsEmail}</div>
-                <div className="pricing-cell">{p.compare.dedicated}</div>
-                <div className="pricing-cell">{p.compare.dedicatedManager}</div>
-              </div>
-              <div className="pricing-compare-row">
-                <div className="pricing-row-label">{p.compare.slackLabel}</div>
-                {[false, true, true, true, true].map((yes, i) => (
-                  <div key={i} className="pricing-cell">{yes ? <span className="pricing-check-yes">{CHECK_ICON}</span> : <span className="pricing-check-no">{X_ICON}</span>}</div>
-                ))}
-              </div>
-            </CompareSection>
-
-            <div className="pricing-compare-buttons-row">
-              <div />
-              {plans.map((plan) => (
-                <button
-                  key={plan.name}
-                  type="button"
-                  className={`pricing-plan-btn${plan.popular ? ' popular' : ''}`}
-                  onClick={() => handleSelectPlan(plan)}
-                >
-                  {plan.tier === currentTier ? p.currentPlanCta : plan.tableCta} {ARROW_ICON}
-                </button>
-              ))}
-              <a href={`/${lang}/demo`} className="pricing-plan-btn">
-                {p.compare.agencyCta} {ARROW_ICON}
-              </a>
-            </div>
-
-          </div>
-        </div>
+        </section>
 
         {/* ============ FAQ ============ */}
         <div className="pricing-faq-wrap">
-          <h2 className="pricing-faq-title">{p.faqTitle}</h2>
+          <h2 className="pricing-faq-title">{bv.faqTitle}</h2>
           <div className="pricing-faq-list">
-            {p.faq.map((item, i) => (
+            {bv.faq.map((item, i) => (
               <PricingFaqItem
-                key={i}
+                key={item.q}
                 item={item}
                 isOpen={openFaq === i}
                 onToggle={() => setOpenFaq(openFaq === i ? null : i)}
@@ -1014,7 +940,181 @@ export default function PricingPage() {
           </div>
         </div>
 
+        </>)}
+
+        {agencyView && (
+          <>
+            {/* ============ STEP 1 · AGENCY PACK ============ */}
+            <section className="pr-pack">
+              <div className="pr-pack-main">
+                <div className="pr-step">{av.step1}</div>
+                <h2 className="pr-pack-title">{av.packTitle}</h2>
+                <p className="pr-pack-price">
+                  <span className="pr-pack-amount">{agencyRoll('pack')}</span>
+                  <span className="pr-pack-period">{av.perMonth}</span>
+                </p>
+                <p className="pr-pack-promo">
+                  {GIFT_ICON}
+                  <span><strong>{av.promo.strong}</strong> {av.promo.rest}</span>
+                </p>
+                <p className="pr-pack-desc">{av.packDesc}</p>
+                {/* Agency accounts are opened by a partner, never self-serve,
+                    so booking a call is the only action on this page. */}
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="pr-pack-cta">
+                  {av.cta} {ARROW_ICON}
+                </a>
+                <p className="pr-pack-note">{av.ctaNote}</p>
+              </div>
+              <div className="pr-pack-side">
+                <h3 className="pr-pack-side-title">{av.includedTitle}</h3>
+                <ul className="pr-pack-list">
+                  {av.includes.map((item, i) => (
+                    <li key={item.title}>
+                      <span className="pr-pack-icon">{PACK_ICONS[i]}</span>
+                      <span className="pr-pack-item">
+                        <span className="pr-pack-item-title">{item.title}</span>
+                        <span className="pr-pack-item-desc">{item.desc}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+
+            {/* ============ STEP 2 · CLIENT PLANS ============ */}
+            <section className="pr-section">
+              <div className="pr-section-head">
+                <div className="pr-step blue">{av.step2}</div>
+                <h2 className="pr-h2">{av.clientsTitle}</h2>
+                <p className="pr-lead">{av.clientsLead}</p>
+              </div>
+              {/* Same card as the brand plans (pricing-card). */}
+              <div className="pricing-grid pr-clients">
+                {AGENCY_TIERS.map((key, i) => {
+                  const tier = av.tiers[i];
+                  return (
+                    <div key={key} className="pricing-card pr-client-card">
+                      <div className="pricing-plan-name">{tier.name}</div>
+                      <div className="pricing-price-row">
+                        <span className="pricing-price">{agencyRoll(key)}</span>
+                        <div className="pricing-price-meta">
+                          <span className="pricing-price-period">{av.perClient}</span>
+                        </div>
+                      </div>
+                      <p className="pr-client-credits">{tier.credits}</p>
+                      <div className="pricing-divider" />
+                      <ul className="pricing-features">
+                        {tier.features.map((f) => <li key={f}>{CHECK_ICON}<span>{f}</span></li>)}
+                      </ul>
+                    </div>
+                  );
+                })}
+                <div className="pricing-card pr-client-card custom">
+                  <div className="pricing-plan-name">{av.customTier.name}</div>
+                  <div className="pricing-price-row">
+                    <span className="pricing-price">{av.customTier.price}</span>
+                    {/* Empty line where the others say "per client / month",
+                        so the credits line stays level across the cards. */}
+                    <div className="pricing-price-meta" aria-hidden="true">
+                      <span className="pricing-price-period">&nbsp;</span>
+                    </div>
+                  </div>
+                  <p className="pr-client-credits">{av.customTier.credits}</p>
+                  <div className="pricing-divider" />
+                  <ul className="pricing-features">
+                    {av.customTier.features.map((f) => <li key={f}>{CHECK_ICON}<span>{f}</span></li>)}
+                  </ul>
+                </div>
+              </div>
+              <p className="pr-notes">
+                <span className="pr-notes-icon">{INFO_ICON}</span>
+                <span>{av.clientsNote}</span>
+              </p>
+            </section>
+
+            {/* ============ TWO MODES ============ */}
+            <section className="pr-section">
+              <div className="pr-section-head">
+                <h2 className="pr-h2">{av.modes.title}</h2>
+                <p className="pr-lead">{av.modes.lead}</p>
+              </div>
+              {/* One card, two columns: the row labels are shared, so the two
+                  modes read as a direct comparison. */}
+              <div className="pr-modes">
+                <div className="pr-modes-head">
+                  <span aria-hidden="true" />
+                  {av.modes.items.map((mode) => (
+                    <div key={mode.title} className="pr-modes-col">
+                      <span className="pr-mode-tag">{mode.tag}</span>
+                      <h3 className="pr-mode-title">{mode.title}</h3>
+                      <p className="pr-mode-desc">{mode.desc}</p>
+                    </div>
+                  ))}
+                </div>
+                {av.modes.rows.map((label, r) => (
+                  <div key={label} className="pr-modes-row">
+                    <span className="pr-modes-label">{label}</span>
+                    {av.modes.items.map((mode) => (
+                      <span key={mode.title} className="pr-modes-value">{mode.values[r]}</span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* ============ FREE AUDITS ============ */}
+            <section className="pr-audits">
+              <div className="pr-audits-text">
+                <div className="pr-step blue">{av.audits.eyebrow}</div>
+                <h2 className="pr-h2">{av.audits.title}</h2>
+                <p className="pr-lead">{av.audits.lead}</p>
+              </div>
+              <ol className="pr-audits-steps">
+                {av.audits.steps.map((step, i) => (
+                  <li key={step.title}>
+                    <span className="pr-audits-num">{i + 1}</span>
+                    <span>
+                      <span className="pr-audits-title">{step.title}</span>
+                      <span className="pr-audits-desc">{step.desc}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            {/* ============ HOW TO GET STARTED ============ */}
+            <section className="pr-section">
+              <h2 className="pr-h2">{av.start.title}</h2>
+              <ol className="pr-start">
+                {av.start.steps.map((step, i) => (
+                  <li key={step.title}>
+                    <span className="pr-start-num">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="pr-start-title">{step.title}</span>
+                    <span className="pr-start-desc">{step.desc}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            {/* Same accordion and styling as the brand FAQ above. */}
+            <div className="pricing-faq-wrap">
+              <h2 className="pricing-faq-title">{av.faqTitle}</h2>
+              <div className="pricing-faq-list">
+                {av.faq.map((item, i) => (
+                  <PricingFaqItem
+                    key={item.q}
+                    item={item}
+                    isOpen={openFaq === i}
+                    onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
       </div>
+
       <Footer />
       <PlanCheckoutModal
         open={Boolean(checkoutPlan)}

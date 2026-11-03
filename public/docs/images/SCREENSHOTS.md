@@ -44,11 +44,16 @@ hides itself, so the pages stay clean until a screenshot arrives.
 | S37 | `s37-content-optimizer.webp` | content | The optimizer compares the original and the optimized text. |
 | S38 | `s38-long-term-plan-review.webp` | content | Reviewing a long-term content plan before approval. |
 | S40 | `s40-acquire-citation.webp` | citations | Acquire Citation: sources to get cited on, with their cost and score. |
-| S41 | `s41-poli-ai.webp` | poli-ai | Poli AI in full page. |
+| S41 | `s41-poli-ai.webp` | poli-ai | Poli AI as a full page. |
 | S42 | `s42-connect-chooser.webp` | site-connection | Choosing how Poliris connects to your site. |
 | S43 | `s43-wordpress-pairing.webp` | site-connection | Connecting WordPress: install the plugin, pair with a one-time code, verify. |
+| S44 | `s44-search-console.webp` | site-connection | The Manage Search Console window: enter your GSC property, then connect. |
 | S45 | `s45-mcp-tab.webp` | site-connection | The MCP tab in My Account. |
 | S46 | `s46-members.webp` | settings | Members of a workspace and their roles. |
 | S47 | `s47-billing.webp` | settings | The Billing tab. |
+| S48 | `s48-seo-pixel-install.webp` | site-connection | Installing the SEO Pixel: copy the snippet into your pages, then verify. |
+| S50 | `s50-review-citation.webp` | citations | Review Citation: the pages that already mention your products and the action to take on each. |
+| S51 | `s51-google-analytics.webp` | site-connection | The Manage Google Analytics window: enter your GA4 property ID, then connect. |
+| S52 | `s52-seo-pixel-enable.webp` | site-connection | Step 1: enable the SEO Pixel for the site. |
 
-44 screenshots, all in place. S31 (Keyword Audit), S39 (Technical Fixes) and S44 (Search Console connection) were taken out until those features reach production. The original, uncropped screenshots were moved out of public/ to .backups/cleanup-2026-10-26/public/docs-assets/.
+49 screenshots, all in place. S42 lists SEO Pixel and WordPress only. S31 (Keyword Audit) and S39 (Technical Fixes) were taken out until those features reach production. S49 (Webflow connection) has no slot yet: add one when Webflow is available. The original, uncropped screenshots were moved out of public/ to .backups/cleanup-2026-10-26/public/docs-assets/.

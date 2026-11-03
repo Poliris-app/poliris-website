@@ -28,17 +28,14 @@
 .pricing-flexibility-note { text-align: center; font-size: 13px; color: var(--pr-text-faint); margin: 14px 0 0; }
 
 /* ---------- Billing toggle ---------- */
-.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; margin: 36px 0 8px; }
+.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; margin: 22px 0 8px; }
 
 .pricing-switcher-card {
   display: inline-flex;
   align-items: center;
   gap: 16px;
-  background: #fff;
-  border: 1px solid var(--pr-border);
-  border-radius: 100px;
-  padding: 8px 10px 8px 16px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .pricing-switcher-divider { width: 1px; align-self: stretch; background: var(--pr-border); }
 
@@ -72,7 +69,7 @@
   cursor: pointer;
   transition: background .2s ease;
 }
-.pricing-switch.on { background: var(--pr-navy); }
+.pricing-switch.on { background: var(--pr-blue); }
 .pricing-switch__knob {
   position: absolute;
   top: 2px; left: 2px;
@@ -115,8 +112,7 @@
   transition: background .15s ease, color .15s ease;
 }
 .pricing-currency-btn.active {
-  background: var(--pr-navy);
-  color: #fff;
+  color: var(--fg-1);
   font-weight: 700;
 }
 
@@ -262,7 +258,7 @@
 
 .pricing-features { list-style: none; margin: 0 0 24px; padding: 0; flex-grow: 1; }
 .pricing-features li { display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; color: var(--pr-text); line-height: 1.5; margin-bottom: 12px; }
-.pricing-features li .pricing-check { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; color: var(--pr-good); }
+.pricing-features li .pricing-check { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; color: var(--pr-blue); }
 .pricing-feature-models { display: flex; flex-wrap: nowrap; align-items: center; gap: 5px; margin-top: 6px; width: 100%; }
 .pricing-feature-model-icon { width: 16px; height: 16px; border-radius: 4px; object-fit: contain; flex-shrink: 0; }
 .pricing-feature-model-more-wrap { position: relative; display: inline-flex; flex-shrink: 0; cursor: default; }
@@ -702,63 +698,36 @@
 }
 .pricing-compare-heading p { font-size: 15px; color: var(--pr-text-faint); margin: 0; line-height: 1.5; }
 
-.pricing-agency-banner {
-  display: flex; gap: 40px;
-  background: #fff; border: 1px solid var(--pr-border); border-radius: var(--pr-radius);
-  padding: 32px 36px; margin-bottom: 36px;
+.pr-agency-link {
+  /* "Running an agency?" strip, right under the calculator banner and the
+     same size as it. Leads to the agencies view. */
+  width: 100%; margin-top: 12px; display: flex; align-items: center; gap: 16px; text-align: left;
+  background: rgba(0, 98, 255, .06); border: 1px solid rgba(0, 98, 255, .2); border-radius: var(--pr-radius);
+  padding: 18px 22px; cursor: pointer; transition: border-color .15s ease, background .15s ease;
 }
-.pricing-agency-left { flex: 0 0 300px; }
-.pricing-agency-eyebrow {
-  font-family: var(--manrope); font-size: 11.5px; font-weight: 700; letter-spacing: .05em;
-  color: var(--pr-blue); text-transform: uppercase; margin-bottom: 8px;
+.pr-agency-link:hover { border-color: rgba(0, 98, 255, .4); background: rgba(0, 98, 255, .09); }
+.pr-agency-link-icon {
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 10px; background: var(--pr-blue); color: #fff;
 }
-.pricing-agency-title {
-  font-family: var(--manrope); font-size: 28px; font-weight: 800; color: var(--pr-navy);
-  margin: 0 0 10px;
+.pr-agency-link-icon svg { width: 20px; height: 20px; }
+.pr-agency-link-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.pr-agency-link-title { font-family: var(--manrope); font-size: 14.5px; font-weight: 700; color: var(--pr-navy); }
+.pr-agency-link-sub { font-size: 12.5px; color: var(--pr-text-faint); }
+.pr-agency-link-cta {
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; flex-shrink: 0;
+  background: var(--pr-blue); color: #fff; font-family: var(--chivo); font-size: 13px; font-weight: 700;
+  padding: 11px 18px; border-radius: 100px; box-shadow: 0 10px 24px -10px rgba(0, 98, 255, .6);
+  transition: transform .15s ease, filter .15s ease;
 }
-.pricing-agency-desc { font-size: 14px; color: var(--pr-text-faint); line-height: 1.55; margin: 0 0 14px; }
-.pricing-agency-price { font-size: 13.5px; font-weight: 700; color: var(--pr-blue); line-height: 1.5; margin: 0 0 20px; }
-.pricing-agency-cta {
-  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
-  background: var(--pr-blue); border: none; border-radius: 100px;
-  padding: 11px 20px; font-size: 13.5px; font-weight: 700; color: #fff;
-  text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-  box-shadow: 0 10px 24px -10px rgba(0,98,255,0.6);
-}
-.pricing-agency-cta:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 12px 28px -8px rgba(0,98,255,0.7); }
-.pricing-agency-cta svg { width: 13px; height: 13px; }
-
-.pricing-agency-right { flex: 1; min-width: 0; }
-.pricing-agency-everything {
-  font-family: var(--manrope); font-size: 11px; font-weight: 700; letter-spacing: .05em;
-  color: var(--pr-text-faint); text-transform: uppercase; margin-bottom: 16px;
-}
-.pricing-agency-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.pricing-agency-tile {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 16px; border: 1px solid var(--pr-border); border-radius: 12px;
-  background: var(--pr-bg);
-  transition: border-color .15s ease, background .15s ease;
-}
-.pricing-agency-tile:hover { border-color: #c7d3f2; background: #fff; }
-.pricing-agency-tile-icon {
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  flex-shrink: 0;
-  width: 34px; 
-  height: 34px; 
-  border-radius: 9px;
-  background: white; 
-  color: var(--poliris-blue);
-  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
-}
-.pricing-agency-tile-icon svg { width: 17px; height: 17px; }
-.pricing-agency-tile-label { font-size: 13.5px; font-weight: 600; color: var(--pr-navy); line-height: 1.4; padding-top: 6px; }
-@media (max-width: 780px) {
-  .pricing-agency-banner { flex-direction: column; gap: 24px; padding: 28px 24px; }
-  .pricing-agency-left { flex: none; }
-  .pricing-agency-tiles { grid-template-columns: 1fr; }
+.pr-agency-link:hover .pr-agency-link-cta { transform: translateY(-1px); filter: brightness(1.06); }
+.pr-agency-link-cta svg { width: 12px; height: 12px; }
+@media (max-width: 640px) {
+  /* Text takes the row beside the icon, so the button drops below it
+     instead of squeezing the text (applies to the calculator banner too). */
+  .pr-agency-link { flex-wrap: wrap; }
+  .pr-agency-link-text, .pricing-calc-banner-text { flex-basis: calc(100% - 56px); }
+  .pr-agency-link-cta { margin-left: 56px; }
 }
 
 .pricing-compare-table { border: 1px solid var(--pr-border); border-radius: 10px; overflow: hidden; background: #fff; }
@@ -881,23 +850,427 @@ button.pricing-compare-section-title {
 /* ---------- FAQ accordion ---------- */
 .pricing-faq-wrap { max-width: 760px; margin: 100px auto 0; }
 .pricing-faq-title { text-align: center; font-family: var(--manrope); font-size: 26px; font-weight: 800; color: var(--pr-navy); margin: 0 0 28px; }
-.pricing-faq-list { display: flex; flex-direction: column; gap: 10px; }
-.pricing-faq-item { border: 1px solid var(--pr-border); border-radius: 12px; background: #fff; overflow: hidden; transition: border-color .15s ease; }
-.pricing-faq-item.open { border-color: #c7d3f2; }
+.pricing-faq-list { display: flex; flex-direction: column; }
+/* Same rows as the FAQ page (faq2 in faqs.css): thin lines, no boxes. */
+.pricing-faq-item { border-bottom: 1px solid #eceef4; }
+.pricing-faq-item:first-child { border-top: 1px solid #eceef4; }
 .pricing-faq-q {
-  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 16px 20px; background: none; border: none; cursor: pointer; text-align: left;
-  font-family: var(--manrope); font-size: 14.5px; font-weight: 700; color: var(--pr-navy);
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 22px 0; background: none; border: none; cursor: pointer; text-align: left;
+  font-family: var(--manrope); font-size: 16px; font-weight: 600; line-height: 1.45; color: #1a1d23;
+  transition: color .15s ease;
 }
+.pricing-faq-q:hover { color: var(--pr-blue); }
 .pricing-faq-icon {
   flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(0,98,255,0.08); color: var(--pr-blue); font-size: 15px; font-weight: 700; line-height: 1;
-  transition: background .15s ease, color .15s ease;
+  box-sizing: border-box; background: #fff; border: 1.5px solid #dde1ec; color: #9aa0ab;
+  font-size: 15px; font-weight: 700; line-height: 1;
+  transition: border-color .2s ease, color .2s ease;
 }
-.pricing-faq-item.open .pricing-faq-icon { background: var(--pr-blue); color: #fff; }
+.pricing-faq-q:hover .pricing-faq-icon,
+.pricing-faq-item.open .pricing-faq-icon { border-color: var(--pr-blue); color: var(--pr-blue); }
 .pricing-faq-a-wrap { height: 0; overflow: hidden; transition: height .32s cubic-bezier(.4,0,.2,1); }
-.pricing-faq-a { margin: 0; padding: 0 20px 16px; font-size: 13.5px; color: var(--pr-text-faint); line-height: 1.6; }
+.pricing-faq-a { margin: 0; padding: 0 48px 22px 0; font-size: 14.5px; color: #4b5563; line-height: 1.7; }
 @media (max-width: 620px) {
   .pricing-faq-wrap { margin-top: 64px; }
+}
+
+/* ---------- For brands / For agencies switch and the agencies view ---------- */
+.pr-hero { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pr-hero .eyebrow { margin: 0; }
+.pr-hero-title {
+  margin: 0; font-family: var(--manrope); font-weight: 800;
+  font-size: clamp(30px, 3.6vw, 50px); line-height: 1.12; letter-spacing: -0.025em;
+  color: var(--pr-text); text-wrap: balance;
+}
+.pr-hero-title .hl { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.pr-hero-lead { margin: 14px 0 0; max-width: 1000px; font-size: 18px; line-height: 1.6; color: var(--pr-text-muted); }
+
+.pr-audience-wrap { display: flex; justify-content: center; margin-top: 28px; }
+/* Two equal columns, so the blue pill (::before) is half the width and
+   slides across with a transform when "is-agencies" is set. */
+.pr-audience {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr;
+  background: #fff; border: 1px solid #d5d9e4; border-radius: 999px; padding: 4px;
+}
+.pr-audience::before {
+  content: ''; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px);
+  border-radius: 999px; background: var(--pr-blue);
+  box-shadow: 0 4px 12px -4px rgba(0, 98, 255, .55);
+  transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+}
+.pr-audience.is-agencies::before { transform: translateX(100%); }
+.pr-audience-tab {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 7px; height: 38px; padding: 0 18px;
+  border: 0; border-radius: 999px; background: transparent; cursor: pointer; white-space: nowrap;
+  font-family: var(--manrope); font-weight: 700; font-size: 14px; color: var(--pr-text);
+  transition: color .3s ease;
+}
+.pr-audience-tab svg { width: 15px; height: 15px; }
+.pr-audience-tab:not(.active):hover { color: var(--pr-blue); }
+.pr-audience-tab.active { color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .pr-audience::before, .pr-audience-tab { transition: none; }
+}
+
+
+
+.pr-plan-name { margin: 0; font-family: var(--manrope); font-weight: 800; font-size: 20px; color: var(--pr-text); }
+.pr-plan-price { margin: 16px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; color: var(--pr-text); }
+.pr-plan-amount { font-family: var(--manrope); font-weight: 800; font-size: 42px; line-height: 1; letter-spacing: -0.02em; }
+.pr-plan-period { font-size: 14px; color: var(--pr-text-faint); }
+.pr-plan-billed { margin: 6px 0 0; min-height: 18px; font-size: 12.5px; color: var(--pr-text-faint); white-space: pre; }
+.pr-plan-credits {
+  margin: 6px 0 0; display: flex; flex-direction: column;
+  font-family: var(--manrope); font-weight: 700; font-size: 14px; color: var(--pr-blue);
+}
+.pr-plan-credits span { font-weight: 600; color: var(--pr-text-faint); }
+.pr-plan-features {
+  align-self: start; margin: 20px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid #e3e6ee;
+  display: flex; flex-direction: column; gap: 11px; font-size: 14px; line-height: 1.4; color: var(--pr-text);
+}
+.pr-plan-features li { display: flex; gap: 9px; }
+.pr-plan-features .pricing-check { flex-shrink: 0; width: 17px; height: 17px; margin-top: 1px; color: var(--pr-blue); }
+/* ---------- Sections ---------- */
+.pr-section { margin-top: 96px; }
+.pr-section-head { max-width: none; }
+.pr-section-head.center { margin: 0 auto; text-align: center; }
+.pr-h2 {
+  margin: 0; font-family: var(--manrope); font-weight: 800; font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.15; letter-spacing: -0.02em; color: var(--pr-text); text-wrap: balance;
+}
+.pr-lead { margin: 12px 0 0; font-size: 16px; line-height: 1.6; color: var(--pr-text-muted); }
+.pr-step {
+  font-family: var(--manrope); font-weight: 700; font-size: 12px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #93b4fc; margin-bottom: 10px;
+}
+.pr-step.blue { color: var(--pr-blue); }
+
+
+/* ---------- Agencies: Agency Pack ----------
+   Same look as the site's agency banner and cards: white card, light
+   tiles with the glowing white icon box, blue pill CTA. The tiles stretch
+   to the height of the left column so the card has no empty corner. */
+.pr-pack {
+  margin-top: 44px; display: grid; grid-template-columns: 45% 1fr; gap: 0;
+  background: #fff; border: 1px solid var(--pr-border); border-radius: 24px; overflow: hidden;
+}
+.pr-pack-main { display: flex; flex-direction: column; padding: 44px 40px; }
+.pr-pack .pr-step { color: var(--pr-blue); margin-bottom: 12px; }
+.pr-pack-title { margin: 0; font-family: var(--manrope); font-weight: 800; font-size: 30px; color: var(--pr-text); }
+.pr-pack-price { margin: 18px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; color: var(--pr-text); }
+.pr-pack-amount { font-family: var(--manrope); font-weight: 800; font-size: 64px; line-height: 1; letter-spacing: -0.03em; }
+.pr-pack-period { font-size: 17px; color: var(--pr-text-muted); }
+.pr-pack-billed { margin: 6px 0 0; font-size: 12.5px; color: var(--pr-text-faint); }
+.pr-pack-desc { margin: 22px 0 28px; font-size: 16px; line-height: 1.6; color: var(--pr-text-muted); }
+.pr-pack-cta {
+  /* Full width, like the plan card buttons. */
+  margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 7px;
+  text-align: center; line-height: 1.3; min-height: 54px; background: var(--pr-blue); color: #fff; text-decoration: none;
+  border-radius: 100px; padding: 12px 24px; font-family: var(--manrope); font-size: 15px; font-weight: 700;
+  box-shadow: 0 10px 24px -10px rgba(0,98,255,0.6);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.pr-pack-cta:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 12px 28px -8px rgba(0,98,255,0.7); }
+.pr-pack-cta svg { width: 13px; height: 13px; }
+.pr-pack-note { margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: var(--pr-text-faint); }
+.pr-pack-side { display: flex; flex-direction: column; min-width: 0; padding: 44px 40px; }
+.pr-pack-side-title {
+  /* Same type as the "Step 1" label opposite, so the two line up. */
+  margin: 0 0 12px; font-family: var(--manrope); font-size: 12px; font-weight: 700; line-height: inherit;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--pr-text-faint);
+}
+.pr-pack-list {
+  flex: 1; margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-content: start;
+}
+.pr-pack-list li {
+  display: flex; align-items: flex-start; gap: 12px; padding: 16px;
+  border: 1px solid var(--pr-border); border-radius: 12px; background: var(--pr-bg);
+  transition: border-color .15s ease, background .15s ease;
+}
+.pr-pack-list li:hover { border-color: #c7d3f2; background: #fff; }
+.pr-pack-icon {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; background: #fff; color: var(--poliris-blue);
+  box-shadow: 0 4px 16px -4px rgba(0, 98, 255, .35), 0 0 0 1px rgba(0, 98, 255, .08);
+}
+.pr-pack-icon svg { width: 17px; height: 17px; }
+.pr-pack-item { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pr-pack-item-title { font-family: var(--manrope); font-size: 14.5px; font-weight: 700; line-height: 1.35; color: var(--pr-text); padding-top: 7px; }
+.pr-pack-item-desc { font-size: 13px; line-height: 1.5; color: var(--pr-text-faint); }
+.pr-pack-promo {
+  /* The design's badge shape and type, as a light highlight in our blue. */
+  margin: 18px 0 0; align-self: flex-start; display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; border-radius: 12px;
+  background: rgba(0, 98, 255, .08); border: 1px solid rgba(0, 98, 255, .25);
+  font-size: 14.5px; line-height: 1.4; color: var(--pr-text);
+}
+.pr-pack-promo svg { flex: none; width: 18px; height: 18px; color: var(--pr-blue); }
+.pr-pack-promo strong { font-weight: 700; color: var(--pr-blue); }
+@media (max-width: 900px) {
+  .pr-pack { grid-template-columns: 1fr; }
+  .pr-pack-main, .pr-pack-side { padding: 30px 24px; }
+}
+@media (max-width: 560px) { .pr-pack-list { grid-template-columns: 1fr; grid-auto-rows: auto; } .pr-pack-amount { font-size: 52px; } }
+
+
+.pr-clients { margin-top: 32px; }
+
+.pr-notes { margin: 20px 0 0; display: flex; gap: 10px; font-size: 14px; line-height: 1.6; color: var(--pr-text-muted); }
+.pr-notes p { margin: 0; }
+.pr-notes-icon { flex-shrink: 0; display: flex; color: var(--pr-blue); margin-top: 3px; }
+.pr-notes-icon svg { width: 17px; height: 17px; }
+
+
+
+@media (max-width: 640px) {
+  .pr-audience-tab { padding: 0 14px; }
+  .pr-section { margin-top: 72px; }
+}
+
+/* Same top spacing as the shared Hero on the other pages (.hero padding
+   + .hero__inner padding in poliris.css at each breakpoint), so the
+   eyebrow sits at the same height when moving between pages. */
+.pricing-wrap { padding-top: 184px; }
+@media (max-width: 1024px) { .pricing-wrap { padding-top: 164px; } }
+@media (max-width: 768px)  { .pricing-wrap { padding-top: 126px; } }
+@media (max-width: 480px)  { .pricing-wrap { padding-top: 118px; } }
+
+/* ---------- Agencies: two modes, one compare card ---------- */
+.pr-modes {
+  margin-top: 32px; background: #fff; border: 1px solid var(--pr-border);
+  border-radius: var(--pr-radius); overflow: hidden;
+}
+.pr-modes-head, .pr-modes-row { display: grid; grid-template-columns: 240px 1fr 1fr; }
+.pr-modes-col { padding: 28px 28px 24px; border-left: 1px solid var(--pr-border); }
+.pr-modes-col:first-of-type { background: #f5f8ff; }
+.pr-mode-tag {
+  display: inline-block; font-family: var(--manrope); font-size: 12px; font-weight: 700; color: #fff;
+  background: var(--pr-blue); padding: 5px 11px; border-radius: 999px;
+}
+.pr-mode-title { margin: 12px 0 0; font-family: var(--manrope); font-weight: 800; font-size: 22px; color: var(--pr-text); }
+.pr-mode-desc { margin: 8px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--pr-text-muted); }
+.pr-modes-row { border-top: 1px solid var(--pr-border); }
+.pr-modes-label {
+  padding: 18px 28px; font-family: var(--manrope); font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--pr-text-faint);
+  display: flex; align-items: center; white-space: nowrap;
+}
+.pr-modes-value {
+  padding: 18px 28px; border-left: 1px solid var(--pr-border);
+  font-family: var(--manrope); font-size: 15px; font-weight: 700; color: var(--pr-text);
+}
+.pr-modes-value:nth-child(2) { background: #f5f8ff; }
+@media (max-width: 760px) {
+  .pr-modes-head, .pr-modes-row { grid-template-columns: 1fr 1fr; }
+  .pr-modes-head > span:first-child { display: none; }
+  .pr-modes-col:first-of-type { border-left: 0; }
+  .pr-modes-label { grid-column: 1 / -1; padding: 14px 20px 0; }
+  .pr-modes-value { padding: 8px 20px 14px; font-size: 14px; }
+  .pr-modes-value:nth-child(2) { border-left: 0; }
+  .pr-modes-col { padding: 22px 20px 18px; }
+}
+
+/* Client plan cards reuse the brand pricing-card, with a credits line
+   under the price instead of the brand card's coverage bar. */
+/* "per client / month" sits on the price's baseline, beside it. */
+.pr-client-card .pricing-price-row { align-items: baseline; gap: 5px; margin-bottom: 8px; }
+.pr-client-card .pricing-price-period { font-size: 12.5px; white-space: nowrap; }
+.pr-client-card .pricing-price { line-height: 1.1; }
+.pr-client-card .pricing-price-meta { margin-top: 0; }
+/* No button under the list, so drop the space the brand card keeps for it. */
+.pr-client-card .pricing-features { margin-bottom: 0; }
+.pr-client-card .pricing-features li:last-child { margin-bottom: 0; }
+.pr-client-card.custom { background: #f5f8ff; border-color: #d3def5; }
+.pr-client-card.custom .pricing-price { font-size: 34px; white-space: nowrap; line-height: 1.36; }
+.pr-client-credits { margin: 0 0 18px; font-family: var(--manrope); font-size: 14px; font-weight: 700; color: var(--pr-blue); }
+
+/* ---------- Agencies: free audits ---------- */
+.pr-audits {
+  margin-top: 96px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+  background: #e6edfa; border: 1px solid #d3def5; border-radius: 24px; padding: 40px;
+}
+.pr-audits-steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.pr-audits-steps li {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: #fff; border-radius: 14px; padding: 18px 20px;
+}
+.pr-audits-num {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--pr-blue); color: #fff; font-family: var(--manrope); font-size: 14px; font-weight: 700;
+}
+.pr-audits-title { display: block; font-family: var(--manrope); font-weight: 800; font-size: 17px; color: var(--pr-text); }
+.pr-audits-desc { display: block; margin-top: 4px; font-size: 14.5px; line-height: 1.55; color: var(--pr-text-muted); }
+
+/* ---------- Agencies: how to get started ---------- */
+.pr-start { margin: 32px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.pr-start li { display: flex; flex-direction: column; border-top: 3px solid var(--pr-blue); padding-top: 22px; }
+.pr-start-num { font-family: var(--manrope); font-size: 14px; font-weight: 700; color: var(--pr-blue); }
+.pr-start-title { margin-top: 8px; font-family: var(--manrope); font-weight: 800; font-size: 19px; color: var(--pr-text); }
+.pr-start-desc { margin-top: 8px; font-size: 14.5px; line-height: 1.6; color: var(--pr-text-muted); }
+
+@media (max-width: 900px) {
+  .pr-modes, .pr-audits { grid-template-columns: 1fr; }
+  .pr-audits { padding: 28px 22px; gap: 24px; }
+  .pr-start { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .pr-mode { padding: 22px; }
+  .pr-mode-row { grid-template-columns: 1fr; gap: 4px; }
+  .pr-start { grid-template-columns: 1fr; }
+}
+
+/* ---------- Agencies: price roll when switching currency ----------
+   Both prices share one grid cell, so the box is as wide as the wider one
+   and keeps the first one's baseline. clip-path hides whichever is out of
+   the box without changing that baseline (overflow: hidden would). */
+.pr-roll { display: inline-grid; clip-path: inset(0 -0.05em); vertical-align: baseline; justify-items: start; }
+.pr-roll > span {
+  grid-area: 1 / 1; transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .3s ease;
+}
+.pr-roll-eur { transform: translateY(100%); opacity: 0; }
+/* Direct children only: on brand prices a currency roll sits inside the
+   monthly/annual roll, and each level has to move on its own. */
+.pr-roll.is-eur > .pr-roll-usd { transform: translateY(-100%); opacity: 0; }
+.pr-roll.is-eur > .pr-roll-eur { transform: translateY(0); opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .pr-roll > span { transition: none; } }
+
+/* ---------- Currency switcher ----------
+   A grey track with a white pill on the selected currency, which slides
+   across when switching. Same in the brands and agencies views. */
+.pricing-toggle-wrap.is-agencies { margin-top: 18px; }
+.pricing-toggle-wrap.is-agencies .pricing-switcher-card { background: none; border: 0; padding: 0; }
+.pricing-toggle-wrap .pricing-currency-switch {
+  position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; gap: 0;
+  background: #f0f2f7; border-radius: 999px; padding: 3px;
+}
+.pricing-toggle-wrap .pricing-currency-switch::before {
+  content: ''; position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px);
+  border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(13, 22, 48, .12);
+  transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+}
+.pricing-toggle-wrap .pricing-currency-switch:has(.pricing-currency-btn:last-child.active)::before { transform: translateX(100%); }
+.pricing-toggle-wrap .pricing-currency-btn {
+  position: relative; z-index: 1; height: 32px; padding: 0 14px; background: none;
+  font-size: 13px; font-weight: 700; color: var(--pr-text-faint); transition: color .25s ease;
+}
+.pricing-toggle-wrap .pricing-currency-btn.active { background: none; color: var(--pr-text); }
+@media (prefers-reduced-motion: reduce) {
+  .pricing-toggle-wrap .pricing-currency-switch::before { transition: none; }
+}
+
+/* ---------- Brands view ----------
+   Five plans in one row. Each card spans the same seven rows of the parent
+   grid (subgrid), so prices, credits, buttons and lists line up across cards
+   whatever the length of the text above them. */
+.pr-brand-grid {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 14px; row-gap: 20px;
+  margin-top: 44px;
+}
+.pr-brand-card {
+  position: relative; display: grid; grid-row: span 7; grid-template-rows: subgrid; row-gap: 0; min-width: 0;
+  background: var(--pr-card); border: 1px solid var(--pr-border); border-radius: 20px; padding: 28px 20px 30px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.pr-brand-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px -20px rgba(13,27,62,0.25); }
+.pr-brand-card.popular {
+  border: 2px solid var(--pr-blue); padding: 27px 19px 29px;
+  box-shadow: 0 18px 44px rgba(0, 98, 255, .14);
+}
+.pr-brand-card .pricing-badge-popular { top: -14px; }
+.pr-brand-desc { margin: 8px 0 0; font-size: 14px; line-height: 1.5; color: var(--pr-text-muted); }
+.pr-brand-card .pr-plan-price { margin-top: 18px; flex-wrap: nowrap; }
+.pr-brand-card .pr-plan-credits { margin-top: 6px; gap: 2px; line-height: 1.4; }
+.pr-plan-amount.is-long { font-size: 30px; line-height: 42px; white-space: nowrap; }
+.pr-brand-card .pr-plan-billed { white-space: normal; margin-top: 4px; }
+/* Full card width even when the list items are short. */
+.pr-brand-card .pr-plan-features { align-self: stretch; margin-top: 22px; padding-top: 20px; gap: 13px; }
+.pr-brand-cta {
+  display: flex; align-items: center; justify-content: center; align-self: start; width: 100%; min-height: 48px;
+  margin-top: 20px; padding: 10px 14px; border-radius: 999px; text-align: center; cursor: pointer;
+  border: 1.5px solid var(--pr-blue); background: transparent; color: var(--pr-blue);
+  font-family: var(--manrope); font-size: 15px; font-weight: 600; text-decoration: none;
+  transition: background .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.pr-brand-cta:hover, .pr-brand-card.popular .pr-brand-cta {
+  background: var(--pr-blue); color: #fff;
+}
+.pr-brand-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -8px rgba(0, 98, 255, .45); }
+/* The Custom card sits on the brand blue. */
+.pr-brand-card.custom { background: var(--pr-blue); border-color: var(--pr-blue); color: #fff; }
+.pr-brand-card.custom .pr-plan-name,
+.pr-brand-card.custom .pr-plan-price,
+.pr-brand-card.custom .pr-plan-features { color: #fff; }
+.pr-brand-card.custom .pr-brand-desc { color: #fff; }
+.pr-brand-card.custom .pr-plan-credits { color: #fff; }
+.pr-brand-card.custom .pr-plan-features { border-top-color: rgba(255, 255, 255, .28); }
+.pr-brand-card.custom .pr-plan-features .pricing-check { color: #fff; }
+.pr-brand-card.custom .pr-brand-cta { background: #fff; border-color: #fff; color: var(--pr-blue); }
+.pr-brand-card.custom .pr-brand-cta:hover { box-shadow: 0 10px 22px -8px rgba(255, 255, 255, .35); }
+
+/* Calculator banner and agency strip, one above the other. The calculator
+   itself opens below them. */
+.pricing-calc-panel.pr-brand-panel { margin-top: 44px; }
+.pr-brand-links { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.pr-brand-links .pricing-calc-banner,
+.pr-brand-links .pr-agency-link { margin-top: 0; border-radius: 20px; padding: 22px 24px; }
+.pr-brand-links .pricing-calc-banner-title,
+.pr-brand-links .pr-agency-link-title { font-size: 17px; font-weight: 800; }
+.pr-brand-links .pricing-calc-banner-sub,
+.pr-brand-links .pr-agency-link-sub { font-size: 14.5px; line-height: 1.45; color: var(--pr-text-muted); }
+
+/* Plan comparison: a real table that scrolls on its own on small screens. */
+.pr-compare-card { margin-top: 32px; background: #fff; border: 1px solid var(--pr-border); border-radius: 20px; overflow: hidden; }
+.pr-compare-scroll { overflow-x: auto; }
+/* Fixed layout: the five plan columns share the same width. */
+.pr-compare { width: 100%; min-width: 980px; table-layout: fixed; border-collapse: collapse; font-size: 14px; color: var(--fg-1); }
+.pr-compare th, .pr-compare td { padding: 15px 16px; text-align: left; vertical-align: middle; font-weight: 400; border-bottom: 1px solid var(--pr-border); }
+.pr-compare tbody tr:last-child th, .pr-compare tbody tr:last-child td { border-bottom: 0; }
+.pr-compare thead th { font-family: var(--manrope); font-weight: 700; line-height: 1.35; vertical-align: bottom; }
+.pr-compare thead th:first-child { font-weight: 800; font-size: 15px; }
+.pr-compare thead th:first-child { width: 22%; }
+.pr-compare tbody th { font-weight: 600; }
+.pr-compare tbody th small { display: block; margin-top: 3px; font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--pr-text-faint); }
+/* Available models: one row, logos and names grouped by tracking method. */
+.pr-model-groups { display: flex; flex-direction: column; gap: 14px; }
+.pr-compare td:has(.pr-model-groups) { vertical-align: top; }
+.pr-model-group-label { margin: 0 0 8px; font-family: var(--manrope); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--pr-text-faint); }
+.pr-model-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pr-model-list li { display: flex; align-items: center; gap: 8px; font-size: 13.5px; line-height: 1.3; white-space: nowrap; }
+.pr-model-list img { width: 17px; height: 17px; flex-shrink: 0; border-radius: 4px; object-fit: contain; }
+.pr-compare tfoot td { border-bottom: 0; border-top: 1px solid var(--pr-border); }
+.pr-compare-cta { margin-top: 0; min-height: 42px; font-size: 14px; }
+.pr-compare-cta.solid { background: var(--pr-blue); color: #fff; }
+.pr-compare-price { display: block; font-size: 17px; font-weight: 800; }
+.pr-compare-price small { font-size: 13px; font-weight: 500; color: var(--pr-text-faint); }
+.pr-compare td.muted { color: var(--pr-text-faint); }
+.pr-compare .is-popular { background: rgba(0, 98, 255, .05); }
+.pr-compare thead .is-popular { background: rgba(0, 98, 255, .1); color: var(--pr-blue); }
+.pr-compare .pricing-check { width: 18px; height: 18px; color: var(--pr-blue); vertical-align: middle; }
+.pr-compare-no { display: inline-block; width: 12px; height: 2px; border-radius: 2px; background: var(--fg-6); vertical-align: middle; }
+
+.pr-included { margin-top: 14px; background: #fff; border: 1px solid var(--pr-border); border-radius: 20px; padding: 30px; }
+.pr-included h3 { margin: 0; font-family: var(--manrope); font-size: 20px; font-weight: 800; color: var(--fg-1); }
+/* Each column is as wide as its text, with the spare room shared evenly
+   between columns. Text only wraps when the row is too narrow to fit it. */
+.pr-included-grid { display: grid; grid-template-columns: repeat(5, minmax(min-content, max-content)); justify-content: space-between; gap: 26px 20px; margin-top: 20px; }
+.pr-included-label { margin: 0 0 10px; font-family: var(--manrope); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--pr-blue); }
+.pr-included-grid ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; line-height: 1.4; color: var(--fg-1); }
+
+@media (max-width: 1120px) {
+  .pr-brand-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pr-included-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+  .pr-brand-card.custom { grid-column: 1 / -1; }
+}
+@media (max-width: 620px) {
+  .pr-brand-grid { grid-template-columns: minmax(0, 1fr); }
+  .pr-brand-card { display: flex; flex-direction: column; grid-row: auto; }
+  .pr-included { padding: 24px; }
+  .pr-included-grid { grid-template-columns: minmax(0, 1fr); }
+  /* The billing and currency controls wrap here, so no divider between them. */
+  .pricing-switcher-divider { display: none; }
 }

@@ -111,8 +111,8 @@ const TIERS = [
 const tierBadges = (html) => TIERS.reduce((h, [re, t]) => h.replace(re, `badge tier tier-${t}">$1<`), html);
 
 // Screenshots of features that are not in production yet. Their text stays,
-// only the figure goes. S31: Keyword Tracker. S39: Technical Fixes. S44: Search Console connection.
-const UNRELEASED_SHOTS = ['S31', 'S39', 'S44'];
+// only the figure goes. S31: Keyword Tracker. S39: Technical Fixes.
+const UNRELEASED_SHOTS = ['S31', 'S39'];
 const dropUnreleasedFigures = (html) => html.replace(
   /<figure class="docs-figure" data-shot="([A-Z0-9]+)">[\s\S]*?<\/figure>/g,
   (m, shot) => (UNRELEASED_SHOTS.includes(shot) ? '' : m),

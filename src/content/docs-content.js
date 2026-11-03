@@ -32,8 +32,8 @@ function merge(base, overrides) {
 // already leaves them out (UNRELEASED_SHOTS in scripts/extract-docs.mjs), but
 // Tolgee can still hold an older copy of a block with the figure in it, so
 // they are taken out again after the merge. Their text stays.
-// S31: Keyword Tracker. S39: Technical Fixes. S44: Search Console connection.
-const UNRELEASED_SHOTS = new Set(['S31', 'S39', 'S44']);
+// S31: Keyword Tracker. S39: Technical Fixes.
+const UNRELEASED_SHOTS = new Set(['S31', 'S39']);
 const dropUnreleasedFigures = (html) => String(html ?? '').replace(
   /<figure class="docs-figure" data-shot="([A-Z0-9]+)">[\s\S]*?<\/figure>/g,
   (m, shot) => (UNRELEASED_SHOTS.has(shot) ? '' : m),
