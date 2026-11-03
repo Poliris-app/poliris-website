@@ -881,23 +881,28 @@ button.pricing-compare-section-title {
 /* ---------- FAQ accordion ---------- */
 .pricing-faq-wrap { max-width: 760px; margin: 100px auto 0; }
 .pricing-faq-title { text-align: center; font-family: var(--manrope); font-size: 26px; font-weight: 800; color: var(--pr-navy); margin: 0 0 28px; }
-.pricing-faq-list { display: flex; flex-direction: column; gap: 10px; }
-.pricing-faq-item { border: 1px solid var(--pr-border); border-radius: 12px; background: #fff; overflow: hidden; transition: border-color .15s ease; }
-.pricing-faq-item.open { border-color: #c7d3f2; }
+.pricing-faq-list { display: flex; flex-direction: column; }
+/* Same rows as the FAQ page (faq2 in faqs.css): thin lines, no boxes. */
+.pricing-faq-item { border-bottom: 1px solid #eceef4; }
+.pricing-faq-item:first-child { border-top: 1px solid #eceef4; }
 .pricing-faq-q {
-  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 16px 20px; background: none; border: none; cursor: pointer; text-align: left;
-  font-family: var(--manrope); font-size: 14.5px; font-weight: 700; color: var(--pr-navy);
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 22px 0; background: none; border: none; cursor: pointer; text-align: left;
+  font-family: var(--manrope); font-size: 16px; font-weight: 600; line-height: 1.45; color: #1a1d23;
+  transition: color .15s ease;
 }
+.pricing-faq-q:hover { color: var(--pr-blue); }
 .pricing-faq-icon {
   flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(0,98,255,0.08); color: var(--pr-blue); font-size: 15px; font-weight: 700; line-height: 1;
-  transition: background .15s ease, color .15s ease;
+  box-sizing: border-box; background: #fff; border: 1.5px solid #dde1ec; color: #9aa0ab;
+  font-size: 15px; font-weight: 700; line-height: 1;
+  transition: border-color .2s ease, color .2s ease;
 }
-.pricing-faq-item.open .pricing-faq-icon { background: var(--pr-blue); color: #fff; }
+.pricing-faq-q:hover .pricing-faq-icon,
+.pricing-faq-item.open .pricing-faq-icon { border-color: var(--pr-blue); color: var(--pr-blue); }
 .pricing-faq-a-wrap { height: 0; overflow: hidden; transition: height .32s cubic-bezier(.4,0,.2,1); }
-.pricing-faq-a { margin: 0; padding: 0 20px 16px; font-size: 13.5px; color: var(--pr-text-faint); line-height: 1.6; }
+.pricing-faq-a { margin: 0; padding: 0 48px 22px 0; font-size: 14.5px; color: #4b5563; line-height: 1.7; }
 @media (max-width: 620px) {
   .pricing-faq-wrap { margin-top: 64px; }
 }
