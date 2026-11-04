@@ -857,9 +857,9 @@ export default {
     p4: {
       agentPill: 'Rencontrez Tom · votre agent d\'audit technique',
       eyebrow: '04 Votre agent d\'audit',
-      h2Pre: "Vous ne décodez pas l'audit.",
-      h2Hl: 'Tom le fait',
-      h2Post: 'et le corrige.',
+      h2Pre: 'Votre site présente des problèmes techniques ? ',
+      h2Hl: 'Tom les identifie',
+      h2Post: 'et les corrige.',
       lead: "Avant tout, Tom est action. Il prend chaque problème trouvé ci-dessus critique, avertissement, notice et le transforme en un plan classé que vous pouvez approuver en un clic.",
       points: [
         'Réponses en langage clair "Qu\'est-ce qu\'un conflit canonique ?"',
