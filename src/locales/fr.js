@@ -833,14 +833,14 @@ export default {
       tag: '03 Corrigé',
       h3Pre: 'Identifiez et corrigez les problèmes de votre site',
       h3Hl: 'en un clic',
-      p: 'Poliris identifie les corrections nécessaires et les applique directement sur votre site après validation, sans faire appel à un développeur.',
+      p: 'Poliris identifie les corrections nécessaires et les applique directement sur votre site après validation, sans avoir besoin de faire appel à un développeur.',
       beforeLabel: 'Avant',
       afterLabel: 'Après',
       url: 'sprout.ph/pricing',
       fixesReady: '3 corrections prêtes',
       applyBtn: 'Approuver & appliquer',
       flowLabel: 'appliqué sur votre site en direct',
-      footCap: 'Pas de ticket développeur, pas de copier-coller. La correction arrive sur votre site, pas dans votre boîte mail.',
+      footCap: 'Les corrections sont appliquées directement sur votre site, sans intervention d’un développeur.',
       issues: {
         before: [
           { b: 'Résumé de page',        span: "Manquant l'IA ne peut pas décrire la page." },
