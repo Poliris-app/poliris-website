@@ -83,7 +83,7 @@ export default {
       items: [
         { q: "Qu'est-ce que Poliris et à qui s'adresse-t-il ?", a: "Poliris montre comment les moteurs IA comme ChatGPT, Gemini et Perplexity parlent de vos produits, puis vous aide à faire évoluer leurs réponses pour qu'ils vous recommandent. Il s'adresse aux marques, aux équipes marketing, aux spécialistes SEO et aux agences." },
         { q: 'Quels moteurs IA Poliris suit-il ?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok et DeepSeek.' },
-        { q: 'Faut-il être expert en SEO ?', a: "Non. Nos agents IA font le travail technique et expliquent tout en langage clair. C'est vous qui décidez." },
+        { q: 'Faut-il être expert en SEO ?', a: 'Non, nos agents IA s’occupent des aspects techniques et vous expliquent simplement les actions à entreprendre, tout en vous laissant le contrôle.' },
         { q: 'Quels marchés et quelles langues couvrez-vous ?', a: 'Poliris fonctionne dans le monde entier. Vous choisissez les marchés à suivre, et toutes les fonctionnalités marchent en anglais et en français.' },
         { q: "Comment fonctionne l'essai gratuit ?", a: "Vous profitez de 14 jours gratuits, sans carte bancaire. Ensuite, les offres mensuelles sont sans engagement, et vous pouvez changer d'offre ou résilier à tout moment." },
       ],
@@ -932,8 +932,8 @@ export default {
     },
     threeJobs: {
       eyebrow: 'Un agent, trois missions',
-      h2Pre: 'Rédigez. Optimisez.',
-      h2Hl: 'Implémentez.',
+      h2Pre: 'Rédigez, Optimisez,',
+      h2Hl: 'Implémentez',
       lead: 'Kate couvre toute la boucle de contenu et vous pouvez commencer n\'importe où.',
       cards: [
         { no: '01', title: "D'un sujet à un article prêt à publier", desc: "Un brief conversationnel court, trois angles, un brouillon complet avec plan, liens et métadonnées, noté au fur et à mesure de la rédaction." },

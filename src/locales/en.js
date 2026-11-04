@@ -82,7 +82,7 @@ export default {
       items: [
         { q: 'What is Poliris and who is it for?', a: 'Poliris shows how AI engines like ChatGPT, Gemini and Perplexity talk about your products, then helps you change it so AI recommends you. It is built for brands, marketing teams, SEO specialists and agencies.' },
         { q: 'Which AI engines does Poliris track?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok and DeepSeek.' },
-        { q: 'Do I need to be an SEO expert?', a: 'No. Our AI agents do the technical work and explain everything in plain language. You make the decisions.' },
+        { q: 'Do I need to be an SEO expert?', a: 'No, our AI agents handle the technical work and explain everything in simple terms, while keeping you in control.' },
         { q: 'Which markets and languages do you cover?', a: 'Poliris works worldwide. You choose the markets to track, and every feature works in English and French.' },
         { q: 'How does the free trial work?', a: 'You get 14 days free, with no credit card. After that, monthly plans have no contract, and you can switch or cancel anytime.' },
       ],
@@ -931,8 +931,8 @@ export default {
     },
     threeJobs: {
       eyebrow: 'One agent, three jobs',
-      h2Pre: 'Write it. Optimize it.',
-      h2Hl: 'Implement it.',
+      h2Pre: 'Write it, Optimize it,',
+      h2Hl: 'Implement it',
       lead: 'Kate covers the full content loop and you can start anywhere.',
       cards: [
         { no: '01', title: 'From a topic to a publish-ready article',  desc: "A short conversational brief, three angles, a full draft with outline, links and metadata, graded as it's written." },
