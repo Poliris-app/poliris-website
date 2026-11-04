@@ -861,8 +861,8 @@ export default {
       h2Post: 'and fixes them.',
       lead: 'Tom identifies the issues holding back your visibility, explains their impact, and prepares a prioritized action plan that can be applied directly to your website once approved.',
       points: [
-        'Plain-language answers   "What\'s a canonical conflict?"',
-        'Any test explained no SEO, no developer.',
+        'Understand every issue with clear, simple explanations.',
+        'Identify the priority fixes to improve your visibility.',
         'A ranked fix plan, applied inside the app.',
       ],
       meetTom: 'Meet Tom',

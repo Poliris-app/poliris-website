@@ -864,7 +864,7 @@ export default {
       points: [
         'Comprenez chaque problème grâce à des explications accessibles.',
         'Identifiez les corrections prioritaires pour améliorer votre visibilité.',
-        'Appliquez les corrections directement sur votre site.',
+        'Apply fixes directly to your website.',
       ],
       meetTom: 'Rencontrer Tom',
       liveSession: 'SESSION EN DIRECT',
