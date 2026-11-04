@@ -830,8 +830,8 @@ export default {
     },
     p3: {
       tag: '03 We ship the fix',
-      h3Pre: 'Find it, fix it',
-      h3Hl: 'on your live site.',
+      h3Pre: 'Identify and fix issues on your website',
+      h3Hl: 'in one click',
       p: 'Every recommendation comes with an Apply button. Approve it, and Poliris makes the change on your site itself the summary, the canonical, the structure. You watch the problems turn into fixes.',
       beforeLabel: 'Before',
       afterLabel: 'After',
@@ -905,7 +905,7 @@ export default {
     hero: {
       eyebrow: 'Content Writing · Meet Kate',
       titlePre: 'The AI writing room',
-      titleHl: 'built for your brand.',
+      titleHl: 'built for your brand',
       lead: 'Kate is your content agent. She already knows your brand and exactly where AI isn\'t citing you so you just talk: she writes, optimises and publishes content that gets you cited.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
@@ -914,7 +914,7 @@ export default {
     dataSynergy: {
       eyebrow: 'Why Kate is different',
       h2Pre: 'Kate is already briefed on',
-      h2Hl: 'your entire brand.',
+      h2Hl: 'your entire brand',
       lead: 'She knows your products, audiences, competitors and every Poliris audit you\'ve run so she starts writing the moment you ask, with no blank page and nothing to re-explain.',
       kateSub: 'writes to your strategy',
       hubNodes: [
@@ -945,7 +945,7 @@ export default {
       tag: '01 · Write',
       h3Pre: 'From a topic to a',
       h3Hl: 'publish-ready article,',
-      h3Post: 'in six steps.',
+      h3Post: 'in six steps',
       p: 'Conversational up front, structured underneath. Every step is editable you stay in control of the inputs.',
       steps: [
         { num: '01', label: 'Brief',     text: 'Kate suggests three topic ideas on her own, tailored to your product and audience. Pick one, or bring your own.' },
@@ -972,7 +972,7 @@ export default {
     optimize: {
       tag: '02 · Optimize & Score',
       h3Pre: 'A score you can trust, and the',
-      h3Hl: 'rewrite to lift it.',
+      h3Hl: 'rewrite to lift it',
       p: 'New article or an existing URL. Kate grades your content, then rewrites only the weak parts.',
       beforeLabel: 'Your draft, before Kate',
       afterLabel: 'After Kate optimizes',

@@ -70,7 +70,7 @@ export default {
       h2Hl: 'dans les réponses des IA',
       lead: 'Poliris analyse votre présence, identifie ce qui freine votre visibilité et vous aide à mettre en place les bonnes actions.',
       steps: [
-        { title: 'Analyser', desc: 'Mesurez votre visibilité et celle de vos concurrents sur les moteurs de recherche et les IA, sur chaque marché et dans le temps.' },
+        { title: 'Analyser', desc: 'Mesurez votre visibilité face à vos concurrents sur les moteurs de recherche et les IA, par marché et dans le temps.' },
         { title: 'Décider', desc: 'Identifiez ce qui favorise vos concurrents et obtenez une feuille de route claire et priorisée pour améliorer votre visibilité.' },
         { title: 'Agir', desc: 'Optimisez votre site, créez du contenu avec Kate et renforcez votre présence sur les sources utilisées par les IA.' },
       ],
@@ -535,14 +535,14 @@ export default {
       eyebrow: '02 · Marché réel',
       h2Pre: 'Comprenez votre produit sur',
       h2Hl: 'vos marchés cibles',
-      lead: 'Notre audit évalue votre produit au sein de vos zones commerciales cibles, en vous aidant à comprendre la demande locale, le positionnement concurrentiel, et où votre produit a le plus fort potentiel de croissance.',
-      hint: 'Notre audit évalue votre produit au sein de vos zones commerciales cibles, en vous aidant à comprendre la demande locale, le positionnement concurrentiel, et où votre produit a le plus fort potentiel de croissance.',
+      lead: 'Notre audit évalue votre produit sur vos marchés cibles pour analyser la demande locale, la concurrence et identifier les meilleures opportunités de croissance.',
+      hint: 'Notre audit évalue votre produit sur vos marchés cibles pour analyser la demande locale, la concurrence et identifier les meilleures opportunités de croissance.',
     },
     sourceIntel: {
       eyebrow: '03 · Cartographie des sources',
       h2Pre: 'Explorez les sources qui influencent',
       h2Hl: 'les réponses IA',
-      lead: 'Nous collectons les domaines que l\'IA cite dans votre catégorie, puis nous vous montrons où vous êtes présent, absent ou devancé.',
+      lead: 'Identifiez les sites cités par les IA et découvrez où vous êtes présent, absent ou devancé par vos concurrents.',
       pipeline: [
         { title: "L'IA génère une réponse",          sub: 'Cite des sources externes' },
         { title: 'Poliris collecte les sources',      sub: '100+ types de sources suivis' },
@@ -831,8 +831,8 @@ export default {
     },
     p3: {
       tag: '03 Corrigé',
-      h3Pre: 'Trouvez-le, corrigez-le',
-      h3Hl: 'sur votre site en direct.',
+      h3Pre: 'Identifiez et corrigez les problèmes de votre site',
+      h3Hl: 'en un clic',
       p: 'Chaque recommandation est accompagnée d\'un bouton Appliquer. Approuvez-le, et Poliris effectue le changement sur votre site le résumé, la balise canonique, la structure. Vous regardez les problèmes se transformer en corrections.',
       beforeLabel: 'Avant',
       afterLabel: 'Après',
@@ -906,7 +906,7 @@ export default {
     hero: {
       eyebrow: 'Rédaction IA · Rencontrez Kate',
       titlePre: 'Du contenu rédigé pour votre marque,',
-      titleHl: 'optimisé pour l\'IA.',
+      titleHl: 'optimisé pour l\'IA',
       lead: 'Kate est votre agente de contenu. Elle connaît déjà votre marque et sait où l\'IA vous ignore. Vous lui parlez en langage clair ; elle rédige, optimise et publie du contenu qui vous fait exister dans les réponses IA.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
@@ -915,7 +915,7 @@ export default {
     dataSynergy: {
       eyebrow: 'Pourquoi Kate est différente',
       h2Pre: 'Kate est déjà briefée sur',
-      h2Hl: 'toute votre marque.',
+      h2Hl: 'toute votre marque',
       lead: 'Elle connaît vos produits, vos audiences, vos concurrents et chacun de vos audits Poliris. Résultat : elle rédige dès que vous le demandez, avec tout le contexte déjà en tête.',
       kateSub: 'rédige selon votre stratégie',
       hubNodes: [
@@ -946,7 +946,7 @@ export default {
       tag: '01 · Rédiger',
       h3Pre: "D'un sujet à un article",
       h3Hl: 'prêt à publier,',
-      h3Post: 'en six étapes.',
+      h3Post: 'en six étapes',
       p: "Conversationnel au départ, structuré en dessous. Chaque étape est modifiable vous gardez le contrôle des inputs.",
       steps: [
         { num: '01', label: 'Brief',      text: "Kate vous propose spontanément trois idées de sujets, adaptées à votre produit et à votre audience. Vous en choisissez une, ou vous lui donnez la vôtre." },
@@ -973,7 +973,7 @@ export default {
     optimize: {
       tag: '02 · Optimiser & Noter',
       h3Pre: 'Un score fiable, et la',
-      h3Hl: 'réécriture pour l\'améliorer.',
+      h3Hl: 'réécriture pour l\'améliorer',
       p: 'Nouvel article ou URL existante. Kate note votre contenu, puis réécrit uniquement les parties faibles.',
       beforeLabel: 'Votre brouillon, avant Kate',
       afterLabel: 'Après optimisation par Kate',
