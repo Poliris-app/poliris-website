@@ -58,7 +58,7 @@ export default {
       lead: 'See where your products show up in search and AI answers, why competitors get picked instead, and what to fix first, all in one place.',
       primaryCta: 'Start your free trial',
       secondaryCta: 'Book a demo',
-      note: 'No technical expertise required',
+      note: 'No credit card required',
       websitePlaceholder: 'your-website.com',
       websiteCta: 'Start Free',
       websiteError: 'Enter a valid website, like your-website.com',

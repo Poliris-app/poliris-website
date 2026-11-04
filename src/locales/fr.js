@@ -54,10 +54,10 @@ export default {
       titleHl: 'votre SEO',
       titlePost: 'grâce à l’IA',
       audience: 'Pour les équipes internes, les agences et les responsables marketing d’entreprise.',
-      lead: 'Comprenez et gérez votre visibilité sur l\'IA et le web, produit par produit, avec une équipe d\'agents qui transforme les insights en plan d\'action.',
+      lead: 'Analysez votre visibilité sur les moteurs de recherche et les IA, comprenez ce qui favorise vos concurrents et identifiez les actions prioritaires pour renforcer votre présence.',
       primaryCta: "Commencer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
-      note: 'Aucune compétence technique requise.',
+      note: 'Aucune carte bancaire requise.',
       websitePlaceholder: 'votre-site.com',
       // Volontairement court : ce libellé partage sa ligne avec le champ,
       // et un libellé plus long réduit la saisie à ~70px sur mobile.
@@ -66,13 +66,13 @@ export default {
     },
     howItWorks: {
       eyebrow: 'Comment ça marche',
-      h2Pre: 'Trois étapes pour que',
-      h2Hl: 'l’IA vous recommande.',
-      lead: 'Poliris repère où l’IA vous oublie, vous explique pourquoi et vous aide à y remédier.',
+      h2Pre: 'Gagnez en visibilité',
+      h2Hl: 'dans les réponses des IA',
+      lead: 'Poliris analyse votre présence, identifie ce qui freine votre visibilité et vous aide à mettre en place les bonnes actions.',
       steps: [
-        { title: 'Analyser', desc: 'Voyez où l’IA et les moteurs de recherche citent vos produits et vos concurrents, sur chaque moteur et chaque marché, et comment cela évolue dans le temps.' },
-        { title: 'Décider', desc: 'Obtenez une feuille de route claire et priorisée de ce qui empêche l’IA de vous trouver, de vous faire confiance et de vous recommander.' },
-        { title: 'Agir', desc: 'Corrigez les problèmes techniques, publiez avec Kate le contenu dont l’IA a besoin, et obtenez des citations sur les sites auxquels l’IA fait confiance.' },
+        { title: 'Analyser', desc: 'Mesurez votre visibilité et celle de vos concurrents sur les moteurs de recherche et les IA, sur chaque marché et dans le temps.' },
+        { title: 'Décider', desc: 'Identifiez ce qui favorise vos concurrents et obtenez une feuille de route claire et priorisée pour améliorer votre visibilité.' },
+        { title: 'Agir', desc: 'Optimisez votre site, créez du contenu avec Kate et renforcez votre présence sur les sources utilisées par les IA.' },
       ],
     },
     faq: {
