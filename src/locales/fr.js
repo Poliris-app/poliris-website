@@ -53,7 +53,7 @@ export default {
       titlePre: 'Prenez en main',
       titleHl: 'votre SEO',
       titlePost: 'grâce à l’IA',
-      audience: 'Pour les équipes internes, les agences et les responsables marketing d’entreprise.',
+      audience: 'Pour les équipes internes, les agences et les responsables marketing.',
       lead: 'Analysez votre visibilité sur les moteurs de recherche et les IA, comprenez ce qui favorise vos concurrents et identifiez les actions prioritaires pour renforcer votre présence.',
       primaryCta: "Commencer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
@@ -85,7 +85,7 @@ export default {
         { q: 'Quels moteurs IA Poliris suit-il ?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok et DeepSeek.' },
         { q: 'Faut-il être expert en SEO ?', a: 'Non, nos agents IA s’occupent des aspects techniques et vous expliquent simplement les actions à entreprendre, tout en vous laissant le contrôle.' },
         { q: 'Quels marchés et quelles langues couvrez-vous ?', a: 'Poliris fonctionne dans le monde entier. Vous choisissez les marchés à suivre, et toutes les fonctionnalités marchent en anglais et en français.' },
-        { q: "Comment fonctionne l'essai gratuit ?", a: "Vous profitez de 14 jours gratuits, sans carte bancaire. Ensuite, les offres mensuelles sont sans engagement, et vous pouvez changer d'offre ou résilier à tout moment." },
+        { q: "Comment fonctionne l'essai gratuit ?", a: 'Vous bénéficiez d’un essai gratuit sans limite de durée. Si vous souhaitez ensuite passer à une offre payante, nos abonnements mensuels sont sans engagement. Vous pouvez changer d’offre ou résilier à tout moment.' },
       ],
     },
     valueChain: {
@@ -533,7 +533,7 @@ export default {
     },
     realMarket: {
       eyebrow: '02 · Marché réel',
-      h2Pre: 'Comprenez votre produit sur',
+      h2Pre: 'Analysez votre produit sur',
       h2Hl: 'vos marchés cibles',
       lead: 'Notre audit évalue votre produit sur vos marchés cibles pour analyser la demande locale, la concurrence et identifier les meilleures opportunités de croissance.',
       hint: 'Notre audit évalue votre produit sur vos marchés cibles pour analyser la demande locale, la concurrence et identifier les meilleures opportunités de croissance.',

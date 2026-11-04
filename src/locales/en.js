@@ -84,7 +84,7 @@ export default {
         { q: 'Which AI engines does Poliris track?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok and DeepSeek.' },
         { q: 'Do I need to be an SEO expert?', a: 'No, our AI agents handle the technical work and explain everything in simple terms, while keeping you in control.' },
         { q: 'Which markets and languages do you cover?', a: 'Poliris works worldwide. You choose the markets to track, and every feature works in English and French.' },
-        { q: 'How does the free trial work?', a: 'You get 14 days free, with no credit card. After that, monthly plans have no contract, and you can switch or cancel anytime.' },
+        { q: 'How does the free trial work?', a: 'You can start with a free trial with no time limit. If you decide to upgrade to a paid plan, our monthly subscriptions have no long-term commitment. You can change your plan or cancel at any time.' },
       ],
     },
     valueChain: {
