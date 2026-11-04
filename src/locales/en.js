@@ -449,9 +449,9 @@ export default {
     },
     stakes: {
       eyebrow: 'The search shift',
-      h2Pre: 'Google ranks. AI recommends.',
-      h2Hl: 'depends on both.',
-      h2Mid: 'Your brand\'s growth',
+      h2Pre: 'AI is already shaping',
+      h2Hl: 'your brand',
+      h2Mid: 'how people perceive',
       lead: 'Every day, search engines rank you and AI engines describe you. Most brands only measure half of that, and optimize even less.',
       cards: [
         { title: 'Buyers ask AI first',   desc: "Customers don't just Google you anymore, they ask ChatGPT first." },

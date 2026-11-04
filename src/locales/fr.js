@@ -405,7 +405,7 @@ export default {
         { name: 'Tom',  role: 'Audit SEO Technique',           desc: 'Analyse votre site, détecte les problèmes qui freinent votre visibilité et recommande les corrections prioritaires.' },
         { name: 'Kate', role: 'Contenu Stratégique',            desc: 'Transforme les opportunités identifiées en contenus optimisés pour renforcer votre visibilité dans les IA.' },
         { name: 'Ivy',  role: 'Sentiment & Réputation',         desc: 'Analyse la perception de votre marque par les IA et détecte les informations erronées ou défavorables.' },
-        { name: 'Emma', role: 'Intelligence Concurrentielle', desc: 'Identifie vos véritables concurrents sur chaque marché et montre où ils vous devancent dans les réponses des IA.' },
+        { name: 'Emma', role: 'Intelligence Concurrentielle', desc: 'Identifie vos concurrents, compare leur visibilité à la vôtre et révèle les opportunités de vous démarquer.' },
       ],
     },
     // Carte comparatif compacte après la section Équipe ; renvoie vers
@@ -450,10 +450,10 @@ export default {
     },
     stakes: {
       eyebrow: 'Les enjeux',
-      h2Pre: "L'IA façonne déjà votre marque.",
-      h2Hl: 'sans vous',
-      h2Mid: 'Avec ou',
-      lead: "Chaque jour, les assistants IA décrivent, recommandent ou ignorent vos produits. La plupart des marques ne peuvent pas le voir et n'ont aucun moyen d'agir.",
+      h2Pre: 'L’IA influence déjà',
+      h2Hl: 'de votre marque',
+      h2Mid: 'la perception',
+      lead: 'Chaque jour, les IA parlent de votre marque, recommandent vos concurrents ou passent à côté de vos produits. Sans visibilité sur ces réponses, difficile de savoir où agir.',
       cards: [
         { title: "Les acheteurs consultent l'IA en premier", desc: "Vos clients ne vous cherchent plus sur Google, ils demandent d'abord à ChatGPT." },
         { title: 'Vous avancez à l’aveugle',                   desc: "Savez-vous si ChatGPT, Gemini et les autres modèles IA recommandent réellement votre entreprise aux acheteurs ?" },
