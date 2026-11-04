@@ -138,7 +138,7 @@ export default {
         },
         {
           title: 'Content Generation & Optimization',
-          desc: 'Tell our content agent what to write, and it publishes directly to your website. No copy-pasting, no developer, no delay.',
+          desc: 'Create, optimize, and publish content directly to your website with your AI agent.',
           tags: ['Smart Content Generation', 'Content Optimization', 'Content Planner', 'Social Studio'],
           url: 'poliris.io/dashboard/content/sony',
           href: '/content-writing',
@@ -396,7 +396,7 @@ export default {
       h2: 'A full team working for you,',
       h2Blue: 'right inside the app',
       lead: 'A complete team of specialized AI agents continuously analyzing performance, surface high-impact opportunities, and implement improvements for you.',
-      footNote: 'Each agent brings specialized expertise to the platform, helping you understand the data, identify opportunities, and implement improvements. The agents do the heavy lifting; you make the decisions.',
+      footNote: 'Each agent brings specialized expertise to the platform, helping you understand the data, identify opportunities, and implement improvements.',
       list: [
         { name: 'Leo',  role: 'Strategy & Orchestration',  desc: 'Reads the whole picture and sets the game plan, like a lead strategist briefing the team.' },
         { name: 'Nora', role: 'Visibility Analyst',         desc: "Tracks where you show up in AI answers and flags where you're losing ground." },
