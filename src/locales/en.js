@@ -909,7 +909,7 @@ export default {
       lead: 'Kate is your content agent. She already knows your brand and exactly where AI isn\'t citing you so you just talk: she writes, optimises and publishes content that gets you cited.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
-      note: 'Publish-ready draft in ~90 seconds · No SEO expertise · You stay in control',
+      note: 'No credit card required',
     },
     dataSynergy: {
       eyebrow: 'Why Kate is different',

@@ -907,10 +907,10 @@ export default {
       eyebrow: 'Rédaction IA · Rencontrez Kate',
       titlePre: 'Du contenu rédigé pour votre marque,',
       titleHl: 'optimisé pour l\'IA',
-      lead: 'Kate est votre agente de contenu. Elle connaît déjà votre marque et sait où l\'IA vous ignore. Vous lui parlez en langage clair ; elle rédige, optimise et publie du contenu qui vous fait exister dans les réponses IA.',
+      lead: 'Kate, votre agente de contenu, connaît votre marque et identifie les opportunités pour améliorer sa visibilité. Décrivez-lui simplement vos besoins : elle se charge de rédiger, d’optimiser et de publier des contenus adaptés aux réponses des IA.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
-      note: 'Brouillon prêt à publier en ~90 secondes · Aucune expertise SEO · Vous gardez le contrôle',
+      note: 'Aucune carte bancaire requise',
     },
     dataSynergy: {
       eyebrow: 'Pourquoi Kate est différente',
@@ -934,7 +934,7 @@ export default {
       eyebrow: 'Un agent, trois missions',
       h2Pre: 'Rédigez, Optimisez,',
       h2Hl: 'Implémentez',
-      lead: 'Kate couvre toute la boucle de contenu et vous pouvez commencer n\'importe où.',
+      lead: 'Kate vous accompagne à chaque étape de la création de contenu, quel que soit votre point de départ.',
       cards: [
         { no: '01', title: "D'un sujet à un article prêt à publier", desc: "Un brief conversationnel court, trois angles, un brouillon complet avec plan, liens et métadonnées, noté au fur et à mesure de la rédaction." },
         { no: '02', title: 'Notez-le, puis améliorez les parties faibles', desc: "Nouvel article ou URL existante. Kate le note sur les signaux qui comptent, puis réécrit uniquement ce qui doit être amélioré pour augmenter le score." },
