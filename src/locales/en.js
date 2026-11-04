@@ -856,10 +856,10 @@ export default {
     p4: {
       agentPill: 'Meet Tom · your technical audit agent',
       eyebrow: '04 Your audit agent',
-      h2Pre: "You don't decode the audit.",
-      h2Hl: 'Tom does',
-      h2Post: 'and fixes it.',
-      lead: 'Above all, Tom is action. It takes every issue found above critical, warning, notice and turns it into one ranked plan you can approve in a click.',
+      h2Pre: 'Technical issues on your website?',
+      h2Hl: 'Tom finds',
+      h2Post: 'and fixes them.',
+      lead: 'Tom identifies the issues holding back your visibility, explains their impact, and prepares a prioritized action plan that can be applied directly to your website once approved.',
       points: [
         'Plain-language answers   "What\'s a canonical conflict?"',
         'Any test explained no SEO, no developer.',
