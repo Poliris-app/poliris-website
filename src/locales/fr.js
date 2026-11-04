@@ -118,21 +118,21 @@ export default {
       cards: [
         {
           title: 'Réputation IA',
-          desc: 'Mesurez à quelle fréquence l’IA cite et recommande votre marque, par produit et par marché, face aux concurrents qui gagnent du terrain.',
+          desc: 'Mesurez votre présence dans les réponses des IA et comparez votre visibilité à celle de vos concurrents.',
           tags: ['Score global', 'Analyse de visibilité', 'Analyse de sentiment', 'Position concurrentielle', 'Explorateur de prompts', 'Recommandations'],
           url: 'poliris.io/dashboard/brands/sony',
           href: '/visibility',
         },
         {
           title: 'Confiance IA',
-          desc: 'Évaluez la santé technique de votre site pour les IA, identifiez ce qui limite votre visibilité et obtenez les correctifs prioritaires pour chaque problème.',
+          desc: 'Identifiez les problèmes techniques qui freinent votre visibilité et les corrections à apporter en priorité.',
           tags: ['Crawl & Indexation', 'Statut des pages', 'Vitesse des pages', 'Score de santé global', 'Test du sitemap', 'Test du robots.txt'],
           url: 'poliris.io/dashboard/audit/sony',
           href: '/technical-audit',
         },
         {
           title: 'Feuille de route',
-          desc: "Sachez exactement quoi corriger, quoi prioriser et quoi faire ensuite. Organisez votre travail SEO et GEO dans une feuille de route claire et suivez chaque étape, de la stratégie à la mise en œuvre.",
+          desc: 'Obtenez un plan d’action clair et priorisé, généré automatiquement à partir de vos analyses et audits, pour améliorer votre visibilité et suivre vos progrès.',
           tags: ['Priorités claires', 'Guide étape par étape', 'Flux de travail organisé', 'Recommandations concrètes', 'Focus sur la croissance'],
           url: 'poliris.io/dashboard/roadmap/sony',
           href: '/demo',

@@ -117,7 +117,7 @@ export default {
       cards: [
         {
           title: 'AI Reputation',
-          desc: 'See how ChatGPT, Gemini, and more talk about your brand. Track your visibility and sentiment against the competitors AI recommends.',
+          desc: 'Measure your presence in AI-generated answers and compare your visibility with competitors.',
           tags: ['Global Score', 'Visibility Analysis', 'Sentiment Analysis', 'Competitive Position', 'Prompt Explorer', 'Recommendations'],
           url: 'poliris.io/dashboard/brands/sony',
           href: '/visibility',
@@ -131,7 +131,7 @@ export default {
         },
         {
           title: 'Prioritized Action Roadmap',
-          desc: 'An intelligent, actionable step-by-step roadmap automatically generated from the AI Reputation and Technical Audit findings. Tells teams exactly what to fix first.',
+          desc: 'An intelligent, actionable step-by-step roadmap automatically generated from the AI Reputation and Technical Audit findings. ',
           tags: ['Clear priorities', 'Step-by-step guide', 'Organized workflow', 'Actionable Recommendations', 'Stay focused on growth'],
           url: 'poliris.io/dashboard/roadmap/sony',
           href: '/demo',
