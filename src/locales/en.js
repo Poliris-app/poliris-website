@@ -832,7 +832,7 @@ export default {
       tag: '03 We ship the fix',
       h3Pre: 'Identify and fix issues on your website',
       h3Hl: 'in one click',
-      p: 'Every recommendation comes with an Apply button. Approve it, and Poliris makes the change on your site itself the summary, the canonical, the structure. You watch the problems turn into fixes.',
+      p: 'Poliris identifies the fixes your website needs and applies them directly once approved, with no developer required.',
       beforeLabel: 'Before',
       afterLabel: 'After',
       url: 'sprout.ph/pricing',

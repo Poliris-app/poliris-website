@@ -833,7 +833,7 @@ export default {
       tag: '03 Corrigé',
       h3Pre: 'Identifiez et corrigez les problèmes de votre site',
       h3Hl: 'en un clic',
-      p: 'Chaque recommandation est accompagnée d\'un bouton Appliquer. Approuvez-le, et Poliris effectue le changement sur votre site le résumé, la balise canonique, la structure. Vous regardez les problèmes se transformer en corrections.',
+      p: 'Poliris identifie les corrections nécessaires et les applique directement sur votre site après validation, sans faire appel à un développeur.',
       beforeLabel: 'Avant',
       afterLabel: 'Après',
       url: 'sprout.ph/pricing',
