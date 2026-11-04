@@ -455,7 +455,7 @@ export default {
       lead: 'Every day, search engines rank you and AI engines describe you. Most brands only measure half of that, and optimize even less.',
       cards: [
         { title: 'Buyers ask AI first',   desc: "Customers don't just Google you anymore, they ask ChatGPT first." },
-        { title: "You're flying blind",   desc: 'Do you know if ChatGPT, Gemini, and other AI models are actually recommending your business to buyers?' },
+        { title: "You're flying blind",   desc: 'You lack insight into how AI presents your brand and recommends your competitors.' },
         { title: 'Other tools only watch',      desc: 'The tools that do exist hand you a dashboard, then leave the actual work entirely to you.' },
       ],
     },

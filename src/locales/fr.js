@@ -455,9 +455,9 @@ export default {
       h2Mid: 'la perception',
       lead: 'Chaque jour, les IA parlent de votre marque, recommandent vos concurrents ou passent à côté de vos produits. Sans visibilité sur ces réponses, difficile de savoir où agir.',
       cards: [
-        { title: "Les acheteurs consultent l'IA en premier", desc: "Vos clients ne vous cherchent plus sur Google, ils demandent d'abord à ChatGPT." },
-        { title: 'Vous avancez à l’aveugle',                   desc: "Savez-vous si ChatGPT, Gemini et les autres modèles IA recommandent réellement votre entreprise aux acheteurs ?" },
-        { title: 'Les outils ne font que surveiller',        desc: "Les outils qui existent vous donnent un tableau de bord, puis vous laissent faire tout le travail seul." },
+        { title: 'Vos clients consultent déjà les IA', desc: "Vos clients ne vous cherchent plus sur Google, ils demandent d'abord à ChatGPT." },
+        { title: 'Votre visibilité reste un angle mort',                   desc: 'Vous manquez de visibilité sur la manière dont les IA présentent votre marque et recommandent vos concurrents.' },
+        { title: 'Mesurer sa visibilité ne suffit plus',        desc: 'Les outils traditionnels analysent votre visibilité, mais vous laissent seul face aux actions à mettre en œuvre.' },
       ],
     },
     cta: {
