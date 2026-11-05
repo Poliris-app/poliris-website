@@ -953,7 +953,7 @@ export default {
         { num: '03', label: 'Links',     text: 'Kate surfaces relevant internal links from your sitemap. Choose the ones you want, and she weaves them naturally into the text.' },
         { num: '04', label: 'Outline',   text: 'Kate proposes an H2/H3 outline with a target length per section. Drag and drop to reorder, add or remove sections freely.' },
         { num: '05', label: 'Generate',  text: 'Kate researches, writes, and scores each section in the background. Watch the article take shape, section by section.' },
-        { num: '06', label: 'Result',    text: 'You get a complete article, with its SEO score and meta tags. Tweak it, re-run the score, and go live instantly.' },
+        { num: '06', label: 'Result',    text: 'Get a complete article with an SEO score and meta tags. Refine the content, reassess its performance, and publish it directly to your website.' },
       ],
       ofSteps: 'of',
       steps2: 'steps',
