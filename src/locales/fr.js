@@ -1555,10 +1555,10 @@ export default {
   glossary: {
     hero: {
       eyebrow: 'Glossaire',
-      titlePre: 'Le glossaire',
-      titleHl: 'visibilité IA',
-      titlePost: 'en langage clair.',
-      lead: "Chaque terme que nous utilisons défini comme vous l'expliqueriez à votre PDG.",
+      titlePre: 'Le',
+      titleHl: 'SEO et le GEO',
+      titlePost: 'expliqués simplement',
+      lead: 'Retrouvez les définitions essentielles pour comprendre le référencement, la visibilité dans les IA et les concepts clés du marketing digital.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
     },
@@ -1986,7 +1986,7 @@ export default {
       trialDetail: "En 14 jours, lancez votre premier audit IA, découvrez comment ChatGPT, Claude et Gemini décrivent votre marque, et comparez-vous à vos concurrents.",
     },
     billing: { monthly: 'Mensuel', annual: 'Annuel', save: '-20%', billedAnnually: 'Facturé {amount} par an' },
-    flexibilityNote: 'Changez de forfait ou annulez à tout moment. Sans engagement, sans tracas.',
+    flexibilityNote: 'Changez d’offre ou résiliez à tout moment, en toute liberté et sans engagement.',
     coverage: 'Couverture',
     mostPopular: 'Le plus populaire',
     currentPlan: 'Plan actuel',
