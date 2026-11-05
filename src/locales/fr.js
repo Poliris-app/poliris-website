@@ -974,7 +974,7 @@ export default {
       tag: '02 · Optimiser & Noter',
       h3Pre: 'Évaluez votre contenu et ',
       h3Hl: 'améliorez ses performances',
-      p: 'Nouvel article ou URL existante. Kate note votre contenu, puis réécrit uniquement les parties faibles.',
+      p: 'Kate analyse vos articles, identifie les points faibles et réécrit les passages à optimiser pour améliorer leur score.',
       beforeLabel: 'Votre brouillon, avant Kate',
       afterLabel: 'Après optimisation par Kate',
       beforeVerdict: "À améliorer, ne sera pas classé",
@@ -984,9 +984,9 @@ export default {
     contentScore: 'Score de contenu',
     implement: {
       tag: '03 · Implémenter',
-      h3Pre: 'Approuvez une fois.',
-      h3Hl: 'Kate publie pour vous.',
-      p: "Pas de copier-coller, pas de remise à un développeur. Dès que vous approuvez, Kate le met en ligne formaté, lié et prêt à être indexé.",
+      h3Pre: 'Validez votre contenu,',
+      h3Hl: 'Kate s’occupe de la publication',
+      p: 'Une fois approuvé, votre contenu est automatiquement mis en ligne, mis en forme et optimisé pour l’indexation.',
       mockup: {
         live: '✓ En ligne',
         category: 'Lifestyle · Sport',

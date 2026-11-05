@@ -973,7 +973,7 @@ export default {
       tag: '02 · Optimize & Score',
       h3Pre: 'A score you can trust, and the',
       h3Hl: 'rewrite to lift it',
-      p: 'New article or an existing URL. Kate grades your content, then rewrites only the weak parts.',
+      p: 'Kate analyzes your articles, identifies areas for improvement, and rewrites the sections that need optimization to boost their scores.',
       beforeLabel: 'Your draft, before Kate',
       afterLabel: 'After Kate optimizes',
       beforeVerdict: "Needs work, won't rank",
@@ -983,9 +983,9 @@ export default {
     contentScore: 'Content Score',
     implement: {
       tag: '03 · Implement',
-      h3Pre: 'Approve once.',
-      h3Hl: 'Kate publishes it for you.',
-      p: 'No copy-paste, no handover to a developer. The moment you approve, Kate pushes it live formatted, linked and ready to be indexed.',
+      h3Pre: 'Approve your content,',
+      h3Hl: 'and Kate handles the publishing',
+      p: 'Once approved, your content is automatically published, properly formatted, and optimized for indexing.',
       mockup: {
         live: 'Live',
         category: 'Lifestyle · Sport',
