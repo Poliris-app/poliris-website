@@ -1000,9 +1000,9 @@ export default {
     },
     internalLinking: {
       eyebrow: 'Liens internes, automatiques',
-      h2Pre: 'Kate connecte votre article au',
-      h2Hl: 'reste de votre site.',
-      lead: "Au fil de la rédaction, Kate transforme les phrases-clés de votre article en liens vers vos autres pages. Les lecteurs cliquent, et les moteurs de recherche et l'IA suivent ces mêmes liens pour découvrir tout votre site.",
+      h2Pre: 'Kate optimise votre maillage interne pour',
+      h2Hl: 'renforcer votre visibilité',
+      lead: 'Kate ajoute des liens pertinents entre vos pages pour faciliter la navigation et améliorer leur visibilité sur les moteurs de recherche et les IA.',
       yourArticle: 'Votre article',
       articleHeadline: 'Le guide ultime des écouteurs à réduction de bruit',
       pagesOnSite: 'Pages de votre site',

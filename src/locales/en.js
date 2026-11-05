@@ -999,9 +999,9 @@ export default {
     },
     internalLinking: {
       eyebrow: 'Internal linking, automatic',
-      h2Pre: 'Kate links your article to the',
-      h2Hl: 'rest of your site.',
-      lead: "As she writes, Kate turns key phrases in your article into links to your other pages. Readers click through, and search engines and AI follow the very same links to discover your whole site.",
+      h2Pre: 'Kate optimizes your internal linking to',
+      h2Hl: 'boost your visibility',
+      lead: 'Kate adds relevant internal links between your pages to improve navigation and visibility in search engines and AI-generated answers.',
       yourArticle: 'Your article',
       articleHeadline: 'The Ultimate Guide to Noise-Cancelling Earbuds',
       pagesOnSite: 'Pages on your site',
