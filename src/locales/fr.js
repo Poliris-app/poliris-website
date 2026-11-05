@@ -1073,19 +1073,19 @@ export default {
       ],
     },
     cta: {
-      heading: 'Publiez votre premier article optimisé pour l’IA en quelques minutes',
-      lead: "Connectez votre marque, lancez un scan, et Kate suggérera l'article le plus susceptible de combler votre plus grande lacune de visibilité puis le rédigera.",
+      heading: 'Publiez votre premier article optimisé pour l’IA',
+      lead: 'Connectez votre marque, lancez une analyse, et Kate identifie l’opportunité de contenu la plus pertinente pour améliorer votre visibilité, puis rédige l’article pour vous.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
-      note: 'Aucune carte · Annulation à tout moment',
+      note: 'Aucune carte bancaire requise',
     },
   },
 
   blog: {
     hero: {
       eyebrow: 'Blog',
-      title: "Notes de terrain sur la visibilité IA & le GEO",
-      lead: "Stratégie, frameworks et lectures courtes de l'équipe qui construit le système d'exploitation de la façon dont l'IA voit votre marque.",
+      title: 'Analyses, conseils et stratégies SEO & GEO',
+      lead: 'Explorez nos analyses, guides et bonnes pratiques pour améliorer votre référencement, renforcer votre présence dans les IA et développer votre croissance organique.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
     },
@@ -1160,8 +1160,8 @@ export default {
   faqs: {
     hero: {
       eyebrow: 'FAQ',
-      title: 'Les réponses, avant que vous demandiez.',
-      lead: "Les réponses en langage clair aux questions que les équipes posent le plus. Cherchez dans la liste, ou parcourez depuis le haut.",
+      title: 'Toutes les réponses à vos questions',
+      lead: 'Retrouvez les informations essentielles sur Poliris, ses fonctionnalités et son fonctionnement pour démarrer en toute confiance.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       statsQ: 'questions',
@@ -1548,7 +1548,7 @@ export default {
       lead: "Notre équipe répond généralement dans l'heure pendant les heures ouvrables.",
       primaryCta: 'Nous contacter',
       secondaryCta: "Démarrer l'essai gratuit",
-      note: 'Aucune carte · Annulation à tout moment',
+      note: 'Aucune carte bancaire requise',
     },
   },
 
@@ -1640,7 +1640,7 @@ export default {
       lead: "Démarrez un audit gratuit et voyez exactement où se situe votre marque dans les réponses IA aujourd'hui.",
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
-      note: 'Aucune carte · Annulation à tout moment',
+      note: 'Aucune carte bancaire requise',
     },
   },
   dashboard: {

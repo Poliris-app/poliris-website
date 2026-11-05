@@ -1072,19 +1072,19 @@ export default {
       ],
     },
     cta: {
-      heading: 'Your first AI-optimised article in 90 seconds.',
-      lead: 'Connect your brand, run a scan, and Kate will suggest the article most likely to close your biggest visibility gap then write it.',
+      heading: 'Publish your first AI-optimized article',
+      lead: 'Connect your brand, run an analysis, and Kate identifies the most relevant content opportunity to improve your visibility, then writes the article for you.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
-      note: 'No credit card · Cancel anytime',
+      note: 'No credit card required',
     },
   },
 
   blog: {
     hero: {
       eyebrow: 'Blog',
-      title: 'Field notes on AI visibility & GEO',
-      lead: 'Strategy, frameworks, and short reads from the team building the operating system for how AI sees your brand.',
+      title: 'SEO & GEO Insights, Tips, and Strategies',
+      lead: 'Explore our insights, guides, and best practices to improve your search rankings, boost your visibility in AI-generated answers, and drive organic growth.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
     },
@@ -1164,8 +1164,8 @@ export default {
   faqs: {
     hero: {
       eyebrow: 'FAQs',
-      title: 'Answers, before you ask.',
-      lead: 'Plain-English answers to the questions teams ask most. Search the list, or browse from the top.',
+      title: 'Answers to All Your Questions\n\n',
+      lead: 'Find everything you need to know about Poliris, its features, and how it works so you can get started with confidence.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
       statsQ: 'questions',
@@ -1552,7 +1552,7 @@ export default {
       lead: 'Our team usually replies within an hour during business hours.',
       primaryCta: 'Talk to us',
       secondaryCta: 'Start free trial',
-      note: 'No credit card · Cancel anytime',
+      note: 'No credit card required',
     },
   },
 
@@ -1649,7 +1649,7 @@ export default {
       lead: 'Start a free audit and see exactly where your brand stands in AI answers today.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
-      note: 'No credit card · Cancel anytime',
+      note: 'No credit card required',
     },
   },
   dashboard: {
