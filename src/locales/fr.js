@@ -39,7 +39,7 @@ export default {
   },
 
   footer: {
-    copy: "© 2026 Poliris · Intelligence de marque pour l'ère de l'IA",
+    copy: '© 2026 Poliris · Le SEO à l\'ère de l\'IA',
     links: ['Produits', 'Pour les équipes', 'Comment ça marche', 'Tarifs', 'Blog'],
     legalNotice: 'Mentions légales',
     privacyPolicy: 'Politique de confidentialité',
@@ -1149,11 +1149,11 @@ export default {
       },
     ],
     cta: {
-      heading: "Vous voulez des mises à jour de l'équipe ?",
-      lead: "Un court email par mois nouveaux articles, évolutions produit et ce qui change dans la recherche IA.",
-      primaryCta: "S'abonner",
-      secondaryCta: 'Parcourir les articles',
-      note: 'Pas de spam · Se désabonner à tout moment',
+      heading: 'Découvrez comment l\'IA décrit votre marque',
+      lead: 'Démarrez votre essai gratuit, sans configuration ni expertise technique, et découvrez comment l’IA perçoit votre marque aujourd’hui.',
+      primaryCta: 'Obtenez votre essai gratuit',
+      secondaryCta: 'Réserver une démo',
+      note: 'Aucune carte bancaire requise',
     },
   },
 
@@ -2213,8 +2213,8 @@ export default {
       secondaryCta: 'Démarrer l\'essai gratuit',
     },
     eyebrow: 'Envoyer un message',
-    heading: 'Sur quoi travaillez-vous ?',
-    lead: 'Parlez-nous de votre marque, de votre défi ou de votre calendrier. Plus vous nous donnez de contexte, mieux nous pouvons vous aider.',
+    heading: 'Parlons de votre projet',
+    lead: 'Vous avez une question, un projet ou souhaitez découvrir Poliris ? Présentez-nous vos besoins et notre équipe vous accompagnera dans les prochaines étapes.',
     topics: ['Demander une démo', 'Audit GEO gratuit', 'Partenariat agence', 'Question technique', 'Autre chose'],
     fields: {
       firstName: 'Prénom',

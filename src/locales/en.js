@@ -2216,14 +2216,14 @@ export default {
   demo: {
     hero: {
       eyebrow: 'Get a demo',
-      title: 'See Poliris with your own brand',
-      lead: 'Book a live session, run a free GEO audit, or reach out about a partnership.',
+      title: 'Discover what Poliris can do for your brand',
+      lead: 'Connect with our team for a personalized demo and discover how Poliris helps you analyze, optimize, and improve your search rankings.',
       primaryCta: 'Book a demo',
       secondaryCta: 'Start free trial',
     },
     eyebrow: 'Send a message',
-    heading: 'What are you working on?',
-    lead: 'Tell us about your brand, your challenge, or your timeline. The more context you give us, the better we can help.',
+    heading: 'Let\'s Talk About Your Project',
+    lead: 'Have a question, a project in mind, or want to learn more about Poliris? Tell us what you need, and our team will help you take the next steps.',
     topics: ['Request a demo', 'Free GEO audit', 'Agency partnership', 'Technical question', 'Something else'],
     fields: {
       firstName: 'First name',
