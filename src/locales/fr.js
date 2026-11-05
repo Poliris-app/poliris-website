@@ -932,13 +932,13 @@ export default {
     },
     threeJobs: {
       eyebrow: 'Un agent, trois missions',
-      h2Pre: 'Rédigez, Optimisez,',
-      h2Hl: 'Implémentez',
-      lead: 'Kate vous accompagne à chaque étape de la création de contenu, quel que soit votre point de départ.',
+      h2Pre: 'Créez, optimisez et',
+      h2Hl: 'publiez vos contenus',
+      lead: 'Kate vous accompagne à chaque étape, de la rédaction à la publication, pour renforcer votre visibilité dans les IA.',
       cards: [
-        { no: '01', title: "D'un sujet à un article prêt à publier", desc: "Un brief conversationnel court, trois angles, un brouillon complet avec plan, liens et métadonnées, noté au fur et à mesure de la rédaction." },
-        { no: '02', title: 'Notez-le, puis améliorez les parties faibles', desc: "Nouvel article ou URL existante. Kate le note sur les signaux qui comptent, puis réécrit uniquement ce qui doit être amélioré pour augmenter le score." },
-        { no: '03', title: 'Publiez-le directement sur votre site',    desc: "Approuvez le brouillon et Kate le déploie sur votre site en un clic. Pas de copier-coller, pas de développeur, pas d'étapes supplémentaires." },
+        { no: '01', title: 'Créez des contenus prêts à publier', desc: 'Décrivez votre sujet à Kate : elle propose des angles pertinents et rédige un contenu structuré, optimisé et adapté à votre marque.' },
+        { no: '02', title: 'Optimisez vos contenus existants', desc: 'Kate analyse vos contenus, identifie les points à améliorer et propose des optimisations ciblées pour renforcer leur visibilité.' },
+        { no: '03', title: 'Publiez directement sur votre site',    desc: 'Validez vos contenus et Kate les publie sur votre site en un clic, sans copier-coller ni faire appel à un développeur.' },
       ],
       seeIt: 'Voir ci-dessous',
     },
@@ -949,7 +949,7 @@ export default {
       h3Post: 'en six étapes',
       p: "Conversationnel au départ, structuré en dessous. Chaque étape est modifiable vous gardez le contrôle des inputs.",
       steps: [
-        { num: '01', label: 'Brief',      text: "Kate vous propose spontanément trois idées de sujets, adaptées à votre produit et à votre audience. Vous en choisissez une, ou vous lui donnez la vôtre." },
+        { num: '01', label: 'Brief',      text: 'Kate vous suggère trois idées de sujets adaptées à votre produit et à votre audience. Choisissez celle qui vous convient ou proposez votre propre idée.' },
         { num: '02', label: 'Configurer', text: "Définissez les mots-clés à cibler, le ton, l'intention de recherche, la longueur visée et les faits à intégrer. Chaque champ reste modifiable avant de lancer la rédaction." },
         { num: '03', label: 'Liens',      text: "Kate repère les liens internes pertinents à partir de votre plan de site. Choisissez ceux à intégrer, elle les place naturellement dans le texte." },
         { num: '04', label: 'Plan',       text: "Kate propose un plan en H2 et H3, avec une longueur cible par section. Glissez pour réorganiser, ajoutez ou supprimez des sections librement." },
