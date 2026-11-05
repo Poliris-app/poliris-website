@@ -1048,32 +1048,32 @@ export default {
       items: [
         {
           q: 'Kate est-elle un simple rédacteur IA générique ?',
-          a: "Non. Kate est chargée avec vos données Poliris en direct lacunes de visibilité, sentiment, audit technique, marque, produits et audiences et rédige pour corriger vos vraies faiblesses. Un rédacteur générique part de zéro.",
+          a: 'Non, contrairement aux outils génériques, Kate s’appuie sur vos données Poliris pour comprendre votre marque, identifier vos points faibles et créer des contenus ciblés qui améliorent votre visibilité dans les IA.',
         },
         {
           q: 'Combien de temps prend un article complet ?',
-          a: "Un brouillon prêt à publier prend environ 90 secondes. Vous pouvez le lancer et continuer à travailler ; Kate termine en arrière-plan et un badge flottant vous avertit quand c'est prêt.",
+          a: 'Kate génère un brouillon prêt à publier en 90 secondes environ. Pendant ce temps, vous pouvez poursuivre votre travail : une notification vous informe dès que votre contenu est prêt.',
         },
         {
           q: "Puis-je modifier l'article après que Kate l'a généré ?",
-          a: "Oui, chaque input, section et ligne est modifiable à chaque étape. Vous gardez le contrôle des inputs ; Kate gère le travail lourd.",
+          a: 'Oui, vous pouvez modifier chaque section de votre article à tout moment. Vous gardez le contrôle du contenu, tandis que Kate se charge de la rédaction et de l’optimisation.',
         },
         {
           q: "Quelle est la différence entre rédiger et optimiser ?",
-          a: "Rédiger part d'un sujet et produit un nouvel article. Optimiser prend une URL ou un brouillon existant, le note, et réécrit uniquement les parties faibles pour améliorer le score.",
+          a: 'La rédaction permet de créer un nouvel article à partir d’un sujet. L’optimisation analyse un contenu existant, évalue son score et améliore les passages qui en ont besoin.',
         },
         {
           q: 'Comment fonctionne la notation ?',
-          a: 'Trois couches indépendantes : des contrôles programmatiques déterministes, un juge LLM qualitatif et un auditeur d\'hallucinations. Le tout est combiné en un score de 0 à 100 sur les signaux SEO, GEO et AEO.',
+          a: 'Kate évalue votre contenu à partir de trois analyses complémentaires : des contrôles techniques, une évaluation qualitative par IA et une vérification des informations. Vous obtenez un score de 0 à 100 basé sur les critères SEO, GEO et AEO.',
         },
         {
           q: "Dois-je être un expert SEO ?",
-          a: 'Non. Kate est faite pour les non-experts : chefs de produit, fondateurs, équipes sans marketing interne. Vous parlez en langage clair, elle gère la technique.',
+          a: 'Non, Kate est conçue pour être accessible à tous, même sans connaissances en SEO. Décrivez simplement vos besoins et elle se charge des aspects techniques.',
         },
       ],
     },
     cta: {
-      heading: 'Votre premier article optimisé pour l\'IA en 90 secondes.',
+      heading: 'Publiez votre premier article optimisé pour l’IA en quelques minutes',
       lead: "Connectez votre marque, lancez un scan, et Kate suggérera l'article le plus susceptible de combler votre plus grande lacune de visibilité puis le rédigera.",
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',

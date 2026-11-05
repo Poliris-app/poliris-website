@@ -1047,27 +1047,27 @@ export default {
       items: [
         {
           q: 'Is Kate a generic AI writer in a wrapper?',
-          a: 'No. Kate is loaded with your live Poliris data visibility gaps, sentiment, technical audit, brand, products and audiences and writes to fix your real weaknesses. A generic writer starts from nothing.',
+          a: 'No. Unlike generic AI writing tools, Kate uses your Poliris data to understand your brand, identify areas for improvement, and create targeted content that boosts your visibility in AI-generated answers.',
         },
         {
           q: 'How long does a full article take?',
-          a: "A publish-ready draft takes about 90 seconds. You can start it and keep working; Kate finishes in the background and a floating badge tells you when it's ready.",
+          a: 'Kate generates a publish-ready draft in about 90 seconds. In the meantime, you can keep working, and you\'ll receive a notification as soon as your content is ready.',
         },
         {
           q: 'Can I edit the article after Kate generates it?',
-          a: 'Yes, every input, section and line is editable at every step. You stay in control of the inputs; Kate handles the heavy work.',
+          a: 'Yes, you can edit any section of your article at any time. You stay in control of the content while Kate handles the writing and optimization.',
         },
         {
           q: "What's the difference between writing and optimizing?",
-          a: 'Writing starts from a topic and produces a new article. Optimizing takes a URL or draft you already have, scores it, and rewrites only the weak parts to lift the score.',
+          a: 'Writing creates a new article from a topic. Optimization analyzes existing content, evaluates its score, and improves the sections that need work.',
         },
         {
           q: 'How does the scoring work?',
-          a: 'Three independent layers: deterministic programmatic checks, a qualitative LLM judge, and a hallucination auditor combined into one 0–100 score across SEO, GEO and AEO signals.',
+          a: 'Kate evaluates your content using three complementary methods: technical checks, AI-powered quality assessment, and fact-checking. You receive a score from 0 to 100 based on SEO, GEO, and AEO criteria.',
         },
         {
           q: 'Do I need to be an SEO expert?',
-          a: 'No. Kate is built for non-experts product managers, founders, teams without an in-house marketing desk. You talk in plain language; she handles the technical depth.',
+          a: 'No, Kate is designed for everyone, even if you have no SEO experience. Simply describe what you need, and she’ll handle the technical work.',
         },
       ],
     },
