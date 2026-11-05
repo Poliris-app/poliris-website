@@ -1008,7 +1008,7 @@ export default {
       pagesOnSite: 'Pages de votre site',
       linkedByKate: 'Lié par Kate',
       chips: ['Lecteurs', 'Moteurs de recherche', 'Moteurs IA'],
-      note: "Les trois suivent les liens de Kate pour atteindre chaque page de votre site, afin que votre contenu soit trouvé, classé et cité.",
+      note: 'Grâce aux liens internes, vos pages sont plus faciles à explorer, à référencer et à découvrir, aussi bien par les visiteurs que par les moteurs de recherche et les IA.',
     },
     multiChannel: {
       eyebrow: 'Partout où le contenu vit',

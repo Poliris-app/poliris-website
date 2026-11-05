@@ -1007,7 +1007,7 @@ export default {
       pagesOnSite: 'Pages on your site',
       linkedByKate: 'Linked by Kate',
       chips: ['Readers', 'Search engines', 'AI engines'],
-      note: "All three follow Kate's links to reach every page on your site, so your content is found, ranked and cited.",
+      note: 'Internal links make your pages easier for visitors, search engines, and AI assistants to discover, navigate, and index.',
     },
     multiChannel: {
       eyebrow: 'Wherever content lives',
