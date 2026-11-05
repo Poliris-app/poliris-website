@@ -2206,9 +2206,9 @@ export default {
   },
   demo: {
     hero: {
-      eyebrow: 'Obtenir une démo',
-      title: 'Découvrez Poliris avec votre propre marque',
-      lead: 'Réservez une session en direct, lancez un audit GEO gratuit ou contactez-nous pour un partenariat.',
+      eyebrow: 'DÉMONSTRATION PERSONNALISÉE',
+      title: 'Découvrez tout le potentiel de Poliris pour votre marque',
+      lead: 'Échangez avec notre équipe lors d’une démonstration personnalisée et découvrez comment Poliris vous aide à analyser, optimiser et développer votre référencement.',
       primaryCta: 'Réserver une démo',
       secondaryCta: 'Démarrer l\'essai gratuit',
     },
