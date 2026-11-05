@@ -1011,17 +1011,17 @@ export default {
       note: 'Grâce aux liens internes, vos pages sont plus faciles à explorer, à référencer et à découvrir, aussi bien par les visiteurs que par les moteurs de recherche et les IA.',
     },
     multiChannel: {
-      eyebrow: 'Partout où le contenu vit',
-      h2Pre: 'Pas seulement',
-      h2Hl: 'votre blog.',
-      lead: 'Kate est conçue pour fonctionner partout où votre marque doit apparaître pour rester présent sur chaque canal qui compte.',
+      eyebrow: 'UNE PRÉSENCE SUR TOUS VOS CANAUX',
+      h2Pre: 'Votre contenu va bien au-delà de',
+      h2Hl: 'votre blog',
+      lead: 'Kate adapte et diffuse vos contenus sur les canaux qui comptent pour votre marque, afin de renforcer votre visibilité et toucher votre audience.',
       channels: ['Blog et site', 'Docs', 'LinkedIn', 'Posts sociaux', 'Newsletter'],
     },
     comparison: {
-      eyebrow: 'Kate face aux autres',
-      h2Pre: 'Kate face',
-      h2Hl: 'aux autres.',
-      lead: "Les rédacteurs IA génériques partent de zéro. Kate part de vos données.",
+      eyebrow: 'POURQUOI KATE ?',
+      h2Pre: 'Bien plus qu’un simple',
+      h2Hl: 'rédacteur IA',
+      lead: 'Contrairement aux outils classiques, Kate s’appuie sur vos données pour créer des contenus adaptés à votre marque et à vos objectifs de visibilité.',
       headers: ['', 'Rédacteur IA générique', 'Outil contenu SEO', 'Kate (Poliris)'],
       rows: [
         'Connaît votre marque, produits et audiences',
@@ -1043,8 +1043,8 @@ export default {
     },
     faqs: {
       eyebrow: 'FAQ',
-      h2Pre: 'Les questions qu\'on se pose',
-      h2Hl: 'avant de commencer.',
+      h2Pre: 'Tout ce que vous devez savoir',
+      h2Hl: 'avant de commencer',
       items: [
         {
           q: 'Kate est-elle un simple rédacteur IA générique ?',

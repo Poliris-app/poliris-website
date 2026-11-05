@@ -1010,17 +1010,17 @@ export default {
       note: 'Internal links make your pages easier for visitors, search engines, and AI assistants to discover, navigate, and index.',
     },
     multiChannel: {
-      eyebrow: 'Wherever content lives',
-      h2Pre: 'Not just',
-      h2Hl: 'your blog.',
-      lead: 'Kate is built to work wherever your brand needs to show up so you stay present across every channel that matters.',
+      eyebrow: 'BE PRESENT ACROSS ALL YOUR CHANNELS',
+      h2Pre: 'Your content goes far beyond',
+      h2Hl: 'your blog',
+      lead: 'Kate adapts and distributes your content across the channels that matter most to your brand, helping you boost visibility and reach your audience.',
       channels: ['Blog & site', 'Docs', 'LinkedIn', 'Social posts', 'Newsletter'],
     },
     comparison: {
-      eyebrow: 'Kate vs. the others',
-      h2Pre: 'Kate vs',
-      h2Hl: 'the rest.',
-      lead: 'Generic AI writers start from nothing. Kate starts from your data.',
+      eyebrow: 'WHY KATE?',
+      h2Pre: 'More than just an',
+      h2Hl: 'AI writing assistant',
+      lead: 'Unlike traditional tools, Kate uses your data to create content tailored to your brand and visibility goals.',
       headers: ['', 'Generic AI writer', 'SEO content tool', 'Kate (Poliris)'],
       rows: [
         'Knows your brand, products & audiences',
@@ -1043,7 +1043,7 @@ export default {
     faqs: {
       eyebrow: 'FAQ',
       h2Pre: 'Questions people ask',
-      h2Hl: 'before they start.',
+      h2Hl: 'before they start',
       items: [
         {
           q: 'Is Kate a generic AI writer in a wrapper?',
