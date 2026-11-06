@@ -52,8 +52,14 @@ hides itself, so the pages stay clean until a screenshot arrives.
 | S46 | `s46-members.webp` | settings | Members of a workspace and their roles. |
 | S47 | `s47-billing.webp` | settings | The Billing tab. |
 | S48 | `s48-seo-pixel-install.webp` | site-connection | Installing the SEO Pixel: copy the snippet into your pages, then verify. |
+| S49 | `s49-webflow-connection.webp` | site-connection | Connecting Webflow: create a Site Token, connect, then choose the drafts collection. |
 | S50 | `s50-review-citation.webp` | citations | Review Citation: the pages that already mention your products and the action to take on each. |
 | S51 | `s51-google-analytics.webp` | site-connection | The Manage Google Analytics window: enter your GA4 property ID, then connect. |
 | S52 | `s52-seo-pixel-enable.webp` | site-connection | Step 1: enable the SEO Pixel for the site. |
+| S53 | `s53-keywords-overview.webp` | keywords | The Overview tab of Keywords on Google. |
+| S54 | `s54-keywords-list.webp` | keywords | The Keywords tab, with its filters and one row per search. |
+| S55 | `s55-keyword-panel.webp` | keywords | The panel of one search: its position over time, the positions and what Google shows. |
+| S56 | `s56-keywords-pages.webp` | keywords | The Pages tab: the same data, page by page. |
+| S57 | `s57-find-keywords.webp` | keywords | The Find keywords drawer, with its four tabs. |
 
-49 screenshots, all in place. S42 lists SEO Pixel and WordPress only. S31 (Keyword Audit) and S39 (Technical Fixes) were taken out until those features reach production. S49 (Webflow connection) has no slot yet: add one when Webflow is available. The original, uncropped screenshots were moved out of public/ to .backups/cleanup-2026-10-26/public/docs-assets/.
+55 screenshots, all in place. S42 shows the three connection options (WordPress plugin, Webflow, SEO Pixel). S31 (Keyword Audit) and S39 (Technical Fixes) were taken out until those features reach production. Each file is a WebP under 100 kB (the build's SEO check fails above that), and the width and height in the docs match its real size, so the page holds the right space before it loads. The PNG originals of S53 to S57 are in .backups/keywords-screenshots-2026-11-06/originals-png/. The original, uncropped screenshots were moved out of public/ to .backups/cleanup-2026-10-26/public/docs-assets/.

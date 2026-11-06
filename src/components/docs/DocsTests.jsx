@@ -23,11 +23,56 @@ function Field({ label, html }) {
   );
 }
 
+// The native <details> snaps open; this slides the body down (and back up on
+// close) instead. The element still opens for real, so find-in-page, links to
+// a test and keyboard use behave as before; with reduced motion it snaps.
+const OPEN_MS = 260;
+const CLOSE_MS = 200;
+const EASE = 'cubic-bezier(.2, .7, .2, 1)';
+
+function useSmoothDetails() {
+  const running = useRef(null);
+  return useCallback((e) => {
+    const details = e.currentTarget.parentElement;
+    const body = details.querySelector('.docs-test__body');
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (!body || reduced || typeof body.animate !== 'function') return;
+    e.preventDefault();
+
+    // A click during an animation turns it around from where it is.
+    const from = running.current ? body.getBoundingClientRect().height : null;
+    running.current?.cancel();
+
+    const closing = details.open && details.dataset.closing !== 'true';
+    if (!closing) {
+      details.dataset.closing = 'false';
+      details.open = true;
+    }
+    const cs = getComputedStyle(body);
+    const full = { height: `${body.scrollHeight + parseFloat(cs.borderTopWidth)}px`, paddingTop: cs.paddingTop, paddingBottom: cs.paddingBottom, opacity: 1 };
+    const shut = { height: '0px', paddingTop: '0px', paddingBottom: '0px', opacity: 0 };
+    const start = from == null ? (closing ? full : shut) : { ...(closing ? full : shut), height: `${from}px` };
+
+    body.style.overflow = 'hidden';
+    if (closing) details.dataset.closing = 'true';
+    const anim = body.animate([start, closing ? shut : full], { duration: closing ? CLOSE_MS : OPEN_MS, easing: EASE });
+    running.current = anim;
+    anim.onfinish = () => {
+      running.current = null;
+      body.style.overflow = '';
+      if (closing) details.open = false;
+      delete details.dataset.closing;
+    };
+    anim.oncancel = () => { body.style.overflow = ''; };
+  }, []);
+}
+
 function Test({ test, labels }) {
   const c = CLASSIFICATION[test.id] ?? {};
+  const onToggle = useSmoothDetails();
   return (
     <details className="docs-test" id={test.id}>
-      <summary>
+      <summary onClick={onToggle}>
         <span className="docs-test__title">{test.title}</span>
         <span className="docs-test__badges">
           <span className={`docs-badge docs-badge--lvl-${c.level ?? 'page'}`}>
@@ -57,7 +102,7 @@ function Test({ test, labels }) {
   );
 }
 
-// The Technical Audit test reference: 151 tests, so it gets its own search
+// The Technical Audit test reference: 158 tests, so it gets its own search
 // box and severity filter rather than asking the reader to scroll.
 export default function DocsTests({ chapter, slug }) {
   const { lang } = useLang();

@@ -92,7 +92,17 @@ export default function DocsShell({ activeSlug, children, aside }) {
       });
     });
     return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner); };
-  }, [activeSlug]);
+    // `open`: on narrow screens the list only gets a height once the
+    // Contents panel opens, so run again then.
+  }, [activeSlug, open]);
+
+  // Escape closes the Contents panel on narrow screens.
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
 
   const groups = useMemo(() => getNavGroups(lang, tolgee), [lang, tolgee]);
 
@@ -111,13 +121,14 @@ export default function DocsShell({ activeSlug, children, aside }) {
           type="button"
           className="docs__drawer-toggle"
           aria-expanded={open}
+          aria-controls="docs-sidebar"
           onClick={() => setOpen((v) => !v)}
         >
           {lang === 'fr' ? 'Sommaire' : 'Contents'}
         </button>
 
         <div className="docs__layout" ref={layoutRef}>
-          <aside ref={sidebarRef} className={`docs__sidebar${open ? ' is-open' : ''}`} aria-label={lang === 'fr' ? 'Navigation de la documentation' : 'Documentation navigation'}>
+          <aside id="docs-sidebar" ref={sidebarRef} className={`docs__sidebar${open ? ' is-open' : ''}`} aria-label={lang === 'fr' ? 'Navigation de la documentation' : 'Documentation navigation'}>
             <div className="docs__search">
               <input
                 type="search"

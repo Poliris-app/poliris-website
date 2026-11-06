@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 
-// The screenshots are dropped into public/docs/images over time. Until a file
-// is there the <img> would show as a broken icon, so any figure whose image
-// fails to load takes itself off the page instead.
+// Safety net behind docsFigures.js, which already settles every figure in the
+// HTML (sized when its screenshot exists, placeholder or left out when not).
+// If a screenshot still fails to load (a file listed but unreadable, a
+// network error), its figure takes itself off the page rather than show a
+// broken icon; in development it turns into the dashed placeholder.
 //
 // The chapter HTML can be swapped out under us (a language change, Tolgee's
 // live copy arriving), replacing every <img>, so rather than listening on each
@@ -12,8 +14,6 @@ export default function useHideMissingFigures(ref, deps = []) {
   useEffect(() => {
     const root = ref.current;
     if (!root) return undefined;
-    // In development the slot stays on the page as a dashed placeholder
-    // naming the file it is waiting for, so it is easy to see what is left.
     const hide = (img) => {
       const fig = img.closest('.docs-figure');
       if (!fig) return;

@@ -65,6 +65,21 @@ export const DOC_CHAPTERS = [
     ]
   },
   {
+    "id": "feature-keywords",
+    "slug": "keywords",
+    "kind": "prose",
+    "blocks": [
+      "feature-keywords",
+      "keywords-zones",
+      "keywords-overview",
+      "keywords-list",
+      "keywords-pages",
+      "keywords-find",
+      "keywords-competitors",
+      "keywords-free"
+    ]
+  },
+  {
     "id": "feature-technical",
     "slug": "technical-audit",
     "kind": "prose",
@@ -76,8 +91,7 @@ export const DOC_CHAPTERS = [
       "feature-technical-overview-1",
       "tech-issues-tab-1",
       "feature-technical-page-explorer-1",
-      "page-explorer-report-1",
-      "feature-keywords-1"
+      "page-explorer-report-1"
     ]
   },
   {
@@ -92,7 +106,7 @@ export const DOC_CHAPTERS = [
     "tests": {
       "test-canonical_indexability_status": {
         "level": "page",
-        "severity": "critical",
+        "severity": "warning",
         "ai": false
       },
       "test-canonical_link_fragments": {
@@ -155,9 +169,19 @@ export const DOC_CHAPTERS = [
         "severity": "critical",
         "ai": false
       },
+      "test-security_headers": {
+        "level": "site",
+        "severity": "notice",
+        "ai": false
+      },
       "test-ssl_validator": {
         "level": "site",
         "severity": "critical",
+        "ai": false
+      },
+      "test-anchor_text_presence": {
+        "level": "page",
+        "severity": "mixed",
         "ai": false
       },
       "test-external_link_authority": {
@@ -176,6 +200,16 @@ export const DOC_CHAPTERS = [
         "ai": false
       },
       "test-internal_link_integrity": {
+        "level": "page",
+        "severity": "mixed",
+        "ai": false
+      },
+      "test-internal_links_with_tracking_parameters": {
+        "level": "page",
+        "severity": "mixed",
+        "ai": false
+      },
+      "test-internal_nofollow_links": {
         "level": "page",
         "severity": "mixed",
         "ai": false
@@ -275,11 +309,6 @@ export const DOC_CHAPTERS = [
         "severity": "warning",
         "ai": false
       },
-      "test-interaction_latency_threshold": {
-        "level": "page",
-        "severity": "warning",
-        "ai": false
-      },
       "test-js_efficiency": {
         "level": "page",
         "severity": "warning",
@@ -300,7 +329,7 @@ export const DOC_CHAPTERS = [
         "severity": "warning",
         "ai": false
       },
-      "test-ttfb_speed": {
+      "test-total_blocking_time": {
         "level": "page",
         "severity": "warning",
         "ai": false
@@ -367,7 +396,7 @@ export const DOC_CHAPTERS = [
       },
       "test-ai_crawler_strategy": {
         "level": "site",
-        "severity": "warning",
+        "severity": "critical",
         "ai": false
       },
       "test-robot_allow_logic_check": {
@@ -407,7 +436,7 @@ export const DOC_CHAPTERS = [
       },
       "test-robot_utf-8_encoding": {
         "level": "site",
-        "severity": "critical",
+        "severity": "warning",
         "ai": false
       },
       "test-robot_asset_visibility": {
@@ -431,6 +460,11 @@ export const DOC_CHAPTERS = [
         "ai": false
       },
       "test-sitemap_discovery_link": {
+        "level": "site",
+        "severity": "warning",
+        "ai": false
+      },
+      "test-sitemaps_from_other_domains": {
         "level": "site",
         "severity": "warning",
         "ai": false
@@ -500,6 +534,11 @@ export const DOC_CHAPTERS = [
         "severity": "mixed",
         "ai": false
       },
+      "test-document_structure_validity": {
+        "level": "page",
+        "severity": "warning",
+        "ai": false
+      },
       "test-href_attributes_detection": {
         "level": "page",
         "severity": "mixed",
@@ -512,7 +551,7 @@ export const DOC_CHAPTERS = [
       },
       "test-meta_keyword_presence": {
         "level": "page",
-        "severity": "none",
+        "severity": "notice",
         "ai": false
       },
       "test-meta_refresh_identifier": {
@@ -526,12 +565,12 @@ export const DOC_CHAPTERS = [
         "ai": false
       },
       "test-performance_monitoring": {
-        "level": "page",
+        "level": "site",
         "severity": "notice",
         "ai": false
       },
       "test-visual_analytics_presence": {
-        "level": "page",
+        "level": "site",
         "severity": "notice",
         "ai": false
       },
@@ -541,6 +580,11 @@ export const DOC_CHAPTERS = [
         "ai": false
       },
       "test-hreflang_language_code_validator": {
+        "level": "page",
+        "severity": "warning",
+        "ai": false
+      },
+      "test-hreflang_placement": {
         "level": "page",
         "severity": "warning",
         "ai": false
@@ -576,6 +620,11 @@ export const DOC_CHAPTERS = [
         "ai": false
       },
       "test-image_alt_attribute": {
+        "level": "page",
+        "severity": "mixed",
+        "ai": false
+      },
+      "test-image_alt_text_length": {
         "level": "page",
         "severity": "mixed",
         "ai": false
