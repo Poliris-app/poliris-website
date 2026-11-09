@@ -6,7 +6,7 @@ import Hero from './Hero';
 import CtaBand from './CtaBand';
 import StepLottieIcon from './StepLottieIcon';
 import ContentGenDemo from './ContentGenDemo';
-// import KpiStats from './KpiStats'; // hidden for now, see below
+import KpiStats from './KpiStats';
 // import AuditModal from './AuditModal'; // hidden for now, see below
 import { useLang } from '../contexts/LangContext';
 
@@ -97,6 +97,7 @@ export function LandingTop() {
         }}
         showAiBand={false}
         showFilm
+        belowFilm={<KpiStats />}
       />
       <HowItWorks />
     </>
@@ -118,8 +119,6 @@ export default function LandingPage() {
       {/* <ValueChain /> */}
       {/* ProductCarousel hidden for now — restore by uncommenting. */}
       {/* <ProductCarousel /> */}
-      {/* KpiStats hidden for now — restore by uncommenting (and its import above). */}
-      {/* <KpiStats /> */}
       <PlatformEngine />
       <Agents />
       <CompareCard />

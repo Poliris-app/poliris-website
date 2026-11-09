@@ -4290,59 +4290,115 @@ button { cursor: pointer; border: none; background: none; }
 }
 
 
-/* ── KPI cards: Poliris in numbers (before Platform) ────────── */
+/* ── KPI strip: Poliris in numbers (below the hero film) ─────
+   Made to read as the end of the film, not a new section: no card, on the
+   hero's background with the orbit rings passing behind, carrying the film's
+   blue tick (.lab in public/poliris-film/sections) in front of each label.
+   The negative top margin takes back part of the .hfilm bottom margin, which
+   was sized for the rings alone. */
 .pl-stats {
-  --pl-blue: #0062ff;
-  --pl-blue-soft: #eaf0ff;
   --pl-fg-1: #0d111a;
-  --pl-fg-3: #4d4d4d;
-  --pl-fg-4: #6c6c7c;
-  --pl-surface-2: #f3f5f9;
-  --pl-border: #e9ebf1;
-  /* the Platform section's active card shadow (.engine-card--active) */
-  --pl-shadow: 0 18px 40px -20px rgba(20, 30, 80, 0.22), 0 4px 14px rgba(0, 98, 255, 0.06);
-  --pl-shadow-hover: 0 24px 48px -20px rgba(20, 30, 80, 0.28), 0 6px 18px rgba(0, 98, 255, 0.08);
+  --pl-fg-4: #6a768a;
   --pl-display: var(--manrope);
   --pl-body: var(--chivo);
-  background: #fff;
-  padding: 72px 16px;
+  position: relative;
+  margin-top: -36px;
+  padding-bottom: 96px;
+  text-align: center;
   font-family: var(--pl-body);
-  color: var(--pl-fg-3);
 }
 .pl-stats * { box-sizing: border-box; }
 .pl-stats__inner { max-width: 1120px; margin: 0 auto; }
 
-.pl-stats__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
-.pl-card {
-  display: flex; flex-direction: column;
-  background: #fff; border: 1px solid var(--pl-border); border-radius: 20px;
-  padding: 28px 24px 22px; box-shadow: var(--pl-shadow);
-  transition: box-shadow .18s cubic-bezier(.22,1,.36,1), transform .18s cubic-bezier(.22,1,.36,1);
+.pl-stats__title { margin: 0; color: var(--pl-fg-1); font: 700 24px/1.3 var(--pl-display); letter-spacing: -.3px; }
+.pl-stats__lead { margin: 6px 0 0; color: var(--pl-fg-4); font-size: 15px; line-height: 1.5; }
+
+/* The film's blue check, in front of each row's label. */
+.pl-stat__badge {
+  flex: none; display: grid; place-items: center;
+  width: 22px; height: 22px; border-radius: 50%; background: #0062ff; color: #fff;
 }
-.pl-card:hover { box-shadow: var(--pl-shadow-hover); transform: translateY(-2px); }
-.pl-card__icon {
-  width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
-  background: var(--pl-blue-soft); color: var(--pl-blue);
+.pl-stat__badge svg { width: 13px; height: 13px; }
+
+/* The tags as one dotted line of text rather than a stack of chips. */
+.pl-dotlist {
+  display: flex; flex-wrap: wrap; gap: 2px 0; margin: 12px 0 0; padding: 0; list-style: none;
+  color: #5d6a82; font: 500 12.5px/1.5 var(--pl-body);
 }
-.pl-card__icon svg { width: 20px; height: 20px; }
-.pl-card__value {
-  margin: 22px 0 6px; color: var(--pl-fg-1);
-  font: 800 clamp(40px, 3.9vw, 48px)/1 var(--pl-display); letter-spacing: -1.4px;
+.pl-dotlist li + li::before { content: '\00b7'; margin: 0 9px; color: #b9c1d1; }
+
+/* The section's own title read literally: one ruled row per figure — label
+   on the left, what it counts in the middle, the number on the right. */
+.pl-sheet { position: relative; margin: 46px 0 0; padding: 1px 0; text-align: left; }
+/* The rules that close the sheet top and bottom fade at both ends, so the
+   block sits on the hero wash instead of being boxed by two hard lines; the
+   dividers between the rows stay solid, since those are inside it. */
+.pl-sheet::before, .pl-sheet::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, rgba(11, 21, 51, 0), rgba(11, 21, 51, .15) 11%, rgba(11, 21, 51, .15) 89%, rgba(11, 21, 51, 0));
+}
+.pl-sheet::before { top: 0; }
+.pl-sheet::after { bottom: 0; }
+.pl-sheet__row {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) auto;
+  gap: 0 32px; align-items: center; padding: 26px 2px;
+}
+/* The divider under each row, drawn as its own line so the entrance can
+   sweep it in from the left. */
+.pl-sheet__row::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: #e9ecf3; transform-origin: left center;
+}
+.pl-sheet__row:last-child::after { display: none; }
+
+/* Entrance (KpiStats.jsx arms it once JS runs and adds .is-in when the sheet
+   scrolls into view; without JS, or with reduced motion, nothing is hidden).
+   Row by row, --i steps apart: the row rises and fades in, its check pops,
+   its divider sweeps in, and its numbers count up on the same beat. */
+.pl-stats--armed .pl-sheet::before,
+.pl-stats--armed .pl-sheet::after { transform: scaleX(0); transition: transform 1.1s cubic-bezier(.2, .7, .2, 1); }
+.pl-stats--armed .pl-sheet::after { transition-delay: .45s; }
+.pl-stats--armed .pl-sheet__row {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .6s ease, transform .8s cubic-bezier(.2, .7, .2, 1);
+  transition-delay: calc(var(--i, 0) * 140ms + 80ms);
+}
+.pl-stats--armed .pl-sheet__row::after {
+  transform: scaleX(0);
+  transition: transform .9s cubic-bezier(.2, .7, .2, 1);
+  transition-delay: calc(var(--i, 0) * 140ms + 260ms);
+}
+.pl-stats--armed .pl-stat__badge {
+  opacity: 0; transform: scale(.4);
+  transition: opacity .3s ease, transform .5s cubic-bezier(.34, 1.56, .64, 1);
+  transition-delay: calc(var(--i, 0) * 140ms + 220ms);
+}
+.pl-stats--armed.is-in .pl-sheet::before,
+.pl-stats--armed.is-in .pl-sheet::after,
+.pl-stats--armed.is-in .pl-sheet__row::after { transform: scaleX(1); }
+.pl-stats--armed.is-in .pl-sheet__row { opacity: 1; transform: none; }
+.pl-stats--armed.is-in .pl-stat__badge { opacity: 1; transform: none; }
+.pl-sheet__label { display: flex; align-items: center; gap: 10px; color: #0b1533; font: 600 14.5px/1.3 var(--pl-display); }
+.pl-sheet .pl-stat__badge { width: 24px; height: 24px; }
+.pl-sheet .pl-stat__badge svg { width: 13px; height: 13px; }
+.pl-sheet__body { margin: 0; min-width: 0; }
+.pl-sheet__desc { margin: 0; color: var(--pl-fg-4); font-size: 13.5px; line-height: 1.5; }
+.pl-sheet__body .pl-dotlist { margin-top: 8px; }
+.pl-sheet__value {
+  margin: 0; justify-self: end; color: var(--pl-fg-1);
+  font: 800 clamp(34px, 3.6vw, 46px)/1 var(--pl-display); letter-spacing: -1.8px;
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.pl-card__label { margin: 0 0 8px; color: var(--pl-fg-1); font: 700 17px/1.3 var(--pl-display); }
-.pl-card__desc { margin: 0 0 20px; font-size: 14px; line-height: 1.5; color: var(--pl-fg-4); }
-.pl-card__foot { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; padding-top: 18px; }
-.pl-chip {
-  padding: 5px 8px; border-radius: 999px; background: var(--pl-surface-2);
-  font: 500 11.5px/1.2 var(--pl-body); color: var(--pl-fg-3); white-space: nowrap;
-}
+
 @media (max-width: 900px) {
-  .pl-stats__grid { grid-template-columns: 1fr; max-width: 520px; margin: 40px auto 0; }
-  .pl-card__value { font-size: 44px; }
+  .pl-sheet__row { grid-template-columns: 1fr; gap: 10px; padding: 22px 2px; }
+  .pl-sheet__value { justify-self: start; font-size: 40px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .pl-card { transition: none; }
+
+@media (max-width: 480px) {
+  .pl-stats { margin-top: 16px; padding-bottom: 56px; }
+  .pl-stats__title { font-size: 22px; }
 }
 
 /* ================================================================

@@ -151,7 +151,7 @@ function AiBand() {
   );
 }
 
-export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showFilm = false, showAiBand = true, dark = false, bottom = null, websiteCapture = null }) {
+export default function Hero({ eyebrow, title, audience, lead, primaryCta, secondaryCta, note, showFilm = false, showAiBand = true, dark = false, bottom = null, belowFilm = null, websiteCapture = null }) {
   const { lang } = useLang();
   const primaryTrial = isTrialCta(primaryCta);
   const primaryDemo  = isDemoCta(primaryCta);
@@ -218,6 +218,8 @@ export default function Hero({ eyebrow, title, audience, lead, primaryCta, secon
           {showAiBand && <AiBand />}
 
           {showFilm && <HeroFilm />}
+
+          {belowFilm}
         </div>
       </header>
     </>
