@@ -1076,8 +1076,11 @@ button.pricing-compare-section-title {
 
 /* Client plan cards reuse the brand pricing-card, with a credits line
    under the price instead of the brand card's coverage bar. */
-/* "per client / month" sits on the price's baseline, beside it. */
-.pr-client-card .pricing-price-row { align-items: baseline; gap: 5px; margin-bottom: 8px; }
+/* "per client / month" sits on its own line under the price: beside it, it
+   ran out of the card at every width (four cards across leave too little
+   room for "$151.20" and the label), and stacked it stays level across the
+   cards, the Custom card keeping an empty line in its place. */
+.pr-client-card .pricing-price-row { flex-direction: column; align-items: flex-start; gap: 2px; margin-bottom: 8px; }
 .pr-client-card .pricing-price-period { font-size: 12.5px; white-space: nowrap; }
 .pr-client-card .pricing-price { line-height: 1.1; }
 .pr-client-card .pricing-price-meta { margin-top: 0; }

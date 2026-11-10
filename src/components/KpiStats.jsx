@@ -209,7 +209,6 @@ export default function KpiStats() {
     },
   ];
   const value = (k) => <span data-stat={k}>{fmt(k)}</span>;
-
   return (
     <section className="pl-stats" aria-labelledby="pl-stats-title" ref={rootRef}>
       <div className="pl-stats__inner">
@@ -218,9 +217,9 @@ export default function KpiStats() {
           <p className="pl-stats__lead">{d.lead}</p>
         </div>
 
-        <dl className="pl-sheet">
-          {stats.map((s, i) => (
-            <div className="pl-sheet__row" key={s.key} style={{ '--i': i }}>
+        <dl className="pl-sheet reveal">
+          {stats.map((s) => (
+            <div className="pl-sheet__row" key={s.key}>
               <dt className="pl-sheet__label">{CHECK}<span>{s.label}</span></dt>
               <dd className="pl-sheet__body">
                 <p className="pl-sheet__desc">{s.desc}</p>

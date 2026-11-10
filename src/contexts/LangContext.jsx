@@ -139,12 +139,21 @@ function restoreScroll(pathname) {
   }
 
   let cancelled = false;
-  const cancel = () => { cancelled = true; detach(); };
+  let stopGlide = () => {};
+  const cancel = () => { cancelled = true; detach(); stopGlide(); };
   // The visitor scrolled first: leave them where they are.
   const takeOver = () => { cancel(); forgetScroll(); };
   const inputs = ['wheel', 'touchstart', 'keydown', 'mousedown'];
-  const detach = () => inputs.forEach((e) => window.removeEventListener(e, takeOver));
+  // Any scroll counts too (scrollbar drag, touchpad momentum, a swipe that
+  // began before this was armed), not only the inputs above. The page has
+  // just been put at the top, so a position away from it is the visitor's.
+  const onScroll = () => { if (window.scrollY > 2) takeOver(); };
+  const detach = () => {
+    inputs.forEach((e) => window.removeEventListener(e, takeOver));
+    window.removeEventListener('scroll', onScroll);
+  };
   inputs.forEach((e) => window.addEventListener(e, takeOver, { passive: true, once: true }));
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   // Not the load event: that waits on the film and analytics, seconds later.
   Promise.resolve(document.fonts?.ready)
@@ -153,8 +162,20 @@ function restoreScroll(pathname) {
       if (cancelled) return;
       detach();
       forgetScroll();
+      if (window.scrollY > 2) return; // moved meanwhile: never pull them back
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({ top: y, behavior: reduced ? 'instant' : 'smooth' });
+      if (reduced) return;
+      // The glide is long on a deep page: any input during it stops it
+      // where it is, so it never fights the visitor.
+      const halt = () => { stopGlide(); window.scrollTo({ top: window.scrollY, behavior: 'instant' }); };
+      const timer = setTimeout(() => stopGlide(), 2000);
+      stopGlide = () => {
+        clearTimeout(timer);
+        inputs.forEach((e) => window.removeEventListener(e, halt));
+        stopGlide = () => {};
+      };
+      inputs.forEach((e) => window.addEventListener(e, halt, { passive: true, once: true }));
     });
   return cancel;
 }
@@ -196,7 +217,12 @@ export function LangWrapper() {
       forgetScroll();
       document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: samePage ? 'smooth' : 'instant', block: 'start' });
     } else {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      // A fresh visit already opens at the top, and any scroll since is the
+      // visitor's own (the prerendered page scrolls before React takes over),
+      // so only reset on later route changes and on reload/back-forward.
+      const nav = performance.getEntriesByType?.('navigation')[0];
+      const freshLoad = !scrollRestored && nav?.type === 'navigate';
+      if (!freshLoad) window.scrollTo({ top: 0, behavior: 'instant' });
       // First render of this document only: a refresh glides back down.
       if (!scrollRestored) cancelRestore = restoreScroll(location.pathname);
     }

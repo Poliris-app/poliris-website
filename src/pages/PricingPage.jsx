@@ -35,6 +35,8 @@ const COMPARE_MODELS = {
     { logo: 'google-com-logo.png', label: 'AI Mode' },
     { logo: 'google-com-logo.png', label: 'AI Overviews' },
     { logo: 'perplexity-ai-logo.png', label: 'Perplexity' },
+    { logo: 'claudeai-com-logo.png', label: 'Claude' },
+    { logo: 'grok-com-logo.png', label: 'Grok' },
   ],
   api: [
     { logo: 'chatgpt-com-logo.png', label: 'ChatGPT' },
@@ -91,6 +93,8 @@ const CALC_MODELS = [
   { id: 'google-ai-mode', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Mode', weight: 1 },
   { id: 'google-ai-overview', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Overview', weight: 1 },
   { id: 'perplexity', group: 'web', logo: 'perplexity-ai-logo.png', label: 'Perplexity', weight: 1 },
+  { id: 'claude-web', group: 'web', logo: 'claudeai-com-logo.png', label: 'Claude Web', weight: 1 },
+  { id: 'grok-web', group: 'web', logo: 'grok-com-logo.png', label: 'Grok Web', weight: 1 },
   // API integration — versioned, credit cost scales with the model.
   { id: 'gpt-4o-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-4o Mini', weight: 1 },
   { id: 'gpt-5.4-nano', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Nano', weight: 3 },
@@ -491,8 +495,11 @@ const PLAN_META = [
 const CURRENCIES = { usd: { symbol: '$', label: 'USD', code: 'USD' }, eur: { symbol: '€', label: 'EUR', code: 'EUR' } };
 
 /* ── Agency pricing ────────────────────────────────────────────────
-   Monthly prices, excl. tax, per currency, as the design shows them:
-   the Agency pack, then one plan per client (Client S / M / L). Client XL
+   Monthly prices, excl. tax, per currency, exactly as agencies are billed
+   (agency billing rules of 5 Nov 2026): the Agency pack, then one plan per
+   client (Client S / M / L = Starter / Growth / Pro at 20% below the direct
+   price). Same amounts as the app's Stripe prices
+   (poliris-backend scripts/create_agency_stripe_prices.py). Client XL
    is quoted, so it has no price here. The names and copy live in
    pricing.agencyView in src/locales/en.js and fr.js.
 
@@ -500,10 +507,10 @@ const CURRENCIES = { usd: { symbol: '$', label: 'USD', code: 'USD' }, eur: { sym
    why nothing feeds PlanCheckoutModal. They are opened by the partner
    team, so the only action is booking a call. */
 const AGENCY_PRICES = {
-  pack:    { usd: 69,  eur: 64 },
-  clientS: { usd: 22,  eur: 20 },
-  clientM: { usd: 74,  eur: 69 },
-  clientL: { usd: 142, eur: 131 },
+  pack:    { usd: 69,     eur: 64 },
+  clientS: { usd: 23.2,   eur: 21.6 },
+  clientM: { usd: 79.2,   eur: 73.6 },
+  clientL: { usd: 151.2,  eur: 140 },
 };
 const AGENCY_TIERS = ['clientS', 'clientM', 'clientL'];
 // Same booking link the hero and the CTA band use.
@@ -615,9 +622,11 @@ export default function PricingPage() {
   // it reads straight from pricing.compare. Only the layout is new.
   const c = p.compare;
   const num = (n) => (lang === 'fr' ? n.replace(',', ' ') : n);
+  // 1 credit = 1 AI model query, so a plan tracks up to its monthly credits.
+  const upTo = (n) => (c.upTo ?? 'Up to {n}').replace('{n}', num(n));
   const compareRows = [
     { label: bv.compare.creditsLabel, values: [false, '300', num('1,500'), num('3,000'), c.custom] },
-    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: ['10', '100', '500', num('1,000'), c.custom] },
+    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: ['10', upTo('300'), upTo('1,500'), upTo('3,000'), c.custom] },
     { label: c.modelsLabel, sub: c.modelsSub, values: ['modelsWebOnly', 'models', 'models', 'models', 'models'] },
     { label: c.modelsCountLabel, values: ['2', c.anyCombination, c.anyCombination, c.anyCombination, c.anyCombination] },
     { label: c.projectsLabel, values: ['1', c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
@@ -647,11 +656,20 @@ export default function PricingPage() {
   const annualTotalFor = (plan) => priceFor(plan, true) * 12;
 
   // Agency prices are monthly only. Both currencies are rendered so
-  // CurrencyRoll can slide from one to the other.
+  // CurrencyRoll can slide from one to the other. Cents are shown when a
+  // price has them ($23.20, 21,60 in French), never for whole prices ($69).
+  const agencyAmount = (value) =>
+    value.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+      minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+      maximumFractionDigits: 2,
+    });
   const agencyRoll = (key) => (
     <CurrencyRoll
       currency={currency}
-      values={{ usd: `$${AGENCY_PRICES[key].usd}`, eur: `€${AGENCY_PRICES[key].eur}` }}
+      values={{
+        usd: `$${agencyAmount(AGENCY_PRICES[key].usd)}`,
+        eur: `€${agencyAmount(AGENCY_PRICES[key].eur)}`,
+      }}
     />
   );
 
