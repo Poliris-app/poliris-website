@@ -1986,9 +1986,9 @@ export default {
   pricing: {
     hero: {
       eyebrow: 'Pricing',
-      titlePre: 'Own how AI talks about your brand,',
-      titleHl: "everywhere it's asked.",
-      lead: 'Choose how much visibility coverage you need across AI models. Every plan includes sentiment tracking, competitor benchmarking, and real-time GEO scoring so you always know where you stand across AI search.',
+      titlePre: 'Every tool included.',
+      titleHl: 'Credits are the only limit.',
+      lead: 'Pick the volume you need. Switch plans or cancel anytime, with no lock-in.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
       note: 'No credit card required',
