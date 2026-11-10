@@ -1983,7 +1983,7 @@ export default {
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       note: 'Aucune carte bancaire requise',
-      trialDetail: "En 14 jours, lancez votre premier audit IA, découvrez comment ChatGPT, Claude et Gemini décrivent votre marque, et comparez-vous à vos concurrents.",
+      trialDetail: 'En 7 jours, avec 200 crédits, lancez votre premier audit IA, découvrez comment ChatGPT, Claude et Gemini décrivent votre marque, et comparez-vous à vos concurrents.',
     },
     billing: { monthly: 'Mensuel', annual: 'Annuel', save: '-20%', billedAnnually: 'Facturé {amount} par an' },
     flexibilityNote: 'Changez d’offre ou résiliez à tout moment, en toute liberté et sans engagement.',

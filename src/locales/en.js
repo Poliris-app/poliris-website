@@ -1992,7 +1992,7 @@ export default {
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
       note: 'No credit card required',
-      trialDetail: 'In 14 days, you can run your first AI audit, see how ChatGPT, Claude, and Gemini describe your brand, and benchmark yourself against your competitors.',
+      trialDetail: 'In 7 days, with 200 credits, you can run your first AI audit, see how ChatGPT, Claude, and Gemini describe your brand, and benchmark yourself against your competitors.',
     },
     billing: { monthly: 'Monthly', annual: 'Annual', save: 'Save 20%', billedAnnually: 'Billed {amount} annually' },
     flexibilityNote: 'Switch plans or cancel anytime, with no long-term commitment.',
