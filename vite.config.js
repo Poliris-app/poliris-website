@@ -2,6 +2,40 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { LANGS, PAGE_SLUGS, BLOG_POST_SLUGS } from './src/seo.js'
 import { DOC_SLUGS } from './src/content/docs-structure.js'
+import fs from 'node:fs'
+import path from 'node:path'
+
+// The docs screenshots that exist, handed to the app as __DOCS_IMAGES__ so a
+// figure's final HTML is decided before anything is drawn (docsFigures.js):
+// no slot changes size under the reader. In dev, adding or removing a file
+// restarts the server so the page picks it up; a build lists the screenshots
+// the docs still wait for.
+const DOCS_IMAGES_DIR = path.resolve('public/docs/images')
+const docsImages = () => (fs.existsSync(DOCS_IMAGES_DIR) ? fs.readdirSync(DOCS_IMAGES_DIR).filter((f) => !f.endsWith('.md')) : [])
+
+function docsImagesPlugin() {
+  return {
+    name: 'docs-images',
+    config: () => ({ define: { __DOCS_IMAGES__: JSON.stringify(docsImages()) } }),
+    configureServer(server) {
+      server.watcher.add(DOCS_IMAGES_DIR)
+      const onChange = (file) => { if (path.dirname(path.resolve(file)) === DOCS_IMAGES_DIR) server.restart() }
+      server.watcher.on('add', onChange)
+      server.watcher.on('unlink', onChange)
+    },
+    buildStart() {
+      const have = new Set(docsImages())
+      const wanted = new Set()
+      for (const lang of ['en', 'fr']) {
+        const file = path.resolve(`src/locales/docs/${lang}.js`)
+        if (!fs.existsSync(file)) continue
+        for (const m of fs.readFileSync(file, 'utf8').matchAll(/\/docs\/images\/([\w.-]+)/g)) wanted.add(m[1])
+      }
+      const missing = [...wanted].filter((f) => !have.has(f))
+      if (missing.length) this.warn(`${missing.length} docs screenshot(s) missing, their figures are left out of the pages: ${missing.join(', ')}`)
+    },
+  }
+}
 
 function devApiPlugin(env) {
   return {
@@ -209,7 +243,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), ''); // '' loads ALL vars, not just VITE_
 
   return {
-  plugins: [react(), devApiPlugin(env)],
+  plugins: [react(), devApiPlugin(env), docsImagesPlugin()],
   // vite-react-ssg build options (read from vite config at build time).
   ssgOptions: {
     // Emit /en/visibility/index.html so routes resolve as clean directory URLs.

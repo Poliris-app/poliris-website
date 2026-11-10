@@ -12,6 +12,7 @@
 
 .docs {
   --docs-nav-h: 74px;
+  --docs-toggle-h: 38px; /* the Contents bar on narrow screens */
   --docs-gap: 44px;
   --docs-sidebar: 262px;
   --docs-aside: 216px;
@@ -334,7 +335,37 @@
 }
 .docs-rich dd { margin: 4px 0 0; color: var(--fg-3); }
 
-.docs-rich .kv { display: grid; gap: 4px; }
+/* The glossary (.kv is used only there): a term column and a definition
+   column, one row per entry divided by hairlines, so 60+ entries scan as a
+   list instead of a wall of text. The "See also" note that ends each GEO
+   definition drops to its own quiet line. Stacked on narrow screens. */
+.docs-rich .kv {
+  display: grid;
+  grid-template-columns: minmax(150px, 28%) minmax(0, 1fr);
+  margin: 0 0 24px;
+  border-top: 1px solid var(--border);
+}
+.docs-rich .kv dt,
+.docs-rich .kv dd {
+  margin: 0;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.docs-rich .kv dt {
+  padding-right: 24px; /* the column gap, kept inside so the hairline runs unbroken */
+  font: 700 15px/1.45 var(--font-display);
+  color: var(--poliris-black);
+  overflow-wrap: anywhere;
+}
+.docs-rich .kv dd { font-size: 15px; line-height: 1.65; color: var(--fg-3); }
+.docs-rich .kv dd > em:last-child {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-5);
+}
 /* Term → description rows ("Prompts", "Trade Areas"…): two columns divided
    by thin lines, stacked on narrow screens. */
 .docs-rich .def-rows { list-style: none; margin: 0 0 20px; padding: 0; border-top: 1px solid var(--border); }
@@ -449,6 +480,31 @@
 }
 .docs-rich .legend-row { display: flex; align-items: center; gap: 10px; }
 
+/* Contents of the test reference: one row per stage, with its test count. */
+.docs-rich .tests-toc {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+.docs-rich .tests-toc > li { margin: 0; }
+.docs-rich .tests-toc > li + li { border-top: 1px solid var(--border); }
+.docs-rich .tests-toc a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 18px;
+  text-decoration: none;
+}
+.docs-rich .tests-toc a:hover { background: var(--surface2); }
+.docs-rich .toc-title { font-weight: 600; color: var(--fg-1); }
+.docs-rich .toc-count { font-size: 13px; color: var(--fg-5); }
+
 .docs-rich .subcat-header {
   display: flex;
   align-items: baseline;
@@ -463,14 +519,19 @@
 .docs-figure[hidden] { display: none; }
 
 /* Dev only (useHideMissingFigures): a slot whose screenshot is not there yet. */
-.docs-figure--missing { padding: 10px; border: 1px dashed var(--poliris-blue-300); border-radius: 12px; }
+/* It takes exactly the box the screenshot will (--shot-w / --shot-ratio, set
+   from the <img> attributes), so the page never changes height around it. */
 .docs-figure.docs-figure--missing img { display: none; }
 .docs-figure--missing::before {
   content: 'Screenshot ' attr(data-shot) ' · ' attr(data-file);
+  box-sizing: border-box;
   display: grid;
   place-items: center;
-  min-height: 160px;
+  width: min(100%, var(--shot-w, 100%));
+  aspect-ratio: var(--shot-ratio, 16 / 10);
+  margin: 0 auto;
   padding: 16px;
+  border: 1px dashed var(--poliris-blue-300);
   border-radius: 12px;
   background: var(--surface1);
   font: 600 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -683,6 +744,7 @@
 .docs-test__badges { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .docs-test__body {
+  box-sizing: border-box; /* DocsTests animates its height with its padding */
   padding: 2px 16px 16px;
   border-top: 1px solid var(--border);
   font-size: 14.5px;
@@ -700,6 +762,25 @@
   color: var(--fg-6);
 }
 .docs-test__body dd { margin: 0; }
+
+/* Test entries live outside .docs-rich, so they carry their own rules for the
+   bullet list of "How to fix it" and the headers and tags quoted inline. */
+.docs-test__body ul { margin: 0; padding-left: 20px; }
+.docs-test__body li { margin-bottom: 5px; }
+.docs-test__body li:last-child { margin-bottom: 0; }
+.docs-test__body li::marker { color: var(--fg-6); }
+.docs-test__body p { margin: 0 0 8px; }
+.docs-test__body p:last-child { margin-bottom: 0; }
+.docs-test__body code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  font: 500 .88em/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--fg-1);
+  overflow-wrap: anywhere;
+}
+
 .docs-tests__empty { padding: 30px 0; color: var(--fg-5); }
 
 /* ── Pager ───────────────────────────────────────────────────── */
@@ -909,12 +990,53 @@
     overflow: visible;
     margin-bottom: 26px;
   }
-  .docs__sidebar.is-open { display: block; }
+  /* Open, the list is a panel pinned under the Contents bar with its own
+     scroll, so it shows from the top wherever the page is scrolled to. */
+  .docs__sidebar.is-open {
+    display: block;
+    position: fixed;
+    z-index: 3;
+    top: calc(var(--docs-nav-h) + var(--docs-toggle-h));
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - var(--docs-nav-h) - var(--docs-toggle-h));
+    max-height: calc(100dvh - var(--docs-nav-h) - var(--docs-toggle-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0;
+    padding: 16px 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+    box-shadow: var(--shadow-md);
+  }
+  /* The desktop rail's scroll fade (.has-more / .has-less, up to three
+     classes) would let the page show through the panel, so this outranks it. */
+  .docs__sidebar.is-open,
+  .docs__sidebar.is-open.has-more.has-less {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .docs__drawer-toggle { display: flex; align-items: center; justify-content: space-between; height: var(--docs-toggle-h); }
+  .docs__drawer-toggle::after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    margin-right: 4px;
+    border-right: 1.6px solid currentColor;
+    border-bottom: 1.6px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .16s;
+  }
+  .docs__drawer-toggle[aria-expanded="true"]::after { transform: translateY(2px) rotate(-135deg); }
   .docs__main { max-width: none; min-height: 0; }
   .docs-chapter__head { gap: 14px; }
   .docs-icon--lg { width: 46px; height: 46px; border-radius: 13px; }
   .docs-rich table { display: block; overflow-x: auto; }
   .docs-rich .def-rows > li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .docs-rich .kv { grid-template-columns: minmax(0, 1fr); }
+  .docs-rich .kv dt { padding: 16px 0 4px; border-bottom: 0; }
+  .docs-rich .kv dt { padding-right: 0; }
+  .docs-rich .kv dd { padding-top: 0; }
   .docs-tests__filters { position: static; }
   .docs-pager { flex-direction: column; }
   .docs-pager__link, .docs-pager__link--next {

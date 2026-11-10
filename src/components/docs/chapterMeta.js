@@ -20,6 +20,7 @@ const ICONS = {
   pen: 'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z',
   code: 'M16 18l6-6-6-6M8 6l-6 6 6 6',
   checks: 'M3 6l1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17M11 6h10M11 12h10M11 18h10',
+  search: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3',
   doc: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6',
 };
 
@@ -29,6 +30,7 @@ const META = {
   'key-concepts':    'bulb',
   'credits':         'coins',
   'ai-reputation':   'sparkles',
+  'keywords':        'search',
   'technical-audit': 'wrench',
   'roadmap':         'map',
   'content':         'pen',

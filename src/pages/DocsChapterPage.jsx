@@ -35,6 +35,11 @@ function summarise(htmls) {
   return fitDescription(text);
 }
 
+// The test reference opens with its counters, which read as loose numbers in a
+// results page; its lede is written to describe the chapter on its own.
+const LEDE = /<p class="lede">([\s\S]*?)<\/p>/i;
+const ledeOf = (html) => LEDE.exec(String(html ?? ''))?.[1] ?? html;
+
 // Which "On this page" entry the reader is in: the last section whose top
 // has scrolled past the upper third of the viewport.
 function useActiveSection(ids) {
@@ -47,11 +52,32 @@ function useActiveSection(ids) {
       const line = window.innerHeight / 3;
       let current = els[0].id;
       for (const el of els) if (el.getBoundingClientRect().top <= line) current = el.id;
+      // The last sections can never reach that line: at the bottom of the
+      // page, the section the reader picked in "On this page" wins if it is
+      // on screen, else the last one showing.
+      const picked = els.find((el) => `#${el.id}` === window.location.hash);
+      const pickedTop = picked ? picked.getBoundingClientRect().top : NaN;
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        const onScreen = els.filter((el) => el.getBoundingClientRect().top < window.innerHeight);
+        current = (onScreen.includes(picked) ? picked : onScreen[onScreen.length - 1] ?? els[els.length - 1]).id;
+      } else if (pickedTop >= -8 && pickedTop <= line) {
+        // A short section the reader just jumped to keeps the highlight while
+        // its heading sits at the top, even if the next one starts within
+        // the upper third; scrolling on hands it over as usual.
+        current = picked.id;
+      }
       setActive(current);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    // Picking a section already on screen at the bottom scrolls nothing,
+    // so the hash change alone has to move the highlight.
+    window.addEventListener('hashchange', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('hashchange', onScroll);
+    };
   }, [key]);
   return active;
 }
@@ -92,7 +118,7 @@ export default function DocsChapterPage() {
   const group = copy.breadcrumb?.[1];
 
   const description = meta.kind === 'tests'
-    ? summarise([copy.intro, copy.howToRead?.html])
+    ? summarise([ledeOf(copy.intro)])
     : summarise((copy.blocks ?? []).map((b) => b.html));
   const seoTitle = DOC_SEO_TITLES[lang]?.[slug] ?? `${copy.title} | Poliris Docs`;
 
