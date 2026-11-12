@@ -24,6 +24,7 @@ export const DOC_CHAPTERS = [
       "getting-started",
       "quickstart",
       "getting-started-2",
+      "getting-started-troubleshooting",
       "getting-started-3"
     ]
   },
@@ -921,7 +922,7 @@ export const DOC_CHAPTERS = [
   },
   {
     "id": "feature-implementation",
-    "slug": "implementation",
+    "slug": "technical-fixes",
     "kind": "prose",
     "blocks": [
       "feature-implementation",

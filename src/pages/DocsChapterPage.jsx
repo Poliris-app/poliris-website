@@ -11,6 +11,7 @@ import { getChapter, getChapterIndex } from '../content/docs-content';
 import { trackEvent } from '../lib/analytics';
 import { fitDescription } from '../lib/serpWidth';
 import { DOC_SEO_TITLES } from '../content/docs-seo';
+import { updatedOf } from '../content/docs-updated';
 
 // The authored copy is HTML with entities (&nbsp;, &rsquo;…); a meta
 // description is plain text, so both the tags and the entities come out.
@@ -21,6 +22,10 @@ const plainText = (html) => String(html ?? '')
   .replace(/&#(\d+);/g, (_m, d) => String.fromCodePoint(Number(d)))
   .replace(/&([a-z]+);/gi, (m, n) => ENTITIES[n] ?? m)
   .replace(/\s+/g, ' ')
+  // Dropping a tag leaves a space where the markup was, which shows up as
+  // "( Keywords on Google …)" once a bracket sits against one.
+  .replace(/([([])\s+/g, '$1')
+  .replace(/\s+([)\],.])/g, '$1')
   .trim();
 
 // The meta description: the opening copy of the chapter, topped up with the
@@ -39,6 +44,17 @@ function summarise(htmls) {
 // results page; its lede is written to describe the chapter on its own.
 const LEDE = /<p class="lede">([\s\S]*?)<\/p>/i;
 const ledeOf = (html) => LEDE.exec(String(html ?? ''))?.[1] ?? html;
+
+// "11 November 2026" / "11 novembre 2026". Formatted in UTC, so the date
+// shown is the date written down whatever the reader's timezone.
+function formatUpdated(iso, lang) {
+  if (!iso) return null;
+  const d = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return null;
+  return new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+  }).format(d);
+}
 
 // Which "On this page" entry the reader is in: the last section whose top
 // has scrolled past the upper third of the viewport.
@@ -121,6 +137,8 @@ export default function DocsChapterPage() {
     ? summarise([ledeOf(copy.intro)])
     : summarise((copy.blocks ?? []).map((b) => b.html));
   const seoTitle = DOC_SEO_TITLES[lang]?.[slug] ?? `${copy.title} | Poliris Docs`;
+  const updated = updatedOf(slug);
+  const updatedLabel = formatUpdated(updated, lang);
 
   return (
     <DocsShell
@@ -138,7 +156,7 @@ export default function DocsChapterPage() {
         </nav>
       ) : null}
     >
-      <Seo page={`docs/${slug}`} title={seoTitle} description={description} />
+      <Seo page={`docs/${slug}`} title={seoTitle} description={description} modified={updated} />
 
       <nav className="docs-crumbs" aria-label={lang === 'fr' ? 'Fil d’Ariane' : 'Breadcrumb'}>
         <Link to={`/${lang}/docs`}>{copy.breadcrumb?.[0] ?? 'Docs'}</Link>
@@ -151,6 +169,12 @@ export default function DocsChapterPage() {
         <div>
           {group ? <p className="docs-chapter__eyebrow">{group}</p> : null}
           <h1 className="docs-h1">{copy.title}</h1>
+          {updatedLabel ? (
+            <p className="docs-chapter__updated">
+              {lang === 'fr' ? 'Mis \u00e0 jour le ' : 'Last updated '}
+              <time dateTime={updated}>{updatedLabel}</time>
+            </p>
+          ) : null}
         </div>
       </header>
 

@@ -16,7 +16,7 @@ const OG_IMAGE = `${SITE_URL}/og-image.png`;
 // Open Graph and Twitter cards. Also sets <html lang> for the current page.
 // Drop <Seo page="..." /> at the top of each route component. Blog posts pass
 // type="article" so Open Graph presents them as articles.
-export default function Seo({ page, title: titleOverride, description: descriptionOverride, type = 'website' }) {
+export default function Seo({ page, title: titleOverride, description: descriptionOverride, type = 'website', modified }) {
   const { lang } = useLang();
   // Pages generated from content (documentation chapters, blog posts) carry
   // their own title and description rather than having an entry in src/seo.js.
@@ -50,6 +50,25 @@ export default function Seo({ page, title: titleOverride, description: descripti
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={SITE_NAME} />
+
+      {/* When the page content carries a review date, publish it: the
+          meta tag for crawlers that read Open Graph, and TechArticle for
+          the ones that read structured data. */}
+      {modified ? <meta property="article:modified_time" content={modified} /> : null}
+      {modified ? (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'TechArticle',
+            headline: title,
+            description,
+            inLanguage: lang,
+            dateModified: modified,
+            url: canonical,
+            publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+          })}
+        </script>
+      ) : null}
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />

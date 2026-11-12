@@ -258,6 +258,11 @@
   text-transform: uppercase;
   color: var(--accent);
 }
+.docs-chapter__updated {
+  margin: 8px 0 0;
+  color: var(--fg-6);
+  font-size: 13px;
+}
 
 .docs-h1 {
   margin: 0 0 18px;
@@ -269,6 +274,11 @@
 /* ── Blocks ──────────────────────────────────────────────────── */
 
 .docs-block { scroll-margin-top: calc(var(--docs-nav-h) + 20px); }
+/* Headings are link targets of their own (see docsAnchors.js), so they need
+   the same offset as the sections: without it the sticky nav covers the
+   heading someone was linked to. */
+.docs-block__h2[id],
+.docs-rich :is(h2, h3, h4, h5, h6)[id] { scroll-margin-top: calc(var(--docs-nav-h) + 20px); }
 .docs-block + .docs-block { margin-top: 48px; }
 
 .docs-block__h2 {
@@ -351,6 +361,7 @@
   padding: 16px 0;
   border-bottom: 1px solid var(--border);
 }
+.docs-rich .kv dt[id] { scroll-margin-top: calc(var(--docs-nav-h) + 20px); }
 .docs-rich .kv dt {
   padding-right: 24px; /* the column gap, kept inside so the hairline runs unbroken */
   font: 700 15px/1.45 var(--font-display);
@@ -358,6 +369,15 @@
   overflow-wrap: anywhere;
 }
 .docs-rich .kv dd { font-size: 15px; line-height: 1.65; color: var(--fg-3); }
+/* The GEO & AI entries open with a one-line plain definition, set above the
+   full one so a reader who only needs the gist can stop there. */
+.docs-rich .kv dd > .gloss-short {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--fg-1);
+}
+
 .docs-rich .kv dd > em:last-child {
   display: block;
   margin-top: 8px;
@@ -379,6 +399,25 @@
 }
 .docs-rich .def-term { font-weight: 700; color: var(--poliris-black); }
 
+/* The "#" link beside every heading: out of the way until the heading is
+   hovered, and reachable by keyboard. aria-label carries the meaning, so the
+   "#" itself is hidden from screen readers. */
+.docs-anchor {
+  margin-left: 7px;
+  color: var(--fg-6);
+  /* A fixed size, not an em: the headings run from 25px down to 16.5px, so
+     scaling with them made the mark heavy on an h2 and tiny on an h4. */
+  font: 500 16px/1 var(--font-display);
+  vertical-align: 1px;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity .12s ease;
+}
+:is(h1, h2, h3, h4, h5, h6):hover > .docs-anchor,
+.docs-anchor:focus-visible { opacity: 1; }
+.docs-anchor:hover { color: var(--poliris-blue); }
+@media (hover: none) { .docs-anchor { opacity: .35; } }
+
 /* Tables. */
 .docs-rich table {
   width: 100%;
@@ -399,15 +438,25 @@
   color: var(--fg-1);
 }
 
-/* Callouts. */
+/* Callouts. Three kinds, so a limitation is not styled like an aside:
+   .note (neutral, the default), .warning (a limit or a requirement) and
+   .tip (a shortcut worth knowing). The accent is the left rule and the
+   label the copy opens with; no icons, per the docs design. */
 .docs-rich .callout {
+  --callout-accent: var(--poliris-blue);
   margin: 0 0 20px;
   padding: 16px 18px;
   border: 1px solid var(--border);
-  border-left: 3px solid var(--poliris-blue);
+  border-left: 3px solid var(--callout-accent);
   border-radius: 10px;
   background: var(--surface1);
 }
+.docs-rich .callout > :first-child { margin-top: 0; }
+.docs-rich .callout > :last-child { margin-bottom: 0; }
+.docs-rich .callout.warning { --callout-accent: #c2410c; background: #fff8f4; border-color: #f6ddcd; }
+.docs-rich .callout.tip { --callout-accent: #15803d; background: #f5fbf7; border-color: #d4e9db; }
+.docs-rich .callout.warning > :first-child > strong:first-child { color: #9a3412; }
+.docs-rich .callout.tip > :first-child > strong:first-child { color: #166534; }
 
 /* Cards. */
 .docs-rich .card, .docs-rich .card-plain, .docs-rich .action-card {
@@ -613,42 +662,98 @@
 .docs-lightbox__close:hover { background: var(--poliris-blue); }
 @keyframes docs-lightbox-in { from { opacity: 0; } to { opacity: 1; } }
 
+/* The copy-link control in a test's summary. Quiet until the row is hovered,
+   always reachable by keyboard, and it never toggles the test open. */
+.docs-test__link {
+  flex: none;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg-6);
+  font: 600 13px/1.4 var(--font-display);
+  cursor: pointer;
+  opacity: .4;
+  transition: opacity .12s ease, background .12s ease, color .12s ease;
+}
+.docs-test > summary:hover .docs-test__link,
+.docs-test__link:focus-visible { opacity: 1; }
+.docs-test__link:hover { background: var(--surface2); color: var(--poliris-blue); }
+.docs-test__link.is-done {
+  opacity: 1;
+  background: var(--surface2);
+  color: var(--poliris-blue);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* The FAQ's own list of questions, above the answers. Two columns on a wide
+   screen, one on a phone; it is built from the headings (DocsProse), so it
+   never falls out of step with them. */
+.docs-qtoc {
+  margin: 0 0 36px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface1);
+}
+.docs-qtoc ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 6px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.docs-qtoc li { margin: 0; }
+.docs-qtoc a {
+  display: block;
+  padding: 3px 0;
+  color: var(--fg-2);
+  font-size: 14.5px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.docs-qtoc a:hover { color: var(--poliris-blue); text-decoration: underline; }
+
 /* ── Badges ──────────────────────────────────────────────────── */
 
-.docs-badge {
-  display: inline-block;
-  padding: 3px 9px;
-  border-radius: var(--r-pill);
-  font: 700 10.5px/1.45 var(--font-display);
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  white-space: nowrap;
+:root {
+  --badge-neutral-bg: var(--surface2);  --badge-neutral-fg: var(--fg-4);
+  --badge-critical-bg: #fef2f2;         --badge-critical-fg: #b4312a;
+  --badge-warning-bg: #fff7ed;          --badge-warning-fg: #a65d12;
+  --badge-notice-bg: #f3f5f9;           --badge-notice-fg: var(--fg-4);
+  --badge-mixed-bg: #fefce8;            --badge-mixed-fg: #8a6d09;
+  --badge-site-bg: #eef2ff;             --badge-site-fg: #4454b5;
+  --badge-ai-bg: rgba(0, 98, 255, .1);  --badge-ai-fg: var(--poliris-blue);
 }
-.docs-badge--lvl-page { background: var(--surface2); color: var(--fg-4); }
-.docs-badge--lvl-site { background: #eef2ff; color: #4454b5; }
-.docs-badge--sev-critical { background: #fef2f2; color: #b4312a; }
-.docs-badge--sev-warning  { background: #fff7ed; color: #a65d12; }
-.docs-badge--sev-notice   { background: #f3f5f9; color: var(--fg-4); }
-.docs-badge--sev-mixed    { background: #fefce8; color: #8a6d09; }
-.docs-badge--ai           { background: rgba(0, 98, 255, .1); color: var(--poliris-blue); }
 
-/* The export's own badge classes, inside rich text. */
+/* One badge, two spellings. The Test reference builds badges in JSX
+   (.docs-badge--sev-critical) and the authored chapters carry the export's
+   own classes (.badge.sev-critical); they used to repeat the same hex values
+   in two places and could drift apart. Both now read the tokens below, so a
+   severity colour is defined once. */
+.docs-badge,
 .docs-rich .badge {
   display: inline-block;
   padding: 3px 9px;
   border-radius: var(--r-pill);
-  background: var(--surface2);
+  background: var(--badge-neutral-bg);
+  color: var(--badge-neutral-fg);
   font: 700 10.5px/1.45 var(--font-display);
   letter-spacing: .05em;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--fg-4);
 }
-.docs-rich .sev-critical { background: #fef2f2; color: #b4312a; }
-.docs-rich .sev-warning  { background: #fff7ed; color: #a65d12; }
-.docs-rich .sev-mixed    { background: #fefce8; color: #8a6d09; }
-.docs-rich .lvl-site     { background: #eef2ff; color: #4454b5; }
-.docs-rich .ai-yes       { background: rgba(0, 98, 255, .1); color: var(--poliris-blue); }
+
+.docs-badge--sev-critical, .docs-rich .sev-critical { background: var(--badge-critical-bg); color: var(--badge-critical-fg); }
+.docs-badge--sev-warning,  .docs-rich .sev-warning  { background: var(--badge-warning-bg);  color: var(--badge-warning-fg); }
+.docs-badge--sev-notice,   .docs-rich .sev-notice   { background: var(--badge-notice-bg);   color: var(--badge-notice-fg); }
+.docs-badge--sev-mixed,    .docs-rich .sev-mixed    { background: var(--badge-mixed-bg);    color: var(--badge-mixed-fg); }
+.docs-badge--lvl-site,     .docs-rich .lvl-site     { background: var(--badge-site-bg);     color: var(--badge-site-fg); }
+.docs-badge--ai,           .docs-rich .ai-yes       { background: var(--badge-ai-bg);       color: var(--badge-ai-fg); }
+.docs-badge--lvl-page { background: var(--badge-neutral-bg); color: var(--badge-neutral-fg); }
 
 /* The five sentiment levels, in the product's tier colours. */
 .docs-rich .tier    { border: 1px solid currentColor; }
@@ -734,13 +839,13 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 6px 10px;
   padding: 12px 16px;
   cursor: pointer;
   list-style: none;
 }
 .docs-test > summary::-webkit-details-marker { display: none; }
-.docs-test__title { font: 600 14.5px/1.4 var(--font-body); color: var(--fg-1); }
+.docs-test__title { flex: 1 1 auto; font: 600 14.5px/1.4 var(--font-body); color: var(--fg-1); }
 .docs-test__badges { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .docs-test__body {
