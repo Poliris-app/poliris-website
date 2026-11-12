@@ -403,7 +403,7 @@ export default {
         { name: 'Tom',  role: 'Site Health Check',        desc: 'Scans your website for technical problems that stop search engines and AI from reading it properly, then helps you what to fix first.' },
         { name: 'Kate', role: 'Content & Brand Image',           desc: 'Writes and improves your content so it\'s clear, on-brand, and gives AI good reasons to recommend you.' },
         { name: 'Ivy',  role: 'Keywords Management',      desc: 'Finds the words your customers search for, tracks where you rank, and shows which ones your competitors are winning.' },
-        { name: 'Emma', role: 'Competitor Intelligence',     desc: "Maps your real rivals in each zone and shows where they're beating you in AI." },
+        { name: 'Emma', role: 'Links & Authority',     desc: 'Gets your brand mentioned and linked on trusted websites, the same sources AI tools rely on when deciding who to recommend.' },
       ],
     },
     // Compact comparison card after the Team section; links to the full
