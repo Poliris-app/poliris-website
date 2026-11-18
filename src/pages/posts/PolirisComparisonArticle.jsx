@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Head } from 'vite-react-ssg';
 import Navbar from '../../components/Navbar';
 import Seo from '../../components/Seo';
+import { canonicalUrl } from '../../seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
@@ -443,12 +443,16 @@ export default function PolirisComparisonArticle({ content: c }) {
 
   return (
     <div className="bp-page">
-      <Seo page={`blog/${SLUG}`} type="article" title={c.seo.title} description={c.seo.description} />
-      <Head>
-        {c.jsonLd.map((ld) => (
-          <script key={ld['@type']} type="application/ld+json">{JSON.stringify(ld)}</script>
-        ))}
-      </Head>
+      <Seo
+        page={`blog/${SLUG}`}
+        type="article"
+        title={c.seo.title}
+        description={c.seo.description}
+        schema={c.jsonLd
+          .filter((ld) => ld['@type'] === 'FAQPage')
+          // eslint-disable-next-line no-unused-vars
+          .map(({ '@context': _ctx, ...ld }) => ({ ...ld, '@id': `${canonicalUrl(lang, `blog/${SLUG}`)}#faq` }))}
+      />
       <Navbar />
 
       <div className="bp-layout">
