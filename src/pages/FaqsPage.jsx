@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
+import { faqPageNode } from '../lib/schema';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import useReveal from '../hooks/useReveal';
@@ -81,7 +82,7 @@ function FaqGroup({ group, openIds, onToggle }) {
 
 export default function FaqsPage() {
   useReveal();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
   const [openIds, setOpenIds] = useState([]);
@@ -124,7 +125,7 @@ export default function FaqsPage() {
 
   return (
     <div>
-      <Seo page="faqs" />
+      <Seo page="faqs" schema={[faqPageNode(lang, 'faqs', FAQ_GROUPS.flatMap((g) => g.items))]} />
       <Navbar />
       <main>
         <Hero

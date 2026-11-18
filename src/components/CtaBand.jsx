@@ -23,7 +23,7 @@ const tripled = [...MODELS, ...MODELS, ...MODELS];
 const TRIAL_URL = 'https://app.poliris.io';
 const DEMO_URL  = 'https://cal.com/team/poliris/discovery-call';
 const isTrialCta = (label) => typeof label === 'string' && /trial|essai/i.test(label);
-const isDemoCta  = (label) => typeof label === 'string' && /demo|démo|expert/i.test(label);
+const isDemoCta  = (label) => typeof label === 'string' && /demo|démo|expert|talk to us|contact/i.test(label);
 const isAuditCta = (label) => typeof label === 'string' && /audit/i.test(label);
 
 export default function CtaBand({

@@ -35,6 +35,11 @@
     { "source": "/terms(/)?", "destination": "/en/terms", "permanent": false },
     { "source": "/mentions-legales", "destination": "/en/mentions-legales", "permanent": false },
     { "source": "/en/a-propos(/)?", "destination": "/en/docs", "permanent": true },
+    { "source": "/a-propos(/)?", "destination": "/fr/docs", "permanent": true },
+    { "source": "/en/tarifs(/)?", "destination": "/en/pricing", "permanent": true },
+    { "source": "/en/faq(/)?", "destination": "/en/faqs", "permanent": true },
+    { "source": "/en/services(/)?", "destination": "/en/", "permanent": true },
+    { "source": "/docs/fr(/)?", "destination": "/fr/docs", "permanent": true },
     { "source": "/en/author/florian(/)?", "destination": "/en/blog", "permanent": true }
   ],
   "rewrites": [
@@ -44,6 +49,14 @@
     { "source": "/fr/checkout/:path*", "destination": "/fr/index.html" }
   ],
   "headers": [
+    {
+      "source": "/poliris-film/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, indexifembedded" }]
+    },
+    {
+      "source": "/poliris-onboarding-flow-v3.html",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, indexifembedded" }]
+    },
     {
       "source": "/",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
