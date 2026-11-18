@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
+import { SOFTWARE_ID, planOffers, faqPageNode } from '../lib/schema';
 import PlanCheckoutModal from '../components/PlanCheckoutModal';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
@@ -618,7 +619,14 @@ export default function PricingPage() {
 
   return (
     <div className="pricing-page">
-      <Seo page="pricing" />
+      <Seo
+        page="pricing"
+        schema={[
+          // Prices from PLAN_META, names from the cards: the schema can't drift from the page.
+          { '@id': SOFTWARE_ID, offers: planOffers(lang, p.plans, PLAN_META) },
+          faqPageNode(lang, 'pricing', p.faq),
+        ]}
+      />
       <Navbar />
 
       <div className="pricing-wrap">
