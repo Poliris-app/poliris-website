@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
+import { definedTermSetNode, termSlug, stripBrand } from '../lib/schema';
+import { getMeta } from '../seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import useReveal from '../hooks/useReveal';
@@ -14,7 +16,7 @@ const sortAlpha = arr => [...arr].sort((a, b) => a.term.localeCompare(b.term));
 
 export default function GlossaryPage() {
   useReveal();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [letter, setLetter] = useState(null);
@@ -64,7 +66,7 @@ export default function GlossaryPage() {
 
   return (
     <div>
-      <Seo page="glossary" />
+      <Seo page="glossary" schema={[definedTermSetNode(lang, 'glossary', stripBrand(getMeta(lang, 'glossary').title), TERMS)]} />
       <Navbar />
       <main>
         <Hero
@@ -134,7 +136,8 @@ export default function GlossaryPage() {
                   <span className={`gloss-badge gloss-badge--${term.category}`}>
                     {term.category === 'poliris' ? 'Poliris' : 'GEO & AI'}
                   </span>
-                  <p className="gloss-term">{term.term}</p>
+                  {/* h2 with an id so each term can be linked and cited (#slug). Same class, same look. */}
+                  <h2 className="gloss-term" id={termSlug(term.term)}>{term.term}</h2>
                   <p className="gloss-def">{term.def}</p>
                 </div>
               )) : (
