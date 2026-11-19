@@ -37,6 +37,23 @@ function extractErrorMessage(data) {
   return 'Something went wrong. Please try again.';
 }
 
+// The modal's own strings. The plan's name, price and features come from the
+// locale files; these few belong to the checkout step.
+const COPY = {
+  en: {
+    includes: 'Includes',
+    verifying: 'Checking your browser, one moment. Try again in a second.',
+    secure: 'Secure checkout via Stripe. Cancel anytime.',
+    protected: 'Protected by Cloudflare',
+  },
+  fr: {
+    includes: 'Comprend',
+    verifying: "V\u00e9rification de votre navigateur, un instant. R\u00e9essayez dans une seconde.",
+    secure: 'Paiement s\u00e9curis\u00e9 via Stripe. Annulable \u00e0 tout moment.',
+    protected: 'Prot\u00e9g\u00e9 par Cloudflare',
+  },
+};
+
 export default function PlanCheckoutModal({
   open,
   onClose,
@@ -48,6 +65,7 @@ export default function PlanCheckoutModal({
   symbol = '$',
 }) {
   const { lang } = useLang();
+  const t = COPY[lang === 'fr' ? 'fr' : 'en'];
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [turnstileToken, setTurnstileToken] = useState('');
@@ -64,8 +82,14 @@ export default function PlanCheckoutModal({
       widgetIdRef.current = window.turnstile.render(widgetRef.current, {
         sitekey: TURNSTILE_SITE_KEY,
         size: 'flexible',
-        callback: (token) => setTurnstileToken(token),
+        // Cloudflare's box is the heaviest thing in the modal and almost
+        // nobody needs to touch it. "interaction-only" keeps the check
+        // running but shows the widget only when it actually wants an
+        // interaction, so the usual path is a clean form.
+        appearance: 'interaction-only',
+        callback: (token) => { setTurnstileToken(token); setFormError(''); },
         'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
       });
     });
     return () => {
@@ -96,7 +120,10 @@ export default function PlanCheckoutModal({
       return;
     }
     if (TURNSTILE_SITE_KEY && !turnstileToken) {
-      setFormError('Please complete the verification below.');
+      // With an invisible widget there is usually nothing to complete: the
+      // check is still running, or it is asking for an interaction and has
+      // just made itself visible. Either way, say what is happening.
+      setFormError(t.verifying);
       return;
     }
     setSubmitting(true);
@@ -146,6 +173,15 @@ export default function PlanCheckoutModal({
           {billingInterval === 'year' && (
             <p className="promo-modal-billed-annually">Billed {symbol}{displayAnnualTotal} annually</p>
           )}
+          {plan.credits && (
+            <p className="promo-modal-credits">
+              <span className="promo-modal-credits__label">{t.includes}</span>
+              <strong>{plan.credits}</strong>
+            </p>
+          )}
+          {plan.firstMonth && (
+            <p className="promo-modal-credits-bonus"><span>{plan.firstMonth}</span></p>
+          )}
           <p className="promo-modal-lead">{plan.desc}</p>
 
           <ul className="pricing-features">
@@ -178,7 +214,13 @@ export default function PlanCheckoutModal({
             {formError && <p className="code-modal-error">{formError}</p>}
           </form>
 
-          <p className="promo-modal-trust">🔒 Secure checkout via Stripe · Cancel anytime</p>
+          <p className="promo-modal-trust">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="4" y="10.5" width="16" height="10" rx="2.2" /><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+            </svg>
+            {t.secure}
+          </p>
+          {TURNSTILE_SITE_KEY && <p className="promo-modal-protected">{t.protected}</p>}
         </div>
       </div>
     </div>,

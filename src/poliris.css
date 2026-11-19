@@ -196,17 +196,17 @@ button { cursor: pointer; border: none; background: none; }
   background: rgba(0,98,255,0.08);
   padding: 6px 14px;
   border-radius: 24px;
-  margin: 0 auto 16px;
+  margin: 0 auto 10px;
 }
 .promo-modal-title {
   font-family: var(--manrope);
-  font-size: 26px;
+  font-size: 40px;
   font-weight: 800;
-  line-height: 1.18;
-  letter-spacing: -0.02em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   color: #0d111a;
   text-align: center;
-  margin: 0 0 12px;
+  margin: 0 0 6px;
 }
 .promo-modal-lead {
   font-family: var(--chivo);
@@ -214,7 +214,7 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.6;
   color: var(--fg4);
   text-align: center;
-  margin: 0 0 26px;
+  margin: 16px 0 16px;
 }
 .promo-modal-tracked-label {
   font-family: var(--manrope);
@@ -260,17 +260,70 @@ button { cursor: pointer; border: none; background: none; }
   font-size: 13.5px;
   padding: 12px 20px;
 }
+.promo-modal-billed-annually {
+  margin: 0 0 2px;
+  font: 500 13px/1.4 var(--manrope);
+  color: var(--fg5);
+  text-align: center;
+}
+
+/* What the plan actually buys, under the price: the label and the figure on
+   one line, the first-month bonus as a pill beneath. Each row gets its own
+   breathing room so the header does not read as one dense block. */
+.promo-modal-credits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font: 600 16px/1.4 var(--manrope);
+  color: #0d111a;
+}
+.promo-modal-credits__label {
+  font: 700 10.5px/1 var(--manrope);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg6);
+}
+.promo-modal-credits strong { font-weight: 700; }
+.promo-modal-credits-bonus {
+  margin: 10px 0 0;
+  text-align: center;
+}
+.promo-modal-credits-bonus span {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 98, 255, .09);
+  color: var(--poliris-blue);
+  font: 600 12.5px/1.5 var(--manrope);
+}
+
+/* Cloudflare's own badge is gone with the visible widget, so the credit is
+   given here instead, in the same register as the Stripe line. */
+.promo-modal-protected {
+  margin: 4px 0 0;
+  font: 500 10.5px/1.4 var(--manrope);
+  color: var(--fg6);
+  text-align: center;
+  opacity: .75;
+}
+
 .promo-modal-trust {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  /* the lock is an inline SVG now, not an emoji */
   font-family: var(--manrope);
   font-size: 11px;
   font-weight: 600;
   color: var(--fg6);
   margin-top: 8px;
 }
+.promo-modal-trust svg { width: 13px; height: 13px; flex: none; }
+
 
 .free-audit-form { display: flex; flex-direction: column; gap: 8px; }
 .free-audit-form__input {
@@ -287,13 +340,18 @@ button { cursor: pointer; border: none; background: none; }
   border-color: var(--poliris-blue);
   box-shadow: 0 0 0 3px rgba(0, 98, 255, 0.1);
 }
+/* Turnstile renders with appearance:"interaction-only" (PlanCheckoutModal),
+   so this box is empty and takes no room until Cloudflare actually wants an
+   interaction. :empty keeps the form tight in the usual case; once the widget
+   appears it gets its own margin back. */
 .free-audit-form__turnstile {
   display: flex;
   justify-content: center;
-  margin: -4px 0 -2px;
   transform: scale(0.85);
   transform-origin: center;
+  margin: 4px 0 2px;
 }
+.free-audit-form__turnstile:empty { display: none; }
 
 .reveal {
   opacity: 0;

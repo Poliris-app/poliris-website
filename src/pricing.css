@@ -257,7 +257,7 @@
 .pricing-divider { height: 1px; background: var(--pr-border); margin: 2px 0 18px; }
 
 .pricing-features { list-style: none; margin: 0 0 24px; padding: 0; flex-grow: 1; }
-.pricing-features li { display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; color: var(--pr-text); line-height: 1.5; margin-bottom: 12px; }
+.pricing-features li { display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; color: var(--pr-text); line-height: 1.5; margin-bottom: 10px; }
 .pricing-features li .pricing-check { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; color: var(--pr-blue); }
 .pricing-feature-models { display: flex; flex-wrap: nowrap; align-items: center; gap: 5px; margin-top: 6px; width: 100%; }
 .pricing-feature-model-icon { width: 16px; height: 16px; border-radius: 4px; object-fit: contain; flex-shrink: 0; }
@@ -1258,15 +1258,53 @@ button.pricing-compare-section-title {
 
 .pr-included { margin-top: 14px; background: #fff; border: 1px solid var(--pr-border); border-radius: 20px; padding: 30px; }
 .pr-included h3 { margin: 0; font-family: var(--manrope); font-size: 20px; font-weight: 800; color: var(--fg-1); }
-/* Each column is as wide as its text, with the spare room shared evenly
-   between columns. Text only wraps when the row is too narrow to fit it. */
-.pr-included-grid { display: grid; grid-template-columns: repeat(5, minmax(min-content, max-content)); justify-content: space-between; gap: 26px 20px; margin-top: 20px; }
-.pr-included-label { margin: 0 0 10px; font-family: var(--manrope); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--pr-blue); }
+/* Four columns, weighted rather than equal: "Technical Audit & Search
+   Intelligence" is three times the length of "Take Action" and has to stay on
+   one line, so its column is given the room and the others give it up.
+   The three rows (heading, strapline, list) are a subgrid, so every list
+   starts at the same height however the straplines wrap. */
+.pr-included-grid {
+  display: grid;
+  /* max-content, so each column is exactly as wide as its own widest
+     unbreakable thing: the heading, which never wraps. Guessing fixed widths
+     would break the moment a heading or a translation changed length. The
+     straplines are capped below so they wrap instead of driving the width. */
+  grid-template-columns: repeat(4, max-content);
+  grid-template-rows: auto auto auto;
+  justify-content: space-between;
+  column-gap: 28px;
+  row-gap: 0;
+  margin-top: 22px;
+}
+.pr-included-grid > div { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; }
+.pr-included-label {
+  margin: 0 0 5px;
+  font-family: var(--manrope);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--pr-blue);
+}
+.pr-included-desc {
+  margin: 0 0 16px;
+  /* the strapline stays on one line too, so it joins the heading in deciding
+     how wide its column is */
+  white-space: nowrap;
+  font-family: var(--chivo);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--fg-4);
+}
 .pr-included-grid ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; line-height: 1.4; color: var(--fg-1); }
 
 @media (max-width: 1120px) {
   .pr-brand-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .pr-included-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+  .pr-included-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; row-gap: 30px; justify-content: stretch; }
+  .pr-included-grid > div { display: block; grid-row: auto; }
+  .pr-included-label, .pr-included-desc { white-space: normal; }
   .pr-brand-card.custom { grid-column: 1 / -1; }
 }
 @media (max-width: 620px) {
@@ -1274,6 +1312,7 @@ button.pricing-compare-section-title {
   .pr-brand-card { display: flex; flex-direction: column; grid-row: auto; }
   .pr-included { padding: 24px; }
   .pr-included-grid { grid-template-columns: minmax(0, 1fr); }
+  .pr-included-grid ul { margin-bottom: 2px; }
   /* The billing and currency controls wrap here, so no divider between them. */
   .pricing-switcher-divider { display: none; }
 }

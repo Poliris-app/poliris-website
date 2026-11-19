@@ -2121,8 +2121,8 @@ export default {
       formula: '{prompts} prompts × {sites} {sitesWord} × {models} {modelsWord} × {runs} vérifications',
       brandWord: 'marque',
       brandsWord: 'marques',
-      modelWord: 'modèle',
-      modelsWord: 'modèles',
+      modelWord: 'crédit par vérification',
+      modelsWord: 'crédits par vérification',
       fitsPre: 'Convient au forfait',
       spareCredits: '{n} crédits restants',
       recommendedCtaPlan: 'Choisir {plan}',
@@ -2285,7 +2285,28 @@ export default {
       },
       included: {
         title: 'Inclus dans tous les forfaits',
-        sentimentDashboard: 'Sentiment et tableau de bord',
+        groups: [
+          {
+            title: 'Réputation IA',
+            desc: "Voyez ce que l'IA dit de votre marque.",
+            items: ['Score de visibilité IA', 'Score de sentiment IA', 'Analyse des réponses IA', 'Comparatif concurrents', 'Explorateur de sources IA', 'Analyse de la perception de marque'],
+          },
+          {
+            title: 'Audit technique & intelligence de recherche',
+            desc: "Rendez votre site lisible par l'IA et Google.",
+            items: ['Bilan de santé du site', 'Analyse des robots IA', 'Vérification sitemap & robots.txt', 'Google Search Console & Analytics', 'Suivi des performances des pages', 'Analyse de mots-clés', 'Analyse des annonces payantes'],
+          },
+          {
+            title: 'Passer à l\'action',
+            desc: 'Transformez les constats en résultats.',
+            items: ['Opportunités de contenu', 'Génération de contenu', 'Optimisation de contenu', "Plan d'action à long terme", 'Corrections techniques', 'Opportunités de backlinks'],
+          },
+          {
+            title: 'Couverture de la plateforme',
+            desc: 'Conçu pour toute votre équipe, partout.',
+            items: ["Plus de 10 modèles d'IA", 'Marchés et langues locales', "Membres d'équipe illimités", 'Exports CSV & PDF'],
+          },
+        ],
       },
       faqTitle: 'Questions sur les tarifs',
       faq: [

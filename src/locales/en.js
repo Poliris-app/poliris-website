@@ -2130,8 +2130,8 @@ export default {
       formula: '{prompts} prompts × {sites} {sitesWord} × {models} {modelsWord} × {runs} checks',
       brandWord: 'brand',
       brandsWord: 'brands',
-      modelWord: 'model',
-      modelsWord: 'models',
+      modelWord: 'credit per check',
+      modelsWord: 'credits per check',
       fitsPre: 'Fits',
       spareCredits: '{n} credits spare',
       recommendedCtaPlan: 'Get {plan}',
@@ -2296,7 +2296,28 @@ export default {
       },
       included: {
         title: 'Included in every plan',
-        sentimentDashboard: 'Sentiment and dashboard',
+        groups: [
+          {
+            title: 'AI Reputation',
+            desc: 'See how AI talks about your brand.',
+            items: ['AI Visibility Score', 'AI Sentiment Score', 'AI Response Analysis', 'Competitor Benchmark', 'AI Sources Explorer', 'Brand Perception Analysis'],
+          },
+          {
+            title: 'Technical Audit & Search Intelligence',
+            desc: 'Make your site easy for AI and Google to read.',
+            items: ['Site Health Check', 'AI Crawler Analytics', 'Sitemap & robots.txt Check', 'Google Search Console & Analytics', 'Page Performance Tracking', 'Keyword Analysis', 'Paid Ads Analysis'],
+          },
+          {
+            title: 'Take Action',
+            desc: 'Turn insights into results.',
+            items: ['Content Opportunities', 'Content Generation', 'Content Optimization', 'Long-Term Action Plan', 'Technical Fixes', 'Backlink Opportunities'],
+          },
+          {
+            title: 'Platform Coverage',
+            desc: 'Built for your whole team, in any market.',
+            items: ['10+ AI Models', 'Local Markets & Languages', 'Unlimited Team Members', 'CSV & PDF Exports'],
+          },
+        ],
       },
       faqTitle: 'Questions about pricing',
       faq: [

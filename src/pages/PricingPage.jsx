@@ -111,7 +111,6 @@ const CALC_MODELS = [
   { id: 'mistral-small', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Small', weight: 1 },
   { id: 'mistral-medium', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Medium', weight: 2 },
   { id: 'mistral-large', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Large', weight: 2 },
-  { id: 'deepseek-v3', group: 'api', logo: 'deepseek.png', label: 'DeepSeek V3', weight: 2 },
 ];
 const CALC_MODEL_BY_ID = Object.fromEntries(CALC_MODELS.map((m) => [m.id, m]));
 const CALC_WEB_MODELS = CALC_MODELS.filter((m) => m.group === 'web');
@@ -126,7 +125,6 @@ const CALC_API_MODELS_UI = [
   { ...CALC_MODEL_BY_ID['gemini-3.1-pro-preview'], label: 'Gemini' },
   { ...CALC_MODEL_BY_ID['claude-haiku-4-5'], label: 'Claude' },
   { ...CALC_MODEL_BY_ID['mistral-large'], label: 'Mistral' },
-  { ...CALC_MODEL_BY_ID['deepseek-v3'], label: 'DeepSeek' },
   { ...CALC_MODEL_BY_ID['grok-4.3'], label: 'Grok' },
 ];
 // Every id the picker can show — "Select all" toggles between this and a
@@ -638,13 +636,10 @@ export default function PricingPage() {
     { label: c.slackLabel, values: [false, true, true, true, true] },
     { label: c.supportChannelsLabel, values: [c.chatsOnly, c.chatsEmail, c.chatsEmail, c.dedicated, c.dedicatedManager] },
   ];
-  const includedGroups = [
-    { title: c.monitorTitle, items: [c.promptTrackingLabel, c.responseAnalysisLabel, c.mentionsLabel, c.sourceExplorerLabel, c.insightsLabel] },
-    { title: bv.included.sentimentDashboard, items: [c.sentimentScoreLabel, c.perceptionLabel, c.overviewLabel, c.geoMatrixLabel, c.benchmarkingLabel] },
-    { title: c.auditTitle, items: [c.siteReadinessLabel, c.siteDiagnosticsLabel, c.crawlerAnalyticsLabel, c.pagePerfLabel, c.gscLabel] },
-    { title: c.actTitle, items: [c.contentOppsLabel, c.contentStudioLabel, c.backlinkOppsLabel] },
-    { title: c.platformTitle, items: [c.enginesLabel, c.languagesLabel, c.teamMembersLabel, c.exportsLabel] },
-  ];
+  // The four columns live in the locale files (pricing.brandView.included.groups)
+  // rather than being assembled from scattered label keys, so the copy can be
+  // read and translated in one place.
+  const includedGroups = bv.included.groups ?? [];
 
   const symbol = CURRENCIES[currency].symbol;
   const priceFor = (plan, isAnnual) => {
@@ -944,6 +939,7 @@ export default function PricingPage() {
               {includedGroups.map((group) => (
                 <div key={group.title}>
                   <p className="pr-included-label">{group.title}</p>
+                  {group.desc && <p className="pr-included-desc">{group.desc}</p>}
                   <ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul>
                 </div>
               ))}
