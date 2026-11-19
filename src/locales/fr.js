@@ -85,7 +85,7 @@ export default {
         { q: 'Quels moteurs IA Poliris suit-il ?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok et DeepSeek.' },
         { q: 'Faut-il être expert en SEO ?', a: 'Non, nos agents IA s’occupent des aspects techniques et vous expliquent simplement les actions à entreprendre, tout en vous laissant le contrôle.' },
         { q: 'Quels marchés et quelles langues couvrez-vous ?', a: 'Poliris fonctionne dans le monde entier. Vous choisissez les marchés à suivre, et toutes les fonctionnalités marchent en anglais et en français.' },
-        { q: "Comment fonctionne l'essai gratuit ?", a: 'Vous bénéficiez d’un essai gratuit sans limite de durée. Si vous souhaitez ensuite passer à une offre payante, nos abonnements mensuels sont sans engagement. Vous pouvez changer d’offre ou résilier à tout moment.' },
+        { q: "Comment fonctionne l'essai gratuit ?", a: 'Vous profitez d\'un essai gratuit de 7 jours avec 200 crédits, sans carte bancaire. Ensuite, les offres mensuelles sont sans engagement, et vous pouvez changer d\'offre ou résilier à tout moment.' },
       ],
     },
     valueChain: {
@@ -1502,7 +1502,7 @@ export default {
             intro: "Les crédits sont consommés par les requêtes LLM, les scans techniques et les brouillons de contenu.",
             bullets: [
               { label: 'Panneau Utilisation', text: 'crédits utilisés vs restants par mois, répartition par type d\'action et par Client ou Workspace, plus des graphiques de tendance.' },
-              { label: 'Recharges', text: 'achetez des packs de crédits depuis le panneau Facturation.' },
+              { label: 'Recharges', text: 'sur un forfait payant, achetez des crédits supplémentaires depuis la page Utilisation. Ils n’expirent jamais.' },
             ],
             callout: "Définissez une alerte d'utilisation à 80% pour que votre équipe soit prévenue avant la remise à zéro mensuelle.",
           } },
@@ -1977,9 +1977,9 @@ export default {
   pricing: {
     hero: {
       eyebrow: 'Tarifs',
-      titlePre: "Maîtrisez ce que l'IA dit de votre marque,",
-      titleHl: "partout où elle est interrogée.",
-      lead: "Choisissez le niveau de couverture de visibilité dont vous avez besoin sur les modèles IA. Chaque forfait inclut le suivi de sentiment, le benchmark concurrentiel et le score GEO en temps réel, pour toujours savoir où vous en êtes sur la recherche IA.",
+      titlePre: 'Tous les outils inclus.',
+      titleHl: 'Seuls les crédits limitent.',
+      lead: 'Choisissez le volume dont vous avez besoin. Changez de forfait ou annulez à tout moment, sans engagement.',
       primaryCta: "Démarrer l'essai gratuit",
       secondaryCta: 'Réserver une démo',
       note: 'Aucune carte bancaire requise',
@@ -2100,8 +2100,8 @@ export default {
       formula: '{prompts} prompts × {sites} {sitesWord} × {models} {modelsWord} × {runs} vérifications',
       brandWord: 'marque',
       brandsWord: 'marques',
-      modelWord: 'modèle',
-      modelsWord: 'modèles',
+      modelWord: 'crédit par vérification',
+      modelsWord: 'crédits par vérification',
       fitsPre: 'Convient au forfait',
       spareCredits: '{n} crédits restants',
       recommendedCtaPlan: 'Choisir {plan}',
