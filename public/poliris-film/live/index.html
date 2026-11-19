@@ -113,6 +113,10 @@
   "use strict";
   var q = new URLSearchParams(location.search);
   var FR = q.get("lang") === "fr";
+  // ?lite=1 (phones): only the sections on screen or about to be are loaded;
+  // the others are emptied. Nine full sections at once is more than iOS
+  // Safari gives a tab, and it kills it. See keep() below.
+  var LITE = q.get("lite") === "1";
   if (FR) {
     document.documentElement.lang = "fr";
     document.getElementById("mix").setAttribute("src", "../film-fr/assets/audio/mix.m4a");
@@ -190,9 +194,13 @@
     var f = document.createElement("iframe");
     f.className = "sec"; f.id = "s" + k; f.setAttribute("aria-hidden", "true"); f.setAttribute("tabindex", "-1");
     // ?t=0 holds the section on its first frame; it never plays by itself here
-    f.src = "../sections/" + s[0] + ".html?t=0&bare=1";
+    var src = "../sections/" + s[0] + ".html?t=0&bare=1";
+    if (LITE) f.dataset.src = src; else f.src = src;
     f.addEventListener("load", function () {
-      var d = f.contentDocument, st = d.createElement("style");
+      var d = f.contentDocument;
+      // lite: an emptied frame (about:blank) loads too, and isn't a section
+      if (LITE && (f.dataset.on !== "1" || d.URL === "about:blank")) return;
+      var gen = f.dataset.gen, st = d.createElement("style");
       st.textContent = EMBED_CSS; d.head.appendChild(st);
       var inner = T.inner[s[0]] || {};
       Object.keys(inner).forEach(function (id) {
@@ -202,6 +210,7 @@
       });
       var w = f.contentWindow;
       (w.document.fonts ? w.document.fonts.ready : Promise.resolve()).then(function () {
+        if (LITE && f.dataset.gen !== gen) return;     // emptied or reloaded since
         F[k] = { win: w, last: -1 };
         ready++;
         sync(true);
@@ -230,12 +239,34 @@
       stl.time(local);
     });
   }
+  // ── lite: a section is loaded from LEAD s before it first shows until
+  // LINGER s after it last does, in each stretch it is seen (a docked card
+  // counts). Spans are read off the finished timeline below. Near the end the
+  // opening is looked up too, so the loop comes round onto a loaded 01. ──
+  var LEAD = 3, LINGER = 0.5, SPANS = [];
+  function near(k, now) {
+    return SPANS[k].some(function (r) {
+      return [now, now - CL.TOTAL].some(function (n) { return n >= r[0] - LEAD && n <= r[1] + LINGER; });
+    });
+  }
+  function keep(now) {
+    SECS.forEach(function (s, k) {
+      var f = document.getElementById("s" + k), on = near(k, now);
+      if (on === (f.dataset.on === "1")) return;
+      f.dataset.on = on ? "1" : "0";
+      f.dataset.gen = +(f.dataset.gen || 0) + 1;
+      delete F[k];
+      f.src = on ? f.dataset.src : "about:blank";
+    });
+  }
+
   // the runtime may move the clock without telling the tweens (a seek with
   // events suppressed), so the sections follow it every frame, not on update
   var lastT = -1;
   (function frame() {
     var now = tl.time();
     if (now !== lastT) { lastT = now; sync(false); }
+    if (LITE && SPANS.length) keep(now);
     requestAnimationFrame(frame);
   })();
   tl.eventCallback("onUpdate", function () { sync(false); });
@@ -411,13 +442,33 @@
   tl.to("#railwrap", { opacity: 0, y: -10, duration: 0.5, ease: "power2.in" }, at("K", 5.5));
 
   tl.set({}, {}, CL.TOTAL);                            // the timeline lasts the whole film (the web player reads its length)
+  // lite: step through the film once and note when each section's layer is
+  // shown (its own style, as sync() reads it: the page around it may still be
+  // hidden while the film loads). A layer the timeline hasn't styled yet is
+  // hidden, as .seclay starts.
+  if (LITE) {
+    SECS.forEach(function () { SPANS.push([]); });
+    for (var x = 0; x <= CL.TOTAL; x += 0.2) {
+      tl.time(x, true);
+      SECS.forEach(function (s, k) {
+        var v = document.getElementById("L" + k).style.visibility;
+        if (v === "hidden" || v === "") return;
+        var r = SPANS[k][SPANS[k].length - 1];
+        if (r && x - r[1] < 0.3) r[1] = x; else SPANS[k].push([x, x]);
+      });
+    }
+  }
   // Lay down the opening frame now. A paused timeline is already at 0, so the
   // player seeking to 0 would move nothing and render nothing, and the film
   // would open on an empty stage.
   tl.time(1e-4); tl.time(0);
   window.__timelines = window.__timelines || {};      // the web player injects its runtime after the page has run
   window.__timelines["main"] = tl;
-  window.__ready = function () { return ready === SECS.length; };
+  window.__ready = function () {
+    if (!LITE) return ready === SECS.length;
+    var now = tl.time();
+    return SECS.every(function (s, k) { return F[k] || !near(k, now); });
+  };
 
   // Opened on its own (not in the player): play it, or hold a moment with ?t=
   if (!window.parent || window.parent === window) {

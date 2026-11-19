@@ -92,6 +92,34 @@ for (const file of sitePages) {
     if (prev && h.level > prev.level + 1) report(url, `H${h.level} skips a level after H${prev.level}`, h.text);
   });
 
+  // Structured data: exactly one JSON-LD graph per page, valid JSON, with the
+  // Organization node, and every {"@id"} reference resolving inside the graph.
+  const ldBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].map((m) => m[1]);
+  if (ldBlocks.length !== 1) report(url, 'JSON-LD graph count is not 1', `${ldBlocks.length} blocks`);
+  for (const raw of ldBlocks) {
+    let doc;
+    try {
+      doc = JSON.parse(raw);
+    } catch (err) {
+      report(url, 'JSON-LD does not parse', err.message);
+      continue;
+    }
+    const graph = doc['@graph'] ?? [];
+    if (!graph.some((n) => n['@type'] === 'Organization')) report(url, 'JSON-LD Organization missing', '');
+    const ids = new Set();
+    const refs = new Set();
+    const walk = (v) => {
+      if (Array.isArray(v)) return v.forEach(walk);
+      if (!v || typeof v !== 'object') return;
+      const keys = Object.keys(v);
+      if (keys.length === 1 && keys[0] === '@id') refs.add(v['@id']);
+      else if (v['@id']) ids.add(v['@id']);
+      Object.values(v).forEach(walk);
+    };
+    walk(graph);
+    for (const ref of refs) if (!ids.has(ref)) report(url, 'JSON-LD @id reference unresolved', ref);
+  }
+
   // Images.
   for (const m of body.matchAll(/<img\b[^>]*>/gi)) {
     const tag = m[0];

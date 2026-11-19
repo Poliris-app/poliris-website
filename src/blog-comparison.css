@@ -195,9 +195,11 @@
   color: #fff;
   border-bottom-color: var(--poliris-blue);
 }
+/* The tint alone marks the column. It used to carry a blue rule down each
+   side as well, drawn per cell as an inset shadow, which stacked into two
+   hard vertical lines the length of the table. */
 .bpc-table td.bpc-pol {
   background: #f2f6ff;
-  box-shadow: inset 2px 0 0 var(--poliris-blue), inset -2px 0 0 var(--poliris-blue);
 }
 /* The Poliris column sticks next to the criterion column while the other
    tools scroll under it. */
