@@ -84,7 +84,7 @@ export default {
         { q: 'Which AI engines does Poliris track?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok and DeepSeek.' },
         { q: 'Do I need to be an SEO expert?', a: 'No, our AI agents handle the technical work and explain everything in simple terms, while keeping you in control.' },
         { q: 'Which markets and languages do you cover?', a: 'Poliris works worldwide. You choose the markets to track, and every feature works in English and French.' },
-        { q: 'How does the free trial work?', a: 'You can start with a free trial with no time limit. If you decide to upgrade to a paid plan, our monthly subscriptions have no long-term commitment. You can change your plan or cancel at any time.' },
+        { q: 'How does the free trial work?', a: 'You get a 7-day free trial with 200 credits, and no credit card. After that, monthly plans have no contract, and you can switch or cancel anytime.' },
       ],
     },
     valueChain: {
@@ -400,7 +400,7 @@ export default {
       list: [
         { name: 'Leo',  role: 'Your Guide & Team Lead',  desc: 'Reads the whole picture and sets the game plan, like a lead strategist briefing the team.' },
         { name: 'Nora', role: 'AI Reputation',         desc: 'Checks how often AI tools like ChatGPT & Gemini mention your brand, and whether what they say is positive, neutral, or negative.' },
-        { name: 'Tom',  role: 'Site Health Check',        desc: 'Scans your website for technical problems that stop search engines and AI from reading it properly, then helps you what to fix first.' },
+        { name: 'Tom',  role: 'Site Health Check',        desc: 'Scans your website for technical problems that stop search engines and AI from reading it properly, then shows you what to fix first.' },
         { name: 'Kate', role: 'Content & Brand Image',           desc: 'Writes and improves your content so it\'s clear, on-brand, and gives AI good reasons to recommend you.' },
         { name: 'Ivy',  role: 'Keywords Management',      desc: 'Finds the words your customers search for, tracks where you rank, and shows which ones your competitors are winning.' },
         { name: 'Emma', role: 'Links & Authority',     desc: 'Gets your brand mentioned and linked on trusted websites, the same sources AI tools rely on when deciding who to recommend.' },
@@ -1164,7 +1164,7 @@ export default {
   faqs: {
     hero: {
       eyebrow: 'FAQs',
-      title: 'Answers to All Your Questions\n\n',
+      title: 'Answers to All Your Questions',
       lead: 'Find everything you need to know about Poliris, its features, and how it works so you can get started with confidence.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
