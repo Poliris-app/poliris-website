@@ -400,7 +400,7 @@ export default {
       list: [
         { name: 'Leo',  role: 'Your Guide & Team Lead',  desc: 'Reads the whole picture and sets the game plan, like a lead strategist briefing the team.' },
         { name: 'Nora', role: 'AI Reputation',         desc: 'Checks how often AI tools like ChatGPT & Gemini mention your brand, and whether what they say is positive, neutral, or negative.' },
-        { name: 'Tom',  role: 'Site Health Check',        desc: 'Scans your website for technical problems that stop search engines and AI from reading it properly, then helps you what to fix first.' },
+        { name: 'Tom',  role: 'Site Health Check',        desc: 'Scans your website for technical problems that stop search engines and AI from reading it properly, then shows you what to fix first.' },
         { name: 'Kate', role: 'Content & Brand Image',           desc: 'Writes and improves your content so it\'s clear, on-brand, and gives AI good reasons to recommend you.' },
         { name: 'Ivy',  role: 'Keywords Management',      desc: 'Finds the words your customers search for, tracks where you rank, and shows which ones your competitors are winning.' },
         { name: 'Emma', role: 'Links & Authority',     desc: 'Gets your brand mentioned and linked on trusted websites, the same sources AI tools rely on when deciding who to recommend.' },
@@ -1189,7 +1189,7 @@ export default {
   faqs: {
     hero: {
       eyebrow: 'FAQs',
-      title: 'Answers to All Your Questions\n\n',
+      title: 'Answers to All Your Questions',
       lead: 'Find everything you need to know about Poliris, its features, and how it works so you can get started with confidence.',
       primaryCta: 'Start free trial',
       secondaryCta: 'Book a demo',
@@ -1531,7 +1531,7 @@ export default {
             intro: 'Credits are consumed by LLM queries, technical scans, and content drafts.',
             bullets: [
               { label: 'Usage panel', text: 'credits used vs. remaining by month, broken down by action type and by Client or Workspace, plus trend charts.' },
-              { label: 'Top-ups', text: 'buy credit packs from the Billing panel.' },
+              { label: 'Top-ups', text: 'on a paid plan, buy extra credits from the Usage page. They never expire.' },
             ],
             callout: 'Set a usage alert at 80% so your team gets a heads-up before the monthly reset.',
           } },
@@ -2301,12 +2301,13 @@ export default {
       faqTitle: 'Questions about pricing',
       faq: [
         { q: 'What is a credit?', a: 'On a web AI model, one credit covers about one question. API models use 1 to 15 credits per question, depending on the model. A 10-prompt audit run across 3 web models uses about 30 credits.' },
-        { q: 'What happens when credits run out?', a: 'An AI visibility analysis needs at least 100 credits to start, so below that, analyses and scheduled runs stop until your next monthly renewal. To keep going sooner, move to a larger plan: the extra credits are available immediately.' },
+        { q: 'What happens when credits run out?', a: 'An AI visibility analysis needs at least 100 credits to start, so below that, analyses and scheduled runs stop until your next monthly renewal. To keep going sooner, add credits from the Usage page, from 100 credits for $10, or move to a larger plan: the extra credits are available immediately.' },
+        { q: 'Can I buy extra credits?', a: "Yes, on any paid plan, from the Usage page: 100 credits for $10, 250 for $24 or 500 for $47 (the same figures in euros, excl. tax), or any amount from 100 credits. They are added right after payment and never expire, and your plan's credits are used first. Bought credits are not refundable. If you need more every month, a larger plan usually costs less, and the app tells you when it does." },
         { q: 'Does this include all tools?', a: 'Yes. Every plan gives you full access to AI Visibility, Sentiment Analysis, Technical Auditing, and Content tools. No add-ons, no upsells.' },
         { q: 'Is the Free plan really free?', a: 'Yes. Your first analysis (1 product, 1 market, 2 web AI models, up to 10 prompts) and a 100-page technical audit cost no credits, and your results stay available. To run more, move to a paid plan.' },
         { q: "What's a market?", a: 'A market, called a trading zone in the app, is the country or region where Poliris tracks your AI visibility. AI answers change from one country to another, so each product is audited per market.' },
         { q: 'Can I switch plans?', a: 'Yes, anytime. An upgrade applies at once and the larger credit pool is available immediately. A downgrade applies at the end of the current period. You can also cancel whenever you need.' },
-        { q: 'Do credits roll over?', a: "No. Your credit pool is refilled at each monthly renewal, and unused credits don't carry over." },
+        { q: 'Do credits roll over?', a: "Your plan's credits are refilled at each monthly renewal, and unused plan credits don't carry over. Credits you buy are different: they never expire, and they are used once your plan's credits run out." },
         { q: 'Is there a long-term contract?', a: 'No. Monthly plans are billed month-to-month with no contract. Annual plans lock in a discounted rate for 12 months.' },
       ],
     },
@@ -2381,7 +2382,8 @@ export default {
       faq: [
         { q: 'How do we get started?', a: 'Book a call with our partner team. There is no self-serve sign-up for agencies yet: we open your agency space and set it up with you.' },
         { q: 'Do our clients see the Poliris brand?', a: 'No. With white label, your logo, colors and domain appear everywhere, and your name is on the emails. Poliris stays invisible to your clients.' },
-        { q: 'Does the agency pack include credits?', a: 'No. Credits come with each client plan: 300 for Client S, 1,500 for Client M and 3,000 for Client L, or a custom volume for Client XL.' },
+        { q: 'Does the agency pack include credits?', a: 'No. Credits come with each client plan: 300 for Client S, 1,500 for Client M and 3,000 for Client L, or a custom volume for Client XL. If a client needs more, you can buy extra credits for it at any time.' },
+        { q: 'Can we buy extra credits for a client?', a: "Yes, from Agency Management, 20% below the standard price: 100 credits for $8, 250 for $19.20 or 500 for $37.60 (the same figures in euros, excl. tax). Only your agency is billed, and you set what you charge your client. The credits never expire, and the client's plan credits are used first." },
         { q: 'Who sets the price for our clients?', a: 'You do. You set the price you charge your clients, and the margin is yours.' },
         { q: "Can we change a client's plan?", a: 'Yes. An upgrade applies right away, and the difference is added to your next bill. A downgrade applies at your next renewal: until then, the client keeps its plan and its credits.' },
       ],
