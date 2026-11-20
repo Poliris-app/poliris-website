@@ -85,7 +85,7 @@ export default {
         { q: 'Quels moteurs IA Poliris suit-il ?', a: 'ChatGPT, Gemini, Perplexity, Claude, Mistral, Grok et DeepSeek.' },
         { q: 'Faut-il être expert en SEO ?', a: 'Non, nos agents IA s’occupent des aspects techniques et vous expliquent simplement les actions à entreprendre, tout en vous laissant le contrôle.' },
         { q: 'Quels marchés et quelles langues couvrez-vous ?', a: 'Poliris fonctionne dans le monde entier. Vous choisissez les marchés à suivre, et toutes les fonctionnalités marchent en anglais et en français.' },
-        { q: "Comment fonctionne l'essai gratuit ?", a: "Vous profitez d'un essai gratuit de 7 jours avec 200 crédits, sans carte bancaire. Ensuite, les offres mensuelles sont sans engagement, et vous pouvez changer d'offre ou résilier à tout moment." },
+        { q: "Comment fonctionne l'essai gratuit ?", a: 'Vous profitez d\'un essai gratuit de 7 jours avec 200 crédits, sans carte bancaire. Ensuite, les offres mensuelles sont sans engagement, et vous pouvez changer d\'offre ou résilier à tout moment.' },
       ],
     },
     valueChain: {
@@ -2234,7 +2234,7 @@ export default {
           desc: "Un essai gratuit de 7 jours avec 200 crédits. Vos résultats restent disponibles.",
           credits: '200 crédits pendant 7 jours',
           cta: 'Commencer gratuitement',
-          features: ['1 marque, 1 produit', '1 zone commerciale parmi plus de 240 pays', '2 modèles IA, interface web', '10 prompts par audit', 'Audit technique de 100 pages'],
+          features: ['1 marque, 1 produit', '1 marché parmi plus de 240 pays', '2 modèles IA, interface web', '10 prompts par audit', 'Audit technique de 100 pages'],
           tooltips: ["Une marque et un produit suivis.", "Choisissez un pays ou une région à suivre.", "Choisissez 2 modèles parmi ChatGPT, Gemini, Perplexity, Claude, Grok, Google AI Mode et Google AI Overview.", "Jusqu'à 10 questions suivies par analyse.", "Poliris audite gratuitement 100 pages de votre site pendant l'onboarding."],
         },
         {
@@ -2243,7 +2243,7 @@ export default {
           credits: '300 crédits par mois',
           firstMonth: '600 le premier mois',
           cta: 'Choisir ce forfait',
-          features: ['Accès complet à la plateforme', 'Tous les modèles IA, web et API', '20 prompts rédigés par audit, plus les vôtres', 'Suivi quotidien, hebdomadaire ou mensuel', 'Plusieurs zones commerciales et projets'],
+          features: ['Accès complet à la plateforme', 'Tous les modèles IA, web et API', '20 prompts rédigés par audit, plus les vôtres', 'Suivi quotidien, hebdomadaire ou mensuel', 'Plusieurs marchés et projets'],
           tooltips: ["Tous les outils inclus, sans option payante.", "Interrogez tout modèle IA pris en charge, via son interface web ou son API.", "Poliris rédige 20 questions par audit. Gardez-en au moins 5 et ajoutez les vôtres.", "Choisissez la fréquence de relance des audits.", "Suivez plusieurs pays et marques, selon vos crédits."],
         },
         {
@@ -2271,8 +2271,8 @@ export default {
         price: 'Sur devis',
         credits: 'Un volume de crédits adapté à vos marques',
         cta: 'Contactez-nous',
-        features: ['Tout le forfait Pro', 'Projets et zones commerciales illimités', 'Chargé de compte dédié'],
-        tooltips: ["", "Aucune limite sur le nombre de projets et de zones commerciales.", "Un interlocuteur dédié pour votre compte."],
+        features: ['Tout le forfait Pro', 'Projets et marchés illimités', 'Chargé de compte dédié'],
+        tooltips: ["", 'Aucune limite sur le nombre de projets et de marchés.', "Un interlocuteur dédié pour votre compte."],
       },
       compare: {
         title: "Ce qui change d'un forfait à l'autre",
@@ -2304,7 +2304,7 @@ export default {
           {
             title: 'Couverture de la plateforme',
             desc: 'Conçu pour toute votre équipe, partout.',
-            items: ["Plus de 10 modèles d'IA", 'Zones commerciales et langues', "Membres d'équipe illimités", 'Exports CSV & PDF'],
+            items: ["Plus de 10 modèles d'IA", 'Marchés et langues locales', "Membres d'équipe illimités", 'Exports CSV & PDF'],
           },
         ],
       },
@@ -2314,8 +2314,8 @@ export default {
         { q: 'Que se passe-t-il quand mes crédits sont épuisés ?', a: "Une analyse de visibilité IA nécessite au moins 100 crédits pour démarrer. En dessous, les analyses et les exécutions planifiées s'arrêtent jusqu'au prochain renouvellement mensuel. Pour continuer plus tôt, ajoutez des crédits depuis la page Utilisation, à partir de 100 crédits pour 10 $, ou passez à un forfait supérieur : les crédits supplémentaires sont disponibles immédiatement." },
         { q: 'Puis-je acheter des crédits supplémentaires ?', a: "Oui, sur tout forfait payant, depuis la page Utilisation : 100 crédits pour 10 $, 250 pour 24 $ ou 500 pour 47 $ (les mêmes montants en euros, HT), ou toute quantité à partir de 100 crédits. Ils sont ajoutés dès le paiement et n'expirent jamais, et les crédits de votre forfait sont utilisés en premier. Les crédits achetés ne sont pas remboursables. Si vous en avez besoin chaque mois, un forfait supérieur revient généralement moins cher, et l'application vous l'indique." },
         { q: 'Est-ce que cela inclut tous les outils ?', a: "Oui. Chaque forfait vous donne un accès complet à Visibilité IA, Analyse de sentiment, Audit technique et aux outils de rédaction. Sans option payante, sans surcoût." },
-        { q: 'Le forfait Free est-il vraiment gratuit ?', a: "Oui. Votre première analyse (1 produit, 1 zone commerciale, 2 modèles IA web, jusqu'à 10 prompts) et un audit technique de 100 pages ne consomment aucun crédit, et vos résultats restent disponibles. Pour en lancer d'autres, passez à un forfait payant." },
-        { q: "Qu'est-ce qu'une zone commerciale ?", a: "Une zone commerciale est le pays ou la région où Poliris suit votre visibilité IA. Les réponses des IA changent d'un pays à l'autre : chaque produit est donc audité par zone commerciale." },
+        { q: 'Le forfait Free est-il vraiment gratuit ?', a: 'Oui. Votre première analyse (1 produit, 1 marché, 2 modèles IA web, jusqu\'à 10 prompts) et un audit technique de 100 pages ne consomment aucun crédit, et vos résultats restent disponibles. Pour en lancer d\'autres, passez à un forfait payant.' },
+        { q: 'Qu\'est-ce qu\'un marché ?', a: 'Un marché, appelé zone commerciale dans l\'application, est le pays ou la région où Poliris suit votre visibilité IA. Les réponses des IA changent d\'un pays à l\'autre : chaque produit est donc audité par marché.' },
         { q: 'Puis-je changer de forfait ?', a: "Oui, à tout moment. Le passage à un forfait supérieur s'applique immédiatement, et la nouvelle enveloppe de crédits est disponible tout de suite. Le passage à un forfait inférieur s'applique à la fin de la période en cours. Vous pouvez aussi résilier quand vous le souhaitez." },
         { q: 'Les crédits sont-ils reportés au mois suivant ?', a: "Les crédits de votre forfait sont rechargés à chaque renouvellement mensuel, et ceux non utilisés ne sont pas reportés. Les crédits que vous achetez sont différents : ils n'expirent jamais, et ils sont utilisés une fois les crédits de votre forfait épuisés." },
         { q: 'Y a-t-il un engagement de longue durée ?', a: "Non. Les forfaits mensuels sont facturés au mois, sans engagement. Les forfaits annuels garantissent un tarif réduit sur 12 mois." },
@@ -2349,7 +2349,7 @@ export default {
       perClient: 'par client / mois',
       tiers: [
         { name: 'Client S', credits: '300 crédits par mois', features: ["Jusqu'à 300 prompts suivis", 'Tous les outils et tous les modèles IA', 'Suivi quotidien, hebdomadaire ou personnalisé'] },
-        { name: 'Client M', credits: '1 500 crédits par mois', features: ["Jusqu'à 1 500 prompts suivis", 'Tout ce qui est inclus dans Client S', 'Plusieurs produits et zones commerciales'] },
+        { name: 'Client M', credits: '1 500 crédits par mois', features: ["Jusqu'à 1 500 prompts suivis", 'Tout ce qui est inclus dans Client S', 'Plusieurs produits et marchés'] },
         { name: 'Client L', credits: '3 000 crédits par mois', features: ["Jusqu'à 3 000 prompts suivis", 'Tout ce qui est inclus dans Client M', 'Suivi à grand volume'] },
       ],
       customTier: {
@@ -2357,7 +2357,7 @@ export default {
         price: 'Sur mesure',
         credits: 'Volume de crédits sur mesure',
        
-        features: ['Pour vos plus gros comptes', 'Projets et zones commerciales illimités', 'Devis avec votre responsable partenaires'],
+        features: ['Pour vos plus gros comptes', 'Projets et marchés illimités', 'Devis avec votre responsable partenaires'],
       },
       clientsNote: "Prix par mois, HT. Un crédit correspond à une question posée à un modèle IA, et les crédits sont inclus dans chaque forfait client. Après l'onboarding, notre calculateur dimensionne le bon forfait pour chaque client.",
       modes: {
