@@ -10,7 +10,7 @@
     { "source": "/en", "destination": "/en/", "permanent": true },
     { "source": "/fr", "destination": "/fr/", "permanent": true },
     { "source": "/blog/", "destination": "/fr/blog", "permanent": true },
-    { "source": "/mentions-legales/", "destination": "/fr/mentions-legales", "permanent": true },
+    { "source": "/mentions-legales(/)?", "destination": "/fr/mentions-legales", "permanent": true },
     { "source": "/politique-de-confidentialite(/)?", "destination": "/fr/privacy", "permanent": true },
     { "source": "/tarifs(/)?", "destination": "/fr/pricing", "permanent": true },
     { "source": "/faq(/)?", "destination": "/fr/faqs", "permanent": true },
@@ -33,7 +33,6 @@
 
     { "source": "/privacy(/)?", "destination": "/en/privacy", "permanent": false },
     { "source": "/terms(/)?", "destination": "/en/terms", "permanent": false },
-    { "source": "/mentions-legales", "destination": "/en/mentions-legales", "permanent": false },
     { "source": "/en/docs/implementation(/)?", "destination": "/en/docs/technical-fixes", "permanent": true },
     { "source": "/fr/docs/implementation(/)?", "destination": "/fr/docs/technical-fixes", "permanent": true },
     { "source": "/en/a-propos(/)?", "destination": "/en/docs", "permanent": true },
@@ -41,7 +40,8 @@
     { "source": "/en/tarifs(/)?", "destination": "/en/pricing", "permanent": true },
     { "source": "/en/faq(/)?", "destination": "/en/faqs", "permanent": true },
     { "source": "/en/services(/)?", "destination": "/en/", "permanent": true },
-    { "source": "/docs/fr(/)?", "destination": "/fr/docs", "permanent": true },
+    { "source": "/docs/en/:path*(/)?", "destination": "/en/docs", "permanent": true },
+    { "source": "/docs/fr/:path*(/)?", "destination": "/fr/docs", "permanent": true },
     { "source": "/en/author/florian(/)?", "destination": "/en/blog", "permanent": true }
   ],
   "rewrites": [
