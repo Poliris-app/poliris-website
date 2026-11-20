@@ -448,6 +448,7 @@ export default function PolirisComparisonArticle({ content: c }) {
         type="article"
         title={c.seo.title}
         description={c.seo.description}
+        modified={ui.dateISO}
         schema={c.jsonLd
           .filter((ld) => ld['@type'] === 'FAQPage')
           // eslint-disable-next-line no-unused-vars
@@ -489,8 +490,8 @@ export default function PolirisComparisonArticle({ content: c }) {
 
           <header className="bp-hero">
             <div className="bp-meta">
-              {/* One line of text, as in the source: "Comparison · updated …" */}
-              <span><span className="bp-category">{ui.category}</span> · {ui.updated}</span>
+              {/* One line of text: "Comparison · Poliris Team · updated …". The byline matches the BlogPosting author. */}
+              <span><span className="bp-category">{ui.category}</span> · {ui.author} · {ui.updated}</span>
             </div>
             <h1 className="bp-title">{c.hero.title}</h1>
             {/* First line is the source's tagline (blue italic, no full stop). */}
