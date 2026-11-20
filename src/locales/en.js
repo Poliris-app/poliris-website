@@ -2220,7 +2220,7 @@ export default {
           desc: 'A 7-day free trial with 200 credits. Your results stay available.',
           credits: '200 credits for 7 days',
           cta: 'Start for free',
-          features: ['1 brand, 1 product', '1 trading zone out of 240+ countries', '2 AI models, web interface', '10 prompts per audit', '100-page technical audit'],
+          features: ['1 brand, 1 product', '1 market out of 240+ countries', '2 AI models, web interface', '10 prompts per audit', '100-page technical audit'],
           tooltips: ["One brand and one product tracked.", "Pick one country or region to track.", "Choose 2 of ChatGPT, Gemini, Perplexity, Claude, Grok, Google AI Mode and Google AI Overview.", "Up to 10 questions tracked per audit run.", "Poliris audits 100 pages of your site for free during onboarding."],
         },
         {
@@ -2229,7 +2229,7 @@ export default {
           credits: '300 credits per month',
           firstMonth: '600 the first month',
           cta: 'Select plan',
-          features: ['Full platform access', 'All AI models, web and API', '20 prompts written per audit, plus your own', 'Daily, weekly or monthly tracking', 'Multiple trading zones and projects'],
+          features: ['Full platform access', 'All AI models, web and API', '20 prompts written per audit, plus your own', 'Daily, weekly or monthly tracking', 'Multiple markets and projects'],
           tooltips: ["Every tool included. No add-ons.", "Query any supported AI model, through its web interface or its API.", "Poliris writes 20 questions per audit. Keep at least 5 and add your own.", "Choose how often audits re-run.", "Track several countries and brands, within your credits."],
         },
         {
@@ -2257,8 +2257,8 @@ export default {
         price: 'Custom',
         credits: 'Credit volume built around your brands',
         cta: 'Talk to us',
-        features: ['Everything in Pro', 'Unlimited projects and trading zones', 'Dedicated account manager'],
-        tooltips: ["", "No limit on the number of projects and trading zones.", "A dedicated contact for your account."],
+        features: ['Everything in Pro', 'Unlimited projects and markets', 'Dedicated account manager'],
+        tooltips: ["", 'No limit on the number of projects and markets.', "A dedicated contact for your account."],
       },
       compare: {
         title: 'What changes from one plan to the next',
@@ -2289,8 +2289,8 @@ export default {
           },
           {
             title: 'Platform Coverage',
-            desc: 'Built for your whole team, in any country.',
-            items: ['10+ AI Models', 'Trading Zones & Languages', 'Unlimited Team Members', 'CSV & PDF Exports'],
+            desc: 'Built for your whole team, in any market.',
+            items: ['10+ AI Models', 'Local Markets & Languages', 'Unlimited Team Members', 'CSV & PDF Exports'],
           },
         ],
       },
@@ -2300,8 +2300,8 @@ export default {
         { q: 'What happens when credits run out?', a: 'An AI visibility analysis needs at least 100 credits to start, so below that, analyses and scheduled runs stop until your next monthly renewal. To keep going sooner, add credits from the Usage page, from 100 credits for $10, or move to a larger plan: the extra credits are available immediately.' },
         { q: 'Can I buy extra credits?', a: "Yes, on any paid plan, from the Usage page: 100 credits for $10, 250 for $24 or 500 for $47 (the same figures in euros, excl. tax), or any amount from 100 credits. They are added right after payment and never expire, and your plan's credits are used first. Bought credits are not refundable. If you need more every month, a larger plan usually costs less, and the app tells you when it does." },
         { q: 'Does this include all tools?', a: 'Yes. Every plan gives you full access to AI Visibility, Sentiment Analysis, Technical Auditing, and Content tools. No add-ons, no upsells.' },
-        { q: 'Is the Free plan really free?', a: 'Yes. Your first analysis (1 product, 1 trading zone, 2 web AI models, up to 10 prompts) and a 100-page technical audit cost no credits, and your results stay available. To run more, move to a paid plan.' },
-        { q: "What's a trading zone?", a: 'A trading zone is the country or region where Poliris tracks your AI visibility. AI answers change from one country to another, so each product is audited per trading zone.' },
+        { q: 'Is the Free plan really free?', a: 'Yes. Your first analysis (1 product, 1 market, 2 web AI models, up to 10 prompts) and a 100-page technical audit cost no credits, and your results stay available. To run more, move to a paid plan.' },
+        { q: 'What\'s a market?', a: 'A market, called a trading zone in the app, is the country or region where Poliris tracks your AI visibility. AI answers change from one country to another, so each product is audited per market.' },
         { q: 'Can I switch plans?', a: 'Yes, anytime. An upgrade applies at once and the larger credit pool is available immediately. A downgrade applies at the end of the current period. You can also cancel whenever you need.' },
         { q: 'Do credits roll over?', a: "Your plan's credits are refilled at each monthly renewal, and unused plan credits don't carry over. Credits you buy are different: they never expire, and they are used once your plan's credits run out." },
         { q: 'Is there a long-term contract?', a: 'No. Monthly plans are billed month-to-month with no contract. Annual plans lock in a discounted rate for 12 months.' },
@@ -2335,7 +2335,7 @@ export default {
       perClient: 'per client / month',
       tiers: [
         { name: 'Client S', credits: '300 credits per month', features: ['Up to 300 prompts tracked', 'All tools and all AI models', 'Daily, weekly or custom tracking'] },
-        { name: 'Client M', credits: '1,500 credits per month', features: ['Up to 1,500 prompts tracked', 'Everything in Client S', 'Several products and trading zones'] },
+        { name: 'Client M', credits: '1,500 credits per month', features: ['Up to 1,500 prompts tracked', 'Everything in Client S', 'Several products and markets'] },
         { name: 'Client L', credits: '3,000 credits per month', features: ['Up to 3,000 prompts tracked', 'Everything in Client M', 'High-volume monitoring'] },
       ],
       customTier: {
@@ -2343,7 +2343,7 @@ export default {
         price: 'Custom',
         credits: 'Custom credit volume',
        
-        features: ['For your largest accounts', 'Unlimited projects and trading zones', 'Quoted with your partner manager'],
+        features: ['For your largest accounts', 'Unlimited projects and markets', 'Quoted with your partner manager'],
       },
       clientsNote: 'Prices per month, excl. tax. One credit is one question asked to one AI model, and credits come with each client plan. After onboarding, our calculator sizes the right plan for each client.',
       modes: {
