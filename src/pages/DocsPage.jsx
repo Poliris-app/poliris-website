@@ -7,8 +7,14 @@ import { useLang } from '../contexts/LangContext';
 import { getChapter, getNavGroups } from '../content/docs-content';
 import { trackEvent } from '../lib/analytics';
 
-// One line of the chapter's opening copy, for its card.
+// The line under a chapter's name on the docs home. Each chapter carries a
+// summary written for the card; cutting the opening copy at 120 characters,
+// as this used to, left cards ending mid-sentence.
+const ENTITY = { amp: '&', rsquo: '\u2019', lsquo: '\u2018', ldquo: '\u201c', rdquo: '\u201d', nbsp: '\u00a0', hellip: '\u2026', laquo: '\u00ab', raquo: '\u00bb' };
+const decode = (text) => String(text).replace(/&([a-z]+);/gi, (m, n) => ENTITY[n] ?? m);
+
 function blurb(chapter, limit = 120) {
+  if (chapter?.summary) return decode(chapter.summary);
   const html = chapter?.intro ?? chapter?.blocks?.find((b) => b.html)?.html ?? '';
   const text = String(html).replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
   if (text.length <= limit) return text;

@@ -34,7 +34,7 @@ const META = {
   'technical-audit': 'wrench',
   'roadmap':         'map',
   'content':         'pen',
-  'implementation':  'code',
+  'technical-fixes':  'code',
   'citations':       'quote',
   'poli-ai':         'bot',
   'site-connection': 'plug',

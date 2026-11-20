@@ -4,6 +4,7 @@ import { useLang } from '../../contexts/LangContext';
 import { DOC_CHAPTERS } from '../../content/docs-structure';
 import useHideMissingFigures from './useHideMissingFigures';
 import { followDocLinks, rewriteDocLinks } from './docsLinks';
+import { addHeadingAnchors, headingId, slugify } from './docsAnchors';
 import FigureLightbox from './FigureLightbox';
 
 const SEVERITIES = ['critical', 'warning', 'notice', 'mixed'];
@@ -67,12 +68,36 @@ function useSmoothDetails() {
   }, []);
 }
 
+// Every test has a stable id, and the app's "Details" buttons link straight to
+// it, but nothing on the page said so. This copies that link. Clicking it must
+// not also open or close the test, hence preventDefault and stopPropagation.
+function CopyLink({ id, labels }) {
+  const [done, setDone] = useState(false);
+  const copy = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}${window.location.pathname}#${id}`;
+    const seen = () => { setDone(true); window.setTimeout(() => setDone(false), 1600); };
+    // Without the clipboard (http, older browser, denied permission) the link
+    // still becomes the address of the page, which the reader can copy.
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(seen, () => { window.location.hash = id; });
+    else window.location.hash = id;
+  };
+  return (
+    <button type="button" className={`docs-test__link${done ? ' is-done' : ''}`} onClick={copy}
+      title={labels.copyLink} aria-label={labels.copyLink}>
+      {done ? labels.copied : '#'}
+    </button>
+  );
+}
+
 function Test({ test, labels }) {
   const c = CLASSIFICATION[test.id] ?? {};
   const onToggle = useSmoothDetails();
   return (
     <details className="docs-test" id={test.id}>
       <summary onClick={onToggle}>
+        <CopyLink id={test.id} labels={labels} />
         <span className="docs-test__title">{test.title}</span>
         <span className="docs-test__badges">
           <span className={`docs-badge docs-badge--lvl-${c.level ?? 'page'}`}>
@@ -115,6 +140,29 @@ export default function DocsTests({ chapter, slug }) {
   const [severity, setSeverity] = useState('all');
   const { labels } = chapter;
 
+  const anchorLabel = lang === 'fr' ? 'Lien vers cette section' : 'Link to this section';
+
+  // Readable ids and a "#" link for the headings of this chapter too. The
+  // category ids and the test ids are already anchors, so they are reserved
+  // first and a heading that slugifies to one gets a suffix.
+  const anchored = useMemo(() => {
+    const seen = new Set([
+      ...chapter.categories.flatMap((c) => [c.id, ...c.groups.flatMap((g) => g.tests.map((t) => t.id))]),
+      'how-to-read',
+    ]);
+    const intro = addHeadingAnchors(rewriteDocLinks(chapter.intro, slug, lang), seen, anchorLabel);
+    const howToReadId = chapter.howToRead ? headingId(seen, chapter.howToRead.title) : undefined;
+    const howToRead = chapter.howToRead
+      ? addHeadingAnchors(rewriteDocLinks(chapter.howToRead.html, slug, lang), seen, anchorLabel)
+      : null;
+    // A category id is already a readable slug, so it is the anchor when it
+    // matches the title; only a mismatch needs an id of its own.
+    const catIds = new Map(chapter.categories.map(
+      (c) => [c.id, slugify(c.title) === c.id ? null : headingId(seen, c.title)],
+    ));
+    return { intro, howToRead, howToReadId, catIds };
+  }, [chapter, slug, lang, anchorLabel]);
+
   const q = query.trim().toLowerCase();
   const categories = useMemo(() => chapter.categories.map((cat) => ({
     ...cat,
@@ -134,12 +182,15 @@ export default function DocsTests({ chapter, slug }) {
 
   return (
     <div ref={ref} onClick={followDocLinks(navigate, setZoomed)}>
-      {chapter.intro ? <div className="docs-rich" dangerouslySetInnerHTML={{ __html: rewriteDocLinks(chapter.intro, slug, lang) }} /> : null}
+      {chapter.intro ? <div className="docs-rich" dangerouslySetInnerHTML={{ __html: anchored.intro }} /> : null}
 
       {chapter.howToRead ? (
         <section id="how-to-read" className="docs-block">
-          <h2 className="docs-block__h2">{chapter.howToRead.title}</h2>
-          <div className="docs-rich" dangerouslySetInnerHTML={{ __html: rewriteDocLinks(chapter.howToRead.html, slug, lang) }} />
+          <h2 className="docs-block__h2" id={anchored.howToReadId}>
+            {chapter.howToRead.title}
+            {anchored.howToReadId ? <a className="docs-anchor" href={`#${anchored.howToReadId}`} aria-label={anchorLabel}>#</a> : null}
+          </h2>
+          <div className="docs-rich" dangerouslySetInnerHTML={{ __html: anchored.howToRead }} />
         </section>
       ) : null}
 
@@ -168,7 +219,10 @@ export default function DocsTests({ chapter, slug }) {
 
       {categories.map((cat) => (
         <section key={cat.id} id={cat.id} className="docs-block">
-          <h2 className="docs-block__h2">{cat.title}</h2>
+          <h2 className="docs-block__h2" id={anchored.catIds.get(cat.id) ?? undefined}>
+            {cat.title}
+            <a className="docs-anchor" href={`#${anchored.catIds.get(cat.id) ?? cat.id}`} aria-label={anchorLabel}>#</a>
+          </h2>
           {cat.groups.map((g) => (
             <div key={g.id} className="docs-tests__group">
               <h3 className="docs-tests__group-title">
