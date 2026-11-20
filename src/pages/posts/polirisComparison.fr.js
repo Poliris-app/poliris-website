@@ -20,6 +20,7 @@ export default {
     onPage: 'Sur cette page',
     progress: 'Progression de lecture',
     category: 'Comparatif',
+    author: 'Équipe Poliris',
     updated: 'mis à jour le 27 octobre 2026',
     dateISO: '2026-10-27',
     swipe: 'Faites glisser le tableau pour voir tous les outils',
