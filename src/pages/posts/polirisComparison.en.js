@@ -24,6 +24,7 @@ export default {
     onPage: 'On this page',
     progress: 'Reading progress',
     category: 'Comparison',
+    author: 'Poliris Team',
     updated: 'updated October 27, 2026',
     dateISO: '2026-10-27',
     swipe: 'Swipe the table to see every tool',
