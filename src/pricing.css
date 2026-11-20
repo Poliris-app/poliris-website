@@ -921,6 +921,14 @@ button.pricing-compare-section-title {
 .pr-plan-price { margin: 16px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; color: var(--pr-text); }
 .pr-plan-amount { font-family: var(--manrope); font-weight: 800; font-size: 42px; line-height: 1; letter-spacing: -0.02em; }
 .pr-plan-period { font-size: 14px; color: var(--pr-text-faint); }
+/* "/mo excl. tax" stays on one line beside the price. With five cards
+   across, only the label is set smaller (the price keeps its size) so the
+   pair keeps clear of the card's edge, even for $189 and €175. */
+.pr-brand-card .pr-plan-period { white-space: nowrap; }
+@media (min-width: 1121px) {
+  .pr-brand-card .pr-plan-price { gap: 4px 3px; }
+  .pr-brand-card .pr-plan-period { font-size: 11px; }
+}
 .pr-plan-billed { margin: 6px 0 0; min-height: 18px; font-size: 12.5px; color: var(--pr-text-faint); white-space: pre; }
 .pr-plan-credits {
   margin: 6px 0 0; display: flex; flex-direction: column;
@@ -1029,6 +1037,12 @@ button.pricing-compare-section-title {
 @media (max-width: 640px) {
   .pr-audience-tab { padding: 0 14px; }
   .pr-section { margin-top: 72px; }
+}
+/* The smallest phones: "Pour les marques / Pour les agences" fits without
+   the icons. */
+@media (max-width: 380px) {
+  .pr-audience-tab { padding: 0 12px; font-size: 13.5px; }
+  .pr-audience-tab svg { display: none; }
 }
 
 /* Same top spacing as the shared Hero on the other pages (.hero padding
@@ -1269,7 +1283,10 @@ button.pricing-compare-section-title {
      unbreakable thing: the heading, which never wraps. Guessing fixed widths
      would break the moment a heading or a translation changed length. The
      straplines are capped below so they wrap instead of driving the width. */
-  grid-template-columns: repeat(4, max-content);
+  /* Up to max-content, down to min-content: when the four columns don't fit
+     (French, on screens just above the two-column layout) the longest list
+     items wrap instead of pushing the last column off the screen. */
+  grid-template-columns: repeat(4, minmax(min-content, max-content));
   grid-template-rows: auto auto auto;
   justify-content: space-between;
   column-gap: 28px;
@@ -1290,9 +1307,9 @@ button.pricing-compare-section-title {
 }
 .pr-included-desc {
   margin: 0 0 16px;
-  /* the strapline stays on one line too, so it joins the heading in deciding
-     how wide its column is */
-  white-space: nowrap;
+  /* The strapline sets its column's width (max-content) and stays on one
+     line while there is room; it wraps only when the four columns no longer
+     fit, as with the French straplines just above the two-column layout. */
   font-family: var(--chivo);
   font-size: 13.5px;
   line-height: 1.45;

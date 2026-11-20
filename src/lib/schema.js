@@ -145,6 +145,8 @@ export function planOffers(lang, plans = [], meta = []) {
         priceCurrency: currency,
         unitCode: 'MON',
         referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' },
+        // The pricing page shows prices excluding tax.
+        valueAddedTaxIncluded: false,
       },
     }));
   });
@@ -274,4 +276,8 @@ export function buildPageGraph({ lang, page, title, description, type, modified,
 }
 
 /** JSON for a <script> tag. Escapes "<" so no string can close the tag early. */
-export const serializeGraph = (graph) => JSON.stringify(graph).replace(/</g, '\\u003c');
+// "$" is escaped too: the static build inserts this text with a string
+// replace, where "$1", "$&" and the like are patterns, so a price such as
+// "$10" in an FAQ answer would pull page markup into the JSON.
+export const serializeGraph = (graph) =>
+  JSON.stringify(graph).replace(/</g, '\\u003c').replace(/\$/g, '\\u0024');

@@ -693,9 +693,10 @@ export default function PricingPage() {
       <Seo
         page="pricing"
         schema={[
-          // Prices from PLAN_META, names from the cards: the schema can't drift from the page.
-          { '@id': SOFTWARE_ID, offers: planOffers(lang, p.plans, PLAN_META) },
-          faqPageNode(lang, 'pricing', p.faq),
+          // Prices from PLAN_META, names and questions from what the page shows
+          // (the brands view): the schema can't drift from the page.
+          { '@id': SOFTWARE_ID, offers: planOffers(lang, bv.plans, PLAN_META) },
+          faqPageNode(lang, 'pricing', bv.faq),
         ]}
       />
       <Navbar />
@@ -793,7 +794,12 @@ export default function PricingPage() {
               <p className="pr-brand-desc">{plan.desc}</p>
               <p className="pr-plan-price">
                 <span className="pr-plan-amount"><PlanPrice plan={plan} annual={annual} currency={currency} /></span>
-                <span className="pr-plan-period">{bv.perMonth}</span>
+                <span className="pr-plan-period">
+                  {bv.perMonth}
+                  {/* Under "/mo" on every paid card, so the cards stay level
+                      however narrow they get. */}
+                  {plan.tier !== 'free' && bv.exclTax && <span className="pr-plan-tax"> {bv.exclTax}</span>}
+                </span>
               </p>
               <p className="pr-plan-billed">
                 {annual && plan.tier !== 'free' && p.billing.billedAnnually.split('{amount}').map((part, i) => (
@@ -874,7 +880,7 @@ export default function PricingPage() {
                         {plan.name}
                         <span className="pr-compare-price">
                           <PlanPrice plan={plan} annual={annual} currency={currency} />
-                          {plan.tier !== 'free' && <small> {bv.perMonth}</small>}
+                          {plan.tier !== 'free' && <small> {bv.perMonth}{bv.exclTax && ` ${bv.exclTax}`}</small>}
                         </span>
                       </th>
                     ))}
