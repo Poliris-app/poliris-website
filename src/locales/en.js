@@ -2162,7 +2162,6 @@ export default {
       volumeTitle: 'Usage & limits',
       workspacesLabel: 'Workspaces',
       boostLabel: 'Priority monitoring',
-      premiumModelLabel: 'Premium AI model access',
       platformTitle: 'Platform coverage',
       enginesLabel: '10+ AI models tracked',
       countriesLabel: '240+ markets tracked',

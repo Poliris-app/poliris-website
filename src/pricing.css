@@ -1268,6 +1268,9 @@ button.pricing-compare-section-title {
 .pr-compare .is-popular { background: rgba(0, 98, 255, .05); }
 .pr-compare thead .is-popular { background: rgba(0, 98, 255, .1); color: var(--pr-blue); }
 .pr-compare .pricing-check { width: 18px; height: 18px; color: var(--pr-blue); vertical-align: middle; }
+/* A cell that lists several items (support channels): one per line. */
+.pr-compare-line { display: block; }
+.pr-compare-line + .pr-compare-line { margin-top: 4px; }
 .pr-compare-no { display: inline-block; width: 12px; height: 2px; border-radius: 2px; background: var(--fg-6); vertical-align: middle; }
 
 .pr-included { margin-top: 14px; background: #fff; border: 1px solid var(--pr-border); border-radius: 20px; padding: 30px; }

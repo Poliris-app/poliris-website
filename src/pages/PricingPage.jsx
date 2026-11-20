@@ -631,10 +631,10 @@ export default function PricingPage() {
     { label: c.projectsLabel, values: ['1', c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
     { label: c.zonesLabel, values: [c.zonesFree, c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
     { label: c.cadenceLabel, values: [c.daily, c.anyCadence, c.anyCadence, c.anyCadence, c.anyCadence] },
-    { label: c.premiumModelLabel, values: [false, true, true, true, true] },
     { label: c.virtualTeamsLabel, values: [false, true, true, true, true] },
-    { label: c.slackLabel, values: [false, true, true, true, true] },
-    { label: c.supportChannelsLabel, values: [c.chatsOnly, c.chatsEmail, c.chatsEmail, c.dedicated, c.dedicatedManager] },
+    // Slack community is a support channel too, so it is listed here rather
+    // than in a row of its own. A list renders one channel per line.
+    { label: c.supportChannelsLabel, values: [c.chatsOnly, [c.chatsEmail, c.slackLabel], [c.chatsEmail, c.slackLabel], [c.dedicated, c.slackLabel], [c.dedicatedManager, c.slackLabel]] },
   ];
   // The four columns live in the locale files (pricing.brandView.included.groups)
   // rather than being assembled from scattered label keys, so the copy can be
@@ -916,6 +916,7 @@ export default function PricingPage() {
                           {value === true && <span role="img" aria-label={bv.compare.included}>{CHECK_ICON}</span>}
                           {value === false && <span role="img" aria-label={bv.compare.notIncluded} className="pr-compare-no" />}
                           {typeof value === 'string' && value !== 'models' && value !== 'modelsWebOnly' && value}
+                          {Array.isArray(value) && value.map((line) => <span key={line} className="pr-compare-line">{line}</span>)}
                         </td>
                       ))}
                     </tr>
