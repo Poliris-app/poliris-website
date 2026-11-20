@@ -60,6 +60,14 @@
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, indexifembedded" }]
     },
     {
+      "source": "/:lang(en|fr)/audit/:path*",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    },
+    {
+      "source": "/:lang(en|fr)/checkout/:path*",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    },
+    {
       "source": "/",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
