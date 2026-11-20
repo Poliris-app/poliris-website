@@ -115,7 +115,7 @@ export default function HighVisibilityContentPage() {
               <span className="bp-dot" />
               <span>Aug 20, 2026</span>
             </div>
-            <h1 className="bp-title">High-Visibility Content: Formatting, Readability & AI Optimization</h1>
+            <h1 className="bp-title">The Blueprint for High-Visibility Content in AI Search</h1>
             <p className="bp-deck">Search is splitting into many places. To <strong>optimize content for generative AI</strong>, writers need to know that large language models (LLMs) don't read pages the way search crawlers do. Classic search engines like Google weigh keywords and backlinks. AI engines that use RAG (Retrieval-Augmented Generation) work in a new way. They cut pages into chunks, turn ideas into vectors, and match each question to the meaning of the text.</p>
           </header>
 
