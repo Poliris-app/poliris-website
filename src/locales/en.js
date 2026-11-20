@@ -406,6 +406,31 @@ export default {
         { name: 'Emma', role: 'Links & Authority',     desc: 'Gets your brand mentioned and linked on trusted websites, the same sources AI tools rely on when deciding who to recommend.' },
       ],
     },
+    // KPI cards before the Platform section. The numbers live in
+    // KpiStats.jsx (fallback + live RPC); these are only the words around them.
+    kpi: {
+      eyebrow: 'Poliris in numbers',
+      h2Pre: 'The data behind',
+      h2Hl: 'every recommendation',
+      lead: 'Audits run on the Poliris platform, across AI engines and websites',
+      brands: {
+        label: 'Brands audited',
+        desc: 'Mapped product by product, from AI visibility to sentiment',
+        countries: 'countries',
+        offers: 'products and services',
+      },
+      answers: {
+        label: 'AI answers analyzed',
+        desc: 'Each answer read for brand mentions, sentiment and cited sources',
+        chips: ['ChatGPT', 'Gemini', 'Claude', 'AI Overviews'],
+      },
+      checks: {
+        label: 'Technical checks run',
+        descBefore: 'On',
+        descAfter: 'pages crawled, to see what blocks Google and AI crawlers',
+        chips: ['Page Access', 'Content Access', 'Content Quality'],
+      },
+    },
     // Compact comparison card after the Team section; links to the full
     // comparison post. Cells: 'y' included, 'p' partial / add-on, 'n' not
     // mentioned; ['p', 'note'] adds a note.

@@ -408,6 +408,31 @@ export default {
         { name: 'Emma', role: 'Intelligence Concurrentielle', desc: 'Identifie vos concurrents, compare leur visibilité à la vôtre et révèle les opportunités de vous démarquer.' },
       ],
     },
+    // Cartes KPI avant la section Plateforme. Les chiffres sont dans
+    // KpiStats.jsx ; ici seulement les mots autour.
+    kpi: {
+      eyebrow: 'Poliris en chiffres',
+      h2Pre: 'Les données derrière',
+      h2Hl: 'chaque recommandation',
+      lead: 'Audits réalisés sur la plateforme Poliris, sur les moteurs IA et les sites web',
+      brands: {
+        label: 'Marques auditées',
+        desc: 'Analysées produit par produit, de la visibilité IA au sentiment',
+        countries: 'pays',
+        offers: 'produits et services',
+      },
+      answers: {
+        label: 'Réponses IA analysées',
+        desc: 'Chaque réponse lue pour les mentions de marque, le sentiment et les sources citées',
+        chips: ['ChatGPT', 'Gemini', 'Claude', 'AI Overviews'],
+      },
+      checks: {
+        label: 'Contrôles techniques effectués',
+        descBefore: 'Sur',
+        descAfter: 'pages explorées, pour voir ce qui bloque Google et les robots des IA',
+        chips: ['Page Access', 'Content Access', 'Content Quality'],
+      },
+    },
     // Carte comparatif compacte après la section Équipe ; renvoie vers
     // l'article comparatif complet. Mêmes codes de cellules que en.js.
     compareCard: {
