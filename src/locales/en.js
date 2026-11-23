@@ -46,6 +46,13 @@ export default {
     termsOfService: 'Terms of Service',
   },
 
+  // Short link to the comparison post, shown above the closing CTA on the
+  // product pages and on pricing (internal links into the blog).
+  comparisonLink: {
+    lead: 'Comparing tools?',
+    link: 'See how Poliris compares with Semrush, Ahrefs, Peec AI and other SEO and GEO tools, feature by feature and price by price',
+  },
+
   home: {
     hero: {
       eyebrow: 'Built for the AI era',
