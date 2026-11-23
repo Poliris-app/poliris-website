@@ -50,7 +50,7 @@ export default {
   // produit et de la page tarifs (maillage interne vers le blog).
   comparisonLink: {
     lead: 'Vous comparez les outils ?',
-    link: 'Voir Poliris face à Semrush, Ahrefs, Peec AI et d'autres outils SEO et GEO, fonctionnalité par fonctionnalité et prix par prix',
+    link: "Voir Poliris face à Semrush, Ahrefs, Peec AI et d'autres outils SEO et GEO, fonctionnalité par fonctionnalité et prix par prix",
   },
 
   home: {
