@@ -16,6 +16,8 @@
     { "source": "/faq(/)?", "destination": "/fr/faqs", "permanent": true },
     { "source": "/services(/)?", "destination": "/fr/", "permanent": true },
     { "source": "/poliris(/)?", "destination": "/fr/", "permanent": true },
+    { "source": "/en/poliris(/)?", "destination": "/en/", "permanent": true },
+    { "source": "/comparaison-seo-geo(/)?", "destination": "/fr/blog/poliris-comparison", "permanent": true },
     { "source": "/salon-du-search-marketing-lille-2025-quand-lia-et-le-geo-redefinissent-le-business(/)?", "destination": "/fr/blog", "permanent": true },
 
     { "source": "/visibility(/)?", "destination": "/en/visibility", "permanent": false },
