@@ -42,7 +42,8 @@
     { "source": "/en/services(/)?", "destination": "/en/", "permanent": true },
     { "source": "/docs/en/:path*(/)?", "destination": "/en/docs", "permanent": true },
     { "source": "/docs/fr/:path*(/)?", "destination": "/fr/docs", "permanent": true },
-    { "source": "/en/author/florian(/)?", "destination": "/en/blog", "permanent": true }
+    { "source": "/en/author/florian(/)?", "destination": "/en/blog", "permanent": true },
+    { "source": "/:lang(en|fr)/:path(.+)/", "destination": "/:lang/:path", "permanent": true }
   ],
   "rewrites": [
     { "source": "/en/audit/:path*", "destination": "/en/index.html" },
