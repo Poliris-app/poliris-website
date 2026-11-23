@@ -689,6 +689,16 @@ export default function PricingPage() {
     setCheckoutPlan(plan);
   };
 
+  // Plan CTAs are real links to the app signup (APP_URL), so they work and
+  // are crawlable without JavaScript. The app takes no plan parameter: a
+  // paid plan is bought through the checkout modal, which a plain click
+  // still opens. Modified clicks (new tab, new window) follow the link.
+  const onPlanLinkClick = (e, plan) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    handleSelectPlan(plan);
+  };
+
   return (
     <div className="pricing-page">
       <Seo
@@ -816,9 +826,9 @@ export default function PricingPage() {
                 {plan.credits}
                 {plan.firstMonth && <span>{plan.firstMonth}</span>}
               </p>
-              <button type="button" className="pr-brand-cta" onClick={() => handleSelectPlan(plan)}>
+              <a href={APP_URL} className="pr-brand-cta" onClick={(e) => onPlanLinkClick(e, plan)}>
                 {isCurrentPlan ? p.currentPlanCta : plan.cta}
-              </button>
+              </a>
               <ul className="pr-plan-features">
                 {plan.features.map((f, j) => <PlanFeature key={f} text={f} tooltip={plan.tooltips[j]} />)}
               </ul>
@@ -928,9 +938,9 @@ export default function PricingPage() {
                     <td aria-hidden="true" />
                     {plans.map((plan) => (
                       <td key={plan.name} className={plan.popular ? 'is-popular' : undefined}>
-                        <button type="button" className={`pr-brand-cta pr-compare-cta${plan.popular ? ' solid' : ''}`} onClick={() => handleSelectPlan(plan)}>
+                        <a href={APP_URL} className={`pr-brand-cta pr-compare-cta${plan.popular ? ' solid' : ''}`} onClick={(e) => onPlanLinkClick(e, plan)}>
                           {plan.tier === currentTier ? p.currentPlanCta : p.plans[plans.indexOf(plan)].tableCta}
-                        </button>
+                        </a>
                       </td>
                     ))}
                     <td>
