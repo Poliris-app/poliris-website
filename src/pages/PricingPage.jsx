@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import { SOFTWARE_ID, planOffers, faqPageNode } from '../lib/schema';
 import PlanCheckoutModal from '../components/PlanCheckoutModal';
+import ComparisonLink from '../components/ComparisonLink';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
 import { APP_URL } from '../lib/appUrl';
@@ -1142,6 +1143,7 @@ export default function PricingPage() {
           </>
         )}
 
+        <ComparisonLink />
       </div>
 
       <Footer />
