@@ -16,6 +16,8 @@ import AiBrandVisibilityPage from './posts/AiBrandVisibilityPage';
 import AiBrandVisibilityFrPage from './posts/AiBrandVisibilityFrPage';
 import PolirisComparisonPage from './posts/PolirisComparisonPage';
 import PolirisComparisonFrPage from './posts/PolirisComparisonFrPage';
+import AiContentOptimizationPage from './posts/AiContentOptimizationPage';
+import AiContentOptimizationFrPage from './posts/AiContentOptimizationFrPage';
 
 const POST_MAP = {
   en: {
@@ -26,6 +28,7 @@ const POST_MAP = {
     'blueprint-for-high-visibility-content': HighVisibilityContentPage,
     'ai-brand-visibility-strategies': AiBrandVisibilityPage,
     'poliris-comparison': PolirisComparisonPage,
+    'ai-content-optimization-brand-visibility': AiContentOptimizationPage,
   },
   fr: {
     'why-seo-is-the-cornerstone-of-geo-success': SeoGeoCornerstoneFrPage,
@@ -35,6 +38,7 @@ const POST_MAP = {
     'blueprint-for-high-visibility-content': HighVisibilityContentFrPage,
     'ai-brand-visibility-strategies': AiBrandVisibilityFrPage,
     'poliris-comparison': PolirisComparisonFrPage,
+    'ai-content-optimization-brand-visibility': AiContentOptimizationFrPage,
   },
 };
 
