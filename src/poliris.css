@@ -4728,6 +4728,21 @@ button { cursor: pointer; border: none; background: none; }
 }
 
 
+/* Comparison link above the closing CTA (ComparisonLink.jsx) */
+.comparison-link {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  text-align: center;
+  font-family: var(--manrope);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg3);
+}
+.comparison-link__lead { font-weight: 600; color: var(--black); }
+.comparison-link__a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.comparison-link__a:hover { color: var(--blue-dark); }
+
 /* ================================================================
    CTA BAND
    ================================================================ */
