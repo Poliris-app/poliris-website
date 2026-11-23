@@ -148,8 +148,9 @@ function AiBand() {
   return (
     <section className="ai-band">
       <div className="ai-band__track">
+        {/* The second copy only closes the scroll loop: no alt, hidden from assistive tech. */}
         {doubled.map((l, i) => (
-          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" width="3600" height="777" />
+          <img key={i} src={l.src} alt={i < LOGOS.length ? l.alt : ''} {...(i < LOGOS.length ? {} : { 'aria-hidden': 'true' })} className="ai-band__logo" width="3600" height="777" />
         ))}
       </div>
     </section>
