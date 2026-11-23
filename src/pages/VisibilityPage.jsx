@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import LiveMarketsMap from '../components/LiveMarketsMap';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import ComparisonLink from '../components/ComparisonLink';
 import VisibilityDashboard from '../components/VisibilityDashboard';
 import { useLang } from '../contexts/LangContext';
 
@@ -526,6 +527,8 @@ export default function VisibilityPage() {
             </div>
           </div>
         </section>
+
+        <ComparisonLink />
 
         <CtaBand
           heading={t('visibility.cta.heading')}
