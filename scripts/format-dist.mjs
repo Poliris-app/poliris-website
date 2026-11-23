@@ -5,9 +5,10 @@
 // how browsers or crawlers parse the page.
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import prettier from 'prettier';
 
-const DIST_DIR = new URL('../dist', import.meta.url).pathname;
+const DIST_DIR = fileURLToPath(new URL('../dist', import.meta.url));
 
 async function collectHtmlFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
