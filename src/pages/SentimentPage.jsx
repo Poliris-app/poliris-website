@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import ComparisonLink from '../components/ComparisonLink';
 import DashSidebar from '../components/DashSidebar';
 import { useLang } from '../contexts/LangContext';
 
@@ -1075,6 +1076,8 @@ export default function SentimentPage() {
             </div>
           </div>
         </section>
+
+        <ComparisonLink />
 
         <CtaBand
           heading={t('sentiment.cta.heading')}
