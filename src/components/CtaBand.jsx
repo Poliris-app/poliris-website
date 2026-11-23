@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 
@@ -18,7 +19,6 @@ const MODELS = [
   { name: 'Grok', logo: 'grok-com-logo.png' },
   { name: 'Copilot', logo: 'copilot-transparent.png' },
 ];
-const tripled = [...MODELS, ...MODELS, ...MODELS];
 
 const TRIAL_URL = 'https://app.poliris.io';
 const DEMO_URL  = 'https://cal.com/team/poliris/discovery-call';
@@ -45,6 +45,15 @@ export default function CtaBand({
   const secondaryHref = secondaryTrial ? TRIAL_URL : secondaryDemo ? DEMO_URL : secondaryAudit ? `/${lang}/demo` : '#';
   const primaryExternal  = primaryTrial || primaryDemo;
   const secondaryExternal = secondaryTrial || secondaryDemo;
+
+  // The looping track shows three copies of the list so wide screens stay
+  // filled (same as before). The prerendered HTML carries one; the two loop copies
+  // are added after hydration and hidden from assistive tech, so crawlers
+  // and screen readers read each engine name once.
+  const [loop, setLoop] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setLoop(true), []);
+  const strip = loop ? [0, 1, 2] : [0];
 
   return (
     <section id="how" className="cta-band">
@@ -75,12 +84,12 @@ export default function CtaBand({
       </div>
       <div className="cta-model-strip">
         <div className="cta-model-track">
-          {tripled.map((m, i) => (
-            <span key={i} className="cta-model-item">
-              {m.logo && <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.name} className="cta-model-logo" width="18" height="18" />}
+          {strip.flatMap((copy) => MODELS.map((m) => (
+            <span key={`${copy}-${m.name}`} className="cta-model-item" {...(copy ? { 'aria-hidden': 'true' } : {})}>
+              {m.logo && <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={copy ? '' : m.name} className="cta-model-logo" width="18" height="18" />}
               <span>{m.name}</span>
             </span>
-          ))}
+          )))}
         </div>
       </div>
     </section>
