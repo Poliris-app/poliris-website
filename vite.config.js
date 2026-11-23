@@ -152,6 +152,47 @@ function devApiPlugin(env) {
         });
       });
 
+      // Pricing calculator, "estimate from your website" (api/credit-estimate.js
+      // in production). Locally it goes to the develop backend, like the free
+      // audit request above. POST starts an estimate, GET ?id= polls it.
+      server.middlewares.use('/api/credit-estimate', async (req, res) => {
+        const base = `${env.POLIRIS_AUDIT_BACKEND_URL || env.POLIRIS_BACKEND_URL}/api/v2/public/credit-estimate`;
+        const send = (status, data) => {
+          res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+          res.end(JSON.stringify(data));
+        };
+        const forward = { 'X-Forwarded-For': req.headers['x-forwarded-for'] || '' };
+        try {
+          if (req.method === 'GET') {
+            const id = new URL(req.url, 'http://localhost').searchParams.get('id') || '';
+            if (!/^[0-9a-f-]{36}$/i.test(id)) return send(400, { detail: 'Invalid id' });
+            const r = await fetch(`${base}/${encodeURIComponent(id)}`, { headers: forward });
+            return send(r.status, await r.json().catch(() => ({})));
+          }
+          if (req.method !== 'POST') return send(405, { detail: 'Method not allowed' });
+          let body = '';
+          req.on('data', chunk => { body += chunk; });
+          req.on('end', async () => {
+            try {
+              const { website, language, turnstile_token } = JSON.parse(body || '{}');
+              if (!website || !turnstile_token) return send(400, { detail: 'website and turnstile_token are required' });
+              const r = await fetch(base, {
+                method: 'POST',
+                headers: { ...forward, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ website, language: language || 'en', turnstile_token }),
+              });
+              send(r.status, await r.json().catch(() => ({})));
+            } catch (err) {
+              console.error('Credit estimate error:', err);
+              send(502, { detail: 'Could not reach the backend. Please try again.' });
+            }
+          });
+        } catch (err) {
+          console.error('Credit estimate error:', err);
+          send(502, { detail: 'Could not reach the backend. Please try again.' });
+        }
+      });
+
       server.middlewares.use('/api/checkout-session', async (req, res) => {
         if (req.method !== 'POST') {
           res.writeHead(405, { 'Content-Type': 'application/json' });
