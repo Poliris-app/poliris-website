@@ -331,7 +331,8 @@ export default function SentimentPage() {
               <p className="lead">{t('sentiment.dashboard.lead')}</p>
             </div>
 
-            <div className="app reveal">
+            {/* Demo UI with sample data: kept out of search snippets and the accessibility tree. */}
+            <div className="app reveal" aria-hidden="true" data-nosnippet="">
               <div className="hdash__v2-body">
                 {/* sidebar */}
                 <DashSidebar />
