@@ -8,6 +8,7 @@ import ComparisonLink from '../components/ComparisonLink';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
 import { APP_URL } from '../lib/appUrl';
+import { PLAN_META, creditsOf, creditsLabelOf, FREE_PROMPTS } from '../content/facts';
 import '../pricing.css';
 
 const CHECK_ICON = (
@@ -145,7 +146,7 @@ const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) =
 // monthly cadence (30-day month ÷ refresh_interval_days — see
 // REFRESH_OPTIONS in product-settings/constants.ts: Daily=1, Weekly=7).
 const CALC_CADENCE_DAYS = { daily: 1, weekly: 7 };
-const CALC_METER_MAX = 3000; // Pro's monthly allotment — the meter's right edge
+const CALC_METER_MAX = creditsOf('pro'); // Pro's monthly allotment — the meter's right edge
 
 const CALC_ICON_SOLO = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -191,9 +192,9 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   const estimated = Math.round(prompts * sites * modelCreditWeight * runsPerMonth);
 
   let recommendedTier = 'agency';
-  if (estimated <= 300) recommendedTier = 'starter';
-  else if (estimated <= 1500) recommendedTier = 'growth';
-  else if (estimated <= 3000) recommendedTier = 'pro';
+  if (estimated <= creditsOf('starter')) recommendedTier = 'starter';
+  else if (estimated <= creditsOf('growth')) recommendedTier = 'growth';
+  else if (estimated <= creditsOf('pro')) recommendedTier = 'pro';
   const recommendedPlan = plans.find((pl) => pl.tier === recommendedTier);
   // Agency has no fixed monthly allotment (custom/unlimited), so there's
   // nothing to subtract the estimate from — spareCredits stays null.
@@ -396,7 +397,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
             </div>
             <div className="pricing-calc-meter-track">
               <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
-              {[300, 1500].map((mark) => (
+              {[creditsOf('starter'), creditsOf('growth')].map((mark) => (
                 <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
               ))}
             </div>
@@ -474,20 +475,8 @@ function PricingFaqItem({ item, isOpen, onToggle }) {
   );
 }
 
-// Numeric/structural plan data — not translatable, paired by index with
-// the copy in locales/*.js `pricing.plans`. `tier` is the backend's
-// billing_pricing_catalog.plan_tier slug — the free tier isn't purchasable
-// through Stripe checkout (see app/api/v2/public_checkout.py), so its CTA
-// routes straight to the app instead of opening the checkout modal.
-// firstMonthCredits is always double monthlyCredits (a one-time welcome
-// bonus matching the base allocation) — kept as separate fields so the
-// badge can spell out "300 + 300 = 600" instead of just the total.
-const PLAN_META = [
-  { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,     popular: false },
-  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,   popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
-  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,   popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
-  { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
-];
+// Numeric/structural plan data (tiers, prices, credits) lives in
+// src/content/facts.js, paired by index with `pricing.brandView.plans`.
 
 // currency/annual now flow through to checkout (see PlanCheckoutModal) —
 // the backend has real Stripe prices per (plan_tier, currency,
@@ -625,8 +614,8 @@ export default function PricingPage() {
   // 1 credit = 1 AI model query, so a plan tracks up to its monthly credits.
   const upTo = (n) => (c.upTo ?? 'Up to {n}').replace('{n}', num(n));
   const compareRows = [
-    { label: bv.compare.creditsLabel, values: [false, '300', num('1,500'), num('3,000'), c.custom] },
-    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: ['10', upTo('300'), upTo('1,500'), upTo('3,000'), c.custom] },
+    { label: bv.compare.creditsLabel, values: [false, num(creditsLabelOf('starter')), num(creditsLabelOf('growth')), num(creditsLabelOf('pro')), c.custom] },
+    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: [FREE_PROMPTS, upTo(creditsLabelOf('starter')), upTo(creditsLabelOf('growth')), upTo(creditsLabelOf('pro')), c.custom] },
     { label: c.modelsLabel, sub: c.modelsSub, values: ['modelsWebOnly', 'models', 'models', 'models', 'models'] },
     { label: c.modelsCountLabel, values: ['2', c.anyCombination, c.anyCombination, c.anyCombination, c.anyCombination] },
     { label: c.projectsLabel, values: ['1', c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
