@@ -61,6 +61,10 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
       <form
         className={`hero-website-form${dark ? ' hero-website-form--dark' : ''}${error ? ' hero-website-form--error' : ''}`}
         onSubmit={handleSubmit}
+        // Without JavaScript the form still reaches the app's onboarding,
+        // which reads ?website= (handleSubmit cleans the value first when JS runs).
+        action={`${APP_URL}/${lang}/onboarding`}
+        method="get"
         noValidate
       >
         <span className="hero-website-form__icon" aria-hidden="true">
@@ -73,6 +77,7 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
         <div className="hero-website-form__input-wrap">
           <input
             type="text"
+            name="website"
             inputMode="url"
             autoCapitalize="none"
             autoCorrect="off"
