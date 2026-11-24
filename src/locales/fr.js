@@ -1172,6 +1172,13 @@ export default {
         date: '27 oct. 2026', dateValue: '2026-10-27',
         slug: 'poliris-comparison',
       },
+      {
+        id: 18, label: 'CONTENU IA', category: 'GEO',
+        title: "Optimiser les contenus avec l'IA pour maximiser la visibilité de votre marque",
+        desc: "Découvrez des techniques d'optimisation de contenu par l'IA pour améliorer la visibilité de votre marque et toucher le bon public. Apprenez à mieux vous positionner et à convertir efficacement.",
+        date: '23 nov. 2026', dateValue: '2026-11-23',
+        slug: 'ai-content-optimization-brand-visibility',
+      },
     ],
     cta: {
       heading: 'Découvrez comment l\'IA décrit votre marque',

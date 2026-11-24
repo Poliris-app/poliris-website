@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last updated: October 14, 2026**
+**Last updated: November 23, 2026**
 
 These Terms of Service (the "Terms") govern access to and use of the Poliris platform available at poliris.io and app.poliris.io (the "Service") and the Poliris WordPress plugin (the "Plugin"), operated by POLIRIS, a French single-shareholder simplified joint-stock company (SASU) with a share capital of €5,000, registered with the Paris Trade and Companies Register (RCS) under number 130 526 890, having its registered office at 61 rue de Lyon, 75012 Paris, France ("Poliris", "we", "us").
 
@@ -18,7 +18,15 @@ You must provide accurate information when creating an account and keep your cre
 
 3.1 The Service is provided on a subscription basis. Applicable plans, features, and prices are those displayed at the time of subscription or set out in an order form.
 
-3.2 Fees are payable in advance for each billing period and are exclusive of applicable taxes. Payments are processed by our payment processor.
+3.2 All Service prices are quoted exclusive of taxes. They do not include Value Added Tax (VAT), sales taxes, or any other applicable taxes imposed by law.
+
+Applicable taxes shall be determined in accordance with the relevant tax regulations, particularly based on the Customer’s location, tax status, and the nature of the services provided. Where Poliris is legally required to collect such taxes, they shall be added to the prices exclusive of taxes and charged to the Customer.
+
+In the event of the introduction of a new tax, a change in applicable tax rates, or a modification of the tax obligations relating to the Service, Poliris reserves the right to adjust the total amount charged to the Customer, including for existing subscriptions, to reflect such changes, to the extent permitted by applicable law and contractual provisions.
+
+The Customer shall be notified of any adjustment to the amount charged before it takes effect. The subscription price exclusive of taxes shall remain unchanged, unless a pricing adjustment is made in accordance with Section 3.4 of these Terms.
+
+Subscription fees are payable in advance for each billing period. Payments are processed by our designated payment service provider.
 
 3.3 Subscriptions renew automatically for successive periods of the same length unless cancelled before the end of the current period. Cancellation takes effect at the end of the period already paid; fees already paid are non-refundable except where required by applicable law.
 

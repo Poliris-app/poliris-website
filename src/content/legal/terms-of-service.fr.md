@@ -1,6 +1,6 @@
 # Conditions Générales d'Utilisation
 
-**Dernière mise à jour : 14 octobre 2026**
+**Dernière mise à jour : 23 novembre 2026**
 
 Les présentes Conditions Générales d'Utilisation (les « Conditions ») régissent l'accès à la plateforme Poliris disponible aux adresses poliris.io et app.poliris.io (le « Service ») ainsi qu'au plugin WordPress Poliris (le « Plugin »), exploités par POLIRIS, société par actions simplifiée unipersonnelle (SASU) de droit français au capital de 5 000 €, immatriculée au Registre du Commerce et des Sociétés (RCS) de Paris sous le numéro 130 526 890, dont le siège social est situé 61 rue de Lyon, 75012 Paris, France (« Poliris », « nous »).
 
@@ -18,7 +18,15 @@ Vous devez fournir des informations exactes lors de la création d'un compte et 
 
 3.1 Le Service est fourni sur la base d'un abonnement. Les offres, fonctionnalités, et tarifs applicables sont ceux affichés au moment de la souscription ou précisés dans un bon de commande.
 
-3.2 Les tarifs sont payables d'avance pour chaque période de facturation et s'entendent hors taxes applicables. Les paiements sont traités par notre prestataire de paiement.
+3.2 Les tarifs du Service sont exprimés hors taxes (HT). Ils ne comprennent pas la taxe sur la valeur ajoutée (TVA), les taxes sur les ventes ni toute autre taxe légalement applicable.
+
+Les taxes applicables sont déterminées conformément à la réglementation fiscale en vigueur, notamment en fonction de la localisation du Client, de son statut fiscal et de la nature des prestations fournies. Lorsqu’elles doivent être collectées par Poliris, ces taxes s’ajoutent aux tarifs hors taxes et sont facturées au Client.
+
+En cas d’instauration d’une nouvelle taxe, de modification d’un taux d’imposition ou de changement des obligations fiscales applicables au Service, Poliris pourra ajuster le montant toutes taxes comprises (TTC) facturé au Client, y compris pour les abonnements en cours, dans la mesure autorisée par la réglementation et les dispositions contractuelles applicables.
+
+Le Client sera informé de toute modification du montant prélevé avant son application. Le tarif hors taxes de l’abonnement restera inchangé, sauf révision tarifaire effectuée conformément à l’article 3.4 des présentes Conditions.
+
+Les abonnements sont payables d’avance pour chaque période de facturation. Les paiements sont traités par notre prestataire de paiement.
 
 3.3 Les abonnements se renouvellent automatiquement pour des périodes successives de même durée, sauf résiliation avant la fin de la période en cours. La résiliation prend effet à la fin de la période déjà payée ; les sommes déjà versées ne sont pas remboursables, sauf disposition légale contraire.
 

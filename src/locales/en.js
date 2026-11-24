@@ -1176,6 +1176,13 @@ export default {
         date: 'Oct 27, 2026', dateValue: '2026-10-27',
         slug: 'poliris-comparison',
       },
+      {
+        id: 18, label: 'AI CONTENT', category: 'GEO',
+        title: 'Optimizing AI Content for Maximum Brand Visibility',
+        desc: 'Discover AI content optimization techniques to enhance brand visibility and engage the right audience. Learn to rank and convert effectively.',
+        date: 'Nov 23, 2026', dateValue: '2026-11-23',
+        slug: 'ai-content-optimization-brand-visibility',
+      },
     ],
     cta: {
       heading: 'Know where your brand stands on Google and in AI.',
