@@ -10,6 +10,14 @@ import { useLang } from '../contexts/LangContext';
  *
  * `product` is the index (into dashboard.sidebar.products) highlighted
  * under AI Reputation.
+ *
+ * Optional, for the agency "client view" illustration on the pricing page
+ * (every other use keeps the defaults):
+ * - `logo`: a node shown in place of the Poliris logo (white label).
+ * - `productCount`: how many products to list under AI Reputation.
+ * - `action`: 'shown' (default), 'hidden' (the ACTION section is replaced
+ *   by a dashed placeholder carrying `actionNote`) or 'opened' (ACTION is
+ *   shown, outlined in blue, with `actionNote` as its tag).
  */
 
 // Lucide icon bodies, same as the app's.
@@ -27,6 +35,7 @@ const ICONS = {
   pencil: <><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></>,
   rocket: <><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></>,
   'link-2': <><path d="M9 17H7A5 5 0 0 1 7 7h2" /><path d="M15 7h2a5 5 0 1 1 0 10h-2" /><line x1="8" x2="16" y1="12" y2="12" /></>,
+  'eye-off': <><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /><path d="m2 2 20 20" /></>,
 };
 
 function Icon({ name, size, className }) {
@@ -51,16 +60,17 @@ function FoldRow({ icon, label, open }) {
   );
 }
 
-export default function DashSidebar({ product = 0 }) {
+export default function DashSidebar({ product = 0, logo = null, productCount, action = 'shown', actionNote = '' }) {
   const { t } = useLang();
   const s = t('dashboard').sidebar;
   const base = import.meta.env.BASE_URL;
+  const products = productCount ? s.products.slice(0, productCount) : s.products;
 
   return (
     <aside className="dsb2" aria-hidden="true">
       <div className="dsb2__inner">
         <div className="dsb2__header">
-          <img className="dsb2__logo" src={`${base}Logo-Poliris-1.png`} alt="Poliris" width="218" height="54" />
+          {logo ?? <img className="dsb2__logo" src={`${base}Logo-Poliris-1.png`} alt="Poliris" width="218" height="54" />}
           <Icon name="panel-left" size={15} className="dsb2__toggle" />
         </div>
 
@@ -92,7 +102,7 @@ export default function DashSidebar({ product = 0 }) {
             <div className="dsb2__sec-head"><span>{s.measure}</span><Icon name="plus" size={12} className="dsb2__muted" /></div>
             <FoldRow icon="eye" label={s.aiReputation} open />
             <div className="dsb2__sub-list">
-              {s.products.map((name, i) => (
+              {products.map((name, i) => (
                 <div key={name} className={`dsb2__prod${i === product ? ' dsb2__prod--on' : ''}`}>
                   <span className="dsb2__chip">{name[0].toUpperCase()}</span>
                   <span className="dsb2__prod-lbl">{name}</span>
@@ -103,15 +113,27 @@ export default function DashSidebar({ product = 0 }) {
           </div>
 
           <div className="dsb2__dotted" />
-          <div className="dsb2__section">
-            <div className="dsb2__sec-head"><span>{s.action}</span></div>
-            <FoldRow icon="pencil" label={s.content} />
-            <div className="dsb2__fold">
-              <span className="dsb2__fold-ico"><Icon name="rocket" size={13} /></span>
-              <span className="dsb2__label">{s.implementation}</span>
+          {action === 'hidden' ? (
+            <div className="dsb2__section">
+              <div className="dsb2__hidden">
+                <Icon name="eye-off" size={14} />
+                <span>{actionNote}</span>
+              </div>
             </div>
-            <FoldRow icon="link-2" label={s.citations} />
-          </div>
+          ) : (
+            <div className={`dsb2__section${action === 'opened' ? ' dsb2__section--opened' : ''}`}>
+              <div className="dsb2__sec-head">
+                <span>{s.action}</span>
+                {action === 'opened' && actionNote && <em className="dsb2__note">{actionNote}</em>}
+              </div>
+              <FoldRow icon="pencil" label={s.content} />
+              <div className="dsb2__fold">
+                <span className="dsb2__fold-ico"><Icon name="rocket" size={13} /></span>
+                <span className="dsb2__label">{s.implementation}</span>
+              </div>
+              <FoldRow icon="link-2" label={s.citations} />
+            </div>
+          )}
         </div>
       </div>
     </aside>

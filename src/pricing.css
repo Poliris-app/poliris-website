@@ -515,11 +515,20 @@
   gap: 26px; 
 }
 
-/* Brands + Prompts sit side by side as two equal-width bordered cards. */
+/* The manual counts (brands, products per brand, zones per product) sit
+   side by side as equal-width bordered cards, label above the stepper. */
 .pricing-calc-field-outline {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+.pricing-calc-field-outline .pricing-calc-field-stepper {
+  flex-direction: column; align-items: flex-start; justify-content: space-between;
+}
+/* On a phone the three counts stack, label above the stepper as on desktop. */
+@media (max-width: 620px) {
+  .pricing-calc-field-outline { grid-template-columns: 1fr; gap: 10px; }
+  .pricing-calc-field-outline .pricing-calc-field-stepper { gap: 10px; }
 }
 .pricing-calc-field-outline .pricing-calc-field {
   border: 1px solid var(--pr-border);
@@ -527,7 +536,6 @@
   padding: 15px;
   min-width: 0;
 }
-.pricing-calc-field-outline .pricing-calc-field-stepper { align-items: center; }
 
 /* ---- Shared field label pattern: bold title + gray sub, stacked ---- */
 .pricing-calc-field-copy label, .pricing-calc-field-head > label {
@@ -611,12 +619,211 @@
 .pricing-calc-cadence-btn.active { background: #fff; color: var(--pr-navy); box-shadow: 0 2px 6px rgba(13,27,62,0.12); }
 .pricing-calc-custom-runs { margin-top: 16px; }
 
+/* ---- Website or manual estimate ---- */
+.pricing-calc-modes { margin-top: 0; }
+.pricing-calc-site-label {
+  display: block; margin-bottom: 8px;
+  font-family: var(--manrope); font-size: 14px; font-weight: 700; color: var(--pr-navy);
+}
+.pricing-calc-site-row {
+  display: flex; align-items: center; gap: 8px; padding: 5px 5px 5px 14px;
+  border: 1px solid var(--pr-border); border-radius: 100px; background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.pricing-calc-site-row:focus-within { border-color: var(--pr-blue); box-shadow: 0 0 0 3px rgba(0, 98, 255, .1); }
+.pricing-calc-site-icon { display: flex; color: var(--pr-text-faint); flex-shrink: 0; }
+.pricing-calc-site-icon svg { width: 17px; height: 17px; }
+.pricing-calc-site-input { position: relative; flex: 1; min-width: 0; }
+/* The landing page's company list (.hero-website-form__suggestions in
+   poliris.css), lined up with the field's rounded edge, past the globe. */
+.pricing-calc-site-input .hero-website-form__suggestions { left: -45px; right: auto; width: 420px; max-width: calc(100% + 155px); top: calc(100% + 12px); }
+.pricing-calc-site-row input {
+  width: 100%; border: 0; outline: 0; background: transparent; padding: 6px 0;
+  font-family: var(--chivo); font-size: 15px; color: var(--pr-navy);
+}
+.pricing-calc-site-btn {
+  flex-shrink: 0; padding: 10px 20px; border: 0; border-radius: 100px; cursor: pointer;
+  background: var(--pr-blue); color: #fff; font-family: var(--manrope); font-size: 14px; font-weight: 700;
+}
+.pricing-calc-site-btn:disabled { opacity: .55; cursor: default; }
+.pricing-calc-turnstile { display: flex; justify-content: center; margin-top: 8px; }
+.pricing-calc-turnstile:empty { display: none; }
+.pricing-calc-site-status { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--pr-text-muted); }
+.pricing-calc-site-status.is-error { color: #b42318; }
+.pricing-calc-spinner {
+  width: 14px; height: 14px; flex-shrink: 0; border-radius: 50%;
+  border: 2px solid rgba(0, 98, 255, .2); border-top-color: var(--pr-blue);
+  animation: pricing-calc-spin .8s linear infinite;
+}
+@keyframes pricing-calc-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .pricing-calc-spinner { animation: none; } }
+.pricing-calc-link {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--manrope); font-size: 13.5px; font-weight: 700; color: var(--pr-blue);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+/* ---- Compact calculator (.pcalc) ----
+   Header: title left, Website / Manual switch right. Body: one input row
+   (website) or presets + three counters (manual), the check frequency on
+   one line, a one-line note. The blue summary bar below is unchanged. */
+.pcalc-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 18px 22px; border-bottom: 1px solid var(--pr-border);
+}
+.pcalc-head-copy h2 { margin: 0; font-family: var(--manrope); font-size: 20px; font-weight: 800; letter-spacing: -0.01em; color: var(--pr-navy); }
+.pcalc-head-copy p { margin: 2px 0 0; font-size: 13px; line-height: 1.5; color: var(--pr-text-faint); }
+.pcalc-tabs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 100px; background: var(--pr-bg); border: 1px solid var(--pr-border); }
+.pcalc-tabs button {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0; border-radius: 100px;
+  background: none; cursor: pointer; color: var(--pr-text-faint);
+  font-family: var(--manrope); font-size: 13px; font-weight: 700; transition: background .15s ease, color .15s ease;
+}
+.pcalc-tabs button svg { width: 15px; height: 15px; flex-shrink: 0; }
+.pcalc-tabs button { white-space: nowrap; }
+.pcalc-tabs button.active { background: #fff; color: var(--pr-navy); box-shadow: 0 1px 4px rgba(13, 27, 62, .12); }
+.pcalc-body { padding: 18px 22px 16px; display: flex; flex-direction: column; gap: 14px; }
+.pcalc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.pcalc-note { margin: 0; font-size: 12px; line-height: 1.5; color: var(--pr-text-faint); }
+
+/* Website result: one line, details on demand. */
+.pcalc-result {
+  margin-top: 10px; padding: 12px 14px; border: 1px solid var(--pr-border); border-radius: 12px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pcalc-result .pricing-calc-link { align-self: flex-start; font-size: 13px; }
+.pcalc-result-line { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+.pcalc-result-brand { font-family: var(--manrope); font-size: 15px; font-weight: 800; color: var(--pr-navy); }
+.pcalc-result-counts { font-size: 13.5px; color: var(--pr-text-muted); font-variant-numeric: tabular-nums; }
+.pcalc-details-btn {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border: 0; border-radius: 8px;
+  background: var(--pr-bg); cursor: pointer; color: var(--pr-blue); font-family: var(--manrope); font-size: 12.5px; font-weight: 700;
+}
+.pcalc-details-btn svg { width: 14px; height: 14px; transition: transform .2s ease; }
+.pcalc-details-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.pcalc-details { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pr-border); }
+.pcalc-details li {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto; align-items: center; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid var(--pr-border); font-size: 13px;
+  animation: pricing-calc-in .3s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i, 0) * 45ms);
+}
+.pcalc-details-name { font-weight: 700; color: var(--pr-navy); }
+.pcalc-details-zones { color: var(--pr-text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pcalc-details-count {
+  min-width: 26px; padding: 2px 8px; border-radius: 100px; text-align: center;
+  background: rgba(0, 98, 255, .08); color: var(--pr-blue); font-family: var(--manrope); font-size: 12px; font-weight: 800;
+}
+
+/* Progress while the website is read: the step and a thin bar. */
+.pcalc-progress-top { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: 13px; color: var(--pr-text-muted); }
+.pcalc-progress-top span:first-child { font-weight: 600; color: var(--pr-navy); }
+.pcalc-progress-top span:last-child { font-variant-numeric: tabular-nums; }
+.pcalc-progress-track { height: 6px; border-radius: 100px; background: var(--pr-bg); overflow: hidden; }
+.pcalc-progress-fill { height: 100%; border-radius: inherit; background: var(--pr-blue); transition: width .35s ease-out; }
+.pcalc-skel-brand { width: 90px; height: 14px; }
+.pcalc-skel-counts { width: 220px; max-width: 60%; height: 11px; }
+
+/* Manual: presets, then brands × products × zones on one line. */
+.pcalc-manual { display: flex; flex-direction: column; gap: 12px; }
+.pcalc-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.pcalc-presets button {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--pr-border); border-radius: 100px;
+  background: #fff; cursor: pointer; color: var(--pr-text-muted); font-family: var(--manrope); font-size: 12.5px; font-weight: 700;
+}
+.pcalc-presets button svg { width: 14px; height: 14px; color: var(--pr-blue); }
+.pcalc-presets button.active { border-color: var(--pr-blue); color: var(--pr-blue); background: rgba(0, 98, 255, .06); }
+.pcalc-counters { display: flex; align-items: flex-end; gap: 10px; }
+.pcalc-counter { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.pcalc-counter-label { font-size: 12px; font-weight: 600; color: var(--pr-text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcalc-counter-ctl {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 4px;
+  border: 1px solid var(--pr-border); border-radius: 10px; background: #fff;
+}
+.pcalc-counter-ctl button {
+  width: 28px; height: 28px; flex-shrink: 0; border: 0; border-radius: 7px; cursor: pointer;
+  background: var(--pr-bg); color: var(--pr-navy); font-size: 16px; font-weight: 700; line-height: 1;
+}
+.pcalc-counter-ctl button:hover { background: rgba(0, 98, 255, .1); color: var(--pr-blue); }
+.pcalc-counter-value { font-family: var(--manrope); font-size: 16px; font-weight: 800; color: var(--pr-navy); font-variant-numeric: tabular-nums; }
+.pcalc-times { padding-bottom: 10px; color: var(--pr-text-faint); font-weight: 700; }
+
+/* Check frequency on one line. */
+.pcalc-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pcalc-row-label { font-family: var(--manrope); font-size: 13.5px; font-weight: 700; color: var(--pr-navy); white-space: nowrap; }
+.pcalc-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 100px; background: var(--pr-bg); }
+.pcalc-seg button {
+  padding: 6px 14px; border: 0; border-radius: 100px; background: none; cursor: pointer;
+  color: var(--pr-text-faint); font-family: var(--chivo); font-size: 12.5px; font-weight: 600;
+}
+.pcalc-seg button.active { background: #fff; color: var(--pr-navy); box-shadow: 0 1px 4px rgba(13, 27, 62, .12); }
+
+.pcalc-row--slider .pricing-calc-slider { flex: 1; }
+
+/* AI models: label and running total on one line, the chips below. */
+.pcalc-models { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; padding-top: 16px; border-top: 1px solid var(--pr-border); }
+.pcalc-models-sum { font-size: 12.5px; font-weight: 600; color: var(--pr-text-faint); font-variant-numeric: tabular-nums; }
+.pcalc-model-chips { display: flex; flex-wrap: wrap; gap: 8px 10px; }
+.pcalc-model {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px;
+  border: 1px solid var(--pr-border); border-radius: 100px; background: #fff; cursor: pointer;
+  color: var(--pr-text-muted); font-family: var(--chivo); font-size: 13px; font-weight: 600;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.pcalc-model img { width: 17px; height: 17px; border-radius: 4px; object-fit: contain; }
+.pcalc-model:hover:not(:disabled) { border-color: #c7d3f2; }
+.pcalc-model.active { border-color: var(--pr-blue); background: rgba(0, 98, 255, .06); color: var(--pr-navy); }
+.pcalc-model:disabled { opacity: .45; cursor: default; }
+
+/* Skeleton blocks, with a soft sweep. */
+.pricing-calc-skel {
+  display: block; border-radius: 6px;
+  background: linear-gradient(90deg, #eceff5 0%, #f6f8fb 50%, #eceff5 100%);
+  background-size: 200% 100%;
+  animation: pricing-calc-shimmer 1.3s ease-in-out infinite;
+}
+/* On the blue result bar. */
+.pricing-calc-skel--light {
+  width: 120px; height: 34px; border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.34) 50%, rgba(255,255,255,.18) 100%);
+  background-size: 200% 100%;
+}
+@keyframes pricing-calc-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.pcalc-result.is-in { animation: pricing-calc-in .35s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes pricing-calc-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .pricing-calc-skel, .pcalc-result.is-in, .pcalc-details li { animation: none; }
+  .pcalc-progress-fill { transition: none; }
+}
+@media (max-width: 620px) {
+  .pcalc-head, .pcalc-body { padding-left: 16px; padding-right: 16px; }
+  .pcalc-tabs { width: 100%; }
+  .pcalc-tabs button { flex: 1; justify-content: center; padding: 7px 8px; }
+  .pcalc-tabs button svg { display: none; }
+  .pcalc-counters { flex-direction: column; align-items: stretch; }
+  .pcalc-times { display: none; }
+  .pcalc-counter { flex-direction: row; align-items: center; justify-content: space-between; }
+  .pcalc-counter-ctl { min-width: 128px; }
+  .pcalc-counter-label { white-space: normal; line-height: 1.35; }
+  .pcalc-row { flex-direction: column; align-items: stretch; }
+  .pcalc-models .pcalc-row { flex-direction: row; align-items: baseline; }
+  .pcalc-seg { width: 100%; }
+  .pcalc-seg button { flex: 1; }
+  .pcalc-details li { grid-template-columns: minmax(0, 1fr) auto; }
+  .pcalc-details-zones { grid-column: 1; grid-row: 2; white-space: normal; }
+  .pcalc-details-count { grid-column: 2; grid-row: 1 / span 2; }
+}
+.pricing-calc-assumption { margin: -10px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--pr-text-faint); }
+/* Before a website result there is nothing to price yet: only the hint. */
+.pricing-calc-summary.is-waiting { min-height: 92px; }
+.pricing-calc-summary.is-waiting .pricing-calc-summary-formula { margin: 0; font-size: 14px; color: #fff; }
+
 /* ---- Bottom summary bar: stats | fit + meter | CTA, one dark row ---- */
 .pricing-calc-summary {
   display: flex; align-items: center; gap: 32px;
   padding: 22px;
   position: relative;
-  overflow: hidden;
+  /* Not clipped: the ⓘ tooltip opens above the bar. The grid pattern
+     (::before, inset 0) stays inside it, and the card clips its corners. */
+  overflow: visible;
   background: linear-gradient(100deg, #0062ff 0%, #4d90ff 100%);
 }
 .pricing-calc-summary::before {
@@ -632,7 +839,7 @@
   pointer-events: none;
 }
 .pricing-calc-summary > * { position: relative; z-index: 1; }
-.pricing-calc-summary-stats { flex: 0 0 auto; }
+.pricing-calc-summary-stats { flex: 0 1 auto; min-width: 0; }
 .pricing-calc-summary-number {
   font-family: var(--manrope); font-size: 34px; font-weight: 800; color: #fff;
   letter-spacing: -0.02em; line-height: 1.1; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
@@ -640,7 +847,38 @@
 .pricing-calc-summary-number span {
   font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.75); letter-spacing: 0;
 }
-.pricing-calc-summary-formula { font-size: 12px; color: rgba(255,255,255,0.75); margin: 4px 0 0; }
+.pricing-calc-summary-formula { font-size: 12px; color: rgba(255,255,255,0.75); margin: 4px 0 0; overflow-wrap: anywhere; }
+/* The ⓘ after the formula: what the estimate assumes (10 prompts per product
+   and market), shown on hover or keyboard focus. */
+.pricing-calc-basis {
+  position: relative; display: inline-flex; vertical-align: -2px; margin-left: 5px;
+  color: rgba(255, 255, 255, .85); cursor: help; border-radius: 50%; outline: none;
+}
+.pricing-calc-basis svg { width: 13px; height: 13px; }
+.pricing-calc-basis:focus-visible { box-shadow: 0 0 0 2px #fff; }
+.pricing-calc-basis-tip {
+  position: absolute; left: 50%; bottom: calc(100% + 10px); z-index: 5; width: 250px;
+  padding: 9px 11px; border-radius: 9px; background: #fff; color: var(--pr-navy, #0d1b3e);
+  border: 1px solid var(--pr-border);
+  font-size: 12px; font-weight: 500; line-height: 1.45; text-align: left;
+  box-shadow: 0 8px 24px rgba(13, 27, 62, .18);
+  opacity: 0; visibility: hidden; transform: translate(-50%, 4px);
+  transition: opacity .15s ease, transform .15s ease, visibility .15s;
+  pointer-events: none;
+}
+.pricing-calc-basis-tip::after {
+  content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+  border: 5px solid transparent; border-top-color: #fff;
+}
+.pricing-calc-basis:hover .pricing-calc-basis-tip,
+.pricing-calc-basis:focus-visible .pricing-calc-basis-tip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+@media (max-width: 620px) {
+  /* Near the left edge on a phone: open to the right of the icon. */
+  .pricing-calc-basis-tip { left: -12px; transform: translateY(4px); }
+  .pricing-calc-basis:hover .pricing-calc-basis-tip,
+  .pricing-calc-basis:focus-visible .pricing-calc-basis-tip { transform: none; }
+  .pricing-calc-basis-tip::after { left: 18px; }
+}
 
 .pricing-calc-summary-fit { flex: 1; min-width: 0; }
 .pricing-calc-summary-fit-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
@@ -935,6 +1173,16 @@ button.pricing-compare-section-title {
   font-family: var(--manrope); font-weight: 700; font-size: 14px; color: var(--pr-blue);
 }
 .pr-plan-credits span { font-weight: 600; color: var(--pr-text-faint); }
+/* The first-month bonus as an offer tag, in the green of the "Save 20%"
+   badge (.pricing-save-badge): green already means a saving on this page,
+   and it keeps the card from being blue on blue. */
+.pr-plan-credits .pr-plan-bonus {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 6px; padding: 3px 10px 3px 8px; border-radius: 999px;
+  background: #e9f9ef; border: 1px solid rgba(34, 197, 94, .3); color: #16a34a;
+  font-size: 12.5px; font-weight: 700; line-height: 1.4;
+}
+.pr-plan-bonus svg { width: 13px; height: 13px; flex-shrink: 0; }
 .pr-plan-features {
   align-self: start; margin: 20px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid #e3e6ee;
   display: flex; flex-direction: column; gap: 11px; font-size: 14px; line-height: 1.4; color: var(--pr-text);
@@ -1010,14 +1258,16 @@ button.pricing-compare-section-title {
 .pr-pack-item-title { font-family: var(--manrope); font-size: 14.5px; font-weight: 700; line-height: 1.35; color: var(--pr-text); padding-top: 7px; }
 .pr-pack-item-desc { font-size: 13px; line-height: 1.5; color: var(--pr-text-faint); }
 .pr-pack-promo {
-  /* The design's badge shape and type, as a light highlight in our blue. */
+  /* The design's badge shape and type, in the offer green of the plan cards'
+     first-month tag and the "Save 20%" badge (.pr-plan-bonus,
+     .pricing-save-badge): green means an offer on this page. */
   margin: 18px 0 0; align-self: flex-start; display: flex; align-items: center; gap: 8px;
   padding: 10px 14px; border-radius: 12px;
-  background: rgba(0, 98, 255, .08); border: 1px solid rgba(0, 98, 255, .25);
+  background: #e9f9ef; border: 1px solid rgba(34, 197, 94, .3);
   font-size: 14.5px; line-height: 1.4; color: var(--pr-text);
 }
-.pr-pack-promo svg { flex: none; width: 18px; height: 18px; color: var(--pr-blue); }
-.pr-pack-promo strong { font-weight: 700; color: var(--pr-blue); }
+.pr-pack-promo svg { flex: none; width: 18px; height: 18px; color: #16a34a; }
+.pr-pack-promo strong { font-weight: 700; color: #16a34a; }
 @media (max-width: 900px) {
   .pr-pack { grid-template-columns: 1fr; }
   .pr-pack-main, .pr-pack-side { padding: 30px 24px; }
@@ -1026,6 +1276,17 @@ button.pricing-compare-section-title {
 
 
 .pr-clients { margin-top: 32px; }
+/* What every client plan gets, above the cards. */
+.pr-clients-included {
+  margin: 28px 0 0; padding: 18px 22px; list-style: none;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px;
+  background: #fff; border: 1px solid var(--pr-border); border-radius: 14px;
+}
+.pr-clients-included li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.5; color: var(--pr-text-muted); }
+.pr-clients-included strong { font-family: var(--manrope); font-weight: 800; color: var(--pr-text); }
+.pr-clients-included .pricing-check { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; color: var(--pr-blue); }
+.pr-clients-included + .pr-clients { margin-top: 20px; }
+@media (max-width: 760px) { .pr-clients-included { grid-template-columns: 1fr; } }
 
 .pr-notes { margin: 20px 0 0; display: flex; gap: 10px; font-size: 14px; line-height: 1.6; color: var(--pr-text-muted); }
 .pr-notes p { margin: 0; }
@@ -1053,39 +1314,62 @@ button.pricing-compare-section-title {
 @media (max-width: 768px)  { .pricing-wrap { padding-top: 126px; } }
 @media (max-width: 480px)  { .pricing-wrap { padding-top: 118px; } }
 
-/* ---------- Agencies: two modes, one compare card ---------- */
-.pr-modes {
-  margin-top: 32px; background: #fff; border: 1px solid var(--pr-border);
-  border-radius: var(--pr-radius); overflow: hidden;
+/* ---------- Agencies: two modes, each with the client's view ----------
+   One card per mode: tag, title, one line, then the picture of what the
+   client sees (the app sidebar, DashSidebar, under the agency's logo, with
+   the Action tools hidden or opened), then two short facts. */
+.pr-modes2 { margin-top: 32px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.pr-mode2 {
+  display: flex; flex-direction: column; min-width: 0;
+  background: #fff; border: 1px solid var(--pr-border); border-radius: var(--pr-radius); padding: 28px;
 }
-.pr-modes-head, .pr-modes-row { display: grid; grid-template-columns: 240px 1fr 1fr; }
-.pr-modes-col { padding: 28px 28px 24px; border-left: 1px solid var(--pr-border); }
-.pr-modes-col:first-of-type { background: #f5f8ff; }
 .pr-mode-tag {
-  display: inline-block; font-family: var(--manrope); font-size: 12px; font-weight: 700; color: #fff;
+  align-self: flex-start; display: inline-block; font-family: var(--manrope); font-size: 12px; font-weight: 700; color: #fff;
   background: var(--pr-blue); padding: 5px 11px; border-radius: 999px;
 }
 .pr-mode-title { margin: 12px 0 0; font-family: var(--manrope); font-weight: 800; font-size: 22px; color: var(--pr-text); }
 .pr-mode-desc { margin: 8px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--pr-text-muted); }
-.pr-modes-row { border-top: 1px solid var(--pr-border); }
-.pr-modes-label {
-  padding: 18px 28px; font-family: var(--manrope); font-size: 12px; font-weight: 700;
+.pr-mode2-shot { margin: 22px 0 0; }
+/* A window onto the client's account: the sidebar at its real mockup size,
+   flat placeholder blocks for the dashboard beside it. */
+.pr-mode2-screen {
+  /* Tall enough to show the whole sidebar down to the ACTION area, which
+     is the point of the picture. */
+  position: relative; display: flex; height: 468px; overflow: hidden;
+  border: 1px solid var(--pr-border); border-radius: 12px; background: var(--surface-2);
+}
+/* display:block beats poliris.css hiding .dsb2 under 768px (meant for the
+   dashboard mockups): here the sidebar is the whole picture. */
+.pr-mode2-screen .dsb2 { display: block; height: 100%; }
+.pr-mode2-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 18px 16px; }
+.pr-mode2-main > span { display: block; border-radius: 6px; background: #fff; }
+.pr-mode2-bar { height: 10px; width: 70%; }
+.pr-mode2-bar--title { height: 14px; width: 45%; background: #e3e7ef !important; }
+.pr-mode2-bar--short { width: 40%; }
+.pr-mode2-row { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 8px; background: none !important; }
+.pr-mode2-row > span { height: 52px; border-radius: 8px; background: #fff; }
+.pr-mode2-panel { flex: 1; min-height: 80px; border-radius: 8px !important; }
+.pr-mode2-caption { margin: 12px 0 0; font-size: 14px; line-height: 1.5; color: var(--pr-text); font-weight: 600; }
+.pr-mode2-caption span {
+  margin-right: 4px; font-family: var(--manrope); font-size: 11px; font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase; color: var(--pr-text-faint);
-  display: flex; align-items: center; white-space: nowrap;
 }
-.pr-modes-value {
-  padding: 18px 28px; border-left: 1px solid var(--pr-border);
-  font-family: var(--manrope); font-size: 15px; font-weight: 700; color: var(--pr-text);
+.pr-mode2-facts { margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid var(--pr-border); display: grid; gap: 12px; }
+.pr-mode2-facts div { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: baseline; }
+.pr-mode2-facts dt {
+  font-family: var(--manrope); font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--pr-text-faint);
 }
-.pr-modes-value:nth-child(2) { background: #f5f8ff; }
-@media (max-width: 760px) {
-  .pr-modes-head, .pr-modes-row { grid-template-columns: 1fr 1fr; }
-  .pr-modes-head > span:first-child { display: none; }
-  .pr-modes-col:first-of-type { border-left: 0; }
-  .pr-modes-label { grid-column: 1 / -1; padding: 14px 20px 0; }
-  .pr-modes-value { padding: 8px 20px 14px; font-size: 14px; }
-  .pr-modes-value:nth-child(2) { border-left: 0; }
-  .pr-modes-col { padding: 22px 20px 18px; }
+.pr-mode2-facts dd { margin: 0; font-family: var(--manrope); font-size: 15px; font-weight: 700; color: var(--pr-text); }
+@media (max-width: 900px) {
+  .pr-modes2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .pr-mode2 { padding: 22px 18px; }
+  /* The sidebar is the point: on a phone it takes the window. */
+  .pr-mode2-main { display: none; }
+  .pr-mode2-screen .dsb2 { width: 100%; border-right: 0; }
+  .pr-mode2-facts div { grid-template-columns: 1fr; gap: 2px; }
 }
 
 /* Client plan cards reuse the brand pricing-card, with a credits line
@@ -1123,22 +1407,16 @@ button.pricing-compare-section-title {
 .pr-audits-title { display: block; font-family: var(--manrope); font-weight: 800; font-size: 17px; color: var(--pr-text); }
 .pr-audits-desc { display: block; margin-top: 4px; font-size: 14.5px; line-height: 1.55; color: var(--pr-text-muted); }
 
-/* ---------- Agencies: how to get started ---------- */
-.pr-start { margin: 32px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.pr-start li { display: flex; flex-direction: column; border-top: 3px solid var(--pr-blue); padding-top: 22px; }
-.pr-start-num { font-family: var(--manrope); font-size: 14px; font-weight: 700; color: var(--pr-blue); }
-.pr-start-title { margin-top: 8px; font-family: var(--manrope); font-weight: 800; font-size: 19px; color: var(--pr-text); }
-.pr-start-desc { margin-top: 8px; font-size: 14.5px; line-height: 1.6; color: var(--pr-text-muted); }
+/* ---------- Agencies: how to get started ----------
+   Uses the landing page's How it works steps (.how__* in poliris.css); the
+   page background is the same --surface1 the icons are cut out of. Only the
+   spacing is set here. */
+.pr-start-h2 { text-align: center; }
+.pr-start2 { margin-top: 40px; }
 
 @media (max-width: 900px) {
-  .pr-modes, .pr-audits { grid-template-columns: 1fr; }
+  .pr-audits { grid-template-columns: 1fr; }
   .pr-audits { padding: 28px 22px; gap: 24px; }
-  .pr-start { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 560px) {
-  .pr-mode { padding: 22px; }
-  .pr-mode-row { grid-template-columns: 1fr; gap: 4px; }
-  .pr-start { grid-template-columns: 1fr; }
 }
 
 /* ---------- Agencies: price roll when switching currency ----------
@@ -1233,6 +1511,20 @@ button.pricing-compare-section-title {
    itself opens below them. */
 .pricing-calc-panel.pr-brand-panel { margin-top: 44px; }
 .pr-brand-links { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+/* The calculator opens between the two cards. Its space comes from inside
+   the sliding wrapper (padding-top), not the grid gap, so the agency card
+   moves with the slide instead of jumping by a gap at the start and end. */
+.pr-brand-links .pricing-calc-wrap { margin-top: 0; }
+.pr-brand-links .pcalc-reveal { margin-top: -14px; }
+.pcalc-reveal { overflow: hidden; height: 0; transition: height .42s cubic-bezier(.2, .7, .2, 1); }
+.pcalc-reveal-inner {
+  padding-top: 14px; opacity: 0; transform: translateY(-8px);
+  transition: opacity .3s ease, transform .42s cubic-bezier(.2, .7, .2, 1);
+}
+.pcalc-reveal.is-open .pcalc-reveal-inner { opacity: 1; transform: none; transition-delay: .06s; }
+@media (prefers-reduced-motion: reduce) {
+  .pcalc-reveal, .pcalc-reveal-inner { transition: none; }
+}
 .pr-brand-links .pricing-calc-banner,
 .pr-brand-links .pr-agency-link { margin-top: 0; border-radius: 20px; padding: 22px 24px; }
 .pr-brand-links .pricing-calc-banner-title,

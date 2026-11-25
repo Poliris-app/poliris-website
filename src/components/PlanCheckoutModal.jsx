@@ -2,27 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
+import { TURNSTILE_SITE_KEY, loadTurnstileScript } from '../lib/turnstile';
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-let turnstileScriptPromise = null;
-function loadTurnstileScript() {
-  if (typeof window === 'undefined') return Promise.resolve();
-  if (window.turnstile) return Promise.resolve();
-  if (!turnstileScriptPromise) {
-    turnstileScriptPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = TURNSTILE_SCRIPT_SRC;
-      script.async = true;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load Turnstile'));
-      document.head.appendChild(script);
-    });
-  }
-  return turnstileScriptPromise;
-}
 
 // FastAPI validation errors return `detail` as an array of
 // {type, loc, msg, input} objects, not a string — never render that shape
