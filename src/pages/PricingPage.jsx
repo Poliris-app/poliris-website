@@ -103,6 +103,14 @@ const ESTIMATE_MODELS_MAX = 4;
 // under the result says more prompts use more credits.
 const PROMPTS_PER_PRODUCT = 10;
 
+// "From your website" estimate: on/off. It needs the backend's public credit
+// estimate (poliris-backend PR #1203), which is not on the production backend
+// yet; until it is, the option would only say "not available". While false,
+// the calculator opens on the manual estimate, the Website / Manual switch is
+// hidden, and nothing is sent to the backend. All the website code stays: set
+// this back to true once PR #1203 is deployed to production.
+const WEBSITE_ESTIMATE_ENABLED = false;
+
 // Runs/month derived the same way the app converts a refresh interval to a
 // monthly cadence (30-day month ÷ refresh_interval_days — see
 // REFRESH_OPTIONS in product-settings/constants.ts: Daily=1, Weekly=7).
@@ -198,7 +206,7 @@ function CalcCounter({ label, value, onChange, min = 1, max = 50 }) {
 // is recommended.
 function CreditCalculator({ c, plans, agencyLabel, onRecommend, lang }) {
   const presets = calcPresets(c);
-  const [mode, setMode] = useState('website');
+  const [mode, setMode] = useState(WEBSITE_ESTIMATE_ENABLED ? 'website' : 'manual');
   const [brands, setBrands] = useState(presets[0].brands);
   const [products, setProducts] = useState(presets[0].products);
   const [zones, setZones] = useState(presets[0].zones);
@@ -404,10 +412,13 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend, lang }) {
             <h2>{c.title}</h2>
             <p>{c.subtitle}</p>
           </div>
-          <div className="pcalc-tabs" role="tablist">
-            <button type="button" role="tab" aria-selected={mode === 'website'} className={mode === 'website' ? 'active' : ''} onClick={() => setMode('website')}>{CALC_ICON_GLOBE}{c.modeWebsite}</button>
-            <button type="button" role="tab" aria-selected={mode === 'manual'} className={mode === 'manual' ? 'active' : ''} onClick={() => setMode('manual')}>{CALC_ICON_SLIDERS}{c.modeManual}</button>
-          </div>
+          {/* Only one way in while the website estimate is off: no switch. */}
+          {WEBSITE_ESTIMATE_ENABLED && (
+            <div className="pcalc-tabs" role="tablist">
+              <button type="button" role="tab" aria-selected={mode === 'website'} className={mode === 'website' ? 'active' : ''} onClick={() => setMode('website')}>{CALC_ICON_GLOBE}{c.modeWebsite}</button>
+              <button type="button" role="tab" aria-selected={mode === 'manual'} className={mode === 'manual' ? 'active' : ''} onClick={() => setMode('manual')}>{CALC_ICON_SLIDERS}{c.modeManual}</button>
+            </div>
+          )}
         </div>
 
         <div className="pcalc-body">
