@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-shift',      label: 'SEO sémantique vs. SEO traditionnel' },
@@ -248,6 +249,7 @@ export default function EntityBasedSeoFrPage() {
             <p className="bp-takeaways-intro">Les praticiens qui prospèrent dans cet environnement traitent leur site comme une base de connaissances structurée. Ils relient leurs entités à des identifiants Wikidata. Ils font tourner des audits de schema selon un cycle régulier. Cette discipline opérationnelle sépare les sites qui apparaissent dans les AI Overviews de ceux qui n'y apparaissent pas. L'<strong>évolution</strong> continue. Commencez par une entité. Construisez à partir de là.</p>
           </div>
 
+          <RelatedLinks page="blog/entity-based-seo" />
         </main>
       </div>
       <Footer />

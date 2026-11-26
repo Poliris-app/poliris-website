@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import { trackEvent } from '../../lib/analytics';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-defining',  label: 'SEO vs. GEO' },
@@ -334,6 +335,7 @@ export default function SeoGeoCornerstoneFrPage() {
             <p className="bp-takeaways-outro">La meilleure approche est de mesurer les deux signaux ensemble, et non séparément. Poliris fait exactement cela, en surveillant les directives de crawl, les taux de citation IA et les métriques de sentiment sur chaque LLM majeur en un seul endroit. Commencez par là. C'est votre première étape concrète vers un <strong>succès piloté par l'IA</strong> durable dans la recherche moderne.</p>
           </div>
 
+          <RelatedLinks page="blog/why-seo-is-the-cornerstone-of-geo-success" />
         </main>
       </div>
       <Footer />

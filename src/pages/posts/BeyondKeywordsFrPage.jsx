@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-strategy',    label: "Qu'est-ce qu'une stratégie de génération de contenu par IA ?" },
@@ -269,6 +270,7 @@ export default function BeyondKeywordsFrPage() {
             <p className="bp-takeaways-intro">Vos <strong>prochaines étapes</strong> sont claires. Appliquez les principes d'une <strong>stratégie de génération de contenu par IA</strong> structurée à un seul support de contenu, mesurez la visibilité de citation avec des outils comme Perplexity ou Google AI Overview, puis étendez à partir de là.</p>
           </div>
 
+          <RelatedLinks page="blog/beyond-keywords-ai-content-generation" />
         </main>
       </div>
       <Footer />

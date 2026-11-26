@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-strategy',    label: 'What Is AI Content Generation Strategy?' },
@@ -269,6 +270,7 @@ export default function BeyondKeywordsPage() {
             <p className="bp-takeaways-intro">Your <strong>next steps</strong> are clear. Apply a structured <strong>AI content generation strategy</strong> to one piece of content. Track how often it gets cited in tools like Perplexity or Google AI Overviews. Then grow from there.</p>
           </div>
 
+          <RelatedLinks page="blog/beyond-keywords-ai-content-generation" />
         </main>
       </div>
       <Footer />

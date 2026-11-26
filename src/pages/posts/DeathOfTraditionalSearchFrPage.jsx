@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-paradigm',   label: 'Le changement de paradigme' },
@@ -253,6 +254,7 @@ export default function DeathOfTraditionalSearchFrPage() {
             </div>
           </div>
 
+          <RelatedLinks page="blog/death-of-traditional-search-geo-priority" />
         </main>
       </div>
       <Footer />

@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-shift',      label: 'Entity-Based vs. Traditional SEO' },
@@ -248,6 +249,7 @@ export default function EntityBasedSeoPage() {
             <p className="bp-takeaways-intro">The teams who win here treat their site as a well-ordered base of facts. They map entities to Wikidata IDs. They run schema audits on a set schedule. That habit is what sets apart the sites that show up in AI Overviews from those that don't. The <strong>evolution</strong> continues. Start with one entity. Build from there.</p>
           </div>
 
+          <RelatedLinks page="blog/entity-based-seo" />
         </main>
       </div>
       <Footer />
