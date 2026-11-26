@@ -4,10 +4,14 @@
 //   dist/sitemap-en.xml   English pages
 //   dist/sitemap-fr.xml   French pages
 // One child sitemap per language keeps each version's coverage readable on
-// its own in Search Console. Every <url> carries the full hreflang set
-// (languages, their markets from HREFLANG_REGIONS in src/seo.js, x-default),
-// a <changefreq> and <priority> hint by page type, and the content images
-// found in the page's <main>.
+// its own in Search Console. Every <url> carries a <changefreq> and
+// <priority> hint by page type and the content images found in <main>.
+//
+// hreflang lives in each page's <head> only (languages, their markets from
+// HREFLANG_REGIONS in src/seo.js, x-default). Google treats <head> and
+// sitemap hreflang as equivalent, and xhtml:link elements in a sitemap make
+// Chrome show the file as run-together text instead of its XML tree (Chrome
+// no longer supports XSLT, so a stylesheet can't fix that).
 //
 //   node scripts/generate-sitemap.mjs                     (runs in `npm run build`)
 //   node scripts/generate-sitemap.mjs --update-manifest   (`npm run sitemap:update`)
@@ -17,11 +21,9 @@
 //   - the file exists
 //   - the canonical points to the route itself (sitemap only lists canonicals)
 //   - there is no robots noindex
-//   - every hreflang alternate points to another prerendered route
+//   - every hreflang alternate in <head> points to another prerendered route
+//     and the set includes the page itself
 // Any failure exits with code 1, so a broken sitemap never ships.
-//
-// hreflang alternates are copied from each page's <head>, so the sitemap and
-// the HTML can't disagree.
 //
 // <lastmod> is the date the page's main content last changed. The text inside
 // <main> (or <body> without header/nav/footer) is hashed and compared with scripts/sitemap-lastmod.json (committed):
@@ -191,7 +193,6 @@ function main() {
       `    <lastmod>${e.lastmod}</lastmod>`,
       `    <changefreq>${changefreq}</changefreq>`,
       `    <priority>${priority}</priority>`,
-      ...e.alternates.map((a) => `    <xhtml:link rel="alternate" hreflang="${xmlEscape(a.hreflang)}" href="${xmlEscape(a.href)}" />`),
       ...e.images.map((src) => `    <image:image><image:loc>${xmlEscape(src)}</image:loc></image:image>`),
       '  </url>',
     ].join('\n');
@@ -206,7 +207,6 @@ function main() {
     if (!langEntries.length) continue;
     const file = langSitemap(lang);
     const xml = `${HEADER}<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${langEntries.map(urlXml).join('\n')}
 </urlset>
