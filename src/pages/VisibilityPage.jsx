@@ -7,6 +7,7 @@ import LiveMarketsMap from '../components/LiveMarketsMap';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import ComparisonLink from '../components/ComparisonLink';
+import RelatedLinks from '../components/RelatedLinks';
 import VisibilityDashboard from '../components/VisibilityDashboard';
 import { useLang } from '../contexts/LangContext';
 import { canonicalUrl } from '../seo';
@@ -544,6 +545,7 @@ export default function VisibilityPage() {
           </div>
         </section>
 
+        <RelatedLinks page="visibility" />
         <ComparisonLink />
 
         <CtaBand

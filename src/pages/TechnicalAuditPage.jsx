@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import ComparisonLink from '../components/ComparisonLink';
+import RelatedLinks from '../components/RelatedLinks';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { AuditVis } from '../components/ProductCarousel';
@@ -529,6 +530,7 @@ export default function TechnicalAuditPage() {
         </section>
 
         {/* ── CTA BAND ─────────────────────────────── */}
+        <RelatedLinks page="technical-audit" />
         <ComparisonLink />
 
         <CtaBand

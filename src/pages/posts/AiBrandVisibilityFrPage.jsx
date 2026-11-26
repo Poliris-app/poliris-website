@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-strategies',  label: 'Des stratégies qui fonctionnent' },
@@ -276,6 +277,7 @@ export default function AiBrandVisibilityFrPage() {
             <p className="bp-takeaways-outro">Les marques qui gagnent du terrain en 2026 ne sont pas celles qui ont les plus gros budgets. Ce sont celles qui traitent la gestion de la réputation de marque comme une discipline vivante, alimentée par les données, plutôt que comme une revue trimestrielle.</p>
           </div>
 
+          <RelatedLinks page="blog/ai-brand-visibility-strategies" />
         </main>
       </div>
       <Footer />

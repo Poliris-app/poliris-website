@@ -53,6 +53,14 @@ export default {
     link: "Voir Poliris face à Semrush, Ahrefs, Peec AI et d'autres outils SEO et GEO, fonctionnalité par fonctionnalité et prix par prix",
   },
 
+  // Liens internes « Pour aller plus loin » (RelatedLinks.jsx). Nouvelles clés, hors Tolgee.
+  relatedLinks: {
+    heading: 'Pour aller plus loin',
+    docs: 'Dans la documentation',
+    posts: 'Sur le blog',
+    product: 'Le produit',
+    pricing: 'Tarifs',
+  },
   home: {
     hero: {
       eyebrow: 'Gestion de marque IA, au-delà du monitoring',

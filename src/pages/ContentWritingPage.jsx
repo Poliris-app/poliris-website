@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
 import ComparisonLink from '../components/ComparisonLink';
+import RelatedLinks from '../components/RelatedLinks';
 import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
@@ -1117,6 +1118,7 @@ export default function ContentWritingPage() {
         </section>
 
         {/* ── CTA BAND ──────────────────────────────────────── */}
+        <RelatedLinks page="content-writing" />
         <ComparisonLink />
 
         <CtaBand

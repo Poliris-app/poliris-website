@@ -1,0 +1,46 @@
+/* "Learn more" internal links (RelatedLinks.jsx): a quiet block above the
+   closing CTA on product pages and at the end of each blog post. */
+/* Doubled class: product pages style every <section> (e.g. .vis-page section
+   { padding: 60px 0 }), which would otherwise strip the side padding. */
+.related-links.related-links {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 24px 8px;
+  font-family: var(--manrope, 'Manrope', Arial, sans-serif);
+}
+.related-links__title {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--black, #000);
+}
+.related-links__groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px 40px;
+}
+.related-links__label {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--fg4, #6c6c6c);
+}
+.related-links__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.related-links__list li { margin: 0 0 8px; line-height: 1.5; }
+.related-links__a {
+  font-size: 15px;
+  color: var(--blue, #1e3893);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.related-links__a:hover { color: var(--blue-dark, #182d76); }
+
+/* Inside a blog post the block sits in the article column. */
+.bp-main .related-links.related-links { max-width: none; padding: 40px 0 8px; }

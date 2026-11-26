@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-what-is',    label: 'What Is AI Content Optimization?' },
@@ -325,6 +326,7 @@ export default function AiContentOptimizationPage() {
             <p className="bp-takeaways-outro">The better approach is to treat AI as a production layer, not a replacement for editorial judgment. Audit your top-performing pages first, identify where <strong>content optimization</strong> creates the clearest lift, then build from there. That's a next step you can take today.</p>
           </div>
 
+          <RelatedLinks page="blog/ai-content-optimization-brand-visibility" />
         </main>
       </div>
       <Footer />

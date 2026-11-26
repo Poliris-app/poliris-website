@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-what-is',    label: "Qu'est-ce que l'optimisation de contenu par l'IA ?" },
@@ -325,6 +326,7 @@ export default function AiContentOptimizationFrPage() {
             <p className="bp-takeaways-outro">La meilleure approche consiste à considérer l'IA comme une couche de production, et non comme un remplacement du jugement éditorial. Commencez par auditer vos pages les plus performantes, identifiez les domaines dans lesquels l'optimisation de contenu peut apporter les améliorations les plus importantes, puis développez votre stratégie à partir de ces résultats. C'est une prochaine étape que vous pouvez entreprendre dès aujourd'hui.</p>
           </div>
 
+          <RelatedLinks page="blog/ai-content-optimization-brand-visibility" />
         </main>
       </div>
       <Footer />

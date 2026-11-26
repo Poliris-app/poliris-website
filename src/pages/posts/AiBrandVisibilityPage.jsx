@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-strategies',  label: 'Strategies That Work' },
@@ -276,6 +277,7 @@ export default function AiBrandVisibilityPage() {
             <p className="bp-takeaways-outro">The brands gaining ground in 2026 aren't the ones with the biggest budgets. They're the ones treating brand reputation management as a live, data-fed discipline rather than a quarterly review.</p>
           </div>
 
+          <RelatedLinks page="blog/ai-brand-visibility-strategies" />
         </main>
       </div>
       <Footer />

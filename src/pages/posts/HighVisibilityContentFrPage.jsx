@@ -5,6 +5,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-core',      label: 'Principes fondamentaux du GEO' },
@@ -288,6 +289,7 @@ export default function HighVisibilityContentFrPage() {
             </div>
           </section>
 
+          <RelatedLinks page="blog/blueprint-for-high-visibility-content" />
         </main>
       </div>
       <Footer />

@@ -7,6 +7,7 @@ import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import '../../blog-post.css';
 import '../../blog-comparison.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 // The comparison post is mostly tables, so unlike the other posts its copy
 // lives in data files (polirisComparison.en.js / .fr.js) and this component
@@ -506,6 +507,7 @@ export default function PolirisComparisonArticle({ content: c }) {
             </section>
           ))}
 
+          <RelatedLinks page="blog/poliris-comparison" />
         </main>
       </div>
       <Footer />

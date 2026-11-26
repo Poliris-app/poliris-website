@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import { useLang } from '../../contexts/LangContext';
 import { trackEvent } from '../../lib/analytics';
 import '../../blog-post.css';
+import RelatedLinks from '../../components/RelatedLinks';
 
 const SECTIONS = [
   { id: 's-defining',  label: 'SEO vs. GEO' },
@@ -334,6 +335,7 @@ export default function SeoGeoCornerstonePage() {
             <p className="bp-takeaways-outro">The better approach is to measure both signals together, not separately. Poliris does exactly that, monitoring crawl directives, AI citation rates, and sentiment metrics across every major LLM in one place. Start there. That's your first concrete step toward lasting <strong>AI-driven success</strong> in modern search.</p>
           </div>
 
+          <RelatedLinks page="blog/why-seo-is-the-cornerstone-of-geo-success" />
         </main>
       </div>
       <Footer />
