@@ -5,12 +5,14 @@ import Seo from '../components/Seo';
 import { SOFTWARE_ID, planOffers, faqPageNode } from '../lib/schema';
 import PlanCheckoutModal from '../components/PlanCheckoutModal';
 import DashSidebar from '../components/DashSidebar';
+import ComparisonLink from '../components/ComparisonLink';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
 import { APP_URL } from '../lib/appUrl';
 import { trackEvent } from '../lib/analytics';
 import { TURNSTILE_SITE_KEY, loadTurnstileScript } from '../lib/turnstile';
 import useDomainSuggestions from '../hooks/useDomainSuggestions';
+import { PLAN_META, creditsOf, creditsLabelOf, FREE_PROMPTS } from '../content/facts';
 import '../pricing.css';
 
 const CHECK_ICON = (
@@ -114,7 +116,7 @@ const WEBSITE_ESTIMATE_ENABLED = true;
 // monthly cadence (30-day month ÷ refresh_interval_days — see
 // REFRESH_OPTIONS in product-settings/constants.ts: Daily=1, Weekly=7).
 const CALC_CADENCE_DAYS = { daily: 1, weekly: 7 };
-const CALC_METER_MAX = 3000; // Pro's monthly allotment — the meter's right edge
+const CALC_METER_MAX = creditsOf('pro'); // Pro's monthly allotment — the meter's right edge
 
 // The website estimate runs the first onboarding steps on the backend (a
 // minute or two). Polled at this pace, given up after CALC_POLL_LIMIT_MS.
@@ -376,9 +378,9 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend, lang }) {
   const showResult = mode === 'manual' || fromSite;
 
   let recommendedTier = 'agency';
-  if (estimated <= 300) recommendedTier = 'starter';
-  else if (estimated <= 1500) recommendedTier = 'growth';
-  else if (estimated <= 3000) recommendedTier = 'pro';
+  if (estimated <= creditsOf('starter')) recommendedTier = 'starter';
+  else if (estimated <= creditsOf('growth')) recommendedTier = 'growth';
+  else if (estimated <= creditsOf('pro')) recommendedTier = 'pro';
   const recommendedPlan = plans.find((pl) => pl.tier === recommendedTier);
   // Agency has no fixed monthly allotment (custom/unlimited), so there's
   // nothing to subtract the estimate from — spareCredits stays null.
@@ -674,7 +676,7 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend, lang }) {
                 </div>
                 <div className="pricing-calc-meter-track">
                   <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
-                  {[300, 1500].map((mark) => (
+                  {[creditsOf('starter'), creditsOf('growth')].map((mark) => (
                     <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
                   ))}
                 </div>
@@ -803,20 +805,8 @@ function PricingFaqItem({ item, isOpen, onToggle }) {
   );
 }
 
-// Numeric/structural plan data — not translatable, paired by index with
-// the copy in locales/*.js `pricing.plans`. `tier` is the backend's
-// billing_pricing_catalog.plan_tier slug — the free tier isn't purchasable
-// through Stripe checkout (see app/api/v2/public_checkout.py), so its CTA
-// routes straight to the app instead of opening the checkout modal.
-// firstMonthCredits is always double monthlyCredits (a one-time welcome
-// bonus matching the base allocation) — kept as separate fields so the
-// badge can spell out "300 + 300 = 600" instead of just the total.
-const PLAN_META = [
-  { tier: 'free',    monthly: 0,   annual: 0,   eurMonthly: 0,   eurAnnual: 0,     popular: false },
-  { tier: 'starter', monthly: 29,  annual: 23,  eurMonthly: 27,  eurAnnual: 21,   popular: false, monthlyCredits: '300',   firstMonthCredits: '600' },
-  { tier: 'growth',  monthly: 99,  annual: 79,  eurMonthly: 92,  eurAnnual: 73,   popular: true,  monthlyCredits: '1,500', firstMonthCredits: '3,000' },
-  { tier: 'pro',     monthly: 189, annual: 151, eurMonthly: 175, eurAnnual: 140, popular: false, monthlyCredits: '3,000', firstMonthCredits: '6,000' },
-];
+// Numeric/structural plan data (tiers, prices, credits) lives in
+// src/content/facts.js, paired by index with `pricing.brandView.plans`.
 
 // currency/annual now flow through to checkout (see PlanCheckoutModal) —
 // the backend has real Stripe prices per (plan_tier, currency,
@@ -964,8 +954,8 @@ export default function PricingPage() {
   // 1 credit = 1 AI model query, so a plan tracks up to its monthly credits.
   const upTo = (n) => (c.upTo ?? 'Up to {n}').replace('{n}', num(n));
   const compareRows = [
-    { label: bv.compare.creditsLabel, values: [false, '300', num('1,500'), num('3,000'), c.custom] },
-    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: ['10', upTo('300'), upTo('1,500'), upTo('3,000'), c.custom] },
+    { label: bv.compare.creditsLabel, values: [false, num(creditsLabelOf('starter')), num(creditsLabelOf('growth')), num(creditsLabelOf('pro')), c.custom] },
+    { label: c.promptsTrackedLabel, sub: c.promptsTrackedSub, values: [FREE_PROMPTS, upTo(creditsLabelOf('starter')), upTo(creditsLabelOf('growth')), upTo(creditsLabelOf('pro')), c.custom] },
     { label: c.modelsLabel, sub: c.modelsSub, values: ['modelsWebOnly', 'models', 'models', 'models', 'models'] },
     { label: c.modelsCountLabel, values: ['2', c.anyCombination, c.anyCombination, c.anyCombination, c.anyCombination] },
     { label: c.projectsLabel, values: ['1', c.multipleCreditLimited, c.multipleCreditLimited, c.multipleCreditLimited, c.unlimited] },
@@ -1026,6 +1016,16 @@ export default function PricingPage() {
       return;
     }
     setCheckoutPlan(plan);
+  };
+
+  // Plan CTAs are real links to the app signup (APP_URL), so they work and
+  // are crawlable without JavaScript. The app takes no plan parameter: a
+  // paid plan is bought through the checkout modal, which a plain click
+  // still opens. Modified clicks (new tab, new window) follow the link.
+  const onPlanLinkClick = (e, plan) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    handleSelectPlan(plan);
   };
 
   return (
@@ -1156,9 +1156,9 @@ export default function PricingPage() {
                 {/* The first-month bonus as an offer tag, not a grey footnote. */}
                 {plan.firstMonth && <span className="pr-plan-bonus">{GIFT_ICON}{plan.firstMonth}</span>}
               </p>
-              <button type="button" className="pr-brand-cta" onClick={() => handleSelectPlan(plan)}>
+              <a href={APP_URL} className="pr-brand-cta" onClick={(e) => onPlanLinkClick(e, plan)}>
                 {isCurrentPlan ? p.currentPlanCta : plan.cta}
-              </button>
+              </a>
               <ul className="pr-plan-features">
                 {plan.features.map((f, j) => <PlanFeature key={f} text={f} tooltip={plan.tooltips[j]} />)}
               </ul>
@@ -1269,9 +1269,9 @@ export default function PricingPage() {
                     <td aria-hidden="true" />
                     {plans.map((plan) => (
                       <td key={plan.name} className={plan.popular ? 'is-popular' : undefined}>
-                        <button type="button" className={`pr-brand-cta pr-compare-cta${plan.popular ? ' solid' : ''}`} onClick={() => handleSelectPlan(plan)}>
+                        <a href={APP_URL} className={`pr-brand-cta pr-compare-cta${plan.popular ? ' solid' : ''}`} onClick={(e) => onPlanLinkClick(e, plan)}>
                           {plan.tier === currentTier ? p.currentPlanCta : p.plans[plans.indexOf(plan)].tableCta}
-                        </button>
+                        </a>
                       </td>
                     ))}
                     <td>
@@ -1533,6 +1533,7 @@ export default function PricingPage() {
           </>
         )}
 
+        <ComparisonLink />
       </div>
 
       <Footer />

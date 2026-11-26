@@ -46,6 +46,13 @@ export default {
     termsOfService: 'Terms of Service',
   },
 
+  // Short link to the comparison post, shown above the closing CTA on the
+  // product pages and on pricing (internal links into the blog).
+  comparisonLink: {
+    lead: 'Comparing tools?',
+    link: 'See how Poliris compares with Semrush, Ahrefs, Peec AI and other SEO and GEO tools, feature by feature and price by price',
+  },
+
   home: {
     hero: {
       eyebrow: 'Built for the AI era',
@@ -617,12 +624,24 @@ export default {
     stakes: {
       h2Pre: 'Visibility is the',
       h2Hl: 'new traffic',
-      stats: [
-        { n: '60%',  d: 'of B2B buyers now use AI in their research phase' },
-        { n: '3 in 4', d: 'brands have zero visibility into their AI mention data' },
+      // Under a new key (not "stats") so the old, unsourced values held in
+      // Tolgee for visibility.stakes.stats can't overlay these.
+      // Market figures carry their source; the page shows it and the schema
+      // cites it (VisibilityPage.jsx).
+      facts: [
+        {
+          n: '94%', d: 'of B2B buyers use AI in their buying process',
+          source: { name: "Forrester, Buyers' Journey Survey 2025", date: 'Jan 2026', url: 'https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/' },
+        },
+        {
+          n: '73%', d: "of marketers don't consistently track whether their brand appears in AI answers",
+          source: { name: 'Page One Power, survey of 600 marketers', date: 'Mar 2026', url: 'https://www.pageonepower.com/linkarati/brands-are-flying-blind-in-ai-search-and-many-dont-even-know-it' },
+        },
+        // TODO(verify) Poliris results: add method, sample and date from customer data.
         { n: '+3.4×', d: 'average mention lift on Poliris within 90 days' },
         { n: '5×',   d: 'faster decisions when buyers see your brand in AI' },
       ],
+      sourceLabel: 'Source',
     },
     cta: {
       heading: 'See your AI visibility score for free',
@@ -2530,7 +2549,7 @@ export default {
         title: 'Agency program',
         desc: 'Manage GEO across clients, co-branded reports, volume pricing, and a dedicated partner lead.',
         cta: 'Talk to us',
-        href: 'https://app.poliris.io',
+        href: 'https://cal.com/team/poliris/discovery-call',
       },
     ],
     cta: {

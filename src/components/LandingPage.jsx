@@ -469,7 +469,9 @@ function ValueChain() {
    ================================================================ */
 function EngineWindow({ url, bare = false, children }) {
   return (
-    <div className="engine-window">
+    // Sample data in the product demos stays out of search snippets. Not
+    // aria-hidden: some demos have working controls (roadmap toggle, bars).
+    <div className="engine-window" data-nosnippet="">
       {!bare && (
         <div className="engine-window__bar">
           <span className="engine-window__dot" style={{ background: '#ff5f57' }} />

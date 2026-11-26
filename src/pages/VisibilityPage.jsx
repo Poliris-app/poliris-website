@@ -6,8 +6,10 @@ import Seo from '../components/Seo';
 import LiveMarketsMap from '../components/LiveMarketsMap';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import ComparisonLink from '../components/ComparisonLink';
 import VisibilityDashboard from '../components/VisibilityDashboard';
 import { useLang } from '../contexts/LangContext';
+import { canonicalUrl } from '../seo';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
 
@@ -84,7 +86,13 @@ function wrapQuestion(text, lineCount = 3) {
 }
 
 export default function VisibilityPage() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
+  // Market figures with a published source: shown under each number and
+  // cited in the page's JSON-LD, so AI answers can quote them with attribution.
+  const stakeFacts = t('visibility.stakes.facts');
+  const citations = (Array.isArray(stakeFacts) ? stakeFacts : [])
+    .filter((f) => f.source?.url)
+    .map((f) => ({ '@type': 'CreativeWork', name: f.source.name, url: f.source.url }));
   const PF_TOPICS = t('visibility.productFocus.topics');
   /* Exclusive prefix sum of question counts, so each topic's connector
      lines get a unique, stable pf-line--N (drives the staggered draw-in). */
@@ -113,7 +121,10 @@ export default function VisibilityPage() {
 
   return (
     <div className="vis-page">
-      <Seo page="visibility" />
+      <Seo
+        page="visibility"
+        schema={citations.length ? [{ '@id': `${canonicalUrl(lang, 'visibility')}#webpage`, citation: citations }] : []}
+      />
       <Navbar />
       <main>
 
@@ -516,16 +527,24 @@ export default function VisibilityPage() {
             </div>
             <div className="vstakes reveal">
               <div className="vstakes-grid">
-                {t('visibility.stakes.stats').map((s, i) => (
+                {stakeFacts.map((s, i) => (
                   <div key={i}>
                     <div className="n">{s.n}</div>
                     <div className="d">{s.d}</div>
+                    {s.source?.url && (
+                      <p className="src">
+                        {t('visibility.stakes.sourceLabel')}:{' '}
+                        <cite><a href={s.source.url} target="_blank" rel="noopener">{s.source.name}</a></cite>, {s.source.date}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </section>
+
+        <ComparisonLink />
 
         <CtaBand
           heading={t('visibility.cta.heading')}

@@ -1,10 +1,10 @@
 {
   "https://poliris.io/en/": {
-    "hash": "d58e50993cf7c6ccf62fcf5befaa2bd78d64bde26c26ecb3d97849e5d64554b1",
-    "lastmod": "2026-11-20"
+    "hash": "66828c4bb075ba0475610e067bcc2052cde95ecc5daf354f5d8996091edece54",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/blog": {
-    "hash": "e816dcca1df9e33222ada748ac681fefac29643dd3338d8656afea9a9d6eaf93",
+    "hash": "17ca0a5d654efb196bf9a0bb13cc2451842f976801face0880cc2e9695cedcdb",
     "lastmod": "2026-11-26"
   },
   "https://poliris.io/en/blog/ai-brand-visibility-strategies": {
@@ -40,12 +40,12 @@
     "lastmod": "2026-06-23"
   },
   "https://poliris.io/en/content-writing": {
-    "hash": "c0a05f26379be3bed0c4c1d7bd40cbeaf9088d2fc196fa36a1c139ee8a3253bb",
-    "lastmod": "2026-06-16"
+    "hash": "3ffa88dc8fc836281df8a2b7e1c09f8c865aa6bd9e2eef8ccd1e5b36a068bad9",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/demo": {
-    "hash": "8cd1249b4dd4de94bcfc0436a20a87594117c673581dc6d7237901ed175e48fd",
-    "lastmod": "2026-07-03"
+    "hash": "f34628e2c79c3a301e85c3cbf607afbaf185a209f9adbfd523a3ca2afbc83b04",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/docs": {
     "hash": "a874c1a5fa7b50abdcb8a470d371c7571cdd3c915585a7fe1cd9ba1e0335fd30",
@@ -128,47 +128,47 @@
     "lastmod": "2026-11-20"
   },
   "https://poliris.io/en/faqs": {
-    "hash": "bcef20b1b642c4980fbf77866c3a67e346a992a4a2103cbd4b3859692114bd5d",
-    "lastmod": "2026-11-20"
+    "hash": "45881791151dfd9a8929d047ada6fa02d381f09bfb34af688ffb42d90ecbfb3c",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/glossary": {
-    "hash": "63315db5eb49d3543810e8b6aa9c94ba1ca7e0be78c20d9b34ecea60b62e3db7",
-    "lastmod": "2026-06-16"
+    "hash": "2bdfd153514d9ef584d660549f634037bd30d16c4f2e92c0ab485a19a9ffab65",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/mentions-legales": {
     "hash": "9730075e0823f7e06595845651e59bb951ebd4199b62741e7e0cec8037ba6600",
     "lastmod": "2026-07-16"
   },
   "https://poliris.io/en/pricing": {
-    "hash": "7683c3d0123a71a91dc6e6d473ad4269c63c555558e619c13cf46c2a9ae65c4d",
-    "lastmod": "2026-11-20"
+    "hash": "11bd48b6d9dff6253ce9c211f19f0fdc4a602f5dcc913264f2b380e837012594",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/privacy": {
     "hash": "cbfa4f0bc0ca7745af4fb938799d32e6e497006d3675c8c7b6fa36a4ebcf41f4",
     "lastmod": "2026-11-26"
   },
   "https://poliris.io/en/sentiment": {
-    "hash": "6c4b36daa78a976feb4508fed24eff08f2d7220c7e642a685d75f8daeb2e261b",
-    "lastmod": "2026-06-16"
+    "hash": "895dda7843a157e600e9d8e6f2f8dcf50905f2fad16ed34cc1e85b36f29c7bf8",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/technical-audit": {
-    "hash": "b5effc43d3431d555a422e1f9643e4c6de8ea445d549e058cceb5be4495d2c88",
-    "lastmod": "2026-06-16"
+    "hash": "4e32705a6d6c44df2a9c70a02e581723dfa64f0ec62a0aac1d1cf36974367b4b",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/terms": {
     "hash": "09ad836791d7d826b90ab5856a55c569983b8c2111eecc12bf06777a8dc08829",
     "lastmod": "2026-11-26"
   },
   "https://poliris.io/en/visibility": {
-    "hash": "9a56e1864a3a017b52f8581f15ebde4beef668a8576691509cfb82c51247835a",
-    "lastmod": "2026-06-16"
+    "hash": "a754eb16a7ed42cd35685fe2e69d7216061b7752cb2948b4d40e765f4f4061f4",
+    "lastmod": "2026-11-24"
   },
   "https://poliris.io/fr/": {
-    "hash": "ff2ab1acb3f2c7e49d769da2d1d99708603d2b8d98d7ccbb58ae946a31ead533",
-    "lastmod": "2026-11-20"
+    "hash": "67787b0c607550348f350aafc5f9c90a4baac45f6e8682164b6a88b3cf7d7507",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/blog": {
-    "hash": "88523363e4a195a21cc8e4bf69f79e492fa4ee34a49a4aef16353d48c8c27af8",
+    "hash": "ce600f28b7d9c24731ed3ef437ae6cf65e29bd1eab1992d01de792fcfadfb811",
     "lastmod": "2026-11-26"
   },
   "https://poliris.io/fr/blog/ai-brand-visibility-strategies": {
@@ -204,12 +204,12 @@
     "lastmod": "2026-06-23"
   },
   "https://poliris.io/fr/content-writing": {
-    "hash": "9c23ae64b12ae33aed163a53334263916e12dcfa5196e3921f49f41574c357b2",
-    "lastmod": "2026-06-16"
+    "hash": "19c7d8dd3a62deebcced35f328a55f4c6d8e85ba83feb9527af7f2b4e6479fb6",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/demo": {
-    "hash": "fe028f0557dd62a8413f458d1db744adda96a1a632be31aefbd355d0757f92d9",
-    "lastmod": "2026-07-03"
+    "hash": "2e74f568d56f01b20d239f8737cc47e8bf49de47180dbb90c634710a09224290",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/docs": {
     "hash": "3e117fede735a39f534b86d529f5349c550747fa7b38c5bc3bb9d3076048ec72",
@@ -292,39 +292,39 @@
     "lastmod": "2026-11-20"
   },
   "https://poliris.io/fr/faqs": {
-    "hash": "960eba432db25e81424c047d5f32647003df1eabf368393d1664ea6d3ffd0ff1",
-    "lastmod": "2026-11-20"
+    "hash": "29213318e45919fb25d82585a96b93e0a5536b270377638e0dd9277e44eae23b",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/glossary": {
-    "hash": "a00b8f603f21cf9add06dbf537aa8fab47eb33f2fd03687033e1c733bacf3e44",
-    "lastmod": "2026-06-16"
+    "hash": "8d160f72b21df5f0a26e440866908fb1c2edcf9957e18541c47af42daecf2d43",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/mentions-legales": {
     "hash": "c9e9ecdd7e667016d83e53b5b793d32b5cdc028b81cfa36594393cf34677ef44",
     "lastmod": "2026-07-16"
   },
   "https://poliris.io/fr/pricing": {
-    "hash": "876f12ff9441d04bd6b879876856d85a30206c112aacc31d3b8fcf5cc41890e8",
-    "lastmod": "2026-11-20"
+    "hash": "6d76239257d1961f710c79b4e754bd44e47dd70192d352ed742fce9191a14a17",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/privacy": {
     "hash": "4816639aaf44e1e1e3d6a40f8956c73145c5b9d5eae1cf7aa0fbae96a097812e",
     "lastmod": "2026-11-26"
   },
   "https://poliris.io/fr/sentiment": {
-    "hash": "ff9a02c4fb4beb9f124bde01f63160b9201e15f058082ea48fb1a1ee1558079e",
-    "lastmod": "2026-06-16"
+    "hash": "b31ab2e92db8d801affe57951d1112cc7e42b88cb859dfdba31dcf99dcb28bb0",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/technical-audit": {
-    "hash": "fb240582adc6890199b6341ce84e8bba083a9b5954e1347c8795ca5d48b98c50",
-    "lastmod": "2026-06-16"
+    "hash": "9f5e75b79d00e247b09b223fc9561b805bc37bf3789f44a49a4a3c9660d68e6e",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/terms": {
     "hash": "9a013ff40d8d2b64e1f96873962ebd268b792f5a502e6df956203195ceeb541b",
     "lastmod": "2026-11-26"
   },
   "https://poliris.io/fr/visibility": {
-    "hash": "2ee00768953a2c7a6eae7d7c50eec7cfefb936c9bdf2d98587c9c3f03da0aaa8",
-    "lastmod": "2026-06-16"
+    "hash": "a3605370ec1de8df0fecb45eaba21e075ca30426c3e4353e107bcfcc3307b189",
+    "lastmod": "2026-11-24"
   }
 }

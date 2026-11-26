@@ -136,7 +136,9 @@ export default function SiteOverviewMockup() {
   const statusList = [...statusSegs].sort((a, b) => b.value - a.value);
 
   return (
-    <div className="som">
+    // Demo UI with sample data: kept out of search snippets and the accessibility tree.
+    // Its tabs and links are pictures of the app, so none of them takes focus.
+    <div className="som" aria-hidden="true" data-nosnippet="">
 
       {/* Browser chrome */}
 
@@ -147,7 +149,7 @@ export default function SiteOverviewMockup() {
           <div className="som-head-left">
             <h2 className="som-h2">{d.siteOverview}</h2>
             <div className="som-url-row">
-              <a className="som-url" href="#">www.sony.com</a>
+              <a className="som-url">www.sony.com</a>
               <IconExternal />
               <span className="som-sep">·</span>
               <span className="som-brand">Sony</span>
@@ -168,12 +170,12 @@ export default function SiteOverviewMockup() {
         {/* ── Tabs + view toggle (same row) ────────────────── */}
         <div className="som-tab-row">
           <div className="som-tabs">
-            <button className="som-tab som-tab-active">{d.tabOverview}</button>
-            <button className="som-tab">{d.tabIssues}</button>
+            <button type="button" tabIndex={-1} className="som-tab som-tab-active">{d.tabOverview}</button>
+            <button type="button" tabIndex={-1} className="som-tab">{d.tabIssues}</button>
           </div>
           <div className="som-view-toggle">
-            <button className="som-vt-btn som-vt-active" aria-pressed="true"><IconList /></button>
-            <button className="som-vt-btn" aria-pressed="false"><IconGraph /></button>
+            <button type="button" tabIndex={-1} className="som-vt-btn som-vt-active" aria-pressed="true"><IconList /></button>
+            <button type="button" tabIndex={-1} className="som-vt-btn" aria-pressed="false"><IconGraph /></button>
           </div>
         </div>
 
@@ -291,7 +293,7 @@ export default function SiteOverviewMockup() {
                   <SegmentedRatingBar activeIndex={0} fraction={0.4} weights={[26.7, 40, 33.3]} labels={ratingLabels} />
                 </li>
               </ul>
-              <a href="#" className="som-see-more">{d.seeMore} →</a>
+              <a className="som-see-more">{d.seeMore} →</a>
             </div>
           </div>
 
