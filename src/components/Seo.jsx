@@ -6,6 +6,8 @@ import {
   SITE_NAME,
   SITE_URL,
   LANGS,
+  DEFAULT_LANG,
+  hreflangCodes,
 } from '../seo';
 import { buildPageGraph, serializeGraph } from '../lib/schema';
 
@@ -46,11 +48,12 @@ export default function Seo({ page, title: titleOverride, description: descripti
       <meta name="description" content={description} />
       <link rel="canonical" href={canonical} />
 
-      {/* hreflang alternates */}
-      {LANGS.map((l) => (
-        <link key={l} rel="alternate" hrefLang={l} href={canonicalUrl(l, page)} />
-      ))}
-      <link rel="alternate" hrefLang="x-default" href={canonicalUrl('en', page)} />
+      {/* hreflang alternates: each language plus the markets it serves
+          (HREFLANG_REGIONS in src/seo.js), then x-default. */}
+      {LANGS.flatMap((l) => hreflangCodes(l).map((code) => (
+        <link key={code} rel="alternate" hrefLang={code} href={canonicalUrl(l, page)} />
+      )))}
+      <link rel="alternate" hrefLang="x-default" href={canonicalUrl(DEFAULT_LANG, page)} />
 
       {/* Open Graph */}
       <meta property="og:site_name" content={SITE_NAME} />
