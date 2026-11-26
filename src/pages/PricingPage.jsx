@@ -1,13 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import { SOFTWARE_ID, planOffers, faqPageNode } from '../lib/schema';
 import PlanCheckoutModal from '../components/PlanCheckoutModal';
+import DashSidebar from '../components/DashSidebar';
 import ComparisonLink from '../components/ComparisonLink';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
 import { APP_URL } from '../lib/appUrl';
+import { trackEvent } from '../lib/analytics';
+import { TURNSTILE_SITE_KEY, loadTurnstileScript } from '../lib/turnstile';
+import useDomainSuggestions from '../hooks/useDomainSuggestions';
 import { PLAN_META, creditsOf, creditsLabelOf, FREE_PROMPTS } from '../content/facts';
 import '../pricing.css';
 
@@ -79,74 +83,45 @@ function ModelList({ models }) {
   );
 }
 
-// Calculator-only model list — the real, currently-active models, not
-// generic per-provider badges. Pulled live from the `modelspecs` table
-// (generic/version/web_ui) and poliris-frontend/lib/llm-model-credits.ts's
-// AVG_CREDITS_PER_REQUEST, checked 2026-08-14. Labels follow the same
-// humanizeModelVersion() convention the product itself uses
-// (poliris-frontend/lib/utils/visibility.ts) so a visitor sees the same
-// names they'll see after signing up. Split into `web` (flat-rate,
-// browser-based tracking) and `api` (token-metered, cost scales with the
-// specific model) — same distinction the product draws between web_ui
-// models and versioned API integrations.
-const CALC_MODELS = [
-  // Web interface — flat rate, 1 credit per request regardless of provider.
-  { id: 'chatgpt-web', group: 'web', logo: 'chatgpt-com-logo.png', label: 'ChatGPT Web', weight: 1 },
-  { id: 'gemini-web', group: 'web', logo: 'gemini-logo.png', label: 'Gemini Web', weight: 1 },
-  { id: 'google-ai-mode', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Mode', weight: 1 },
-  { id: 'google-ai-overview', group: 'web', logo: 'google-com-logo.png', label: 'Google AI Overview', weight: 1 },
-  { id: 'perplexity', group: 'web', logo: 'perplexity-ai-logo.png', label: 'Perplexity', weight: 1 },
-  { id: 'claude-web', group: 'web', logo: 'claudeai-com-logo.png', label: 'Claude Web', weight: 1 },
-  { id: 'grok-web', group: 'web', logo: 'grok-com-logo.png', label: 'Grok Web', weight: 1 },
-  // API integration — versioned, credit cost scales with the model.
-  { id: 'gpt-4o-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-4o Mini', weight: 1 },
-  { id: 'gpt-5.4-nano', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Nano', weight: 3 },
-  { id: 'gpt-5.4-mini', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4 Mini', weight: 5 },
-  { id: 'gpt-5.4', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.4', weight: 10 },
-  { id: 'gpt-5.5', group: 'api', logo: 'chatgpt-com-logo.png', label: 'GPT-5.5', weight: 15 },
-  { id: 'gemini-3.1-flash-lite', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.1 Flash Lite', weight: 3 },
-  { id: 'gemini-3-flash-preview', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3 Flash Preview', weight: 4 },
-  { id: 'gemini-3.5-flash', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.5 Flash', weight: 7 },
-  { id: 'gemini-3.1-pro-preview', group: 'api', logo: 'gemini-logo.png', label: 'Gemini 3.1 Pro Preview', weight: 12 },
-  { id: 'claude-haiku-4-5', group: 'api', logo: 'claudeai-com-logo.png', label: 'Claude Haiku 4.5', weight: 2 },
-  { id: 'grok-4.3', group: 'api', logo: 'grok-com-logo.png', label: 'Grok 4.3', weight: 2 },
-  { id: 'mistral-small', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Small', weight: 1 },
-  { id: 'mistral-medium', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Medium', weight: 2 },
-  { id: 'mistral-large', group: 'api', logo: 'mistral-ai-logo.png', label: 'Mistral Large', weight: 2 },
+// The AI models a prompt can be tracked on, with what one tracked prompt
+// costs per check in credits: the app's model picker, web interface, as of
+// 23 Nov 2026 (Claude 2 credits, the others 1). As in the app, a project
+// starts on ChatGPT + Gemini and tracks 2 to 4 models.
+const ESTIMATE_MODELS = [
+  { id: 'chatgpt', label: 'ChatGPT', logo: 'chatgpt-com-logo.png', credits: 1 },
+  { id: 'gemini', label: 'Gemini', logo: 'gemini-logo.png', credits: 1 },
+  { id: 'claude', label: 'Claude', logo: 'claudeai-com-logo.png', credits: 2 },
+  { id: 'ai-mode', label: 'Google AI Mode', logo: 'google-com-logo.png', credits: 1 },
+  { id: 'ai-overview', label: 'Google AI Overview', logo: 'google-com-logo.png', credits: 1 },
+  { id: 'grok', label: 'Grok', logo: 'grok-com-logo.png', credits: 1 },
+  { id: 'perplexity', label: 'Perplexity', logo: 'perplexity-ai-logo.png', credits: 1 },
 ];
-const CALC_MODEL_BY_ID = Object.fromEntries(CALC_MODELS.map((m) => [m.id, m]));
-const CALC_WEB_MODELS = CALC_MODELS.filter((m) => m.group === 'web');
-const CALC_API_MODELS = CALC_MODELS.filter((m) => m.group === 'api');
-// The API-integration picker shows one chip per provider instead of every
-// version — each still points at a real CALC_MODELS id/weight (its
-// flagship tier), so toggling it drives the same credit math as before;
-// only the label is simplified to the provider name. CALC_API_MODELS
-// itself stays the full versioned list for anything needing that detail.
-const CALC_API_MODELS_UI = [
-  { ...CALC_MODEL_BY_ID['gpt-5.5'], label: 'ChatGPT' },
-  { ...CALC_MODEL_BY_ID['gemini-3.1-pro-preview'], label: 'Gemini' },
-  { ...CALC_MODEL_BY_ID['claude-haiku-4-5'], label: 'Claude' },
-  { ...CALC_MODEL_BY_ID['mistral-large'], label: 'Mistral' },
-  { ...CALC_MODEL_BY_ID['grok-4.3'], label: 'Grok' },
-];
-// Every id the picker can show — "Select all" toggles between this and a
-// single fallback so at least one model always stays selected.
-const ALL_CALC_MODEL_IDS = [...CALC_WEB_MODELS, ...CALC_API_MODELS_UI].map((m) => m.id);
+const ESTIMATE_DEFAULT_MODELS = ['chatgpt', 'gemini'];
+const ESTIMATE_MODELS_MIN = 2;
+const ESTIMATE_MODELS_MAX = 4;
+// Prompts tracked per product and trading zone, fixed, not asked (Florian:
+// visitors shouldn't have to reason about prompts; brands, products and
+// trading zones are what they know). Paid plans allow up to 20, so a line
+// under the result says more prompts use more credits.
+const PROMPTS_PER_PRODUCT = 10;
 
-// Calculator formula mirrors the app's real credit estimate (see
-// poliris-frontend/lib/llm-model-credits.ts + ProductSettingsPanel.tsx) —
-// estimated credits/month = prompts tracked × brands/workspaces tracked ×
-// Σ(each selected model's own credit weight, from CALC_MODELS above) ×
-// checks per month. Each model is picked individually now (not a per-
-// provider approximation), so this is exact for whatever's selected — no
-// floor/ceiling guess needed. Each brand is its own project, so its prompts
-// run independently at every check (see the "Projects" row).
+// "From your website" estimate: on/off. It needs the backend's public credit
+// estimate (poliris-backend PR #1203), live on the production backend since
+// 26 Nov 2026. Set to false to hide it again (the calculator then opens on the
+// manual estimate, without the Website / Manual switch, and sends nothing to
+// the backend) if the backend estimate is ever unavailable.
+const WEBSITE_ESTIMATE_ENABLED = true;
 
 // Runs/month derived the same way the app converts a refresh interval to a
 // monthly cadence (30-day month ÷ refresh_interval_days — see
 // REFRESH_OPTIONS in product-settings/constants.ts: Daily=1, Weekly=7).
 const CALC_CADENCE_DAYS = { daily: 1, weekly: 7 };
 const CALC_METER_MAX = creditsOf('pro'); // Pro's monthly allotment — the meter's right edge
+
+// The website estimate runs the first onboarding steps on the backend (a
+// minute or two). Polled at this pace, given up after CALC_POLL_LIMIT_MS.
+const CALC_POLL_MS = 3000;
+const CALC_POLL_LIMIT_MS = 6 * 60 * 1000;
 
 const CALC_ICON_SOLO = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -157,39 +132,250 @@ const CALC_ICON_TEAM = (
 const CALC_ICON_AGENCY = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="10" width="7" height="11"/><rect x="12" y="4" width="9" height="17"/><path d="M6 14h1M6 17h1M15 8h3M15 11h3M15 14h3"/></svg>
 );
+const CALC_ICON_SLIDERS = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+);
+const CALC_ICON_GLOBE = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+);
 
-// Quick-start presets — clicking one seeds every field at once. `c` (the
-// calculator's locale slice) is passed in so labels stay translatable;
-// the numbers themselves are the same across languages.
+// Quick-start presets for the manual estimate — clicking one seeds the three
+// counts at once. Labels come from the calculator's locale slice.
 const calcPresets = (c) => [
-  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, desc: c.presetSoloDesc, sites: 1, modelIds: ['chatgpt-web', 'perplexity'], cadence: 'weekly' },
-  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, desc: c.presetTeamDesc, sites: 3, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'perplexity'], cadence: 'weekly' },
-  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, desc: c.presetAgencyDesc, sites: 8, modelIds: ['chatgpt-web', 'gemini-web', 'claude-haiku-4-5', 'google-ai-mode', 'google-ai-overview', 'perplexity'], cadence: 'weekly' },
+  { id: 'solo', icon: CALC_ICON_SOLO, label: c.presetSoloLabel, brands: 1, products: 1, zones: 1 },
+  { id: 'team', icon: CALC_ICON_TEAM, label: c.presetTeamLabel, brands: 1, products: 3, zones: 2 },
+  { id: 'agency', icon: CALC_ICON_AGENCY, label: c.presetAgencyLabel, brands: 5, products: 2, zones: 2 },
 ];
 
-// Not a keypad — a live, preset-and-slider estimator. Starts from the
-// "Solo brand" preset, lets you jump to a different typical setup or
-// fine-tune every field by hand, and turns the result into a
-// credits/month figure using the same formula the FAQ already teaches,
-// then recommends the cheapest plan that comfortably covers it.
-function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
-  const presets = calcPresets(c);
-  const [prompts, setPrompts] = useState(10);
-  const [sites, setSites] = useState(presets[0].sites);
-  const [modelIds, setModelIds] = useState(presets[0].modelIds);
-  const [cadence, setCadence] = useState(presets[0].cadence);
-  const [customRuns, setCustomRuns] = useState(8);
-  const [activePreset, setActivePreset] = useState(presets[0].id);
+// Animates a number to `value` (ease-out, ~0.7s), from 0 when it first
+// appears and from the previous value after that. Reduced motion: no count.
+function useCountUp(value, duration = 700) {
+  const [shown, setShown] = useState(0);
+  const fromRef = useRef(0);
+  useEffect(() => {
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const from = fromRef.current;
+    let raf;
+    if (reduce || from === value) {
+      raf = requestAnimationFrame(() => { fromRef.current = value; setShown(value); });
+      return () => cancelAnimationFrame(raf);
+    }
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const v = Math.round(from + (value - from) * (1 - (1 - t) ** 3));
+      fromRef.current = v;
+      setShown(v);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, duration]);
+  return shown;
+}
 
-  // Rounded once, here — daily/weekly cadence is really a repeating rate
-  // (30/7 checks a month for "weekly"), but showing that full-precision
-  // number both feeds the total AND is what the formula line displays.
-  // Round it to the same one decimal a human would use by hand, so
-  // multiplying out the formula text always reproduces the shown total —
-  // no separate rounded-for-display vs exact-for-math copies to drift apart.
+function CountUp({ value, locale }) {
+  return useCountUp(value).toLocaleString(locale);
+}
+
+// A trading zone as the backend names it ("in Japan", "en France", "in the
+// United States") reads better without the leading preposition in a list.
+const zoneName = (label) => String(label || '').replace(/^(in|en|au|aux|à|dans)\s+/i, '').replace(/^the\s+/i, '');
+
+// One count of the manual estimate: its label over a small − n + control.
+function CalcCounter({ label, value, onChange, min = 1, max = 50 }) {
+  return (
+    <div className="pcalc-counter">
+      <span className="pcalc-counter-label">{label}</span>
+      <div className="pcalc-counter-ctl">
+        <button type="button" aria-label={`${label} −`} onClick={() => onChange(Math.max(min, value - 1))}>−</button>
+        <span className="pcalc-counter-value">{value}</span>
+        <button type="button" aria-label={`${label} +`} onClick={() => onChange(Math.min(max, value + 1))}>+</button>
+      </div>
+    </div>
+  );
+}
+
+// The estimator. Two ways in, as the product sees it: what makes the price
+// is how many products are tracked and in how many trading zones.
+// - From a website: the backend runs the first onboarding steps and returns
+//   the brands, products and zones it finds (limited per visitor and
+//   logged on the backend, see api/credit-estimate.js).
+// - Manually: brands × products per brand × trading zones per product.
+// Then credits/month = product-zone pairs × 10 prompts × the credits of the
+// default models × checks per month, and the cheapest plan that covers it
+// is recommended.
+function CreditCalculator({ c, plans, agencyLabel, onRecommend, lang }) {
+  const presets = calcPresets(c);
+  const [mode, setMode] = useState(WEBSITE_ESTIMATE_ENABLED ? 'website' : 'manual');
+  const [brands, setBrands] = useState(presets[0].brands);
+  const [products, setProducts] = useState(presets[0].products);
+  const [zones, setZones] = useState(presets[0].zones);
+  const [activePreset, setActivePreset] = useState(presets[0].id);
+  const [cadence, setCadence] = useState('weekly');
+  const [customRuns, setCustomRuns] = useState(8);
+
+  // Website estimate state: idle → running → done | error.
+  const [website, setWebsite] = useState('');
+  const [siteStatus, setSiteStatus] = useState('idle');
+  const [siteResult, setSiteResult] = useState(null);
+  const [siteError, setSiteError] = useState('');
+  // The backend's last reported step ({ step, percent, done, total }), and the
+  // bar's shown percent, which eases on between reports so it never sits
+  // still through the long first step.
+  const [progress, setProgress] = useState(null);
+  const [shownPct, setShownPct] = useState(0);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [modelIds, setModelIds] = useState(ESTIMATE_DEFAULT_MODELS);
+  // 2 to 4 models, as in the app: below 2 a model can't be removed, at 4 no
+  // other can be added.
+  const toggleModel = (id) => setModelIds((ids) => {
+    if (ids.includes(id)) return ids.length > ESTIMATE_MODELS_MIN ? ids.filter((x) => x !== id) : ids;
+    return ids.length < ESTIMATE_MODELS_MAX ? [...ids, id] : ids;
+  });
+  const chosenModels = ESTIMATE_MODELS.filter((m) => modelIds.includes(m.id));
+  const creditsPerPrompt = chosenModels.reduce((sum, m) => sum + m.credits, 0);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const widgetRef = useRef(null);
+  const widgetIdRef = useRef(null);
+  const pollRef = useRef(null);
+  // Company search under the field, the same as the landing page's website
+  // field (Hero.jsx): typing "asics" offers asics.com, asics.com.br, ...
+  // A pick fills the field and closes the list until the next real edit.
+  const [siteFocused, setSiteFocused] = useState(false);
+  const [suggestionsSuppressed, setSuggestionsSuppressed] = useState(false);
+  const suggestions = useDomainSuggestions(website, mode === 'website' && !suggestionsSuppressed);
+  const suggestionsOpen = siteFocused && !suggestionsSuppressed && siteStatus !== 'running' && suggestions.length > 0;
+
+  // The bot check is only needed for the website estimate; it runs as soon
+  // as that option is on screen, invisibly unless Cloudflare asks for more.
+  useEffect(() => {
+    if (mode !== 'website' || !TURNSTILE_SITE_KEY) return undefined;
+    let cancelled = false;
+    loadTurnstileScript().then(() => {
+      if (cancelled || !widgetRef.current || widgetIdRef.current || !window.turnstile) return;
+      widgetIdRef.current = window.turnstile.render(widgetRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        size: 'flexible',
+        appearance: 'interaction-only',
+        callback: (token) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
+      });
+    }).catch(() => {});
+    return () => {
+      cancelled = true;
+      if (widgetIdRef.current && window.turnstile) window.turnstile.remove(widgetIdRef.current);
+      widgetIdRef.current = null;
+      setTurnstileToken('');
+    };
+  }, [mode]);
+
+  useEffect(() => () => window.clearTimeout(pollRef.current), []);
+
+  useEffect(() => {
+    if (siteStatus !== 'running') return undefined;
+    const timer = window.setInterval(() => {
+      setShownPct((shown) => {
+        const p = progress || { step: 'reading', percent: 2 };
+        // How far the bar may drift before the next report: to just short of
+        // where the next step starts (reading 45, checking 55), or one
+        // product's share further while zones come in.
+        const cap = p.step === 'reading' ? 42 : p.step === 'checking' ? 53
+          : Math.min(97, p.percent + (45 / Math.max(1, p.total || 1)) - 2);
+        const next = Math.max(shown, p.percent);
+        return next >= cap ? next : Math.min(cap, next + (cap - next) * 0.06 + 0.15);
+      });
+    }, 300);
+    return () => window.clearInterval(timer);
+  }, [siteStatus, progress]);
+
+
+  const failSite = (message) => {
+    setSiteStatus('error');
+    setSiteError(message);
+  };
+
+  const startSiteEstimate = async (e) => {
+    e.preventDefault();
+    const url = website.trim();
+    if (!url) return;
+    if (TURNSTILE_SITE_KEY && !turnstileToken) { failSite(c.websiteVerifying); return; }
+    window.clearTimeout(pollRef.current);
+    setSiteStatus('running');
+    setSiteError('');
+    setSiteResult(null);
+    setProgress(null);
+    setShownPct(2);
+    setDetailsOpen(false);
+    trackEvent('credit_estimate_started', { source: 'website' });
+    try {
+      const res = await fetch('/api/credit-estimate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ website: /^https?:\/\//i.test(url) ? url : `https://${url}`, language: lang, turnstile_token: turnstileToken }),
+      });
+      const data = await res.json().catch(() => ({}));
+      // A token is single-use: get a fresh one for the next request.
+      if (widgetIdRef.current && window.turnstile) window.turnstile.reset(widgetIdRef.current);
+      setTurnstileToken('');
+      if (res.status === 429) { failSite(c.websiteLimit); return; }
+      // Not found or a server error: the estimate service itself is not
+      // there (not deployed, backend down), which is not the website's fault.
+      if (res.status === 404 || res.status >= 500) { failSite(c.websiteUnavailable); return; }
+      if (!res.ok || !data.estimate_id) { failSite(c.websiteError); return; }
+      const startedAt = Date.now();
+      const poll = async () => {
+        if (Date.now() - startedAt > CALC_POLL_LIMIT_MS) { failSite(c.websiteError); return; }
+        try {
+          const r = await fetch(`/api/credit-estimate?id=${encodeURIComponent(data.estimate_id)}`);
+          const s = await r.json().catch(() => ({}));
+          if (s.status === 'done' && s.result?.totals) {
+            setShownPct(100);
+            setDetailsOpen(true);
+            setSiteResult(s.result);
+            setSiteStatus('done');
+            trackEvent('credit_estimate_done', { products: s.result.totals.products });
+            return;
+          }
+          if (s.status === 'failed' || r.status === 404) { failSite(c.websiteError); return; }
+          if (s.progress?.step) setProgress(s.progress);
+        } catch { /* a dropped poll: try again on the next tick */ }
+        pollRef.current = window.setTimeout(poll, CALC_POLL_MS);
+      };
+      pollRef.current = window.setTimeout(poll, CALC_POLL_MS);
+    } catch {
+      failSite(c.websiteUnavailable);
+    }
+  };
+
+  // The website result, carried into the manual counts so it can be
+  // adjusted: brands as found, then the products and zones per brand and
+  // per product rounded to the nearest whole number.
+  const adjustSiteResult = () => {
+    const t = siteResult.totals;
+    const b = Math.max(1, t.brands);
+    setBrands(b);
+    setProducts(Math.max(1, Math.round(t.products / b)));
+    setZones(Math.max(1, Math.round(t.product_zones / Math.max(1, t.products))));
+    setActivePreset(null);
+    setMode('manual');
+  };
+
+  const applyPreset = (preset) => {
+    setBrands(preset.brands);
+    setProducts(preset.products);
+    setZones(preset.zones);
+    setActivePreset(preset.id);
+    setMode('manual');
+  };
+
   const runsPerMonth = cadence === 'custom' ? customRuns : Number((30 / CALC_CADENCE_DAYS[cadence]).toFixed(1));
-  const modelCreditWeight = modelIds.reduce((sum, id) => sum + (CALC_MODEL_BY_ID[id]?.weight ?? 1), 0);
-  const estimated = Math.round(prompts * sites * modelCreditWeight * runsPerMonth);
+  const fromSite = mode === 'website' && siteStatus === 'done' && siteResult;
+  // Each product is tracked once in each of its trading zones.
+  const productZones = fromSite ? siteResult.totals.product_zones : brands * products * zones;
+  const estimated = Math.round(productZones * PROMPTS_PER_PRODUCT * creditsPerPrompt * runsPerMonth);
+  const showResult = mode === 'manual' || fromSite;
 
   let recommendedTier = 'agency';
   if (estimated <= creditsOf('starter')) recommendedTier = 'starter';
@@ -201,212 +387,307 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
   const planCredits = recommendedPlan?.monthlyCredits ? Number(recommendedPlan.monthlyCredits.replace(/,/g, '')) : null;
   const spareCredits = planCredits !== null ? Math.max(0, planCredits - estimated) : null;
 
-  const allModelsSelected = ALL_CALC_MODEL_IDS.every((id) => modelIds.includes(id));
-
-  // Presets seed the AI models + check frequency — the actual "shape" of a
-  // Solo/Team/Agency setup — plus a starting product count. They deliberately
-  // don't touch prompts: how many prompts you track per product is a
-  // personal-preference dial, not something that defines which preset
-  // you're in, so it always starts at 10 and only moves when you drag it.
-  const applyPreset = (preset) => {
-    setSites(preset.sites);
-    setModelIds(preset.modelIds);
-    setCadence(preset.cadence);
-    setActivePreset(preset.id);
+  const numLocale = lang === 'fr' ? 'fr-FR' : 'en-US';
+  // Fills {placeholders}. With React nodes among the values (a counting
+  // number), it returns the pieces as an array instead of a string.
+  const fill = (text, values) => {
+    const src = text || '';
+    if (!Object.values(values).some((v) => typeof v === 'object')) {
+      return Object.entries(values).reduce((s, [k, v]) => s.replace(`{${k}}`, v), src);
+    }
+    return src.split(/(\{\w+\})/).map((part) => {
+      const key = part.match(/^\{(\w+)\}$/)?.[1];
+      return key && key in values ? values[key] : part;
+    });
   };
-
-  // Products and prompts are just numbers layered on top of a preset, not
-  // part of what makes it "Solo" vs "Team" vs "Agency" — adjusting either
-  // keeps the preset pill selected. Only changing the AI models or check
-  // frequency actually breaks from the preset, since those are what the
-  // preset itself defines.
-  const setPromptsManual = (v) => { setPrompts(v); };
-  const setSitesManual = (v) => { setSites(Math.max(1, Math.min(10, v))); };
-  const setCadenceManual = (v) => { setCadence(v); setActivePreset(null); };
-  const setCustomRunsManual = (v) => { setCustomRuns(v); setActivePreset(null); };
-  const toggleModel = (id) => {
-    setModelIds((ids) => (
-      ids.includes(id)
-        ? (ids.length > 1 ? ids.filter((x) => x !== id) : ids)
-        : [...ids, id]
-    ));
-    setActivePreset(null);
-  };
-  const toggleAllModels = () => {
-    setModelIds(allModelsSelected ? [ALL_CALC_MODEL_IDS[0]] : ALL_CALC_MODEL_IDS);
-    setActivePreset(null);
-  };
+  const stepLabel = !progress || progress.step === 'reading' ? c.stepReading
+    : progress.step === 'checking' ? c.stepChecking
+      : fill(c.stepZones, { done: progress.done ?? 0, total: progress.total ?? 0 });
 
   return (
     <div className="pricing-calc-wrap">
-      <div className="pricing-calc-card">
+      <div className="pricing-calc-card pcalc">
 
-        <div className="pricing-calc-head">
-          <div className="pricing-calc-head-copy">
+        <div className="pcalc-head">
+          <div className="pcalc-head-copy">
             <h2>{c.title}</h2>
             <p>{c.subtitle}</p>
           </div>
-          <div className="pricing-calc-presets">
-            {presets.map((preset) => (
-              <button
-                key={preset.id}
-                type="button"
-                className={`pricing-calc-preset-pill${activePreset === preset.id ? ' active' : ''}`}
-                aria-pressed={activePreset === preset.id}
-                onClick={() => applyPreset(preset)}
-              >
-                <span className="pricing-calc-preset-pill-icon">{preset.icon}</span>
-                {preset.label}
-              </button>
-            ))}
-          </div>
+          {/* Only one way in while the website estimate is off: no switch. */}
+          {WEBSITE_ESTIMATE_ENABLED && (
+            <div className="pcalc-tabs" role="tablist">
+              <button type="button" role="tab" aria-selected={mode === 'website'} className={mode === 'website' ? 'active' : ''} onClick={() => setMode('website')}>{CALC_ICON_GLOBE}{c.modeWebsite}</button>
+              <button type="button" role="tab" aria-selected={mode === 'manual'} className={mode === 'manual' ? 'active' : ''} onClick={() => setMode('manual')}>{CALC_ICON_SLIDERS}{c.modeManual}</button>
+            </div>
+          )}
         </div>
 
-        <div className="pricing-calc-inputs">
+        <div className="pcalc-body">
+          {mode === 'website' ? (
+            <div className="pcalc-site">
+              <form className="pricing-calc-site" onSubmit={startSiteEstimate}>
+                <label htmlFor="calc-website" className="pcalc-sr">{c.websiteLabel}</label>
+                <div className="pricing-calc-site-row">
+                  <span className="pricing-calc-site-icon">{CALC_ICON_GLOBE}</span>
+                  <div className="pricing-calc-site-input">
+                    <input
+                      id="calc-website"
+                      type="text"
+                      inputMode="url"
+                      autoComplete="off"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      spellCheck={false}
+                      role="combobox"
+                      aria-autocomplete="list"
+                      aria-expanded={suggestionsOpen}
+                      placeholder={c.websitePlaceholder}
+                      value={website}
+                      onChange={(e) => { setWebsite(e.target.value); setSuggestionsSuppressed(false); }}
+                      onFocus={() => setSiteFocused(true)}
+                      onBlur={() => setSiteFocused(false)}
+                      disabled={siteStatus === 'running'}
+                    />
+                    {suggestionsOpen && (
+                      <ul className="hero-website-form__suggestions" role="listbox">
+                        {suggestions.map((s) => (
+                          <li key={s.domain} role="option" aria-selected={false}>
+                            <button
+                              type="button"
+                              onMouseDown={(e) => e.preventDefault()}
+                              onClick={() => { setWebsite(s.domain); setSuggestionsSuppressed(true); setSiteFocused(false); }}
+                              className="hero-website-form__suggestion"
+                            >
+                              <img
+                                src={s.logoUrl || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.domain)}&sz=64`}
+                                alt=""
+                                aria-hidden="true"
+                                width="28"
+                                height="28"
+                                className="hero-website-form__suggestion-logo"
+                                onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+                              />
+                              <span className="hero-website-form__suggestion-text">
+                                <span className="hero-website-form__suggestion-name">{s.name}</span>
+                                <span className="hero-website-form__suggestion-domain">{s.domain}</span>
+                              </span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  <button type="submit" className="pricing-calc-site-btn" disabled={siteStatus === 'running' || !website.trim()}>
+                    {siteStatus === 'running' ? c.websiteRunningCta : c.websiteCta}
+                  </button>
+                </div>
+                <div ref={widgetRef} className="pricing-calc-turnstile" />
+              </form>
 
-          <div className="pricing-calc-field-outline">
-            <div className="pricing-calc-field pricing-calc-field-stepper">
-              <div className="pricing-calc-field-copy">
-                <label>{c.sitesLabel}</label>
-                <p className="pricing-calc-field-sub">{c.sitesSub}</p>
+              {siteStatus === 'running' && (
+                <div className="pcalc-result is-loading">
+                  {/* Progress of the run, step by step, as the backend reports it. */}
+                  <div className="pcalc-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(shownPct)} aria-label={stepLabel}>
+                    <div className="pcalc-progress-top">
+                      <span>{stepLabel}</span>
+                      <span>{Math.round(shownPct)}%</span>
+                    </div>
+                    <div className="pcalc-progress-track"><div className="pcalc-progress-fill" style={{ width: `${shownPct}%` }} /></div>
+                  </div>
+                  <div className="pcalc-result-line" aria-hidden="true">
+                    <span className="pricing-calc-skel pcalc-skel-brand" />
+                    <span className="pricing-calc-skel pcalc-skel-counts" />
+                  </div>
+                </div>
+              )}
+
+              {siteStatus === 'error' && (
+                <p className="pricing-calc-site-status is-error" role="alert">{siteError} <button type="button" className="pricing-calc-link" onClick={() => setMode('manual')}>{c.websiteUseManual}</button></p>
+              )}
+
+              {fromSite && (() => {
+                const t = siteResult.totals;
+                const brandNames = siteResult.brands.map((b) => b.name).join(', ');
+                return (
+                  <div className="pcalc-result is-in">
+                    <div className="pcalc-result-line">
+                      <span className="pcalc-result-brand">{brandNames}</span>
+                      <span className="pcalc-result-counts">
+                        {fill(c.resultLine, {
+                          products: <CountUp key="p" value={t.products} locale={numLocale} />,
+                          pairs: <CountUp key="z" value={t.product_zones} locale={numLocale} />,
+                        })}
+                      </span>
+                      <button type="button" className="pcalc-details-btn" aria-expanded={detailsOpen} onClick={() => setDetailsOpen((o) => !o)}>
+                        {detailsOpen ? c.hideDetails : c.showDetails}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+                      </button>
+                    </div>
+                    {detailsOpen && (
+                      <ul className="pcalc-details">
+                        {siteResult.brands.flatMap((b) => b.products.map((p) => ({ ...p, brand: b.name }))).map((p, i) => {
+                          const names = (p.zones || []).map(zoneName).filter(Boolean);
+                          const count = Math.max(1, names.length);
+                          const more = names.length > 3 ? ` ${fill(c.zonesMore, { n: names.length - 3 })}` : '';
+                          return (
+                            <li key={`${p.brand}-${p.name}`} style={{ '--i': i }}>
+                              <span className="pcalc-details-name">{p.name}</span>
+                              <span className="pcalc-details-zones">{names.length ? names.slice(0, 3).join(', ') + more : c.zoneUnknown}</span>
+                              <span className="pcalc-details-count">{count}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                    {t.products > t.products_shown && (
+                      <p className="pcalc-note">{fill(c.websiteMore, { n: t.products - t.products_shown })}</p>
+                    )}
+                    <button type="button" className="pricing-calc-link" onClick={adjustSiteResult}>{c.websiteAdjust}</button>
+                  </div>
+                );
+              })()}
+            </div>
+          ) : (
+            <div className="pcalc-manual">
+              <div className="pcalc-presets">
+                {presets.map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    className={activePreset === preset.id ? 'active' : ''}
+                    aria-pressed={activePreset === preset.id}
+                    onClick={() => applyPreset(preset)}
+                  >
+                    {preset.icon}{preset.label}
+                  </button>
+                ))}
               </div>
-              <div className="pricing-calc-stepper">
-                <button type="button" className="pricing-calc-stepper-btn" aria-label="Decrease" onClick={() => setSitesManual(sites - 1)}>−</button>
-                <span className="pricing-calc-stepper-value">{sites}</span>
-                <button type="button" className="pricing-calc-stepper-btn pricing-calc-stepper-btn--fill" aria-label="Increase" onClick={() => setSitesManual(sites + 1)}>+</button>
+              <div className="pcalc-counters">
+                <CalcCounter label={c.brandsLabel} value={brands} onChange={(v) => { setBrands(v); setActivePreset(null); }} />
+                <span className="pcalc-times" aria-hidden="true">×</span>
+                <CalcCounter label={c.productsLabel} value={products} onChange={(v) => { setProducts(v); setActivePreset(null); }} />
+                <span className="pcalc-times" aria-hidden="true">×</span>
+                <CalcCounter label={c.zonesLabel} value={zones} onChange={(v) => { setZones(v); setActivePreset(null); }} />
               </div>
             </div>
-            
-            <div className="pricing-calc-field">
-              <div className="pricing-calc-field-head">
-                <div className="pricing-calc-field-copy">
-                  <label htmlFor="calc-prompts">{c.promptsLabel}</label>
-                  <p className="pricing-calc-field-sub">{c.promptsSub}</p>
-                </div>
-                <span className="pricing-calc-value">{prompts}</span>
-              </div>
+          )}
+
+          <div className="pcalc-row">
+            <span className="pcalc-row-label">{c.cadenceLabel}</span>
+            <div className="pcalc-seg">
+              {[['daily', c.cadenceDaily], ['weekly', c.cadenceWeekly], ['custom', c.cadenceCustom]].map(([key, label]) => (
+                <button key={key} type="button" className={cadence === key ? 'active' : ''} aria-pressed={cadence === key} onClick={() => setCadence(key)}>{label}</button>
+              ))}
+            </div>
+          </div>
+          {cadence === 'custom' && (
+            <div className="pcalc-row pcalc-row--slider">
+              <label htmlFor="calc-runs" className="pcalc-row-label">{c.cadenceCustomLabel}</label>
               <input
-                id="calc-prompts"
+                id="calc-runs"
                 type="range"
-                min="5"
-                max="50"
-                step="1"
-                value={prompts}
-                onChange={(e) => setPromptsManual(Number(e.target.value))}
+                min="1"
+                max="30"
+                value={customRuns}
+                onChange={(e) => setCustomRuns(Number(e.target.value))}
                 className="pricing-calc-slider"
               />
+              <span className="pricing-calc-value">{customRuns}</span>
+            </div>
+          )}
+
+          {/* AI models: ChatGPT + Gemini by default, as a new project in the
+              app; 2 to 4. Each model's credits (ESTIMATE_MODELS) still count:
+              only their total per prompt is shown, on the right. */}
+          <div className="pcalc-models">
+            <div className="pcalc-row">
+              <span className="pcalc-row-label">{c.modelsLabel}</span>
+              <span className="pcalc-models-sum">{fill(c.modelsSum, { n: chosenModels.length, credits: creditsPerPrompt })}</span>
+            </div>
+            <div className="pcalc-model-chips">
+              {ESTIMATE_MODELS.map((m) => {
+                const on = modelIds.includes(m.id);
+                const locked = !on && modelIds.length >= ESTIMATE_MODELS_MAX;
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    className={`pcalc-model${on ? ' active' : ''}`}
+                    aria-pressed={on}
+                    disabled={locked}
+                    onClick={() => toggleModel(m.id)}
+                  >
+                    <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt="" aria-hidden="true" width="16" height="16" />
+                    {m.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="pricing-calc-field">
-            <div className="pricing-calc-field-head">
-              <label>{c.modelsLabel}</label>
-              <button type="button" className="pricing-calc-select-all" onClick={toggleAllModels}>
-                {allModelsSelected ? c.modelsDeselectAll : c.modelsSelectAll}
-              </button>
-            </div>
-
-            <p className="pricing-calc-model-group-label">{c.modelsWebLabel}</p>
-            <div className="pricing-calc-model-grid">
-              {CALC_WEB_MODELS.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  className={`pricing-calc-model-chip${modelIds.includes(m.id) ? ' active' : ''}`}
-                  aria-pressed={modelIds.includes(m.id)}
-                  onClick={() => toggleModel(m.id)}
-                >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} aria-hidden="true" width="18" height="18" />
-                  {m.label}
-                </button>
-              ))}
-            </div>
-
-            <p className="pricing-calc-model-group-label">{c.modelsApiLabel}</p>
-            <div className="pricing-calc-model-grid">
-              {CALC_API_MODELS_UI.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  className={`pricing-calc-model-chip${modelIds.includes(m.id) ? ' active' : ''}`}
-                  aria-pressed={modelIds.includes(m.id)}
-                  onClick={() => toggleModel(m.id)}
-                >
-                  <img src={`${import.meta.env.BASE_URL}${m.logo}`} alt={m.label} aria-hidden="true" width="18" height="18" />
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="pricing-calc-field">
-            <div className="pricing-calc-field-copy">
-              <label>{c.cadenceLabel}</label>
-              <p className="pricing-calc-field-sub">{c.cadenceSub.replace('{runs}', Math.round(runsPerMonth))}</p>
-            </div>
-            <div className="pricing-calc-cadence">
-              <button type="button" className={`pricing-calc-cadence-btn${cadence === 'daily' ? ' active' : ''}`} onClick={() => setCadenceManual('daily')}>{c.cadenceDaily}</button>
-              <button type="button" className={`pricing-calc-cadence-btn${cadence === 'weekly' ? ' active' : ''}`} onClick={() => setCadenceManual('weekly')}>{c.cadenceWeekly}</button>
-              <button type="button" className={`pricing-calc-cadence-btn${cadence === 'custom' ? ' active' : ''}`} onClick={() => setCadenceManual('custom')}>{c.cadenceCustom}</button>
-            </div>
-            {cadence === 'custom' && (
-              <div className="pricing-calc-custom-runs">
-                <div className="pricing-calc-field-head">
-                  <label htmlFor="calc-runs">{c.cadenceCustomLabel}</label>
-                  <span className="pricing-calc-value">{customRuns}</span>
-                </div>
-                <input
-                  id="calc-runs"
-                  type="range"
-                  min="1"
-                  max="30"
-                  value={customRuns}
-                  onChange={(e) => setCustomRunsManual(Number(e.target.value))}
-                  className="pricing-calc-slider"
-                />
-              </div>
-            )}
-          </div>
-
+          <p className="pcalc-note">
+            {c.assumption}
+          </p>
         </div>
 
-        <div className="pricing-calc-summary">
+        <div className={`pricing-calc-summary${showResult ? '' : ' is-waiting'}`}>
           <div className="pricing-calc-summary-stats">
-            <div className="pricing-calc-summary-number">
-              {estimated.toLocaleString()}<span>{c.resultUnit}</span>
-            </div>
+            {showResult && (
+              <div className="pricing-calc-summary-number">
+                <CountUp value={estimated} locale={numLocale} /><span>{c.resultUnit}</span>
+              </div>
+            )}
+            {!showResult && siteStatus === 'running' && (
+              <div className="pricing-calc-summary-number" aria-hidden="true">
+                <span className="pricing-calc-skel pricing-calc-skel--light" />
+              </div>
+            )}
             <p className="pricing-calc-summary-formula">
-              {c.formula
-                .replace('{prompts}', prompts)
-                .replace('{sites}', sites)
-                .replace('{sitesWord}', sites === 1 ? c.brandWord : c.brandsWord)
-                .replace('{models}', modelCreditWeight)
-                .replace('{modelsWord}', modelCreditWeight === 1 ? c.modelWord : c.modelsWord)
-                .replace('{runs}', runsPerMonth)}
+              {showResult
+                ? fill(c.formulaV2, {
+                  pairs: productZones,
+                  pairsWord: productZones === 1 ? c.pairWord : c.pairsWord,
+                  prompts: PROMPTS_PER_PRODUCT,
+                  credits: creditsPerPrompt,
+                  runs: runsPerMonth.toLocaleString(numLocale),
+                })
+                : siteStatus === 'running' ? c.websiteRunningShort : c.websiteWaiting}
+              {/* What the estimate assumes, on hover or focus of the ⓘ, so
+                  the result stays two lines. */}
+              {showResult && (
+                <span className="pricing-calc-basis" tabIndex={0} aria-label={fill(c.promptsBasis, { prompts: PROMPTS_PER_PRODUCT })}>
+                  {INFO_ICON}
+                  <span className="pricing-calc-basis-tip" role="tooltip">{fill(c.promptsBasis, { prompts: PROMPTS_PER_PRODUCT })}</span>
+                </span>
+              )}
             </p>
           </div>
 
-          <div className="pricing-calc-summary-fit">
-            <div className="pricing-calc-summary-fit-head">
-              <span className="pricing-calc-summary-fit-label">
-                {c.fitsPre} {recommendedTier === 'agency' ? agencyLabel : recommendedPlan.name}
-              </span>
-              {spareCredits !== null && (
-                <span className="pricing-calc-summary-spare">{c.spareCredits.replace('{n}', spareCredits.toLocaleString())}</span>
-              )}
-            </div>
-            <div className="pricing-calc-meter-track">
-              <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
-              {[creditsOf('starter'), creditsOf('growth')].map((mark) => (
-                <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
-              ))}
-            </div>
-          </div>
+          {showResult && (
+            <>
+              <div className="pricing-calc-summary-fit">
+                <div className="pricing-calc-summary-fit-head">
+                  <span className="pricing-calc-summary-fit-label">
+                    {c.fitsPre} {recommendedTier === 'agency' ? agencyLabel : recommendedPlan.name}
+                  </span>
+                  {spareCredits !== null && (
+                    <span className="pricing-calc-summary-spare">{c.spareCredits.replace('{n}', spareCredits.toLocaleString(numLocale))}</span>
+                  )}
+                </div>
+                <div className="pricing-calc-meter-track">
+                  <div className="pricing-calc-meter-fill" style={{ width: `${Math.min((estimated / CALC_METER_MAX) * 100, 100)}%` }} />
+                  {[creditsOf('starter'), creditsOf('growth')].map((mark) => (
+                    <div key={mark} className="pricing-calc-meter-mark" style={{ left: `${(mark / CALC_METER_MAX) * 100}%` }} />
+                  ))}
+                </div>
+              </div>
 
-          <button type="button" className="pricing-calc-cta" onClick={() => onRecommend(recommendedTier)}>
-            {recommendedTier === 'agency' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
-            {ARROW_ICON}
-          </button>
+              <button type="button" className="pricing-calc-cta" onClick={() => onRecommend(recommendedTier)}>
+                {recommendedTier === 'agency' ? c.recommendedCtaAgency : c.recommendedCtaPlan.replace('{plan}', recommendedPlan.name)}
+                {ARROW_ICON}
+              </button>
+            </>
+          )}
         </div>
 
       </div>
@@ -419,7 +700,54 @@ function CreditCalculator({ c, plans, agencyLabel, onRecommend }) {
 // it to reveal the full CreditCalculator in place (same conditional-render
 // accordion pattern as CompareSection above, just gating a much bigger
 // block so the pricing page isn't dominated by it by default).
-function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend, children }) {
+// Opens and closes its content smoothly: the space slides open to the
+// content's measured height while the content fades and lifts in, then the
+// height is released (the calculator grows as results come in), and the
+// reverse on close, unmounting at the end. Reduced motion: no animation.
+const REVEAL_MS = 420;
+function SmoothReveal({ open, children }) {
+  const ref = useRef(null);
+  const [mounted, setMounted] = useState(open);
+  // Mount as soon as it opens (adjusting state during render, not in an
+  // effect, so the first frame is already the collapsed one).
+  if (open && !mounted) setMounted(true);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    let timer;
+    if (open) {
+      if (reduce) { el.style.height = 'auto'; el.classList.add('is-open'); return undefined; }
+      el.style.height = '0px';
+      el.classList.remove('is-open');
+      void el.offsetHeight; // start from 0 before going to the full height
+      el.style.height = `${el.scrollHeight}px`;
+      el.classList.add('is-open');
+      timer = window.setTimeout(() => { el.style.height = 'auto'; }, REVEAL_MS);
+    } else if (mounted) {
+      if (reduce) {
+        const frame = requestAnimationFrame(() => setMounted(false));
+        return () => cancelAnimationFrame(frame);
+      }
+      el.style.height = `${el.scrollHeight}px`;
+      void el.offsetHeight;
+      el.style.height = '0px';
+      el.classList.remove('is-open');
+      timer = window.setTimeout(() => setMounted(false), REVEAL_MS);
+    }
+    return () => window.clearTimeout(timer);
+  }, [open, mounted]);
+
+  if (!mounted) return null;
+  return (
+    <div ref={ref} className="pcalc-reveal">
+      <div className="pcalc-reveal-inner">{children}</div>
+    </div>
+  );
+}
+
+function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend, lang, children }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="pricing-calc-panel pr-brand-panel">
@@ -439,11 +767,13 @@ function CreditCalculatorPanel({ c, plans, agencyLabel, onRecommend, children })
           {open ? c.bannerCtaClose : c.bannerCtaOpen} {ARROW_ICON}
         </span>
       </button>
+      {/* The calculator opens right under the card that opens it; the
+          agency card (children) follows it. */}
+      <SmoothReveal open={open}>
+        <CreditCalculator c={c} plans={plans} agencyLabel={agencyLabel} onRecommend={onRecommend} lang={lang} />
+      </SmoothReveal>
       {children}
       </div>
-      {open && (
-        <CreditCalculator c={c} plans={plans} agencyLabel={agencyLabel} onRecommend={onRecommend} />
-      )}
     </div>
   );
 }
@@ -527,6 +857,16 @@ const PACK_ICONS = [
 const GIFT_ICON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
 );
+
+// One icon per pricing.agencyView.start step, in order: book a call, set up
+// the space, first audits together, roll out. Drawn at the landing page's
+// How it works size (44px in a 64px slot).
+const START_ICONS = [
+  <svg key="call" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/><path d="m9 15 2 2 4-4"/></svg>,
+  <svg key="setup" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2.5" y="3.5" width="19" height="14" rx="2"/><path d="M8 21h8M12 17.5V21"/><path d="M6 7.5h5M6 10.5h3"/><circle cx="16" cy="10" r="2.5"/></svg>,
+  <svg key="audit" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20.5 20.5-5.4-5.4"/><path d="m7.8 10.6 1.9 1.9 3.4-3.4"/></svg>,
+  <svg key="rollout" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>,
+];
 
 const INFO_ICON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -813,7 +1153,8 @@ export default function PricingPage() {
               </p>
               <p className="pr-plan-credits">
                 {plan.credits}
-                {plan.firstMonth && <span>{plan.firstMonth}</span>}
+                {/* The first-month bonus as an offer tag, not a grey footnote. */}
+                {plan.firstMonth && <span className="pr-plan-bonus">{GIFT_ICON}{plan.firstMonth}</span>}
               </p>
               <a href={APP_URL} className="pr-brand-cta" onClick={(e) => onPlanLinkClick(e, plan)}>
                 {isCurrentPlan ? p.currentPlanCta : plan.cta}
@@ -845,6 +1186,7 @@ export default function PricingPage() {
           plans={plans}
           agencyLabel={bv.custom.name}
           onRecommend={scrollToPlan}
+          lang={lang}
         >
           {/* Leads to the agencies view, starting from its top. */}
           <button
@@ -1017,6 +1359,20 @@ export default function PricingPage() {
                 <h2 className="pr-h2">{av.clientsTitle}</h2>
                 <p className="pr-lead">{av.clientsLead}</p>
               </div>
+              {/* What every client plan gets, said once above the cards:
+                  everything included, and the annual price without the
+                  yearly commitment (Client S/M/L are 20% below Starter,
+                  Growth and Pro, the same as their annual price). */}
+              {av.clientsIncluded?.length > 0 && (
+                <ul className="pr-clients-included">
+                  {av.clientsIncluded.map((item) => (
+                    <li key={item.strong}>
+                      {CHECK_ICON}
+                      <span><strong>{item.strong}</strong> {item.rest}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
               {/* Same card as the brand plans (pricing-card). */}
               <div className="pricing-grid pr-clients">
                 {AGENCY_TIERS.map((key, i) => {
@@ -1067,27 +1423,58 @@ export default function PricingPage() {
                 <h2 className="pr-h2">{av.modes.title}</h2>
                 <p className="pr-lead">{av.modes.lead}</p>
               </div>
-              {/* One card, two columns: the row labels are shared, so the two
-                  modes read as a direct comparison. */}
-              <div className="pr-modes">
-                <div className="pr-modes-head">
-                  <span aria-hidden="true" />
-                  {av.modes.items.map((mode) => (
-                    <div key={mode.title} className="pr-modes-col">
+              {/* One card per mode, each showing what the client actually
+                  sees: the app's sidebar under the agency's own logo, with
+                  the ACTION tools hidden (mode 1) or opened (mode 2). The
+                  picture carries "The client sees", so only who does the
+                  work and who it suits stay as text. */}
+              <div className="pr-modes2">
+                {av.modes.items.map((mode, m) => {
+                  const ill = av.modes.illustration ?? {};
+                  return (
+                    <article key={mode.title} className="pr-mode2">
                       <span className="pr-mode-tag">{mode.tag}</span>
                       <h3 className="pr-mode-title">{mode.title}</h3>
                       <p className="pr-mode-desc">{mode.desc}</p>
-                    </div>
-                  ))}
-                </div>
-                {av.modes.rows.map((label, r) => (
-                  <div key={label} className="pr-modes-row">
-                    <span className="pr-modes-label">{label}</span>
-                    {av.modes.items.map((mode) => (
-                      <span key={mode.title} className="pr-modes-value">{mode.values[r]}</span>
-                    ))}
-                  </div>
-                ))}
+                      <figure className="pr-mode2-shot">
+                        <div className="pr-mode2-screen">
+                          <DashSidebar
+                            product={0}
+                            productCount={1}
+                            logo={(
+                              <span className="dsb2__agency">
+                                <span className="dsb2__agency-mark">{(ill.agency ?? 'A')[0]}</span>
+                                <span className="dsb2__agency-name">{ill.agency}</span>
+                              </span>
+                            )}
+                            action={m === 0 ? 'hidden' : 'opened'}
+                            actionNote={m === 0 ? ill.hidden : ill.opened}
+                          />
+                          {/* The dashboard beside the sidebar, as flat
+                              placeholder blocks: the sidebar is the point. */}
+                          <div className="pr-mode2-main" aria-hidden="true">
+                            <span className="pr-mode2-bar pr-mode2-bar--title" />
+                            <span className="pr-mode2-row"><span /><span /><span /></span>
+                            <span className="pr-mode2-panel" />
+                            <span className="pr-mode2-bar" />
+                            <span className="pr-mode2-bar pr-mode2-bar--short" />
+                          </div>
+                        </div>
+                        <figcaption className="pr-mode2-caption">
+                          <span>{av.modes.rows[1]}</span> {mode.values[1]}
+                        </figcaption>
+                      </figure>
+                      <dl className="pr-mode2-facts">
+                        {[0, 2].map((r) => (
+                          <div key={r}>
+                            <dt>{av.modes.rows[r]}</dt>
+                            <dd>{mode.values[r]}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </article>
+                  );
+                })}
               </div>
             </section>
 
@@ -1113,13 +1500,17 @@ export default function PricingPage() {
 
             {/* ============ HOW TO GET STARTED ============ */}
             <section className="pr-section">
-              <h2 className="pr-h2">{av.start.title}</h2>
-              <ol className="pr-start">
+              <h2 className="pr-h2 pr-start-h2">{av.start.title}</h2>
+              {/* The landing page's step design (How it works: icon,
+                  connector line, numbered title), drawn still here: same
+                  classes, lines shown and icons in blue from the start. */}
+              <ol className="how__steps pr-start2" style={{ '--how-cols': av.start.steps.length }}>
                 {av.start.steps.map((step, i) => (
-                  <li key={step.title}>
-                    <span className="pr-start-num">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="pr-start-title">{step.title}</span>
-                    <span className="pr-start-desc">{step.desc}</span>
+                  <li key={i} className="how__step">
+                    {i < av.start.steps.length - 1 && <span className="how__link is-drawn" aria-hidden="true" />}
+                    <span className="how__icon is-lit" aria-hidden="true">{START_ICONS[i] ?? START_ICONS[0]}</span>
+                    <h3 className="how__h3">{i + 1}. {step.title}</h3>
+                    <p className="how__desc">{step.desc}</p>
                   </li>
                 ))}
               </ol>

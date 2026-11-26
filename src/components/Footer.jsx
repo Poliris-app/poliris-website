@@ -48,6 +48,18 @@ export default function Footer() {
             )
           ))}
         </nav>
+        {/* Comparateur-IA verification badge. Their monthly checker reads
+            the raw HTML, so this must stay a plain prerendered link: keep
+            the exact href/img, and never add rel="nofollow". Display size
+            is set in CSS (.cia-badge img). */}
+        <a href="https://comparateur-ia.com/outils-ia/poliris/" className="cia-badge">
+          <img
+            src="https://comparateur-ia.com/wp-content/uploads/2026/08/badge-verifie-comparateur-ia.svg"
+            alt="Vérifié par Comparateur-IA"
+            width="180"
+            height="52"
+          />
+        </a>
       </div>
       <div className="footer__legal">
         <p className="footer__copy">{t('footer.copy')}</p>

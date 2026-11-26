@@ -1,6 +1,6 @@
 # Politique de confidentialité
 
-*Dernière mise à jour : 6 octobre 2026*
+*Dernière mise à jour : 24 novembre 2026*
 
 La présente Politique de confidentialité explique comment POLIRIS, société par actions simplifiée (SAS) de droit français, immatriculée au Registre du commerce et des sociétés de Paris sous le numéro SIREN 130 526 890, dont le siège social est situé 61 rue de Lyon, 75012 Paris, France, exploite Poliris et traite des données à caractère personnel lorsque vous :
 
@@ -8,7 +8,7 @@ La présente Politique de confidentialité explique comment POLIRIS, société p
 - utilisez la plateforme Poliris accessible à l'adresse app.poliris.io (le « Service ») ;
 - installez ou utilisez le plugin WordPress Poliris (le « Plugin ») ;
 - utilisez les fonctionnalités d'intelligence artificielle proposées par Poliris ;
-- connectez un service tiers, notamment Google Analytics ou Google Search Console ;
+- connectez un service tiers, notamment Google Analytics, Google Search Console ou Google Ads ;
 - contactez Poliris ou interagissez avec nous dans un contexte commercial.
 
 **Informations relatives à la société :**
@@ -128,7 +128,30 @@ Poliris n'utilise pas ces autorisations pour modifier ou supprimer des données 
 
 L'utilisation spécifique des données reçues des API Google est détaillée à la section 7.
 
-### 1.6 Données de prospects professionnels
+### 1.6 Lorsque vous connectez Google Ads
+
+Vous pouvez choisir de connecter un compte Google Ads à un projet configuré dans Poliris.
+
+Cette connexion est facultative et est initiée par vous au moyen du mécanisme d'autorisation fourni par Google.
+
+Poliris demande les autorisations suivantes :
+
+- `https://www.googleapis.com/auth/adwords` ;
+- les informations d'identification du compte Google nécessaires à la connexion, notamment `openid` et `email`.
+
+Lorsque vous connectez Google Ads, Poliris peut notamment accéder aux données suivantes du compte sélectionné :
+
+- les comptes accessibles et leurs paramètres ;
+- les campagnes, groupes d'annonces, annonces, mots-clés et termes de recherche ;
+- les données de ciblage et de budget ;
+- les indicateurs de performance, notamment les impressions, clics, coûts et conversions ;
+- les pages de destination et les actions de conversion.
+
+Poliris n'apporte aucune modification à votre compte Google Ads sans votre instruction préalable.
+
+L'utilisation spécifique des données reçues des API Google est détaillée à la section 7.
+
+### 1.7 Données de prospects professionnels
 
 Dans le cadre de notre activité commerciale, nous pouvons traiter des informations professionnelles relatives à des personnes susceptibles d'être intéressées par Poliris.
 
@@ -153,7 +176,7 @@ Lorsque les données n'ont pas été collectées directement auprès de vous, no
 
 Chaque communication de prospection permet de vous opposer facilement à toute nouvelle sollicitation.
 
-### 1.7 Ce que le Plugin ne collecte pas
+### 1.8 Ce que le Plugin ne collecte pas
 
 Dans son fonctionnement normal, le Plugin Poliris n'a pas pour objet de collecter ou transmettre à Poliris les données personnelles des visiteurs de votre propre site.
 
@@ -212,6 +235,14 @@ Lorsque vous choisissez d'activer ces intégrations, nous traitons les données 
 **Base juridique :** exécution du contrat, article 6, paragraphe 1, point b) du RGPD.
 
 La connexion à Google reste facultative.
+
+### Connexion Google Ads
+
+Lorsque vous choisissez de connecter un compte Google Ads, nous traitons les données de ce compte afin de fournir les fonctionnalités Campagnes et Publicité du Service.
+
+**Base juridique :** exécution du contrat, article 6(1)(b) du RGPD.
+
+La connexion à Google Ads reste facultative.
 
 ### Sécurité et prévention des abus
 
@@ -355,11 +386,11 @@ Vous pouvez nous contacter afin d'obtenir davantage d'informations concernant le
 
 ## 7. Données provenant des API Google
 
-La présente section concerne spécifiquement les informations reçues de Google Analytics et Google Search Console lorsque vous choisissez de connecter ces services à Poliris.
+La présente section concerne spécifiquement les informations reçues de Google Analytics, Google Search Console et Google Ads lorsque vous choisissez de connecter ces services à Poliris.
 
 ### 7.1 Utilisation
 
-Nous utilisons ces données uniquement pour fournir les fonctionnalités Poliris associées au site que vous avez connecté.
+Nous utilisons ces données uniquement pour fournir les fonctionnalités Poliris associées au site ou au compte publicitaire que vous avez connecté.
 
 Elles peuvent notamment être utilisées pour :
 
@@ -367,6 +398,7 @@ Elles peuvent notamment être utilisées pour :
 - compléter des audits techniques ;
 - compléter des audits de mots-clés ;
 - produire des indicateurs ;
+- analyser les performances de vos campagnes publicitaires et formuler des recommandations ;
 - répondre à une question portant sur votre site dans Poli IA lorsque vous sollicitez cette fonctionnalité.
 
 ### 7.2 Accès et permissions
@@ -374,6 +406,8 @@ Elles peuvent notamment être utilisées pour :
 Nous demandons uniquement les autorisations nécessaires au fonctionnement des fonctionnalités activées.
 
 Les accès Google Analytics et Google Search Console utilisés par Poliris sont en lecture seule.
+
+L'accès Google Ads est utilisé pour consulter les données du compte sélectionné. Aucune modification n'est apportée à ce compte sans votre instruction préalable.
 
 ### 7.3 Utilisation dans Poli IA
 
@@ -420,9 +454,9 @@ Les personnes disposant d'un accès sont soumises à des obligations de confiden
 
 ### 7.7 Déconnexion et suppression
 
-Vous pouvez déconnecter Google Analytics ou Google Search Console depuis les paramètres disponibles dans Poliris.
+Vous pouvez déconnecter Google Analytics, Google Search Console ou Google Ads depuis les paramètres disponibles dans Poliris.
 
-La déconnexion entraîne la suppression du jeton permettant à Poliris de maintenir l'accès à la propriété concernée, selon le fonctionnement prévu par le Service.
+La déconnexion entraîne la suppression du jeton permettant à Poliris de maintenir l'accès à la propriété ou au compte concerné, selon le fonctionnement prévu par le Service.
 
 Vous pouvez également révoquer directement l'autorisation accordée à Poliris depuis les paramètres de sécurité de votre compte Google.
 

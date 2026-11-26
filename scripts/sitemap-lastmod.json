@@ -4,12 +4,16 @@
     "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/blog": {
-    "hash": "0c517e8656a0a02ebbc638d8b58c3603ebae91b6530b44e65a37502b2721a47b",
-    "lastmod": "2026-11-23"
+    "hash": "17ca0a5d654efb196bf9a0bb13cc2451842f976801face0880cc2e9695cedcdb",
+    "lastmod": "2026-11-26"
   },
   "https://poliris.io/en/blog/ai-brand-visibility-strategies": {
     "hash": "f937538348118a11cca2eeb5e2ba1f1edad1a878b3eb30ea284ec9a4535db35c",
     "lastmod": "2026-10-13"
+  },
+  "https://poliris.io/en/blog/ai-content-optimization-brand-visibility": {
+    "hash": "53fb839482c1521e094f67b40e1f44653ccfeacfcebb159236a5c4e8ef6187d8",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/blog/beyond-keywords-ai-content-generation": {
     "hash": "6edaa53bea2582439ea58c9d85ada55c858dd89a56e534a9f9e1cb101c5c458b",
@@ -140,8 +144,8 @@
     "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/privacy": {
-    "hash": "56c3d100564b1f74e61375334bb6e987dbf3a8559c1cf9832c0c77cba48369da",
-    "lastmod": "2026-10-06"
+    "hash": "cbfa4f0bc0ca7745af4fb938799d32e6e497006d3675c8c7b6fa36a4ebcf41f4",
+    "lastmod": "2026-11-26"
   },
   "https://poliris.io/en/sentiment": {
     "hash": "895dda7843a157e600e9d8e6f2f8dcf50905f2fad16ed34cc1e85b36f29c7bf8",
@@ -152,8 +156,8 @@
     "lastmod": "2026-11-23"
   },
   "https://poliris.io/en/terms": {
-    "hash": "926031c4db6ee7ead2c5124e4e9f3302034d39be91d202cedd3f265db7025399",
-    "lastmod": "2026-07-16"
+    "hash": "09ad836791d7d826b90ab5856a55c569983b8c2111eecc12bf06777a8dc08829",
+    "lastmod": "2026-11-26"
   },
   "https://poliris.io/en/visibility": {
     "hash": "656e98b2760c6d911e1ee182de091a5b843beedb3addda2f2bb46f2ed4d8096b",
@@ -164,12 +168,16 @@
     "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/blog": {
-    "hash": "75dfb461cf1b1b91a4429ef8e4bd39c69ecafa79713d5d8ea6770365defcf848",
-    "lastmod": "2026-11-23"
+    "hash": "ce600f28b7d9c24731ed3ef437ae6cf65e29bd1eab1992d01de792fcfadfb811",
+    "lastmod": "2026-11-26"
   },
   "https://poliris.io/fr/blog/ai-brand-visibility-strategies": {
     "hash": "5742fa1ae602d24b459eda128d3e975cb6038c32f9c83cfeff772d50c97146bf",
     "lastmod": "2026-10-13"
+  },
+  "https://poliris.io/fr/blog/ai-content-optimization-brand-visibility": {
+    "hash": "df4283a7416e035af2f6474b0a4954f949fcc6582cd89f30ac574d6affcac47f",
+    "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/blog/beyond-keywords-ai-content-generation": {
     "hash": "7223e3beb05a8cea9e01ff78a328f00a0d7d3b1eab50f5ae3dba68d11a0ea86b",
@@ -300,8 +308,8 @@
     "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/privacy": {
-    "hash": "c4dbed4e5c4d3248c651e8b986c4ae4904867063d9c1be99a034ee57b6203046",
-    "lastmod": "2026-10-06"
+    "hash": "4816639aaf44e1e1e3d6a40f8956c73145c5b9d5eae1cf7aa0fbae96a097812e",
+    "lastmod": "2026-11-26"
   },
   "https://poliris.io/fr/sentiment": {
     "hash": "b31ab2e92db8d801affe57951d1112cc7e42b88cb859dfdba31dcf99dcb28bb0",
@@ -312,8 +320,8 @@
     "lastmod": "2026-11-23"
   },
   "https://poliris.io/fr/terms": {
-    "hash": "0afbb05b933d9df2202b7ddc10c6bc6e8ec39f1d7f4f568ed9a65ba32d60665c",
-    "lastmod": "2026-07-16"
+    "hash": "9a013ff40d8d2b64e1f96873962ebd268b792f5a502e6df956203195ceeb541b",
+    "lastmod": "2026-11-26"
   },
   "https://poliris.io/fr/visibility": {
     "hash": "eb7e0e0b5fd4af71fc51ea8ae9d2123ebf83d895a6140b333d30f7b3dc316498",

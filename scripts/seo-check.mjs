@@ -49,8 +49,19 @@ const urlOf = (file) => '/' + path.relative(DIST, path.dirname(file)).split(path
 // Only the real, indexable site pages: /en/... and /fr/....
 const sitePages = pages().filter((f) => /^\/(en|fr)(\/|$)/.test(urlOf(f)));
 
+// Pages whose title and meta description are kept word for word as supplied
+// by the content team, even though they run past the SERP length limits.
+// Only the title/description length rules are skipped; every other check
+// still runs on these pages.
+const META_LENGTH_EXCEPTIONS = new Set([
+  '/fr/blog/ai-content-optimization-brand-visibility',
+]);
+
 const problems = [];
-const report = (url, rule, detail) => problems.push({ url, rule, detail });
+const report = (url, rule, detail) => {
+  if (META_LENGTH_EXCEPTIONS.has(url) && /^(title|description) (over|under) /.test(rule)) return;
+  problems.push({ url, rule, detail });
+};
 const checkedImages = new Map();
 
 for (const file of sitePages) {

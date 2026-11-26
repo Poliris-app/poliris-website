@@ -2500,6 +2500,51 @@ button { cursor: pointer; border: none; background: none; }
 }
 .dsb2__chev { color: #8b8b8b; flex-shrink: 0; margin-right: 3px; }
 .dsb2__chev--open { transform: rotate(90deg); }
+/* Agency "client view" states (pricing page, Two ways to offer Poliris).
+   Hidden: the ACTION tools are not in the client's sidebar at all, so a
+   dashed outline stands where they would be. Opened: they are, outlined
+   in the brand blue with a small tag. */
+.dsb2__hidden {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 10px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 8px;
+  color: var(--fg6);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.dsb2__hidden svg { flex-shrink: 0; }
+.dsb2__section--opened {
+  margin: 2px 6px 0;
+  padding: 4px 4px 3px;
+  border: 1.5px solid var(--poliris-blue);
+  border-radius: 9px;
+}
+.dsb2__note {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--poliris-blue);
+  white-space: nowrap;
+}
+/* The agency's own mark, in place of the Poliris logo (white label). */
+.dsb2__agency { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.dsb2__agency-mark {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--fg-1);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+.dsb2__agency-name { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dsb2__sub-list {
   margin-left: 13px;
   padding: 2px 0 2px 7px;
@@ -6235,6 +6280,8 @@ button { cursor: pointer; border: none; background: none; }
 .footer__link { font-size: 14px; font-family: var(--chivo); color: var(--fg6); transition: color 0.2s; }
 .footer__link:hover { color: var(--blue); }
 .footer__copy { font-size: 13px; color: var(--fg6); flex-shrink: 0; }
+.cia-badge { display: inline-flex; flex-shrink: 0; }
+.cia-badge img { width: 140px; height: auto; }
 
 .footer__legal {
   max-width: 1180px;

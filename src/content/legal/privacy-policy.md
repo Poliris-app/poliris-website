@@ -1,6 +1,6 @@
 # Privacy Policy
 
-*Last updated: October 6, 2026*
+*Last updated: November 24, 2026*
 
 This Privacy Policy explains how POLIRIS, a French Société par actions simplifiée (SAS), registered with the Paris Trade and Companies Register under SIREN number 130 526 890, with its registered office at 61 rue de Lyon, 75012 Paris, France, operates Poliris and processes personal data when you:
 
@@ -8,7 +8,7 @@ This Privacy Policy explains how POLIRIS, a French Société par actions simplif
 - use the Poliris platform available at app.poliris.io (the “Service”);
 - install or use the Poliris WordPress plugin (the “Plugin”);
 - use the artificial intelligence features offered by Poliris;
-- connect a third-party service, including Google Analytics or Google Search Console;
+- connect a third-party service, including Google Analytics, Google Search Console or Google Ads;
 - contact Poliris or interact with us in a business context.
 
 **Company information:**
@@ -128,7 +128,30 @@ Poliris does not use these permissions to modify or delete data in your Google A
 
 The specific use of data received from Google APIs is detailed in Section 7.
 
-### 1.6 Business Prospect Data
+### 1.6 When You Connect Google Ads
+
+You may choose to connect a Google Ads account to a project configured in Poliris.
+
+This connection is optional and is initiated by you using the authorization mechanism provided by Google.
+
+Poliris requests the following permissions:
+
+- `https://www.googleapis.com/auth/adwords`;
+- Google account identity information required for the connection, including `openid` and `email`.
+
+When you connect Google Ads, Poliris may, in particular, access the following data of the selected account:
+
+- accessible accounts and their settings;
+- campaigns, ad groups, ads, keywords and search terms;
+- targeting and budget data;
+- performance metrics, including impressions, clicks, costs and conversions;
+- landing pages and conversion actions.
+
+Poliris does not make any change to your Google Ads account without your prior instruction.
+
+The specific use of data received from Google APIs is detailed in Section 7.
+
+### 1.7 Business Prospect Data
 
 As part of our commercial activities, we may process professional information relating to individuals who may be interested in Poliris.
 
@@ -153,7 +176,7 @@ Where data has not been collected directly from you, we will inform you of its u
 
 Each prospecting communication allows you to easily object to any further solicitation.
 
-### 1.7 What the Plugin Does Not Collect
+### 1.8 What the Plugin Does Not Collect
 
 In its normal operation, the Poliris Plugin is not intended to collect or transmit to Poliris personal data relating to visitors to your own website.
 
@@ -212,6 +235,14 @@ When you choose to enable these integrations, we process the relevant data in or
 **Legal basis:** performance of the contract, Article 6(1)(b) of the GDPR.
 
 Connecting to Google remains optional.
+
+### Google Ads Connection
+
+When you choose to connect a Google Ads account, we process the data of that account in order to provide the Campaigns and Advertising features of the Service.
+
+**Legal basis:** performance of the contract, Article 6(1)(b) of the GDPR.
+
+Connecting Google Ads remains optional.
 
 ### Security and Abuse Prevention
 
@@ -357,11 +388,11 @@ You may contact us to obtain further information about the safeguards applicable
 
 ## 7. Data Originating from Google APIs
 
-This section specifically concerns information received from Google Analytics and Google Search Console when you choose to connect these services to Poliris.
+This section specifically concerns information received from Google Analytics, Google Search Console and Google Ads when you choose to connect these services to Poliris.
 
 ### 7.1 Use
 
-We use this data solely to provide the Poliris features associated with the website you have connected.
+We use this data solely to provide the Poliris features associated with the website or the advertising account you have connected.
 
 It may, in particular, be used to:
 
@@ -369,6 +400,7 @@ It may, in particular, be used to:
 - supplement technical audits;
 - supplement keyword audits;
 - generate metrics;
+- analyze the performance of your advertising campaigns and provide recommendations;
 - answer a question concerning your website in Poli AI when you request this functionality.
 
 ### 7.2 Access and Permissions
@@ -376,6 +408,8 @@ It may, in particular, be used to:
 We request only the permissions necessary for the operation of enabled features.
 
 The Google Analytics and Google Search Console access used by Poliris is read-only.
+
+Google Ads access is used to consult the data of the selected account. No change is made to that account without your prior instruction.
 
 ### 7.3 Use in Poli AI
 
@@ -422,9 +456,9 @@ Individuals with access are subject to confidentiality obligations and access re
 
 ### 7.7 Disconnection and Deletion
 
-You may disconnect Google Analytics or Google Search Console using the settings available within Poliris.
+You may disconnect Google Analytics, Google Search Console or Google Ads using the settings available within Poliris.
 
-Disconnecting the integration results in the deletion of the token that allows Poliris to maintain access to the relevant property, in accordance with the operation of the Service.
+Disconnecting the integration results in the deletion of the token that allows Poliris to maintain access to the relevant property or account, in accordance with the operation of the Service.
 
 You may also revoke the authorization granted to Poliris directly through the security settings of your Google account.
 
