@@ -104,12 +104,11 @@ const ESTIMATE_MODELS_MAX = 4;
 const PROMPTS_PER_PRODUCT = 10;
 
 // "From your website" estimate: on/off. It needs the backend's public credit
-// estimate (poliris-backend PR #1203), which is not on the production backend
-// yet; until it is, the option would only say "not available". While false,
-// the calculator opens on the manual estimate, the Website / Manual switch is
-// hidden, and nothing is sent to the backend. All the website code stays: set
-// this back to true once PR #1203 is deployed to production.
-const WEBSITE_ESTIMATE_ENABLED = false;
+// estimate (poliris-backend PR #1203), live on the production backend since
+// 26 Nov 2026. Set to false to hide it again (the calculator then opens on the
+// manual estimate, without the Website / Manual switch, and sends nothing to
+// the backend) if the backend estimate is ever unavailable.
+const WEBSITE_ESTIMATE_ENABLED = true;
 
 // Runs/month derived the same way the app converts a refresh interval to a
 // monthly cadence (30-day month ÷ refresh_interval_days — see
