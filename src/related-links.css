@@ -1,6 +1,8 @@
 /* "Learn more" internal links (RelatedLinks.jsx): a quiet block above the
    closing CTA on product pages and at the end of each blog post. */
-.related-links {
+/* Doubled class: product pages style every <section> (e.g. .vis-page section
+   { padding: 60px 0 }), which would otherwise strip the side padding. */
+.related-links.related-links {
   max-width: 1120px;
   margin: 0 auto;
   padding: 48px 24px 8px;
@@ -41,4 +43,4 @@
 .related-links__a:hover { color: var(--blue-dark, #182d76); }
 
 /* Inside a blog post the block sits in the article column. */
-.bp-main .related-links { max-width: none; padding: 40px 0 8px; }
+.bp-main .related-links.related-links { max-width: none; padding: 40px 0 8px; }
