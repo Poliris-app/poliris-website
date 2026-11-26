@@ -462,7 +462,8 @@ export function AuditVis({ showStages = true } = {}) {
   const bnIdx  = minVal < BN_THRESH ? vals.indexOf(minVal) : -1;
 
   return (
-    <div className="vis-card">
+    // Sample audit data: kept out of search snippets and the accessibility tree.
+    <div className="vis-card" aria-hidden="true" data-nosnippet="">
       {/* ── Header ─────────────────────────────────────────── */}
       <div className="pipeline-hdr">
         <div className="pipeline-hdr-text">

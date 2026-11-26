@@ -157,7 +157,8 @@ export default function VisibilityDashboard() {
   const tipFlip = chartHov !== null && chartHov > n * 0.6;
 
   return (
-    <div className="hero__dashboard">
+    // Sample data stays out of search snippets. Not aria-hidden: the tabs work.
+    <div className="hero__dashboard" data-nosnippet="">
       <div className="hdash__v2-body">
 
         <DashSidebar />

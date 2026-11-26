@@ -26,6 +26,11 @@ export const ORG_FACTS = {
   // Google asks for a logo of at least 112x112 px; this wordmark is 218x54.
   // Swap in a square PNG when one exists.
   logo: `${SITE_URL}/Logo-Poliris-1.png`,
+  // RCS / SIREN and VAT number exactly as printed on /mentions-legales.
+  siren: '130526890',
+  vatID: 'FR24130526890',
+  // Support address published throughout the docs (support, FAQ chapters).
+  email: 'contact@poliris.io',
   // Only verified, live profiles (LinkedIn, G2, Crunchbase...). Never guess.
   sameAs: [],
 };
@@ -81,10 +86,21 @@ export function organizationNode(lang) {
     '@id': ORG_ID,
     name: SITE_NAME,
     legalName: ORG_FACTS.legalName,
-    url: `${SITE_URL}/`,
+    // The root redirects to /en/, so point at the canonical home page itself.
+    url: canonicalUrl('en', 'home'),
     logo: { '@type': 'ImageObject', url: ORG_FACTS.logo, width: 218, height: 54 },
     description: getMeta(lang, 'home').description,
     address: { '@type': 'PostalAddress', ...ORG_FACTS.address },
+    email: ORG_FACTS.email,
+    vatID: ORG_FACTS.vatID,
+    identifier: { '@type': 'PropertyValue', propertyID: 'SIREN', value: ORG_FACTS.siren },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: ORG_FACTS.email,
+      url: canonicalUrl(lang, 'demo'),
+      availableLanguage: ['en', 'fr'],
+    },
     ...(ORG_FACTS.sameAs.length ? { sameAs: ORG_FACTS.sameAs } : {}),
   };
 }

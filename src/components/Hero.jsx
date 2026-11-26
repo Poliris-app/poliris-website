@@ -61,6 +61,10 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
       <form
         className={`hero-website-form${dark ? ' hero-website-form--dark' : ''}${error ? ' hero-website-form--error' : ''}`}
         onSubmit={handleSubmit}
+        // Without JavaScript the form still reaches the app's onboarding,
+        // which reads ?website= (handleSubmit cleans the value first when JS runs).
+        action={`${APP_URL}/${lang}/onboarding`}
+        method="get"
         noValidate
       >
         <span className="hero-website-form__icon" aria-hidden="true">
@@ -73,6 +77,7 @@ function HeroWebsiteCapture({ placeholder, ctaLabel, errorText, dark }) {
         <div className="hero-website-form__input-wrap">
           <input
             type="text"
+            name="website"
             inputMode="url"
             autoCapitalize="none"
             autoCorrect="off"
@@ -143,8 +148,9 @@ function AiBand() {
   return (
     <section className="ai-band">
       <div className="ai-band__track">
+        {/* The second copy only closes the scroll loop: no alt, hidden from assistive tech. */}
         {doubled.map((l, i) => (
-          <img key={i} src={l.src} alt={l.alt} className="ai-band__logo" width="3600" height="777" />
+          <img key={i} src={l.src} alt={i < LOGOS.length ? l.alt : ''} {...(i < LOGOS.length ? {} : { 'aria-hidden': 'true' })} className="ai-band__logo" width="3600" height="777" />
         ))}
       </div>
     </section>

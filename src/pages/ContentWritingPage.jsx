@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import ComparisonLink from '../components/ComparisonLink';
 import { useLang } from '../contexts/LangContext';
 
 const HL = ({ children }) => <span className="hl">{children}</span>;
@@ -1116,6 +1117,8 @@ export default function ContentWritingPage() {
         </section>
 
         {/* ── CTA BAND ──────────────────────────────────────── */}
+        <ComparisonLink />
+
         <CtaBand
           heading={cwCta.heading}
           lead={cwCta.lead}

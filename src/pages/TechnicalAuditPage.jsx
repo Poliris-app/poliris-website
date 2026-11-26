@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import CtaBand from '../components/CtaBand';
+import ComparisonLink from '../components/ComparisonLink';
 import { useLang } from '../contexts/LangContext';
 import { trackEvent } from '../lib/analytics';
 import { AuditVis } from '../components/ProductCarousel';
@@ -528,6 +529,8 @@ export default function TechnicalAuditPage() {
         </section>
 
         {/* ── CTA BAND ─────────────────────────────── */}
+        <ComparisonLink />
+
         <CtaBand
           heading={cta.heading}
           lead={cta.lead}

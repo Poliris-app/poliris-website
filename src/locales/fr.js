@@ -46,6 +46,13 @@ export default {
     termsOfService: "Conditions d'utilisation",
   },
 
+  // Lien court vers l'article comparatif, au-dessus du CTA final des pages
+  // produit et de la page tarifs (maillage interne vers le blog).
+  comparisonLink: {
+    lead: 'Vous comparez les outils ?',
+    link: "Voir Poliris face à Semrush, Ahrefs, Peec AI et d'autres outils SEO et GEO, fonctionnalité par fonctionnalité et prix par prix",
+  },
+
   home: {
     hero: {
       eyebrow: 'Gestion de marque IA, au-delà du monitoring',
@@ -2519,7 +2526,7 @@ export default {
         title: 'Programme agence',
         desc: 'Gérez le GEO pour vos clients, rapports co-brandés, tarifs volume et un responsable partenaires dédié.',
         cta: 'Nous contacter',
-        href: 'https://app.poliris.io',
+        href: 'https://cal.com/team/poliris/discovery-call',
       },
     ],
     cta: {
