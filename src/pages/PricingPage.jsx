@@ -6,6 +6,7 @@ import { SOFTWARE_ID, planOffers, faqPageNode } from '../lib/schema';
 import PlanCheckoutModal from '../components/PlanCheckoutModal';
 import DashSidebar from '../components/DashSidebar';
 import ComparisonLink from '../components/ComparisonLink';
+import RelatedLinks from '../components/RelatedLinks';
 import { useLang } from '../contexts/LangContext';
 import { hasAccountCookie, currentPlanTierCookie } from '../lib/hasAccountCookie';
 import { APP_URL } from '../lib/appUrl';
@@ -1533,6 +1534,7 @@ export default function PricingPage() {
           </>
         )}
 
+        <RelatedLinks page="pricing" />
         <ComparisonLink />
       </div>
 
