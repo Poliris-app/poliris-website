@@ -724,6 +724,9 @@
 .vis-page .vstakes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
 .vis-page .vstakes .n { font-family: var(--font-display); font-weight: 800; font-size: 42px; color: var(--poliris-blue); line-height: 1; }
 .vis-page .vstakes .d { font-size: 14px; color: var(--fg-4); margin-top: 10px; line-height: 1.5; }
+.vis-page .vstakes .src { font-size: 12px; color: var(--fg-4); margin-top: 8px; line-height: 1.4; }
+.vis-page .vstakes .src cite { font-style: normal; }
+.vis-page .vstakes .src a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 /* ============================================================
    CLOSING CTA BAND

@@ -625,12 +625,22 @@ export default {
     stakes: {
       h2Pre: 'La visibilité est',
       h2Hl: 'le nouveau trafic',
-      stats: [
-        { n: '60%', d: 'des acheteurs B2B utilisent désormais l\'IA dans leur phase de recherche' },
-        { n: '3 sur 4', d: 'marques ignorent comment les IA parlent d\'elles' },
+      // Sous une nouvelle clé (pas "stats") pour que les anciennes valeurs
+      // non sourcées gardées dans Tolgee ne s'appliquent pas ici.
+      facts: [
+        {
+          n: '94%', d: "des acheteurs B2B utilisent l'IA dans leur processus d'achat",
+          source: { name: "Forrester, Buyers' Journey Survey 2025", date: 'janv. 2026', url: 'https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/' },
+        },
+        {
+          n: '73%', d: "des marketeurs ne vérifient pas régulièrement si leur marque apparaît dans les réponses des IA",
+          source: { name: 'Page One Power, enquête auprès de 600 marketeurs', date: 'mars 2026', url: 'https://www.pageonepower.com/linkarati/brands-are-flying-blind-in-ai-search-and-many-dont-even-know-it' },
+        },
+        // TODO(verify) Résultats Poliris : ajouter méthode, échantillon et date à partir des données clients.
         { n: '+3,4×', d: 'de mentions en moyenne, avec Poliris, sous 90 jours' },
         { n: '5×',    d: "décisions plus rapides quand les acheteurs voient votre marque sur l'IA" },
       ],
+      sourceLabel: 'Source',
     },
     cta: {
       heading: 'Voyez gratuitement votre score de visibilité IA',
