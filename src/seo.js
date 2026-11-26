@@ -25,6 +25,25 @@ export const PAGE_SLUGS = {
 
 export const LANGS = ['en', 'fr'];
 
+// International targeting. Each language version is also declared for the
+// markets it serves, so search engines in those countries pick the right
+// version: the English pages for English-speaking markets, the French pages
+// for French-speaking ones. All variants of a language point to the same
+// URL (there is one English and one French site, not one per country), and
+// the bare language code stays as the fallback for every other country.
+// Add a market here and it appears in every page's <head> and in the
+// sitemap. Codes are ISO 639-1 language + ISO 3166-1 country.
+export const HREFLANG_REGIONS = {
+  en: ['en-US', 'en-GB', 'en-CA', 'en-AU', 'en-IE', 'en-NZ', 'en-SG', 'en-IN', 'en-ZA'],
+  fr: ['fr-FR', 'fr-CA', 'fr-BE', 'fr-CH', 'fr-LU'],
+};
+
+// x-default: the version for users whose language we don't serve.
+export const DEFAULT_LANG = 'en';
+
+/** Every hreflang code that points to one language version: ['en', 'en-US', ...]. */
+export const hreflangCodes = (lang) => [lang, ...(HREFLANG_REGIONS[lang] ?? [])];
+
 // Individual blog post slugs to prerender (relative to /:lang/blog/).
 // Keep in sync with the POST_MAP keys in src/pages/BlogPostPage.jsx.
 export const BLOG_POST_SLUGS = [
