@@ -6265,6 +6265,8 @@ button { cursor: pointer; border: none; background: none; }
 .footer__link { font-size: 14px; font-family: var(--chivo); color: var(--fg6); transition: color 0.2s; }
 .footer__link:hover { color: var(--blue); }
 .footer__copy { font-size: 13px; color: var(--fg6); flex-shrink: 0; }
+.cia-badge { display: inline-flex; flex-shrink: 0; }
+.cia-badge img { width: 140px; height: auto; }
 
 .footer__legal {
   max-width: 1180px;
