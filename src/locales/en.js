@@ -53,6 +53,14 @@ export default {
     link: 'See how Poliris compares with Semrush, Ahrefs, Peec AI and other SEO and GEO tools, feature by feature and price by price',
   },
 
+  // "Learn more" internal links (RelatedLinks.jsx). New keys, not in Tolgee.
+  relatedLinks: {
+    heading: 'Learn more',
+    docs: 'In the documentation',
+    posts: 'On the blog',
+    product: 'The product',
+    pricing: 'Pricing',
+  },
   home: {
     hero: {
       eyebrow: 'Built for the AI era',
