@@ -39,6 +39,13 @@ const PEOPLE_ICON = (
   </svg>
 );
 
+// Where each info card links, by position (demo, free audit, agency). Kept
+// here rather than in the locale files: URLs aren't translated, and the
+// Tolgee sync rewrites locale strings with whatever Tolgee holds, which had
+// sent the agency card back to the app login.
+const DISCOVERY_CALL_URL = 'https://cal.com/team/poliris/discovery-call';
+const CARD_LINKS = [DISCOVERY_CALL_URL, null, DISCOVERY_CALL_URL];
+
 const CARD_ICONS = {
   dark: CALENDAR_ICON,
   green: CHART_ICON,
@@ -217,7 +224,7 @@ export default function GetaDemoPage() {
                   <p className="demo-card-title">{card.title}</p>
                   <p className="demo-card-desc">{card.desc}</p>
                   {card.cta && (
-                    <a href={card.href} className="demo-card-link" target="_blank" rel="noopener noreferrer">
+                    <a href={CARD_LINKS[i] ?? card.href} className="demo-card-link" target="_blank" rel="noopener noreferrer">
                       {card.cta} {ARROW_ICON}
                     </a>
                   )}
